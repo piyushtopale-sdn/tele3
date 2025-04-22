@@ -1,4 +1,3 @@
-// import {ComplaintManagement} from "../../models/complaint_management/complaint_management";
 import ComplaintManagement from "../../models/complaint_management/complaint_management"
 import { sendResponse } from "../../helpers/transmission";
 import Http from "../../helpers/httpservice";

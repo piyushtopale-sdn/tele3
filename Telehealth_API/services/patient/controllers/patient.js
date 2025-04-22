@@ -50,7 +50,7 @@ import {
   uploadSingleOrMultipleDocuments,
 } from "../helpers/gcs";
 import purchasehistory from "../models/subscription/purchasehistory";
-import { formatString, generateMRNNumber } from "../helpers/string";
+import { formatString } from "../helpers/string";
 const httpService = new Http();
 const fs = require("fs");
 const { NODE_ENV } = config;
@@ -309,7 +309,6 @@ class Patient {
         saudi_id,
         iqama_number,
         passport,
-        mrn_number,
         profile_pic,
         address,
         emergency_contact,
@@ -355,18 +354,6 @@ class Patient {
         const savedData = await addLocationData.save();
         locationId = savedData?._id;
       }
-      // let mrnNumber = generateMRNNumber(10)
-      // let isMRNExist = false
-      // do {
-      //   const getExistingMRN = await ProfileInfo.find({ mrn_number: mrnNumber })
-      //   if (getExistingMRN.length > 0) {
-      //     mrnNumber = generateMRNNumber(10)
-      //     isMRNExist = true
-      //   } else {
-      //     isMRNExist = false
-      //   }
-      // } while (isMRNExist);
-
 
       let mrnNumber = await generateUniqueMRN();
       let profile = new ProfileInfo({
@@ -419,7 +406,7 @@ class Patient {
 
   async login(req, res) {
     try {
-      const { mobile, country_code, password, fcmToken } = req.body;
+      const { mobile, country_code } = req.body;
       const { uuid } = req.headers;
       const portalUserData = await PortalUser.findOne({
         mobile,
@@ -473,36 +460,6 @@ class Patient {
         profileData = profileData1[0];
       }
 
-      // if (profileData?.locationinfos.length > 0) {
-      //   try {
-      //     let locationids = {
-      //       country_id: profileData?.locationinfos[0].country,
-      //       region_id: profileData?.locationinfos[0].region,
-      //       province_id: profileData?.locationinfos[0].province,
-      //       village_id: profileData?.locationinfos[0].village,
-      //       city_id: profileData?.locationinfos[0].city,
-      //       department_id: profileData?.locationinfos[0].department,
-      //     }
-
-      //     const locationdata = await httpService.postStaging(
-      //       "common-api/get-location-name",
-      //       { locationids: locationids },
-      //       {},
-      //       "superadminServiceUrl"
-      //     );
-      //     if (locationdata.status) {
-      //       profileData.locationinfos[0].country = { countryname: locationdata.body.country_name, country_iso_code: locationdata.body.country_iso_code };
-      //       profileData.locationinfos[0].region = locationdata.body.region_name;
-      //       profileData.locationinfos[0].province = locationdata.body.province_name;
-      //       profileData.locationinfos[0].village = locationdata.body.village_name;
-      //       profileData.locationinfos[0].city = locationdata.body.city_name;
-      //       profileData.locationinfos[0].department = locationdata.body.department_name;
-
-      //     }
-      //   } catch (err) {
-
-      //   }
-      // }
       const deviceExist = await Otp2fa.findOne({
         uuid,
         for_portal_user: portalUserData._id,
@@ -745,11 +702,7 @@ class Patient {
         });
       }
       let otp = 1111;
-      // if (mobile && mobile.length === 10) {
-      //   otp = 1111;
-      // } else {
-      //   otp = generate4DigitOTP();
-      // }
+
       if (process.env.NODE_ENV === "production") {
         otp = generate4DigitOTP();
       } else {
@@ -773,7 +726,6 @@ class Patient {
       }
       await sendSms(country_code + mobile, otpText);
       let result = null;
-      // if (smsRes == 200) {
       if (deviceExist) {
         result = await Otp2fa.findOneAndUpdate(
           { mobile, country_code, uuid, verified: false, for_portal_user: portalUserData._id  },
@@ -826,8 +778,7 @@ class Patient {
     try {
       const { email, otp, userId } = req.body;
 
-      let ip = req.ip;
-      const { uuid, role } = req.headers;
+      const { uuid } = req.headers;
 
       const data = await Otp2fa.findOne({
         uuid,
@@ -932,7 +883,6 @@ class Patient {
       });
       if (otpResult) {
         if (otpResult.otp == otp) {
-          // req.session.ph_verified = true;
           const updateVerified = await PortalUser.findOneAndUpdate(
             { _id: portalUserData._id },
             {
@@ -1029,19 +979,6 @@ class Patient {
           });
         }
       }
-      /**PT - Mar 21 Update mobile number*/
-    //   if(mobile && country_code){
-    //   const existingUser = await PortalUser.findOne({ country_code: country_code, mobile: mobile });
-    //   if (existingUser && existingUser._id.toString() !== patient_id.toString()) {
-    //     return sendResponse(req, res, 400, {
-    //       status: false,
-    //       message: "Mobile number already exists.",
-    //       data: null,
-    //       errorCode: "MOBILE_ALREADY_EXISTS",
-    //     });
-    //   }
-    // }
-      /**PT - Mar 21 */
 
       let jsonDataUser = {};
 
@@ -1049,10 +986,6 @@ class Patient {
       if (first_name && last_name) jsonDataUser.full_name = `${first_name} ${last_name}`;
       if (first_name_arabic && last_name_arabic) jsonDataUser.full_name_arabic = `${first_name_arabic} ${last_name_arabic}`;
       if (notification !== undefined) jsonDataUser.notification = notification;
-      // if (mobile && country_code) {
-      //     jsonDataUser.country_code = country_code;
-      //     jsonDataUser.mobile = mobile;
-      // } 
 
       await PortalUser.findOneAndUpdate(
         { _id: patient_id },
@@ -1564,7 +1497,7 @@ class Patient {
           for_portal_user: patient_id,
         });
         const medicineData = await medicineDetails.save();
-        const personalDetails = await ProfileInfo.findOneAndUpdate(
+        await ProfileInfo.findOneAndUpdate(
           { for_portal_user: patient_id },
           {
             $set: {
@@ -1597,7 +1530,7 @@ class Patient {
       if (patient_id || !patient_id) {
         if (doctor_id === undefined) {
           let insert_List = [];
-          const list = immunization.map(async (singleData) => {
+          immunization.map(async (singleData) => {
             if (!singleData._id && singleData._id == "") {
               delete singleData._id;
               insert_List.push({
@@ -1620,7 +1553,7 @@ class Patient {
             }
           });
 
-          const result = await Immunization_info.insertMany(insert_List);
+         await Immunization_info.insertMany(insert_List);
 
           const resultAll = await Immunization_info.find({
             for_portal_user: mongoose.Types.ObjectId(patient_id),
@@ -1634,7 +1567,7 @@ class Patient {
           });
         } else {
           let reqData = [];
-          const list = immunization.map(async (singleData) => {
+          immunization.map(async (singleData) => {
             if (!singleData._id && singleData._id == "") {
               delete singleData._id;
               reqData.push({
@@ -1884,11 +1817,11 @@ class Patient {
         }).select({ permission: 1, _id: 0 });
         let medical_documents = [];
         if (data.length > 0) {
-          medical_document = data[0].permission.medical_documents;
+          data[0].permission.medical_documents;
         }
 
         if (savedDocs.length > 0) {
-          let newDocsIds = savedDocs.map((singleDoc) => {
+          savedDocs.map((singleDoc) => {
             let docId = singleDoc._id.toString();
             medical_documents.push(docId);
           });
@@ -1930,7 +1863,7 @@ class Patient {
             patient_id,
             permission,
           });
-          personalDetails = await data.save();
+          await data.save();
         }
       }
       return sendResponse(req, res, 200, {
@@ -1969,7 +1902,7 @@ class Patient {
         }
 
         if (savedDocs.length > 0) {
-          let newDocsIds = savedDocs.map((singleDoc) => {
+          savedDocs.map((singleDoc) => {
             let docId = singleDoc._id.toString();
             medical_documents.push(docId);
           });
@@ -2628,13 +2561,12 @@ class Patient {
         user_id: userData._id,
         token: hashResetToken,
       });
-      let savedForgotPasswordData = await ForgotPasswordData.save();
+      await ForgotPasswordData.save();
       const content = forgotPasswordEmail(
         email.toLowerCase(),
         resetToken,
         userData._id
       );
-      // let sendEmailStatus = sendSmtpEmail(email.toLowerCase(), 'Forgot password reset link', html);
       let sendEmailStatus = await sendEmail(content);
       if (sendEmailStatus) {
         return sendResponse(req, res, 200, {
@@ -2707,7 +2639,7 @@ class Patient {
       } else {
         const hashPassword = await generateTenSaltHash(newPassword);
 
-        const updatedUser = await PortalUser.findOneAndUpdate(
+        await PortalUser.findOneAndUpdate(
           { _id: user_id },
           { password: hashPassword },
           { new: true }
@@ -3077,7 +3009,6 @@ class Patient {
         message: "Successfully get patient profile",
         errorCode: null,
       });
-      return;
     } catch (error) {
       return sendResponse(req, res, 500, {
         status: false,
@@ -4411,9 +4342,6 @@ async getAllPatientForSuperAdminNew(req, res) {
 
   //A Notification Publishing Page that allows writing content and sending it as a push notification, SMS, or email to all users.
   async getAllPatientForSuperAdminNewToNotify(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
 
     try {
       const { searchText, fromDate, toDate, sort, gender, subscriptionPlan } =
@@ -4569,7 +4497,7 @@ async getAllPatientForSuperAdminNew(req, res) {
   async deletePatientDocs(req, res) {
     try {
       const { patientId, documentId } = req.body;
-      let deleteDoc = await Medical_document.deleteOne({
+      await Medical_document.deleteOne({
         for_portal_user: patientId,
         _id: documentId,
       });
@@ -5134,7 +5062,6 @@ async getAllPatientForSuperAdminNew(req, res) {
         phone,
         address,
         created_By,
-        verify_status,
         portalmessage,
         portalname,
         invitationId,
@@ -5175,7 +5102,7 @@ async getAllPatientForSuperAdminNew(req, res) {
 
           if (mailSent) {
             updatedUserData.verify_status = "SEND";
-            const result = await updatedUserData.save();
+            await updatedUserData.save();
           }
           return sendResponse(req, res, 200, {
             status: true,
@@ -5228,7 +5155,7 @@ async getAllPatientForSuperAdminNew(req, res) {
 
         if (mailSent) {
           userData.verify_status = "SEND";
-          const result = await userData.save();
+          await userData.save();
         }
 
         if (userData) {
@@ -5279,7 +5206,6 @@ async getAllPatientForSuperAdminNew(req, res) {
       }
 
       const filter = {};
-      // const filterDate = {};
 
       if (searchKey && searchKey !== "") {
         filter.$or = [{ first_name: { $regex: searchKey } }];
@@ -5294,11 +5220,9 @@ async getAllPatientForSuperAdminNew(req, res) {
       ) {
         const createdDateObj = new Date(createdDate);
         const updatedDateObj = new Date(updatedDate);
-        // dateFilter.createdAt = createdDateObj.toISOString();
         dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
       } else if (createdDate && createdDate !== "") {
         const createdDateObj = new Date(createdDate);
-        // dateFilter.createdAt = createdDateObj.toISOString();
         dateFilter.createdAt = { $gte: createdDateObj };
       } else if (updatedDate && updatedDate !== "") {
         const updatedDateObj = new Date(updatedDate);
@@ -5519,7 +5443,7 @@ async getAllPatientForSuperAdminNew(req, res) {
       if (action_name == "delete") filter["delete_status"] = action_value;
 
       if (action_name == "active") {
-        let result = await ImmunizationList.updateOne(
+        await ImmunizationList.updateOne(
           { _id: immunizationId },
           filter,
           { new: true }
@@ -5700,9 +5624,7 @@ async getAllPatientForSuperAdminNew(req, res) {
 
   async getPatienthavingFCMtoken(req, res) {
     try {
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       const usersWithFCMToken = await PortalUser.find({
         fcmToken: { $exists: true, $ne: null },
       });
@@ -6022,7 +5944,7 @@ async getAllPatientForSuperAdminNew(req, res) {
       });
 
       let environvent = process.env.NODE_ENV;
-      let url = process.env.terst_FRONTEND_URL;
+      let url = process.env.test_p_FRONTEND_URL;
 
       if (result) {
         if (environvent == "local") {
@@ -6125,7 +6047,7 @@ async getAllPatientForSuperAdminNew(req, res) {
       let dataUpdate = await getData.save();
 
       if (dataUpdate) {
-        const userData = await PortalUser.findOneAndUpdate(
+        await PortalUser.findOneAndUpdate(
           { _id: mongoose.Types.ObjectId(familyMember.familyMemberId) },
           {
             $set: {
@@ -6377,11 +6299,7 @@ async getAllPatientForSuperAdminNew(req, res) {
     try {
       const { patient_id, serviceType, count, isAdd } = req.body;
 
-      // const findUser = await PortalUser.findOne({_id: mongoose.Types.ObjectId(patient_id)})
       let patientId = patient_id;
-      // if(findUser?.parent_userid){
-      //   patientId = findUser?.parent_userid
-      // }
 
       const getPatient = await PortalUser.find({
         _id: { $eq: patientId },
@@ -6490,54 +6408,6 @@ async getAllPatientForSuperAdminNew(req, res) {
       });
     }
   }
-
-  // async assignDoctor(req, res) {
-  //   try {
-  //     const { patientId, doctorId, assignedDate } = req.body;
-
-  //     const getPatient = await ProfileInfo.find({
-  //       for_portal_user: { $eq: patientId },
-  //     }).select("previousAssignedDoctor");
-  //     const previousAssignedDoctor = getPatient[0]?.previousAssignedDoctor
-  //       ? getPatient[0]?.previousAssignedDoctor
-  //       : [];
-  //     const currentAssignedDoctor = {
-  //       assignedDate,
-  //       doctorId,
-  //       isCurrentAssignedDoctor: true,
-  //     };
-  //     const newDataArray = previousAssignedDoctor.map((val) => {
-  //       val.isCurrentAssignedDoctor = false;
-  //       return val;
-  //     });
-  //     newDataArray.push(currentAssignedDoctor);
-  //     await ProfileInfo.findOneAndUpdate(
-  //       { for_portal_user: patientId },
-  //       {
-  //         $set: {
-  //           currentAssignedDoctor: doctorId,
-  //           previousAssignedDoctor: newDataArray,
-  //         },
-  //       }
-  //     );
-
-  //     return sendResponse(req, res, 200, {
-  //       status: true,
-  //       message: `Doctor assigned successfully.`,
-  //       data: null,
-  //       errorCode: null,
-  //     });
-  //   } catch (error) {
-  //     return sendResponse(req, res, 500, {
-  //       status: false,
-  //       message: "Internal server error",
-  //       body: error,
-  //       errorCode: null,
-  //     });
-  //   }
-  // }
-
-
 
   async assignDoctor(req, res) {
     try {
@@ -6773,7 +6643,7 @@ async getAllPatientForSuperAdminNew(req, res) {
       })
         .select("currentAssignedDoctor previousAssignedDoctor")
         .lean();
-      if (getPatientDetails && getPatientDetails?.previousAssignedDoctor) {
+      if (getPatientDetails?.previousAssignedDoctor) {
         const getDetails = await httpService.postStaging(
           "individual-doctor/get-patient-doctors",
           {
@@ -7838,7 +7708,6 @@ async getAllPatientForSuperAdminNew(req, res) {
         let userContact =
           doctorData?.body.country_code + doctorData?.body.mobile;
 
-        let modifiedContent;
         const getContentforsms = await httpService.getStaging(
           "superadmin/get-notification-by-condition",
           { condition: condition, type: "sms" },
@@ -7864,7 +7733,7 @@ async getAllPatientForSuperAdminNew(req, res) {
             title: getContentforsms?.data[0].notification_title,
             appointmentId: appointment_id,
           };
-          let saveNoti = await saveNotification(
+          await saveNotification(
             paramsData,
             headers,
             requestData
@@ -8004,7 +7873,6 @@ async getAllPatientForSuperAdminNew(req, res) {
 
       let __activeSubscriptionList = [];
       let __cancelSubscriptionList = [];
-      let ___revenueList = [];
 
       let planIdsSet = new Set();
       let userIdsSet = new Set();
@@ -8110,7 +7978,9 @@ async getAllPatientForSuperAdminNew(req, res) {
         errorCode: null,
       });
     }
-  } async exportMainRevenueList(req, res) {
+  } 
+  
+  async exportMainRevenueList(req, res) {
     const headers = { Authorization: req.headers["authorization"] };
     try {
       const getAllPatient = await ProfileInfo.find({ isFamilyMember: false })
@@ -8119,7 +7989,6 @@ async getAllPatientForSuperAdminNew(req, res) {
 
       let __activeSubscriptionList = [];
       let __cancelSubscriptionList = [];
-      let ___revenueList = [];
 
       let planIdsSet = new Set();
       let userIdsSet = new Set();
@@ -8226,7 +8095,6 @@ async getAllPatientForSuperAdminNew(req, res) {
       });
     }
   }
-
 
   async getPatientTotalSubscriberList(req, res) {
     const headers = { Authorization: req.headers["authorization"] };
@@ -8614,7 +8482,6 @@ async getAllPatientForSuperAdminNew(req, res) {
   //new api end
 
   async getPatientActiveCancelledList(req, res) {
-    const headers = { Authorization: req.headers["authorization"] };
     const { fromDate, toDate } = req.query;
 
     try {
@@ -8815,7 +8682,7 @@ async getAllPatientForSuperAdminNew(req, res) {
             const userId = user._id.toString();
             const userPurchaseHistories = purchaseHistoryMap.get(userId) || [];
 
-            let userTotalPaid = userPurchaseHistories.reduce((sum, history) => sum + parseFloat(history.amountPaid || 0), 0);
+            userPurchaseHistories.reduce((sum, history) => sum + parseFloat(history.amountPaid || 0), 0);
 
             const subscriptionDetailsList = userPurchaseHistories.map(history => ({
                 planName: subscriptionPlansMap.get(history.subscriptionPlanId)?.plan_name || "Plan Name Not Found",
@@ -9145,7 +9012,6 @@ async getAllPatientForSuperAdminNew(req, res) {
       try {
         const { mobile } = req.body;
         const {country_code} = req.body;
-        const { uuid } = req.headers;
     
         // Find user by mobile number
         const portalUserData = await PortalUser.findOne({ mobile,country_code }).lean();

@@ -60,40 +60,6 @@ const add_role = async (req, res) => {
                 });
                }
 
-            // const addRole = new Role({
-            //     name: req.body.name,
-            //     status: req.body.status,
-            //     role_id: seqId,
-            //     for_user: req.body.userId,
-            //     type : req.body.type
-            // });
-            // // res.json(addRole);
-            // try {
-            //     const savedRole = addRole.save((err,result)=>{
-            //         if(err){
-            //             sendResponse(req, res, 500, {
-            //                 status: false,
-            //                 body: null,
-            //                 message: "failed to add role",
-            //                 errorCode: "INTERNAL_SERVER_ERROR",
-            //             })
-            //         }
-            //         sendResponse(req, res, 200, {
-            //             status: true,
-            //             body: null,
-            //             message: "Data Added Successfully",
-            //             errorCode: null,
-            //         })
-            //     });
-            // } catch (error) {
-            //     sendResponse(req, res, 500, {
-            //         status: false,
-            //         body: null,
-            //         message: "failed to add role",
-            //         errorCode: "INTERNAL_SERVER_ERROR",
-            //     })
-            // }
-
         }
     )
         
@@ -102,7 +68,7 @@ const add_role = async (req, res) => {
 
 const all_role = async (req, res) => {
     try {
-        let { limit, page, searchText, userId, type } = req.query;
+        let { limit, page, userId, type } = req.query;
         const checkUser = await PortalUser.findOne({_id:userId});
         if (checkUser?.role === 'STAFF') {
             const data = await PortalUser.findOne({ created_by_user: checkUser?.created_by_user });
@@ -160,27 +126,6 @@ const all_role = async (req, res) => {
     }
 
 }
-
-// const all_role = async (req, res) => {
-//     const {userId} = req.query
-//     try {
-//         const roles = await Role.find({ is_delete: { $eq: 'No' }, for_user: userId }).sort({'_id':1});
-//         sendResponse(req, res, 200, {
-//             status: true,
-//             body: roles,
-//             message: "Successfully fetched all roles",
-//             errorCode: null,
-//         })
-//       } catch (error) {
-//         sendResponse(req, res, 500, {
-//             status: false,
-//             body: null,
-//             message: "Failed to fetch roles",
-//             errorCode: "INTERNAL_SERVER_ERROR",
-//         })
-//       }
-    
-// }
 
 const update_role = async(req,res)=>{
     //

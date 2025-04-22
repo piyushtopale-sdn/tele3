@@ -151,8 +151,6 @@ export const updateSlotAvailability = async (
       "labradioServiceUrl"
     );
 
-    // timeStampString = moment(timeStamp, "DD-MM-YYYY").add(1, 'days');
-    // timeStamp = new Date(timeStampString)
     const slots = resData?.body?.allGeneralSlot;
 
     let isBreak = false;
@@ -179,7 +177,7 @@ export const updateSlotAvailability = async (
   }
 
   if (slot != null) {
-    const basicInfo = await BasicInfo.findOneAndUpdate(
+    await BasicInfo.findOneAndUpdate(
       { for_portal_user: { $eq: notificationReceiver } },
       {
         $set: {
@@ -429,15 +427,7 @@ class advFiltersLabRadio {
       const current_timestamp = new Date(timeStamp);
       const onlyDate = timeStamp.split("T")[0];
       var day = current_timestamp.getDay();
-      var hour = current_timestamp.getHours().toString();
-      var minute = current_timestamp.getMinutes().toString();
-      if (hour.toString().length == 1) {
-        hour = "0" + hour;
-      }
-      if (minute.toString().length == 1) {
-        minute = "0" + minute;
-      }
-      const hourAndMin = hour + minute;
+   
       var startTime;
       var startTimeH;
       var startTimeM;
@@ -446,14 +436,9 @@ class advFiltersLabRadio {
       var endTimeH;
       var endTimeM;
       var endTimeHM;
-      var currentTimeH;
-      var currentTimeM;
-      var currentTimeHM;
 
       var allGeneralSlot = [];
       var allGeneralSlot2 = [];
-      var afterUnavailable = [];
-      var x = "";
       const result = await PortalAvailability.findOne({
         for_portal_user: portal_id,
         location_id: locationId,
@@ -527,8 +512,7 @@ class advFiltersLabRadio {
           startTimeH = startTime.slice(0, 2);
           startTimeM = startTime.slice(2);
           startTimeHM = startTimeH + ":" + startTimeM;
-          var piece = startTimeHM;
-          var piece = startTimeHM.split(":");
+          piece = startTimeHM.split(":");
           var mins =
             piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
           var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
@@ -547,9 +531,8 @@ class advFiltersLabRadio {
           });
           // allGeneralSlot2.push(startTimeH + startTimeM)
           for (let index = 0; index < totalNumbersSlots - 1; index++) {
-            var piece = startTimeHM;
-            var piece = startTimeHM.split(":");
-            var mins =
+            piece = startTimeHM.split(":");
+            mins =
               piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
             startTimeH = ((mins % (24 * 60)) / 60) | 0;
             if (startTimeH.toString().length == 1) {
@@ -561,19 +544,17 @@ class advFiltersLabRadio {
             }
             startTimeHM = startTimeH + ":" + startTimeM;
 
-            var piece = startTimeHM;
-            var piece = startTimeHM.split(":");
-            var mins =
+            mins =
               piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-            var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+            nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
             if (nextStartTimeH.toString().length == 1) {
               nextStartTimeH = "0" + startTimeH;
             }
-            var nextStartTimeM = mins % 60;
+            nextStartTimeM = mins % 60;
             if (nextStartTimeM.toString().length == 1) {
               nextStartTimeM = nextStartTimeM + "0";
             }
-            var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+            nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
             availabilitySlot.push({
               slot: startTimeHM + "-" + nextStartTimeHM,
@@ -650,7 +631,7 @@ class advFiltersLabRadio {
             startTimeM = startTime.slice(2);
             startTimeHM = startTimeH + ":" + startTimeM;
             var piece = startTimeHM;
-            var piece = startTimeHM.split(":");
+            piece = startTimeHM.split(":");
             var mins =
               piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
             var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
@@ -669,9 +650,8 @@ class advFiltersLabRadio {
             });
             allGeneralSlot2.push(startTimeH + startTimeM);
             for (let index = 0; index < totalNumbersSlots - 1; index++) {
-              var piece = startTimeHM;
-              var piece = startTimeHM.split(":");
-              var mins =
+              piece = startTimeHM.split(":");
+              mins =
                 piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
               startTimeH = ((mins % (24 * 60)) / 60) | 0;
               if (startTimeH.toString().length == 1) {
@@ -683,19 +663,18 @@ class advFiltersLabRadio {
               }
               startTimeHM = startTimeH + ":" + startTimeM;
 
-              var piece = startTimeHM;
-              var piece = startTimeHM.split(":");
-              var mins =
+              piece = startTimeHM.split(":");
+              mins =
                 piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-              var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+              nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
               if (nextStartTimeH.toString().length == 1) {
                 nextStartTimeH = "0" + startTimeH;
               }
-              var nextStartTimeM = mins % 60;
+              nextStartTimeM = mins % 60;
               if (nextStartTimeM.toString().length == 1) {
                 nextStartTimeM = nextStartTimeM + "0";
               }
-              var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+              nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
               allGeneralSlot.push({
                 slot: startTimeHM + "-" + nextStartTimeHM,
@@ -751,8 +730,7 @@ class advFiltersLabRadio {
               startTimeH = startTime.slice(0, 2);
               startTimeM = startTime.slice(2);
               startTimeHM = startTimeH + ":" + startTimeM;
-              var piece = startTimeHM;
-              var piece = startTimeHM.split(":");
+              piece = startTimeHM.split(":");
               var mins =
                 piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
               var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
@@ -771,9 +749,8 @@ class advFiltersLabRadio {
               });
               // allGeneralSlot2.push(startTimeH + startTimeM)
               for (let index = 0; index < totalNumbersSlots - 1; index++) {
-                var piece = startTimeHM;
-                var piece = startTimeHM.split(":");
-                var mins =
+                piece = startTimeHM.split(":");
+                mins =
                   piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
                 startTimeH = ((mins % (24 * 60)) / 60) | 0;
                 if (startTimeH.toString().length == 1) {
@@ -785,19 +762,18 @@ class advFiltersLabRadio {
                 }
                 startTimeHM = startTimeH + ":" + startTimeM;
 
-                var piece = startTimeHM;
-                var piece = startTimeHM.split(":");
-                var mins =
+                piece = startTimeHM.split(":");
+                mins =
                   piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-                var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+                nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
                 if (nextStartTimeH.toString().length == 1) {
                   nextStartTimeH = "0" + startTimeH;
                 }
-                var nextStartTimeM = mins % 60;
+                nextStartTimeM = mins % 60;
                 if (nextStartTimeM.toString().length == 1) {
                   nextStartTimeM = nextStartTimeM + "0";
                 }
-                var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+                nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
                 unavailabilitySlot.push({
                   slot: startTimeHM + "-" + nextStartTimeHM,
@@ -839,9 +815,6 @@ class advFiltersLabRadio {
         );
       }
 
-      // allGeneralSlot = allGeneralSlot.filter((data) => {
-      //     return data.status == 0;
-      // })
       sendResponse(req, res, 200, {
         status: true,
         body: {

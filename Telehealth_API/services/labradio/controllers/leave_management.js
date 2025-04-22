@@ -64,11 +64,7 @@ export const getAllStaffLeave_instaffPortal = async (req, res) => {
       sortingarray["createdAt"] = -1;
     }
     const filter = {};
-    // const filterDate = {};
 
-    // if (searchKey && searchKey !== "") {
-    //   filter.$or = [{ leave_type: { $regex: searchKey } }];
-    // }
     if (searchKey && typeof searchKey === "string" && searchKey.trim() !== "") {
       filter["$or"] = [
         {
@@ -88,7 +84,6 @@ export const getAllStaffLeave_instaffPortal = async (req, res) => {
       const createdDateObj = new Date(createdDate);
       const updatedDateObj = new Date(updatedDate);
       dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
-      // myFilter.createdAt = { $lte: updatedDateObj };
     }
 
     const listdata = await LeaveManagements.find({
@@ -307,7 +302,6 @@ export const getAllMyLeaveFourPortal = async (req, res) => {
       const createdDateObj = new Date(createdDate);
       const updatedDateObj = new Date(updatedDate);
       dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
-      // myFilter.createdAt = { $lte: updatedDateObj };
     }
 
     const listdata = await LeaveManagements.find({
@@ -365,7 +359,6 @@ export const getAllLaboratoryLeave = async (req, res) => {
       const createdDateObj = new Date(createdDate);
       const updatedDateObj = new Date(updatedDate);
       dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
-      // myFilter.createdAt = { $lte: updatedDateObj };
     }
     const filter = {
       sent_to: mongoose.Types.ObjectId(req.query.sent_to),
@@ -447,7 +440,6 @@ export const getAllDentalLeave = async (req, res) => {
       const createdDateObj = new Date(createdDate);
       const updatedDateObj = new Date(updatedDate);
       dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
-      // myFilter.createdAt = { $lte: updatedDateObj };
     }
     const filter = {
       sent_to: mongoose.Types.ObjectId(req.query.sent_to),
@@ -523,7 +515,6 @@ export const getAllOpticalLeave = async (req, res) => {
       const createdDateObj = new Date(createdDate);
       const updatedDateObj = new Date(updatedDate);
       dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
-      // myFilter.createdAt = { $lte: updatedDateObj };
     }
     const filter = {
       sent_to: mongoose.Types.ObjectId(req.query.sent_to),
@@ -602,7 +593,6 @@ export const getAllParaMedicalLeave = async (req, res) => {
       const createdDateObj = new Date(createdDate);
       const updatedDateObj = new Date(updatedDate);
       dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
-      // myFilter.createdAt = { $lte: updatedDateObj };
     }
     const filter = {
       sent_to: mongoose.Types.ObjectId(req.query.sent_to),

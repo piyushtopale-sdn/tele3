@@ -166,8 +166,6 @@ export const updateSlotAvailability = async (
       "hospitalServiceUrl"
     );
 
-    // timeStampString = moment(timeStamp, "DD-MM-YYYY").add(1, 'days');
-    // timeStamp = new Date(timeStampString)
     const slots = resData?.body?.allGeneralSlot;
 
     let isBreak = false;
@@ -194,7 +192,7 @@ export const updateSlotAvailability = async (
   }
 
   if (slot != null) {
-    const basicInfo = await BasicInfo.findOneAndUpdate(
+    await BasicInfo.findOneAndUpdate(
       { for_portal_user: { $eq: notificationReceiver } },
       {
         $set: {
@@ -231,8 +229,7 @@ export const addTestsForMngDoc = async (pathologyInfo, id) => {
         }
       }
     } catch (error) {
-      // console.error("Erroroccurreddddd:", error);
-      // Handle the error as needed
+
     }
   }
 };
@@ -247,7 +244,6 @@ class DoctorController {
         email,
         password,
         phone_number,
-        name,
         dob,
         language,
         gender,
@@ -263,26 +259,8 @@ class DoctorController {
         role,
         for_doctor,
       } = req.body;
-      const portalInput = {
-        first_name,
-        middle_name,
-        last_name,
-        email,
-        password,
-        phone_number,
-      };
-      const profileInput = {
-        name: first_name + " " + middle_name + " " + last_name,
-        first_name,
-        middle_name,
-        last_name,
-        dob,
-        language,
-        gender,
-        address,
-        about,
-        profile_picture,
-      };
+
+ 
       const passwordHash = await hashPassword(password);
       let sequenceDocument = await Counter.findOneAndUpdate(
         { _id: "employeeid" },
@@ -369,16 +347,7 @@ class DoctorController {
         role,
         for_doctor,
       } = req.body;
-      const portalInput = { user_name, phone_number };
-      const profileInput = {
-        name,
-        dob,
-        language,
-        gender,
-        address,
-        about,
-        profile_picture,
-      };
+ 
       const userData = PortalUser.updateOne(
         { _id: for_portal_user },
         {
@@ -526,16 +495,6 @@ class DoctorController {
         specilaization,
         act,
       } = req.body;
-      const portalInput = { user_name, email, password, phone_number };
-      const profileInput = {
-        name,
-        dob,
-        language,
-        gender,
-        address,
-        about,
-        profile_picture,
-      };
 
       const passwordHash = await hashPassword(password);
       const userDetails = new PortalUser({
@@ -1449,9 +1408,7 @@ class DoctorController {
         for_portal_user: portal_user_id,
       }).exec();
       if (checkExist.length > 0) {
-        // await DocumentManagement.findOneAndUpdate({ for_portal_user: { $eq: portal_user_id } }, {
-        //   $set: { document_details }
-        // }).exec();
+
         await DocumentManagement.findOneAndUpdate(
           { for_portal_user: portal_user_id },
           { $set: { document_details: document_details } },
@@ -1712,8 +1669,6 @@ async doctorManagementUpdateAvailability(req, res) {
         })
         .exec();
 
-      let license_detailsData = result[0].license_details;
-
       sendResponse(req, res, 200, {
         status: true,
         data: { result, pathology_tests },
@@ -1748,7 +1703,7 @@ async doctorManagementUpdateAvailability(req, res) {
     });
 
     if (checkUser.role === "HOSPITAL_STAFF") {
-      let adminData = await StaffInfo.findOne({
+      await StaffInfo.findOne({
         for_portal_user: mongoose.Types.ObjectId(hospital_portal_id),
       });
     }
@@ -1902,7 +1857,7 @@ async doctorManagementUpdateAvailability(req, res) {
       });
 
       if (checkUser.role === "HOSPITAL_STAFF") {
-        let adminData = await StaffInfo.findOne({
+        await StaffInfo.findOne({
           for_portal_user: mongoose.Types.ObjectId(hospital_portal_id),
         });
       }
@@ -2022,11 +1977,11 @@ async doctorManagementUpdateAvailability(req, res) {
           { for_portal_user: doctor_portal_id },
         );
 
-        const result2 = await BasicInfo.updateOne(
+        await BasicInfo.updateOne(
           { for_portal_user: doctor_portal_id },
         );
 
-        const result3 = await HospitalLocation.updateOne(
+        await HospitalLocation.updateOne(
           {
             for_portal_user: doctor_portal_id,
             "hospital_or_clinic_location.hospital_id": hospital_id,
@@ -2043,7 +1998,7 @@ async doctorManagementUpdateAvailability(req, res) {
           { for_portal_user: doctor_portal_id },
         );
 
-        const result2 = await HospitalLocation.updateOne(
+        await HospitalLocation.updateOne(
           { for_portal_user: doctor_portal_id },
           {
             $pull: {
@@ -2085,7 +2040,7 @@ async doctorManagementUpdateAvailability(req, res) {
           ? "isActive"
           : "";
       if (key) {
-        const portalData = await PortalUser.findOneAndUpdate(
+        await PortalUser.findOneAndUpdate(
           { _id: { $eq: doctor_portal_id } },
           {
             $set: {
@@ -2134,7 +2089,7 @@ async doctorManagementUpdateAvailability(req, res) {
 
   async getDoctorList(req, res) {
     try {
-      const { page, limit, status, searchText, from_date, to_date } = req.query;
+      const { page, limit, status, searchText } = req.query;
   
       // Get sort parameter
       let sort = req.query.sort;
@@ -2320,7 +2275,7 @@ async doctorManagementUpdateAvailability(req, res) {
           ? "isActive"
           : "";
       if (key) {
-        const portalData = await PortalUser.findOneAndUpdate(
+        await PortalUser.findOneAndUpdate(
           { _id: { $eq: doctor_portal_id } },
           {
             $set: {
@@ -2579,9 +2534,7 @@ async doctorManagementUpdateAvailability(req, res) {
   
   async viewAppointmentByRoomName(req, res) {
     try {
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       const { roomname, appointment_id } = req.query;
       let result = {};
       if (appointment_id == undefined) {
@@ -2626,9 +2579,6 @@ async doctorManagementUpdateAvailability(req, res) {
     try {
       const user_id = req.query.id;
       const chatId = req.query.chatId;
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
 
       const result = await Appointment.findOneAndUpdate(
         {
@@ -2698,9 +2648,6 @@ async doctorManagementUpdateAvailability(req, res) {
   }
 
   async UpdateVideocallAppointment(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
 
     try {
       const {
@@ -2731,50 +2678,7 @@ async doctorManagementUpdateAvailability(req, res) {
       } else {
         if (participants != undefined) {
           if (participantstype == "add") {
-            // const result = await Appointment.updateOne(
-            //   {
-            //     _id: appointmentId,
-            //     // Ensure participants with the same userId do not already exist
-            //     "participants.userId": { $ne: participants.userId },
-            //     $expr: { $lt: [{ $size: "$participants" }, 2] } // Ensure array size is less than 2
-            //   },
-            //   {
-            //     $push: { participants: participants } // Add the new participant
-            //   }
-            // );
-             
-            // if (result.modifiedCount > 0) {
-            //   console.log(participants, "Successfully added unique participant.");
-            // } else {
-            //   console.log(
-            //     "Participant not added: either limit reached or userId already exists."
-            //   );
-            // }
-             
-            // // Optional Cleanup (if somehow duplicates still exist)
-            // await Appointment.updateOne(
-            //   { _id: appointmentId },
-            //   [
-            //     {
-            //       $set: {
-            //         participants: {
-            //           $reduce: {
-            //             input: "$participants",
-            //             initialValue: [],
-            //             in: {
-            //               $cond: [
-            //                 { $in: ["$$this.userId", "$$value.userId"] },
-            //                 "$$value", // Skip duplicates
-            //                 { $concatArrays: ["$$value", ["$$this"]] } // Add unique
-            //               ]
-            //             }
-            //           }
-            //         }
-            //       }
-            //     },
-            //     { $set: { participants: { $slice: ["$participants", 2] } } } // Trim array to max 2
-            //   ]
-            // );
+
             appointmentDetails = await Appointment.findOneAndUpdate(
               { _id: appointmentId },
               { $push: { participants: participants } },
@@ -2828,16 +2732,12 @@ async doctorManagementUpdateAvailability(req, res) {
   }
 
   async UpdateVideocallchatmessage(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
 
     try {
       const { appointmentId, chatmessage } = req.body;
       let appointmentDetails;
 
       if (chatmessage != undefined) {
-        // if (participantstype == 'add') {
         appointmentDetails = await Appointment.findOneAndUpdate(
           { _id: appointmentId },
           { $push: { chatmessage: chatmessage } },
@@ -3024,9 +2924,7 @@ async doctorManagementUpdateAvailability(req, res) {
 
   async allDoctorsHopitalizationList(req, res) {
     try {
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       const result = await BasicInfo.find({ verify_status: "APPROVED" })
         .select({
           first_name: 1,
@@ -3318,7 +3216,6 @@ async doctorManagementUpdateAvailability(req, res) {
       }
 
       let result;
-      let message = "successfully created template";
 
       if (templateId == "") {
         const templateInfo = new Template({
@@ -3505,7 +3402,6 @@ async doctorManagementUpdateAvailability(req, res) {
       }
 
       let result;
-      let message = "";
 
       if (ePrescriptionNumber == "") {
         const ePrescNumber = await getNextSequenceValue("ePrescriptionNumber"); //Create New ePrescription Number
@@ -3525,7 +3421,6 @@ async doctorManagementUpdateAvailability(req, res) {
         });
 
         result = await prescriptionInfo.save();
-        message = "Successfully Saved E-prescription";
       } else {
         result = await Eprescription.findOneAndUpdate(
           { ePrescriptionNumber, appointmentId: appointmentId },
@@ -3624,7 +3519,7 @@ async doctorManagementUpdateAvailability(req, res) {
           comment,
         });
 
-        result = await labData.save();
+        await labData.save();
       } else {
         let obj = {
           reason_for_lab,
@@ -3682,7 +3577,6 @@ async doctorManagementUpdateAvailability(req, res) {
 
     try {
       let result;
-      let message;
 
       if (_id == "" || _id == null) {
         const labData = new EprescriptionImaging({
@@ -3697,7 +3591,6 @@ async doctorManagementUpdateAvailability(req, res) {
         });
 
         result = await labData.save();
-        message = "Imaging Test added successfully";
       } else {
         let obj = {
           reason_for_imaging,
@@ -3753,7 +3646,6 @@ async doctorManagementUpdateAvailability(req, res) {
 
     try {
       let result;
-      let message;
 
       if (_id == "" || _id == null) {
         const labData = new EprescriptionVaccination({
@@ -3766,7 +3658,6 @@ async doctorManagementUpdateAvailability(req, res) {
         });
 
         result = await labData.save();
-        message = "Vaccination Test added successfully";
       } else {
         let obj = {
           dosage,
@@ -3822,7 +3713,6 @@ async doctorManagementUpdateAvailability(req, res) {
 
     try {
       let result;
-      let message;
 
       if (_id == "" || _id == null) {
         const labData = new EprescriptionEyeglass({
@@ -3838,7 +3728,6 @@ async doctorManagementUpdateAvailability(req, res) {
         });
 
         result = await labData.save();
-        message = "Eyeglass Test added successfully";
       } else {
         let obj = {
           left_eye,
@@ -3910,8 +3799,7 @@ async doctorManagementUpdateAvailability(req, res) {
           comment,
         });
 
-        result = await labData.save();
-        message = "Other Test added successfully";
+        await labData.save();
       } else {
         let obj = {
           reason_for_other,
@@ -3959,7 +3847,6 @@ async doctorManagementUpdateAvailability(req, res) {
 
     try {
       let result;
-      let message;
 
       result = await Eprescription.findOne({ appointmentId });
 
@@ -3970,7 +3857,7 @@ async doctorManagementUpdateAvailability(req, res) {
       if (environvent == "local") {
         result.eSignature = `http://localhost:8005/hospital/esignature-for-e-prescription/${result.eSignature}`;
       } else {
-        result.eSignature = `${config.terst_Backend_url}/hospital/esignature-for-e-prescription/${result.eSignature}`;
+        result.eSignature = `${config.test_p_Backend_url}/hospital/esignature-for-e-prescription/${result.eSignature}`;
       }
 
       if (result) {
@@ -4036,9 +3923,8 @@ async doctorManagementUpdateAvailability(req, res) {
     const { doseId } = req.body;
 
     try {
-      let result;
 
-      result = await EprescriptionMedicineDosage.findOneAndDelete({
+      await EprescriptionMedicineDosage.findOneAndDelete({
         _id: doseId,
       });
 
@@ -4588,7 +4474,7 @@ async doctorManagementUpdateAvailability(req, res) {
     try {
       const { data } = req.body;
       if (data?.metadata) {
-        let appointmentDetails = await Appointment.updateOne(
+        await Appointment.updateOne(
           { order_id: data.metadata.order_id },
           {
             $set: {
@@ -4610,7 +4496,7 @@ async doctorManagementUpdateAvailability(req, res) {
           errorCode: null,
         });
       } else {
-        let appointmentDetails = await Appointment.updateOne(
+        await Appointment.updateOne(
           { order_id: data.order_id },
           {
             $set: {
@@ -4646,10 +4532,6 @@ async doctorManagementUpdateAvailability(req, res) {
 
   async getAllEprescriptionDetailsForMedicine(req, res) {
     const { ePrescriptionNumber } = req.query;
-
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
 
     try {
       let result;
@@ -4748,7 +4630,6 @@ async doctorManagementUpdateAvailability(req, res) {
       });
       if (getData.length > 0) {
         const eprescriptionID = getData[0]._id;
-        // const getAllMedicine = await EprescriptionMedicineDosage.find({ ePrescriptionId: { $eq: eprescriptionID } });
 
         let getAllMedicine = {};
         if (req.query.test_type === "Laboratory") {
@@ -4896,9 +4777,7 @@ async doctorManagementUpdateAvailability(req, res) {
   }
 
   async onlineConsultationCount(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
+
     try {
       const { doctor_portal_id, consultation_type, status, date } = req.query;
       let doctorPortalId = Array.isArray(doctor_portal_id)
@@ -5004,22 +4883,9 @@ async doctorManagementUpdateAvailability(req, res) {
           status =
             todayDate == appointment.consultationDate ? "Today" : "Upcoming";
         }
-        let consultationType = "";
-        if (appointment.appointmentType == "ONLINE")
-          consultationType = "Online";
+ 
         listArray.push({
-          // appointment_id: appointment._id,
-          // patient_name: appointment.patientDetails.patientFullName,
-          // patient_id: appointment.patientId,
-          // doctor_name: appointment.doctorDetails.full_name,
-          // doctorId: appointment.doctorId,
-          // hospital_details: appointment.hospital_details,
-          // hospital_name: appointment.hospital_details ? appointment.hospital_details.hospital_name : 'N/A',
-          // made_by: appointment.madeBy,
-          // consultation_date: appointment.consultationDate,
-          // consultation_time: appointment.consultationTime,
-          // consultation_type: consultationType,
-          // reason_for_appointment: appointment.reasonForAppointment,
+        
           fee: appointment.consultationFee,
           // order_id: appointment.order_id ? appointment.order_id : '',
           status,
@@ -5050,9 +4916,7 @@ async doctorManagementUpdateAvailability(req, res) {
   }
 
   async facetofaceConsultationCount(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
+
     try {
       const { doctor_portal_id, consultation_type, status, date } = req.query;
       let doctorPortalId = Array.isArray(doctor_portal_id)
@@ -5202,9 +5066,7 @@ async doctorManagementUpdateAvailability(req, res) {
   }
 
   async homeConsultationCount(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
+
     try {
       const { doctor_portal_id, consultation_type, status, date } = req.query;
       let doctorPortalId = Array.isArray(doctor_portal_id)
@@ -5309,9 +5171,7 @@ async doctorManagementUpdateAvailability(req, res) {
           status =
             todayDate == appointment.consultationDate ? "Today" : "Upcoming";
         }
-        let consultationType = "";
         if (appointment.appointmentType == "HOME_VISIT")
-          consultationType = "Home Visit";
 
         listArray.push({
           // appointment_id: appointment._id,
@@ -5354,9 +5214,7 @@ async doctorManagementUpdateAvailability(req, res) {
   }
 
   async allConsultationCount(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
+
     try {
       const { doctor_portal_id, consultation_type, status, date } = req.query;
       let doctorPortalId = Array.isArray(doctor_portal_id)
@@ -5461,9 +5319,7 @@ async doctorManagementUpdateAvailability(req, res) {
           status =
             todayDate == appointment.consultationDate ? "Today" : "Upcoming";
         }
-        let consultationType = "";
         if (appointment.appointmentType == "HOME_VISIT")
-          consultationType = "Home Visit";
 
         listArray.push({
           fee: appointment.consultationFee,
@@ -5493,9 +5349,7 @@ async doctorManagementUpdateAvailability(req, res) {
   }
 
   async graphListHospital(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
+
     try {
       const { doctor_portal_id, consultation_type, status, date } = req.query;
 
@@ -5648,13 +5502,7 @@ async doctorManagementUpdateAvailability(req, res) {
           status =
             todayDate == appointment.consultationDate ? "Today" : "Upcoming";
         }
-        let consultationType = "";
-        if (appointment.appointmentType == "HOME_VISIT")
-          consultationType = "Home Visit";
-        if (appointment.appointmentType == "ONLINE")
-          consultationType = "Online";
-        if (appointment.appointmentType == "FACE_TO_FACE")
-          consultationType = "Face to Face";
+       
 
         listArray.push({
           appointment_id: appointment._id,
@@ -5826,16 +5674,12 @@ async doctorManagementUpdateAvailability(req, res) {
       if (action_name == "delete") filter["delete_status"] = action_value;
 
       if (action_name == "active") {
-        let result = await HospitalType.updateOne(
+        await HospitalType.updateOne(
           { _id: healthcentreId },
           filter,
           { new: true }
         ).exec();
 
-        message =
-          action_value == true
-            ? "Successfully Active HospitalType"
-            : "Successfully In-active HospitalType";
       }
 
       if (action_name == "delete") {
@@ -5856,7 +5700,6 @@ async doctorManagementUpdateAvailability(req, res) {
             { new: true }
           );
         }
-        message = "Successfully HospitalType deleted";
       }
 
       sendResponse(req, res, 200, {
@@ -6040,7 +5883,7 @@ async doctorManagementUpdateAvailability(req, res) {
       let previewTemplate = "";
 
       let environvent = process.env.NODE_ENV;
-      let url = process.env.terst_FRONTEND_URL;
+      let url = process.env.test_p_FRONTEND_URL;
       if (result) {
         if (previewTemplate != "") {
           if (environvent == "local") {

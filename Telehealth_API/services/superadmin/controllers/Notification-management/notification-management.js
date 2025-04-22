@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import NotificationManagement from "../../models/superadmin/notification-management"
 import { sendResponse } from "../../helpers/transmission";
-import notificationManagement from "../../models/superadmin/notification-management";
 
 export const addNotification = async (req, res) => {
     try {

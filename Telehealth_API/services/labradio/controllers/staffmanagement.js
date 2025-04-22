@@ -139,7 +139,7 @@ class StaffController {
                   $push: { staff_ids: userDetails._id }
                 }
             )
-            let staffFullDetails = await StaffInfo.findOne({ _id: staffDetails._id, type })
+            await StaffInfo.findOne({ _id: staffDetails._id, type })
             let paramsData = {
                 sendTo: 'staff',
                 madeBy: 'labradio',
@@ -195,7 +195,6 @@ class StaffController {
             specialty,
             type,
             profilePic,
-            creatorId,
             doj
         } = req.body;
         try {
@@ -232,7 +231,7 @@ class StaffController {
                 { upsert: false, new: true }
             )
 
-            const staffDetails = await StaffInfo.findOneAndUpdate(
+            await StaffInfo.findOneAndUpdate(
                 { for_portal_user: staffId },
                 {
                     $set: {
@@ -256,7 +255,7 @@ class StaffController {
                 },
                 { upsert: false, new: true }
             )
-            const PortalUserDetails = await PortalUser.findOneAndUpdate(
+            await PortalUser.findOneAndUpdate(
                 { _id: staffId, type },
                 {
                     $set: {
@@ -314,9 +313,7 @@ class StaffController {
                 .populate({
                     path: "role",
                 }).lean()
-                // let sepcality = staffFullDetails?.specialty;
-            // const specialityData = await httpService.getStaging('hospital/get-speciality-data', { data: sepcality }, {}, 'hospitalServiceUrl');
-            // let sepcalityId = specialityData.data[0]?._id
+          
             let department = staffFullDetails?.department;
             let departdetails = [];
             if (department.length > 0) {
@@ -548,7 +545,7 @@ class StaffController {
                 filter,
                 { new: true }
             );
-            let updatedStaffInfo = await StaffInfo.updateOne(
+           await StaffInfo.updateOne(
                 { for_portal_user: staff_id, type },
                 filter,
                 { new: true }

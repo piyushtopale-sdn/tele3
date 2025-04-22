@@ -9,11 +9,11 @@ require('dotenv/config');
 const NODE_ENV = process.env.NODE_ENV || "local"; //local
 const config = require('../config/config.js').get();
 const allowedOrigin = [
-    "https://dev.terstapp.com",
-    "https://dev.terstapp.com:8009",
+    "https://dev.test_papp.com",
+    "https://dev.test_papp.com:8009",
     "http://localhost:4200",
     "https://meanstack.smartdatainc.com:6002",
-    "https://terstapp.com"
+    "https://test_papp.com"
 ];
 
 const normalizePort = function (val) {

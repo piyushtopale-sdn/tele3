@@ -1,6 +1,6 @@
 import "dotenv/config.js";
 
-const terstFrontendUrl = process.env.terst_FRONTEND_URL || "http://localhost:4200";
+const test_pFrontendUrl = process.env.test_p_FRONTEND_URL || "http://localhost:4200";
 
 export const forgotPasswordEmail = (email, code, user_id) => {
     return {
@@ -20,7 +20,7 @@ export const forgotPasswordEmail = (email, code, user_id) => {
                 <br/>
                 <p>Click the below button to reset your password</p>
                 <br/>
-                <a href="${terstFrontendUrl}/patient/setnewpass?token=${code}&user_id=${user_id}&role="button">RESET YOUR PASSWORD</a>
+                <a href="${test_pFrontendUrl}/patient/setnewpass?token=${code}&user_id=${user_id}&role="button">RESET YOUR PASSWORD</a>
                 <br/>
                 <p>If you didn’t request this, you can ignore this email.</p>
                 <br/>
@@ -87,7 +87,7 @@ export const sendMailInvitations = (email, first_name, last_name, loggeInname, p
           <br/>
           <p>Please register yourself on this portal</p>
           <br/>
-          <a href="${terstFrontendUrl}/${portalname}/signup" role="button">CLICK HERE</a>
+          <a href="${test_pFrontendUrl}/${portalname}/signup" role="button">CLICK HERE</a>
           <br/>
           <p>${portalmessage}</p>
           <br/>

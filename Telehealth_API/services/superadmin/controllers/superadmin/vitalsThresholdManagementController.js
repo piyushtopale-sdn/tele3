@@ -208,14 +208,14 @@ export const updateVitalsThreshold = async (req, res) => {
         for (const ele of rangeData) {
             if (vitalsType === "BLOOD_PRESSURE") {
                 //Get records for BP systolic
-                const getSystolicData = await VitalsThreshold.findOne({
+               await VitalsThreshold.findOne({
                     vitalsType,
                     'BPSystolic.gender': ele?.BPSystolic?.gender,
                     'BPSystolic.age': ele?.BPSystolic?.age,
                     _id: { $ne: id }
                 })
                 //Get records for BP Diastolic
-                const getDiastolicData = await VitalsThreshold.findOne({
+               await VitalsThreshold.findOne({
                     vitalsType,
                     'BPDiastolic.gender': ele?.BPDiastolic?.gender,
                     'BPDiastolic.age': ele?.BPDiastolic?.age,

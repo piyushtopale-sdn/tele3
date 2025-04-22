@@ -3,8 +3,6 @@ import { sendResponse } from "../../helpers/transmission";
 import mongoose from "mongoose";
 import { processExcel } from "../../middleware/utils";
 import { LoincCodeColumns } from "../../config/constants";
-import loinc_code from "../../models/superadmin/loinc_code";
-
 
 const fs = require("fs");
 
@@ -180,7 +178,7 @@ class LoincCodeManagement {
       if (action_name == "delete") filter["delete_status"] = action_value;
 
       if (action_name == "active") {
-        let result = await LoincCode.updateOne({ _id: loincCodeId }, filter, {
+        await LoincCode.updateOne({ _id: loincCodeId }, filter, {
           new: true,
         }).exec();
 

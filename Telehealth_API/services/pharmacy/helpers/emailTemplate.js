@@ -1,6 +1,6 @@
 import "dotenv/config.js";
 
-const terstFrontendUrl = process.env.terst_FRONTEND_URL || "http://localhost:4200";
+const test_pFrontendUrl = process.env.test_p_FRONTEND_URL || "http://localhost:4200";
 
 export const verifyEmail2fa = (email, code) => ({
     Source: '<no-reply@yopmail.com>',
@@ -24,12 +24,12 @@ export const verifyEmail2fa = (email, code) => ({
           <p>If you didn’t request this, you can ignore this email.</p>
           <br/>
           <p>Thanks,</p>
-          <p>terst</p>`
+          <p>test_p</p>`
             },
         },
         Subject: {
             Charset: 'UTF-8',
-            Data: `terst Pharmacy OTP Verification`,
+            Data: `test_p Pharmacy OTP Verification`,
         }
     },
 })
@@ -56,12 +56,12 @@ export const sendStaffDetails = (email, password, type) => ({
           <br/>
           <br/>
           <p>Thanks,</p>
-          <p>terst</p>`
+          <p>test_p</p>`
             },
         },
         Subject: {
             Charset: 'UTF-8',
-            Data: `terst Pharmacy Staff Credential.`,
+            Data: `test_p Pharmacy Staff Credential.`,
         }
     },
 })
@@ -85,7 +85,7 @@ export const sendMailInvitations = (email,first_name,last_name,loggeInname) => (
           <br/>
           <p>Please register yourself on this</p>
           <br/>
-          <a href="${terstFrontendUrl}/pharmacy/signup" role="button">CLICK</a>
+          <a href="${test_pFrontendUrl}/pharmacy/signup" role="button">CLICK</a>
           <br/>          
           <br/>
           <p>Thanks,</p>
@@ -94,7 +94,7 @@ export const sendMailInvitations = (email,first_name,last_name,loggeInname) => (
         },
         Subject: {
             Charset: 'UTF-8',
-            Data: `Mail Invitation from terst `,
+            Data: `Mail Invitation from test_p `,
         }
     },
 })

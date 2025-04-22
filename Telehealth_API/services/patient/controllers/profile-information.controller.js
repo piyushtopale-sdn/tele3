@@ -167,7 +167,6 @@ class ProfileInformation {
       const getRecords = await Family_info.find({ for_portal_user: { $eq: patientId } }).lean();
       let familyRecords = getRecords[0]?.family_members || [];
 
-      // familyRecords = familyRecords.filter(member => !member.isDeleted);
       for (let index = 0; index < familyRecords.length; index++) {
         const element = familyRecords[index];
         if (element?.profile_pic) {

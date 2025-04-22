@@ -260,7 +260,7 @@ export const getReferenceRangeById = async (req, res) => {
 
 export const getNewvitalsThresholdById = async (req, res) => {
     try {
-        const { id, vitalsType } = req.params;  // Extract both 'id' and 'vitalsType' from request params
+        const { vitalsType } = req.params;  // Extract both 'id' and 'vitalsType' from request params
 
         // Aggregation pipeline
         const pipeline = [

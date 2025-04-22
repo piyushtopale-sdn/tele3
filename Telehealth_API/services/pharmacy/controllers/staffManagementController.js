@@ -82,8 +82,7 @@ class StaffManagementController {
                 doj: new Date(doj)
             })
             await staffDetails.save()
-            const content = sendStaffDetails(email, password, 'Pharmacy');
-            //save staff id into parent pharmacy
+            sendStaffDetails(email, password, 'Pharmacy');
             await PortalUser.findOneAndUpdate(
                 { _id: userId },
                 {
@@ -487,30 +486,7 @@ class StaffManagementController {
         try {
             const { pharmacyId, staffRoleId } = req.query
             const staffList = await StaffInfo.find({ for_staff: pharmacyId, role: staffRoleId })
-            // const staffInfo = await StaffInfo.aggregate([
-            //     {
-            //         $lookup: {
-            //             from: "roles",
-            //             localField: "role",
-            //             foreignField: "_id",
-            //             as: "roles",
-            //         }
-            //     },
-            //     {
-            //         $match: {
-            //             for_staff: mongoose.Types.ObjectId(pharmacyId)
-            //         }
-            //     },
-            //     { $unwind: "$roles" },
-            //     {
-            //         $addFields: {
-            //             staffRole: "$roles.name",
-            //         }
-            //     },
-            //     {
-            //         $unset: "roles"
-            //     },
-            // ])
+    
             sendResponse(req, res, 200, {
                 status: true,
                 data: staffList,

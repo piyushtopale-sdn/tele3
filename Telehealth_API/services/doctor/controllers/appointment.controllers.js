@@ -155,20 +155,7 @@ class AppointmentController {
         status: { $in: ["APPROVED"] },
         patientConfirmation: { $ne: 'declined' }
       })
-      // if (consultationFor == 'self') {
-      //   getPatientAppointment = await Appointment.find({
-      //     patientId: mongoose.Types.ObjectId(patientId),
-      //     status: {$in: ["APPROVED"]},
-      //     patientConfirmation:{$ne: 'declined'}
-      //   })
-      // } else {
-      //   getPatientAppointment = await Appointment.find({
-      //     patientId: mongoose.Types.ObjectId(req?.user?.portalUserId),
-      //     consultationFor: 'family-member',
-      //     status: {$in: ["APPROVED"]},
-      //     patientConfirmation:{$ne: 'declined'}
-      //   })
-      // }
+
       if (getPatientAppointment.length > 0) {
         return sendResponse(req, res, 200, {
           status: false,
@@ -324,9 +311,6 @@ class AppointmentController {
 
   // 11 Feb 2025 ---- Altamash
   async listAppointment(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
 
     try {
       const {
@@ -382,11 +366,7 @@ class AppointmentController {
       } else {
         appointmentStatus = status === 'ALL' ? ["PENDING", "CANCELLED", "APPROVED", "COMPLETED", "MISSED"] : [status];
       }
-      // if (status === 'ALL') {
-      //   appointmentStatus = ["PENDING", "CANCELLED", "APPROVED", "COMPLETED", "MISSED"]
-      // } else {
-      //   appointmentStatus = status
-      // }
+
       let date_filter = {}
       if (date) {
         date_filter['consultationDate'] = date
@@ -587,7 +567,7 @@ class AppointmentController {
         });
       }
 
-      const appointmentDetails = await Appointment.findOneAndUpdate(
+     await Appointment.findOneAndUpdate(
         { _id: { $eq: appointmentId } },
         {
           $set: {
@@ -917,31 +897,6 @@ class AppointmentController {
       } else {
         allAvailableSlots = allSlots;
       }
-      /**Feb 10 End*/
-
-      // if (unavailableSlot.length > 0) {
-      //   for (const ele of unavailability_slot) {
-      //     if (ele.date == date) {
-      //       // Time range to remove (in minutes)
-      //       const startRemove = ele.start_time;
-      //       const endRemove = ele.end_time;
-
-      //       // Filter the slots
-      //       const filteredSlots = allSlots.filter(slotObj => {
-      //         const [start, end] = slotObj.slot.split('-');
-      //         const startMinutes = start.replace(':', '');
-      //         const endMinutes = end.replace(':', '');
-
-      //         // Return true if the slot is not in the range to be removed
-      //         return !(startMinutes < endRemove && endMinutes > startRemove);
-      //       });
-      //       const newSlot = [...allAvailableSlots, ...filteredSlots]
-      //       allAvailableSlots = newSlot
-      //     }
-      //   }
-      // } else {
-      //   allAvailableSlots = allSlots
-      // }
 
       return sendResponse(req, res, 200, {
         status: true,

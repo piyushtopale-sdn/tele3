@@ -5,7 +5,6 @@ import mongoose from "mongoose";
 import Superadmin from "../../models/superadmin/superadmin";
 import PortalUser from "../../models/superadmin/portal_user";
 import LocationDetails from "../../models/superadmin/location_info";
-import DocumentInfo from "../../models/superadmin/document_info";
 // utils
 import { sendResponse } from "../../helpers/transmission";
 import { hashPassword } from "../../helpers/string";
@@ -59,7 +58,7 @@ class StaffManagementController {
       if(portalData){
         const content = sendStaffDetails(email, password, staff_name);
   
-        let checkerror = sendEmail(content);
+        sendEmail(content);
       }
 
       
@@ -81,7 +80,7 @@ class StaffManagementController {
   }
 
   async editStaff(req, res) {
-    const { id, staff_name, first_name, middle_name, last_name, mobile, country_code, dob, language, address, neighborhood, country, region, province, department, city, village, pincode, staff_role, about_staff, old_staff_profile, userId,email } = req.body;
+    const { id, first_name, middle_name, last_name, mobile, country_code, dob, language, address, neighborhood, country, region, province, department, city, village, pincode, staff_role, about_staff, email } = req.body;
     try {
       const selectedLanguagesArray = JSON.parse(language);
       const userExist = await PortalUser.find({ _id: { $eq: id } });
@@ -94,7 +93,7 @@ class StaffManagementController {
         });
       }
 
-      const updateSuperadmin = await Superadmin.findOneAndUpdate({ _id: userExist[0].superadmin_id }, { $set: { fullName: first_name + " " + middle_name + " " + last_name, first_name, middle_name, last_name, mobile, country_code,email:email } }, { new: true })
+      await Superadmin.findOneAndUpdate({ _id: userExist[0].superadmin_id }, { $set: { fullName: first_name + " " + middle_name + " " + last_name, first_name, middle_name, last_name, mobile, country_code,email:email } }, { new: true })
 
       //Location details
       const locationObject = {
@@ -108,7 +107,7 @@ class StaffManagementController {
         city: city == '' ? null : city,
         village: village == '' ? null : village
     }
-      const updateLocationDetails = await LocationDetails.findOneAndUpdate(
+      await LocationDetails.findOneAndUpdate(
         { _id: userExist[0]?.location_id },
         {
           $set: locationObject
@@ -125,7 +124,7 @@ class StaffManagementController {
         infoObject['staff_profile'] = staff_profile
       }
       // Portal user details
-      const portalUserDetails = await PortalUser.findOneAndUpdate(
+     await PortalUser.findOneAndUpdate(
         { _id: { $eq: id } },
         {
           $set: infoObject
@@ -265,7 +264,7 @@ class StaffManagementController {
 
   async listStaffforChat(req, res) {
     try {
-      const { page, limit, admin_id, role_id, searchKey } = req.query;
+      const { page, limit, admin_id, searchKey } = req.query;
 
       let filter = {
         role: { $in: ['STAFF_USER', "superadmin"] },

@@ -107,11 +107,7 @@ class MasterController {
 
     async labTestMasterList(req, res) {
         const { searchText, limit, page } = req.query
-        // if (limit != 0) {
-        //     aggregate.push(
-        //         { $skip: (page - 1) * limit },
-        //         { $limit: limit * 1 })
-        // }
+
         let sort = req.query.sort
         let sortingarray = { "createdAt": -1 };
         if (sort != 'undefined' && sort != '' && sort != undefined) {
@@ -519,12 +515,7 @@ class MasterController {
                 res.download(newPath)
             })
 
-            // sendResponse(req, res, 200, {
-            //     status: true,
-            //     body: result,
-            //     message: "All eyeglass records added successfully",
-            //     errorCode: null,
-            // });
+
         } catch (error) {
             
             sendResponse(req, res, 500, {
@@ -587,11 +578,7 @@ class MasterController {
             let value = sort.split(":")[1];
             sortingarray[keynew] = value;
         }
-        // if (limit != 0) {
-        //     aggregate.push(
-        //         { $skip: (page - 1) * limit },
-        //         { $limit: limit * 1 })
-        // }
+
         let filter
         if (searchText == "") {
             filter = {
@@ -783,7 +770,7 @@ class MasterController {
                 { new: true }
             )
             
-            const fourportalChange = await httpService.postStaging('labradio/edit-new-lab-name-superadmin', {imagingTestId,ImagingTestData }, headers, 'labradioServiceUrl');
+            await httpService.postStaging('labradio/edit-new-lab-name-superadmin', {imagingTestId,ImagingTestData }, headers, 'labradioServiceUrl');
 
             sendResponse(req, res, 200, {
                 status: true,
@@ -812,7 +799,7 @@ class MasterController {
             if (action_name == "delete") filter['is_deleted'] = action_value
 
             if (action_name == "active") {
-                let result = await ImagingTest.findOneAndUpdate(
+               await ImagingTest.findOneAndUpdate(
                     { _id: imagingTestId },
                     filter,
                     { new: true }
@@ -1255,7 +1242,7 @@ class MasterController {
             if (action_name == "delete") filter['is_deleted'] = action_value
 
             if (action_name == "active") {
-                let result = await Vaccination.findOneAndUpdate(
+                await Vaccination.findOneAndUpdate(
                     { _id: vaccinationId },
                     filter,
                     { new: true }
@@ -1266,7 +1253,7 @@ class MasterController {
 
             if (action_name == "delete") {
                 if (vaccinationId == '') {
-                    let result = await Vaccination.updateMany(
+                    await Vaccination.updateMany(
                         { is_deleted: { $eq: false } },
                         {
                             $set: { is_deleted: true }
@@ -1275,7 +1262,7 @@ class MasterController {
                     )
                 }
                 else {
-                    let result = await Vaccination.updateMany(
+                    await Vaccination.updateMany(
                         { _id: { $in: vaccinationId } },
                         {
                             $set: { is_deleted: true }
@@ -1403,12 +1390,7 @@ class MasterController {
                 res.download(newPath)
             })
 
-            // sendResponse(req, res, 200, {
-            //     status: true,
-            //     body: result,
-            //     message: "All eyeglass records added successfully",
-            //     errorCode: null,
-            // });
+
         } catch (error) {
             
             sendResponse(req, res, 500, {
@@ -1680,7 +1662,7 @@ class MasterController {
             if (action_name == "delete") filter['is_deleted'] = action_value
 
             if (action_name == "active") {
-                let result = await OthersTest.findOneAndUpdate(
+                await OthersTest.findOneAndUpdate(
                     { _id: otherTestId },
                     filter,
                     { new: true }
@@ -1812,12 +1794,6 @@ class MasterController {
                 res.download(newPath)
             })
 
-            // sendResponse(req, res, 200, {
-            //     status: true,
-            //     body: result,
-            //     message: "All eyeglass records added successfully",
-            //     errorCode: null,
-            // });
         } catch (error) {
             
             sendResponse(req, res, 500, {
@@ -1844,7 +1820,7 @@ class MasterController {
             is_new: new_key
         }));
         try {
-            const result = await Eyeglass.insertMany(list)
+            await Eyeglass.insertMany(list)
             sendResponse(req, res, 200, {
                 status: true,
                 data: null,
@@ -1864,11 +1840,7 @@ class MasterController {
         const { searchText, limit, page } = req.query
         let sort = req.query.sort
         let sortingarray = {};
-        // if (limit != 0) {
-        //     aggregate.push(
-        //         { $skip: (page - 1) * limit },
-        //         { $limit: limit * 1 })
-        // }
+
         if (sort != 'undefined' && sort != '' && sort != undefined) {
             let keynew = sort.split(":")[0];
             let value = sort.split(":")[1];
@@ -2227,12 +2199,7 @@ class MasterController {
                 res.download(newPath)
             })
 
-            // sendResponse(req, res, 200, {
-            //     status: true,
-            //     body: result,
-            //     message: "All eyeglass records added successfully",
-            //     errorCode: null,
-            // });
+
         } catch (error) {
             
             sendResponse(req, res, 500, {

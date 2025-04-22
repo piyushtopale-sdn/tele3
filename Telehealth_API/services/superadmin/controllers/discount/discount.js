@@ -1,6 +1,6 @@
 import { handleResponse } from "../../helpers/transmission";
 import DiscountCoupon from "../../models/superadmin/discount.model";
-import { config, messages } from "../../config/constants";
+import { messages } from "../../config/constants";
 import { generateRandomString } from "../../middleware/utils";
 import mongoose from "mongoose";
 import SubscriptionPlan from "../../models/subscription/subscriptionplans";

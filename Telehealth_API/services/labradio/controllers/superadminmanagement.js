@@ -378,7 +378,7 @@ export const activeLockDeleteLabRadio = async (req, res) => {
         ? "isActive"
         : "";
     if (key) {
-      const portalData = await PortalUser.findOneAndUpdate(
+      await PortalUser.findOneAndUpdate(
         { _id: { $eq: doctor_portal_id } },
         {
           $set: {
@@ -579,7 +579,7 @@ export const labRadioViewBasicInfo = async (req, res) => {
         item.team = teamData[index]?.data;
       });
       // For Profile Picture
-      const profilePicture = await Promise.all(
+      await Promise.all(
         result.map(async (chat) => {
           // For Profile Picture
           if (chat?.profile_picture?.url) {

@@ -588,13 +588,7 @@ class OrderController {
                 for_order_id,
                 in_medicine_bill,
                 request_type,
-                status,
-                name,
-                total_cost,
-                price_per_unit,
-                medicine_id,
-
-                // service
+                status
             } = req.body;
             const headers = {
                 'Authorization': req.headers['authorization']
@@ -621,7 +615,7 @@ class OrderController {
                     title: "Sent Amount"
                 }
 
-                let result = await notification("patientServiceUrl", headers, requestData)
+                await notification("patientServiceUrl", headers, requestData)
                 
                 sendResponse(req, res, 200, {
                     status: true,
@@ -669,7 +663,7 @@ class OrderController {
                     title: "Sent Amount"
                 }
 
-                let result = await notification("patientServiceUrl", headers, requestData)
+                await notification("patientServiceUrl", headers, requestData)
                 
                 sendResponse(req, res, 200, {
                     status: true,
@@ -1154,13 +1148,12 @@ class OrderController {
                 console.error("Error in one of the promises:", error);
             }
  
-            let orderpaymentData = await httpService.getStaging('payment/get-pharmacy-order-payment-history', { orderId, createdDate ,updatedDate,searchKey }, headers, 'patientServiceUrl');
+            await httpService.getStaging('payment/get-pharmacy-order-payment-history', { orderId, createdDate ,updatedDate,searchKey }, headers, 'patientServiceUrl');
 
             let filteredData = data1.filter(item => item.totalApprovedAmount !== null );
            
             const promises2 = filteredData.map(async (item) => {
                 try {
-                    let totalPayment;
                     for (const key in item) {
                         if(key == "plan_price"){
                             return {
@@ -1181,7 +1174,6 @@ class OrderController {
             });
 
             let result;
-            let totalRecords = 0;
             try {
                 let all_details= await Promise.all(promises2);
 

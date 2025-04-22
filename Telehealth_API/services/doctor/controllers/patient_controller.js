@@ -2,29 +2,21 @@
 
 // models
 import HospitalAdminInfo from "../models/hospital_admin_info";
-import DocumentInfo from "../models/document_info";
 import BasicInfo from "../models/basic_info";
-import DoctorAvailability from "../models/doctor_availability";
 import HospitalOpeningHours from "../models/hospital_opening_hours";
 import ReviewAndRating from "../models/review";
 import PortalUser from "../models/portal_user";
 import Appointment from "../models/appointment";
 import Reminder from "../models/reminder";
 import Specialty from "../models/specialty_info";
-import ReasonForAppointment from "../models/reason_for_appointment";
-import review from "../models/review";
 import moment from "moment";
 
 // utils
 import { sendResponse } from "../helpers/transmission";
-import { formatDateAndTime } from "../middleware/utils";
 import mongoose from "mongoose";
 import Http from "../helpers/httpservice";
-import reminder from "../models/reminder";
 import { notification } from "../helpers/notification";
-import specialty_info from "../models/specialty_info";
 import StaffInfo from "../models/staff_info";
-import profile_info from "../models/profile_info";
 import PathologyTestInfoNew from "../models/pathologyTestInfoNew";
 import { generateSignedUrl } from "../helpers/gcs";
 const httpService = new Http();
@@ -297,18 +289,11 @@ class PatientController {
       let data = result[0];
 
       //Opening hours status
-      let status = "";
       if (data.opening_hours_status) {
-        status = "24 Hrs";
       } else {
-        const dayArray = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
-        const todaysDate = formatDateAndTime(new Date());
-        const day = dayArray[new Date().getDay()];
-        const getHours = await HospitalOpeningHours.find({
+        await HospitalOpeningHours.find({
           for_portal_user: { $eq: hospital_portal_id },
         });
-        const getWeekDaysValue = getHours;
-        // let openTime
       }
 
       let hospitalPicture = [];
@@ -714,7 +699,7 @@ class PatientController {
 
   async getReviewAndRatingForSupeAdmin(req, res) {
     try {
-      const { portal_user_id, page, limit, reviewBy, reviewTo } = req.query;
+      const { page, limit, reviewBy, reviewTo } = req.query;
       let sort = req.query.sort;
       let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
@@ -827,22 +812,7 @@ class PatientController {
           _id: value?._id,
         });
       }
-      // const getAverage = await PortalUser.findById(portal_user_id).select('average_rating')
-      // const getAllRatings = await ReviewAndRating.find({ portal_user_id: { $eq: portal_user_id } }).select('rating')
-      // let fiveStart = 0
-      // let fourStart = 0
-      // let threeStart = 0
-      // let twoStart = 0
-      // let oneStart = 0
-      // for (const rating of getAllRatings) {
-      //     if (rating.rating === 5) fiveStart += 1
-      //     if (rating.rating === 4) fourStart += 1
-      //     if (rating.rating === 3) threeStart += 1
-      //     if (rating.rating === 2) twoStart += 1
-      //     if (rating.rating === 1) oneStart += 1
-      // }
-      // const ratingCount = { fiveStart, fourStart, threeStart, twoStart, oneStart }
-      // const totalCount = await ReviewAndRating.find({ portal_user_id: { $eq: portal_user_id }, reviewBy }).countDocuments()
+    
       return sendResponse(req, res, 200, {
         status: true,
         body: {
@@ -869,7 +839,7 @@ class PatientController {
   }
 
   async getDoctorProfileAndName(doctorIds) {
-    const basic_info = await BasicInfo.find({
+    await BasicInfo.find({
       for_portal_user: { $in: doctorIds },
     })
       .select({
@@ -911,45 +881,7 @@ class PatientController {
           _id: reminder?.appointment_id,
         });
         if (appointmentDetails) {
-          let consultationDate = new Date(appointmentDetails?.consultationDate);
-          let consultationTime = appointmentDetails?.consultationTime;
-          let startTime = consultationTime.split("-")[0].trim();
-          if (!reminder?.datetime) {
-            let notificationMinutesBefore = reminder?.minutes || 0;
-            if (reminder?.hours) {
-              notificationMinutesBefore += reminder?.hours * 60;
-            }
-            let formattedDateTime =
-              moment(consultationDate).format("YYYY-MM-DD") + " " + startTime;
-
-            let notificationTime = new Date(
-              moment(formattedDateTime).subtract(
-                notificationMinutesBefore,
-                "minutes"
-              )
-            );
-            // let notificationTime = "2024-04-03T09:21:53.935Z"
-          } else {
-            let formattedDateTime =
-              moment(consultationDate).format("YYYY-MM-DD") + " " + startTime;
-
-            let notificationTime = new Date(moment(reminder?.datetime));
-            // let notificationTime = "2024-04-03T09:21:53.935Z"
-
-            if (!isNaN(notificationTime.getTime())) {
-              let formattedDateTimeTimestamp = new Date(
-                formattedDateTime
-              ).getTime();
-              let notificationTimeTimestamp = notificationTime.getTime();
-
-              let differenceInMilliseconds =
-                notificationTimeTimestamp - formattedDateTimeTimestamp;
-              let notificationMinutesBefore = Math.abs(
-                differenceInMilliseconds / (1000 * 60)
-              );
-            }
-          }
-
+     
           // Compare notification time with current time
           // let currentTime = new Date(moment().utcOffset("+05:30").format())
           // let currentTime = "2024-04-03T09:21:53.935Z"
@@ -966,7 +898,7 @@ class PatientController {
                 notitype: "Appointment Reminder",
                 appointmentId: reminder?.appointment_id,
               };
-              let result = await notification(
+              await notification(
                 appointmentDetails?.madeBy,
                 reminder?.doctorId,
                 "hospitalServiceUrl",
@@ -976,7 +908,7 @@ class PatientController {
                 {},
                 requestData
               );
-              let modifiedresult = await Reminder.updateOne(
+              await Reminder.updateOne(
                 { _id: reminder?._id },
                 { status: 1 },
                 { new: true }
@@ -991,7 +923,7 @@ class PatientController {
                 notitype: "Appointment Reminder",
                 appointmentId: reminder?.appointment_id,
               };
-              let result = await notification(
+             await notification(
                 "patient",
                 reminder?.patientId,
                 "patientServiceUrl",
@@ -1002,7 +934,7 @@ class PatientController {
                 requestData
               );
 
-              let modifiedresult = await Reminder.updateOne(
+              await Reminder.updateOne(
                 { _id: reminder?._id },
                 { status: 1 },
                 { new: true }
@@ -1020,9 +952,8 @@ class PatientController {
   async getRatingReviewByPatient(req, res) {
     try {
       const { patientId } = req.query;
-      // const result = await review.find({patient_login_id:patientId });
 
-      const result = await review.aggregate([
+      const result = await ReviewAndRating.aggregate([
         {
           $match: { patient_login_id: mongoose.Types.ObjectId(patientId) },
         },
@@ -1338,7 +1269,7 @@ class PatientController {
         let speciality = "";
 
         if (basic_info?.speciality) {
-          const res = await specialty_info.findOne({
+          const res = await Specialty.findOne({
             _id: basic_info.speciality,
           });
           if (res) {
@@ -1353,7 +1284,6 @@ class PatientController {
           patient_name: appointment.patientDetails.patientFullName,
           // doctor_name: doctorDetails[0].full_name,
           doctor_name: appointment.doctorId.full_name,
-          order_id: appointment.appointment_id,
           doctor_id: appointment.doctorId.for_portal_user,
           hospital_name: appointment.hospital_details
             ? appointment.hospital_details.hospital_name

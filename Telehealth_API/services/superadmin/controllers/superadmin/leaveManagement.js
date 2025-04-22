@@ -153,7 +153,7 @@ class LeaveTypeManagementController {
       if (action_name == "delete") filter["delete_status"] = action_value;
 
       if (action_name == "active") {
-        let result = await LeaveTypes.updateOne({ _id: leaveTypesId }, filter, {
+        await LeaveTypes.updateOne({ _id: leaveTypesId }, filter, {
           new: true,
         }).exec();
 

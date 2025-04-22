@@ -23,7 +23,6 @@ class IndividualDoctorStaffController {
       Authorization: req.headers["authorization"],
     }
     const {
-      staff_name,
       first_name,
       middle_name,
       last_name,
@@ -116,7 +115,7 @@ class IndividualDoctorStaffController {
           $push: { staff_ids: userDetails._id }
         }
       )
-      let staffFullDetails = await StaffInfo.findOne({ _id: staffDetails._id })
+     await StaffInfo.findOne({ _id: staffDetails._id })
         .populate({
           path: "in_profile",
           populate: {
@@ -161,7 +160,6 @@ class IndividualDoctorStaffController {
   async editStaff(req, res) {
     const {
       staffId,
-      staffName,
       first_name,
       middle_name,
       last_name,
@@ -172,7 +170,6 @@ class IndividualDoctorStaffController {
       dob,
       language,
       addressInfo,
-      password,
       countryCode,
       mobile,
       role,
@@ -185,7 +182,6 @@ class IndividualDoctorStaffController {
       // unit,
       // expertise,
       profilePic,
-      creatorId,
       doj
     } = req.body;
     try {
@@ -223,7 +219,7 @@ class IndividualDoctorStaffController {
         { upsert: false, new: true }
       )
 
-      const staffDetails = await StaffInfo.findOneAndUpdate(
+      await StaffInfo.findOneAndUpdate(
         { for_portal_user: staffId },
         {
           $set: {
@@ -245,7 +241,7 @@ class IndividualDoctorStaffController {
         },
         { upsert: false, new: true }
       )
-      const PortalUserDetails = await PortalUser.findOneAndUpdate(
+      await PortalUser.findOneAndUpdate(
         { _id: staffId },
         {
           $set: {
@@ -548,7 +544,7 @@ class IndividualDoctorStaffController {
         filter,
         { new: true }
       );
-      let updatedStaffInfo = await StaffInfo.updateOne(
+     await StaffInfo.updateOne(
         { for_portal_user: staff_id },
         filter,
         { new: true }

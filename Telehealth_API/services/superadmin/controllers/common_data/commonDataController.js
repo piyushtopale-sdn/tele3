@@ -440,9 +440,8 @@ class CommonDataController {
   //   Country Api
   async addCountries(req, res) {
     try {
-      const { name, country_code, iso_code, createdBy } = req.body;
+      const { country_code, iso_code, createdBy } = req.body;
       const coutryname = req.body.name;
-      // const lowercaseName = coutryname.toLowerCase();
       const lowercaseName = coutryname;
 
       const list = await Country.find({ name: lowercaseName, is_deleted: false });
@@ -479,7 +478,7 @@ class CommonDataController {
 
   async countryLists(req, res) {
     try {
-      const { page, limit, searchKey, createdDate, updatedDate } = req.query;
+      const { page, limit, searchKey } = req.query;
       let sort=req.query.sort
       let sortingarray={};
       if (sort != 'undefined' && sort != '' && sort != undefined)
@@ -589,16 +588,6 @@ class CommonDataController {
       if (action_name == "active") filter["active"] = action_value;
       if (action_name == "delete") filter["is_deleted"] = action_value;
 
-      // if (action_name == "active") {
-      //     let result = await Vaccination.findOneAndUpdate(
-      //         { _id: vaccinationId },
-      //         filter,
-      //         { new: true }
-      //     );
-
-      //     message = action_value == true ? 'Successfully Active Vaccination' : 'Successfully In-active Vaccination'
-      // }
-
       if (action_name == "delete") {
         if (vaccinationId == "") {
           
@@ -614,7 +603,7 @@ class CommonDataController {
               });
           }
 
-          let result = await Country.updateMany(
+          await Country.updateMany(
             { is_deleted: { $eq: false } },
             {
               $set: { is_deleted: true },
@@ -631,7 +620,7 @@ class CommonDataController {
                   errorCode: null,
               });
           }
-          let result = await Country.updateMany(
+          await Country.updateMany(
             { _id: { $in: vaccinationId } },
             {
               $set: { is_deleted: true },
@@ -724,103 +713,6 @@ class CommonDataController {
     }
   }
 
-  // async uploadCSVForCountryList(req, res) {
-  //   try {
-  //     const filePath = "./uploads/" + req.filename;
-  //     const data = await processExcel(filePath);
-  //     const isValidFile = validateColumnWithExcel(CountryColumns, data[0]);
-  //     fs.unlinkSync(filePath);
-  //     if (!isValidFile) {
-  //       sendResponse(req, res, 500, {
-  //         status: false,
-  //         body: isValidFile,
-  //         message: "Invalid excel sheet! column not matched.",
-  //         errorCode: null,
-  //       });
-  //       return;
-  //     }
-  //     if (data.length === 0) {
-  //       return sendResponse(req, res, 400, {
-  //         status: false,
-  //         body: null,
-  //         message: "CSV data is empty",
-  //         errorCode: null,
-  //       });
-  //     }
-
-  //     for (const element of data) {
-  //       const country = await Country.findOne({
-  //         name: element.name.trim(),
-  //         is_deleted: false,
-  //       });
-  // if (!country) {
-  //   for (const country of data) {
-  //     countryData.push({
-  //       name: country.name,
-  //       country_code: country.country_code,
-  //       iso_code: country.iso_code,
-  //     });
-  //   }
-
-  //   const result = await Country.insertMany(countryData);
-  //       } else {
-  //         const regionName = element.name.trim();
-
-  //         // Check if the combination of country name and region name already exists
-  //         const existingRegion = await Country.findOne({
-  //           name: regionName,
-  //           country_id: country._id,
-  //           is_deleted: false,
-
-  //         });
-  //         if (existingRegion) {
-  //           return sendResponse(req, res, 500, {
-  //             status: false,
-  //             body: null,
-  //             message: `'${regionName}' country  already exists`,
-  //             errorCode: null,
-  //           });
-  //         } else {
-  //           const payload = {
-  //             name: regionName,
-  //             country_id: country._id,
-  //           };
-  //           const region = new Region(payload);
-  //           await region.save();
-  //         }
-  //       }
-
-
-
-  //     }
-  //     const countryData = [];
-
-  //     for (const country of data) {
-  //       countryData.push({
-  //         name: country.name,
-  //         country_code: country.country_code,
-  //         iso_code: country.iso_code,
-  //       });
-  //     }
-
-  //     const result = await Country.insertMany(countryData);
-  //     sendResponse(req, res, 200, {
-  //       status: true,
-  //       body: result,
-  //       message: "All countryData records added successfully",
-  //       errorCode: null,
-  //     });
-  //   } catch (error) {
-  //     sendResponse(req, res, 500, {
-  //       status: false,
-  //       body: error,
-  //       message: "Internal server error 1",
-  //       errorCode: null,
-  //     });
-  //   }
-  // }
-
-
   async uploadCSVForCountryList(req, res) {
     try {
       const filePath = './uploads/' + req.filename
@@ -898,7 +790,6 @@ class CommonDataController {
   async addRegion(req, res) {
     try {
       const { name, country_id,createdBy } = req.body;
-      // const list = await Region.findOne({ country_id: mongoose.Types.ObjectId(req.body.country_id) });
       const getlist = await Region.findOne({ country_id: mongoose.Types.ObjectId(req.body.country_id), name: name  });
       if (getlist === null || getlist === undefined) {
         let result = new Region({
@@ -936,7 +827,7 @@ class CommonDataController {
   async regionLists(req, res) {
     // 
     try {
-      const { page, limit, searchKey, createdDate, updatedDate } = req.query;
+      const { page, limit, searchKey } = req.query;
       let sort=req.query.sort
       let sortingarray={};
       if (sort != 'undefined' && sort != '' && sort != undefined)
@@ -1028,16 +919,6 @@ class CommonDataController {
       if (action_name == "active") filter["active"] = action_value;
       if (action_name == "delete") filter["is_deleted"] = action_value;
 
-      // if (action_name == "active") {
-      //     let result = await Vaccination.findOneAndUpdate(
-      //         { _id: vaccinationId },
-      //         filter,
-      //         { new: true }
-      //     );
-
-      //     message = action_value == true ? 'Successfully Active Vaccination' : 'Successfully In-active Vaccination'
-      // }
-
       if (action_name == "delete") {
         if (vaccinationId == "") {
           let checkisDeleted = await Region.find({ is_deleted: false }, { _id: 1 });
@@ -1051,7 +932,7 @@ class CommonDataController {
                   errorCode: null,
               });
           }
-          let result = await Region.updateMany(
+          await Region.updateMany(
             { is_deleted: { $eq: false } },
             {
               $set: { is_deleted: true },
@@ -1068,7 +949,7 @@ class CommonDataController {
                   errorCode: null,
               });
           }
-          let result = await Region.updateMany(
+          await Region.updateMany(
             { _id: { $in: vaccinationId } },
             {
               $set: { is_deleted: true },
@@ -1336,7 +1217,7 @@ class CommonDataController {
   async provincemasterList(req, res) {
     
     try {
-      const { page, limit, searchKey, createdDate, updatedDate } = req.query;
+      const { page, limit, searchKey } = req.query;
       let sort=req.query.sort
       let sortingarray={};
       if (sort != 'undefined' && sort != '' && sort != undefined)
@@ -1427,16 +1308,6 @@ class CommonDataController {
       if (action_name == "active") filter["active"] = action_value;
       if (action_name == "delete") filter["is_deleted"] = action_value;
 
-      // if (action_name == "active") {
-      //     let result = await Vaccination.findOneAndUpdate(
-      //         { _id: vaccinationId },
-      //         filter,
-      //         { new: true }
-      //     );
-
-      //     message = action_value == true ? 'Successfully Active Vaccination' : 'Successfully In-active Vaccination'
-      // }
-
       if (action_name == "delete") {
         if (vaccinationId == "") {
           let checkisDeleted = await Province.find({ is_deleted: false }, { _id: 1 });
@@ -1450,7 +1321,7 @@ class CommonDataController {
                   errorCode: null,
               });
           }
-          let result = await Province.updateMany(
+          await Province.updateMany(
             { is_deleted: { $eq: false } },
             {
               $set: { is_deleted: true },
@@ -1467,7 +1338,7 @@ class CommonDataController {
                   errorCode: null,
               });
           }
-          let result = await Province.updateMany(
+          await Province.updateMany(
             { _id: { $in: vaccinationId } },
             {
               $set: { is_deleted: true },
@@ -1754,7 +1625,7 @@ class CommonDataController {
 
   async provincedepartmentList(req, res) {
     try {
-      const { page, limit, searchKey, createdDate, updatedDate } = req.query;
+      const { page, limit, searchKey } = req.query;
       let sort=req.query.sort
       let sortingarray={};
       if (sort != 'undefined' && sort != '' && sort != undefined)
@@ -1844,16 +1715,6 @@ class CommonDataController {
       if (action_name == "active") filter["active"] = action_value;
       if (action_name == "delete") filter["is_deleted"] = action_value;
 
-      // if (action_name == "active") {
-      //     let result = await Vaccination.findOneAndUpdate(
-      //         { _id: vaccinationId },
-      //         filter,
-      //         { new: true }
-      //     );
-
-      //     message = action_value == true ? 'Successfully Active Vaccination' : 'Successfully In-active Vaccination'
-      // }
-
       if (action_name == "delete") {
         if (vaccinationId == "") {
           let checkisDeleted = await Department.find({ is_deleted: false }, { _id: 1 });
@@ -1876,7 +1737,7 @@ class CommonDataController {
                   errorCode: null,
               });
           }
-          let result = await Department.updateMany(
+          await Department.updateMany(
             { is_deleted: { $eq: false } },
             {
               $set: { is_deleted: true },
@@ -1902,7 +1763,7 @@ class CommonDataController {
                   errorCode: null,
               });
           }
-          let result = await Department.updateMany(
+          await Department.updateMany(
             { _id: { $in: vaccinationId } },
             {
               $set: { is_deleted: true },
@@ -2219,7 +2080,7 @@ class CommonDataController {
 
   async mastercityList(req, res) {
     try {
-      const { page, limit, searchKey, createdDate, updatedDate } = req.query;
+      const { page, limit, searchKey } = req.query;
       let sort=req.query.sort
       let sortingarray={};
       if (sort != 'undefined' && sort != '' && sort != undefined)
@@ -2318,19 +2179,10 @@ class CommonDataController {
       if (action_name == "active") filter["active"] = action_value;
       if (action_name == "delete") filter["is_deleted"] = action_value;
 
-      // if (action_name == "active") {
-      //     let result = await Vaccination.findOneAndUpdate(
-      //         { _id: vaccinationId },
-      //         filter,
-      //         { new: true }
-      //     );
-
-      //     message = action_value == true ? 'Successfully Active Vaccination' : 'Successfully In-active Vaccination'
-      // }
 
       if (action_name == "delete") {
         if (vaccinationId == "") {
-          let result = await City.updateMany(
+          await City.updateMany(
             { is_deleted: { $eq: false } },
             {
               $set: { is_deleted: true },
@@ -2338,7 +2190,7 @@ class CommonDataController {
             { new: true }
           );
         } else {
-          let result = await City.updateMany(
+          await City.updateMany(
             { _id: { $in: vaccinationId } },
             {
               $set: { is_deleted: true },
@@ -2667,7 +2519,7 @@ class CommonDataController {
 
   async mastervillageList(req, res) {
     try {
-      const { page, limit, searchKey, createdDate, updatedDate } = req.query;
+      const { page, limit, searchKey } = req.query;
       let sort=req.query.sort
       let sortingarray={};
       if (sort != 'undefined' && sort != '' && sort != undefined)
@@ -2766,19 +2618,9 @@ class CommonDataController {
       if (action_name == "active") filter["active"] = action_value;
       if (action_name == "delete") filter["is_deleted"] = action_value;
 
-      // if (action_name == "active") {
-      //     let result = await Vaccination.findOneAndUpdate(
-      //         { _id: vaccinationId },
-      //         filter,
-      //         { new: true }
-      //     );
-
-      //     message = action_value == true ? 'Successfully Active Vaccination' : 'Successfully In-active Vaccination'
-      // }
-
       if (action_name == "delete") {
         if (vaccinationId == "") {
-          let result = await Village.updateMany(
+         await Village.updateMany(
             { is_deleted: { $eq: false } },
             {
               $set: { is_deleted: true },
@@ -2786,7 +2628,7 @@ class CommonDataController {
             { new: true }
           );
         } else {
-          let result = await Village.updateMany(
+          await Village.updateMany(
             { _id: { $in: vaccinationId } },
             {
               $set: { is_deleted: true },
@@ -3226,7 +3068,7 @@ class CommonDataController {
       if (action_name == "delete") filter['delete_status'] = action_value
 
       if (action_name == "active") {
-        let result = await Designation.updateOne(
+        await Designation.updateOne(
           { _id: designationId },
           filter,
           { new: true }
@@ -3569,7 +3411,7 @@ class CommonDataController {
       if (action_name == "delete") filter['delete_status'] = action_value
 
       if (action_name == "active") {
-        let result = await Title.updateOne(
+        await Title.updateOne(
           { _id: titleId },
           filter,
           { new: true }
@@ -3917,7 +3759,7 @@ class CommonDataController {
       if (action_name == "delete") filter['delete_status'] = action_value
 
       if (action_name == "active") {
-        let result = await Language.updateOne(
+        await Language.updateOne(
           { _id: languageId },
           filter,
           { new: true }
@@ -4238,7 +4080,7 @@ async addStudyType(req,res)
             await addStudyType.save()
         }
     }
-    let message = "Study Type added successfully"
+    let message;
     if (studyTypes.length == existingStudyType.length) {
         message = `This study type already exists.`
     } else if(existingStudyType.length > 0 && studyTypes.length != existingStudyType.length) {

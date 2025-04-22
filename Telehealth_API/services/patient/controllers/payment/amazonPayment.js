@@ -185,7 +185,7 @@ const saveData = (getPaymentData, existingSubscription, params) => {
 //          language=en&
 //          command=AUTHORIZATION&
 //          customer_email=test@yopmail.com&
-//          return_url=https://dev.terstapp.com&
+//          return_url=https://dev.test_papp.com&
 //          signature=c790c3ed329e75a7f7ef3f28ad14fa846ab3b2a425caa6ab10c932cbdc838944`
 // }).then(response => response.text())
 //   .then(html => {
@@ -208,7 +208,7 @@ class AmazonPaymentController {
                 language: 'en',
                 command: 'AUTHORIZATION',
                 customer_email: customerEmail,
-                return_url: 'dev.terstapp.com',
+                return_url: 'dev.test_papp.com',
                 tokenization: 'Y',       // Request Tokenization
                 remember_me: 'Y'        // Ask customer to save payment method
             };
@@ -378,7 +378,7 @@ class AmazonPaymentController {
                 command: 'PURCHASE',
                 token_name: 'YOUR_SAVED_TOKEN_NAME',
                 customer_email: "test@yopmail.com",
-                // return_url: 'dev.terstapp.com',
+                // return_url: 'dev.test_papp.com',
                 // token_name: token_payment,
                 // tokenization: 'Y',         // Request Tokenization
                 // remember_me: 'Y'           // Ask customer to save payment method

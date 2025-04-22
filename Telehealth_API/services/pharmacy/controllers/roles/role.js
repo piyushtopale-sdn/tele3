@@ -2,7 +2,6 @@ import Role from "../../models/rolesandpermission/role_model";
 import roleCounter from "../../models/rolesandpermission/role_counter_model";
 // utils
 import { handleResponse } from "../../helpers/transmission";
-import mongoose from "mongoose";
 import PortalUser from "../../models/portal_user";
 
 let seqId = 0;
@@ -64,7 +63,7 @@ export const add_role = async (req, res) => {
 
 export const all_role = async (req, res) => {
   try {
-    let { limit, page, searchText, userId } = req.query;
+    let { limit, page, userId } = req.query;
     const checkUser = await PortalUser.findOne({ _id: userId });
     if (checkUser?.role === "PHARMACY_STAFF") {
       const data = await PortalUser.findOne({

@@ -171,7 +171,7 @@ class ICDCodeManagement {
       if (action_name == "delete") filter["delete_status"] = action_value;
 
       if (action_name == "active") {
-        let result = await ICDcode.updateOne({ _id: codeId }, filter, {
+        await ICDcode.updateOne({ _id: codeId }, filter, {
           new: true,
         }).exec();
 
@@ -359,16 +359,7 @@ class ICDCodeManagement {
       } else {
         sortingarray["createdAt"] = -1;
       }
-      // let filter = { delete_status: false };
-      // if (searchText != "") {
-      //   filter = {
-      //     delete_status: false,
-      //     $or: [
-      //       { code: { $regex: searchText || "", $options: "i" } },
-      //       { disease_title: { $regex: searchText || "", $options: "i" } },
-      //     ],
-      //   };
-      // }
+
       let filter = { delete_status: false };
        function escapeRegex(text) {
         return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");

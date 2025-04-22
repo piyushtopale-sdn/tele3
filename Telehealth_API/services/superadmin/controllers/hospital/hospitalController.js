@@ -1,4 +1,3 @@
-import { handleResponse } from "../../helpers/transmission";
 const Http = require('../../helpers/httpservice');
 
 const httpService = new Http()

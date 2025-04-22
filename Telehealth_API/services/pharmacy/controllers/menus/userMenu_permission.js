@@ -1,4 +1,3 @@
-// import Menu from "../../models/users/menu_model";
 import MenuPermission from "../../models/rolesandpermission/menu_permission";
 import PortalUser from "../../models/portal_user";
 import { handleResponse } from "../../helpers/transmission";

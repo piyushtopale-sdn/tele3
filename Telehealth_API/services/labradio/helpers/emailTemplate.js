@@ -1,6 +1,6 @@
 import "dotenv/config";
 
-const terstFrontendUrl = process.env.terst_FRONTEND_URL || "http://localhost:4200";
+const test_pFrontendUrl = process.env.test_p_FRONTEND_URL || "http://localhost:4200";
 
 export const forgotPasswordEmailForIndividualDoctor = (email, code, user_id, type) => {
     return {
@@ -19,7 +19,7 @@ export const forgotPasswordEmailForIndividualDoctor = (email, code, user_id, typ
                 <h3>Password Reset for ${type} portal.</h3>
                 <br/>
                
-                <a href="${terstFrontendUrl}/portals/newpassword/${type}?token=${code}&user_id=${user_id}&type=${type}&role="button">RESET YOUR PASSWORD</a>
+                <a href="${test_pFrontendUrl}/portals/newpassword/${type}?token=${code}&user_id=${user_id}&type=${type}&role="button">RESET YOUR PASSWORD</a>
                 <br/>
                 <p>Click the below button to reset your password</p>
                 <br/>
@@ -86,7 +86,7 @@ export const sendMailInvitations = (email, first_name, last_name, loggeInname) =
           <br/>
           <p>Please register yourself on this</p>
           <br/>
-          <a href="${terstFrontendUrl}/patient/signup" role="button">CLICK</a>
+          <a href="${test_pFrontendUrl}/patient/signup" role="button">CLICK</a>
           <br/>
           <br/>
           <p>Thanks</p>
@@ -149,7 +149,7 @@ export const sendEprescriptionEmail = (patient_email, portal_email, appointmentI
                 <br/>
                 <p>Please find below attachment of your EPrescription by Dr. ${portal_name}.</p>
                 <br/>
-                <a href="${terstFrontendUrl}/portals/eprescription-viewpdf?id=${appointmentId}&portal_type=${portal_type}">Link to Download PDF</a>           
+                <a href="${test_pFrontendUrl}/portals/eprescription-viewpdf?id=${appointmentId}&portal_type=${portal_type}">Link to Download PDF</a>           
                 <br/>
                 <br/>
                 <p>Thanks & Regards</p>

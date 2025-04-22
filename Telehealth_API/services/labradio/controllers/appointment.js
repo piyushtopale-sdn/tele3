@@ -74,12 +74,10 @@ function filterBookedSlotsToday(array1) {
 
 export const updatePaymentStatusAndSlot = async (appointmentId, req) => {
 
-  //const appointmentDetails = Appointment.findById(appointmentId);
   const appointmentDetails = await Appointment.findById(
     mongoose.Types.ObjectId(appointmentId)
   );
 
-  var notificationCreator = null;
   var notificationReceiver = null;
   if (appointmentDetails.madeBy == "patient") {
     notificationCreator = appointmentDetails.patientId;
@@ -89,23 +87,6 @@ export const updatePaymentStatusAndSlot = async (appointmentId, req) => {
     notificationReceiver = appointmentDetails.patientId;
   }
 
-  var appointType = appointmentDetails.appointmentType.replace("_", " ");
-
-  var message = `You have recevied one new appoitment for ${appointType} consulation at ${appointmentDetails.hospital_details.hospital_name} on ${appointmentDetails.consultationDate} | ${appointmentDetails.consultationTime} from ${appointmentDetails.patientDetails.patientFullName}`;
-  var requestData = {
-    created_by_type: appointmentDetails.madeBy,
-    created_by: notificationCreator,
-    content: message,
-    url: "",
-    for_portal_user: notificationReceiver,
-    notitype: "New Appointment",
-    appointmentId: appointmentId,
-  };
-  //var result = await notification(appointmentDetails.madeBy, notificationCreator, "hospitalServiceUrl", req.body.portalId, "one new appointment", "https://mean.stagingsdei.com:451", headers, requestData)
-
-  /*  
-  to insert next available appointment date of doctor
-  */
 
   var timeStamp = new Date();
   var timeStampString;
@@ -139,8 +120,6 @@ export const updatePaymentStatusAndSlot = async (appointmentId, req) => {
       "labradioServiceUrl"
     );
 
-    // timeStampString = moment(timeStamp, "DD-MM-YYYY").add(1, 'days');
-    // timeStamp = new Date(timeStampString)
     const slots = resData?.body?.allGeneralSlot;
 
     let isBreak = false;
@@ -168,7 +147,7 @@ export const updatePaymentStatusAndSlot = async (appointmentId, req) => {
 
   if (slot != null) {
 
-    const basicInfo = await BasicInfo.findOneAndUpdate(
+    await BasicInfo.findOneAndUpdate(
       { for_portal_user: { $eq: notificationReceiver } },
       {
         $set: {
@@ -283,7 +262,7 @@ export default class appointmentController {
           appointmentId: appointmentDetails?._id,
           title: "New Appointment",
         };
-        var result = await notification(
+        await notification(
           "",
           "",
           serviceurl,
@@ -356,7 +335,7 @@ export default class appointmentController {
           message = `New Appointement from ${portalfullName?.full_name}`;
         }
 
-        var requestData = {
+        requestData = {
           created_by_type: portal_type,
           created_by: loginId,
           content: message,
@@ -366,7 +345,7 @@ export default class appointmentController {
           appointmentId: appointmentDetails?._id,
           title: "New Appointment",
         };
-        var result = await notification(
+       await notification(
           "",
           "",
           serviceurl,
@@ -409,7 +388,6 @@ export default class appointmentController {
       if (minute.toString().length == 1) {
         minute = "0" + minute;
       }
-      const hourAndMin = hour + minute;
       var startTime;
       var startTimeH;
       var startTimeM;
@@ -418,9 +396,6 @@ export default class appointmentController {
       var endTimeH;
       var endTimeM;
       var endTimeHM;
-      var currentTimeH;
-      var currentTimeM;
-      var currentTimeHM;
 
       var allGeneralSlot = [];
       var allGeneralSlot2 = [];
@@ -497,7 +472,7 @@ export default class appointmentController {
           startTimeM = startTime.slice(2);
           startTimeHM = startTimeH + ":" + startTimeM;
           var piece = startTimeHM;
-          var piece = startTimeHM.split(":");
+          piece = startTimeHM.split(":");
           var mins =
             piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
           var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
@@ -517,7 +492,7 @@ export default class appointmentController {
           // allGeneralSlot2.push(startTimeH + startTimeM)
           for (let index = 0; index < totalNumbersSlots - 1; index++) {
             var piece = startTimeHM;
-            var piece = startTimeHM.split(":");
+            piece = startTimeHM.split(":");
             var mins =
               piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
             startTimeH = ((mins % (24 * 60)) / 60) | 0;
@@ -531,18 +506,18 @@ export default class appointmentController {
             startTimeHM = startTimeH + ":" + startTimeM;
 
             var piece = startTimeHM;
-            var piece = startTimeHM.split(":");
-            var mins =
+            piece = startTimeHM.split(":");
+            mins =
               piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
             var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
             if (nextStartTimeH.toString().length == 1) {
               nextStartTimeH = "0" + startTimeH;
             }
-            var nextStartTimeM = mins % 60;
+            nextStartTimeM = mins % 60;
             if (nextStartTimeM.toString().length == 1) {
               nextStartTimeM = nextStartTimeM + "0";
             }
-            var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+            nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
             availabilitySlot.push({
               slot: startTimeHM + "-" + nextStartTimeHM,
@@ -620,7 +595,7 @@ export default class appointmentController {
             startTimeM = startTime.slice(2);
             startTimeHM = startTimeH + ":" + startTimeM;
             var piece = startTimeHM;
-            var piece = startTimeHM.split(":");
+            piece = startTimeHM.split(":");
             // var mins = piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2)
 
             var mins =
@@ -648,7 +623,7 @@ export default class appointmentController {
               index++
             ) {
               var piece = startTimeHM;
-              var piece = startTimeHM.split(":");
+              piece = startTimeHM.split(":");
               var mins =
                 parseInt(parseInt(piece[0]) * 60) +
                 +parseInt(piece[1]) +
@@ -664,7 +639,7 @@ export default class appointmentController {
               startTimeHM = startTimeH + ":" + startTimeM;
 
               var piece = startTimeHM;
-              var piece = startTimeHM.split(":");
+              piece = startTimeHM.split(":");
               var mins =
                 parseInt(parseInt(piece[0]) * 60) +
                 +parseInt(piece[1]) +
@@ -735,7 +710,7 @@ export default class appointmentController {
               startTimeM = startTime.slice(2);
               startTimeHM = startTimeH + ":" + startTimeM;
               var piece = startTimeHM;
-              var piece = startTimeHM.split(":");
+              piece = startTimeHM.split(":");
               var mins =
                 piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
               var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
@@ -755,7 +730,7 @@ export default class appointmentController {
               // allGeneralSlot2.push(startTimeH + startTimeM)
               for (let index = 0; index < totalNumbersSlots - 1; index++) {
                 var piece = startTimeHM;
-                var piece = startTimeHM.split(":");
+                piece = startTimeHM.split(":");
                 var mins =
                   piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
                 startTimeH = ((mins % (24 * 60)) / 60) | 0;
@@ -769,7 +744,7 @@ export default class appointmentController {
                 startTimeHM = startTimeH + ":" + startTimeM;
 
                 var piece = startTimeHM;
-                var piece = startTimeHM.split(":");
+                piece = startTimeHM.split(":");
                 var mins =
                   piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
                 var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;

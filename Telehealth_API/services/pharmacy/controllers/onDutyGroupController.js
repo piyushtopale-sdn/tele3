@@ -12,7 +12,6 @@ import OpeningHours from "../models/opening_hours_info";
 import OnDutyGroup from "../models/onDutyGroup";
 import OnDuty from "../models/on_duty_info";
 import { processExcel } from "../../pharmacy/middleware/utils";
-import moment from "moment-timezone";
 // utils
 import { sendResponse } from "../helpers/transmission";
 import { hashPassword } from "../helpers/string";
@@ -77,21 +76,11 @@ class OnDutyGroupController {
                         errorCode: "EXIST",
                     });
                 }
-                let newObject
                 let newArray = []
                 if (datetimeArray.length > 0) {
                     datetimeArray.map((singleData) => {
                         const fromDateTimeString = `${singleData.startDate}T${singleData.startTime}:00`;
                         const toDateTimeString = `${singleData.endDate}T${singleData.endTime}:00`;
-
-                        const dateTime = moment(fromDateTimeString);
-                        const endTime = moment(toDateTimeString);
-
-                        // Convert to UTC format
-
-                        const from_date_timestamp = dateTime.utc();
-                        const to_date_timestamp = endTime.utc();
-
 
                         // Create a new object with the UTC date and time
                         const newObject = {
@@ -147,7 +136,7 @@ class OnDutyGroupController {
                 let newArray = []
                 if (datetimeArray.length > 0) {
                     datetimeArray.map((singleData) => {
-                        newObject = {
+                        let newObject = {
                             from_date_timestamp: new Date(singleData.startDate + "T" + singleData.startTime + ":15.215Z"),
                             to_date_timestamp: new Date(singleData.endDate + "T" + singleData.endTime + ":15.215Z")
                         }
@@ -218,7 +207,6 @@ class OnDutyGroupController {
                 });
             }
          
-            let checkDates = false;
             let newArray = []
             if (extractData.length > 0) {
                 extractData.map((singleData) => {
@@ -227,7 +215,6 @@ class OnDutyGroupController {
                     const endDate = new Date(singleData.endDate + "T" + singleData.endTime);
 
                     if (startDate > endDate) {
-                        checkDates = true;
                         return sendResponse(req, res, 200, {
                             status: false,
                             body: null,
@@ -599,8 +586,6 @@ class OnDutyGroupController {
             verify_status: "APPROVED",
             in_on_duty_group: ondutyGroupId,
             for_portal_user: userData._id,
-            about_pharmacy: '',
-            slogan: '',
             medicine_request: { medicine_price_request: false, prescription_order: false, request_medicine_available: false }
         });
         const adminData = await adminDetails.save();
@@ -608,7 +593,7 @@ class OnDutyGroupController {
             ...addressInfo,
             for_portal_user: userData._id
         });
-        const locationData = locationInfo.save();
+        locationInfo.save();
 
         let newObject
         let newObjectOne
@@ -657,16 +642,14 @@ class OnDutyGroupController {
         });
 
 
-        let onDutyData
         const onDutyInfo = new OnDuty({
             on_duty: newArray3,
             for_portal_user: userData._id,
         });
-        onDutyData = await onDutyInfo.save();
+        await onDutyInfo.save();
 
 
-
-        const openingHoursData = await openingHoursInfo.save();
+        await openingHoursInfo.save();
         try {
             sendResponse(req, res, 200, {
                 status: true,
@@ -691,7 +674,6 @@ class OnDutyGroupController {
     }
 
     async addPharmacyOnDutyGroupBulkCsv(req, res) {
-        const { for_user } = req.body;
         const headers = {
             'Authorization': req.headers['authorization']
         }
@@ -874,8 +856,6 @@ class OnDutyGroupController {
 
             let userData
             let adminData
-            let locationData
-            let openingHoursData
 
             if (secondFilteredData.length != 0) {
                 await Promise.all(secondFilteredData.map(async (element) => {
@@ -910,15 +890,13 @@ class OnDutyGroupController {
                         verify_status: "APPROVED",
                         in_on_duty_group: element?.in_on_duty_group,
                         for_portal_user: forPortalUserId,
-                        about_pharmacy: '',
-                        slogan: ''
                     });
                     adminData = await adminDetails.save();
                     const locationInfo = new LocationDetails({
                         ...element?.addressInfo,
                         for_portal_user: forPortalUserId
                     });
-                    locationData = await locationInfo.save();
+                     await locationInfo.save();
 
                     let newObject
                     let newObjectOne
@@ -957,12 +935,12 @@ class OnDutyGroupController {
                             }
                         ]
                     }
-                    let onDutyData
+                    
                     const onDutyInfo = new OnDuty({
                         on_duty: newArray3,
                         for_portal_user: forPortalUserId,
                     });
-                    onDutyData = await onDutyInfo.save();
+                    await onDutyInfo.save();
 
 
                     const openingHoursInfo = new OpeningHours({
@@ -971,7 +949,7 @@ class OnDutyGroupController {
                         open_date_and_time:newArray1,
                         for_portal_user: forPortalUserId
                     });
-                    openingHoursData = await openingHoursInfo.save();
+                    await openingHoursInfo.save();
                 }))
 
 
@@ -1038,7 +1016,7 @@ class OnDutyGroupController {
                     return;
                 }
 
-                const userData = await PortalUser.findOneAndUpdate(
+                await PortalUser.findOneAndUpdate(
                     { _id: pharmacyId },
                     {
                         $set: {
@@ -1051,7 +1029,7 @@ class OnDutyGroupController {
                     { new: true }
                 )
 
-                const adminData = await AdminInfo.findOneAndUpdate(
+                await AdminInfo.findOneAndUpdate(
                     { for_portal_user: pharmacyId },
                     {
                         $set: {
@@ -1060,7 +1038,7 @@ class OnDutyGroupController {
                     },
                     { new: true }
                 )
-                const locationData = await LocationDetails.findOneAndUpdate(
+               await LocationDetails.findOneAndUpdate(
                     { for_portal_user: pharmacyId },
                     {
                         $set: {
@@ -1102,7 +1080,7 @@ class OnDutyGroupController {
                     ]
                 }
 
-                const openingHoursData = await OpeningHours.findOneAndUpdate(
+                await OpeningHours.findOneAndUpdate(
                     { for_portal_user: pharmacyId },
                     {
                         $set: {
@@ -1114,9 +1092,8 @@ class OnDutyGroupController {
                 )
 
                 const onDutyDetails = await OnDuty.findOne({ for_portal_user: pharmacyId })
-                let onDutyData
                 if (onDutyDetails) {
-                    onDutyData = await OnDuty.findOneAndUpdate(
+                    await OnDuty.findOneAndUpdate(
                         { for_portal_user: pharmacyId },
                         {
                             $set: {
@@ -1130,7 +1107,7 @@ class OnDutyGroupController {
                         on_duty: newArray3,
                         for_portal_user: pharmacyId
                     });
-                    onDutyData = await onDutyInfo.save();
+                   await onDutyInfo.save();
                 }
 
 
@@ -1206,11 +1183,6 @@ class OnDutyGroupController {
                 },
             ])
 
-
-            // const result = await AdminInfo.find({ in_on_duty_group: onDutyGroupId })
-            //     .populate({
-            //         path:"for_portal_user"
-            //     })
             sendResponse(req, res, 200, {
                 status: true,
                 data: {
@@ -1298,10 +1270,6 @@ class OnDutyGroupController {
                 },
             ])
 
-            // const result = await AdminInfo.findOne({ in_on_duty_group: onDutyGroupId, for_portal_user: pharmacyId })
-            //     .populate({
-            //         path: "for_portal_user"
-            //     })
             sendResponse(req, res, 200, {
                 status: true,
                 data: {

@@ -15,7 +15,7 @@ export const addCategory = async (req, res) => {
                 await addCategory.save()
             }
         }
-        let message = "Category added successfully"
+        let message;
         if (categoryData.length == existingCategory.length) {
             message = `This ${existingCategory.join(", ")} categories already exists.`
         } else if(existingCategory.length > 0 && categoryData.length != existingCategory.length) {

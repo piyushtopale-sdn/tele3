@@ -26,7 +26,7 @@ const notificationSaved = (paramsData, headers, requestData) => {
         serviceUrl = 'patientServiceUrl'
       }
       if (endPoint && serviceUrl) {
-        const check = await httpService.postStaging(endPoint, requestData, headers, serviceUrl);
+        await httpService.postStaging(endPoint, requestData, headers, serviceUrl);
       }
       resolve(true)
     } catch (error) {
@@ -41,7 +41,7 @@ class ContentManagementController {
   // Create content
   async createContent(req, res) {
     try {
-      const { title, type, slug, content, contentArabic } = req.body;
+      const { title, type, slug, content } = req.body;
       const existingContent = await Content.findOne({ slug });
       if (existingContent) {
         return sendResponse(req, res, 400, {
@@ -180,7 +180,7 @@ class ContentManagementController {
   // Update content by ID
   async updateContent(req, res) {
     try {
-      const { title, type, slug, content, contentArabic } = req.body;
+      const { title, type, slug, content } = req.body;
 
       const updatedContent = await Content.findByIdAndUpdate(
         req.params.id,
@@ -235,13 +235,8 @@ class ContentManagementController {
 
   async allFAQ(req, res) {
     const { language } = req.query;
-    // if (language == "en") {
-    //     let id = "faqEn"
-    // } else {
-    //     id = "faqFr"
-    // }
+
     try {
-      // const result = await FAQ.find({_id:id})
       const result = await FAQ.find({ type: language });
       return sendResponse(req, res, 200, {
         status: true,
@@ -293,7 +288,6 @@ class ContentManagementController {
 
   /**Feb 6 AP */
   async updateFAQ(req, res) {
-    // const { faqs, _id } = req.body;
 
     try {
       const { faqId, questionId } = req.params;
@@ -1170,16 +1164,7 @@ class ContentManagementController {
         "patientServiceUrl"
       );
 
-      // if (getData && getData.data) {
-      //   const patientDetails = Object.values(getData.data).map(patient => ({
-      //     full_name: patient.full_name,
-      //     email: patient.email,
-      //     deviceToken: patient.deviceToken,
-      //     country_code: patient.country_code,
-      //     mobile: patient.mobile,
-      //     notification: patient.notification
-      //   }));
-      if (getData && getData.data) {
+      if (getData?.data) {
         // Iterate over the keys (patient IDs) in the returned data
         const patientDetails = Object.keys(getData.data).map(patientId => {
           const patient = getData.data[patientId];

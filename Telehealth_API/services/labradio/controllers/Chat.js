@@ -6,13 +6,13 @@ import PortalUser from "../models/portal_user";
 import Chat from "../models/Chat/ChatModel";
 import Message from "../models/Chat/Message";
 import Notification from "../models/notification";
-import { handleResponse, sendResponse } from "../helpers/transmission";
+import { sendResponse } from "../helpers/transmission";
 import StaffInfo from "../models/staffInfo";
 import DocumentInfo from "../models/document_info"
 
 export const getAllUsersForChat = async (req, res) => {
     try {
-        const { loggedInId, adminId,searchText,portalType } = req.query;
+        const { loggedInId, adminId,portalType } = req.query;
 
         let getData;
         const getRole = await PortalUser.findOne({ _id: mongoose.Types.ObjectId(loggedInId) });
@@ -234,37 +234,6 @@ export const getListforHospitalFourPortal = async (loggedInId, adminId,req) => {
           }
         }
 
-        // query = [
-        //     {
-        //         $match: matchFilter,
-        //     },
-        //     {
-        //         $lookup: {
-        //             from: "staffinfos",
-        //             localField: "_id",
-        //             foreignField: "for_portal_user",
-        //             as: "staffinfos",
-        //         },
-        //     },
-        //     { $unwind: "$staffinfos" },
-        //     {
-        //         $match: {
-        //             "staffinfos.for_doctor": { $in: [mongoose.Types.ObjectId(adminId)] },
-        //             "staffinfos.for_portal_user": { $ne: mongoose.Types.ObjectId(loggedInId) }
-        //         }
-        //     },
-        //     {
-        //         $project: {
-        //             role: 1,
-        //             id: "$staffinfos.for_portal_user",
-        //             name: "$staffinfos.name",
-        //             profile_pic: "$staffinfos.profile_picture",
-        //         },
-        //     },
-        // ];
-
-        // Execute the query and aggregate pipelines separately
-        // const queryResults = await PortalUser.aggregate(query);
 
         // Combine the results 
         const combinedResults = [...aggregateResults, ...staffDataArray];
@@ -278,9 +247,7 @@ export const getListforHospitalFourPortal = async (loggedInId, adminId,req) => {
 
 export const createdChat = async (req, res) => {
     try {
-      const headers = {
-        'Authorization': req.headers['authorization']
-      }
+
       let newData = await Chat.findOne({
         $or: [
           {
@@ -326,7 +293,7 @@ export const createdChat = async (req, res) => {
             latestMessage: mongoose.Types.ObjectId(saveMessage?._id)
           }
   
-          const newUpdate = await Chat.updateOne(
+          await Chat.updateOne(
             { _id: mongoose.Types.ObjectId(saveChat?._id) },
             { $set: jsondata },
             { new: true }
@@ -476,10 +443,7 @@ export const getCreatedChats = async (req, res) => {
   
 export const sendMessage = async (req, res) => {
     try {
-      const headers = {
-        'Authorization': req.headers['authorization']
-      }
-  
+
       let chcekRoom = await Chat.findOne({ _id: mongoose.Types.ObjectId(req.body?.data?.chatId) });
       const receivers = req.body?.data?.receiverID == req.body?.data?.senderID ? chcekRoom?.senderID : chcekRoom?.receiverID;
   
@@ -498,7 +462,7 @@ export const sendMessage = async (req, res) => {
         latestMessage: mongoose.Types.ObjectId(saveChat?._id)
       }
   
-      const newUpdate = await Chat.updateOne(
+      await Chat.updateOne(
         { _id: mongoose.Types.ObjectId(saveChat?.chatId) },
         { $set: jsondata },
         { new: true }
@@ -554,7 +518,6 @@ export const sendMessage = async (req, res) => {
   
 export const allMessage = async (req, res) => {
     try {
-      // const {chatId, page, limit, loggedINId}=req.query;
       const chatId = mongoose.Types.ObjectId(req.query.chatId);
       const page = req.query.page ? parseInt(req.query.page) : 1;
       const limit = req.query.limit ? parseInt(req.query.limit) : 500000;
@@ -667,10 +630,7 @@ export const allMessage = async (req, res) => {
   
 export const createGroupChat = async (req, res) => {
     try {
-      const headers = {
-        'Authorization': req.headers['authorization']
-      }
-  
+
       let saveData = new Chat({
         senderID: req.body.data.sender,
         receiverID: req.body.data.receiver,
@@ -696,7 +656,7 @@ export const createGroupChat = async (req, res) => {
           latestMessage: mongoose.Types.ObjectId(saveMessage._id)
         }
   
-        const newUpdate = await Chat.updateOne(
+        await Chat.updateOne(
           { _id: mongoose.Types.ObjectId(saveChat._id) },
           { $set: jsondata },
           { new: true }
@@ -727,10 +687,7 @@ export const createGroupChat = async (req, res) => {
   
 export const addMembersToGroupChat = async (req, res) => {
     try {
-      const headers = {
-        'Authorization': req.headers['authorization']
-      };
-  
+
       const chatroomId = req.body.data.chatroomId;
       const newMembers = req.body.data.newMembers;
   
@@ -755,7 +712,7 @@ export const addMembersToGroupChat = async (req, res) => {
   
   
       // Update existingChat.receiverID in the database
-      const updateResult = await Chat.updateOne(
+      await Chat.updateOne(
         { _id: chatroomId },
         { $push: { receiverID: { $each: uniqueMemberObjectIds } } }
       );
@@ -777,10 +734,7 @@ export const addMembersToGroupChat = async (req, res) => {
   
 export const saveNotification = async (req, res) => {
     try {
-      const headers = {
-        'Authorization': req.headers['authorization']
-      }
-      let getsenderInfo = await PortalUser.findOne({ _id: req.body.for_portal_user });
+
       const chatData = await Chat.findOne({ _id: mongoose.Types.ObjectId(req.body.chatId) });
   
       const receiverData = req.body?.for_portal_user == req.body?.created_by ? chatData?.senderID : req.body?.for_portal_user;
@@ -829,9 +783,6 @@ export const saveNotification = async (req, res) => {
   
 export const getNotification = async (req, res) => {
     try {
-      // const getData = await Notification.find({
-      //   for_portal_user: mongoose.Types.ObjectId(req.query.for_portal_user)
-      // }).sort({ createdAt: -1 });
 
       const {page,limit}=req.query;
       const getData = await Notification.find({
@@ -878,7 +829,7 @@ export const updateNotification = async (req, res) => {
       } = req.body; 
       
       if (!isnew) {
-        let notificationDetails = await Notification.updateMany(
+        await Notification.updateMany(
           { for_portal_user: { $eq: receiverId } },
           {
             $set: {
@@ -981,7 +932,7 @@ export const clearAllmessages = async (req, res) => {
   
 export const clearSinglemessages = async (req, res) => {
     try {
-      const { chatId, deletedBy,messageId } = req.body;
+      const { deletedBy,messageId } = req.body;
       const deleteData = await Message.updateOne(
         { _id: mongoose.Types.ObjectId(messageId) },
         { $push: { deletedBy: { user_Id: mongoose.Types.ObjectId(deletedBy) } } },

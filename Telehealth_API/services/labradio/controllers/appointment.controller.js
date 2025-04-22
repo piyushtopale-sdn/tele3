@@ -16,7 +16,6 @@ import Http from "../helpers/httpservice";
 import { generateSignedUrl, uploadSingleOrMultipleDocuments } from "../helpers/gcs";
 import { sendNotification } from "../helpers/notification";
 import axios from "axios";
-import portal_user from "../models/portal_user";
 import BasicInfo from "../models/basic_info";
 import { sendSms } from "../middleware/sendSms";
 import { sendPushNotification } from "../helpers/firebase_notification";
@@ -106,7 +105,7 @@ const responseFormation = async (results, appointmentId) => {
 
     const getAppointment = await Appointment.findById({ _id: appointmentId });
 
-    let updatePrescribedtest = await httpService.putStaging(
+    await httpService.putStaging(
       "patient-clinical-info/update-prescribed-test-array",
       { _id: getAppointment?.prescribedLabRadiologyTestId, formattedResults: formattedResults, type: getAppointment?.serviceType, labAppointmentId: getAppointment?._id },
       headers,
@@ -234,7 +233,6 @@ const initiateRefund = async (getAppointment, testName) => {
       for (const test of matchedTests) {
         const paymentInfo = test?.paymentInfo;
         const paymentId = paymentInfo?.paymentId;
-        // const paymentId = "b70ff5b5-8597-4ae0-9a8d-f2888402dfaa";
 
         if (paymentInfo?.paymentStatus && paymentId && !refundedPaymentIds.has(paymentId)) {
 
@@ -324,7 +322,7 @@ const notificationSaved = (paramsData, headers, requestData) => {
         serviceUrl = 'doctorServiceUrl'
       }
       if (endPoint && serviceUrl) {
-        const check = await httpService.postStaging(endPoint, requestData, headers, serviceUrl);
+        await httpService.postStaging(endPoint, requestData, headers, serviceUrl);
       }
       resolve(true)
     } catch (error) {
@@ -348,8 +346,6 @@ const notifyUsers = async (element) => {
     const findPatient = await httpService.getStaging("patient/get-portal-data", { data: patientId }, headers, "patientServiceUrl");
     const findDoctor = await httpService.getStaging("doctor/get-doctor-portal-data", { doctorId: doctorId }, headers, "doctorServiceUrl");
     const getSMSContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'RESULT_RECEIVED', type: 'sms' }, headers, 'superadminServiceUrl');
-    // const getEmailContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'RESULT_RECEIVED', type: 'sms' }, headers, 'superadminServiceUrl');
-    // const getPushContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'RESULT_RECEIVED', type: 'sms' }, headers, 'superadminServiceUrl');
 
     let contentData;
     let patintNotify;
@@ -429,7 +425,7 @@ const notifyUsers = async (element) => {
 }
 
 //Apr 2 
-const registerPatientInBackground = async (appointmentDetail, userDetail, portalDetails, servicesList, requestBody, headers, patientId, labRadiologyId) => {
+const registerPatientInBackground = async (appointmentDetail, userDetail, portalDetails, servicesList, requestBody, headers, patientId, labRadiologyId, serviceType) => {
   try {
     const getPortalData = await PortalUser.findOne({ _id: labRadiologyId }).lean();
 
@@ -721,7 +717,7 @@ class AppointmentController {
       }, {});
       let mostUsedLabCenter = Object.values(labIdFrequency).sort((a, b) => b.count - a.count);
 
-      const mostUsedLabCenterDetails = await portal_user.findById(mostUsedLabCenter[0].labRadiologyId)
+      const mostUsedLabCenterDetails = await PortalUser.findById(mostUsedLabCenter[0].labRadiologyId)
         .select("centre_name centre_name_arabic");
       mostUsedLabCenter[0].mostUsedLabCenterDetails = mostUsedLabCenterDetails
 
@@ -739,7 +735,7 @@ class AppointmentController {
       }, {});
       let mostUsedRadioCenter = Object.values(radiologyIdFrequency).sort((a, b) => b.count - a.count);
 
-      const mostUsedRadioCenterDetails = await portal_user.findById(mostUsedRadioCenter[0].labRadiologyId)
+      const mostUsedRadioCenterDetails = await PortalUser.findById(mostUsedRadioCenter[0].labRadiologyId)
         .select("centre_name centre_name_arabic");
       mostUsedRadioCenter[0].mostUsedRadioCenterDetails = mostUsedRadioCenterDetails
 
@@ -765,7 +761,7 @@ class AppointmentController {
 
   async labRadiologySlot(req, res) {
     try {
-      const { date, labRadioId } = req.query
+      const { date } = req.query
       const newDate = moment(date).tz(config.TIMEZONE)
       const slotInterval = 60
 
@@ -837,17 +833,6 @@ class AppointmentController {
           errorCode: null,
         })
       }
-      // const subscriptionDetails = getData?.data?.subscriptionDetails?.subscriptionDetails
-      // if (subscriptionDetails?.services?.consultation <= 0) {
-      //   return sendResponse(req, res, 200, {
-      //     status: false,
-      //     message: messages.unableToBook.en,
-      //     messageArabic: messages.unableToBook.ar,
-      //     key: "addon", // This key used to handle redirection on pay extra consultation if no consultation available
-      //     body: null,
-      //     errorCode: null,
-      //   });
-      // }
 
       const requestedDate = moment(`${consultationDate} ${consultationTime.split('-')[0]}:00`)
       const currentDate = moment()
@@ -925,52 +910,6 @@ class AppointmentController {
       const userDetail = getPatientDetails.body.personalDetails;
       const portalDetails = getPatientDetails.body;
       const isDependent = portalDetails?.portalUserDetails?.isDependent;
-      const randomNumber = Math.floor(Math.random() * 900000) + 100000;
-      // if (process.env.NODE_ENV != "staging") {
-      // const isTokengenerated = await generateTokenForLabTest(requestBody);
-      // if (isTokengenerated.isSuccess) {
-      //   let token = isTokengenerated.data.token;
-      //   const countryCode = portalDetails?.portalUserDetails?.country_code;
-      //   const mobile = portalDetails?.portalUserDetails?.mobile;
-      //   const cleanedCountryCode = countryCode ? countryCode.replace('+', '') : '';
-      //   const patientId = userDetail?.saudi_id ? userDetail?.saudi_id : userDetail?.iqama_number ? userDetail?.iqama_number : null;
-
-      //   let registrationData = {
-      //     // "orderID": process.env.NODE_ENV === "production" ? appointmentDetail.appointment_id : randomNumber,
-      //     "orderID": appointmentDetail.appointment_id,
-      //     "patientDemographics": {
-      //       "patientName": userDetail.full_name,
-      //       "dateOfBirth": new Date(userDetail.dob).toISOString().split('T')[0],
-      //       "sex": userDetail.gender
-      //     },
-      //     "registrationDate": new Date().toISOString(),
-      //     "branchCode": config.ALBORGE.branchCode,
-      //     "payerCode": config.ALBORGE.payerCode,
-      //     "contractCode": config.ALBORGE.contractCode,
-      //     "servicesList": servicesList
-      //   }
-      //   console.log(registrationData , "registrationData");
-      //   if (patientId) {
-      //     registrationData.patientDemographics.patientNumber = patientId;
-      //   }
-      //   if (mobile) {
-      //     registrationData.patientDemographics.patientPhoneCountryCode = cleanedCountryCode;
-      //     registrationData.patientDemographics.patientPhone = mobile;
-      //   }
-      //   const registerUserToalborglaboratories = await addRegistration(token, registrationData);
-      //   if (registerUserToalborglaboratories.isSuccess) {
-      //     console.log(registerUserToalborglaboratories.data, "registerUserToalborglaboratories.data");
-      //     const result = await Appointment.updateOne(
-      //       { appointment_id: appointmentDetail.appointment_id },
-      //       { $push: { registrationData: registerUserToalborglaboratories.data } }
-      //     );
-      //   } else {
-      //     console.log("Error while storing the registration data into the Alborge Laboratory");
-      //   }
-      // } else {
-      //   console.log("Failed To Generate The Token");
-      // }
-      // }
 
       registerPatientInBackground(appointmentDetail, userDetail, portalDetails, servicesList, requestBody, headers, patientId, labRadiologyId, serviceType);
 
@@ -1668,8 +1607,7 @@ class AppointmentController {
         sort,
         fromDate,
         toDate,
-        patientId,
-        appointmentOf
+        patientId
       } = req.query;
 
       let date_filter = {}
@@ -2273,8 +2211,6 @@ class AppointmentController {
         cancel_by,
       } = req.body;
 
-      // const getAppointment = await Appointment.findById("67b49453aac5435b801137f6");
-
       const getAppointment = await Appointment.findById(appointmentId)
       if (!getAppointment) {
         return sendResponse(req, res, 200, {
@@ -2301,9 +2237,6 @@ class AppointmentController {
           errorCode: null,
         })
       }
-
-      // initiateRefund(getAppointment);
-      // return
 
       let updateObject = {
         status
@@ -2334,12 +2267,6 @@ class AppointmentController {
         updateObject.cancelType = 'manual';
       }
 
-      // await httpService.putStaging(
-      //   "patient-clinical-info/update-prescribed-test-status",
-      //   { prescribedLabRadiologyTestId: getAppointment?.prescribedLabRadiologyTestId, type: getAppointment?.serviceType, status: status === 'APPROVED' ? 'INPROGRESS' : 'CANCELLED', orderHistory: history },
-      //   headers,
-      //   "doctorServiceUrl"
-      // );
       if (getAppointment?.serviceType === 'lab') {
         if (getAppointment?.labTestIds?.length) {
           const testIds = getAppointment.labTestIds.map(test => test.testId);
@@ -2421,22 +2348,6 @@ class AppointmentController {
 
         initiateRefund(getAppointment, testName);
 
-        // let paramsDataPatient = {
-        //   sendTo: 'patient',
-        //   madeBy: getAppointment?.serviceType == 'lab' ? 'laboratory' : 'radiology',
-        //   patientId: getAppointment?.patientId,
-        //   doctorId: getAppointment?.doctorId,
-        //   labRadiologyId: getAppointment?.labRadiologyId,
-        //   appointment: {
-        //     _id: getAppointment?._id
-        //   },
-        //   consultationDate: getAppointment?.consultationDate,
-        //   consultationTime: getAppointment?.consultationTime,
-        //   condition: "CANCELLED_LABRADIO_APPOINTMENT",
-        //   notification: ['sms', 'push_notification'],
-        //   testName: testName.join(', '),
-        // }
-        // sendNotification(paramsDataPatient, headers)
       }
 
       return sendResponse(req, res, 200, {
@@ -3671,11 +3582,9 @@ class AppointmentController {
         if ('registrationData' in element && element?.registrationData.length > 0) {
           const accessionNumber = element?.registrationData[0].accessionNumber;
           const isTokengenerated = await generateTokenForLabTest(requestBody);
-          // console.log(isTokengenerated, "isTokengenerated>>>>>>>>>>>>>");
           if (isTokengenerated?.isSuccess) {
             let token = isTokengenerated.data.token;
             const result = await getOrderResult(token, accessionNumber, "");
-            // console.log(result, "orderResult>>>>>>>>>>>>>>>>>");
             if (result?.isSuccess && result?.data?.length) {
               let alborgeRes = result?.data[0];
               let allServices = alborgeRes?.results.flatMap(report =>
@@ -3709,10 +3618,6 @@ class AppointmentController {
                     },
                     { upsert: false, new: true }
                   ).exec();
-
-                  /** March 5 Start */
-                  // notifyUsers(element);
-                  /** March 5 End */
 
                 } else {
                   await Appointment.findOneAndUpdate(

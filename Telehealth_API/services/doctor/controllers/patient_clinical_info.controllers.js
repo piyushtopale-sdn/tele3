@@ -159,13 +159,13 @@ class PatientClinicalInfoController {
           }
 
           if(paymentStatus != "failed"){
-            const updatedResult = await model.updateOne(filter, update);
+            await model.updateOne(filter, update);
           }
 
         })
       );
 
-      const resData = httpService.postStaging(
+      httpService.postStaging(
         "payment/save-payment_history-labradio",
         { paymentId: paymentId, forUser: forUser, totalAmountPaid: totalAmountPaid, vatCharges: vatCharges? vatCharges: "", orderId: orderId? orderId: "", type: type, discountCoupon: discountCoupon? discountCoupon: "", labRadioId: labRadioId? labRadioId: "", testInfo: testInfo, discountedAmount: discountedAmount? discountedAmount: 0, discountCouponId:discountCouponId ? discountCouponId : null},
         headers,
@@ -193,9 +193,7 @@ class PatientClinicalInfoController {
   async getTestsDetailsFromCenter(req, res) {
 
     try {
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       const { labRadioId, type } = req.query;
 
       if (!labRadioId) {
@@ -250,10 +248,7 @@ class PatientClinicalInfoController {
           }
         })
       }
-      // const getMostPerformedTestPerCenter = await httpService.getStaging(
-      //   `appointment/get-most-Performed-tests?labRadioId=${labRadioId}&type=${type}`,headers,
-      //   "labradioServiceUrl"
-      // );
+
 
       sendResponse(req, res, 200, {
         status: true,
@@ -278,9 +273,7 @@ class PatientClinicalInfoController {
 
   async totalRevenuePerTest(req, res) {
     try {
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       const {
         testId,
         type
@@ -330,9 +323,7 @@ class PatientClinicalInfoController {
 
   async mostPerformedTestPerDoctor(req, res) {
     try {
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       const {
         doctorId
       } = req.query;
@@ -1841,7 +1832,6 @@ class PatientClinicalInfoController {
           // Include additional status update if all tests are booked
           if (allTestsBooked) {
             updateObject.status = 'BOOKED';
-            // updateObject.orderHistory.push(history);
 
           }
 
@@ -1887,7 +1877,7 @@ class PatientClinicalInfoController {
           labRadioTestIdArray.forEach((testId) => {
             const matchingTest = getData?.radiologyTest.find((test) => test.radiologyTestId === testId);
 
-            if (matchingTest && matchingTest.paymentInfo && matchingTest.paymentInfo.paymentStatus === true) {
+            if (matchingTest?.paymentInfo && matchingTest.paymentInfo.paymentStatus === true) {
               matchingTest.paymentInfo.isBooked = true;
               matchingTest.status = 'BOOKED';
               matchingTest.testHistory.push(history);
@@ -1904,7 +1894,6 @@ class PatientClinicalInfoController {
           // Include additional status update if all tests are booked
           if (allTestsBooked) {
             updateObject.status = 'BOOKED';
-            // updateObject.orderHistory.push(history);
           }
           await PrescribeRadiologyTest.findOneAndUpdate(
             { _id: prescribedLabRadiologyTestId },
@@ -2213,96 +2202,6 @@ class PatientClinicalInfoController {
       });
     }
   }
-
-  /*update-prescribed-test-array-for-external-lab/radio*/
-  // Mar-12 - working
-//   async updatePrescribedArrayForExternalLabs(req, res) {
-//     try {
-//         const { _id, formattedResults, type, labAppointmentId } = req.body;
-//         let getData;
- 
-//         // Fetch the correct document based on type
-//         if (type === 'lab') {
-//             getData = await PrescribeLabTest.findById(_id);
-//         } else {
-//             getData = await PrescribeRadiologyTest.findById(_id);
-//         }
- 
-//         if (!getData) {
-//             return sendResponse(req, res, 404, {
-//                 status: false,
-//                 message: "Record not found",
-//                 body: null,
-//                 errorCode: "NOT_FOUND",
-//             });
-//         }
- 
-//         let updatePromises = []; // Store API requests
- 
-//         // Iterate over formattedResults and update the corresponding labTest object
-//         formattedResults.forEach(result => {
-//             getData.labTest = getData.labTest.map(test => {
-//                 if (test.loinc && test.loinc.loincCode === result.serviceLOINC) {
-//                     let updatedTest = {
-//                         ...test,
-//                         externalResults: result
-//                     };
-                    
-//                     // Update status if resultDate is present
-//                     if (result.resultDate && result.resultDate.trim() !== '') {
-//                         updatedTest.status = "COMPLETED";
-//                     }
-//                     // Call external API to update appointment status
-//                     const updateLabAppointmentStatusPromise = httpService.putStaging(
-//                         "appointment/update-appointment-status-for-external-results",
-//                         {
-//                             appointmentId: labAppointmentId,
-//                             testId: test.labtestId,
-//                             externalResults: updatedTest.externalResults,
-//                             status: updatedTest.status
-//                         },
-//                         {},
-//                         "labradioServiceUrl"
-//                     );
- 
-//                     updatePromises.push(updateLabAppointmentStatusPromise);
-//                     return updatedTest;
-//                 }
-//                 return test;
-//             });
-//         });
- 
-//         // Execute all external API calls in parallel
-//         await Promise.all(updatePromises);
- 
-//         // Check if all labTest items have status COMPLETED
-//         const allCompleted = getData.labTest.every(test => test.status === "COMPLETED");
- 
-//         // If all tests are completed, update the outer status
-//         if (allCompleted) {
-//             getData.status = "COMPLETED";
-//         }
- 
-//         // Save the updated document
-//         await getData.save();
- 
-//         return sendResponse(req, res, 200, {
-//             status: true,
-//             message: `Status updated successfully`,
-//             body: getData,
-//             errorCode: null,
-//         });
- 
-//     } catch (error) {
-//         console.error("Error in updatePrescribedArrayForExternalLabs:", error);
-//         return sendResponse(req, res, 500, {
-//             status: false,
-//             body: null,
-//             message: `Failed to update prescribed lab/radiology status`,
-//             errorCode: error.errorCode ? error.errorCode : "INTERNAL_SERVER_ERROR",
-//         });
-//     }
-// }
 
 async updatePrescribedArrayForExternalLabs(req, res) {    
   try {
@@ -2873,9 +2772,7 @@ async prescribedLabRadio_update_statusHistory_forEachTest(req, res) {
 
 async getPrescribeLabRadioTest(req, res) {
   try {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
+
     const prescribedLabRadiologyTestId = req.params.id;
     const serviceType = req.query.serviceType;
     let getData;

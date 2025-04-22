@@ -15,7 +15,6 @@ export const sendInvitation = async (req, res) => {
             phone,
             address,
             created_By,
-            verify_status,
             invitationId,
             type
         } = req.body;
@@ -48,7 +47,7 @@ export const sendInvitation = async (req, res) => {
 
                 if (mailSent) {
                     updatedUserData.verify_status = "SEND";
-                    const result = await updatedUserData.save();
+                    await updatedUserData.save();
                 }
 
                 return sendResponse(req, res, 200, {
@@ -91,7 +90,7 @@ export const sendInvitation = async (req, res) => {
 
             if (mailSent) {
                 userData.verify_status = "SEND";
-                const result = await userData.save();
+                await userData.save();
             }
 
             if (userData) {
@@ -137,7 +136,6 @@ export const getAllInvitation = async (req, res) => {
             type:type,
             isDeleted:false
         };
-        // const filterDate = {};
 
         if (searchKey && searchKey !== "") {
             filter.$or = [
@@ -149,12 +147,10 @@ export const getAllInvitation = async (req, res) => {
         if (createdDate && createdDate !== "" && updatedDate && updatedDate !== "") {
             const createdDateObj = new Date(createdDate);
             const updatedDateObj = new Date(updatedDate);
-            // dateFilter.createdAt = createdDateObj.toISOString();
             dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
         }
         else if (createdDate && createdDate !== "") {
             const createdDateObj = new Date(createdDate);
-            // dateFilter.createdAt = createdDateObj.toISOString();
             dateFilter.createdAt = { $gte: createdDateObj };
         }
         else if (updatedDate && updatedDate !== "") {

@@ -8,9 +8,7 @@ import PortalUser from "../../models/superadmin/portal_user";
 
 export const createdChat = async (req, res) => {
   try {
-    const headers = {
-      'Authorization': req.headers['authorization']
-    }
+
     let newData = await Chat.findOne({
       $or: [
         {
@@ -56,7 +54,7 @@ export const createdChat = async (req, res) => {
           latestMessage: mongoose.Types.ObjectId(saveMessage._id)
         }
 
-        const newUpdate = await Chat.updateOne(
+        await Chat.updateOne(
           { _id: mongoose.Types.ObjectId(saveChat._id) },
           { $set: jsondata },
           { new: true }
@@ -92,13 +90,9 @@ const approveOrRejectMedicine = (data) => {
 };
 
 export const getCreatedChats = async (req, res) => {
-  // const id = req.query['0'];
-  // const searchQuery = req.query.searchQuery; // Assuming the search query parameter is 'search'
   const {id,searchQuery} =req.query;
   try {
-    const headers = {
-      'Authorization': req.headers['authorization']
-    }
+
     let filter = {}
 
     if (searchQuery && searchQuery !== "") {
@@ -111,13 +105,6 @@ export const getCreatedChats = async (req, res) => {
         },
       ];
     }
-
-    // const matchQuery = {
-    //   $or: [
-    //     { senderID: mongoose.Types.ObjectId(id) },
-    //     { receiverID: mongoose.Types.ObjectId(id) }
-    //   ]
-    // };
 
     const result = await Chat.aggregate([
       // { $match: matchQuery },
@@ -287,9 +274,6 @@ export const getCreatedChats = async (req, res) => {
 
 export const sendMessage = async (req, res) => {
   try {
-    const headers = {
-      'Authorization': req.headers['authorization']
-    }
 
     let chcekRoom = await Chat.findOne({ _id: mongoose.Types.ObjectId(req.body.data.chatId) });
     const receivers = req.body.data.receiverID == req.body.data.senderID ? chcekRoom?.senderID : chcekRoom?.receiverID;
@@ -308,7 +292,7 @@ export const sendMessage = async (req, res) => {
       latestMessage: mongoose.Types.ObjectId(saveChat._id)
     }
 
-    const newUpdate = await Chat.updateOne(
+    await Chat.updateOne(
       { _id: mongoose.Types.ObjectId(saveChat.chatId) },
       { $set: jsondata },
       { new: true }
@@ -373,10 +357,6 @@ export const allMessage = async (req, res) => {
       "deletedBy.user_Id": { $ne: loggedINId }
     };
 
-    // if(req.query.messageId!= undefined){
-    //   condition._id=req.query.messageId
-    // }
-
     const count = await Message.countDocuments(condition);
 
     const getData = await Message.aggregate([
@@ -428,9 +408,6 @@ export const allMessage = async (req, res) => {
 
 export const createGroupChat = async (req, res) => {
   try {
-    const headers = {
-      'Authorization': req.headers['authorization']
-    }
 
     let saveData = new Chat({
       senderID: req.body.data.sender,
@@ -457,7 +434,7 @@ export const createGroupChat = async (req, res) => {
         latestMessage: mongoose.Types.ObjectId(saveMessage._id)
       }
 
-      const newUpdate = await Chat.updateOne(
+      await Chat.updateOne(
         { _id: mongoose.Types.ObjectId(saveChat._id) },
         { $set: jsondata },
         { new: true }
@@ -487,9 +464,6 @@ export const createGroupChat = async (req, res) => {
 
 export const addMembersToGroupChat = async (req, res) => {
   try {
-    const headers = {
-      'Authorization': req.headers['authorization']
-    };
 
     const chatroomId = req.body.data.chatroomId;
     const newMembers = req.body.data.newMembers;
@@ -515,7 +489,7 @@ export const addMembersToGroupChat = async (req, res) => {
 
 
     // Update existingChat.receiverID in the database
-    const updateResult = await Chat.updateOne(
+    await Chat.updateOne(
       { _id: chatroomId },
       { $push: { receiverID: { $each: uniqueMemberObjectIds } } }
     );
@@ -536,10 +510,7 @@ export const addMembersToGroupChat = async (req, res) => {
 
 export const saveNotification = async (req, res) => {
   try {
-    const headers = {
-      'Authorization': req.headers['authorization']
-    }
-    let getsenderInfo = await Superadmin.findOne({ _id: req.body.for_portal_user });
+
     const chatData = await Chat.findOne({ _id: mongoose.Types.ObjectId(req.body.chatId) });
 
     const receiverData = req.body?.for_portal_user == req.body?.created_by ? chatData?.senderID : req.body?.for_portal_user;
@@ -581,16 +552,6 @@ export const getNotification = async (req, res) => {
   try {
     let staffUserCount;
     let showMNotf;
-    let matchFilter1;
-    let matchFilter={
-      for_portal_user: mongoose.Types.ObjectId(req.query.for_portal_user)
-    }
-
-    if(req?.query?.staffId) {
-     matchFilter1 = {
-        for_portal_user:  mongoose.Types.ObjectId(req?.query?.staffId)
-      }
-    }
 
     let count = await Notification.countDocuments({
       for_portal_user: mongoose.Types.ObjectId(req.query.for_portal_user),
@@ -609,55 +570,6 @@ export const getNotification = async (req, res) => {
       for_portal_user: mongoose.Types.ObjectId(req.query.for_portal_user),
       isView: false
     });
-
-    // const notificationData1 = await Notification.aggregate([
-    //   { $match: matchFilter },
-    //   {
-    //     $lookup: {
-    //       from: "superadmins",
-    //       localField: "created_by",
-    //       foreignField: "_id",
-    //       as: "receiverDetails",
-    //     },
-    //   },
-    //   {
-    //     $unwind: {
-    //       path: "$receiverDetails",
-    //       preserveNullAndEmptyArrays: true
-    //     }
-    //   },
-    //   {
-    //     $sort:{
-    //       createdAt:-1
-    //     }
-    //   }
-    // ]);
-
-    // // FOR STAFF USER ONLY
-    // const notificationData2 = await Notification.aggregate([
-    //   { $match: matchFilter1 },
-    //   {
-    //     $lookup: {
-    //       from: "superadmins",
-    //       localField: "created_by",
-    //       foreignField: "_id",
-    //       as: "receiverDetails",
-    //     },
-    //   },
-    //   {
-    //     $unwind: {
-    //       path: "$receiverDetails",
-    //       preserveNullAndEmptyArrays: true
-    //     }
-    //   },
-    //   {
-    //     $sort:{
-    //       createdAt:-1
-    //     }
-    //   }
-    // ]);
-
-    // let notificationData = [...notificationData1, ...notificationData2]
 
     const notificationData = await Notification.aggregate([
       {
@@ -712,7 +624,7 @@ export const updateNotification = async (req, res) => {
     } = req.body;
 
     if (!isnew) {
-      let notificationDetails = await Notification.updateMany(
+      await Notification.updateMany(
         { for_portal_user: { $eq: receiverId } },
         {
           $set: {
@@ -812,7 +724,7 @@ export const clearAllmessages = async (req, res) => {
 
 export const clearSinglemessages = async (req, res) => {
   try {
-    const { chatId, deletedBy,messageId } = req.body;
+    const { deletedBy,messageId } = req.body;
     const deleteData = await Message.updateMany(
       { _id: mongoose.Types.ObjectId(messageId) },
       { $push: { deletedBy: { user_Id: mongoose.Types.ObjectId(deletedBy) } } },

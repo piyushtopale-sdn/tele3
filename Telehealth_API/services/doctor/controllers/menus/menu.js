@@ -14,7 +14,7 @@ const add_menu = async (req, res) => {
         parent_id: req.body.parent_id
     });
     try {
-        const dataResult = await addMenu.save((err, result) => {
+        await addMenu.save((err, result) => {
             if (err) {
                 handleResponse(req, res, 500, {
                     status: false,

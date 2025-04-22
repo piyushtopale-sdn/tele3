@@ -13,15 +13,13 @@ import SubscriptionPlan from "../../models/subscription/subscriptionplans";
 import PlanPeriodical from "../../models/subscription/planperiodical";
 import SubscriptionPlanService from "../../models/subscription/subscriptionplan_service";
 import Otp2fa from "../../models/otp2fa";
-import { smsTemplateOTP } from "../../config/constants";
-import { config } from "../../config/constants";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, terst_FRONTEND_URL } = config
+import { config, smsTemplateOTP, MedicineColumns } from "../../config/constants";
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL } = config
 const { bcryptCompare, generateTenSaltHash, processExcel, generate4DigitOTP } = require("../../middleware/utils");
 const secret = config.SECRET;
 import { sendResponse } from "../../helpers/transmission";
 import ForgotPasswordToken from "../../models/forgot_password_token";
 import { sendSms } from "../../middleware/sendSms";
-import { MedicineColumns } from "../../config/constants";
 import { sendEmail } from "../../helpers/ses";
 
 import Country from "../../models/common_data/country"
@@ -400,28 +398,8 @@ export const sendSmsOtpFor2fa = async (req, res) => {
 
         const canOtpSend = await canSendOtp(deviceExist, currentTime)
         
-        // Check if the OTP can be sent
-        // if (!canOtpSend.status) {
-        //     const timeLeft = new Date(deviceExist.isTimestampLocked ? deviceExist.limitExceedWithin : canOtpSend.limitExceedWithin) - currentTime;
-        //     if (!deviceExist.isTimestampLocked) {
-        //         await Otp2fa.findOneAndUpdate({ mobile, country_code, uuid, for_portal_user: superAdminData._id }, { $set: {
-        //             limitExceedWithin: canOtpSend.limitExceedWithin,
-        //             isTimestampLocked: canOtpSend.isTimestampLocked
-        //         } }).exec();
-        //     }
-
-        //     return sendResponse(req, res, 200, {
-        //         status: false,
-        //         message: `Maximum limit exceeded. Try again after ${Math.ceil(timeLeft / 60000)} minutes.`,
-        //         errorCode: null,
-        //     })
-        // }
         let otp = 1111;
-        // if (mobile && mobile.length === 10) {
-        //   otp = 1111;
-        // } else {
-        //   otp = generate4DigitOTP();
-        // }
+
         if(process.env.NODE_ENV === "production"){
             otp = generate4DigitOTP();
         }
@@ -440,7 +418,6 @@ export const sendSmsOtpFor2fa = async (req, res) => {
             send_attempts: (deviceExist ? deviceExist.send_attempts : 0) + 1,
         };
         let result = null;
-        // if (smsRes == 200) {
             if (deviceExist) {
                 updateObject.limitExceedWithin = canOtpSend.limitExceedWithin
                 if (canOtpSend?.reset) {
@@ -522,7 +499,7 @@ export const matchEmailOtpFor2fa = async (req, res) => {
                  });
              }
             if (data.otp == otp) {
-                const updateVerified = await Superadmin.findOneAndUpdate(
+                await Superadmin.findOneAndUpdate(
                     { _id: portalUserData._id },
                     {
                         $set: {
@@ -641,7 +618,6 @@ export const matchSmsOtpFor2fa = async (req, res) => {
             }
 
             if (data.otp == otp) {
-                // req.session.ph_verified = true;
                 const updateVerified = await Superadmin.findOneAndUpdate({ _id: for_portal_user }, {
                     $set: {
                         verified: true
@@ -753,9 +729,9 @@ export const forgotPassword = async (req, res) => {
             user_id: userData._id,
             token: hashResetToken,
         });
-        let savedForgotPasswordData = await ForgotPasswordData.save();
+        await ForgotPasswordData.save();
 
-        const link = `${terst_FRONTEND_URL}/super-admin/newpassword?token=${resetToken}&user_id=${userData._id}`
+        const link = `${test_p_FRONTEND_URL}/super-admin/newpassword?token=${resetToken}&user_id=${userData._id}`
         const getEmailContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'FORGOT_PASSWORD', type: 'email' }, headers, 'superadminServiceUrl');
         let emailContent
         if (getEmailContent?.status && getEmailContent?.data?.length > 0) {
@@ -835,7 +811,7 @@ export const resetForgotPassword = async (req, res) => {
         } else {
             const hashPassword = await generateTenSaltHash(newPassword);
 
-            const updatedUser = await Superadmin.findOneAndUpdate(
+            await Superadmin.findOneAndUpdate(
                 { _id: user_id },
                 { password: hashPassword },
                 { new: true }
@@ -930,13 +906,8 @@ export const listMedicineforexport = async (req, res) => {
 export const fetchedMedicineByID = async (req, res) => {
     try {
         const { medicineIds } = req.body;
-        // const medicineArray = {}
         const medicineArray = await Medicine.find({ _id: { $in: medicineIds } }, { _id: 1, medicine: 1 })
 
-        // let medicineDetails = await Medicine.find({ _id:  }).select('medicine.medicine_name').exec()
-        // for (const id in medicineIds) {
-        //     medicineArray[id] = medicineDetails[0].medicine.medicine_name
-        // }
         return sendResponse(req, res, 200, {
             status: true,
             body: medicineArray,
@@ -1051,22 +1022,6 @@ const validateColumnWithExcel = (toValidate, excelColumn) => {
     return true
 }
 
-// const csvExtraction = (filePath) => {
-//     let fileRows = []
-//     return new Promise(function (resolve, reject) {
-//         fs.createReadStream(filePath)
-//             .pipe(csv.parse({ headers: true }))
-//             .on("error", (error) => {
-//                 reject(error.message)
-//             })
-//             .on("data", (row) => {
-//                 fileRows.push(row);
-//             }).on("end", function () {
-//                 resolve(fileRows)
-//             })
-//     })
-// }
-
 export const uploadCSVForMedicine = async (req, res) => {
     try {
         const filePath = './uploads/' + req.filename
@@ -1129,7 +1084,7 @@ export const uploadCSVForMedicine = async (req, res) => {
             });
         }
 
-        const result = await Medicine.insertMany(medicineData);
+        await Medicine.insertMany(medicineData);
         return sendResponse(req, res, 200, {
             status: true,
             body: null,
@@ -1500,101 +1455,6 @@ export const editSubscriptionPlan = async (req, res) => {
     }
 }
 
-// export const deleteSubscriptionPlan = async (req, res) => {
-//     try {
-//         const { id ,action_name, action_value } = req.query
-
-//         const headers = {
-//             Authorization: req.headers["authorization"],
-//         };
-//         let getSubscriptionPlan = await SubscriptionPlan.findById(id);
-//         if (!getSubscriptionPlan) {
-//             return sendResponse(req, res, 500, {
-//                 status: false,
-//                 body: null,
-//                 message: "No subscription plan available",
-//                 errorCode: null,
-//             });
-//         }
-
-//         /** Feb 6 Start AP*/
-//         let message = "";
-//         const filter = {};
-//               if (action_name == "active") filter["is_activated"] = action_value;
-        
-//               if (action_name == "active") {
-//                 let result = await SubscriptionPlan.updateOne({ _id: id }, filter, {
-//                   new: true,
-//                 }).exec();
-        
-//                     if (action_value === true) {
-//                         message = "Plan activated successfully";
-//                     } else {
-//                         message = "Plan deactivated successfully";
-//                     }
- 
-//                   return  sendResponse(req, res, 200, {
-//                         status: true,
-//                         body: result,
-//                         message: message,
-//                         errorCode: null,
-//                     });
-//               }
-
-//         /** Feb 6 End AP*/
-
-//         //Get all subscription which associated with patient
-//         let getData = await httpService.getStaging(
-//             "patient/get-all-patient-having-subscription",
-//             {},
-//             headers,
-//             "patientServiceUrl"
-//         );
-//         const ids = []
-//         if (getData.status) {
-//             for (const ele of getData.data) {
-//                 if(!ids.includes(ele.subscriptionDetails.nextBillingPlanId)) {
-//                     ids.push(ele.subscriptionDetails.nextBillingPlanId)
-//                 }
-//                 if(!ids.includes(ele.subscriptionDetails.subscriptionPlanId)) {
-//                     ids.push(ele.subscriptionDetails.subscriptionPlanId)
-//                 }
-//             }
-//         }
-
-//         if (ids.includes(id)) {
-//             return sendResponse(req, res, 200, {
-//                 status: false,
-//                 body: result,
-//                 message: "Cannot delete! The subscription plan is already associated with a patient",
-//                 errorCode: null,
-//             });
-//         }
-
-//         await SubscriptionPlan.findOneAndUpdate(
-//             {
-//                 _id:id
-//             },
-//             { is_deleted: true },
-//         );
-
-//         sendResponse(req, res, 200, {
-//             status: true,
-//             body: null,
-//             message: "Subscription plan deleted successfully.",
-//             errorCode: null,
-//         });
-
-//     } catch (error) {
-//         sendResponse(req, res, 500, {
-//             status: false,
-//             body: error,
-//             message: "Internal server error",
-//             errorCode: "Internal server error",
-//         });
-//     }
-// }
-
 export const deleteSubscriptionPlan = async (req, res) => {
     try {
         const { id ,action_name, action_value } = req.query
@@ -1859,7 +1719,7 @@ export const refreshToken = async (req, res) => {
 
 export const getSelectedMasterData = async (req, res) => {
     try {
-        const { speciality, team } = req.body
+        const { speciality } = req.body
         let resultArray = {}
         if (speciality.length > 0) {
             let specialityArry = speciality.map(val => mongoose.Types.ObjectId(val))
@@ -2066,7 +1926,6 @@ export const sendInvitation = async (req, res) => {
             phone,
             address,
             created_By,
-            verify_status,
             addedBy,
             invitationId
         } = req.body;
@@ -2099,7 +1958,7 @@ export const sendInvitation = async (req, res) => {
 
                 if (mailSent) {
                     updatedUserData.verify_status = "SEND";
-                    const result = await updatedUserData.save();
+                    await updatedUserData.save();
                 }
 
                 return sendResponse(req, res, 200, {
@@ -2142,7 +2001,7 @@ export const sendInvitation = async (req, res) => {
 
             if (mailSent) {
                 userData.verify_status = "SEND";
-                const result = await userData.save();
+                await userData.save();
             }
 
             if (userData) {
@@ -2205,12 +2064,10 @@ export const getAllInvitation = async (req, res) => {
         if (createdDate && createdDate !== "" && updatedDate && updatedDate !== "") {
             const createdDateObj = new Date(createdDate);
             const updatedDateObj = new Date(updatedDate);
-            // dateFilter.createdAt = createdDateObj.toISOString();
             dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
         }
         else if (createdDate && createdDate !== "") {
             const createdDateObj = new Date(createdDate);
-            // dateFilter.createdAt = createdDateObj.toISOString();
             dateFilter.createdAt = { $gte: createdDateObj };
         }
         else if (updatedDate && updatedDate !== "") {
@@ -2573,7 +2430,7 @@ export const updatelogsData = async (req, res) => {
         const currentDate = new Date();
         const formattedDate = currentDate.toISOString();
         if(userAddress){
-            const findData = await Logs.findOneAndUpdate(
+            await Logs.findOneAndUpdate(
                 { _id: mongoose.Types.ObjectId(currentLogID) },
                 {
                     $set: {
@@ -2585,7 +2442,7 @@ export const updatelogsData = async (req, res) => {
             ).exec();
         }else{
 
-            const findData = await Logs.findOneAndUpdate(
+            await Logs.findOneAndUpdate(
                 { _id: mongoose.Types.ObjectId(currentLogID) },
                 {
                     $set: {
@@ -2696,11 +2553,10 @@ export const getSuperAdminData = async (req, res) => {
 
 export const notification = async (req, res) => {
     try {
-        const userData = await Superadmin.findOne({ _id: req.body.for_portal_user });
         const notificationValue = new Notification(req.body);
         let notificationData = await notificationValue.save();
 
-        const checkEprescriptionNumberExist11 = await httpService.getStaging("pharmacy/sendnoti", { socketuserid: req.body.for_portal_user }, {}, "gatewayServiceUrl");
+        await httpService.getStaging("pharmacy/sendnoti", { socketuserid: req.body.for_portal_user }, {}, "gatewayServiceUrl");
 
         return sendResponse(req, res, 200, {
             status: true,
@@ -3364,7 +3220,7 @@ export const deteleLockAdminUser = async (req, res) => {
           ? "isActive"
           : "";
       if (key) {
-        const portalData = await Superadmin.findOneAndUpdate(
+        await Superadmin.findOneAndUpdate(
           { _id: { $eq: userId } },
           {
             $set: {

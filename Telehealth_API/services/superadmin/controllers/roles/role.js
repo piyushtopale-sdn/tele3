@@ -10,7 +10,6 @@ import mongoose from "mongoose";
 
 let seqId=0;
 export const add_role = async (req, res) => {
-    const roleName = req.body.name;
     roleCounter.findOneAndUpdate(
         { id: "autoval" },
         { "$inc": { "seq": 1 } },
@@ -69,7 +68,7 @@ export const add_role = async (req, res) => {
 
 export const all_role = async (req, res) => {
     try {
-        let { limit, page, searchText, userId } = req.query;
+        let { limit, page, userId } = req.query;
         let checkUser = await Superadmin.findOne({_id: mongoose.Types.ObjectId(userId)})
 
         if(checkUser.role === 'STAFF_USER'){

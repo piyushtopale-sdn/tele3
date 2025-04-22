@@ -5,9 +5,6 @@ import { sendResponse } from "../helpers/transmission";
 // models
 import Template from "../models/template";
 
-
-
-
 class TemplateBuilderController {
 
   //Template Builder

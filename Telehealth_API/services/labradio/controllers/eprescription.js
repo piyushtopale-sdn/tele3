@@ -16,8 +16,6 @@ import EprescriptionEyeglass from "../models/eprescription_eyeglass";
 import EprescriptionOther from "../models/eprescription_other";
 import { sendEmail } from "../helpers/ses";
 import { sendEprescriptionEmail } from "../helpers/emailTemplate";
-import { config } from "../config/constants";
-import Appointment from "../models/appointment";
 import ReasonForAppointment from "../models/reason_of_appointment";
 
 class ePrescriptionController {
@@ -111,9 +109,8 @@ class ePrescriptionController {
   async addEprescriptionMedicineDosage(req, res) {
     const { dosages, portal_type } = req.body;
     try {
-      let data = {}
       dosages.forEach(async (element) => {
-        data = await EprescriptionMedicineDosage.findOneAndUpdate(
+        await EprescriptionMedicineDosage.findOneAndUpdate(
           { ePrescriptionId: element.ePrescriptionId, dose_no: element.dose_no, medicineId: element.medicineId, portal_type },
           { $set: element },
           { upsert: true, new: true }
@@ -164,7 +161,7 @@ class ePrescriptionController {
           portal_type
         })
 
-        result = await labData.save()
+        await labData.save()
 
       } else {
         let obj = {
@@ -443,7 +440,7 @@ class ePrescriptionController {
           portal_type
         })
 
-        result = await labData.save()
+        await labData.save()
         message = "Other Test added successfully"
 
       } else {
@@ -533,9 +530,8 @@ class ePrescriptionController {
     } = req.body;
 
     try {
-      let result;
 
-      result = await EprescriptionMedicineDosage.findOneAndDelete({
+      await EprescriptionMedicineDosage.findOneAndDelete({
         _id: doseId
       })
 

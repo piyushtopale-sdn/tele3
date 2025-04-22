@@ -7,7 +7,6 @@ import mongoose from "mongoose";
 import { sendResponse } from "../helpers/transmission";
 import Basic_info from "../models/basic_info";
 import {notification} from "../helpers/notification";
-import { decryptionData } from "../helpers/crypto";
 import PortalUser from "../models/portal_user";
 const Http = require('../helpers/httpservice');
 const httpService = new Http()
@@ -28,9 +27,6 @@ class OrderFlow {
                 for_portal_user,
                 portal_type
             } = req.body;
-            const headers = {
-                'Authorization': req.headers['authorization']
-            }
 
             let sort = req.body.sort
             let sortingarray = {};
@@ -324,12 +320,7 @@ class OrderFlow {
                             let prescribed = 0
                             let days = 0
                             let frequency = 0
-                            // if (test.take_for.type == 'Days') days = test.take_for.quantity
-                            // if (test.take_for.type == 'Week') days = parseInt(test.take_for.quantity) * 7
-                            // if (test.frequency.frequency_type == "Moment") {
-                            //     frequency = (parseInt(test.frequency.morning) + parseInt(test.frequency.morning) + parseInt(test.frequency.morning) + parseInt(test.frequency.morning) + parseInt(test.frequency.morning))
-                            //     prescribed = frequency * days
-                            // }
+
                             let testname;
                             let testId;
                             if(test.imaging_name){
@@ -371,7 +362,7 @@ class OrderFlow {
                         ordertestList.push(obj)
                     }
                 }
-                ordertestDetails = await OrderTestDetails.insertMany(ordertestList);
+               await OrderTestDetails.insertMany(ordertestList);
             }
 
             let data= orderData[0]?.request_type.split('_').join(' ')
@@ -389,7 +380,7 @@ class OrderFlow {
                     title:"Order Request"
                 }
                 
-                let result = await notification('','',"labradioServiceUrl",'','','', headers, requestData)
+               await notification('','',"labradioServiceUrl",'','','', headers, requestData)
                 
             }
 
@@ -435,11 +426,9 @@ class OrderFlow {
                 });
             let portal_Profile
             if (portal_Details.profile_picture != "" && portal_Details.profile_picture != undefined) {
-                const headers = {
-                    Authorization: req.headers["authorization"],
-                };
+          
                 const profilePictureArray = [portal_Details.profile_picture];
-                const profile_picdata = await DocumentInfo.findOne({ _id: profilePictureArray })
+                await DocumentInfo.findOne({ _id: profilePictureArray })
                 let image;
                 portal_Profile = image;
 
@@ -509,10 +498,6 @@ class OrderFlow {
                 in_ordertest_bill,
                 request_type,
                 status,
-                name,
-                total_cost,
-                price_per_unit,
-                test_id,
                 portal_type
 
 
@@ -539,7 +524,7 @@ class OrderFlow {
                      title:"Sent Amount"
                  }
      
-                 let result = await notification('','', "patientServiceUrl",'','','', headers, requestData)
+                 await notification('','', "patientServiceUrl",'','','', headers, requestData)
                  
 
                 sendResponse(req, res, 200, {
@@ -587,7 +572,7 @@ class OrderFlow {
                     title:"Sent Amount"
                 }
     
-                let result = await notification('','', "patientServiceUrl",'','','', headers, requestData)
+                await notification('','', "patientServiceUrl",'','','', headers, requestData)
                 
 
                 sendResponse(req, res, 200, {
@@ -641,7 +626,7 @@ class OrderFlow {
                 title:"Order Confirmed"
             }
 
-            let result = await notification('','', "patientServiceUrl",'','','', headers, requestData)
+            await notification('','', "patientServiceUrl",'','','', headers, requestData)
             
             sendResponse(req, res, 200, {
                 status: true,
@@ -707,7 +692,7 @@ class OrderFlow {
                 title: "Order Confirmed"
             };
     
-            let result = await notification('', '', "labradioServiceUrl", '', '', '', headers, requestData);
+           await notification('', '', "labradioServiceUrl", '', '', '', headers, requestData);
             
             sendResponse(req, res, 200, {
                 status: true,
@@ -786,7 +771,7 @@ class OrderFlow {
              notitype: 'New Result Uploaded',
              appointmentId: order_id
            }
-          let result = await notification('', '', "patientServiceUrl", '', '', '', headers, requestData);
+          await notification('', '', "patientServiceUrl", '', '', '', headers, requestData);
         
           sendResponse(req, res, 200, {
             status: true,

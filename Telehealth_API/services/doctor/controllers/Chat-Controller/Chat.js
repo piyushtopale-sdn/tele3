@@ -253,8 +253,6 @@ export const getCreatedChats = async (req, res) => {
                 ? (disableChatOption = true)
                 : (disableChatOption = false);
               chat.disableChatOption = disableChatOption;
-            } else {
-              disableChatOption = false;
             }
           }
 
@@ -301,8 +299,6 @@ export const getCreatedChats = async (req, res) => {
                   ? (disableChatOption = true)
                   : (disableChatOption = false);
                 chat.disableChatOption = disableChatOption;
-              } else {
-                disableChatOption = false;
               }
             }
 
@@ -328,21 +324,6 @@ export const getCreatedChats = async (req, res) => {
         return chat;
       })
     );
-    // let filteredResult = [];
-
-    // filteredResult = modifiedResult.filter((chat) => {
-    //   if (type && type === "doctor") {
-    //     const receiverFullName = chat.receiverDetails?.[0]?.full_name || "";
-    //     return searchQuery
-    //       ? receiverFullName.toLowerCase().includes(searchQuery.toLowerCase())
-    //       : true;
-    //   } else {
-    //     const senderFullName = chat.senderDetails?.full_name || "";
-    //     return searchQuery
-    //       ? senderFullName.toLowerCase().includes(searchQuery.toLowerCase())
-    //       : true;
-    //   }
-    // });
 
     const enrichedResult = await Promise.all(
       modifiedResult.map(async (chat) => {
@@ -412,203 +393,6 @@ export const getCreatedChats = async (req, res) => {
   }
 };
 
-
-/* exisiting-working-function */
-// export const getCreatedChats = async (req, res) => {
-//   // const id = req.query['0'];
-//   // const searchQuery = req.query.searchQuery; // Assuming the search query parameter is 'search'
-//   const {id,searchQuery} =req.query;
-//   try {
-//     const headers = {
-//       'Authorization': req.headers['authorization']
-//     }
-//     let filter = {}
- 
-//     if (searchQuery && searchQuery !== "") {
-//       filter["$or"] = [
-//         {
-//           groupName: { $regex: searchQuery, $options: "i" },
-//         },
-//         {
-//           "receiverDetails.fullName": { $regex: searchQuery, $options: "i" },
-//         },
-//       ];
-//     }
- 
-//     // const matchQuery = {
-//     //   $or: [
-//     //     { senderID: mongoose.Types.ObjectId(id) },
-//     //     { receiverID: mongoose.Types.ObjectId(id) }
-//     //   ]
-//     // };
- 
-//     const result = await Chat.aggregate([
-//       // { $match: matchQuery },
-//       { $sort: { updatedAt: -1 } },
-//       {
-//         $match: {
-//           $or: [
-//             {
-//               senderID: mongoose.Types.ObjectId(id)
-//             },
-//             {
-//               receiverID: mongoose.Types.ObjectId(id)
-//             }
-//           ]
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: "superadmins",
-//           localField: "senderID",
-//           foreignField: "_id",
-//           as: "senderDetails",
-//         },
-//       },
-//       {
-//         $unwind: {
-//           path: "$senderDetails",
-//           preserveNullAndEmptyArrays: true
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: 'superadmins',
-//           let: { receiverIDnew: '$receiverID' },
-//           pipeline: [
-//             {
-//               $match: {
-//                 $expr: { $in: ['$_id', '$$receiverIDnew'] }
-//               }
-//             },
-//             {
-//               $lookup: {
-//                 from: "portalusers",
-//                 localField: "_id",
-//                 foreignField: "superadmin_id",
-//                 as: "portaluserReceiverDetailsnew",
-//               }
-//             },
-//             {
-//               $addFields: {
-//                 portaluserReceiverDetails: '$portaluserReceiverDetailsnew'
-//               }
-//             },
-//             {
-//               $lookup: {
-//                 from: "documentinfos",
-//                 localField: "portaluserReceiverDetails.staff_profile",
-//                 foreignField: "_id",
-//                 as: "documentInfoReceiverDetailsnew",
-//               },
-//             },
-//             {
- 
-//               $addFields: {
-//                 'portaluserReceiverDetails': {
-//                   $map: {
-//                     input: '$portaluserReceiverDetails',
-//                     as: 'portaluserReceiverDetailsItem',
-//                     in: {
-//                       $mergeObjects: [
-//                         '$$portaluserReceiverDetailsItem',
-//                         {
-//                           documentInfoReceiverDetails: {
-//                             $filter: {
-//                               input: '$documentInfoReceiverDetailsnew',
-//                               as: 'documentInfoReceiverDetailsnewItem',
-//                               cond: {
-//                                 $eq: ['$$documentInfoReceiverDetailsnewItem._id', '$$portaluserReceiverDetailsItem.staff_profile']
-//                               }
-//                             }
-//                           }
-//                         }
-//                       ]
-//                     }
-//                   }
-//                 }
-//               }
-//             },
-//             {
-//               $project: {
-//                 portaluserReceiverDetailsnew: 0,
-//                 documentInfoReceiverDetailsnew: 0
-//               }
-//             },
-//           ],
-//           as: "receiverDetails",
- 
-//         }
-//       },
-//       { $match: filter },
-//       {
-//         $lookup: {
-//           from: "messages",
-//           localField: "latestMessage",
-//           foreignField: "_id",
-//           as: "latestMessage",
-//         },
-//       },
-//       {
-//         $unwind: {
-//           path: "$latestMessage",
-//           preserveNullAndEmptyArrays: true
-//         }
-//       },
- 
-//     ]);
- 
- 
-//     if (result.length > 0) {
-//       let i = 0;
-//       for (const doc of result) {
-//         if (doc.isGroupChat) {
-//           let imagesObject = {};
-//           imagesObject[doc._id] = '';
- 
-//           // Add profile_pic to the document
-//           doc.profile_pic = imagesObject[doc._id];
-//         }
-//         else {
-//           let j = 0;
-//           for await (const item of doc.receiverDetails) {
-//             let recieveimage = await approveOrRejectMedicine(item);
-//             if (recieveimage != '') {
-//               result[i].receiverDetails[j].portaluserReceiverDetails[0].documentInfoReceiverDetails[0].receiverImage = recieveimage;
-//             }
-//             j++;
-//           }
- 
-//         }
-//         i++;
-//       }
- 
-//       return sendResponse(req, res, 200, {
-//         status: true,
-//         body: result, // Use the modified dataArray instead of the original result
-//         message: "Fetched data successfully",
-//         errorCode: null,
-//       });
-//     } else {
-//       return sendResponse(req, res, 200, {
-//         status: false,
-//         body: [], // Use the modified dataArray instead of the original result
-//         message: "No room list found",
-//         errorCode: null,
-//       });
-//     }
- 
-//   } catch (error) {
-//     sendResponse(req, res, 500, {
-//       status: false,
-//       body: error,
-//       message: "Internal server error",
-//       errorCode: null,
-//     });
-//   }
-// };
-
-
 export const sendMessage = async (req, res) => {
   
   try {
@@ -624,14 +408,7 @@ export const sendMessage = async (req, res) => {
       req.body.data.receiverID == req.body.data.senderID
         ? chcekRoom?.senderID
         : chcekRoom?.receiverID;
-    // let chatPicture = {}
-    // if(req.body.data.attachments && req.body.data.attachments !== undefined){
-    //   chatPicture =  {
-    //     type : req.body.data.attachments.type,
-    //     path : await generateSignedUrl(req.body.data.attachments.path)
-    //   }
-    // }
-    
+
     let saveData = new Message({
       chatId: req.body.data.chatId,
       senderID: req.body.data.senderID,
@@ -648,48 +425,12 @@ export const sendMessage = async (req, res) => {
       latestMessage: mongoose.Types.ObjectId(savedMessage._id),
     };
 
-    const newUpdate = await Chat.updateOne(
+    await Chat.updateOne(
       { _id: mongoose.Types.ObjectId(savedMessage.chatId) },
       { $set: jsondata },
       { new: true }
     );
 
-    // if (saveChat) {
-
-    //   let condition = {
-    //     _id: saveChat._id
-    //   };
-
-    //   const getData = await Message.aggregate([
-    //     { $match: condition },
-    //     {
-    //       $lookup: {
-    //         from: "portalusers",
-    //         localField: "senderID",
-    //         foreignField: "_id",
-    //         as: "senderDetails",
-    //       },
-    //     },
-    //     {
-    //       $unwind: {
-    //         path: "$senderDetails",
-    //         preserveNullAndEmptyArrays: true
-    //       }
-    //     }
-    //   ]);
-
-    //   return sendResponse(req, res, 200, {
-    //     status: true,
-    //     body: getData[0],
-    //     message: "Message send successfully",
-    //   });
-    // } else {
-    //   return sendResponse(req, res, 200, {
-    //     status: false,
-    //     body: null,
-    //     message: "Failed to send message",
-    //   });
-    // }
     if (savedMessage) {
       const condition = { _id: savedMessage._id };
       const sender = await PortalUser.findOne({
@@ -830,109 +571,11 @@ export const readMessageCount = async (req, res) => {
   }
 };
 
-// export const sendMessage = async (req, res) => {
-//   try {
-//     const headers = {
-//       'Authorization': req.headers['authorization'],
-//     };
-
-//     // Check if the chat room exists
-//     const chatRoom = await Chat.findOne({ _id: mongoose.Types.ObjectId(req.body.data.chatId) });
-//     const receivers =
-//       req.body.data.receiverID === req.body.data.senderID
-//         ? chatRoom?.senderID
-//         : chatRoom?.receiverID;
-
-//     // Save the message
-//     const newMessage = new Message({
-//       chatId: req.body.data.chatId,
-//       senderID: req.body.data.senderID,
-//       receiverID: receivers,
-//       appointmentID: req.body.data.appointmentID,
-//       message: req.body.data.message,
-//       attachments: req.body.data.attachments,
-//       type: req.body.data.type,
-//     });
-
-//     const savedMessage = await newMessage.save();
-
-//     // Update the chat's latest message
-//     await Chat.updateOne(
-//       { _id: mongoose.Types.ObjectId(savedMessage.chatId) },
-//       { $set: { latestMessage: mongoose.Types.ObjectId(savedMessage._id) } },
-//       { new: true }
-//     );
-
-//     if (savedMessage) {
-//       const condition = { _id: savedMessage._id };
-//       const sender = await PortalUser.findOne({
-//         _id: mongoose.Types.ObjectId(req.body.data.senderID),
-//       });
-//       let messageDetails = {};
-
-//       if (sender?.role === 'INDIVIDUAL_DOCTOR') {
-//         // Doctor's details
-//         messageDetails = await Message.aggregate([
-//           { $match: condition },
-//           {
-//             $lookup: {
-//               from: 'portalusers',
-//               localField: 'senderID',
-//               foreignField: '_id',
-//               as: 'senderDetails',
-//             },
-//           },
-//           {
-//             $unwind: {
-//               path: '$senderDetails',
-//               preserveNullAndEmptyArrays: true,
-//             },
-//           },
-//         ]);
-//       } else if (sender) {
-//         // Patient's details
-//         const patientData = await httpService.getStaging(
-//           'patient/patient-details',
-//           { patient_id: req.body.data.senderID },
-//           headers,
-//           'patientServiceUrl'
-//         );
-
-//         messageDetails = [
-//           {
-//             ...savedMessage.toObject(),
-//             senderDetails: patientData,
-//           },
-//         ];
-//       }
-//       return sendResponse(req, res, 200, {
-//         status: true,
-//         body: messageDetails[0],
-//         message: 'Message sent successfully',
-//       });
-//     } else {
-//       return sendResponse(req, res, 200, {
-//         status: false,
-//         body: null,
-//         message: 'Failed to send message',
-//       });
-//     }
-//   } catch (err) {
-//     console.error('Error sending message:', err);
-//     return sendResponse(req, res, 500, {
-//       status: false,
-//       body: err,
-//       message: 'Internal server error',
-//     });
-//   }
-// };
-
 export const allMessage = async (req, res) => {
   try {
     const chatId = mongoose.Types.ObjectId(req.query.chatId);
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const limit = req.query.limit ? parseInt(req.query.limit) : 500000;
-    const loggedINId = mongoose.Types.ObjectId(req.query.loggedINId);
 
     let condition = {
       chatId: chatId,
@@ -1020,98 +663,8 @@ export const allMessage = async (req, res) => {
   }
 };
 
-// export const allMessage = async (req, res) => {
-//   try {
-//     const chatId = mongoose.Types.ObjectId(req.query.chatId);
-//     const page = req.query.page ? parseInt(req.query.page) : 1;
-//     const limit = req.query.limit ? parseInt(req.query.limit) : 500000;
-//     const loggedINId = mongoose.Types.ObjectId(req.query.loggedINId);
-
-//     let condition = {
-//       chatId: chatId,
-//       deletedBy: { $ne: loggedINId },
-//       isDeleted: false,
-//     };
-
-//     const count = await Message.countDocuments(condition);
-
-//     const getData = await Message.aggregate([
-//       { $match: condition },
-//       {
-//         $lookup: {
-//           from: "profileinfos",
-//           let: { senderId: "$senderID", receiverIds: "$receiverID" },
-//           pipeline: [
-//             {
-//               $match: {
-//                 $expr: {
-//                   $or: [
-//                     { $eq: ["$for_portal_user", "$$senderId"] },
-//                     { $in: ["$for_portal_user", "$$receiverIds"] },
-//                   ],
-//                 },
-//               },
-//             },
-//             {
-//               $project: {
-//                 name: 1,
-//                 profile_picture: 1,
-//               },
-//             },
-//           ],
-//           as: "userDetails",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "portalusers",
-//           localField: "senderID",
-//           foreignField: "_id",
-//           as: "senderDetails",
-//         },
-//       },
-//       {
-//         $unwind: {
-//           path: "$senderDetails",
-//           preserveNullAndEmptyArrays: true,
-//         },
-//       },
-//       { $sort: { createdAt: 1 } },
-//       { $skip: (page - 1) * limit },
-//       { $limit: limit },
-//     ]);
-
-//     if (getData && getData.length > 0) {
-//       return sendResponse(req, res, 200, {
-//         status: true,
-//         body: getData,
-//         message: "Fetched data successfully",
-//         totalMessages: count,
-//         totalPages: Math.ceil(count / limit),
-//         currentPage: page,
-//       });
-//     } else {
-//       return sendResponse(req, res, 200, {
-//         status: true,
-//         body: [],
-//         message: "No data found",
-//       });
-//     }
-//   } catch (error) {
-//     sendResponse(req, res, 500, {
-//       status: false,
-//       data: error,
-//       message: "failed to update staff",
-//       errorCode: "INTERNAL_SERVER_ERROR",
-//     });
-//   }
-// };
-
 export const createGroupChat = async (req, res) => {
   try {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
 
     let saveData = new Chat({
       senderID: req.body.data.sender,
@@ -1138,7 +691,7 @@ export const createGroupChat = async (req, res) => {
         latestMessage: mongoose.Types.ObjectId(saveMessage._id),
       };
 
-      const newUpdate = await Chat.updateOne(
+      await Chat.updateOne(
         { _id: mongoose.Types.ObjectId(saveChat._id) },
         { $set: jsondata },
         { new: true }
@@ -1167,9 +720,6 @@ export const createGroupChat = async (req, res) => {
 
 export const addMembersToGroupChat = async (req, res) => {
   try {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
 
     const chatroomId = req.body.data.chatroomId;
     const newMembers = req.body.data.newMembers;
@@ -1196,7 +746,7 @@ export const addMembersToGroupChat = async (req, res) => {
     existingChat.receiverID.push(...uniqueMemberObjectIds);
 
     // Update existingChat.receiverID in the database
-    const updateResult = await Chat.updateOne(
+    await Chat.updateOne(
       { _id: chatroomId },
       { $push: { receiverID: { $each: uniqueMemberObjectIds } } }
     );
@@ -1308,9 +858,6 @@ export const getNotification = async (req, res) => {
     let matchFilter = {
       for_portal_user: mongoose.Types.ObjectId(req.query.for_portal_user),
     };
-    // const getData = await Notification.find({
-    //   for_portal_user: mongoose.Types.ObjectId(req.query.for_portal_user)
-    // }).sort({ createdAt: -1 });
 
     const count = await Notification.countDocuments({
       for_portal_user: mongoose.Types.ObjectId(req.query.for_portal_user),
@@ -1358,7 +905,7 @@ export const updateNotification = async (req, res) => {
   try {
     const { receiverId, isnew } = req.body;
     if (!isnew) {
-      let notificationDetails = await Notification.updateMany(
+      await Notification.updateMany(
         { for_portal_user: { $eq: receiverId } },
         {
           $set: {
@@ -1455,7 +1002,7 @@ export const clearAllmessages = async (req, res) => {
 
 export const clearSinglemessages = async (req, res) => {
   try {
-    const { chatId, deletedBy, messageId } = req.body;
+    const { deletedBy, messageId } = req.body;
     
 
     const updatedMessage = await Message.findByIdAndUpdate(

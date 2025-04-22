@@ -19,7 +19,7 @@ import { hashPassword } from "../helpers/string";
 import { sendMailInvitations } from "../helpers/emailTemplate";
 import { sendEmail } from "../helpers/ses";
 import { config, generate4DigitOTP, smsTemplateOTP } from "../config/constants";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, terst_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS } = config
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS } = config
 import { sendSms } from "../middleware/sendSms";
 import {
     generateRefreshToken,
@@ -39,7 +39,6 @@ import { generateSignedUrl } from "../helpers/gcs";
 
 const canSendOtp = (deviceExist, currentTime) => {
     return new Promise((resolve, reject) => {
-        const test = new Date(currentTime.getTime() + 1 * 60000);
         const limitExceedWithin1 = new Date(currentTime.getTime() + OTP_LIMIT_EXCEED_WITHIN * 60000);
         let returnData = { status: false, limitExceedWithin: limitExceedWithin1 }
         if (!deviceExist) resolve({status: true}) // First time sending
@@ -61,7 +60,7 @@ const canSendOtp = (deviceExist, currentTime) => {
 class PharmacyController {
     async signup(req, res) {
         try {
-            const { email, password, phone_number, user_name, first_name, middle_name, last_name, pharmacy_name, country_code } =
+            const { email, password, phone_number, first_name, middle_name, last_name, pharmacy_name, country_code } =
                 req.body;
             const passwordHash = await hashPassword(password);
             let userData
@@ -153,7 +152,7 @@ class PharmacyController {
                 appointmentId: adminData?._id,
             }
 
-            let result = await notification("superadminServiceUrl", "", requestData)
+           await notification("superadminServiceUrl", "", requestData)
 
             sendResponse(req, res, 200, {
                 status: true,
@@ -179,11 +178,9 @@ class PharmacyController {
 
     async login(req, res) {
         try {
-            const { email, password, fcmToken } = req.body;
+            const { email, password } = req.body;
             const { uuid } = req.headers;
-            // const headers = {
-            //     Authorization: req.headers["authorization"],
-            // };
+
             const portalUserData = await PortalUser.findOne({ email: email.toLowerCase(), isDeleted: false }).lean();
 
             if (!portalUserData) {
@@ -197,7 +194,7 @@ class PharmacyController {
             const currentTime = new Date()
 
             if (req.body.fcmToken != "" || req.body.fcmToken != undefined) {
-                let pushNotification = await PortalUser.findByIdAndUpdate(
+                await PortalUser.findByIdAndUpdate(
                     portalUserData._id,
                     { $set: { fcmToken: req.body.fcmToken } }
                 );
@@ -539,10 +536,6 @@ class PharmacyController {
     async refreshToken(req, res) {
         try {
             const { refreshToken } = req.body;
-            const { uuid } = req.headers;
-
-
-
 
             return sendResponse(req, res, 200, {
                 status: true,
@@ -616,11 +609,7 @@ class PharmacyController {
             }
 
             let otp = 1111;
-            // if (mobile && mobile.length === 10) {
-            //   otp = 1111;
-            // } else {
-            //   otp = generate4DigitOTP();
-            // }
+
             if(process.env.NODE_ENV === "production"){
                 otp = generate4DigitOTP();
             }
@@ -1060,7 +1049,7 @@ class PharmacyController {
                 passwordToken
             });
             const result = await otpData.save();
-            const link = `${terst_FRONTEND_URL}/pharmacy/newpassword?token=${passwordToken}&user_id=${portalUserData._id}`
+            const link = `${test_p_FRONTEND_URL}/pharmacy/newpassword?token=${passwordToken}&user_id=${portalUserData._id}`
             const getEmailContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'FORGOT_PASSWORD', type: 'email' }, headers, 'superadminServiceUrl');
             let emailContent
             if (getEmailContent?.status && getEmailContent?.data?.length > 0) {
@@ -1161,8 +1150,6 @@ class PharmacyController {
 
     async resetPassword(req, res) {
         const { passwordToken, new_password } = req.body;
-        ;
-        const { uuid } = req.headers;
         try {
             const resetPaswordResult = await ResetPasswordHistory.findOne({ passwordToken }).lean();
             if (!resetPaswordResult) {
@@ -1463,7 +1450,6 @@ class PharmacyController {
             } = bank_details;
 
             const findUser = await PortalUser.findOne({ _id: for_portal_user })
-            const { provider, pay_number } = mobile_pay_details;
             const isExist = await PortalUser.findOne({ email: email, _id: { $ne: for_portal_user }, isDeleted: false });
             if (isExist) {
                 return sendResponse(req, res, 200, {
@@ -1879,7 +1865,7 @@ class PharmacyController {
 
     async listPharmacyAdminUser(req, res) {
         try {
-            const { page, limit, name, status, start_date, end_date, sort } = req.query;
+            const { page, limit, name, status, sort } = req.query;
     
             const pageNumber = Number(page) || 1;
             const limitNumber = Number(limit) || 10;
@@ -1932,7 +1918,6 @@ class PharmacyController {
                 { $limit: limitNumber }
             );
     
-            // const result = await AdminInfo.aggregate(aggregate);
             let result = await AdminInfo.aggregate(aggregate);
  
             result = await Promise.all(
@@ -2892,8 +2877,6 @@ class PharmacyController {
                 phone,
                 address,
                 created_By,
-                verify_status,
-                invitationId
             } = req.body;
 
             if (invitationId) {
@@ -2923,7 +2906,7 @@ class PharmacyController {
 
                     if (mailSent) {
                         updatedUserData.verify_status = "SEND";
-                        const result = await updatedUserData.save();
+                       await updatedUserData.save();
                         
                     }
 
@@ -2966,7 +2949,7 @@ class PharmacyController {
 
                 if (mailSent) {
                     userData.verify_status = "SEND";
-                    const result = await userData.save();
+                    await userData.save();
                     
                 }
 
@@ -3022,7 +3005,6 @@ class PharmacyController {
 
 
             const filter = {};
-            // const filterDate = {};
 
             if (searchKey && searchKey !== "") {
                 filter.$or = [
@@ -3034,12 +3016,10 @@ class PharmacyController {
             if (createdDate && createdDate !== "" && updatedDate && updatedDate !== "") {
                 const createdDateObj = new Date(createdDate);
                 const updatedDateObj = new Date(updatedDate);
-                // dateFilter.createdAt = createdDateObj.toISOString();
                 dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
             }
             else if (createdDate && createdDate !== "") {
                 const createdDateObj = new Date(createdDate);
-                // dateFilter.createdAt = createdDateObj.toISOString();
                 dateFilter.createdAt = { $gte: createdDateObj };
             }
             else if (updatedDate && updatedDate !== "") {
@@ -3160,9 +3140,7 @@ class PharmacyController {
 
     async saveSuperadminNotification(req, res) {
         try {
-            const headers = {
-                'Authorization': req.headers['authorization']
-            }
+
             let saveNotify = new Notification({
                 created_by: req.body.data?.created_by,
                 notification_name: req.body.data?.notification_name,
@@ -3381,7 +3359,7 @@ class PharmacyController {
             const currentDate = new Date();
             const formattedDate = currentDate.toISOString();
             if (userAddress) {
-                const findData = await Logs.findOneAndUpdate(
+                await Logs.findOneAndUpdate(
                     { _id: mongoose.Types.ObjectId(currentLogID) },
                     {
                         $set: {
@@ -3393,7 +3371,7 @@ class PharmacyController {
                 ).exec();
             } else {
 
-                const findData = await Logs.findOneAndUpdate(
+                await Logs.findOneAndUpdate(
                     { _id: mongoose.Types.ObjectId(currentLogID) },
                     {
                         $set: {

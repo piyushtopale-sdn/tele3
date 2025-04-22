@@ -37,19 +37,17 @@ import {
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../helpers/ses";
-import { generate4DigitOTP, smsTemplateOTP } from "../config/constants";
-import { config } from "../config/constants";
+import { config, generate4DigitOTP, smsTemplateOTP } from "../config/constants";
 const {
   OTP_EXPIRATION,
   OTP_LIMIT_EXCEED_WITHIN,
   OTP_TRY_AFTER,
   SEND_ATTEMPTS,
-  terst_FRONTEND_URL,
+  test_p_FRONTEND_URL,
   LOGIN_AFTER,
   PASSWORD_ATTEMPTS,
 } = config;
 import { sendSms } from "../middleware/sendSms";
-import { forgotPasswordEmailForIndividualDoctor } from "../helpers/emailTemplate";
 import {
   agoraStartRecording,
   agoraStopRecording,
@@ -58,7 +56,6 @@ import {
 import Http from "../helpers/httpservice";
 import appointment from "../models/appointment";
 import mongoose from "mongoose";
-import staff_info from "../models/staff_info";
 import GuestUser from "../models/guestuser";
 import { notification } from "../helpers/notification";
 import { generateSignedUrl } from "../helpers/gcs";
@@ -193,7 +190,6 @@ class IndividualDoctor {
   async signUp(req, res) {
     try {
       const {
-        full_name,
         first_name,
         middle_name,
         last_name,
@@ -259,7 +255,7 @@ class IndividualDoctor {
         appointmentId: userDetails?._id,
       };
 
-      let result = await notification(
+      await notification(
         "",
         "",
         "superadminServiceUrl",
@@ -376,7 +372,7 @@ class IndividualDoctor {
   async login(req, res) {
     try {
       const { email, password } = req.body;
-      const { uuid, role } = req.headers;
+      const { uuid } = req.headers;
 
       const portalUserData = await PortalUser.findOne({
         email,
@@ -750,7 +746,7 @@ class IndividualDoctor {
       });
       await ForgotPasswordData.save();
 
-      const link = `${terst_FRONTEND_URL}/individual-doctor/newpassword?token=${resetToken}&user_id=${userData._id}`;
+      const link = `${test_p_FRONTEND_URL}/individual-doctor/newpassword?token=${resetToken}&user_id=${userData._id}`;
       const getEmailContent = await httpService.getStaging(
         "superadmin/get-notification-by-condition",
         { condition: "FORGOT_PASSWORD", type: "email" },
@@ -870,11 +866,7 @@ class IndividualDoctor {
       }
 
       let otp = 1111;
-      // if (mobile && mobile.length === 10) {
-      //   otp = 1111;
-      // } else {
-      //   otp = generate4DigitOTP();
-      // }
+
       if (process.env.NODE_ENV === "production") {
         otp = generate4DigitOTP();
       }
@@ -901,7 +893,6 @@ class IndividualDoctor {
         send_attempts: (deviceExist ? deviceExist.send_attempts : 0) + 1,
       };
       let result = null;
-      // if (smsRes == 200) {
       if (deviceExist) {
         updateObject.limitExceedWithin = canOtpSend.limitExceedWithin;
         if (canOtpSend?.reset) {
@@ -1133,7 +1124,6 @@ class IndividualDoctor {
             role: portalUserData.role,
             uuid,
           };
-          // req.session.ph_verified = true;
           const updateVerified = await PortalUser.findOneAndUpdate(
             { _id: portalUserData._id },
             {
@@ -1153,10 +1143,7 @@ class IndividualDoctor {
             { new: true }
           ).exec();
 
-          // let adminData = await BasicInfo.findOne({ for_portal_user: portalUserData._id }).populate({
-          //     path: 'profile_picture',
-          //     select: 'url'
-          // }).exec();
+
           let adminData;
 
           if (
@@ -1182,7 +1169,7 @@ class IndividualDoctor {
           }
 
           if (portalUserData.role == "INDIVIDUAL_DOCTOR") {
-            let adminData = await BasicInfo.findOne({
+            await BasicInfo.findOne({
               for_portal_user: portalUserData._id,
             })
               .populate({
@@ -1358,7 +1345,6 @@ class IndividualDoctor {
             role: portalUserData.role,
             uuid,
           };
-          // req.session.ph_verified = true;
           const updateVerified = await PortalUser.findOneAndUpdate(
             { _id: portalUserData._id },
             {
@@ -1636,7 +1622,7 @@ class IndividualDoctor {
       } else {
         const hashPassword = await generateTenSaltHash(newPassword);
 
-        const updatedUser = await PortalUser.findOneAndUpdate(
+        await PortalUser.findOneAndUpdate(
           { _id: user_id },
           { password: hashPassword },
           { new: true }
@@ -1694,7 +1680,7 @@ class IndividualDoctor {
                 userIdentity: uniqueId,
               };
 
-              let appintmentdetails11 = await httpService.postStaging(
+              await httpService.postStaging(
                 "doctor/update-videocall-appointment",
                 {
                   appointmentId: req.body.chatId,
@@ -1705,7 +1691,7 @@ class IndividualDoctor {
                 headers,
                 "doctorServiceUrl"
               );
-              let appintmentdetailsnewwww = await httpService.postStaging(
+              await httpService.postStaging(
                 "doctor/update-videocall-appointment",
                 {
                   appointmentId: req.body.chatId,
@@ -1748,7 +1734,6 @@ class IndividualDoctor {
             message: "Must include roomName argument.",
             errorCode: null,
           });
-          // return res.status(200).json("Must include roomName argument.");
         }
         let token = await agoraTokenGenerator(roomName, uniqueId);
         if (req.body.loggedInUserId) {
@@ -1762,7 +1747,7 @@ class IndividualDoctor {
           const headers = {
             Authorization: req.body.authtoken,
           };
-          let appintmentdetails = await httpService.postStaging(
+          await httpService.postStaging(
             "doctor/update-videocall-appointment",
             {
               appointmentId: req.body.chatId,
@@ -1898,7 +1883,7 @@ class IndividualDoctor {
         Authorization: req.headers["authorization"],
       };
       let portalinfo = portaltype != "" ? `&portal=${portaltype}` : "";
-      const link = `${process.env.terst_FRONTEND_URL}/external-video?id=${appointment}${portalinfo}`;
+      const link = `${process.env.test_p_FRONTEND_URL}/external-video?id=${appointment}${portalinfo}`;
 
       let result = await PortalUser.findOne({ email: email });
 
@@ -1918,7 +1903,7 @@ class IndividualDoctor {
           title: "External Meeting",
         };
 
-        let result1 = await notification(
+        await notification(
           "",
           "",
           serviceurl,
@@ -1959,8 +1944,7 @@ class IndividualDoctor {
       });
       if (getData.participants) {
         getData.participants.forEach(async (ele) => {
-          let audioFlag;
-          let videoFlag;
+
           if (ele.userIdentity == req.query.identtity) {
             return sendResponse(req, res, 200, {
               status: true,
@@ -2035,7 +2019,6 @@ class IndividualDoctor {
         phone,
         address,
         created_By,
-        verify_status,
         invitationId,
       } = req.body;
 
@@ -2073,7 +2056,7 @@ class IndividualDoctor {
 
           if (mailSent) {
             updatedUserData.verify_status = "SEND";
-            const result = await updatedUserData.save();
+            await updatedUserData.save();
           }
 
           return sendResponse(req, res, 200, {
@@ -2125,7 +2108,7 @@ class IndividualDoctor {
 
         if (mailSent) {
           userData.verify_status = "SEND";
-          const result = await userData.save();
+          await userData.save();
         }
 
         if (userData) {
@@ -2195,7 +2178,6 @@ class IndividualDoctor {
       }
 
       const filter = {};
-      // const filterDate = {};
 
       if (searchKey && searchKey !== "") {
         filter.$or = [{ first_name: { $regex: searchKey } }];
@@ -2210,11 +2192,9 @@ class IndividualDoctor {
       ) {
         const createdDateObj = new Date(createdDate);
         const updatedDateObj = new Date(updatedDate);
-        // dateFilter.createdAt = createdDateObj.toISOString();
         dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
       } else if (createdDate && createdDate !== "") {
         const createdDateObj = new Date(createdDate);
-        // dateFilter.createdAt = createdDateObj.toISOString();
         dateFilter.createdAt = { $gte: createdDateObj };
       } else if (updatedDate && updatedDate !== "") {
         const updatedDateObj = new Date(updatedDate);
@@ -2335,7 +2315,7 @@ class IndividualDoctor {
       const currentDate = new Date();
       const formattedDate = currentDate.toISOString();
       if (userAddress) {
-        const findData = await Logs.findOneAndUpdate(
+        await Logs.findOneAndUpdate(
           { _id: mongoose.Types.ObjectId(currentLogID) },
           {
             $set: {
@@ -2345,7 +2325,7 @@ class IndividualDoctor {
           { new: true }
         ).exec();
       } else {
-        const findData = await Logs.findOneAndUpdate(
+        await Logs.findOneAndUpdate(
           { _id: mongoose.Types.ObjectId(currentLogID) },
           {
             $set: {
@@ -2436,7 +2416,6 @@ class IndividualDoctor {
         role,
         createdBy,
         created_by_user,
-        verify_status,
         creator_name,
       } = req.body;
 
@@ -3018,8 +2997,8 @@ class IndividualDoctor {
       }
 
       // Fetching all relevant data instead of just counts
-      const labData = await PrescribeLabTest.find(filter).select("labTest");
-      const radioData = await PrescribeRadiologyTest.find(filter).select(
+      await PrescribeLabTest.find(filter).select("labTest");
+      await PrescribeRadiologyTest.find(filter).select(
         "radiologyTest"
       );
       const eprescriptionData = await Eprescription.find({
@@ -3549,177 +3528,6 @@ class IndividualDoctor {
     }
   }
 
-  // async getLabTestAppointmentList(req, res) {
-  //   try {
-  //     const { fromDate, toDate, limit, page, sort } = req.query;
-  //     let filter = {};
-
-  //     if (req.user?.role === "INDIVIDUAL_DOCTOR") {
-  //       filter.doctorId = mongoose.Types.ObjectId(req.user._id);
-  //     }
-  //     if (fromDate && toDate) {
-  //       const fromDateObj = new Date(`${fromDate} 00:00:00`);
-  //       const toDateObj = new Date(`${toDate} 23:59:59`);
-  //       filter.createdAt = { $gte: fromDateObj, $lte: toDateObj };
-  //     }
-
-  //     let sortKey = "createdAt";
-  //     let sortValue = -1;
-  //     const allowedSortFields = [
-  //       "appointmentId",
-  //       "consultationDate",
-  //       "consultationTime",
-  //       "patientName",
-  //       "labName",
-  //       "testName",
-  //     ];
-
-  //     if (sort) {
-  //       const [key, value] = sort.split(":");
-  //       if (allowedSortFields.includes(key)) {
-  //         sortKey = key;
-  //         sortValue = Number(value);
-  //       }
-  //     }
-
-  //     const pageNumber = Math.max(parseInt(page) || 1, 1);
-  //     const pageSize = Math.max(parseInt(limit) || 10, 1);
-  //     const skip = (pageNumber - 1) * pageSize;
-
-  //     const pipeline = [
-  //       { $match: filter },
-  //       {
-  //         $lookup: {
-  //           from: "portalusers",
-  //           localField: "doctorId",
-  //           foreignField: "_id",
-  //           as: "doctorDetails",
-  //         },
-  //       },
-  //       {
-  //         $unwind: { path: "$doctorDetails", preserveNullAndEmptyArrays: true },
-  //       },
-  //       {
-  //         $lookup: {
-  //           from: "appointments",
-  //           localField: "appointmentId",
-  //           foreignField: "_id",
-  //           as: "appointmentDetails",
-  //         },
-  //       },
-  //       {
-  //         $unwind: {
-  //           path: "$appointmentDetails",
-  //           preserveNullAndEmptyArrays: true,
-  //         },
-  //       },
-  //       {
-  //         $unwind: {
-  //           path: "$labTest",
-  //           preserveNullAndEmptyArrays: true,
-  //         },
-  //       },
-  //       {
-  //         $project: {
-  //           _id: 1,
-  //           appointmentId: "$appointmentDetails.appointment_id",
-  //           appointment_id: "$appointmentDetails._id",
-  //           doctorName: "$doctorDetails.full_name",
-  //           doctorNameArabic: "$doctorDetails.full_name_arabic",
-  //           patientId: "$patientId",
-  //           consultationDate: "$appointmentDetails.consultationDate",
-  //           consultationTime: "$appointmentDetails.consultationTime",
-  //           appointmentStatus: "$appointmentDetails.status",
-  //           prescribeStatus: "$status",
-  //           testName: { $ifNull: ["$labTest.labtestName", "N/A"] },
-  //           labName: { $ifNull: ["$labTest.labCenterName", "N/A"] },
-  //           testStatus: { $ifNull: ["$labTest.status", "N/A"] },
-  //         },
-  //       },
-  //       { $sort: { [sortKey]: sortValue } },
-
-        
-  //       {
-  //         $facet: {
-  //           totalCount: [{ $count: "count" }],
-  //           paginatedResults: [{ $skip: skip }, { $limit: pageSize }],
-  //         },
-  //       },
-  //     ];
-
-  //     const result = await PrescribeLabTest.aggregate(pipeline);
-  //     const totalRecords = result[0]?.totalCount[0]?.count || 0;
-  //     let labTestDetails = result[0]?.paginatedResults || [];
-
-  //     if (!labTestDetails.length) {
-  //       return sendResponse(req, res, 200, {
-  //         status: true,
-  //         message: "Lab test not found",
-  //         body: [],
-  //         totalRecords,
-  //         totalPages: Math.ceil(totalRecords / pageSize),
-  //         currentPage: pageNumber,
-  //       });
-  //     }
-
-  //     const patientIds = [
-  //       ...new Set(labTestDetails.map((item) => item.patientId?.toString())),
-  //     ];
-
-  //     const patientResponse = await httpService.postStaging(
-  //       "patient/get-patient-details-by-id",
-  //       { ids: patientIds },
-  //       {},
-  //       "patientServiceUrl"
-  //     );
-
-  //     const patientDetailsMap = patientResponse?.data || {};
-
-  //     labTestDetails = labTestDetails.map((result) => ({
-  //       appointmentId: result.appointmentId,
-  //       appointment_id: result.appointment_id,
-  //       doctorName: result.doctorName,
-  //       doctorNameArabic: result.doctorNameArabic,
-  //       patientId: result.patientId,
-  //       patientName: patientDetailsMap[result.patientId]?.full_name || "N/A",
-  //       patientNameArabic:
-  //         patientDetailsMap[result.patientId]?.full_name_arabic || "N/A",
-  //       consultationDate: result.consultationDate,
-  //       consultationTime: result.consultationTime,
-  //       appointmentStatus: result.appointmentStatus,
-  //       prescribeStatus: result.prescribeStatus || "N/A",
-  //       testName: result.testName,
-  //       labName: result.labName,
-  //       testStatus: result.testStatus,
-  //     }));
-
-  //     if (sortKey === "patientName") {
-  //       labTestDetails.sort((a, b) => {
-  //         const nameA = a.patientName.toLowerCase();
-  //         const nameB = b.patientName.toLowerCase();
-  //         return sortValue === 1
-  //           ? nameA.localeCompare(nameB)
-  //           : nameB.localeCompare(nameA);
-  //       });
-  //     }
-
-  //     return sendResponse(req, res, 200, {
-  //       status: true,
-  //       body: labTestDetails,
-  //       message: "Successfully fetched lab test appointment details",
-  //       totalRecords,
-  //       totalPages: Math.ceil(totalRecords / pageSize),
-  //       currentPage: pageNumber,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error fetching lab test appointment details:", error);
-  //     return sendResponse(req, res, 500, {
-  //       status: false,
-  //       message: "Internal server error",
-  //     });
-  //   }
-  // }
-
   async getLabTestAppointmentList(req, res) {
     try {
       const { fromDate, toDate, limit, page, sort } = req.query;
@@ -3910,187 +3718,6 @@ class IndividualDoctor {
     }
   }
   
-  
-
-
-
-  // async getRadiologyTestAppointmentList(req, res) {
-  //   try {
-  //     const { fromDate, toDate, limit, page, sort } = req.query;
-  //     let filter = {};
-
-  //     if (req.user?.role === "INDIVIDUAL_DOCTOR") {
-  //       filter.doctorId = mongoose.Types.ObjectId(req.user._id);
-  //     }
-
-  //     if (fromDate && toDate) {
-  //       const fromDateObj = new Date(`${fromDate} 00:00:00`);
-  //       const toDateObj = new Date(`${toDate} 23:59:59`);
-  //       filter.createdAt = { $gte: fromDateObj, $lte: toDateObj };
-  //     }
-
-  //     let sortKey = "createdAt";
-  //     let sortValue = -1;
-
-  //     if (sort) {
-  //       const [key, value] = sort.split(":");
-  //       const allowedSortFields = [
-  //         "appointmentId",
-  //         "consultationDate",
-  //         "consultationTime",
-  //         "patientName",
-  //         "radioName",
-  //         "testName",
-  //       ];
-  //       if (allowedSortFields.includes(key)) {
-  //         sortKey = key;
-  //         sortValue = Number(value);
-  //       }
-  //     }
-
-  //     const pageNumber = Math.max(parseInt(page) || 1, 1);
-  //     const pageSize = Math.max(parseInt(limit) || 10, 1);
-  //     const skip = (pageNumber - 1) * pageSize;
-
-  //     const pipeline = [
-  //       { $match: filter },
-  //       {
-  //         $lookup: {
-  //           from: "portalusers",
-  //           localField: "doctorId",
-  //           foreignField: "_id",
-  //           as: "doctorDetails",
-  //         },
-  //       },
-  //       {
-  //         $unwind: { path: "$doctorDetails", preserveNullAndEmptyArrays: true },
-  //       },
-  //       {
-  //         $lookup: {
-  //           from: "appointments",
-  //           localField: "appointmentId",
-  //           foreignField: "_id",
-  //           as: "appointmentDetails",
-  //         },
-  //       },
-  //       {
-  //         $unwind: {
-  //           path: "$appointmentDetails",
-  //           preserveNullAndEmptyArrays: true,
-  //         },
-  //       },
-  //       {
-  //         $unwind: {
-  //           path: "$radiologyTest",
-  //           preserveNullAndEmptyArrays: true,
-  //         },
-  //       },
-  //       {
-  //         $project: {
-  //           _id: 1,
-  //           appointmentId: "$appointmentDetails.appointment_id",
-  //           appointment_id: "$appointmentDetails._id",
-  //           doctorName: "$doctorDetails.full_name",
-  //           doctorNameArabic: "$doctorDetails.full_name_arabic",
-  //           patientId: "$patientId",
-  //           consultationDate: "$appointmentDetails.consultationDate",
-  //           consultationTime: "$appointmentDetails.consultationTime",
-  //           appointmentStatus: "$appointmentDetails.status",
-  //           prescribeStatus: "$status",
-  //           testName: { $ifNull: ["$radiologyTest.radiologyTestName", "N/A"] },
-  //           radioName: {
-  //             $ifNull: ["$radiologyTest.radiologyCenterName", "N/A"],
-  //           },
-  //           testStatus: { $ifNull: ["$radiologyTest.status", "N/A"] },
-  //         },
-  //       },
-  //       { $sort: { [sortKey]: sortValue } }, // Sorting applied here
-  //       {
-  //         $facet: {
-  //           totalCount: [{ $count: "count" }],
-  //           paginatedResults: [{ $skip: skip }, { $limit: pageSize }],
-  //         },
-  //       },
-  //     ];
-
-  //     const result = await PrescribeRadiologyTest.aggregate(pipeline);
-  //     const totalRecords = result[0]?.totalCount[0]?.count || 0;
-  //     let radiologyTestDetails = result[0]?.paginatedResults || [];
-
-  //     if (!radiologyTestDetails.length) {
-  //       return sendResponse(req, res, 200, {
-  //         status: true,
-  //         message: "Radiology test not found",
-  //         body: [],
-  //         totalRecords,
-  //         totalPages: Math.ceil(totalRecords / pageSize),
-  //         currentPage: pageNumber,
-  //       });
-  //     }
-
-  //     const patientIds = [
-  //       ...new Set(
-  //         radiologyTestDetails.map((item) => item.patientId?.toString())
-  //       ),
-  //     ];
-
-  //     const patientResponse = await httpService.postStaging(
-  //       "patient/get-patient-details-by-id",
-  //       { ids: patientIds },
-  //       {},
-  //       "patientServiceUrl"
-  //     );
-
-  //     const patientDetailsMap = patientResponse?.data || {};
-
-  //     radiologyTestDetails = radiologyTestDetails.map((result) => ({
-  //       appointmentId: result.appointmentId,
-  //       appointment_id: result.appointment_id,
-  //       doctorName: result.doctorName,
-  //       doctorNameArabic: result.doctorNameArabic,
-  //       patientId: result.patientId,
-  //       patientName: patientDetailsMap[result.patientId]?.full_name || "N/A",
-  //       patientNameArabic:
-  //         patientDetailsMap[result.patientId]?.full_name_arabic || "N/A",
-  //       consultationDate: result.consultationDate,
-  //       consultationTime: result.consultationTime,
-  //       appointmentStatus: result.appointmentStatus,
-  //       prescribeStatus: result.prescribeStatus || "N/A",
-  //       testName: result.testName,
-  //       radioName: result.radioName,
-  //       testStatus: result.testStatus,
-  //     }));
-
-  //     // If sorting is based on `patientName`, apply it in JavaScript after fetching patient details
-  //     if (sortKey === "patientName") {
-  //       radiologyTestDetails.sort((a, b) => {
-  //         const nameA = a.patientName.toLowerCase();
-  //         const nameB = b.patientName.toLowerCase();
-  //         return sortValue === 1
-  //           ? nameA.localeCompare(nameB)
-  //           : nameB.localeCompare(nameA);
-  //       });
-  //     }
-
-  //     return sendResponse(req, res, 200, {
-  //       status: true,
-  //       body: radiologyTestDetails,
-  //       message: "Successfully fetched radiology test appointment details",
-  //       totalRecords,
-  //       totalPages: Math.ceil(totalRecords / pageSize),
-  //       currentPage: pageNumber,
-  //     });
-  //   } catch (error) {
-  //     console.error(
-  //       "Error fetching radiology test appointment details:",
-  //       error
-  //     );
-  //     return sendResponse(req, res, 500, {
-  //       status: false,
-  //       message: "Internal server error",
-  //     });
-  //   }
-  // }
 
   async getRadiologyTestAppointmentList(req, res) {
     try {
@@ -4380,107 +4007,6 @@ class IndividualDoctor {
       });
   }
 }
-/* dilip-last-login-doctor */
-// async getExportAllDoctorLastLogin(req, res) {
-//   try {
-//     // Fetch all non-deleted PortalUser data with role "INDIVIDUAL_DOCTOR"
-//     const doctors = await PortalUser.find({
-//       isDeleted: false,
-//       role: "INDIVIDUAL_DOCTOR",
-//     })
-//       .select("email mobile full_name country_code")
-//       .lean(); // Use lean() for faster query and lower memory footprint
-
-//     if (!doctors || doctors.length === 0) {
-//       return sendResponse(req, res, 404, {
-//         status: false,
-//         message: `No doctors found.`,
-//         errorCode: "NO_DOCTORS_FOUND",
-//       });
-//     }
-
-//     // Use Promise.all to parallelize data fetching for all doctors
-//     const doctorLogs = await Promise.all(
-//       doctors.map(async (doctor) => {
-//         try {
-//           // Fetch the latest login log and basic info in parallel
-//           const [lastLoginData, basicInfoData, totalLoginCount] =
-//             await Promise.all([
-//               Logs.findOne({ userId: doctor._id })
-//                 .sort({ loginDateTime: -1 })
-//                 .select("loginDateTime")
-//                 .lean(),
-//               BasicInfo.findOne({ for_portal_user: doctor._id })
-//                 .select("full_name full_name_arabic gender dob")
-//                 .lean(),
-//               Logs.countDocuments({ userId: doctor._id }),
-//             ]);
-
-//           // If no login data or basic info, skip this doctor
-//           if (!lastLoginData || !basicInfoData) return null;
-
-//           // Prepare doctor log details
-//           return {
-//             "Full Name": basicInfoData?.full_name || "N/A",
-//             "Full Name Arabic": basicInfoData?.full_name_arabic || "N/A",
-//             Email: doctor.email,
-//             "Last Login": lastLoginData
-//             ? moment(lastLoginData.loginDateTime).format(
-//                 "DD-MM-YYYY HH:mm:ss"
-//               )
-//             : "N/A", // Formatted date and time
-//             "Country Code": doctor.country_code,
-//             Mobile: doctor.mobile,
-//             Gender: basicInfoData?.gender || "N/A",
-//             DOB: basicInfoData?.dob
-//               ? moment(basicInfoData.dob).format("DD-MM-YYYY")
-//               : "N/A",
-           
-//             "Last Login": lastLoginData
-//             ? moment(lastLoginData.loginDateTime).format(
-//                 "DD-MM-YYYY HH:mm:ss"
-//               )
-//             : "N/A", // Formatted date and time
-//             "Total Login Count": totalLoginCount,
-//           };
-//         } catch (err) {
-//           console.error(
-//             `Error fetching logs for doctor ID: ${doctor._id}`,
-//             err
-//           );
-//           return null;
-//         }
-//       })
-//     );
-
-//     // Filter out null results (doctors without logs or basic info)
-//     const validDoctorLogs = doctorLogs.filter((log) => log !== null);
-
-//     // If no valid doctor logs found
-//     if (validDoctorLogs.length === 0) {
-//       return sendResponse(req, res, 404, {
-//         status: false,
-//         message: `No login logs found for any doctor.`,
-//         errorCode: "NO_LOGS_FOUND",
-//       });
-//     }
-
-//     // Send the response with all valid logs
-//     sendResponse(req, res, 200, {
-//       status: true,
-//       message: `Doctor logs fetched successfully`,
-//       body: validDoctorLogs,
-//       errorCode: null,
-//     });
-//   } catch (error) {
-//     sendResponse(req, res, 500, {
-//       status: false,
-//       body: error,
-//       message: `Failed to get doctor logs`,
-//       errorCode: "INTERNAL_SERVER_ERROR",
-//     });
-//   }
-// }
 
 async getExportAllDoctorLastLogin(req, res) {
   try {

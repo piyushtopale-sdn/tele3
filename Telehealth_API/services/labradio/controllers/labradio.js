@@ -8,7 +8,7 @@ import LocationInfo from "../models/location_info";
 import DocumentInfo from "../models/document_info";
 import StaffInfo from "../models/staffInfo";
 import ForgotPasswordToken from "../models/forgot_password_token";
-import { generate4DigitOTP, smsTemplateOTP } from "../config/constants";
+import { generate4DigitOTP, smsTemplateOTP, AppointmentReasonColumns, config } from "../config/constants";
 import { sendSms } from "../middleware/sendSms";
 import { sendEmail } from "../helpers/ses";
 import crypto from "crypto";
@@ -20,11 +20,10 @@ import {
   generateRefreshToken,
   generateTenSaltHash,
   generateToken,
-  handleRejectionError,
   processExcel,
 } from "../middleware/utils";
 import mongoose from "mongoose";
-import { hashPassword, formatString } from "../helpers/string";
+import { hashPassword } from "../helpers/string";
 import EducationalDetail from "../models/educational_details";
 import HospitalLocation from "../models/hospital_location";
 import Http from "../helpers/httpservice";
@@ -34,7 +33,6 @@ import FeeManagement from "../models/fee_management";
 import DocumentManagement from "../models/document_management";
 import ReasonForAppointment from "../models/reason_of_appointment";
 import ReviewAndRating from "../models/reviews";
-import { AppointmentReasonColumns } from "../config/constants";
 import Questionnaire from "../models/questionnaire";
 import fs from "fs";
 import PathologyTestInfoNew from "../models/pathologyTestInfoNew";
@@ -45,9 +43,8 @@ import { agoraTokenGenerator } from "../helpers/chat";
 import Logs from "../models/logs";
 import ProviderDocs from "../models/provider_document";
 import { notification, sendNotification } from "../helpers/notification";
-import { config } from "../config/constants";
 import { generateSignedUrl, uploadSingleOrMultipleDocuments } from "../helpers/gcs";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, terst_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS } = config
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS } = config
 
 const validateColumnWithExcel = (toValidate, excelColumn) => {
   const requestBodyCount = Object.keys(toValidate).length;
@@ -67,7 +64,6 @@ const validateColumnWithExcel = (toValidate, excelColumn) => {
 };
 
 export const addTestsForMngDoc = async (pathologyInfo, id, type) => {
-  let pathologyTestData;
   for (const test of pathologyInfo) {
     try {
       const existingTest = await PathologyTestInfoNew.findOne({
@@ -77,10 +73,9 @@ export const addTestsForMngDoc = async (pathologyInfo, id, type) => {
       });
 
       if (existingTest) {
-        //throw new Error(`Test ${test.nameOfTest} already_exists_for ${id}`);
       } else {
         if (test.isExist === false) {
-          pathologyTestData = await PathologyTestInfoNew.create({
+          await PathologyTestInfoNew.create({
             for_portal_user: id,
             typeOfTest: test.typeOfTest,
             nameOfTest: test.nameOfTest,
@@ -177,7 +172,6 @@ const getDoctorOpeningsHours = async (week_days) => {
 
 const canSendOtp = (deviceExist, currentTime) => {
   return new Promise((resolve, reject) => {
-      const test = new Date(currentTime.getTime() + 1 * 60000);
       const limitExceedWithin1 = new Date(currentTime.getTime() + OTP_LIMIT_EXCEED_WITHIN * 60000);
       let returnData = { status: false, limitExceedWithin: limitExceedWithin1 }
       if (!deviceExist) resolve({status: true}) // First time sending
@@ -243,7 +237,6 @@ class LabRadiology {
   async signUp(req, res) {
     try {
       const {
-        full_name,
         first_name,
         middle_name,
         last_name,
@@ -312,7 +305,7 @@ class LabRadiology {
         appointmentId: userDetails?._id,
       };
 
-      let result = await notification(
+      await notification(
         "",
         "",
         "superadminServiceUrl",
@@ -344,10 +337,8 @@ class LabRadiology {
   async login(req, res) {
     try {
       const { email, password, type } = req.body;
-      const { uuid, role } = req.headers;
-      // const headers = {
-      //   Authorization: req.headers["authorization"],
-      // };
+      const { uuid } = req.headers;
+
       const portalUserData = await PortalUser.findOne({
         email,type:type,
         isDeleted: false,
@@ -757,11 +748,7 @@ class LabRadiology {
       }
 
       let otp = 1111;
-      // if (mobile && mobile.length === 10) {
-      //   otp = 1111;
-      // } else {
-      //   otp = generate4DigitOTP();
-      // }
+
       if(process.env.NODE_ENV === "production"){
         otp = generate4DigitOTP();
        }
@@ -780,7 +767,6 @@ class LabRadiology {
         send_attempts: (deviceExist ? deviceExist.send_attempts : 0) + 1,
     };
       let result = null;
-      // if (smsRes == 200) {
         if (deviceExist) {
           updateObject.limitExceedWithin = canOtpSend.limitExceedWithin
           if (canOtpSend?.reset) {
@@ -993,7 +979,6 @@ class LabRadiology {
             role: portalUserData.role,
             uuid,
           };
-          // req.session.ph_verified = true;
           const updateVerified = await PortalUser.findOneAndUpdate(
             { _id: portalUserData._id },
             {
@@ -1130,7 +1115,6 @@ class LabRadiology {
             role: portalUserData.role,
             uuid,
           };
-          // req.session.ph_verified = true;
           const updateVerified = await PortalUser.findOneAndUpdate(
             { _id: portalUserData._id },
             {
@@ -1252,8 +1236,8 @@ class LabRadiology {
         user_id: userData._id,
         token: hashResetToken,
       });
-      let savedForgotPasswordData = await ForgotPasswordData.save();
-      const link = `${terst_FRONTEND_URL}/portals/newpassword/${type}?token=${resetToken}&user_id=${userData._id}&type=${type}`
+      await ForgotPasswordData.save();
+      const link = `${test_p_FRONTEND_URL}/portals/newpassword/${type}?token=${resetToken}&user_id=${userData._id}&type=${type}`
       const getEmailContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'FORGOT_PASSWORD', type: 'email' }, headers, 'superadminServiceUrl');
       let emailContent
       if (getEmailContent?.status && getEmailContent?.data?.length > 0) {
@@ -1340,7 +1324,7 @@ class LabRadiology {
       } else {
         const hashPassword = await generateTenSaltHash(newPassword);
 
-        const updatedUser = await PortalUser.findOneAndUpdate(
+        await PortalUser.findOneAndUpdate(
           { _id: user_id },
           { password: hashPassword },
           { new: true }
@@ -1589,7 +1573,6 @@ class LabRadiology {
           country_code: country_code,
           verified: true,
           role: "INDIVIDUAL",
-          verified: true,
           createdBy: createdBy,
           centre_name: centre_name,
           centre_name_arabic: centre_name_arabic,
@@ -1663,10 +1646,7 @@ class LabRadiology {
       }
     } catch (error) {
       console.log("error__________",error);
-      // const CheckEmail = await PortalUser.find({ email: req.body.email });
-      // if (CheckEmail.length > 0) {
-      //   await PortalUser.deleteOne({ _id: { $eq: CheckEmail[0]._id } });
-      // }
+
       return sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -1803,7 +1783,6 @@ class LabRadiology {
       if (searchKey) {
         filter["$or"] = [
           { full_name: { $regex: searchKey || "", $options: "i" } },
-          // {speciality: { $in: [searchKey] } }
         ];
       }
       let aggregate = [
@@ -2125,12 +2104,12 @@ class LabRadiology {
           { $push: { for_hospitalIds: hospital_id } }
         );
 
-        const result2 = await BasicInfo.updateOne(
+        await BasicInfo.updateOne(
           { for_portal_user: doctor_portal_id },
           { $pull: { for_hospitalIds_temp: hospital_id } }
         );
 
-        const result3 = await HospitalLocation.updateOne(
+        await HospitalLocation.updateOne(
           {
             for_portal_user: doctor_portal_id,
             "hospital_or_clinic_location.hospital_id": hospital_id,
@@ -2148,7 +2127,7 @@ class LabRadiology {
           { $pull: { for_hospitalIds_temp: hospital_id } }
         );
 
-        const result2 = await HospitalLocation.updateOne(
+        await HospitalLocation.updateOne(
           { for_portal_user: doctor_portal_id },
           {
             $pull: {
@@ -2338,7 +2317,7 @@ class LabRadiology {
   }
 
   async forPortalManagementAvailability(req, res) {
-    const { portal_user_id, doctor_availability, location_id, type } = req.body;
+    const { portal_user_id, doctor_availability, type } = req.body;
     try {
       //await DoctorAvailability.deleteMany({ for_portal_user: { $eq: portal_user_id }, location_id })
       const dataArray = [];
@@ -2902,7 +2881,7 @@ class LabRadiology {
 
   async QuestionnaireList(req, res) {
     try {
-      const { limit, page, searchText, loginPortalId } = req.query;
+      const { limit, page, loginPortalId } = req.query;
 
       let sort = req.query.sort;
       let sortingarray = {};
@@ -2917,19 +2896,14 @@ class LabRadiology {
         is_deleted: false,
         added_by_portal: { $eq: loginPortalId },
       };
-      // if (searchText != "") {
-      //     filter = {
-      //         is_deleted: false,
-      //         name: { $regex: searchText || '', $options: "i" }
-      //     }
-      // }
+
       const result = await Questionnaire.find(filter)
         .sort(sortingarray)
         .skip((page - 1) * limit)
         .limit(limit * 1)
         .exec();
       const count = await Questionnaire.countDocuments(filter);
-      sendResponse(req, res, 200, {
+      return sendResponse(req, res, 200, {
         status: true,
         body: {
           totalCount: count,
@@ -3324,7 +3298,7 @@ class LabRadiology {
                 userImage: "",
                 userIdentity: uniqueId,
               };
-              let appintmentdetails11 = await httpService.postStaging(
+             await httpService.postStaging(
                 "labradio/four-portal-update-videocall-appointment",
                 {
                   appointmentId: req.body.chatId,
@@ -3335,7 +3309,7 @@ class LabRadiology {
                 headers,
                 "labradioServiceUrl"
               );
-              let appintmentdetailsnewwww = await httpService.postStaging(
+             await httpService.postStaging(
                 "labradio/four-portal-update-videocall-appointment",
                 {
                   appointmentId: req.body.chatId,
@@ -3377,7 +3351,6 @@ class LabRadiology {
             message: "Must include roomName argument.",
             errorCode: null,
           });
-          // return res.status(200).json("Must include roomName argument.");
         }
         let token = await agoraTokenGenerator(roomName, uniqueId);
         if (req.body.loggedInUserId) {
@@ -3391,7 +3364,7 @@ class LabRadiology {
           const headers = {
             Authorization: req.body.authtoken,
           };
-          let appintmentdetails = await httpService.postStaging(
+         await httpService.postStaging(
             "labradio/four-portal-update-videocall-appointment",
             {
               appointmentId: req.body.chatId,
@@ -3638,9 +3611,7 @@ class LabRadiology {
 
   async getAllFourPortalList(req, res) {
     try {
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       const filter = {
         isDeleted: false,
         lock_user: false,
@@ -3725,9 +3696,7 @@ class LabRadiology {
   async fourPortalAllList(req, res) {
     const { hospital_portal_id } = req.query;
     try {
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       let filter = {
         "for_portal_user.role": { $in: ["INDIVIDUAL"] },
         "for_portal_user.isDeleted": false,
@@ -3889,7 +3858,7 @@ class LabRadiology {
       
       const formattedDate = currentDate.toLocaleString("en-US", { timeZone });
       if (userAddress) {
-        const findData = await Logs.findOneAndUpdate(
+        await Logs.findOneAndUpdate(
           { _id: mongoose.Types.ObjectId(currentLogID) },
           {
             $set: {
@@ -3899,7 +3868,7 @@ class LabRadiology {
           { new: true }
         ).exec();
       } else {
-        const findData = await Logs.findOneAndUpdate(
+        await Logs.findOneAndUpdate(
           { _id: mongoose.Types.ObjectId(currentLogID) },
           {
             $set: {
@@ -4101,11 +4070,9 @@ class LabRadiology {
   async fourtportalDetails(req, res) {
     try {
       const { pharmacyId } = req.query;
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       const portalUserData = await PortalUser.findOne({ _id: pharmacyId });
-      const adminData = await BasicInfo.findOne({
+      await BasicInfo.findOne({
         for_portal_user: pharmacyId,
       }).populate({ path: "for_portal_user" });
       sendResponse(req, res, 200, {
@@ -4294,7 +4261,6 @@ class LabRadiology {
 
       let ratingArray = [];
       for (const value of result) {
-        hospitalId = value?.portal_user_id;
         ratingArray.push({
           rating: value?.rating,
           comment: value?.comment,
@@ -4336,9 +4302,7 @@ class LabRadiology {
 
   async saveSuperadminNotification(req, res) {
     try {
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       let saveNotify = new Notification({
         created_by: req.body.data?.created_by,
         notification_name: req.body.data?.notification_name,

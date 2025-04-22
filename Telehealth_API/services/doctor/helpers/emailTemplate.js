@@ -1,6 +1,6 @@
 import "dotenv/config.js";
 
-const terstFrontendUrl = process.env.terst_FRONTEND_URL || "http://localhost:4200";
+const test_pFrontendUrl = process.env.test_p_FRONTEND_URL || "http://localhost:4200";
 
 export const forgotPasswordEmail = (email, code, user_id) => {
     return {
@@ -20,7 +20,7 @@ export const forgotPasswordEmail = (email, code, user_id) => {
                 <br/>
                 <p>Click the below button to reset your password</p>
                 <br/>
-                <a href="${terstFrontendUrl}/hospital/setpassword?token=${code}&user_id=${user_id}&role="button">RESET YOUR PASSWORD</a>
+                <a href="${test_pFrontendUrl}/hospital/setpassword?token=${code}&user_id=${user_id}&role="button">RESET YOUR PASSWORD</a>
                 <br/>
                 <p>If you didn’t request this, you can ignore this email.</p>
                 <br/>
@@ -53,7 +53,7 @@ export const forgotPasswordEmailForIndividualDoctor = (email, code, user_id) => 
                 <h3>Password Reset</h3>
                 <br/>
                
-                <a href="${terstFrontendUrl}/individual-doctor/newpassword?token=${code}&user_id=${user_id}&role="button">RESET YOUR PASSWORD</a>
+                <a href="${test_pFrontendUrl}/individual-doctor/newpassword?token=${code}&user_id=${user_id}&role="button">RESET YOUR PASSWORD</a>
                 <br/>
                 <p>Click the below button to reset your password</p>
                 <br/>
@@ -120,7 +120,7 @@ export const sendMailInvitations = (email, first_name, last_name, loggeInname) =
           <br/>
           <p>Please register yourself on this</p>
           <br/>
-          <a href="${terstFrontendUrl}/patient/signup" role="button">CLICK</a>
+          <a href="${test_pFrontendUrl}/patient/signup" role="button">CLICK</a>
           <br/>
           <br/>
           <p>Thanks</p>
@@ -183,7 +183,7 @@ export const sendEprescriptionEmail = (patient_email, doctor_email, appointmentI
                 <br/>
                 <p>Please find below attachment of your EPrescription by Dr. ${doctor_name}.</p>
                 <br/>
-                <a href="${terstFrontendUrl}/individual-doctor/eprescription-viewpdf?id=${appointmentId}">Link to Download PDF</a>           
+                <a href="${test_pFrontendUrl}/individual-doctor/eprescription-viewpdf?id=${appointmentId}">Link to Download PDF</a>           
                 <br/>
                 <br/>
                 <p>Thanks & Regards</p>

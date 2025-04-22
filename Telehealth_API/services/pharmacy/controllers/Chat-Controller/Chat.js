@@ -10,9 +10,7 @@ const httpService = new Http();
 
 export const createdChat = async (req, res) => {
   try {
-    const headers = {
-      'Authorization': req.headers['authorization']
-    }
+
     let newData = await Chat.findOne({
       $or: [
         {
@@ -57,7 +55,7 @@ export const createdChat = async (req, res) => {
           latestMessage: mongoose.Types.ObjectId(saveMessage._id)
         }
 
-        const newUpdate = await Chat.updateOne(
+        await Chat.updateOne(
           { _id: mongoose.Types.ObjectId(saveChat._id) },
           { $set: jsondata },
           { new: true }
@@ -89,9 +87,7 @@ export const createdChat = async (req, res) => {
 export const getCreatedChats = async (req, res) => {
   const { id, searchQuery } = req.query;
   try {
-    const headers = {
-      'Authorization': req.headers['authorization']
-    }
+
     let filter = {}
 
     if (searchQuery && searchQuery !== "") {
@@ -206,7 +202,7 @@ export const sendMessage = async (req, res) => {
       latestMessage: mongoose.Types.ObjectId(saveChat._id)
     }
 
-    const newUpdate = await Chat.updateOne(
+    await Chat.updateOne(
       { _id: mongoose.Types.ObjectId(saveChat.chatId) },
       { $set: jsondata },
       { new: true }
@@ -324,9 +320,6 @@ export const allMessage = async (req, res) => {
 
 export const createGroupChat = async (req, res) => {
   try {
-    const headers = {
-      'Authorization': req.headers['authorization']
-    }
 
     let saveData = new Chat({
       senderID: req.body.data.sender,
@@ -353,7 +346,7 @@ export const createGroupChat = async (req, res) => {
         latestMessage: mongoose.Types.ObjectId(saveMessage._id)
       }
 
-      const newUpdate = await Chat.updateOne(
+      await Chat.updateOne(
         { _id: mongoose.Types.ObjectId(saveChat._id) },
         { $set: jsondata },
         { new: true }
@@ -384,9 +377,6 @@ export const createGroupChat = async (req, res) => {
 
 export const addMembersToGroupChat = async (req, res) => {
   try {
-    const headers = {
-      'Authorization': req.headers['authorization']
-    };
 
     const chatroomId = req.body.data.chatroomId;
     const newMembers = req.body.data.newMembers;
@@ -412,7 +402,7 @@ export const addMembersToGroupChat = async (req, res) => {
 
 
     // Update existingChat.receiverID in the database
-    const updateResult = await Chat.updateOne(
+    await Chat.updateOne(
       { _id: chatroomId },
       { $push: { receiverID: { $each: uniqueMemberObjectIds } } }
     );
@@ -434,10 +424,8 @@ export const addMembersToGroupChat = async (req, res) => {
 
 export const saveNotification = async (req, res) => {
   try {
-    const headers = {
-      'Authorization': req.headers['authorization']
-    }
-    let getsenderInfo = await PortalUser.findOne({ _id: req.body.for_portal_user });
+
+    await PortalUser.findOne({ _id: req.body.for_portal_user });
     const chatData = await Chat.findOne({ _id: mongoose.Types.ObjectId(req.body.chatId) });
 
     const receiverData = req.body?.for_portal_user == req.body?.created_by ? chatData?.senderID : req.body?.for_portal_user;
@@ -474,30 +462,7 @@ export const saveNotification = async (req, res) => {
         }
       }
     }
-    // let saveNotify = await new Notification({
-    //   chatId: req.body.chatId,
-    //   created_by: req.body.created_by,
-    //   for_portal_user: receiverData,
-    //   content: req.body.content,
-    //   notitype: req.body.notitype,
-    //   created_by_type: req.body.created_by_type
-    // })
-    // let saveData = await saveNotify.save();
-
-    // if (saveData) {
-    //   return sendResponse(req, res, 200, {
-    //     status: true,
-    //     body: saveNotify,
-    //     message: "Notification Saved Successfully",
-    //   });
-    // } else {
-    //   return sendResponse(req, res, 400, {
-    //     status: true,
-    //     body: saveChat,
-    //     message: "Notification not Saved",
-    //   });
-    // }
-
+ 
   } catch (err) {
     
     return sendResponse(req, res, 500, {
@@ -581,7 +546,7 @@ export const updateNotification = async (req, res) => {
     } = req.body;
 
     if (!isnew) {
-      let notificationDetails = await Notification.updateMany(
+      await Notification.updateMany(
         { for_portal_user: { $eq: receiverId } },
         {
           $set: {
@@ -684,7 +649,7 @@ export const clearAllmessages = async (req, res) => {
 
 export const clearSinglemessages = async (req, res) => {
   try {
-    const { chatId, deletedBy,messageId } = req.body;
+    const { deletedBy,messageId } = req.body;
     const deleteData = await Message.updateOne(
       { _id: mongoose.Types.ObjectId(messageId) },
       { $push: { deletedBy: { user_Id: mongoose.Types.ObjectId(deletedBy) } } },

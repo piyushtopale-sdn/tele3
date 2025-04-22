@@ -59,39 +59,6 @@ const add_role = async (req, res) => {
                 });
                }
 
-            // const addRole = new Role({
-            //     name: req.body.name,
-            //     status: req.body.status,
-            //     role_id: seqId,
-            //     for_user: req.body.userId
-            // });
-            // // res.json(addRole);
-            // try {
-            //     const savedRole = addRole.save((err,result)=>{
-            //         if(err){
-            //             sendResponse(req, res, 500, {
-            //                 status: false,
-            //                 body: null,
-            //                 message: "failed to add role",
-            //                 errorCode: "INTERNAL_SERVER_ERROR",
-            //             })
-            //         }
-            //         sendResponse(req, res, 200, {
-            //             status: true,
-            //             body: null,
-            //             message: "Data Added Successfully",
-            //             errorCode: null,
-            //         })
-            //     });
-            // } catch (error) {
-            //     sendResponse(req, res, 500, {
-            //         status: false,
-            //         body: null,
-            //         message: "failed to add role",
-            //         errorCode: "INTERNAL_SERVER_ERROR",
-            //     })
-            // }
-
         }
     )
         
@@ -100,7 +67,7 @@ const add_role = async (req, res) => {
 
 const all_role = async (req, res) => {
     try {
-        let { limit, page, searchText, userId } = req.query;
+        let { limit, page, userId } = req.query;
         const checkUser = await PortalUser.findOne({_id:userId});
         if (checkUser?.role === 'HOSPITAL_STAFF' || checkUser?.role === 'INDIVIDUAL_DOCTOR_STAFF') {
             const data = await PortalUser.findOne({ created_by_user: checkUser?.created_by_user });

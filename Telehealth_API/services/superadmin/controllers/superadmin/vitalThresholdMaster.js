@@ -260,7 +260,7 @@ export const getReferenceRangeById = async (req, res) => {
 
 export const getNewvitalsThresholdById = async (req, res) => {
     try {
-        const { id, vitalsType } = req.params;  // Extract both 'id' and 'vitalsType' from request params
+        const { vitalsType } = req.params;  // Extract both 'id' and 'vitalsType' from request params
 
         // Aggregation pipeline
         const pipeline = [
@@ -292,124 +292,6 @@ export const getNewvitalsThresholdById = async (req, res) => {
         });
     }
 }
-
-
-// export const updateNewvitalsThreshold = async (req, res) => {
-//     try {
-//         const { id, vitalsType, rangeData } = req.body;
-
-//         // Validate required inputs
-//         if (!id) {
-//             return sendResponse(req, res, 400, {
-//                 status: false,
-//                 body: null,
-//                 message: "ID is required",
-//                 errorCode: "ID_NOT_FOUND",
-//             });
-//         }
-
-//         if (!vitalsType || !rangeData) {
-//             return sendResponse(req, res, 400, {
-//                 status: false,
-//                 body: null,
-//                 message: "Vitals type and range data are required",
-//                 errorCode: "INVALID_INPUT",
-//             });
-//         }
-
-//         // Update the document
-//         const updateResult = await VitalThreshold.findByIdAndUpdate(
-//             { _id: id },
-//             { vitalsType: vitalsType, referenceRange: rangeData },
-//             { new: true } // Return the updated document
-//         );
-
-//         if (!updateResult) {
-//             return sendResponse(req, res, 404, {
-//                 status: false,
-//                 body: null,
-//                 message: "Vitals threshold not found",
-//                 errorCode: "NOT_FOUND",
-//             });
-//         }
-
-//         // Success response
-//         sendResponse(req, res, 200, {
-//             status: true,
-//             body: updateResult,
-//             message: "Vitals threshold updated successfully",
-//             errorCode: null,
-//         });
-//     } catch (error) {
-//         console.error("Error in updateNewvitalsThreshold:", error);
-//         sendResponse(req, res, 500, {
-//             status: false,
-//             body: error.message || error,
-//             message: "Internal server error",
-//             errorCode: "SERVER_ERROR",
-//         });
-//     }
-// };
-
-
-//
-
-// export const updateNewvitalsThreshold = async (req, res) => {               //Fixed Update Threshhold Issue  AYAN
-//     try {
-//         const { id, vitalsType, rangeData } = req.body;
-
-//         if (!id) {
-//             return sendResponse(req, res, 400, {
-//                 status: false,
-//                 body: null,
-//                 message: "ID is required",
-//                 errorCode: "ID_NOT_FOUND",
-//             });
-//         }
-
-//         if (!vitalsType || !rangeData) {
-//             return sendResponse(req, res, 400, {
-//                 status: false,
-//                 body: null,
-//                 message: "Vitals type and range data are required",
-//                 errorCode: "INVALID_INPUT",
-//             });
-//         }
-
-
-//         const updateResult = await VitalThreshold.findByIdAndUpdate(
-//             id,  
-//             { vitalsType: vitalsType, referenceRange: rangeData },
-//             { new: true } 
-//         );
-
-//         if (!updateResult) {
-//             return sendResponse(req, res, 404, {
-//                 status: false,
-//                 body: null,
-//                 message: "Vitals threshold not found",
-//                 errorCode: "NOT_FOUND",
-//             });
-//         }
-
-//         // Success response
-//         sendResponse(req, res, 200, {
-//             status: true,
-//             body: updateResult,
-//             message: "Vitals threshold updated successfully",
-//             errorCode: null,
-//         });
-//     } catch (error) {
-//         console.error("Error in updateNewvitalsThreshold:", error);
-//         sendResponse(req, res, 500, {
-//             status: false,
-//             body: error.message || error,
-//             message: "Internal server error",
-//             errorCode: "SERVER_ERROR",
-//         });
-//     }
-// };
-
 
 export const updateNewvitalsThreshold = async (req, res) => {
     try {

@@ -58,7 +58,6 @@ class HospitalStaffController {
             checkCondition = await getData(checkPlan);
 
             if (checkCondition?.statusData === "active") {
-                // for (const data of checkPlan) {
                 let shouldAddStaff = false;
                 for (const data12 of checkCondition?.data1?.services) {
                     if (data12?.name === 'staff' && data12?.is_unlimited === false) {
@@ -161,7 +160,7 @@ class HospitalStaffController {
                         })
                     const content = sendStaffDetails(email, password, 'Hospital');
 
-                    let checkerror = await sendEmail(content);
+                    await sendEmail(content);
                     return sendResponse(req, res, 200, {
                         status: true,
                         body: staffFullDetails,
@@ -254,7 +253,7 @@ class HospitalStaffController {
                         })
                     const content = sendStaffDetails(email, password, 'Hospital');
 
-                    let checkerror = await sendEmail(content);
+                    await sendEmail(content);
                     return sendResponse(req, res, 200, {
                         status: true,
                         body: staffFullDetails,
@@ -286,7 +285,6 @@ class HospitalStaffController {
             dob,
             language,
             addressInfo,
-            password,
             countryCode,
             mobile,
             role,
@@ -299,13 +297,12 @@ class HospitalStaffController {
             unit,
             expertise,
             profilePic,
-            creatorId,
             doj
         } = req.body;
         try {
-            const salt = await bcrypt.genSalt(10);
+            await bcrypt.genSalt(10);
 
-            const userDetails = await PortalUser.findOneAndUpdate(
+            await PortalUser.findOneAndUpdate(
                 { _id: staffId },
                 {
                     $set: {
@@ -346,7 +343,7 @@ class HospitalStaffController {
                 { upsert: false, new: true }
             )
 
-            const staffDetails = await StaffInfo.findOneAndUpdate(
+           await StaffInfo.findOneAndUpdate(
                 { for_portal_user: staffId },
                 {
                     $set: {
@@ -607,7 +604,7 @@ class HospitalStaffController {
                     { new: true },
 
                 )
-                 let updatedStaffInfo = await StaffInfo.findOneAndUpdate(
+                 await StaffInfo.findOneAndUpdate(
                     { for_portal_user: { $eq: staff_id } },
                     {
                         $set: {
@@ -637,21 +634,7 @@ class HospitalStaffController {
                     errorCode: null,
                 });
             }
-            // const filter = {}
-            // if (action_name == "active") filter['isActive'] = action_value
-            // if (action_name == "lock") filter['lock_user'] = action_value
-            // if (action_name == "delete") filter['isDeleted'] = action_value
 
-            // let updatedStaffDetails = await PortalUser.updateOne(
-            //     { _id: staff_id },
-            //     filter,
-            //     { new: true }
-            // );
-            // let updatedStaffInfo = await StaffInfo.updateOne(
-            //     { for_portal_user: staff_id },
-            //     filter,
-            //     { new: true }
-            // );
           
         } catch (error) {
             
