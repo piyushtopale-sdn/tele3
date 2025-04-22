@@ -1,0 +1,32 @@
+<div class="home_wrapper" [attr.dir]="'dir' | translate">
+
+  <div class="main_section contact-main-section">
+    <div class="main_section_inner">
+      <div class="container">
+        <section id="contact-us" [attr.dir]="'dir' | translate">
+          <h1>{{ "contact_test_app" | translate }}</h1>
+          <p>{{ "contact_us_description" | translate }}</p>
+          <ul>
+              <li><strong>{{ "email" | translate }}:</strong> info@testapp.com</li>
+              <li><strong>{{ "phone" | translate }}:</strong> 920015539</li>
+              <li><strong>{{ "social_media" | translate }}</strong> 
+                  <ul>
+                      <li>{{ "facebook" | translate }}</li>
+                      <li>{{ "twitter" | translate }}</li>
+                      <li>{{ "instagram" | translate }}</li>
+                      <li>{{ "linkedin" | translate }}</li>
+                  </ul>
+              </li>
+          </ul>
+          <p><strong>{{ "customer_support_hour" | translate }}</strong></p>
+          <ul>
+              <li>{{ "monday_to_friday" | translate }} 9:00 {{ "AM" | translate }} - 6:00 {{ "PM" | translate }}</li>
+              <li>{{ "saturday" | translate }}: 10:00 {{ "AM" | translate }} - 4:00 {{ "PM" | translate }}</li>
+              <li>{{ "sunday" | translate }}: {{ "closed" | translate }}</li>
+          </ul>
+          <p>{{ "contact_us_footer" | translate }}</p>
+      </section>
+      </div>
+    </div>
+  </div>
+</div>

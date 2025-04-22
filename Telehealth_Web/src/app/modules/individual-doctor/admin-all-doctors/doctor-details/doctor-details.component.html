@@ -1,0 +1,358 @@
+<div class="basic_info dashboard_main_content">
+    <div class="button-container">
+      <div class="back_button" [routerLink]="['/individual-doctor/all-doctors']">
+        <button class="btn btn-primary">{{ "back" | translate }}</button>
+      </div>
+    </div>
+    <div class="subscribe_detail_inner accodion_item mt-30">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="mat-heading-availability"> {{ "basic_info" | translate }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="expansion_panel">
+            <div class="expansion_panel_inner">
+              <div class="row expansion_item img_item_block gap-5">
+                <div class="upper-block-doc d-flex align-items-center">
+                  <div class="left_block">
+                    <!-- <div class="profile_image">
+                      <img class="profile_img_fluid" src="{{
+                        profileImage ? profileImage : 'assets/img/create_profile.png'
+                      }}" />
+                    </div> -->
+                    <div class="profile_image">
+                       <img style="width: 100px"
+                      [src]="
+                        profileImage
+                          ? profileImage
+                          : '../../../assets/img/default_user.png'
+                      "
+                    />
+                  </div> 
+                  <div class="lim-kim">
+                    <p class="m-0 doctor-name-text">{{ profileDetails?.full_name }}</p>
+                  </div>
+                </div>
+               
+                 <!-- <div class="right_block row">
+                   <div class="item_info"> -->
+                    <!-- <label>{{ "doctor_name" | translate }}</label> -->
+                    <!-- <div class="value">{{ profileDetails?.full_name }}</div> -->
+                  <!-- </div> -->
+                  <div class="item_info">
+                    <label>{{ "date_of_birth" | translate }}</label>
+                    <div class="value">
+                      {{ profileDetails?.dob | date : "dd/MM/YYYY" }}
+                    </div>
+                  </div>
+                  <div class="item_info">
+                    <label>{{ "gender" | translate }}</label>
+                    <div class="value">{{ profileDetails?.gender }}</div>
+                  </div>
+                
+                  <div class="item_info">
+                    <label>{{ "email" | translate }}</label>
+                    <div class="value">
+                      {{ profileDetails?.for_portal_user?.email }}
+                    </div>
+                  </div>
+                  <div class="item_info">
+                    <label>{{ "address" | translate }}</label>
+                    <div class="value">
+                   <p class="value paraaddress">{{ profileDetails?.in_location?.address }}</p>   
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
+              <div class="row about_dr expansion_item">
+                <div class="item_info">
+                  <label>{{ "phone_number" | translate }}</label>
+                  <div class="value">
+                    {{ profileDetails?.for_portal_user?.mobile }}
+                  </div>
+                </div>
+                <div class="item_info">
+                  <label>{{ "language" | translate }}</label>
+                  <div class="value">{{ profileDetails?.spoken_language }}</div>
+                </div>
+  
+                <div class="item_info">
+                  <label>{{ "date_of_joined" | translate }}*</label>
+                  <div class="value">
+                    {{ profileDetails?.createdAt | date : "dd/MM/YYYY" }}
+                  </div>
+                </div>
+                <div class="item_info">
+                  <label>{{ "doctor_fees" | translate }}</label>
+                  <div class="value"> SAR
+                    {{
+                      profileDetails?.doctorfees ? profileDetails?.doctorfees : "-"
+                    }}</div>
+                </div>
+              </div>
+              <div class="row expansion_item">
+                <div class="item_info">
+                  <label>{{ "years_of_experience" | translate }}</label>
+                  <div class="value">
+                    {{
+                      profileDetails?.years_of_experience
+                        ? profileDetails?.years_of_experience + " Year"
+                        : "-"
+                    }}
+                  </div>
+                </div>
+                <div class="item_info">
+                  <label>{{ "designation" | translate }}</label>
+                  <div class="value">{{ designation }}</div>
+                </div>
+                <div class="item_info">
+                  <label>{{ "specialty" | translate }}</label>
+                  <div class="value" *ngFor="let data of specialityValue">
+                    {{ data ? data : "-" }}
+                  </div>
+                </div>
+                <div class="item_info">
+                  <label>{{ "category" | translate }}</label>
+                  <div class="value" *ngFor="let data of categoriesValue">
+                    {{ data?.categoryName ? data?.categoryName : "-" }}
+                  </div>
+                </div>
+              </div>
+              <div class="row expansion_item">
+                <div class="item_info">
+                  <label>{{ "about" | translate}}</label>
+                  <div class="value">
+                    {{
+                       profileDetails?.about
+                        ?  profileDetails?.about
+                        : "-"
+                    }}
+                  </div>
+                </div>              
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  
+    <div class="subscribe_detail_inner accodion_item availability mt-30">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="mat-heading-availability"> {{ "availability" | translate }} </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="expansion_panel">
+            <div class="expansion_panel_inner">
+              <div class="row expansion_item">
+                <div class="item_info">
+                  <div class="card">
+                    <div class="top">
+                      <div class="day">{{ "sunday" | translate }}</div>
+                    </div>
+                    <div class="bottom" *ngFor="let sun of availability?.Sun">
+                      <div class="starttime">
+                        {{ "start_time" | translate }} : {{ returnWithAmPm(sun?.start_time) }}
+                      </div>
+                      <div class="endtime">
+                        {{ "end_time" | translate }} : {{ returnWithAmPm(sun?.end_time) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="item_info">
+                  <div class="card">
+                    <div class="top">
+                      <div class="day">{{ "monday" | translate }}</div>
+                    </div>
+                    <div class="bottom" *ngFor="let mon of availability?.Mon">
+                      <div class="starttime">
+                        {{ "start_time" | translate }} : {{ returnWithAmPm(mon?.start_time) }}
+                      </div>
+                      <div class="endtime">
+                        {{ "end_time" | translate }} : {{ returnWithAmPm(mon?.end_time) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="item_info">
+                  <div class="card">
+                    <div class="top">
+                      <div class="day">{{ "tuesday" | translate }}</div>
+                    </div>
+                    <div class="bottom" *ngFor="let Tue of availability?.Tue">
+                      <div class="starttime">
+                        {{ "start_time" | translate }} : {{ returnWithAmPm(Tue?.start_time) }}
+                      </div>
+                      <div class="endtime">
+                        {{ "end_time" | translate }} : {{ returnWithAmPm(Tue?.end_time) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="item_info">
+                  <div class="card">
+                    <div class="top">
+                      <div class="day">{{ "thursday" | translate }}</div>
+                    </div>
+                    <div class="bottom" *ngFor="let thu of availability?.Thu">
+                      <div class="starttime">
+                        {{ "start_time" | translate }} : {{ returnWithAmPm(thu?.start_time) }}
+                      </div>
+                      <div class="endtime">
+                        {{ "end_time" | translate }} : {{ returnWithAmPm(thu?.end_time) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="item_info">
+                  <div class="card">
+                    <div class="top">
+                      <div class="day">{{ "friday" | translate }}</div>
+                    </div>
+                    <div class="bottom" *ngFor="let fri of availability?.Fri">
+                      <div class="starttime">
+                        {{ "start_time" | translate }} : {{ returnWithAmPm(fri?.start_time) }}
+                      </div>
+                      <div class="endtime">
+                        {{ "end_time" | translate }} : {{ returnWithAmPm(fri?.end_time) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="item_info">
+                  <div class="card">
+                    <div class="top">
+                      <div class="day">{{ "saturday" | translate }}</div>
+                    </div>
+                    <div class="bottom" *ngFor="let sat of availability?.Sat">
+                      <div class="starttime">
+                        {{ "start_time" | translate }} : {{  returnWithAmPm(sat?.start_time) }}
+                      </div>
+                      <div class="endtime">
+                        {{ "end_time" | translate }} : {{  returnWithAmPm(sat?.end_time) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="text-center" *ngIf="availability === null">
+                  <span
+                    ><b>{{ "no_availability_present" | translate }}</b></span
+                  >
+                </div>
+              </div>
+              <div class="row expansion_item">
+                <div class="item_info">
+                  <div class="detail_section">
+                    <label>{{ "slot_time_interval" | translate }}</label>
+                    <p>
+                      {{
+                        slot_interval_time
+                      }} {{"min"| translate}}
+                    </p>
+                  </div>
+                </div>                    
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  
+  
+    <div class="subscribe_detail_inner accodion_item availability mt-30">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="mat-heading-availability"> {{ "unavailability_date_and_time" | translate }} </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="expansion_panel">
+            <div class="expansion_panel_inner">
+              <div class="row expansion_item" *ngFor="let slot of unavaliabledate_time">
+                <div class="item_info" *ngIf="slot?.date !== ''" >
+                  <div class="card">
+                    <div class="top">
+                      <div class="day">{{ slot?.date | date: "dd/MM/yyyy" }}</div>
+                    </div>
+                    <div class="bottom">
+                      <div class="starttime">
+                        {{ "start_time" | translate }} : {{ returnWithAmPm(slot?.start_time) }}
+                      </div>
+                      <div class="endtime">
+                        {{ "end_time" | translate }} : {{ returnWithAmPm(slot?.end_time) }}
+                      </div>
+                    </div>
+                  </div>
+                </div>           
+                <div class="text-center" *ngFor="let slot of unavaliabledate_time" >
+                  <div *ngIf="slot?.date === ''">
+                    <span
+                      ><b>{{ "no_unavailability_present" | translate }}</b></span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  
+    <div class="subscribe_detail_inner accodion_item document mt-30">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="mat-heading-availability"> {{ "license" | translate }} </mat-panel-title>
+          </mat-expansion-panel-header>
+  
+          <div
+            class="text-center"
+            *ngIf="profileDetails?.license_details === null"
+          >
+            <b>{{ "no_license_found" | translate }}</b>
+          </div>
+          <div class="expansion_panel">
+            <div class="expansion_panel_inner">
+              <div class="row expansion_item">
+                <div class="item_info">
+                  <div class="users_img">
+                     <img
+                      class="license_img"
+                      src="{{
+                        profileDetails?.license_details?.license_image_signed_url
+                          ? profileDetails?.license_details?.license_image_signed_url
+                          : '../../../../../assets/img/doc.png'
+                      }}"
+                    />
+                  </div>
+                </div>
+                <div class="item_info">
+                  <label>{{ "license_number" | translate }}</label>
+                  <div class="value">
+                    {{
+                      profileDetails?.license_details?.license_number
+                        ? profileDetails?.license_details?.license_number
+                        : "-"
+                    }}
+                  </div>
+                </div>
+                <div class="item_info">
+                  <label>{{ "expiry_date" | translate }}</label>
+                  <div class="value">
+                    {{
+                      profileDetails?.license_details?.license_expiry_date
+                        ? (profileDetails?.license_details?.license_expiry_date
+                          | date : "dd/MM/YYYY")
+                        : "-"
+                    }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+  </div>
+  

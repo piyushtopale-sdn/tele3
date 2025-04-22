@@ -1,0 +1,478 @@
+<div class="details_patient dashboard_main_content">
+    <div class="button-container d-flex justify-content-end mb-3">
+      <div class="back_button" [routerLink]="['/super-admin/patient']">
+        <button class="btn btn-primary">{{ "back" | translate }}</button>
+      </div>
+    </div>
+    <div class="main_title">{{ "patient_details" | translate }}</div>
+    <div class="profile_data">
+      <div class="profile_info">
+        <ul class="profile_info_inner profile_info_with_img">
+          <li class="col_item profile_image_wrapper">
+            <div class="profile_image">
+              <img style="width: 100px;" src="{{
+                  profile?.profile_pic_signed_url
+                    ? profile.profile_pic_signed_url
+                    : '../../../assets/img/default_user.png'
+                }}" />
+            </div>
+  
+            <div class="profile_contact">
+              <div class="profile_title">
+                {{ profile?.first_name }} {{ profile?.last_name }}
+              </div>
+  
+              <div class="lable">{{ "mobile_number" | translate }}</div>             
+              <div class="user_value">({{ profile?.country_code }}) {{ profile?.mobile }}</div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "email" | translate }}</div>
+              <div class="user_value">{{ profile?.email ? profile?.email :"-" }}</div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "age" | translate }}</div>
+              <div class="user_value">
+                {{ profile?.dob ? calculateAge(profile.dob) : "-" }} {{"years" | translate}}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "gender" | translate }}</div>
+              <div class="user_value">{{ profile?.gender ? profile?.gender :"-" }}</div>
+            </div>
+          </li>
+  
+        </ul>
+        <ul class="profile_info_inner">
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "date_of_birth" | translate }}</div>
+              <div class="user_value">
+                {{ profile?.dob | date : "dd/MM/yyyy" }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "blood_group" | translate }}</div>
+              <div class="user_value">
+                {{ profile?.blood_group ? profile.blood_group : "-" }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "marital_status" | translate }}</div>
+              <div class="user_value">{{ profile?.marital_status ? profile?.marital_status :"-" }}</div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "mrn_number" | translate }}</div>
+              <div class="user_value">
+                {{
+                profile?.mrn_number
+                ? profile?.mrn_number
+                : "-"
+                }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "joined_since" | translate }}</div>
+              <div class="user_value">
+                {{ profile?.createdAt | date : "dd/MM/YYYY" }}
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="emergency_contact">
+          <ul class="profile_info_inner">
+            <li class="col_item" *ngIf="profile?.iqama_number">
+              <div class="profile_contact">
+                <div class="lable">{{ "iqama_number" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.iqama_number }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item" *ngIf="profile?.passport">
+              <div class="profile_contact">
+                <div class="lable">{{ "passport" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.passport }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item" *ngIf="profile?.saudi_id">
+              <div class="profile_contact">
+                <div class="lable">{{ "saudi_id" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.saudi_id }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "emergency_contact" | translate }}</div>
+                <div class="user_value">
+                  ({{ profile?.emergency_contact?.country_code }}) {{ profile?.emergency_contact?.phone_number ? profile?.emergency_contact?.phone_number : "-" }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "nationality" | translate }}</div>
+                <div class="user_value">{{ profile?.nationality ? profile?.nationality : "-" }}</div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "address" | translate }}</div>
+                <div class="user_value">{{ locationData?.address ? locationData?.address : "-" }}</div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "assigned" | translate }}</div>
+                <div class="user_value">{{ assignedDoctorData?.currentAssignedDoctor?.full_name || '-' }}
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="profile?.isPlanActive === true">
+      <div class="header-container">
+        <div class="main_title">{{ "active_subscription_details" | translate }}</div>
+        <button class="btn btn-primary" (click)="openAddConsultationCountPopup(addConsultationCount)">
+          {{"assign_additional_consultation" | translate}}
+        </button>
+      </div>      
+    <div class="profile_data">
+      <div class="profile_info">
+        <div class="emergency_contact">
+          <ul class="profile_info_inner">
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "plan_name" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.planName ? profile?.planName : "-" }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "duration" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.subscriptionDuration }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "start_date" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.period?.start | date: "dd-MM-yyy" }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "end_date" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.period?.end | date: "dd-MM-yyy"}}
+                </div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">
+                  {{ "services" | translate }}
+                </div>          
+                <div class="user_value">
+                  <div class="service_item">
+                    <span>
+                      {{ "no_of_consulation" | translate }}:
+                    </span>
+                    <span>
+                      {{ profile?.services?.consultation ? profile?.services?.consultation : "-" }}
+                    </span>
+                  </div>
+                  <!-- <div class="service_item">
+                    <span>
+                      {{ "no_of_labtest" | translate }}:
+                    </span>
+                    <span>
+                      {{ profile?.services?.labtest ? profile?.services?.labtest : "-" }}
+                    </span>
+                  </div>
+                  <div class="service_item">
+                    <span>
+                      {{ "no_of_radiotest" | translate }}:
+                    </span>
+                    <span>
+                      {{ profile?.services?.radiologytest ? profile?.services?.radiologytest : "-" }}
+                    </span>
+                  </div> -->
+                </div>
+              </div>
+            </li>          
+          </ul>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <!-- <ng-container   *ngIf="profile?.isPlanActive === false"
+  >
+  <div class="back_button d-flex justify-content-end">
+    <button class="btn btn-success" [routerLink]="['/super-admin/patient/moyasar-payment',id]">{{"subscribe_trial_plan" | translate}}</button>
+  </div>
+</ng-container> -->
+  <ng-container *ngIf="profile?.isPlanActive === true && upcoimgPlanData">
+    <div class="main_title">{{ "upcoming_plan_details" | translate }}</div>
+    <div class="profile_data">
+      <div class="profile_info">
+        <div class="emergency_contact">
+          <ul class="profile_info_inner">
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "plan_name" | translate }}</div>
+                <div class="user_value">
+                  {{ upcoimgPlanData?.plan_name ? upcoimgPlanData?.plan_name : "-" }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "duration" | translate }}</div>
+                <div class="user_value">
+                  {{ upcoimgPlanData?.plan_duration[0].duration}}
+                </div>
+              </div>
+            </li>       
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "start_date" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.period?.end | date: "dd-MM-yyy"}}
+                </div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "trial_period" | translate }}</div>
+                <div class="user_value">
+                  {{ upcoimgPlanData?.trial_period ? upcoimgPlanData?.trial_period : "-"}}
+                </div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "services" | translate }}</div>
+                <div *ngFor="let item of upcoimgPlanData?.services">
+                  <div class="user_value">
+                    <span *ngIf="item.name === 'consultation'">
+                      {{ "no_of_consulation" | translate }}: {{ item?.max_number }}
+                    </span>
+                    <!-- <span *ngIf="item.name === 'labtest'">
+                      {{ "no_of_labtest" | translate }}: {{ item?.max_number }}
+                    </span>
+                    <span *ngIf="item.name === 'radiologytest'">
+                      {{ "no_of_radiotest" | translate }}: {{ item?.max_number }}
+                    </span> -->
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+    <ng-container *ngIf="dataSource !== null">
+    <div class="main_title">{{ "family_member" | translate }}</div>
+    <!-- <div class="profile_data"> -->
+      <div class="bottom_bar">
+        <div class="table-wrap">
+          <div class="table-inner">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+              <ng-container matColumnDef="patientname">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "name" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.first_name + " " + element.last_name }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="relationship">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "Relationship" | translate }}
+  
+                </th>
+                <td mat-cell *matCellDef="let element" style="text-transform: lowercase">
+                  {{ element?.relationship ? element?.relationship :"-" }}
+                </td>
+              </ng-container>
+  
+  
+              <ng-container matColumnDef="gender">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "gender" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.gender }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="dateofbirth">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "date_of_birth" | translate }}
+  
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.dob ? calculateAge(element.dob) : "-" }} {{"years" | translate}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="phonenumber">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "phone_number" | translate }}
+  
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.mobile_number ? element?.mobile_number :"-" }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "status" | translate }}
+  
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.isDeleted ? ("Inactive" | translate) : ("Active" | translate) }}
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>          
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  
+  <!-- ADD CONSULTATION COUNT MODAL -->
+  <div class="add_consultation_count">
+    <ng-template #addConsultationCount let-modal>
+      <div class="custome_modal">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">
+            {{ "additional_consultation" | translate }}
+          </h4>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="modal-body add_speciality_service">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-6">
+                <label for="consultationSelect" class="form-label">
+                  {{"select_aditional_consultation" | translate}}
+                </label>
+                <select
+                  id="consultationSelect"
+                  class="form-select"
+                  [(ngModel)]="serviceType"
+                >
+                  <option value="" disabled selected>
+                    {{"select_aditional_consultation" | translate}}
+                  </option>
+                  <option
+                  *ngFor="let option of objectKeys(consultationOptions)"
+                  [value]="consultationOptions[option]"
+                  >
+                    {{ option }}
+                  </option>
+                </select>
+                <div *ngIf="serviceType === '' && formSubmitted" class="text-danger">
+                  {{"Please_select_a_consultation_type" | translate}}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="consultationCountSelect" class="form-label">
+                  {{"consultation_count" | translate}}
+                </label>
+                <select
+                  id="consultationCountSelect"
+                  class="form-select"
+                  [(ngModel)]="serviceTypeCount"
+                >
+                  <option value="" disabled selected>
+                    {{"consultation_count" | translate}}
+                  </option>
+                  <option
+                    *ngFor="let option of consultationCounts"
+                    [value]="option"
+                  >
+                    {{ option }}
+                  </option>
+                </select>
+                <div *ngIf="serviceTypeCount === '' && formSubmitted" class="text-danger">
+                  {{"Please_select_a_consultation_count" | translate}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <div class="primary_btn">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="closePopup()"
+            >
+              {{ "cancel" | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary" (click)="AddConsultationCount(saveConfirmation)">
+              {{ "save" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+   <!-- Save Confirmation Modal -->
+  <ng-template #saveConfirmation let-modal>
+    <div class="custome_modal action_modals">
+       <div class="modal-body">
+          <div class="delete_screen text-center">
+             <div class="image delete">
+                <img class="img-fluid" src="../../../../assets/img/delete.svg" alt="" />
+             </div>
+             <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+ 
+             <p>{{ "you_want_to_save_consultation_count" | translate }}</p>
+ 
+             <div class="primary_btn mt-30">
+                <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+                   {{ "no" | translate }}
+                </button>
+                <button type="button" class="btn btn-primary" (click)="saveConsultationCount()">
+                   {{ "yes" | translate }}
+                </button>
+             </div>
+          </div>
+       </div>
+    </div>
+ </ng-template>

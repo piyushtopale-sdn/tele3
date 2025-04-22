@@ -1,0 +1,57 @@
+@import '../../../../../assets/css/variable/variable';
+
+
+.main_section {
+    margin-top: 40px;
+}
+
+.video-main-section {
+    .blog-inside-wrap {
+        border: 2px solid $sidebarcolor;
+        border-radius: 8px;
+        height: 100%;
+    }
+    .blog-img-block {
+        max-width: 250px;
+        height: 250px;
+        width: 100%;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 5px;
+        img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    }
+    .blog-video-block {
+        max-width: 250px;
+        height: 250px;
+        width: 100%;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 5px;
+        video {
+            height: 100%;
+        }
+    }
+    .blog-details-block {
+        color: $black_color;
+        font-size: 15px;
+        border-top: 2px solid $sidebarcolor;
+        p {
+            margin: 0;
+            ::ng-deep {
+                p {
+                    &:empty {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+    .row {
+        border: none;
+        margin: 0;
+    }
+}

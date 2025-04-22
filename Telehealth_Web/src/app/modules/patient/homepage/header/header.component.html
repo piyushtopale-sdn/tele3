@@ -1,0 +1,159 @@
+<div class="header patient" [attr.dir]="'dir' | translate">
+  <div class="container">
+    <div class="header_inner">
+      <div class="logo" [ngClass]="{'logo-ar': selectedLang === 'ar'}">
+        <img src="../../../assets/img/logo2.svg"  />
+      </div>
+      <nav class="navbar navbar-expand-lg">
+        <div class="navbar-inner container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+              <!-- <li class="nav-item animate-txt">
+                <a class="nav-link">{{ "find" | translate }} </a>
+              </li> -->
+              <!-- <li class="nav-item">
+                <a class="nav-link cursor-pointer">{{ "patient" | translate }} </a>
+              </li> -->
+              <li class="nav-item">
+                <a class="nav-link cursor-pointer" [ngClass]="{ active: checkurl('retaildoctor') }"
+                   aria-current="page">{{ "doctors" | translate }}</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link cursor-pointer">{{ "laboratory" | translate }} </a>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a class="dropdown-item cursor-pointer"> {{ "radiology" | translate }} </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link cursor-pointer" [ngClass]="{ active: checkurl('retailpharmacy') }">
+                  {{ "pharmacy" | translate }}
+                </a>
+              </li>
+              
+              <!-- <li class="nav-item">
+                <a class="nav-link cursor-pointer" [ngClass]="{ active: checkurl('retailhospital') }">
+                  {{ "blog" | translate }}
+                </a>
+              </li> -->
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div class="right_content">
+        <app-language (langChange)="onLangChange($event)"></app-language>
+        <div class="search_bar">
+          <!-- <div class="dropdown">
+            <button class="btn search_btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              <img src="../../../../../assets/img/search.svg" />
+            </button>
+
+            <div class="search_bar_content dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="{{ 'search_1' | translate }}"
+                  aria-label="Search" />
+                <button class="btn btn-primary" type="submit">
+                  {{ "search_1" | translate }}
+                </button>
+              </form>
+            </div>
+          </div> -->
+        </div>
+
+        <div class="primary_btn" *ngIf="loginUserID ? false : true">
+          <button type="button" class="btn btn-primary btn-dropdown dropdown-toggle">
+            <a class="btn_svg">
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+                id="mdi-login" width="18" height="18" viewBox="0 0 24 24">
+                <path
+                  d="M10,17V14H3V10H10V7L15,12L10,17M10,2H19A2,2 0 0,1 21,4V20A2,2 0 0,1 19,22H10A2,2 0 0,1 8,20V18H10V20H19V4H10V6H8V4A2,2 0 0,1 10,2Z" />
+              </svg>
+            </a>
+            {{"login_as" | translate}}
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <div class="arrow arrow-up"></div>
+              <!-- <li>
+                <a class="dropdown-item" [routerLink]="['/patient/login']">
+                  {{ "patient" | translate }}</a>
+              </li> -->
+              <li>
+                <a class="dropdown-item" (click)="sendOnpath('individual-doctor')">
+                  {{ "Doctor" | translate }}
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="sendOnpathFourPortal('Laboratory')">
+                  {{ "laboratory" | translate }}
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="sendOnpathFourPortal('Radiology')">
+                  {{ "radiology" | translate }}
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" (click)="sendOnpath('pharmacy')">
+                  {{ "pharmacy" | translate }}
+                </a>
+              </li>
+            </ul>
+          </button>
+          <!-- <button type="button" class="btn btn-primary" [routerLink]="['/patient/signup']">
+            <a class="btn_svg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" xmlns:xlink="http://www.w3.org/1999/xlink"
+                id="Layer_1" style="enable-background: new 0 0 128 128" version="1.1" viewBox="0 0 128 128"
+                xml:space="preserve">
+                <g>
+                  <path
+                    d="M30,49c0,18.7,15.3,34,34,34s34-15.3,34-34S82.7,15,64,15S30,30.3,30,49z M90,49c0,14.3-11.7,26-26,26S38,63.3,38,49   s11.7-26,26-26S90,34.7,90,49z" />
+                  <path
+                    d="M24.4,119.4C35,108.8,49,103,64,103s29,5.8,39.6,16.4l5.7-5.7C97.2,101.7,81.1,95,64,95s-33.2,6.7-45.3,18.7L24.4,119.4z" />
+                </g>
+              </svg> </a>{{"register" | translate}}
+          </button> -->
+
+          <!-- <button type="button" class="btn btn-secondary">Login</button>
+                        <button type="button" class="btn btn-primary">Register</button> -->
+        </div>
+        <div class="primary_btn" *ngIf="loginUserID">
+          <div class="profile_img cursor-pointer" [routerLink]="['/patient/dashboard']">
+            <img src="{{
+                profilePic
+                  ? profilePic
+                  : '../../../../../../../assets/img/default_user.png'
+              }}" style="width: 40px; height: 40px" />
+          </div>
+          <div class="user_wrapper cursor-pointer" id="dropdownMenuButton1" data-bs-toggle="dropdown">
+            <div class="user_name_wrapper">
+              <!-- <div class="user_name" style="margin-top: 8px; margin-left: 10px" title="{{ loginUserNAME }}">
+                {{ loginUserNAME.length > 15 ? loginUserNAME.substring(0, 15) + "..." : loginUserNAME }}
+              </div> -->
+            </div>
+          </div>
+          <ul class="profile dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <!-- <li>
+              <a class="dropdown-item d-flex gap-1" href="#"
+                [routerLink]="['/patient/dashboard']"><mat-icon>person</mat-icon><span class="item_text">{{ "dashboard"
+                  | translate }}</span></a>
+            </li> -->
+            <li>
+              <a class="dropdown-item d-flex gap-1" href="#" (click)="logout()"><mat-icon>logout</mat-icon><span
+                  class="item_text">{{ "logout" | translate }}</span></a>
+            </li>
+          </ul>
+          <!-- <button type="button" class="btn btn-secondary">Login</button>
+                        <button type="button" class="btn btn-primary">Register</button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

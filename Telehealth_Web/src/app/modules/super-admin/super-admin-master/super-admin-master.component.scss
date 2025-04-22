@@ -1,0 +1,975 @@
+@import '../../../../assets/css/variable/variable';
+.material-icons{
+    cursor: pointer;
+}
+
+
+.master {
+    .mat-tab-header {
+        margin: 0 0 40px;
+        border-bottom: none;
+        .mat-tab-list {
+            .mat-tab-labels {
+                background: #F6F8FC;
+                border: 1px solid #b6c8d600;
+                border-radius: 15px;
+                padding: 7px 12px;
+                .mat-tab-label {
+                    font-family: $font_family_body,$font_sans_sarif;
+                    height: 40px;
+                    padding: 0 30px;
+                    min-width: 120px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: $bodyopacitylightcolor;
+                    opacity: 1;
+                }
+                .mat-tab-label.mat-tab-label-active {
+                    font-weight: 700;
+                    color: #000000;
+                }
+            }
+            .mat-ink-bar {
+                background-color: $bodycolor;
+            }
+        }
+    }
+
+    .top_bar{
+        margin: 0 0 35px;
+        align-items: inherit;
+        .left_part{
+            // display: flex;
+            .search_bar{
+                .input-group{
+                    background: #F6F8FC;
+                    border-radius: 6px;
+                    .form-control{
+                        border: none;
+                        background-color: transparent;
+                        padding: 12px 12px 12px 0;
+                        // width: 170px;
+                        &::placeholder{
+                            font-weight: 400;
+                            font-size: $font_small;
+                            line-height: 24px;
+                        }
+                        &:focus{
+                            box-shadow: none;
+                        }
+                    }
+                    .btn{
+                        padding: 0;
+                        border: none;
+                        .mat-icon{
+                            line-height: 50px;
+                            height: 50px;
+                            width: 50px;
+                            color: #9B9B9B;
+                            font-size: 24px;
+                        }
+                        &.filter-btn{
+                            .mat-icon{
+                                color: $bodycolor;
+                                border-left: 1px solid #E6E8F0;
+                                font-size: 26px;
+                            }
+                        }
+                    }
+                }
+            }
+            .content_wrap{
+                .policy{
+                    margin: 0 0 0 20px;
+                    label{
+                        margin-right: 12px;
+                    }
+                    .form_field_wrapper{
+                        display: inline-block;
+                        .mat-form-field{
+                            .mat-form-field-wrapper{
+                                padding: 0;
+                                .mat-form-field-flex{
+                                    background-color: #EBF0F4;
+                                    border: 1px solid #EBF0F4;
+                                    .mat-form-field-infix{
+                                        .mat-select{
+                                            .mat-select-arrow-wrapper{
+                                                transform: translateY(-30%);
+                                            }
+                                            .mat-select-value{
+                                                color: $formfiled_color;
+                                                font-weight: 500;
+                                            }
+                                        }
+                                        width: 150px;
+                                    }
+                                }
+                                .mat-form-field-underline{
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                  
+                }
+            } 
+    
+    
+        }
+    
+    }
+    .bottom_bar{
+        table{
+            tr{
+                td{
+                    .upload_input{
+                        position: relative;
+                        .upload_input_content{
+                            position: absolute;
+                            top: 0;
+                            bottom: auto;
+                            label{
+                                margin: 0;
+                                border: 1px solid rgba(11, 73, 119, 0.5);
+                                border-radius: 10px;
+                                padding: 10px 20px;
+                                font-weight: 500;
+                                font-size: 12px;
+                                color: $bodycolor;
+                            }
+                        }
+                        .user_upload_input {
+                            opacity: 0;
+                            z-index: 0;
+                            width: 150px;
+                            height: 38px;
+                        }
+                    }
+                    .info_img{
+                        margin: 0 0 0 5px;
+                        img{
+                            width: 18px;
+                            height: 18px;
+                            line-height: 18px;
+                            padding: 4px;
+                            text-align: center;
+                            display: inline-block;
+                            background: #EBF0F4;
+                            border-radius: 50%; 
+                        }
+                    }
+                
+                }
+            }
+        }
+        .mat-expansion-panel{
+            .mat-expansion-panel-header{
+                padding: 0 30px;
+                border-radius: 15px 15px 0 0;
+                background: rgba(11, 73, 119, 0.1);
+            }
+            .expansion_panel {
+                margin-top: 20px;
+                .role_item{
+                    margin-bottom: 25px;
+                    .form_field_wrapper{
+                        .mat-checkbox{
+                            .mat-checkbox-layout{
+                                display: flex;
+                                .mat-checkbox-inner-container{
+                                    width: 20px;
+                                    height: 20px;
+                                }
+                                .mat-checkbox-label{
+                                    color: $bodycolor;
+                                    font-size: 15px;
+                                    line-height: 18px;
+                                    font-weight: 500;
+                                    white-space: normal;
+                                }
+                            }
+                        }
+                        .mat-icon{
+                            color: #130F26;
+                        }
+                    }
+                }
+            }
+        }
+        .primary_btn{
+            justify-content: end;
+            margin-top: 15px;
+        }
+    }
+    .manage_claim{
+        .claim_btn{
+            margin-top: 30px;
+        }
+    }
+    .max_request{
+        .main_title{
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 24px;
+            color: $table_color;
+            margin: 0 0 15px;
+        }
+        .item_wrapper{
+            background: #FFFFFF;
+            border: 1px solid #B6C8D6;
+            border-radius: 10px;
+            margin: 0 0 30px;
+            .item{
+               padding: 25px;
+               h4{
+                line-height: 20px;
+                font-weight: 500;
+                color: rgba(12, 47, 73, 0.8);
+               }
+               .primary_btn{
+                    justify-content: start;
+                    button{
+                        padding: 0;
+                        border: none;
+                    }
+                    .qty_btn{
+                        margin: 0;
+                        font-size: 20px;
+                        width: 34px;
+                        height: 34px;
+                        line-height: 34px;
+                        background: #FFFFFF;
+                        color: $bodycolor;
+                        border: 1px solid $bodycolor;
+                        border-radius: 5px;
+                        text-align: center;
+                        &.counter {
+                            margin: 0 7px;
+                            border: none;
+                            width: auto;
+                            height: auto;
+                            font-weight: 600;
+                            font-size: 18px;
+                            color: $table_color;
+                            .form-control{
+                                padding: 0;
+                                width: 50px;
+                                height: 34px;
+                                text-align: center;
+                                font-size: $font_large;
+                                font-weight: 600;
+                                color: $bodyopacitylightcolor;
+                            }
+                        }
+                    }
+               }
+               &.mul_item:not(:last-child){
+                border-bottom: 1px solid #B6C8D6;
+            }
+            }
+         
+        }
+    }
+    .primary_btn{
+        justify-content: end;
+    flex-wrap: wrap;
+    gap: 10px;
+    }
+    .healthcare_network  {
+        .top_bar{
+            .right_part{
+                .primary_btn{
+                    margin-top: 0;
+                }
+            }
+        }
+    }
+
+}
+
+// Add medicine css
+.add_medicine {
+    .modal-dialog{
+        .custome_modal {
+            .modal-body {
+                .category_service{
+                    .modal_content_inner{
+                        display: flex;
+                        margin: 0 -10px;
+                        padding-bottom:0px !important;
+                        .item{
+                            width: 100%;
+                            padding: 0 10px;
+                            .mat-form-field-infix{
+                                // width: 70px;
+                            }
+                            .mat-slide-toggle{
+                                min-height: 50px;
+                                display: flex;
+                                align-items: center;
+                                label{
+                                    margin: 0;
+                                }
+                            }
+                        }
+                    }
+
+                    .commonaddbtn{
+                        margin-right: 30px;
+                        margin-bottom: 30px;
+                    }
+                    .plus.addbtn{
+                        color: #ffffff;
+                    background: #2839FF;
+                    border-radius: 7px;
+                    padding: 10px 70px;
+                    }
+                    
+                    .row_generate.row_add{
+                    background-color: transparent;
+
+                    }
+
+                    .row_generate.row_minus {
+                        background-color: transparent; 
+                      
+                      
+                    }
+
+                    .plus.btnminus{
+                        color: #F05A4F;
+                        background: #FDE6E5;
+                        border-radius: 7px;
+                        padding: 10px 70px;
+                       
+                    }
+                    .minusbtnblock{
+                      margin-right: 30px;
+                      margin-bottom: 30px;
+                    }
+                }
+            }
+        } 
+    }
+}
+
+// medicine modal css
+.medicine {
+    .modal-dialog{
+        max-width: 820px;
+        .medicine_content{
+            background: rgba(182, 200, 214, 0.1);
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+            padding: 20px;
+            .row{
+                border-bottom: 1px solid #dddddd;
+                padding: 0;
+                margin: 0;
+                .medicine_item{
+                    padding: 10px 0;
+                    margin: 10px 0;
+                    .item{
+                        margin: 0 15px 0 0;
+                        .label{
+                            font-weight: 700;
+                            font-size: 16px;
+                            line-height: 19px;
+                            color: $table_color;
+                            margin: 0 0 7px;
+                        }
+                        .sub_label{
+                            font-weight: 400;
+                            font-size: 14px;
+                            line-height: 17px;
+                            color: $bodyopacitycolor;
+                            margin: 0 0 5px;
+                        }
+                        .value{
+                            font-weight: 500;
+                            font-size: 16px;
+                            line-height: 19px;
+                            color: $table_color;
+                            a{
+                                color: #2C8BD2;
+                                &:hover{
+                                    color: $bodycolor;
+                                }
+                            }
+                        }
+                    }
+                }
+                &:last-child{
+                    border-bottom: none;
+                }
+            }
+        
+        }
+    }
+    
+}
+// Import modal css
+.import{
+    .import_services{
+        form{
+            .upload_item{
+                .form_field_wrapper{
+                    label{
+                        padding: 10px 15px;
+                        line-height: 16px;
+                        background-color: #ffffff;
+                        color: $bodycolor;
+                        border: 1px solid rgba(228, 228, 228, 0.9);
+                        font-size: 16px;
+                        font-weight: 500;
+                        border-radius: 5px;
+                        position: relative;
+                    }
+                    .upload_input_content{
+                        position: absolute;
+                        top: 0;
+                        bottom: auto;
+                        display: flex;
+                        flex-direction: column;
+                        width: 100%;
+                        label{
+                            .btn_svg{
+                                margin: 0 10px 0 0;
+                            }
+                        }
+                    }
+                    .user_upload_input {
+                        opacity: 0;
+                        z-index: 0;
+                        width: 100%;
+                        min-height: 40px;
+                    }
+                }
+            }
+            .download_content {
+                .btn{
+                    width: 100%;
+                }
+            }
+           .primary_btn{
+            flex-wrap: wrap;
+                .btn{
+                    margin: 15px 0 0 15px;
+                    &:first-child{
+                        margin-left: 0;
+                    }
+                }
+           } 
+        }
+    }
+}
+// Add lab css
+.add_lab {
+    .modal-dialog{
+        .custome_modal {
+            .modal-body {
+                .category_service{
+                    .modal_content_inner{
+                        display: flex;
+                        margin: 0 -10px;
+                        .item{
+                            width: auto;
+                            padding: 0 10px;
+                            .mat-form-field-infix{
+                                width: 170px;
+                            }
+                            .mat-slide-toggle{
+                                min-height: 50px;
+                                display: flex;
+                                align-items: center;
+                                label{
+                                    margin: 0;
+                                }
+                            }
+                            &.two_element{
+                                .form_field_wrapper{
+                                    .two_element_inner{
+                                        display: flex;
+                                        margin: 0 -10px;
+                                        .mat-form-field{
+                                            padding: 0 10px;
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    }
+}
+
+// Edit lab css
+.edit_lab {
+    .modal-dialog{
+        max-width: 550px;
+        .custome_modal {
+            .modal-body {
+                .category_service{
+                    border: none;
+                    margin: 0 0 10px;
+                    .modal_content_inner{
+                        display: flex;
+                        margin: 0 -15px;
+                        padding: 0;
+                        .item{
+                            width: auto;
+                            padding: 0 15px;
+                            .mat-form-field-infix{
+                                width: 370px;
+                            }
+                            .mat-slide-toggle{
+                                margin-top: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    } 
+}
+
+// Add Healthcare network provider css
+.add_healthcare .modal-body .primary_btn .btn{
+    margin: 0 0 0 15px;
+    &:first-child{
+        margin: 0;
+    }
+}
+//Add category service css
+.add_cat_service{
+    .modal_content {
+        .modal_content_inner{
+            .item{
+                .form_field_wrapper{
+                    .mat-form-field{
+                        .mat-form-field-flex{
+                            .mat-form-field-infix{
+                                width: 240px;
+                            }
+                        }
+                    }
+                }
+            }
+           
+        }
+    }
+}
+// Add Typeofservice css
+.add_typeofservice {
+    .modal-dialog{
+        .custome_modal {
+            .modal-body {
+                .category_service{
+                    .modal_content_inner{
+                        display: flex;
+                        margin: 0 -10px;
+                        .item{
+                            width: auto;
+                            padding: 0 10px;
+                            .mat-form-field-infix{
+                                width: 205px;
+                            }
+                            .mat-slide-toggle{
+                                margin-top: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    }
+}
+// Edit Typeofservice css
+.edit_typeofservice {
+    .modal-dialog{
+        .custome_modal {
+            .modal-body {
+                .category_service{
+                    border: none;
+                    margin: 0 0 10px;
+                    .modal_content_inner{
+                        display: flex;
+                        margin: 0 -15px;
+                        padding: 0;
+                        .item{
+                            width: auto;
+                            padding: 0 15px;
+                            .mat-form-field-infix{
+                                width: 240px;
+                            }
+                            .mat-slide-toggle{
+                                margin-top: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    } 
+}
+//Add category exclusion css
+.add_catexclusion{
+    .modal_content {
+        .item{
+            .form_field_wrapper{
+                .mat-form-field{
+                    .mat-form-field-wrapper{
+                        .mat-form-field-flex{
+                             .mat-form-field-infix{
+                                width: 240px;
+                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+// Add exclusion css
+.add_exclusion {
+    .modal-dialog{
+        max-width: 950px;
+        .custome_modal {
+            .modal-body {
+                .category_service{
+                    .modal_content_inner{
+                        display: flex;
+                        margin: 0 -10px;
+                        .item{
+                            width: auto;
+                            padding: 0 10px;
+                            .mat-form-field-infix{
+                                width: 190px;
+                            }
+                            .mat-slide-toggle{
+                                margin-top: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    }
+}
+// Edit exclusion css
+.edit_exclusion {
+    .modal-dialog{
+        max-width: 860px;
+        .custome_modal {
+            .modal-body {
+                .category_service{
+                    border: none;
+                    margin: 0 0 20px;
+                    .modal_content_inner{
+                        display: flex;
+                        margin: 0 -10px;
+                        padding: 0;
+                        width: 100%;
+                        .item{
+                            width: 50%;
+                            padding: 0 10px;
+                            .mat-slide-toggle{
+                                margin-top: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    } 
+}
+
+// Add Field css
+.add_field {
+    .modal-dialog{
+        .custome_modal {
+            .modal-body {
+                .category_service{
+                    .modal_content_inner{
+                        display: flex;
+                        margin: 0 -10px;
+                        width: 100%;
+                        .item{
+                            width: 50%;
+                            padding: 0 10px;
+                            .mat-slide-toggle{
+                                margin-top: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    }
+}
+
+// Edit Field css
+.edit_field{
+    .modal-body{
+        .item {
+            .form_field_wrapper{
+                .mat-form-field{
+                    .mat-form-field-wrapper{
+                        padding-bottom: 18px;
+                        .mat-form-field-flex{
+                            border: 1px solid #B6C8D6;
+                            border-radius: 5px;
+                            .mat-form-field-infix{
+                                padding-right: 30px;
+                                .mat-input-element{
+                                    color: $table_color;
+                                    font-weight: 500;
+                                }
+                                .mat-icon{
+                                    position: absolute;
+                                    right: 0;
+                                    left: auto;
+                                    color: $table_color;
+                                }
+                            }   
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.medicine-modal{
+    // max-width: 1300px !important;
+    .modal-dialog{
+        max-width: 1300px !important;
+    }
+}
+
+
+@media screen and (max-width:1499px) {
+    .master .healthcare_network .top_bar {
+        flex-direction: column;
+    }
+    .master .healthcare_network .top_bar .left_part{
+        margin: 0 0 15px;
+    }
+}
+@media screen and (max-width:$desktop_large) {
+.master .exclusion .top_bar {
+    flex-direction: column;
+}
+.master .exclusion .top_bar .left_part {
+    margin: 0 0 15px;
+}
+}
+@media screen and (max-width:$desktop_medium) {
+    .master .moreresponsetab  .top_bar{
+        flex-direction: column;
+    }
+    .master .moreresponsetab .top_bar .left_part{
+        margin: 0 0 15px;
+    }
+}
+@media screen and (max-width:$desktop) {
+    .master .bottom_bar .mat-expansion-panel .expansion_panel .role_item {
+        width: auto;
+        min-width: 265px;
+    }
+    .edit_field .modal-body .item {
+        width: auto;
+    }
+} 
+@media screen and (max-width:$tablet) {
+    .add_exclusion .modal-dialog {
+        max-width: 730px;
+    }
+    .add_exclusion .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix {
+        width: 115px;
+    }
+    .edit_exclusion .modal-dialog {
+        max-width: 720px;
+    }
+    .add_medicine .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item{
+        width: 50%;
+    }
+    .add_lab .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix {
+        width: 100%;
+    }
+    .medicine .modal-dialog {
+        max-width: 730px;
+    }
+    .medicine .modal-dialog .medicine_content .row .medicine_item{
+        margin: 5px 0;
+    }
+
+}
+@media screen and (max-width:$large_phone) {
+    .master .moreresponsetab .top_bar .content_wrap {
+        margin: 0;
+    }
+    .master .moreresponsetab .top_bar .right_part {
+        margin-top: 0;
+    }
+    .add_exclusion .modal-dialog {
+        max-width: 550px;
+    }
+    .add_exclusion .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix {
+        width: 150px;
+    }
+    .edit_exclusion .modal-dialog {
+        max-width: 550px;
+    }
+    .add_lab .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item{
+        width: 100%;
+    }
+    .medicine .modal-dialog {
+        max-width: 550px;
+    }
+    .master .healthcare_network .top_bar .left_part{
+        flex-direction: column;
+    }
+    .master .healthcare_network  .top_bar .left_part .search_bar {
+        margin: 0 0 15px;
+    }
+    .master .healthcare_network .top_bar .content_wrap{
+        margin: 0 0 15px;
+    }
+    .master .healthcare_network .top_bar .left_part .content_wrap .policy{
+        margin: 0;
+        width: 100%;
+    }
+    .master .healthcare_network .top_bar .left_part .content_wrap .policy .form_field_wrapper{
+        display: block;
+    }
+
+
+    .master .exclusion .top_bar .left_part{
+        flex-direction: column;
+    }
+    .master .exclusion  .top_bar .left_part .search_bar {
+        margin: 0 0 15px;
+    }
+    .master .exclusion .top_bar .content_wrap{
+        margin: 0 0 15px;
+    }
+    .master .exclusion .top_bar .left_part .content_wrap .policy{
+        margin: 0;
+        width: 100%;
+    }
+    .master .exclusion .top_bar .left_part .content_wrap .policy .form_field_wrapper{
+        display: block;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .edit_lab .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix {
+        width: 290px;
+    }
+    .master .moreresponsetab .top_bar .left_part .search_bar{
+        margin: 0 0 15px;
+    }
+    .master .moreresponsetab .top_bar .left_part .content_wrap .policy{
+        margin: 0;
+        width: 100%;
+    }
+    .master .moreresponsetab .top_bar .left_part .content_wrap .form_field_wrapper{
+        display: block;
+    }
+    .edit_exclusion .modal-dialog {
+        max-width: 100%;
+    }
+    .add_field .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix,
+    .add_field .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item {
+        width: 100%;
+    }
+    .add_field .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .invisible{
+        display: none;
+    }
+    .add_medicine .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item{
+        width: 100%;
+    }
+    .medicine .modal-dialog .medicine_content .row .medicine_item .item {
+        margin: 0;
+    }
+    .medicine .modal-dialog .medicine_content .row .medicine_item .item .invisible{
+        display: none;
+    }
+    .add_healthcare .modal-body .primary_btn{
+        flex-direction: column;
+    }
+    .add_healthcare .modal-body .primary_btn .btn{
+        margin: 15px 0 0;
+    }
+    .import .import_services form .upload_item {
+        margin: 0 0 15px;
+    }
+}
+@media screen and (max-width:$medium_phone) {
+    .add_medicine .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix,
+    .add_typeofservice  .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix,
+    .add_healthcare  .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix  {
+        width: 100%;
+    }
+    .add_medicine .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner,
+    .add_typeofservice  .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner{
+        padding: 20px;
+    }  
+    .add_typeofservice .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item{
+        width: 100%;
+    }
+    .add_lab .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item.two_element .form_field_wrapper .two_element_inner{
+        flex-wrap: wrap;
+    }
+    .edit_lab .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix {
+        width: 100%;
+    }
+    .edit_typeofservice .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item,
+    .edit_typeofservice .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix {
+        width: 100%;
+    }
+    .add_exclusion .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item{
+        width: 100%;
+    }
+    .add_exclusion .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix {
+        width: 100%;
+    }
+    .add_exclusion .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner{
+        padding: 20px;
+    } 
+    .edit_exclusion .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item{
+        width: 100%;
+    }
+    .edit_exclusion .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix {
+        width: 100%;
+    }
+    .edit_field .modal-body .item {
+        width: 100%;
+    }
+    
+}
+@media screen and (max-width:$small_phone) {
+.master .bottom_bar .mat-expansion-panel .expansion_panel .role_item {
+    width: auto;
+    min-width: 240px;
+}
+}
+
+.imageSize{
+    width:25px
+}
+.pt-20 {
+    padding-top: 20px;
+}
+
+.from_title_change{
+    font-size: 15px !important;
+    color: #222222 !important;
+    font-weight: 500;   
+    line-height: 24px;    
+    position: relative;
+
+}

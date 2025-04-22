@@ -1,0 +1,58 @@
+<div class="home_wrapper" [attr.dir]="'dir' | translate">
+    <app-header></app-header>
+  
+    <div class="breadcum_wrapper" aria-label="breadcrumb">
+      <div class="container">
+        <div class="breadcrumb_title">{{ "exchange_refund_policy" | translate }}</div>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['/test/homepage']">{{ "home" | translate }}</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{ "exchange_refund_policy" | translate }}
+          </li>
+        </ol>
+      </div>
+    </div>
+  
+    <div class="main_section">
+      <div class="main_section_inner">
+        <div class="container">
+          <!-- <div class="row" [innerHTML]="showText"></div> -->
+          <section id="refund-policy" [attr.dir]="'dir' | translate">
+                <h1>{{ "exchange_refund_policy" | translate }}</h1>
+                <ol>
+                  <li>
+                    <strong>{{ "service_cancellation_refund" | translate }}:</strong>
+                    <ul>
+                      <li>{{ "service_cancellation_refund_text" | translate }}</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>{{ "package_upgrades" | translate }}:</strong>
+                    <ul>
+                      <li>{{ "package_upgrades_text" | translate }}</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>{{ "package_downgrades" | translate }}:</strong>
+                    <ul>
+                      <li>{{ "package_downgrades_text" | translate }}</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>{{ "service_delivery_gurantee" | translate }}:</strong>
+                    <ul>
+                      <li>{{ "service_delivery_gurantee_text" | translate }}</li>
+                    </ul>
+                  </li>
+                </ol>
+                <p>{{ "policy_fairness" | translate }}</p>              
+        </section>  
+        </div>
+      </div>
+    </div>
+  
+    <app-footer></app-footer>
+  </div>
+  

@@ -1,0 +1,198 @@
+@import '../../../../../assets/css/variable/variable';
+.material-icons{
+    cursor: pointer;
+}
+.appointment_reason{
+    .bar{
+        margin: 0 0 35px;
+        &.bottom_bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            .left_part {
+                display: flex;
+                .search_bar {
+                    .input-group {
+                            background: #ffffff;
+                            border: 1px solid #B6C8D6;
+                            border-radius: 10px;
+                            flex-wrap: nowrap;
+                        .form-control {
+                            border: none;
+                            background-color: transparent;
+                            padding: 12px 0 12px 15px;
+                            // width: 325px;
+                            &::placeholder {
+                                font-weight: 400;
+                                font-size: $font_small;
+                                line-height: 24px;
+                            }
+                            &:focus {
+                                box-shadow: none;
+                            }
+                        }
+                        .btn {
+                            padding: 0;
+                            border: none;
+                            .mat-icon {
+                                line-height: 50px;
+                                height: 50px;
+                                width: 50px;
+                                color: #9B9B9B;
+                                font-size: 24px;
+                            }
+                        }
+                    }
+                }
+            }
+            .right_part{
+                .primary_btn{
+                    .btn-tranprent{
+                        border-radius: 10px;
+                        color: $bodycolor;
+                        margin-left: 10px;
+                        .btn_svg{
+                            border-radius: 9px;
+                        }
+                        &:hover{
+                            color: $white_color; 
+                        }
+                    }
+                }
+            }
+        }
+    }
+  
+}
+
+
+
+// Add reasons modal css
+.add_reasons {
+    .modal-dialog{
+        .custome_modal {
+            .modal-body {
+                .add_reasons{
+                    .modal_content_inner{
+                        display: flex;
+                        flex-wrap: nowrap;
+                        margin: 0 -15px;
+                        padding: 20px;
+                        width: 100%;
+                        .item{
+                            width: auto;
+                            padding: 0 15px;
+                            flex-shrink: unset;
+                            .mat-form-field-infix{
+                                width: 100%;
+                            }
+                            .mat-slide-toggle{
+                                margin-top: 10px;
+                            }
+                            &:first-child{
+                                width: 100%;
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    }
+}
+
+@media screen and (max-width:$large_phone) {
+    .appointment_reason .bar.bottom_bar{
+        flex-direction: column;
+    }
+    .appointment_reason .bar.bottom_bar .left_part{
+        margin: 0 0 15px;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .appointment_reason .bar.bottom_bar .left_part{
+        flex-direction: column;
+        align-items: center;
+    }
+    .appointment_reason .bar {
+        margin: 0 0 20px;
+    }
+}
+@media screen and (max-width:$medium_phone) {
+    .add_reasons .modal-dialog .custome_modal .modal-body .add_reasons .modal_content_inner{
+        flex-wrap: wrap;
+    }
+    .appointment_reason .bar.bottom_bar .left_part .search_bar .input-group .form-control{
+        width: 100%;
+    }
+}
+
+
+
+.primary_btn {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .primary_btn button {
+    margin-left: 10px; /* Add some spacing between the buttons */
+  }
+
+  // Import subscribers css
+.import_subscribes {
+    .modal-dialog {
+        max-width: 650px;
+        .import_subscribes {
+            .upload_item {
+                .form_field_wrapper{
+                    .upload_input{
+                        position: relative;
+                        padding-bottom: 22px;
+                        .upload_input_content{
+                            position: absolute;
+                            top: 0;
+                            bottom: auto;
+                            width: 100%;   
+                            label{
+                                padding: 15px 10px;
+                                background-color: #ffffff;
+                                border: 1px solid rgba(228, 228, 228, 0.9);
+                                font-size: 14px;
+                                font-weight: 500;
+                                border-radius: 5px;
+                                color: #3DA7C8;
+                                display: block;
+                                text-align: center;
+                                margin: 0;
+                                .btn_svg{
+                                    margin-right: 10px;
+                                }
+                            }                 
+                        }
+                        .user_upload_input{
+                            opacity: 0;
+                            z-index: 0;
+                            min-height: 50px;
+                            width: 100%;  
+                        }
+                    }
+                }
+            }
+            .primary_btn{
+                justify-content: space-between;
+                .left{
+                    margin-right: 15px;
+                }
+                .right{
+                    display: flex;
+                }
+            }
+        }
+    }
+
+}
+
+.mat-error {
+    top : 0
+}

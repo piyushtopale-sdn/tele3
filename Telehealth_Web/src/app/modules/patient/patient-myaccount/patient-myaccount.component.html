@@ -1,0 +1,2680 @@
+<div class="myaccount dashboard_main_content">
+  <div class="profile_data">
+    <div class="profile_info">
+      <div class="button_container">
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="handleRouting(0)"
+          >
+            {{ "edit_profile" | translate }}
+          </button>
+        </div>
+        <!-- <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="openVerticallyCentereddetaleChangePassword(changePassword)"
+          >
+            {{ "change_password" | translate }}
+          </button>
+        </div> -->
+      </div>
+      <ul class="profile_info_inner profile_info_with_img">
+        <li class="col_item profile_image_wrapper">
+          <div class="profile_image">
+            <img
+              src="{{
+                profileImage
+                  ? profileImage
+                  : '../../../../../../assets/img/default_user.png'
+              }}"
+            />
+          </div>
+          <div class="profile_contact">
+            <div class="profile_title">
+              {{ profile?.first_name }} {{ profile?.middle_name }}
+              {{ profile?.last_name }}
+            </div>
+            <div class="lable">{{ "mobile_number" | translate }}</div>
+            <div class="user_value">{{ profile?.mobile }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "email" | translate }}</div>
+            <div class="user_value">{{ profile?.email }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "gender" | translate }}</div>
+            <div class="user_value">{{ profile?.gender }}</div>
+          </div>
+        </li>
+        <!-- <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">SSN Number</div>
+            <div class="user_value">15216515443</div>
+          </div>
+        </li> -->
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "date_of_birth" | translate }}</div>
+            <div class="user_value">
+              {{ profile?.dob | date : "dd/MM/YYYY" }}
+            </div>
+          </div>
+        </li>
+
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "notification_status" | translate }}</div>
+            <div class="toggel-slide">
+              <mat-slide-toggle
+                [checked]="profile?.notification"
+                (change)="handleToggleChangeForActive(profile, $event.checked)"
+              ></mat-slide-toggle>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <ul class="profile_info_inner">
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "blood_group" | translate }}</div>
+            <div class="user_value">{{ profile?.blood_group }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "marital_status" | translate }}</div>
+            <div class="user_value">{{ profile?.marital_status }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "address" | translate }}</div>
+            <div class="user_value">{{ locationData?.address }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "province" | translate }}</div>
+            <div class="user_value">{{ province }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "department" | translate }}</div>
+            <div class="user_value">{{ department }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "pincode" | translate }}</div>
+            <div class="user_value">{{ locationData?.pincode }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "city" | translate }}</div>
+            <div class="user_value">{{ city }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "country" | translate }}</div>
+            <div class="user_value">{{ country }}</div>
+          </div>
+        </li>
+      </ul>
+      <div class="emergency_contact">
+        <h3 class="profileinfo_title">{{ "emergency_contact" | translate }}</h3>
+        <ul class="profile_info_inner">
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "name" | translate }}</div>
+              <div class="user_value">
+                {{ profile?.emergency_contact?.name }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "Relationship" | translate }}</div>
+              <div class="user_value">
+                {{ profile?.emergency_contact?.relationship }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "phone_number" | translate }}</div>
+              <div class="user_value">
+                {{ profile?.emergency_contact?.phone_number }}
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="account_tab">
+    <mat-tab-group animationDuration="0ms">
+      <mat-tab label="Insurance Details" *ngIf="primaryInsurance">
+        <div class="tab_content">
+          <div class="expansion_panel">
+            <div class="acc_tab_title">
+              {{ "insurance_details" | translate }}
+            </div>
+            <div class="expansion_panel_inner">
+              <div class="panel_title">
+                {{ "primary_insurance_details" | translate }}
+              </div>
+              <div class="expansion_other_panel first_child">
+                <div class="row">
+                  <div class="col-md-5">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "insurance_ID" | translate }}:</p>
+                        <p>
+                          {{ primaryInsurance?.insurance_id }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-7">
+                    <div class="outer_detail_block last_child">
+                      <div class="detail_section">
+                        <p>{{ "insurance_validity" | translate }}:</p>
+                        <p>
+                          {{ "from" | translate }}:
+                          {{
+                            primaryInsurance?.insurance_validity_from
+                              | date : "dd/MM/YYYY"
+                          }}
+                          {{ "to" | translate }}:
+                          {{
+                            primaryInsurance?.insurance_validity_to
+                              | date : "dd/MM/YYYY"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="expansion_other_panel">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "policy_ID" | translate }}:</p>
+                        <p>
+                          {{ primaryInsurance?.policy_id }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "card_ID" | translate }}:</p>
+                        <p>
+                          {{ primaryInsurance?.card_id }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="outer_detail_block last_child">
+                      <div class="detail_section">
+                        <p>{{ "employee_ID" | translate }}:</p>
+                        <p>
+                          {{ primaryInsurance?.employee_id }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="expansion_other_panel">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "insurance_holder" | translate }}:</p>
+                        <p>
+                          {{ primaryInsurance?.insurance_holder_name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "reimbursement" | translate }}:</p>
+                        <p>
+                          {{ primaryInsurance?.reimbersement_rate + " %" }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="outer_detail_block last_child">
+                      <div class="detail_section">
+                        <p>{{ "registration_number" | translate }}:</p>
+                        <p>541287636201320</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="expansion_other_panel">
+                <div class="expansion_other_panel_inner">
+                  <div class="panel_item_title">
+                    {{ "insurance_card" | translate }}
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="panel_img">
+                        <img src="../../../../assets/img/insurance.png" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="expansion_panel" *ngIf="secondaryInsurance !== undefined">
+            <div class="expansion_panel_inner">
+              <div class="panel_title">
+                {{ "secondary_insurer_identiry" | translate }}
+              </div>
+              <div class="expansion_other_panel first_child">
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "first_name" | translate }}:</p>
+                        <p>
+                          {{ secondaryInsurance?.subscriber_first_name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "last_name" | translate }}:</p>
+                        <p>
+                          {{ secondaryInsurance?.subscriber_last_name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "gender" | translate }}:</p>
+                        <p>
+                          {{ secondaryInsurance?.gender }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="outer_detail_block last_child">
+                      <div class="detail_section">
+                        <p>{{ "date_of_birth" | translate }}:</p>
+                        <p>
+                          {{
+                            secondaryInsurance?.date_of_birth
+                              | date : "dd/MM/YYYY"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="expansion_other_panel">
+                <div class="row">
+                  <div class="col-md-3">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "age" | translate }}:</p>
+                        <p>
+                          {{ secondaryInsurance?.age }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "insurance_ID" | translate }}:</p>
+                        <p>
+                          {{ secondaryInsurance?.insurance_id }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="outer_detail_block last_child">
+                      <div class="detail_section">
+                        <p>{{ "insurance_validity" | translate }}:</p>
+                        <p>
+                          {{ "from" | translate }}:
+                          {{
+                            secondaryInsurance?.insurance_validity_from
+                              | date : "dd/MM/YYYY"
+                          }}
+                          {{ "to" | translate }}:
+                          {{
+                            secondaryInsurance?.insurance_validity_to
+                              | date : "dd/MM/YYYY"
+                          }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="expansion_other_panel">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "policy_ID" | translate }}:</p>
+                        <p>
+                          {{ secondaryInsurance?.policy_id }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "card_ID" | translate }}:</p>
+                        <p>
+                          {{ secondaryInsurance?.card_id }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="outer_detail_block last_child">
+                      <div class="detail_section">
+                        <p>{{ "employee_ID" | translate }}:</p>
+                        <p>
+                          {{ secondaryInsurance?.employee_id }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="expansion_other_panel">
+                <div class="row">
+                  <div class="col-md-4">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "insurance_holder" | translate }}:</p>
+                        <p>
+                          {{ secondaryInsurance?.insurance_holder_name }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="outer_detail_block">
+                      <div class="detail_section">
+                        <p>{{ "reimbursement" | translate }}:</p>
+                        <p>
+                          {{ secondaryInsurance?.reimbersement_rate + " %" }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="outer_detail_block last_child">
+                      <div class="detail_section">
+                        <p>{{ "registration_number" | translate }}:</p>
+                        <p>541287636201320</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="expansion_other_panel">
+                <div class="row">
+                  <div class="col-md-6 col-lg-6 col-xl-4">
+                    <div class="outer_detail_block last_child">
+                      <div class="detail_section">
+                        <p>
+                          {{ "relation_with_the_pirmary_insured" | translate }}:
+                        </p>
+                        <p>
+                          {{ secondaryInsurance?.relationship_with_insure }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Vitals">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="acc_tab_title">{{ "vitals" | translate }}</div>
+            <div class="primary_btn">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="handleRouting(2)"
+              >
+                {{ "add_vitals" | translate }}
+              </button>
+            </div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner without_pagination_block">
+                <table
+                  mat-table
+                  [dataSource]="vitalsdataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Date Column -->
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.createdAt | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Height Column -->
+                  <ng-container matColumnDef="height">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "height" | translate }}
+                      <span class="graph_img"
+                        ><img src="../../../../assets/img/graph.svg"
+                      /></span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.height + " cm" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Weight (LB) Column -->
+                  <ng-container matColumnDef="weight">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "weight(LB)" | translate
+                      }}<span class="graph_img"
+                        ><img src="../../../../assets/img/graph.svg"
+                      /></span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.weight + " kgs" }}
+                    </td>
+                  </ng-container>
+
+                  <!--H-Rate Column -->
+                  <ng-container matColumnDef="hrate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "h_rate" | translate
+                      }}<span class="graph_img"
+                        ><img src="../../../../assets/img/graph.svg"
+                      /></span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.h_rate }}
+                    </td>
+                  </ng-container>
+
+                  <!--BMI Column -->
+                  <ng-container matColumnDef="bmi">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "bmi" | translate
+                      }}<span class="graph_img"
+                        ><img src="../../../../assets/img/graph.svg"
+                      /></span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.bmi + " kg/m2" }}
+                    </td>
+                  </ng-container>
+
+                  <!-- BP(H/L) -->
+                  <ng-container matColumnDef="bp">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "BP(H/L)" | translate
+                      }}<span class="graph_img"
+                        ><img src="../../../../assets/img/graph.svg"
+                      /></span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.bp }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Pulse -->
+                  <ng-container matColumnDef="pulse">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "pulse" | translate
+                      }}<span class="graph_img"
+                        ><img src="../../../../assets/img/graph.svg"
+                      /></span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.pulse }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Resp -->
+                  <ng-container matColumnDef="resp">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "resp" | translate
+                      }}<span class="graph_img"
+                        ><img src="../../../../assets/img/graph.svg"
+                      /></span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.resp }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Temp(°F) -->
+                  <ng-container matColumnDef="temp">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "temp(c)" | translate
+                      }}<span class="graph_img"
+                        ><img src="../../../../assets/img/graph.svg"
+                      /></span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.temp }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Blood Group -->
+                  <ng-container matColumnDef="bloodgroup">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "blood_group" | translate
+                      }}<span class="graph_img"
+                        ><img src="../../../../assets/img/graph.svg"
+                      /></span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.blood_group }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Clearance-->
+                  <ng-container matColumnDef="clearance">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "clearance" | translate
+                      }}<span class="graph_img"
+                        ><img src="../../../../assets/img/graph.svg"
+                      /></span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.clearance }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Hepatics Summary-->
+                  <ng-container matColumnDef="hepaticssummary">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "hepatics_summary" | translate
+                      }}<span class="graph_img"
+                        ><img src="../../../../assets/img/graph.svg"
+                      /></span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.hepatics_summary }}
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="vitalsdisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: vitalsdisplayedColumns"
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Medicine">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="acc_tab_title">
+              {{ "current_medications" | translate }}
+            </div>
+            <div class="primary_btn">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="handleRouting(3)"
+              >
+                {{ "add_medications" | translate }}
+              </button>
+            </div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table
+                  mat-table
+                  [dataSource]="medicationdataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Medicine Column -->
+                  <ng-container matColumnDef="medicine">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "medicine" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.medicine }}
+                    </td>
+                  </ng-container>
+
+                  <!--Dose(mg) Column -->
+                  <ng-container matColumnDef="dose">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "dose(mg)" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.dose }}
+                    </td>
+                  </ng-container>
+
+                  <!--Frequency Column -->
+                  <ng-container matColumnDef="frequency">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "frequency" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.frequency }}
+                    </td>
+                  </ng-container>
+
+                  <!--Strength Column -->
+                  <ng-container matColumnDef="strength">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "duration" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.strength }}
+                    </td>
+                  </ng-container>
+
+                  <!--Start Date Column -->
+                  <ng-container matColumnDef="startdate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "start_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.start_date | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+
+                  <!--End Date  Column -->
+                  <ng-container matColumnDef="enddate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "end_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.end_date | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="handleRouting(3)">
+                          <svg
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                            />
+                          </svg>
+                        </a>
+                        <a
+                          (click)="
+                            openVerticallyCenteredsecond(
+                              deleteModal,
+                              index,
+                              'current_medicine'
+                            )
+                          "
+                          class="svgicon"
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="16"
+                            viewBox="0 0 14 16"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z"
+                            /></svg
+                        ></a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="medicationdisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: medicationdisplayedColumns"
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="top_bar">
+            <div class="acc_tab_title">
+              {{ "past_medications" | translate }}
+            </div>
+            <div class="primary_btn">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="handleRouting(3)"
+              >
+                {{ "add_medications" | translate }}
+              </button>
+            </div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table
+                  mat-table
+                  [dataSource]="medicinedataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Medicine Column -->
+                  <ng-container matColumnDef="medicine">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "medicine" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.medicine }}
+                    </td>
+                  </ng-container>
+
+                  <!--Dose(mg) Column -->
+                  <ng-container matColumnDef="dose">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "dose(mg)" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.dose }}
+                    </td>
+                  </ng-container>
+
+                  <!--Frequency Column -->
+                  <ng-container matColumnDef="frequency">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "frequency" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.frequency }}
+                    </td>
+                  </ng-container>
+
+                  <!--Strength Column -->
+                  <ng-container matColumnDef="strength">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "duration" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.strength }}
+                    </td>
+                  </ng-container>
+
+                  <!--Start Date Column -->
+                  <ng-container matColumnDef="startdate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "start_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.start_date | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+
+                  <!--End Date  Column -->
+                  <ng-container matColumnDef="enddate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "end_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.end_date | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="handleRouting(3)">
+                          <svg
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                            />
+                          </svg>
+                        </a>
+                        <a
+                          (click)="
+                            openVerticallyCenteredsecond(
+                              deleteModal,
+                              index,
+                              'past_medicine'
+                            )
+                          "
+                          class="svgicon"
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="16"
+                            viewBox="0 0 14 16"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z"
+                            /></svg
+                        ></a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="medicinedisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: medicinedisplayedColumns"
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Vaccination">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="acc_tab_title">{{ "vaccination" | translate }}</div>
+            <div class="primary_btn">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="
+                  openVerticallyCenteredAddImmunization(
+                    add_immunization_content,
+                    ''
+                  )
+                "
+              >
+                {{ "add_vaccination" | translate }}
+              </button>
+            </div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table
+                  mat-table
+                  [dataSource]="immunizationdataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Name Column -->
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.name }}
+                    </td>
+                  </ng-container>
+
+                  <!--Administered Date Column -->
+                  <ng-container matColumnDef="administereddate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "administered_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.administered_date | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Manufactured name Column -->
+                  <ng-container matColumnDef="manufacturedname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "manufactured_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.manufactured_name }}
+                    </td>
+                  </ng-container>
+
+                  <!--Medical centre Column -->
+                  <ng-container matColumnDef="medicalcentre">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "medical_centre" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.medical_centre }}
+                    </td>
+                  </ng-container>
+
+                  <!--Batch number Column -->
+                  <ng-container matColumnDef="batchnumber">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "batch_number" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                        element?.batch_number
+                          ? element?.batch_number + " CHA"
+                          : ""
+                      }}
+                    </td>
+                  </ng-container>
+
+                  <!--Route Of Administration  Column -->
+                  <ng-container matColumnDef="routeofadministration">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "route_Of_administration" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.route_of_administered }}
+                    </td>
+                  </ng-container>
+
+                  <!--Next immunization date  Column -->
+                  <ng-container matColumnDef="nextimmunizationdate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "next_vaccination_appointment" | translate}}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                        element?.next_immunization_appointment
+                          | date : "dd/MM/yyyy"
+                      }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="icon_group">
+                        <a *ngIf="element.allow_to_export === true">
+
+                          <mat-icon (click)="openVerticallyCenteredVaccCard(vaccCard, element._id)">vaccines</mat-icon>    
+                        </a>
+                        <a
+                          class="svgicon"
+                          (click)="
+                            openVerticallyCenteredAddImmunization(
+                              add_immunization_content,
+                              element
+                            )
+                          "
+                          *ngIf="element?.added_by === 'patient'"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 12 12"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                            />
+                          </svg>
+                        </a>
+                        <a
+                          class="svgicon"
+                          (click)="
+                            openVerticallyCentereddetale(
+                              delete_Immunization,
+                              element
+                            )
+                          "
+                          *ngIf="element?.added_by === 'patient'"
+                        >
+                          <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="immunizationdisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: immunizationdisplayedColumns"
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="History">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="acc_tab_title">{{ "patient_history" | translate }}</div>
+            <div class="primary_btn">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="handleRouting(5)"
+              >
+                {{ "add_history" | translate }}
+              </button>
+            </div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table
+                  mat-table
+                  [dataSource]="patienthistorydataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Patient History Type Column -->
+                  <ng-container matColumnDef="patienthistorytype">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "patient_history_type" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.type }}
+                    </td>
+                  </ng-container>
+
+                  <!--History Name Column -->
+                  <ng-container matColumnDef="historyname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "history_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.name }}
+                    </td>
+                  </ng-container>
+
+                  <!--Start Date Column -->
+                  <ng-container matColumnDef="startdate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "start_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.start_date | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="handleRouting(5)">
+                          <svg
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                            />
+                          </svg>
+                        </a>
+                        <a
+                          (click)="
+                            openVerticallyCenteredsecond(
+                              deleteModal,
+                              index,
+                              'patient_history'
+                            )
+                          "
+                          class="svgicon"
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="16"
+                            viewBox="0 0 14 16"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z"
+                            /></svg
+                        ></a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="patienthistorydisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="
+                      let row;
+                      columns: patienthistorydisplayedColumns
+                    "
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="top_bar">
+            <div class="acc_tab_title">{{ "allergies" | translate }}</div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table
+                  mat-table
+                  [dataSource]="allergiesdataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Allergy Type Column -->
+                  <ng-container matColumnDef="allergytype">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "allergy_type" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.type }}
+                    </td>
+                  </ng-container>
+
+                  <!--Start Date Column -->
+                  <ng-container matColumnDef="startdate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "start_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.start_date | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="handleRouting(5)">
+                          <svg
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                            />
+                          </svg>
+                        </a>
+                        <a
+                          (click)="
+                            openVerticallyCenteredsecond(
+                              deleteModal,
+                              index,
+                              'allergy'
+                            )
+                          "
+                          class="svgicon"
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="16"
+                            viewBox="0 0 14 16"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z"
+                            /></svg
+                        ></a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="allergiesdisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: allergiesdisplayedColumns"
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="top_bar">
+            <div class="acc_tab_title">{{ "lifestyle" | translate }}</div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table
+                  mat-table
+                  [dataSource]="lifestyledataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Lifestyle Type Column -->
+                  <ng-container matColumnDef="lifestyletype">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "lifestyle_type" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.type }}
+                    </td>
+                  </ng-container>
+
+                  <!--Lifestyle Type Name Column -->
+                  <ng-container matColumnDef="lifestyletypename">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "lifestyle_type_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.type_name }}
+                    </td>
+                  </ng-container>
+
+                  <!--Start Date Column -->
+                  <ng-container matColumnDef="startdate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "start_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.start_date | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="handleRouting(5)">
+                          <svg
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                            />
+                          </svg>
+                        </a>
+                        <a
+                          (click)="
+                            openVerticallyCenteredsecond(
+                              deleteModal,
+                              index,
+                              'lifestyle'
+                            )
+                          "
+                          class="svgicon"
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="16"
+                            viewBox="0 0 14 16"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z"
+                            /></svg
+                        ></a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="lifestyledisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: lifestyledisplayedColumns"
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="top_bar">
+            <div class="acc_tab_title">{{ "family_history" | translate }}</div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table
+                  mat-table
+                  [dataSource]="familyhistorydataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Relationship Column -->
+                  <ng-container matColumnDef="relationship">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "Relationship" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.relationship }}
+                    </td>
+                  </ng-container>
+
+                  <!--Family History Type Column -->
+                  <ng-container matColumnDef="familyhistorytype">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "family_history_type" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.family_history_type }}
+                    </td>
+                  </ng-container>
+
+                  <!--History Name Column -->
+                  <ng-container matColumnDef="historyname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "history_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.history_name }}
+                    </td>
+                  </ng-container>
+
+                  <!--Start Date Column -->
+                  <ng-container matColumnDef="startdate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "start_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.start_date | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="handleRouting(5)">
+                          <svg
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                            />
+                          </svg>
+                        </a>
+                        <a
+                          (click)="
+                            openVerticallyCenteredsecond(
+                              deleteModal,
+                              index,
+                              'family_history'
+                            )
+                          "
+                          class="svgicon"
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="16"
+                            viewBox="0 0 14 16"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z"
+                            /></svg
+                        ></a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="familyhistorydisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: familyhistorydisplayedColumns"
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Medical Document">
+        <div class="tab_content medical_doc">
+          <div class="top_bar">
+            <div class="acc_tab_title">
+              {{ "medical_document" | translate }}
+            </div>
+            <div class="primary_btn">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="handleRouting(6)"
+              >
+                {{ "add_document" | translate }}
+              </button>
+            </div>
+          </div>
+
+          <div class="bottom_bar">
+            <div class="row">
+              <div
+                class="item col-sm-4 col-md-3"
+                *ngFor="let doc of medicalDocuments"
+              >
+                <div class="item_inner">
+                  <div class="doc_img"  *ngIf="doc?.image.endsWith('.png')">
+                    <img src="{{ doc?.image_signed_url }}" />
+                    <span
+                      class="quick_view"
+                      (click)="
+                        openVerticallyCenteredquickview(
+                          quick_view,
+                          doc?.image_signed_url
+                        )
+                      "
+                      ><img src="../../../../assets/img/quick_view.svg"
+                    /></span>
+                  </div>
+                  <div class="doc_img"  *ngIf="doc?.image.endsWith('.pdf')" (click)="downloadpdf(doc?.image_signed_url)">
+                    <mat-icon >get_app</mat-icon>
+                  </div>
+                  <div class="doc_desc">
+                    <div class="name">{{ doc?.name }}</div>
+                    <div class="date">
+                      {{ "issue_date" | translate }} -
+                      {{ doc?.issue_date | date : "dd/MM/YYYY" }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="item col-sm-4 col-md-3">
+                <div class="item_inner">
+                  <div class="doc_img">
+                    <img src="../../../../assets/img/doc_img.png" />
+                    <span class="quick_view"
+                      ><img src="../../../../assets/img/quick_view.svg"
+                    /></span>
+                  </div>
+                  <div class="doc_desc">
+                    <div class="name">Document Name</div>
+                    <div class="date">Date - 10-26-2024</div>
+                  </div>
+                </div>
+              </div>
+              <div class="item col-sm-4 col-md-3">
+                <div class="item_inner">
+                  <div class="doc_img">
+                    <img src="../../../../assets/img/doc_img.png" />
+                    <span class="quick_view"
+                      ><img src="../../../../assets/img/quick_view.svg"
+                    /></span>
+                  </div>
+                  <div class="doc_desc">
+                    <div class="name">Document Name</div>
+                    <div class="date">Date - 10-26-2024</div>
+                  </div>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Dependent & Family Members">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="acc_tab_title">
+              {{ "dependent_family_members" | translate }}
+            </div>
+            <div class="primary_btn">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="handleRouting(7)"
+              >
+                {{ "add_family_member" | translate }}
+              </button>
+            </div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table
+                  mat-table
+                  [dataSource]="dependentdataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Name Column -->
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.first_name }} {{ element?.last_name }}
+                    </td>
+                  </ng-container>
+
+                  <!--SSN Number Column -->
+                  <ng-container matColumnDef="ssnnumber">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "ssn_numner" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.ssn_number }}
+                    </td>
+                  </ng-container>
+
+                  <!--Gender Column -->
+                  <ng-container matColumnDef="gender">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "gender" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.gender }}
+                    </td>
+                  </ng-container>
+
+                  <!--Date of Birth Column -->
+                  <ng-container matColumnDef="dateofbirth">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date_of_birth" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.dob | date : "dd/MM/YYYY" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Reletionship  Column -->
+                  <ng-container matColumnDef="reletionship">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "Relationship" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.relationship }}
+                    </td>
+                  </ng-container>
+
+                  <!--Mobile Number  Column -->
+                  <ng-container matColumnDef="mobilenumber">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "mobile_number" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.mobile_number }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="handleRouting(7)">
+                          <svg
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                            />
+                          </svg>
+                        </a>
+                        <a
+                          (click)="
+                            openVerticallyCenteredsecond(
+                              deleteModal,
+                              index,
+                              'family_members'
+                            )
+                          "
+                          class="svgicon"
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="16"
+                            viewBox="0 0 14 16"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z"
+                            /></svg
+                        ></a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="dependentdisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: dependentdisplayedColumns"
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="top_bar">
+            <div class="acc_tab_title">{{ "medical_history" | translate }}</div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table
+                  mat-table
+                  [dataSource]="medicalhistorydataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Allergy Type Column -->
+                  <ng-container matColumnDef="allergytype">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "allergy_type" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.allergy_type }}
+                    </td>
+                  </ng-container>
+
+                  <!--Allergen Column -->
+                  <ng-container matColumnDef="allergen">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "allergen" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.allergen }}
+                    </td>
+                  </ng-container>
+
+                  <!--Note Column -->
+                  <ng-container matColumnDef="note">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "note" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.note }}
+                    </td>
+                  </ng-container>
+
+                  <!--Reaction Column -->
+                  <ng-container matColumnDef="reaction">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "reaction" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      {{ element?.reaction }}
+                    </td>
+                  </ng-container>
+
+                  <!--Status Column -->
+                  <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "status" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span
+                        class="status {{
+                          element?.status === 'Open' ? '' : 'canceled'
+                        }}"
+                        >{{
+                          element?.status === "Open" ? "ACTIVE" : "IN-ACTIVE"
+                        }}
+                      </span>
+                    </td>
+                  </ng-container>
+
+                  <!--Created Date Column -->
+                  <ng-container matColumnDef="createddate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "created_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.created_date | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="handleRouting(7)">
+                          <svg
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                            />
+                          </svg>
+                        </a>
+                        <a
+                          (click)="
+                            openVerticallyCenteredsecond(
+                              deleteModal,
+                              index,
+                              'medical_history'
+                            )
+                          "
+                          class="svgicon"
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="16"
+                            viewBox="0 0 14 16"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z"
+                            /></svg
+                        ></a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="medicalhistorydisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="
+                      let row;
+                      columns: medicalhistorydisplayedColumns
+                    "
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="top_bar">
+            <div class="acc_tab_title">{{ "social_history" | translate }}</div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table
+                  mat-table
+                  [dataSource]="socialhistorydataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Alcohol Column -->
+                  <ng-container matColumnDef="alcohol">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "alcohol" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.alcohol ? "Yes" : "No" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Tobacco Column -->
+                  <ng-container matColumnDef="tobacco">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "tobacco" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.tobacco ? "Yes" : "No" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Drugs Column -->
+                  <ng-container matColumnDef="drugs">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "drugs" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.drugs ? "Yes" : "No" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Occupation Column -->
+                  <ng-container matColumnDef="occupation">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "occupation" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.occupation }}
+                    </td>
+                  </ng-container>
+
+                  <!--Travel Column -->
+                  <ng-container matColumnDef="travel">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "travel" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.travel }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="handleRouting(7)">
+                          <svg
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                            />
+                          </svg>
+                        </a>
+                        <a
+                          (click)="
+                            openVerticallyCenteredsecond(
+                              deleteModal,
+                              index,
+                              'social_history'
+                            )
+                          "
+                          class="svgicon"
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="16"
+                            viewBox="0 0 14 16"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z"
+                            /></svg
+                        ></a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="socialhistorydisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: socialhistorydisplayedColumns"
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Past Appointment">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="acc_tab_title">
+              {{ "past_appointment" | translate }}
+            </div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table
+                  mat-table
+                  [dataSource]="pastappointmentdataSource"
+                  class="mat-elevation-z8 withoutpagination"
+                >
+                  <!--Doctor Name Column -->
+                  <ng-container matColumnDef="doctorname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "doctor_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.doctor_name }}
+                    </td>
+                  </ng-container>
+
+                  <!--Hospital Name Column -->
+                  <ng-container matColumnDef="hospitalname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "hospital_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.hospital_name }}
+                    </td>
+                  </ng-container>
+
+                  <!--Appointments Type Column -->
+                  <ng-container matColumnDef="appointmentstype">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "counsultation_type" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.consultation_type }}
+                    </td>
+                  </ng-container>
+
+                  <!--Date Time Column -->
+                  <ng-container matColumnDef="datetime">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date_time" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.consultation_date }} &
+                      {{ element?.consultation_time }}
+                    </td>
+                  </ng-container>
+
+                  <!--Symptom/Ailment Column -->
+                  <ng-container matColumnDef="symptomorailment">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "symptom_ailment" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element.symptomorailment }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      <div class="icon_group">
+                        <a
+                          class="svgicon"
+                          [routerLink]="[
+                            '/patient/myappointment/newappointment',
+                            element?.appointment_id
+                          ]"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="17"
+                            height="9"
+                            viewBox="0 0 17 9"
+                            fill="none"
+                          >
+                            <path
+                              d="M8.73047 0C3.48167 0 0.730469 3.88286 0.730469 4.5C0.730469 5.11554 3.48167 9 8.73047 9C13.9785 9 16.7305 5.11554 16.7305 4.5C16.7305 3.88286 13.9785 0 8.73047 0ZM8.73047 7.96098C6.76647 7.96098 5.17447 6.4117 5.17447 4.5C5.17447 2.5883 6.76647 1.03741 8.73047 1.03741C10.6945 1.03741 12.2857 2.5883 12.2857 4.5C12.2857 6.4117 10.6945 7.96098 8.73047 7.96098ZM8.73047 4.5C8.40487 4.1408 9.26087 2.76911 8.73047 2.76911C7.74807 2.76911 6.95207 3.54455 6.95207 4.5C6.95207 5.45545 7.74807 6.23089 8.73047 6.23089C9.71207 6.23089 10.5089 5.45545 10.5089 4.5C10.5089 4.06045 9.00727 4.80455 8.73047 4.5Z"
+                            />
+                          </svg>
+                        </a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr
+                    mat-header-row
+                    *matHeaderRowDef="pastappointmentdisplayedColumns"
+                  ></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="
+                      let row;
+                      columns: pastappointmentdisplayedColumns
+                    "
+                  ></tr>
+                </table>
+              </div>
+              <mat-paginator
+                class="pagination"
+                [length]="totalLength"
+                (page)="handlePageEvent($event)"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[5, 10, 20]"
+                showFirstLastButtons
+                aria-label="Select page of periodic elements"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+
+<!-------------------------- Delete modal --------------------->
+
+<ng-template #deleteModal let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "you_want_to_delete" | translate }}?</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="handleDelete()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Quickview Modal -->
+
+<ng-template #quick_view let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="docview_img">
+        <img src="{{ setDocToView }}" width="600px" height="500px" />
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- ---------------------------------------Add Immunization Model ---------------------------------------- -->
+<ng-template #add_immunization_content let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ isImmunizationUpdating ? "Edit Vaccination" : "Add Vaccination" }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="closePopup()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="immunizationForm">
+        <ng-container formArrayName="immunization">
+          <ng-container *ngFor="let _ of immunization.controls; let i = index">
+            <ng-container [formGroupName]="i">
+              <div class="add_immunization_inner">
+                <div class="row increse_content_inner">
+                  <div class="col-sm-6 col-md-6 col-lg-4">
+                    <div class="form_field_wrapper">
+                      <label>{{ "vaccination_name" | translate }} </label>
+                      <mat-form-field appearance="fill">
+                        <!-- <mat-label>Sub-admin</mat-label> -->
+                        <mat-select disableRipple formControlName="name">
+                          <mat-option
+                            *ngFor="let imm of immunizationOptionsList"
+                            [value]="imm.name"
+                            >{{ imm.name }}</mat-option
+                          >
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && immunizationValidation(i).controls['name']
+                  .errors?.['required']"
+                      >{{ "select_vaccination" | translate }}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-4">
+                    <div class="form_field_wrapper">
+                      <label>{{ "manufactured_name" | translate }}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="manufactured_name"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && immunizationValidation(i).controls['manufactured_name']
+                  .errors?.['required']"
+                      >{{ "enter_manufactured_name" | translate }}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-4">
+                    <div class="form_field_wrapper">
+                      <label>{{ "medical_centre" | translate }}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="medical_centre"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && immunizationValidation(i).controls['medical_centre']
+                  .errors?.['required']"
+                      >{{ "enter_medical_center" | translate }}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-4">
+                    <div class="form_field_wrapper">
+                      <label>{{ "batch_number" | translate }}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="batch_number"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && immunizationValidation(i).controls['batch_number']
+                  .errors?.['required']"
+                      >{{ "enter_batch_number" | translate }}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-4">
+                    <div class="form_field_wrapper">
+                      <label>{{
+                        "next_vaccination_appointment" | translate
+                      }}</label>
+                      <mat-form-field
+                        class="example-full-width"
+                        appearance="fill"
+                      >
+                        <input
+                          matInput
+                          [matDatepickerFilter]="myFilter"
+                          [matDatepicker]="picker1"
+                          formControlName="next_immunization_appointment"
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="picker1"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && immunizationValidation(i).controls['next_immunization_appointment']
+                          .errors?.['required']"
+                      >{{ "select_date" | translate }}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-4">
+                    <div class="form_field_wrapper">
+                      <label>{{ "administered_date" | translate }}</label>
+                      <mat-form-field
+                        class="example-full-width"
+                        appearance="fill"
+                      >
+                        <input
+                          matInput
+                          [matDatepickerFilter]="myFilter"
+                          [matDatepicker]="picker2"
+                          formControlName="administered_date"
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="picker2"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && immunizationValidation(i).controls['administered_date']
+                .errors?.['required']"
+                      >{{ "select_date" | translate }}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-4">
+                    <div class="form_field_wrapper">
+                      <label>{{ "route_of_administered" | translate }}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="route_of_administered"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && immunizationValidation(i).controls['route_of_administered']
+                .errors?.['required']"
+                      >{{ "required" | translate }}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-4">
+                    <div class="form_field_wrapper">
+                      <label>{{
+                        "HCP_provided_vaccination" | translate
+                      }}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="hcp_provided_immunization"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && immunizationValidation(i).controls['hcp_provided_immunization']
+                .errors?.['required']"
+                      >{{ "required" | translate }}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-4">
+                    <div class="form_field_wrapper">
+                      <label
+                        >{{
+                          "allow_to_export_transmit_immu" | translate
+                        }}
+                        report</label
+                      >
+                      <div class="toggel-slide">
+                        <mat-slide-toggle
+                          formControlName="allow_to_export"
+                        ></mat-slide-toggle>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="row_generate row_add"
+                  *ngIf="i === 0 && !isImmunizationUpdating"
+                >
+                  <mat-icon (click)="addNewImmunization()">add</mat-icon>
+                </div>
+
+                <div
+                  class="row_generate row_minus"
+                  *ngIf="i !== 0 && !isImmunizationUpdating"
+                >
+                  <mat-icon (click)="deleteImmunization(i)">remove</mat-icon>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </form>
+      <div class="primary_btn">
+        <button class="btn btn-secondary" (click)="closePopup()">
+          {{ "cancel" | translate }}
+        </button>
+        <button
+          class="btn btn-primary"
+          (click)="
+            handleAddImmunization(isImmunizationUpdating ? 'edit' : 'add')
+          "
+        >
+          {{ isImmunizationUpdating ? "Save" : "Add" }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- ----------------------- Delete Immunization--------------------------- -->
+<ng-template #delete_Immunization let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "you_want_delete_immu" | translate }}.</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="delete_ImmunizationById()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- ----------------------- Change Password--------------------------- -->
+<ng-template #changePassword let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="change_pass">
+        <div class="changepass_inner">
+          <form
+            [formGroup]="changePasswordForm"
+            (ngSubmit)="handleChangePassword()"
+          >
+            <div class="form_field_wrapper">
+              <label>{{ "current_password" | translate }}</label>
+              <mat-form-field appearance="fill" class="password-input-block"> 
+                <input
+                  type="password"
+                  matInput
+                  formControlName="old_password"
+                  placeholder="{{ 'current_password' | translate }}"
+                  [type]="hide1 ? 'password' : 'text'" />
+                  <a class="password-view" (click)="hide1 = !hide1">
+                    <mat-icon>{{
+                      hide1 ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </a>
+              </mat-form-field>
+            </div>
+            <span
+              class="text-danger"
+              *ngIf="isSubmitted && f['old_password'].errors?.['required']"
+            >
+              {{ "enter_current_password" | translate }}*
+            </span>
+            <div class="form_field_wrapper">
+              <label>{{ "new_password" | translate }}</label>
+              <mat-form-field appearance="fill" class="password-input-block">
+                <input
+                  type="password"
+                  matInput
+                  formControlName="new_password"
+                  placeholder="{{ 'new_password' | translate }}"
+                  [type]="hide2 ? 'password' : 'text'" />
+                  <a class="password-view" (click)="hide2 = !hide2">
+                    <mat-icon>{{
+                      hide2 ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </a>
+              </mat-form-field>
+            </div>
+            <span
+              class="text-danger"
+              *ngIf="isSubmitted && f['new_password'].errors?.['required']"
+            >
+              {{ "enter_password" | translate }}*
+            </span>
+            <div
+              class="text-danger"
+              *ngIf=" f['new_password'].errors?.['minlength']"
+            >
+              {{ "must_be_atleast_8_char" | translate }}
+            </div>
+            <div
+              class="text-danger"
+              *ngIf="f['new_password'].errors?.['hasNumber']"
+            >
+              {{ "must_contain_atleast_1_number" | translate }}!
+            </div>
+            <div
+              class="text-danger"
+              *ngIf="f['new_password'].errors?.['hasCapitalCase']"
+            >
+              {{ "must_contain_atleast_1_capcase" | translate }}
+            </div>
+            <div
+              class="text-danger"
+              *ngIf="f['new_password'].errors?.['hasSmallCase']"
+            >
+              {{ "must_contain_atleast_1_smallcase" | translate }}
+            </div>
+            <div
+              class="text-danger"
+              *ngIf="f['new_password'].errors?.['hasSpecialCharacters']"
+            >
+              {{ "must_contain_atleast_1_number" | translate }}!
+            </div>
+            <div class="form_field_wrapper">
+              <label>{{ "confirm_password" | translate }}</label>
+              <mat-form-field appearance="fill" class="password-input-block">
+                <input
+                  type="password"
+                  matInput
+                  formControlName="confirm_password"
+                  placeholder="{{ 'confirm_password' | translate }}"
+                  [type]="hide3 ? 'password' : 'text'" />
+                  <a class="password-view" (click)="hide3 = !hide3">
+                    <mat-icon>{{
+                      hide3 ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </a>
+              </mat-form-field>
+            </div>
+            <span
+              class="text-danger"
+              *ngIf="isSubmitted && f['confirm_password'].errors?.['required']"
+            >
+              {{ "enter_confirm_password" | translate }}*
+            </span>
+            <span
+              class="text-danger"
+              *ngIf="f['confirm_password'].errors?.['matching']"
+            >
+              {{ "confim_password_does_not_match" | translate }}
+            </span>
+
+            <div class="form-btn primary_btn">
+              <button type="submit" class="login_btn btn btn-primary">
+                {{ "reset_password" | translate }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Actiate DeActivate modal -->
+<ng-template #activateDeactivate let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/reject.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>
+          {{ "you" | translate }} {{ notificationStatus }}
+          {{ "to_receive_further_notifica" | translate }}
+        </p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="updateNotificationStatus()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- ----------------------- Immunization card--------------------------- -->
+<ng-template #vaccCard let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <h2>{{"medical_centre" | translate}} : {{getData?.medical_centre}}</h2>
+      <div class="qr_code">
+          <ngx-qrcode
+            [elementType]="elementType"
+            [errorCorrectionLevel]="correctionLevel"          
+            cssClass="qrcodeshadow" 
+            [value]="value"
+            placement="top"
+          ></ngx-qrcode>
+        </div>
+    </div>
+    <div>
+      <h2>Manufactured Name : {{getData?.manufactured_name}}</h2>
+      <h2>{{"date_of_birth" | translate}}:{{patientDOB | date : "dd/MM/YYYY"}}</h2>
+      <h2>{{"vaccination_name" | translate}}: {{getData?.name}}</h2>
+      <h2>{{"injection_date" | translate}} : {{getData?.administered_date | date:"dd-MM-yyyy"}}</h2>
+      <h2>{{"batch_number" | translate}} : {{getData?.batch_number}}</h2>
+    </div> 
+
+
+  </div>
+</ng-template>

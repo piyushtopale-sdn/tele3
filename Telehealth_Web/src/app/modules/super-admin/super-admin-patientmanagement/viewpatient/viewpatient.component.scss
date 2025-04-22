@@ -1,0 +1,221 @@
+@import '../../../../../assets/css/variable/variable';
+
+.material-icons{
+    cursor: pointer;
+}
+
+.view_patient{
+    .top_bar{
+        margin: 0 0 35px;
+        .left_part{
+            display: flex;
+            .search_bar{
+                .input-group{
+                    background: #F6F8FC;
+                    border-radius: 6px;
+                    flex-wrap: nowrap;
+                    .form-control{
+                        border: none;
+                        background-color: transparent;
+                        padding: 12px 12px 12px 0;
+                        width: 165px;
+                        &::placeholder{
+                            font-weight: 400;
+                            font-size: $font_small;
+                            line-height: 24px;
+                        }
+                        &:focus{
+                            box-shadow: none;
+                        }
+                    }
+                    .btn{
+                        padding: 0;
+                        border: none;
+                        .mat-icon{
+                            line-height: 50px;
+                            height: 50px;
+                            width: 50px;
+                            color: #9B9B9B;
+                            font-size: 24px;
+                        }
+                    }
+                }
+            }
+            .content_wrap{
+                flex-wrap: wrap;
+                .policy{
+                    margin: 0 0 0 20px;
+                    label{
+                        margin-right: 12px;
+                    }
+                    .mat-form-field{
+                        .mat-form-field-wrapper{
+                            padding: 0;
+                            .mat-form-field-flex{
+                                background-color: #EBF0F4;
+                                border: 1px solid #EBF0F4;
+                                .mat-form-field-infix{
+                                    width: 150px;
+                                    .mat-select{
+                                        .mat-select-value{
+                                            color: $formfiled_color;
+                                            font-weight: 500;
+                                        }
+                                    }
+                                }
+                            }
+                            .mat-form-field-underline{
+                                display: none;
+                            }
+                        }
+                    }
+                    &.date{
+                        .mat-form-field{
+                            .mat-form-field-wrapper{
+                                .mat-form-field-flex{
+                                    .mat-form-field-infix{
+                                        width: 90px;
+                                    }
+                                }
+                            }
+                        } 
+                    }
+                }
+               
+            }
+            .primary_btn{
+                .btn {
+                    min-width: 100px;
+                }
+            }
+        }
+    }
+    .bottom_bar{
+        .primary_btn{
+            margin: 0 0 30px;
+            .btn {
+                background: #FFFFFF;
+                color: $bodycolor;
+                border: 1px solid rgba(11, 73, 119, 0.15);
+                border-radius: 10px;
+                padding: 10px;
+                justify-content: flex-start;
+                .btn_svg{
+                    height: 35px;
+                    width: 35px;
+                    background-color: $bodycolor;
+                    border-radius: 9px;
+                    svg{
+                        fill: $white_color;
+                        width: 20px;
+                        height: 20px;
+                    }
+                }
+                &:hover{
+                    background: $bodycolor;
+                    color: $white_color;
+                    .btn_svg{
+                        background-color: #EBF0F4;
+                        svg{
+                            fill: $bodycolor;
+                        }
+                    }
+                }
+               
+            }
+            .active
+            {
+               
+                background: $bodycolor;
+                color: $white_color;
+                    .btn_svg{
+                        background-color: #EBF0F4;
+                        svg{
+                            fill: $bodycolor;
+                        }
+                    }
+                
+            }
+        }
+    }
+}
+
+.modal_content_inner{
+    &.modal-block{
+        gap: 10px;
+        
+        .item-box{
+                flex: 0 1 calc(50% - 10px);
+
+                @media(max-width:767px){
+                    flex: 0 1 100%;
+                }
+        }
+    }
+}
+
+.filter_Modal{
+    .modal-dialog.modal-dialog-centered.modal-xl{
+        max-width: 1000px;
+
+        .modal-content{
+            height: fit-content;
+        }
+    }
+}
+
+
+@media screen and (max-width:$desktop_large) {
+    // .view_patient .top_bar .left_part .content_wrap .policy{
+    //     margin-bottom: 10px;
+    // }
+    // .view_patient .top_bar .left_part .content_wrap .policy.date .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix{
+    //     width: 122px;
+    // }
+    .view_patient .top_bar .left_part{
+        flex-direction: column;
+    }
+    .view_patient  .top_bar{
+        justify-content: center;
+    }
+    .view_patient .top_bar .left_part .content_wrap{
+        margin: 10px -5px;
+    }
+    .view_patient .top_bar .left_part .content_wrap .policy {
+        padding: 0 5px;
+        margin: 0;
+    }
+}
+@media screen and (max-width:$desktop) {
+.view_patient .top_bar .left_part .content_wrap .policy .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+    width: 125px;
+}
+}
+@media screen and (max-width:$large_phone) {
+    .view_patient .top_bar .left_part .content_wrap .policy {
+        width: 100%;
+        margin: 0 0 10px;    
+    }
+    .view_patient .bottom_bar .primary_btn{
+        // flex-direction: column;
+        flex-wrap: wrap;
+    }
+    .view_patient .bottom_bar .primary_btn .btn{
+        margin: 0 15px 15px 0;
+    }
+}
+@media screen and (max-width:$medium_phone) {
+    .view_patient .bottom_bar .primary_btn .btn{
+        width: 100%;
+        margin-right: 0;
+    }
+}
+.select-dropdown-box{
+    .select2-results{
+        ul.select2-results__options{
+            max-height: 133px !important;
+        }
+        
+    }
+}
+    

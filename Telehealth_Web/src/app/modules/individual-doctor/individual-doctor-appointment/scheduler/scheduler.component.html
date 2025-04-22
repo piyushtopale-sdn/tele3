@@ -1,0 +1,297 @@
+<div class="scheduler">
+  <!-- <div class="top_part mb-4">
+    <div class="row justify-content">  
+      <div class="col-xxl-4 col-md-6 col-12">
+        <div class="form_field_wrapper">
+          <label>{{ "patient" | translate }} : {{"select_or_deselect" | translate}}</label>
+          <span class="label_value"
+            ></span
+          >
+          <mat-form-field appearance="fill">
+            <mat-select [formControl]="patients" (selectionChange)="onPatientSelectionChange($event.value)" multiple placeholder="{{ 'select_patient' | translate }}">
+             
+              <mat-option
+                *ngFor="let patient of uniquePatients"
+                [value]="patient"
+                >{{ patient }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>   
+    </div>
+  </div> -->
+
+  <div class="bottom_part">
+    <div class="calender_section">
+      <div class="app-calendar calender-correect">
+        <div class="calender_top">
+          <div class="left_part">
+            <div class="calender_date">
+              <h2>
+                {{ viewDate | calendarDate : view + "ViewTitle" : "en" }}
+              </h2>
+            </div>
+          </div>
+          <div class="right_part">
+            <div class="btn-group calender_view">
+              <div
+                class="btn btn-primary"
+                (click)="setView(CalendarView.Month)"
+                [class.active]="view === CalendarView.Month"
+              >
+                {{ "month" | translate }}
+              </div>
+              <div
+                class="btn btn-primary"
+                (click)="setView(CalendarView.Week)"
+                [class.active]="view === CalendarView.Week"
+              >
+                {{ "week" | translate }}
+              </div>
+              <div
+                class="btn btn-primary"
+                (click)="setView(CalendarView.Day)"
+                [class.active]="view === CalendarView.Day"
+              >
+                {{ "day" | translate }}
+              </div>
+            </div>
+
+            <div class="calender_nav">
+              <div class="btn-group">
+                <mat-icon
+                  mwlCalendarPreviousView
+                  [view]="view"
+                  [(viewDate)]="viewDate"
+                  (viewDateChange)="closeOpenMonthViewDay($event)"
+                  >arrow_back_ios</mat-icon
+                >
+                <mat-icon
+                  mwlCalendarNextView
+                  [view]="view"
+                  [(viewDate)]="viewDate"
+                  (viewDateChange)="closeOpenMonthViewDay($event)"
+                  >arrow_forward_ios</mat-icon
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="events | async; let events">
+          <div [ngSwitch]="view">
+            <context-menu #basicMenu>
+              <ng-template
+                [enabled]="appointId == 1 ? true : false"
+                contextMenuItem
+                let-item
+                (execute)="addEvent($event, '2')"
+              >
+                {{ "view_appointment" | translate }}
+              </ng-template>
+<!-- 
+              <ng-template
+                contextMenuItem
+                [enabled]="rescheduledId == 1 ? true : false"
+                contextMenuItem
+                let-item
+                (execute)="addEvent($event, '3')"
+              >
+                <span> {{ "reschedule" | translate }}</span>
+              </ng-template> -->
+
+              <ng-template
+                contextMenuItem
+                [enabled]="cancelledId == 1 ? true : false"
+                contextMenuItem
+                let-item
+                (execute)="addEvent($event, '4')"
+              >
+                {{ "cancel_appointment" | translate }}
+              </ng-template>
+
+              <!-- <ng-template
+                contextMenuItem
+                [enabled]="setRemainderId == 1 ? true : false"
+                contextMenuItem
+                let-item
+                (execute)="addEvent($event, '6')"
+              >
+                {{ "set_remainders" | translate }}
+              </ng-template> -->
+            </context-menu>
+
+            <mwl-calendar-month-view
+              [cellTemplate]="monthViewTemplate"
+              *ngSwitchCase="CalendarView.Month"
+              [refresh]="refresh"
+              [viewDate]="viewDate"
+              [events]="events"
+              [activeDayIsOpen]="activeDayIsOpen"
+              (eventTimesChanged)="eventTimesChanged($event)"
+              (eventClicked)="eventClicked($event.event)"
+              (beforeViewRender)="beforeMonthViewRender($event)"
+            >
+            </mwl-calendar-month-view>
+            <mwl-calendar-week-view
+              *ngSwitchCase="CalendarView.Week"
+              [viewDate]="viewDate"
+              [events]="events"
+              [refresh]="refresh"
+              (eventClicked)="handleEvent('Clicked', $event.event)"
+              (eventTimesChanged)="eventTimesChanged($event)"
+            >
+            </mwl-calendar-week-view>
+            <mwl-calendar-day-view
+              *ngSwitchCase="CalendarView.Day"
+              [viewDate]="viewDate"
+              [events]="events"
+              [refresh]="refresh"
+              (eventClicked)="handleEvent('Clicked', $event.event)"
+              (eventTimesChanged)="eventTimesChanged($event)"
+            >
+            </mwl-calendar-day-view>
+          </div>
+        </div>
+
+        <ng-template #monthViewTemplate let-day="day">
+          <div
+            [ngClass]="{
+              'is-available-cell-re': isBoolingDateAvailable(day.date)
+            }"
+          >
+            <div
+              class="custom-month-evnts-box"
+              *ngIf="day.events && day.events.length > 0"
+            >
+              <span class="month-day-num">{{ toDateString(day.date) }}</span>
+              <div class="calendar-data-wrap">
+                <div *ngFor="let e of day.events; let i = index">
+                  <div>
+                    <span
+                      [tooltip]="monthEvntsToolTip(e.title)"
+                      tooltip-class="month-title-tip-view"
+                      content-type="html"
+                      placement="top"
+                      class="cal-day-badge month-slots-custom"
+                      [ngClass]="getBgClass(i)"
+                    >
+                      <span *ngFor="let a of e.actions">
+                        <span
+                          (click)="monthViewActionCliked(a, e)"
+                          [innerHtml]="a.label"
+                        ></span>
+                      </span>
+
+                      <span
+                        (click)="onContextMenu($event, e)"
+                        class="month-event-txt-s crsr-ptr"
+                      >
+                        {{ e.title }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="custom-month-evnts-box"
+              *ngIf="day.events && day.events.length == 0"
+            >
+              <span class="month-day-num">{{ toDateString(day.date) }}</span>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="create_notification">
+  <ng-template #cancelappointmentcontent let-modal>
+    <div class="custome_modal notification_manage">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "cancel_appointment" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form_field_wrapper">
+                <label>{{ "cancellation_reason" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <textarea
+                    type="text"
+                    [(ngModel)]="resonText"
+                    [ngModelOptions]="{ standalone: true }"
+                    matInput
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "back" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="openVerticallyCentereddetale(addsecondsubsriber)"
+          >
+            {{ "cancel_appointment" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #addsecondsubsriber let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "you_want_cancel_appoinement" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="cancelAppointment()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

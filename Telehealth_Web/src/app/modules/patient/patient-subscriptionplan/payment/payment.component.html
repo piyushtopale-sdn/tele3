@@ -1,0 +1,183 @@
+<div class="payment">
+  <div class="payment_inner">
+    <div class="row">
+      <div class="left_part part col-md-6">
+        <div class="leftpart_inner">
+          <div class="section_wrap">
+            <div class="top_section">
+              <div class="project_title_wrap">
+                <mat-icon [routerLink]="['/patient/subscriptionplan/plan']"
+                  >west</mat-icon
+                >
+                <div class="project_logo">
+                  <img src="../../../../../assets/img/login_img.svg" />
+                </div>
+                <div class="project_title">
+                  {{ "test_project" | translate }}
+                </div>
+              </div>
+              <div class="plan_info">
+                <label
+                  >{{ "purchase" | translate }} "{{ planName }}"
+                  {{ "plane_for" | translate }} {{ planDuration }}
+                  {{ "duration" | translate }}</label
+                >
+                <div class="price">
+                  Plan Cost: {{ planCost | currency : "CFA "
+                  }}<span class="duration"> </span>
+                </div>
+              </div>
+            </div>
+            <div class="bottom_bar">
+              <ul class="list_wrapper">
+                <li>
+                  {{ "powered_by" | translate }}
+                  <b>{{ "strip" | translate }}</b>
+                </li>
+                <!-- <li>Terms</li>
+                                <li>Privacy</li> -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right_part part col-md-6">
+        <div class="rightpart_inner">
+          <div class="payment_form">
+            <div class="payment_form_inner">
+              <form [formGroup]="stripeTest">
+                <div class="payment_title">
+                  {{ "pay_with_card" | translate }}
+                </div>
+
+                <!-- <div class="form_field_wrapper">
+                                    <mat-form-field appearance="fill">
+                                        <input placeholder="amount" type="number" formControlName="amount" matInput>
+                                    </mat-form-field>
+                                </div> -->
+
+                <!-- <div class="form_field_wrapper card_info">
+                                    <label>Card Information</label>
+                                    <div class="card_info_field">
+                                        <mat-form-field class="card_no" appearance="fill">
+                                            <input type="number" placeholder="1234 1234 1234 1234" matInput>
+                                            <img class="pay_strip" src="/assets/img/payment_strip.png">
+                                        </mat-form-field>
+                                        
+                                        <div class="row">
+                                            <mat-form-field appearance="fill" class="col-sm-5 card_month_year">
+                                                <mat-select disableRipple>
+                                                    <mat-option value="">Select Month</mat-option>
+                                                    <mat-option value="1">01</mat-option>
+                                                    <mat-option value="2">02</mat-option>
+                                                    <mat-option value="3">03</mat-option>
+                                                    <mat-option value="4">04</mat-option>
+                                                    <mat-option value="5">05</mat-option>
+                                                    <mat-option value="6">06</mat-option>
+                                                    <mat-option value="7">07</mat-option>
+                                                    <mat-option value="8">08</mat-option>
+                                                    <mat-option value="9">09</mat-option>
+                                                    <mat-option value="10">10</mat-option>
+                                                    <mat-option value="11">11</mat-option>
+                                                    <mat-option value="12">12</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+
+                                            <mat-form-field appearance="fill" class="col-sm-5 card_month_year">
+                                                <mat-select disableRipple>
+                                                    <mat-option value="">Select Year</mat-option>
+                                                    <mat-option value="20">2020</mat-option>
+                                                    <mat-option value="21">2021</mat-option>
+                                                    <mat-option value="22">2022</mat-option>
+                                                    <mat-option value="23">2023</mat-option>
+                                                    <mat-option value="24">2024</mat-option>
+                                                    <mat-option value="25">2025</mat-option>
+                                                    <mat-option value="26">2026</mat-option>
+                                                    <mat-option value="27">2027</mat-option>
+                                                    <mat-option value="28">2028</mat-option>
+                                                    <mat-option value="29">2029</mat-option>
+                                                    <mat-option value="30">2030</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+
+
+                                            <mat-form-field class="col-sm-2 card_cvc" appearance="fill">
+                                                <input type="number" placeholder="CVC" matInput>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                <div class="form_field_wrapper">
+                  <label>{{ "name_on_card" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      formControlName="name"
+                      placeholder="{{ 'enter_your_name' | translate }}"
+                      matInput
+                    />
+                  </mat-form-field>
+                </div>
+
+                <div class="form_field_wrapper">
+                  <label>{{ "email" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      formControlName="email"
+                      placeholder="{{ 'enter_your_email' | translate }}"
+                      matInput
+                    />
+                  </mat-form-field>
+                </div>
+
+                <ng-container
+                  *ngIf="elementsOptions?.clientSecret as clientSecret"
+                >
+                  <ngx-stripe-payment [clientSecret]="clientSecret">
+                  </ngx-stripe-payment>
+                </ng-container>
+
+                <div class="form-btn primary_btn">
+                  <button (click)="pay()" class="btn btn-primary">
+                    {{ "subscribe" | translate }}
+                  </button>
+                  <!-- <button class="btn btn-primary"
+                                        (click)="openVerticallyCenteredpaymentcontent(paymentcontent)">{{ 'subscribe' | translate }}</button> -->
+                </div>
+
+                <div class="payment_desc">
+                  <p>{{ "payment_desc" | translate }}</p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ---------------------------------------Payment Successfull modal---------------------------------------- -->
+<div class="payment_succesfull">
+  <ng-template #paymentcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-body">
+        <div class="successfull_icon">
+          <img src="/assets/img/successfull.png" />
+        </div>
+        <div class="successfull_title">
+          {{ "payment" | translate }} <br />
+          {{ "successfull" | translate }}
+        </div>
+        <a
+          class="backtodashboard"
+          (click)="modal.dismiss('Cross click')"
+          [routerLink]="['/patient/dashboard']"
+          >{{ "go_to_dashboard" | translate }}</a
+        >
+      </div>
+    </div>
+  </ng-template>
+</div>

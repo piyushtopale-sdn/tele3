@@ -1,0 +1,620 @@
+<div class="step_counter_inner edit_profile_block login_time">
+  <div class="create_profile">
+    <h1 *ngIf="!pageForAdd">{{ "edit_doctor" | translate }}</h1>
+    <div class="create_profile_inner">
+      <div class="user_image_upload">
+        <input
+          class="upload_input"
+          id="file-input"
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event, 'profile')"
+        />
+        <div class="user_upload_block">
+          <span class="user_upload_wrapper">
+            <span class="user_upload_icon">
+              <img
+                class="img-fluid mb-4"
+                src="{{
+                  profileImage ? profileImage : 'assets/img/create_profile.png'
+                }}"
+              />
+              <span class="quick_view" *ngIf="profileImage ? true : false">
+                <mat-icon
+                  class="closeicon"
+                  (click)="removeSelectpic('profileImage')"
+                  >close</mat-icon
+                >
+              </span>
+            </span>
+          </span>
+          <span class="edit_upload_wrapper">
+            <span class="edit_upload_icon"
+              ><img src="../../../assets/img/edit_profile.svg"
+            /></span>
+          </span>
+        </div>
+      </div>     
+      <form [formGroup]="basicInfo">
+        <div class="form">
+          <div class="row">
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "first_name" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="first_name" />
+                </mat-form-field>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['first_name'].errors?.['required']"
+                  >{{ "enter_first_name" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "first_name_arabic" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="first_name_arabic" />
+                </mat-form-field>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['first_name_arabic'].errors?.['required']"
+                  >{{ "enter_first_name" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "middle_name" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="middle_name" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "middle_name_arabic" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="middle_name_arabic" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "last_name" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="last_name" />
+                </mat-form-field>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['last_name'].errors?.['required']"
+                  >{{ "enter_last" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "last_name_arabic" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="last_name_arabic" />
+                </mat-form-field>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['last_name_arabic'].errors?.['required']"
+                  >{{ "enter_last_name" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-8">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "address" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="{{ 'enter_address' | translate }}"
+                    formControlName="address"
+                    #address
+                  />
+                </mat-form-field>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['address'].errors?.['required']"
+                  >{{ "enter_address" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "neighborhood" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="neighborhood" />
+                </mat-form-field>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['neighborhood'].errors?.['required']"
+                  >{{ "enter_neighbourhood" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "country" | translate
+                  }}<span class="danger">*</span></label
+                >                
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="nationality" />
+                </mat-form-field> 
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['nationality'].errors?.['required']"
+                  >{{ "select_country" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "region" | translate }}</label>              
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="region" />
+                </mat-form-field> 
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['region'].errors?.['required']"
+                  >{{ "select_region" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "province" | translate }}</label>               
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="province" />
+                </mat-form-field> 
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['province'].errors?.['required']"
+                  >{{ "select_province" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "department" | translate }}</label>              
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="department" />
+                </mat-form-field> 
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['department'].errors?.['required']"
+                  >{{ "select_department" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "city" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="city" />
+                </mat-form-field> 
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['city'].errors?.['required']"
+                  >{{ "select_city" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "village" | translate }}</label>               
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="village" />
+                </mat-form-field> 
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['village'].errors?.['required']"
+                  >{{ "select_village" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "pincode" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="number" matInput formControlName="pincode" (input)="pinforceMaxLength($event)"
+                  />
+                </mat-form-field>
+              </div>
+              <span
+                class="text-danger"
+                *ngIf="f['pincode'].touched && f['pincode'].errors?.['pattern']"
+                >{{ "enter_pincode" | translate }}*</span
+              >
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "phone_number" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input
+                    type="mobile"
+                    (keypress)="numberFunc($event)"
+                    (paste)="numberFunc($event)"
+                    matInput
+                    formControlName="mobile"
+                    #mobile
+                    (focus)="onFocus()"
+                    (input)="onMobileInput($event)"
+                    ng2TelInput
+                    maxlength="11" 
+                    placeholder="XX-XXX-XXXX"
+                  />
+                </mat-form-field>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['mobile'].errors?.['required']"
+                  >{{ "enter_phone_number" | translate }}*</span
+                >
+                <span
+                  class="text-danger"
+                  *ngIf="f['mobile'].errors?.['pattern'] && f['mobile'].invalid"
+                >
+                  {{ "only_numbers_are_allowed" | translate }}*
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "email" | translate }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input type="email" matInput formControlName="email" />
+                </mat-form-field>               
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['email'].errors?.['required']"
+                  >{{ "enter_email" | translate }}*</span
+                >
+
+                <span
+                  class="text-danger"
+                  *ngIf="f['email'].errors?.['pattern'] && f['email'].invalid"
+                >
+                  {{ "please_enter_valid_email" | translate }}.
+                </span>
+              </div>
+            </div>            
+          </div>
+
+          <div  class="row">
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "date_of_birth" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input
+                    matInput
+                    [matDatepicker]="picker"
+                    formControlName="dob"
+                    [max]="maxDate"
+                    (focus)="picker.open()" 
+                    readonly  
+                    (input)="formatDate($event)"                    
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['dob'].errors?.['required']"
+                  >{{ "enter_date_of_birth" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "gender" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <!-- <mat-label>Sub-admin</mat-label> -->
+                  <mat-select disableRipple formControlName="gender">
+                    <mat-option value="male">{{
+                      "male" | translate
+                    }}</mat-option>
+                    <mat-option value="female">{{
+                      "female" | translate
+                    }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['gender'].errors?.['required']"
+                  >{{ "select_gender" | translate }}*</span
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-4 mb-3">
+              <div class="form_field_wrapper speciality-select-block">
+                <label>{{ "language" | translate }}</label>
+                <select2
+                  class="test"
+                  [overlay]="overlay"
+                  multiple="multiple"
+                  [limitSelection]="0"
+                  [minCountForSearch]="0"
+                  [data]="spokenLanguages"
+                  [(ngModel)]="selectedLanguages"
+                  formControlName="language"
+                  (update)="onSelectionChange($event)"
+                >
+                </select2>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['language'].errors?.['required']"
+                  >{{ "select_language" | translate }}*</span
+                >
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row">            
+            <!-- Speciality Field -->
+            <div class="col-sm-6 col-md-4 mb-3">
+             <div class="form_field_wrapper speciality-select-block">
+               <label>{{ "speciality" | translate }}<span class="danger">*</span></label>
+               <select2
+                 class="test"
+                 [overlay]="true"
+                 multiple="multiple"
+                 [limitSelection]="0"
+                 [minCountForSearch]="0"
+                 [data]="specialityListt"
+                 [(ngModel)]="selectedSpeciality"
+                 formControlName="speciality"
+                 (update)="onSpecialityChange($event)"
+               >
+               </select2>
+               <span
+                 class="text-danger"
+                 *ngIf="isSubmitted && f['speciality'].errors?.['required']"
+                 >{{ "select_speciality" | translate }}*</span>
+             </div>
+           </div>
+
+           <div class="col-sm-6 col-md-4 mb-3">
+             <div class="form_field_wrapper">
+               <label
+                 >{{ "designation" | translate
+                 }}<span class="danger">*</span></label
+               >
+               <select2
+                 [overlay]="overlay"
+                 [limitSelection]="0"
+                 [minCountForSearch]="0"
+                 [data]="deginationList"
+                 formControlName="designation"
+               >
+               </select2>
+               <span
+                 class="text-danger"
+                 *ngIf="isSubmitted && f['designation'].errors?.['required']"
+                 >{{ "select_designation" | translate }}*</span
+               >
+             </div>
+           </div>
+           <div class="col-sm-6 col-md-4 mb-3">
+             <div class="form_field_wrapper">
+               <label
+                 >{{ "years_of_experience" | translate
+                 }}<span class="danger">*</span></label
+               >
+               <mat-form-field appearance="fill">
+                 <input type="number" matInput formControlName="experience" />
+               </mat-form-field>
+               <span
+                 class="text-danger"
+                 *ngIf="isSubmitted && f['experience'].errors?.['required']"
+                 >{{ "enter_years_of_experience" | translate }}*</span
+               >
+             </div>
+           </div>     
+           <div class="col-sm-6 col-md-4 mb-3">
+             <div class="form_field_wrapper speciality-select-block">
+               <label>{{ "category" | translate }}</label>
+               <select2
+                 class="test"
+                 [overlay]="true"
+                 multiple="multiple"
+                 [limitSelection]="0"
+                 [minCountForSearch]="0"
+                 [data]="categoryListt"
+                 [(ngModel)]="selectedCategories"
+                 formControlName="categoryIds"
+                 (update)="onCategoryChange($event)"
+               >
+               </select2>
+               <!-- <span
+                 class="text-danger"
+                 *ngIf="isSubmitted && f['category'].errors?.['required']"
+                 >{{ "required" | translate }}*</span> -->
+             </div>
+           </div>
+         </div>
+
+          <div class="about_doctor divider">
+            <h2>{{ "about_doctor" | translate }}</h2>
+            <div class="row">
+              <div class="col-sm-12 col-md-12">
+                <div class="form_field_wrapper">
+                  <mat-form-field appearance="fill">
+                    <input type="text" matInput formControlName="aboutDoctor" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="about_doctor divider">
+            <h2>{{ "about_doctor_arabic" | translate }}</h2>
+            <div class="row">
+              <div class="col-sm-12 col-md-12">
+                <div class="form_field_wrapper">
+                  <mat-form-field appearance="fill">
+                    <input type="text" matInput formControlName="aboutDoctorArabic" />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="license divider" formGroupName="license_details">
+            <h2>{{ "license" | translate }}</h2>
+            <div class="row">
+              <div class="col-sm-12 col-md-4 mb-3 col-lg-4 col-xl-4 mb-3">
+                <div class="form_field_wrapper">
+                  <label
+                    >{{ "license_number" | translate
+                    }}<span class="danger">*</span></label
+                  >
+                  <mat-form-field appearance="fill">
+                    <input
+                      matInput
+                      formControlName="license_number"
+                      (input)="enforceMaxLength($event)"
+                      maxlength="20"
+                    />
+                  </mat-form-field>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && f['license_details'].get('license_number').errors?.['required']"
+                    >{{ "enter_license_number" | translate }}*</span
+                  >
+                  <span 
+                  class="text-danger"
+                  *ngIf="
+                    f['license_details'].get('license_number').touched &&
+                    f['license_details'].get('license_number').errors?.['pattern']
+                  "
+                >
+                  {{ "license_number_not_less_than_6_digits" | translate }}
+                </span>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-8 col-lg-8 col-xl-5 mb-3">
+                <div class="form_field_wrapper">
+                  <label>{{ "expiry_date" | translate }}<span class="danger">*</span></label>
+                  <div class="license_date">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <input
+                        matInput
+                        placeholder="{{ 'expiry_date' | translate }}"
+                        [matDatepicker]="picker3"
+                        formControlName="license_expiry_date"
+                        [min]="minDate"
+                        (input)="formatDate($event)"                        
+                      />
+                      <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                      <mat-datepicker #picker3></mat-datepicker>
+                    </mat-form-field>
+              
+                    <!-- Error message -->
+                    <div
+                      class="text-danger"
+                      *ngIf="basicInfo.get('license_details.license_expiry_date')?.hasError('matDatepickerMin') && basicInfo.get('license_details.license_expiry_date')?.touched"
+                    >
+                      License expiry date must be a future date.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-12">
+                <div class="form_field_wrapper">
+                  <div class="row form-field-insurance">
+                    <div class="upload_item col-sm-6 col-md-6 mb-4">
+                      <div class="upload_output" *ngIf="license_picture">
+                        <div class="upload_input_content">
+                          <img
+                            src="{{ license_picture }}"
+                            style="width: 200px"
+                          />
+                          <button
+                            class="btn btn-transparent closing-icon"
+                            (click)="removeSelectpic('license_picture')"
+                          >
+                            <mat-icon class="close icon">close</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="upload_item col-sm-6 col-md-6">
+                      <div class="upload_input">
+                        <div class="upload_input_content"  (click)="licenceUpload.click()">
+                          <img src="assets/img/add_box.svg"  />
+                          <label
+                            class="upload_text"                           
+                            >{{ "upload_cart_picture" | translate }}</label
+                          >
+                        </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          hidden
+                          (change)="onFileSelected($event, 'license')"
+                          #licenceUpload
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+         </div>
+      </form>
+    </div>
+  </div>
+  <div class="primary_btn btn_wrap">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      [routerLink]="['/individual-doctor/dashboard']"
+    >
+      {{ "cancel" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="handleSaveBasicInfo('yes')"
+    >
+      {{ "save_and_next" | translate }}
+    </button>
+  </div>
+</div>

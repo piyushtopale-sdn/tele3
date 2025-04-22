@@ -1,0 +1,425 @@
+@import '../../../../assets/css/variable/variable';
+
+.hospital_dashboad{
+    padding: 0;
+    .main_title{
+        font-size: $font_medium;
+        line-height: 22px;
+        color: #222222 !important;
+    }
+    .top_bar{
+        &.up_bar{
+            display: flex;
+            justify-content: flex-end;
+            margin: 0;
+        }
+        .content_wrap{
+            
+            .policy{
+                margin: 0 0 0 15px;
+                display: flex;
+                align-items: baseline;
+                justify-content: flex-start;
+                label{
+                    margin-right: 10px;
+                    margin-bottom: 0;
+                    // min-width: 90px;
+                }
+                .form_field_wrapper{
+                    .mat-form-field{
+                        .mat-form-field-wrapper{
+                            padding: 0;
+                            .mat-form-field-flex{
+                                background-color: #EBF0F4;
+                                border: 1px solid #EBF0F4;
+                                border-radius: 15px;
+                                .mat-form-field-infix{
+                                    .mat-select{
+                                        .mat-select-arrow-wrapper{
+                                            transform: translateY(0);
+                                        }
+                                        .mat-select-value{
+                                            color: $formfiled_color;
+                                            font-weight: 500;
+                                        }
+                                    }
+                                    width: 100px;
+                                }
+                            }
+                            .mat-form-field-underline{
+                                display: none;
+                            }
+                        }
+                    }
+                }
+   
+                &:last-child{
+                    .mat-form-field{
+                        .mat-form-field-wrapper{
+                            .mat-form-field-flex{
+                                .mat-form-field-infix{
+                                    width: 70px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    }
+
+    .counter_section {
+        .cust_col{
+            border-radius: 15px;
+            padding: 20px 15px;
+            position: relative;
+            .cust_col_inner{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 0 -5px;
+                .more{
+                    padding: 0;
+                    position: absolute;
+                    right: 10px;
+                    left: auto;
+                    top: 0;
+                    bottom: auto;
+                    color: $black_color;
+                }
+                .left{
+                    padding: 0 5px;
+                    .counter{
+                        font-weight: 600;
+                        font-size: 26px;
+                        line-height: 30px;
+                        color: $black_color;
+                        margin: 0 0 5px;
+                    }
+                    .counter_title{
+                        font-size: $font_small;
+                        line-height: 20px;
+                        color: $black_color;
+                        position: relative;
+                    }
+                }  
+                .right {
+                    padding: 0 5px;
+                    text-align: right;
+                    .counter_img{
+                        background: $white_color;
+                        box-shadow: 0px 0px 20px rgba(8, 48, 79, 0.08);
+                        border-radius: 15px;
+                        width: 50px;
+                        height: 50px;
+                        line-height: 50px;
+                        text-align: center;
+                        display: inline-block;
+                        img{
+                            width: 50%;
+                        }
+                    }
+                }
+            }
+            &.light_blue{
+                background: $light_blue;
+            }
+            &.light_green{
+                background: $light_green;  
+            }
+            &.light_orange{
+                background: $light_orange;
+            }
+            &.light_yellow{
+                background: $light_yellow;
+            }
+            &.light_violet{
+                background: $light_violet;
+            }
+            &.light_skyblue{
+                background: $light_skyblue;
+            }
+            &.light_orange{
+                background: #F6E5E5;
+            }
+        }
+        cursor: pointer;
+    }
+
+    .top_bar {
+        margin: 0 0 30px;
+        flex-direction: row;
+        .main_title{
+            font-size: 16px;
+        }
+        .icons{
+            display: flex;
+            align-items: center;
+            .mat-icon{
+                color: $black_color;
+                margin: 0 0 0 5px;
+            }
+            .more_action{
+                position: relative;
+                .btn {
+                    padding: 0;
+                    border: none;
+                    background: $white_color;
+                    height: 24px;
+                    &:hover{
+                        background: $white_color;
+                    }
+                }
+                .dropdown-menu{
+                    position: absolute !important;
+                    right: 0 !important;
+                    left: auto !important;
+                }
+            }
+        }
+    }
+    .cost_details_inner.common_space{
+        border-bottom: none;
+        border-right: 1px solid $common_border;
+    }
+      
+    .claim_by_month.common_space{
+        border-bottom: none;
+    }
+}   
+
+.main_title{
+    position: relative;
+    &::after{   
+        font-family: "Font Awesome 5 Free"; font-weight: 700; content: "\f05a";
+        color: rgba(0, 0, 0, 0.15);
+        margin: 0 0 0 8px;
+        cursor: pointer;
+    }
+}
+
+.top_bar{
+    .form_field_wrapper {
+        .mat-form-field {
+            .mat-form-field-wrapper {
+                padding-bottom: 0px; 
+            }
+        }
+    }
+}
+.hospital_dashboad {
+    .claim_details {
+         border-right: 1px solid #B6C8D6;
+        .common_space {
+            border-bottom: none;
+        }
+    }
+}
+
+
+
+@media screen and (max-width:1600px) {
+.hospitaldash .form_field_wrapper .mat-form-field .mat-form-field-wrapper .mat-form-field-flex {
+    padding: 5px 8px;
+}
+// .hospital_dashboad .top_bar {
+//     display: block;
+// }
+.hospital_dashboad .top_bar .content_wrap {
+    margin-top: 15px;
+}
+.claim_by_month .top_bar .icons {
+    margin: 0 0 0 15px;
+}
+}
+@media screen and (max-width:1440px) {
+    .claim_by_month .top_bar .icons {
+        margin-top: 10px;
+    }
+    .hospital_dashboad .hospitaldash .top_bar .content_wrap {
+        display: block;
+        align-items: center;
+    }
+    .hospital_dashboad .top_bar .content_wrap {
+        display: block;
+        margin-top: 15px;
+    }
+    .hospital_dashboad .top_bar.up_bar .content_wrap {
+        display: flex;
+        margin-top: 0;
+    }
+}
+
+@media screen and (max-width:1356px) {
+ 
+    .claim_by_month .top_bar .policy_wrapper {
+        margin-top: 25px;
+    }
+
+}
+
+
+@media screen and (max-width:1200px) {
+    .hospital_dashboad .top_bar {
+        display: block;
+    }
+}
+
+@media screen and (max-width:1199px) {
+    .hospital_dashboad .top_bar {
+        display: flex;
+    }
+    .hospital_dashboad .top_bar .content_wrap {
+        display: flex;
+    }
+    .hospital_dashboad .cost_details_inner.common_space {
+        border-right:none;
+    }
+}
+@media screen and (max-width:$desktop_medium) {
+    .hospital_dashboad .top_bar .content_wrap .policy{
+        flex-direction: column;
+    }
+    .hospital_dashboad .counter_section .cust_col .cust_col_inner{
+        min-height: 80px;
+    }
+    .hospital_dashboad .counter_section .cust_col .cust_col_inner .left .counter{
+        font-size: $font_large;
+    }
+    .amount_premiumtype .counter_section .cust_col .cust_col_inner{
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .amount_premiumtype .counter_section .cust_col .cust_col_inner .left .counter_title{
+        margin: 0 0 10px;
+    }
+    .hospital_dashboad .top_bar .content_wrap .policy label{
+        margin-bottom: 15px;
+    }
+   
+}
+@media screen and (max-width:$desktop) {
+    .hospital_dashboad .counter_section .cust_col .cust_col_inner{
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .hospital_dashboad .counter_section .cust_col .cust_col_inner .left .counter_title {
+        margin: 0 0 10px;
+    }
+    .hospital_dashboad .counter_section .cust_col .cust_col_inner {
+        min-height: 140px;
+    }
+}
+@media screen and (max-width:$large_phone) {
+    .hospital_dashboad .counter_section .col-md:not(:last-child) .cust_col {
+        margin: 0 0 20px;
+    }
+    .hospital_dashboad .chart_section .chart .common_space{
+        padding: 25px 30px;
+        border-bottom: 1px solid $common_border;
+    }
+    .hospital_dashboad .chart_section .chart .canvas_wrap{
+        width: 260px;
+        margin: 0 auto;    
+    }
+    .hospital_dashboad .top_bar .content_wrap{
+        flex-wrap: wrap;
+    }
+
+    .hospital_dashboad .top_bar{
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .hospital_dashboad .top_bar .content_wrap .policy {
+        align-items: center;
+    }
+
+    
+  
+}
+@media screen and (max-width:$medium_iphone) {
+   
+    .hospital_dashboad .top_bar .content_wrap .policy{   
+        margin-bottom: 15px;
+    }
+  
+    .hospital_dashboad .hospitaldash .top_bar {
+        display: block;
+    }
+    .hospital_dashboad .top_bar.up_bar {
+        justify-content: flex-start;
+    }
+    .hospital_dashboad .top_bar .content_wrap .policy {
+    //   align-items: flex-start;
+    align-items: center;
+    }
+    .claim_by_month .top_bar .policy_wrapper {
+        display: block;
+    }
+    .policy .form_field_wrapper {
+        width: 100%;
+    }
+    .hospital_dashboad .top_bar {
+        display: block;
+    }
+    .hospital_dashboad .top_bar .content_wrap {
+        display: block;
+    }
+   
+}
+@media screen and (max-width:$small_phone) {
+    .hospital_dashboad .top_bar .content_wrap {
+        flex-direction: column;
+        width: 100%;
+    }
+    .hospital_dashboad .top_bar .content_wrap .policy{
+        margin: 0 0 15px;
+        width: 100%;
+    }
+    .hospital_dashboad .top_bar .content_wrap .policy .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix,
+    .hospital_dashboad .top_bar .content_wrap .policy:last-child .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+        width: 230px;
+    }
+    .hospital_dashboad .top_bar .content_wrap .policy .form_field_wrapper{
+        width: 100%;
+    }
+    .claim_by_month .top_bar .policy_wrapper {
+        display: block;
+    }
+    .claim_by_month .top_bar .icons {
+        justify-content: end;
+    }
+}
+.pie_chart_main {
+    max-width: 250px;
+}
+
+.pie_outer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+@media screen and (max-width: $desktop_large) {
+    .revenue_management .claims_wrapper .claims .cust_col .cust_col_inner {
+        min-height: 100px;
+    }
+    
+}
+
+.month-year-wrapper {
+    display: flex;
+    gap: 16px; /* Space between month and year dropdowns */
+    width: 70%;
+  }
+  
+  .month-dropdown,
+  .year-dropdown {
+    flex: 1; /* Make both dropdowns take equal width */
+    min-width: 100px; /* Set a minimum width to control dropdown size */
+  }

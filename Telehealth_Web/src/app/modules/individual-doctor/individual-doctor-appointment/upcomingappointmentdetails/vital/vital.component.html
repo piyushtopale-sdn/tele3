@@ -1,0 +1,568 @@
+<div class="tab_content">
+  <div class="tab_content_item">
+    <div class="top_bar">
+      <div class="left_part">
+        <div class="main_title">{{ "vitals" | translate }}</div>
+      </div>
+      <div class="right_part_doctor">
+        <div class="datefilters d-flex align-items-center">
+          <div class="form_field_wrapper d-flex align-items-center gap-3">
+            <div class="main_title">{{ "from" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input
+                matInput
+                [matDatepickerFilter]="myFilter"
+                placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker1"
+                (dateChange)="onDateChange('from', $event.value)"
+                (click)="picker1.open()" readonly
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker1"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </div>
+  
+          <div class="form_field_wrapper d-flex align-items-center gap-3">
+            <div class="main_title">{{ "to" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input
+                matInput
+                [matDatepickerFilter]="myFilter"
+                placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker2"
+                (dateChange)="onDateChange('to', $event.value)"
+                (click)="picker1.open()" readonly
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker2"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+     
+        <div class="comparevitals d-flex align-items-center" *ngIf="userRole !== 'INDIVIDUAL_DOCTOR_ADMIN'">
+          <div class="primary_btn">
+            <!-- <button type="button" class="btn btn-primary">
+              {{ "compare_vitals" | translate }}
+            </button> -->
+          </div>
+          <div class="primary_btn">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="openVitalModal(vitalModal)"
+            >
+              {{ "add_vitals" | translate }}
+            </button>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+    <div class="bottom_bar">
+      <div class="table-wrap">
+        <div class="table-inner">
+          <table
+            mat-table
+            [dataSource]="vitalsdataSource"
+            class="mat-elevation-z8"
+          >
+            <!--Date Column -->
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "date" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.createdAt | date : "dd/MM/yyyy | HH:mm" }}
+              </td>
+            </ng-container>
+
+            <!--Height Column -->
+            <ng-container matColumnDef="height">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "height" | translate }} (cm)
+                <a (click)="openvitalGraph(vgraphpopup,'Height')">
+                  <img src="../../../../../assets/img/emr/height.svg">
+                </a>
+              </th>
+              <td mat-cell *matCellDef="let element" (dblclick)="opendetailsPopup(infopopup,element,'Height')">
+                {{ element?.height }}
+              </td>
+            </ng-container>
+
+            <!--Weight (LB) Column -->
+            <ng-container matColumnDef="weight">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "weight" | translate }} (kg)
+                <a (click)="openvitalGraph(vgraphpopup,'Weight')">
+                  <img src="../../../../../assets/img/emr/weight.svg">
+                </a>
+              </th>
+              <td mat-cell *matCellDef="let element" (dblclick)="opendetailsPopup(infopopup,element,'Weight')">
+               {{ element?.weight ? element?.weight : "" }}
+              </td>
+            </ng-container>
+
+            <!--H-Rate Column -->
+            <ng-container matColumnDef="hrate">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "h_rate" | translate }} (bpm)
+                <a (click)="openvitalGraph(vgraphpopup,'Heart-Rate')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-pulse-fill" viewBox="0 0 16 16">
+                    <path d="M1.475 9C2.702 10.84 4.779 12.871 8 15c3.221-2.129 5.298-4.16 6.525-6H12a.5.5 0 0 1-.464-.314l-1.457-3.642-1.598 5.593a.5.5 0 0 1-.945.049L5.889 6.568l-1.473 2.21A.5.5 0 0 1 4 9z"/>
+                    <path d="M.88 8C-2.427 1.68 4.41-2 7.823 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C11.59-2 18.426 1.68 15.12 8h-2.783l-1.874-4.686a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8z"/>
+                  </svg>
+                </a>
+              </th>
+              <td mat-cell *matCellDef="let element" (dblclick)="opendetailsPopup(infopopup,element,'Heart-Rate')">
+               {{ element?.h_rate }}
+              </td>
+            </ng-container>
+
+            <!--BMI Column -->
+            <ng-container matColumnDef="bmi">
+              <th mat-header-cell *matHeaderCellDef>{{ "bmi" | translate }}
+                <a (click)="openvitalGraph(vgraphpopup,'BMI')">
+                  <img src="../../../../../assets/img/emr/bmi.svg">
+                </a>
+              </th>
+              <td mat-cell *matCellDef="let element" (dblclick)="opendetailsPopup(infopopup,element,'BMI')">
+                {{ element?.bmi ? element?.bmi : "" }}
+              </td>
+            </ng-container>
+
+            <!-- BP(H/L) -->
+            <ng-container matColumnDef="bpsystolic">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "bp_systolic" | translate }} (mmGH)
+                <a (click)="openvitalGraph(vgraphpopup,'BP Systolic')">
+                  <img src="../../../../../assets/img/emr/bp.svg">
+                </a>
+              </th>
+              <td mat-cell *matCellDef="let element" (dblclick)="opendetailsPopup(infopopup,element,'BP Systolic')">
+                 {{ element?.bp_systolic }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="bpdiastolic">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "bp_diastolic" | translate }} (mmGH)
+                <a (click)="openvitalGraph(vgraphpopup,'BP Diastolic')">
+                  <img src="../../../../../assets/img/emr/bp.svg">
+                </a>
+              </th>
+              <td mat-cell *matCellDef="let element" (dblclick)="opendetailsPopup(infopopup,element,'BP Diastolic')">
+                 {{ element?.bp_diastolic }}
+              </td>
+            </ng-container>
+
+            <!-- Pulse -->
+            <ng-container matColumnDef="pulse">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "pulse" | translate }} (bpm)
+                <a (click)="openvitalGraph(vgraphpopup,'Pulse')">
+                  <img src="../../../../../assets/img/emr/pulse 1.svg">
+                </a>
+              </th>
+              <td mat-cell *matCellDef="let element" (dblclick)="opendetailsPopup(infopopup,element,'Pulse')">
+                {{ element?.pulse }}
+              </td>
+            </ng-container>
+
+            <!-- Temp(°F) -->
+            <ng-container matColumnDef="temp">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "temp(c)" | translate }}
+                <a (click)="openvitalGraph(vgraphpopup,'Temperature')">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-thermometer-high" viewBox="0 0 16 16">
+                    <path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V2.5a.5.5 0 0 1 1 0v8.585a1.5 1.5 0 0 1 1 1.415"/>
+                    <path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1"/>
+                  </svg>
+                </a>
+              </th>
+              <td mat-cell *matCellDef="let element" (dblclick)="opendetailsPopup(infopopup,element,'Temperature')">
+                {{ element?.temp }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="blood_glucose">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "blood_glucose" | translate }} (mg/dL)
+                <a (click)="openvitalGraph(vgraphpopup,'Blood Glucose')">
+                  <img src="../../../../../assets/img/emr/BGlu.svg">
+                </a>
+              </th>
+              <td mat-cell *matCellDef="let element" (dblclick)="opendetailsPopup(infopopup,element,'Blood Glucose')">
+                {{ element?.blood_glucose }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "action" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <a class="svgicon" (click)="openVerticallyCenteredsecond(deletePopup, element._id)" *ngIf="userRole !== 'INDIVIDUAL_DOCTOR_ADMIN'"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="16"
+                    viewBox="0 0 14 16"
+                    fill="none"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z"
+                    /></svg></a>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="vitalsdisplayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: vitalsdisplayedColumns"
+            ></tr>
+          </table>
+        </div>
+        <div *ngIf="vitalsdataSource?.length === 0" class="text-center">
+          <b>{{ "no_record_found" | translate }}</b>
+        </div>
+        <mat-paginator
+          class="pagination"
+          [length]="totalLength"
+          (page)="handlePageEvent($event)"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 20, 50, 100]"
+          showFirstLastButtons
+          aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="primary_btn btn_consultation">
+    <button class="btn btn-primary">Start Consultation</button>
+  </div> -->
+</div>
+
+<!-- ---------------------------------------Add Vital Model ---------------------------------------- -->
+<ng-template #vitalModal let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{ "add_vitals" | translate }}</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="vitalForm">
+        <div class="modal_content1" style="border: 1px solid rgba(228, 228, 228, 0.9);">
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>{{ "vitals" | translate }}</th>
+                    <th>{{ "values" | translate }}</th>
+                    <th>{{ "reference_ranges" | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ "height" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="height"  style="text-align: center"/>
+                      </mat-form-field>
+                      <mat-error
+                      *ngIf="
+                        vitalForm.get('height').invalid &&
+                        vitalForm.get('height').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>                  
+                    </td>
+                    <td *ngIf="patientGender == heightRange?.gender; else defaultHeight">
+                      {{ heightRange?.low }} cms - {{ heightRange?.high }} cms
+                    </td>
+                    <ng-template #defaultHeight>
+                      <td>{{"163.2 cms - 193.6 cms"  | translate}}</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "weight" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="weight"  style="text-align: center"/>
+                      </mat-form-field>
+                      <mat-error
+                      *ngIf="
+                        vitalForm.get('weight').invalid &&
+                        vitalForm.get('weight').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                    </td>
+                    <td *ngIf="patientGender == weightRange?.gender; else defaultWeight">
+                      {{ weightRange?.low }} kgs - {{ weightRange?.high }} kgs
+                    </td>
+                    <ng-template #defaultWeight>
+                      <td>{{ " 30 kgs - 80 kgs" | translate }} kgs</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "heart_rate" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="h_rate"   style="text-align: center"/>
+                      </mat-form-field>
+                      <mat-error
+                      *ngIf="
+                        vitalForm.get('h_rate').invalid &&
+                        vitalForm.get('h_rate').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                    </td>
+                    <td *ngIf="patientGender == HeartRateRange?.gender; else defaultHeartRate">
+                      {{ HeartRateRange?.low }} bpm - {{ HeartRateRange?.high }} bpm
+                    </td>
+                    <ng-template #defaultHeartRate>
+                      <td>{{ HeartRateRange?.low }} bpm - {{ HeartRateRange?.high }} bpm</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "bmi" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput  formControlName="bmi" style="text-align: center" />
+                      </mat-form-field>                     
+                    </td>
+                    <!-- <td>{{ bpiRange?.low }} - {{ bpiRange?.high }}</td> -->
+                    <td>{{"18.5 - 24.9" | translate}}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ "bp_systolic" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="bp_systolic"  style="text-align: center"/>
+                      </mat-form-field>                     
+                    </td>
+                    <td *ngIf="patientGender == bloodPressureSystolic?.gender; else defaultBPS">
+                      {{ bloodPressureSystolic?.low }} mmHg - {{ bloodPressureSystolic?.high }} mmHg
+                    </td>
+                    <ng-template #defaultBPS>
+                      <td>{{ bloodPressureSystolic?.low }} mmHg - {{ bloodPressureSystolic?.high }} mmHg</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "bp_diastolic" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="bp_diastolic"  style="text-align: center"/>
+                      </mat-form-field>                      
+                    </td>
+                    <td *ngIf="patientGender == bloodPressureBPDiastolic?.gender; else defaulBPD">
+                      {{ bloodPressureBPDiastolic?.low }} mmHg - {{ bloodPressureBPDiastolic?.high }} mmHg
+                    </td>
+                    <ng-template #defaulBPD>
+                      <td>{{ bloodPressureBPDiastolic?.low }} mmHg - {{ bloodPressureBPDiastolic?.high }} mmHg</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "pulse" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="pulse"  style="text-align: center"/>
+                      </mat-form-field>                     
+                    </td>
+                    <td *ngIf="patientGender == pulseRange?.gender; else defaultPulse">
+                      {{ pulseRange?.low }} bpm - {{ pulseRange?.high }} bpm
+                    </td>
+                    <ng-template #defaultPulse>
+                      <td>{{ pulseRange?.low }} bpm - {{ pulseRange?.high }} bpm</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "temp(c)" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="temp"  style="text-align: center"/>
+                      </mat-form-field>                     
+                    </td>
+                    <td *ngIf="patientGender == temperatureRange?.gender; else defaultTemp">
+                      {{ temperatureRange?.low }} °C - {{ temperatureRange?.high }} °C
+                    </td>
+                    <ng-template #defaultTemp>
+                      <td>{{ temperatureRange?.low }} °C - {{ temperatureRange?.high }} °C</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "blood_glucose" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="blood_glucose"  style="text-align: center"/>
+                      </mat-form-field>                     
+                    </td>
+                    <td *ngIf="patientGender == bloodGlucoseRange?.gender; else defaultBG">
+                      {{ bloodGlucoseRange?.low }} mg/dL - {{ bloodGlucoseRange?.high }} mg/dL
+                    </td>
+                    <ng-template #defaultBG>
+                      <td>{{ bloodGlucoseRange?.low }} mg/dL - {{ bloodGlucoseRange?.high }}  mg/dL</td>
+                      <!-- <td>{{"70 mg/dL- 100 mg/dL" | translate}}</td> -->
+                    </ng-template>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="primary_btn d-flex justify-content-center mt-3">
+          <button type="button" class="btn btn-secondary" (click)="closePopup()">{{ "cancel" | translate }}</button>
+          <button type="submit" class="btn btn-primary" (click)="handleAddVitals()">{{ "save" | translate }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+<!--------------------------Delete modal--------------------------->
+<ng-template #deletePopup let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "you_want_to_delete_this_vital" | translate }}.</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="deleteVitals()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<!-- ----------------------graph----------------------------------- -->
+<ng-template #vgraphpopup let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="vitalsdataSource.length > 0">
+        <h4>{{ graphType }}</h4>
+        <canvas baseChart
+        [datasets]="lineChartData"
+        [labels]="lineChartLabels"
+        [options]="lineChartOptions"
+        [legend]="true"
+        [type]="'line'">
+      </canvas>
+      
+        </div>
+        <div *ngIf="vitalsdataSource?.length === 0" class="text-center">
+          <b>{{ "no_record_found" | translate }}</b>
+        </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #infopopup let-modal>
+  <div class="infopopup-modal">
+    <div class="infopopup-header">
+      <div class="d-flex flex-column">
+        <h2>
+          {{infoLabel}}
+          <span *ngIf="unit"> {{unit}}</span>
+        </h2>
+      <p class="modal-date m-0">{{currentDate | date: 'dd/MM/YYYY'}}</p>
+      </div>
+      <button type="button" class="d-block close-btn" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body m-0">
+      <div class="card">
+        <div class="row">
+          <div class="col">
+            <p><strong>{{"current_value" | translate}}:</strong> {{currentValue}} {{unit}}</p>
+          </div>
+        </div>
+        <ng-container *ngIf="infoLabel !== 'BMI'">
+
+          <div class="row">
+            <div class="col" *ngIf="criticalHigh">
+              <p><strong>{{ "critical_high" | translate}}:</strong> {{criticalHigh ? criticalHigh : "-"}} {{unit}}</p>
+            </div>
+            <div class="col" *ngIf="criticalLow">
+              <p><strong>{{ "critical_low" | translate}}:</strong> {{criticalLow ? criticalLow : "-"}} {{unit}}</p>
+            </div>
+           
+          </div>
+          <div class="row">
+            <div class="col" *ngIf="normalHigh">
+              <p><strong>{{"high" | translate}}:</strong> {{normalHigh ? normalHigh: "-"}} {{unit}}</p>
+            </div>
+            <div class="col" *ngIf="normalLow">
+              <p><strong>{{"low" | translate}}:</strong> {{normalLow ? normalLow :"-"}} {{unit}}</p>
+            </div>          
+          </div>
+      </ng-container>
+
+        <ng-container  *ngIf="infoLabel === 'BMI'" >       
+          <div class="row">         
+          <div class="col">
+            <p><strong>{{"low" | translate}}:</strong> {{ "18.5" | translate }}</p>
+          </div>  
+          <div class="col" >
+            <p><strong>{{"obese" | translate}}:</strong> {{"above_30" | translate}}</p>
+          </div>        
+        </div>
+        <div class="row">
+          <div class="col" >
+            <p><strong>{{"overweight" | translate}}:</strong> {{"between_25_and_29.9" | translate}}</p>
+          </div>
+          <div class="col">
+            <p><strong>{{"normal" | translate}}:</strong> {{"between_18.5_and_24.9" | translate}}</p>
+          </div>          
+        </div>
+        </ng-container>        
+      </div>      
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,150 @@
+@import '../../../../../assets/css/variable/variable';
+.material-icons{
+    cursor: pointer;
+}
+.staff_management {
+    .top_bar {
+        margin: 0 0 35px;
+        .left_part {
+            display: flex;
+            .search_bar {
+                .input-group {
+                    background: #F6F8FC;
+                    border-radius: 6px;
+                    .form-control {
+                        border: none;
+                        background-color: transparent;
+                        // padding: 12px 12px 12px 0;
+                        width: 210px;
+                        &::placeholder {
+                            font-weight: 400;
+                            font-size: $font_small;
+                            line-height: 24px;
+                        }
+                        &:focus {
+                            box-shadow: none;
+                        }
+                    }
+                    .btn {
+                        padding: 0;
+                        border: none;
+                        .mat-icon {
+                            line-height: 50px;
+                            height: 50px;
+                            width: 50px;
+                            color: #9B9B9B;
+                            font-size: 24px;
+                        }
+                    }
+                }
+            }
+            .content_wrap {
+                .policy {
+                    margin: 0 0 0 20px;
+                    width: 300px;
+                    label {
+                        margin-right: 12px;
+                    }
+                    .mat-form-field {
+                        .mat-form-field-wrapper {
+                            padding: 0;
+                            .mat-form-field-flex {
+                                background-color: #EBF0F4;
+                                border: 1px solid #EBF0F4;
+                                .mat-form-field-infix {
+                                    width: 200px;
+                                    .mat-select {
+                                        .mat-select-value {
+                                            color: $formfiled_color;
+                                            font-weight: 500;
+                                        }
+                                    }
+                                }
+                            }
+                            .mat-form-field-underline {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.speciality-select-block {
+    .select2-label ~ .select2-container > div > .select2-selection--multiple ul {
+        overflow: auto !important;
+        position: relative;
+        z-index: 10;
+        height: 50px;
+    }
+}
+.edit_staff {
+    z-index: 999;
+    .modal-dialog {
+        .modal-body {
+            .primary_btn {
+                margin-top: 10px;
+            }
+        }
+    }
+}
+.edit_staffnew
+{
+    z-index: 999;
+}
+.modal-backdrop {
+    /* Your custom styles here */
+   z-index: 999 !important;
+    /* Add any other styles you want to apply to the backdrop */
+  }
+
+  .speciality-select-block {
+    ::ng-deep {
+        .select2-label ~ .select2-container > div > .select2-selection--multiple {
+            ul {
+                width: 400px !important;
+                overflow: auto !important;
+                position: relative;
+                z-index: 10;
+                height: 50px;
+                li {
+                    height: 35px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width:$desktop) {
+    .staff_management .top_bar {
+        flex-direction: column;
+    }
+    .staff_management .top_bar .right_part {
+        margin-top: 20px;
+    }
+}
+
+@media screen and (max-width:$large_phone) {
+    .staff_management .top_bar .left_part {
+        flex-direction: column;
+    }
+    .staff_management .top_bar .left_part .content_wrap .policy {
+        margin: 0;
+        width: 100%;
+    }
+    .staff_management .top_bar .left_part .primary_btn {
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width:$medium_phone) {
+    .staff_management .top_bar .left_part .content_wrap .policy .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+        width: 100%;
+    }
+    .staff_management .top_bar .left_part .content_wrap .mat-form-field {
+        display: block;
+    }
+}

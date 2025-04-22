@@ -1,0 +1,60 @@
+<div class="login entercode">
+    <div class="login_inner">
+        <div class="row">
+            <div class="left_part part col-md-6">
+                <div class="leftpart_inner">
+                    <div class="logo"  (click)="goToHomePage()"  style="cursor: pointer">
+                        <img src="../../../../assets/img/logo.svg" style=" height: 100px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="right_part part col-md-6">
+                <div class="lang d-flex justify-content-end me-3">
+                    <app-language></app-language>
+                </div>
+                <div class="rightpart_inner get_code_screen">
+                    <div class="login_form">
+                        <div class="login_form_inner">
+                            <form>
+                                <div class="keyimg">
+                                    <div class="circle-key-img"  (click)="goToHomePage()"  style="cursor: pointer">                                    
+                                        <img src="../../../../assets/img/entercode.svg">
+                                    </div>
+                                </div>
+                                <div class="login_title">{{ "enter_code" | translate }}</div>
+                                <div class="title_wrapper">
+                                    <div class="form_desc">{{ "verification_code_sent_on" | translate }} {{otpContext}}</div>
+                                </div>
+                                <div class="form_field_wrapper otpview">
+                                    <ng-otp-input #ngOtpInput (onInputChange)="onOtpChnage($event)" [config]="config">
+                                    </ng-otp-input>
+
+                                </div>
+
+
+                                <div class="form-btn primary_btn">
+                                    <button type="submit" (click)="verifyOtp(ngOtpInput)" [disabled]="isDisabled"
+                                        class="login_btn btn btn-primary">{{ "verify" | translate }}</button>
+                                </div>
+
+
+                                <div class="signup_section">
+                                    <div class="signup">{{ "did_not_receive_code" | translate }} <a class="signup_link en-doctor" style="font-size: 16px;"
+                                        (click)="resendOtpDetails()"   [class.disabled]="isResendDisabled"
+                                        [attr.disabled]="isResendDisabled ? true : null">{{ "resend_code" | translate }}</a></div>
+                                </div>
+
+                                <div class="back_section">
+                                    <a [routerLink]="['/individual-doctor/login']">
+                                        <mat-icon>keyboard_backspace</mat-icon>{{ "back_to_log_in" | translate }}
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

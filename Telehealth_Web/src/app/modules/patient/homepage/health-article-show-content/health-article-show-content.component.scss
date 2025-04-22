@@ -1,0 +1,48 @@
+@import '../../../../../assets/css/variable/variable';
+.back_button {
+    display: flex;
+    justify-content: flex-end;
+  }
+.main_section {
+    margin-top: 40px;   
+}
+
+.article-main-section {
+    .article-data-block {
+        width: calc(100% - 200px);
+        @media screen and (max-width: 768px) {
+            width: 100%;
+            margin: 20px 0 0;
+        }
+        p {
+            color: $black_color;
+            font-size: 15px;
+            margin: 0;
+            ::ng-deep {
+                p {
+                    &:empty {
+                        display: none;
+                    }
+                    br {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+    .article-detail-wrap {
+        .img-block {
+            width: 170px;
+            height: 170px;
+            margin: 0 30px 0 0;
+            border-radius: 5px;
+            overflow: hidden;
+            @media screen and (max-width: 768px) {
+                margin: 0 auto;
+            }
+            img {
+                width: 100%;
+            }
+        }
+    }
+}

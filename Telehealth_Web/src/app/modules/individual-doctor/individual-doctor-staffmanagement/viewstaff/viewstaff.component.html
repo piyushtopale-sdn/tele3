@@ -1,0 +1,526 @@
+<div class="staff_management dashboard_main_content login_time">
+  <div class="top_bar">
+    <div class="left_part">
+      <div class="search_bar common_content">
+        <div class="input-group">
+          <button class="btn search-btn">
+            <mat-icon>search</mat-icon>
+          </button>
+          <input type="search" class="form-control" placeholder="{{ 'search' | translate }}" aria-label="Search"
+            (search)="handleSearch($event)" (keyup)="handleSearch($event)" [(ngModel)]="searchText" />
+        </div>
+      </div>
+      <div class="content_wrap">
+        <div class="policy">          
+          <div class="form_field_wrapper">
+            <select2 placeholder="{{ 'select_role' | translate }}" [limitSelection]="0" [minCountForSearch]="0"
+              [overlay]="overlay" [data]="staffRole" [(ngModel)]="filterByrole"
+              (update)="handleSearchCategory($event, 'role')" [placeholder]="'Select a role'">
+            </select2>
+          </div>
+        </div>
+      </div>
+      <div class="primary_btn">
+        <button type="button" class="btn btn-link" (click)="clearFilter()">
+          {{ "clear_all" | translate }}
+        </button>
+      </div>
+    </div>
+    <div class="right_part">
+      <div class="primary_btn">
+        <ng-container *ngIf="giveInnerPermission('add_staff')">
+          <button type="button" class="btn btn-primary" (click)="addStaff()">
+            <a class="btn_svg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                  d="M10.9911 5.18461C10.9911 7.56399 9.04407 9.47078 6.61442 9.47078C4.18565 9.47078 2.2377 7.56399 2.2377 5.18461C2.2377 2.80522 4.18565 0.898438 6.61442 0.898438C9.04407 0.898438 10.9911 2.80522 10.9911 5.18461ZM0 14.3242C0 12.1216 3.04697 11.5706 6.6144 11.5706C10.2012 11.5706 13.2288 12.1406 13.2288 14.3449C13.2288 16.5475 10.1818 17.0986 6.6144 17.0986C3.0276 17.0986 0 16.5285 0 14.3242ZM12.7562 5.26229C12.7562 6.47398 12.3845 7.6046 11.7329 8.54376C11.6651 8.64035 11.725 8.77057 11.843 8.79127C12.0068 8.81801 12.175 8.83439 12.3467 8.83784C14.0551 8.88182 15.5883 7.80468 16.0119 6.18248C16.6397 3.7755 14.7975 1.61431 12.4506 1.61431C12.1961 1.61431 11.9522 1.64018 11.7144 1.68761C11.6818 1.69451 11.6466 1.71003 11.629 1.73763C11.6061 1.77299 11.6228 1.8187 11.6457 1.84888C12.3511 2.81737 12.7562 3.99628 12.7562 5.26229ZM15.5856 10.5304C16.734 10.7503 17.4887 11.1979 17.8013 11.8508C18.0663 12.3855 18.0663 13.0064 17.8013 13.5411C17.3231 14.5518 15.7802 14.877 15.1805 14.9606C15.0564 14.9779 14.9568 14.8744 14.9701 14.7519C15.2765 11.9508 12.8398 10.6227 12.2093 10.3174C12.1829 10.3027 12.1767 10.282 12.1793 10.2682C12.1811 10.2596 12.1926 10.2458 12.2128 10.2432C13.5769 10.2174 15.044 10.4011 15.5856 10.5304Z" />
+              </svg></a>{{ "add_staff" | translate }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom_bar">
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="staffname">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('profileinfos.name')">
+              {{ "staff_name" | translate }}
+              <span *ngIf="sortColumn === 'profileinfos.name'" class="material-icons sorticon">{{ sortIconClass
+                }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.staffname }}
+            </td>
+          </ng-container>
+
+          <!-- User Name Column -->
+          <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "user_name" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.username }}
+            </td>
+          </ng-container>
+
+          <!--Role Column -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('roles.name')">
+              {{ "role" | translate }}
+              <span *ngIf="sortColumn === 'roles.name'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.role }}
+            </td>
+          </ng-container>
+
+          <!--Phone Column -->
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('portalusers.mobile')">
+              {{ "phone" | translate }}
+              <span *ngIf="sortColumn === 'portalusers.mobile'" class="material-icons sorticon">{{ sortIconClass
+                }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.phone }}
+            </td>
+          </ng-container>
+
+          <!--Date Joined Column -->
+          <ng-container matColumnDef="datejoined">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('doj')">
+              {{ "date_joined" | translate }}
+              <span *ngIf="sortColumn === 'doj'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.doj | date : "dd-MM-YYYY HH:mm" }}
+            </td>
+          </ng-container>
+
+          <!-- Active -->
+          <ng-container matColumnDef="active">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "active" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="checkbox">
+                <ng-container *ngIf="giveInnerPermission('active')">
+                  <mat-checkbox class="example-margin" [checked]="element?.is_active" (click)="
+                      openActionPopup(
+                        modalPopupStaff,
+                        element.id,
+                        'active',
+                        $event
+                      )
+                    ">
+                  </mat-checkbox>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Lock User -->
+          <!-- Lock User -->
+          <ng-container matColumnDef="lockuser">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "lock_user" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="toggel-slide">
+                <ng-container *ngIf="giveInnerPermission('lock_user')">
+                  <mat-slide-toggle [checked]="element?.is_locked" (click)="
+                      openActionPopup(modalPopupStaff, element.id, 'lock', $event)
+                    ">
+                  </mat-slide-toggle>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+
+          <!--Action column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "action" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="icon_group">
+                <ng-container *ngIf="giveInnerPermission('edit')">
+                  <a class="svgicon" (click)="
+                      openVerticallyCenterededitstaff(
+                        editstaffcontent,
+                        element.id
+                      )
+                    ">
+                    <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z" />
+                    </svg>
+                  </a>
+                </ng-container>
+
+                <ng-container *ngIf="giveInnerPermission('delete')">
+                  <a class="svgicon" (click)="
+                      openActionPopup(modalPopupStaff, element.id, 'delete')
+                    "><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z" />
+                    </svg></a>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <mat-paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)" [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+
+<!-- ---------------------------------------Edit Staff modal---------------------------------------- -->
+<div class="edit_staff">
+  <ng-template #editstaffcontent let-modal>
+    <div class="custome_modal login_time">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "edit_staff" | translate }}
+        </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="handleClose()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editStaff">
+          <div class="staff_profile_block">
+            <div class="user_image_upload">
+              <input class="ng-hide user_upload_input" (change)="onGroupIconChange($event)" accept="image/*"
+                id="input-file-id" type="file" />
+              <div class="user_upload_block">
+                <span class="user_upload_wrapper">
+                  <span class="user_upload_icon">
+                    <img src="{{
+                      staff_profile ? staff_profile : '/assets/img/create_profile.png'
+                    }}" />
+                    <span class="quick_view" *ngIf="staff_profile ? true : false">
+                      <mat-icon class="closeicon" (click)="removeSelectpic()">close</mat-icon>
+                    </span>
+                  </span>
+                </span>
+
+                <span class="edit_upload_wrapper">
+                  <span class="edit_upload_icon"><img src="../../../assets/img/edit_profile.svg" /></span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "date_of_joined" | translate }}</label>
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input matInput formControlName="doj" [matDatepicker]="picker1" (dateChange)="handleDOCChange()" />
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "first_name" | translate
+                  }}<span class="danger">*</span></label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput placeholder="{{ 'enter_first_name' | translate }}"
+                    formControlName="first_name" />
+                </mat-form-field>
+                <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['first_name'].errors?.['required']">
+                  {{ "first_name_is_required" | translate }}*
+                </span>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "first_name_arabic" | translate
+                  }}<span class="danger">*</span></label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput 
+                    formControlName="first_name_arabic" />
+                </mat-form-field>
+                <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['first_name_arabic'].errors?.['required']">
+                  {{ "field_is_required" | translate }}*
+                </span>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "middle_name" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput placeholder="{{ 'enter_middle_name' | translate }}"
+                    formControlName="middle_name" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "middle_name_arabic" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput
+                    formControlName="middle_name_arabic" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "last_name" | translate
+                  }}<span class="danger">*</span></label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput placeholder="{{ 'enter_last_name' | translate }}"
+                    formControlName="last_name" />
+                </mat-form-field>
+                <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['last_name'].errors?.['required']">
+                  {{ "last_name_is_required" | translate }}*
+                </span>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "last_name_arabic" | translate
+                  }}<span class="danger">*</span></label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput 
+                    formControlName="last_name_arabic" />
+                </mat-form-field>
+                <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['last_name_arabic'].errors?.['required']">
+                  {{ "field_is_required" | translate }}*
+                </span>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "date_of_birth" | translate
+                  }}<span class="danger">*</span></label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker"
+                    placeholder="{{ 'date_of_birth' | translate }}" formControlName="dob" />
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['dob'].errors?.['required']">
+                  {{ "date_of_birth_is_required" | translate }}*
+                </span>
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper speciality-select-block">
+                <label>{{ "spoken_Language" | translate }}</label>
+                <select2 class="test" [overlay]="overlay" multiple="multiple" [limitSelection]="0"
+                  [minCountForSearch]="0" [data]="spokenLanguages" [(ngModel)]="selectedLanguages"
+                  formControlName="language" (update)="onSelectionChange($event)">
+                </select2>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "address" | translate
+                  }}<span class="danger">*</span></label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput id="address" name="address"
+                    placeholder="{{ 'enter_address' | translate }}" formControlName="address" />
+                </mat-form-field>
+                <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['address'].errors?.['required']">
+                  {{ "address_is_required" | translate }}*
+                </span>
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "neighborhood" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput placeholder="{{ 'enter_neighbourhood' | translate }}"
+                    formControlName="neighbourhood" />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "country" | translate }}<span class="danger">*</span></label>
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_country' | translate)" matInput formControlName="country" />
+                </mat-form-field>  
+                <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['country'].errors?.['required']">
+                  {{ "select_country" | translate }}*
+                </span>
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "region" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_region' | translate)" matInput formControlName="region" />
+                </mat-form-field> 
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "province" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_province' | translate)" matInput formControlName="province" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "department" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_department' | translate)" matInput formControlName="department" />
+                </mat-form-field>  
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "city" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_city' | translate)" matInput formControlName="city" />
+                </mat-form-field>  
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "village" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_village' | translate)" matInput formControlName="village" />
+                </mat-form-field>  
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "pincode" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" placeholder="{{ 'enter_pincode' | translate }}" matInput
+                    formControlName="pincode" minlength="5"
+                    maxlength="6" />
+                </mat-form-field>
+              </div>
+            </div>            
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "email" | translate }}<span class="danger">*</span></label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput placeholder="{{ 'enter_email' | translate }}" formControlName="email" />
+                </mat-form-field>
+                <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['email'].errors?.['required']">
+                  {{ "enter_email" | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "phone_number" | translate
+                  }}<span class="danger">*</span></label>
+                <mat-form-field appearance="fill">
+                  <input type="text" id="mobile" maxlength="11" matInput (focus)="onFocus()" formControlName="mobile" ng2TelInput
+                  (input)="onMobileInput1($event)" placeholder="XX-XXX-XXXX"
+                    />
+                </mat-form-field>
+                <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['mobile'].errors?.['required']">
+                  {{ "enter_phone_number" | translate }}
+                </span>
+                <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['mobile'].errors?.['pattern']">
+                  {{ "enter_phone_number" | translate }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+              <div class="form_field_wrapper">
+                <label>{{ "role" | translate }}<span class="danger">*</span></label>
+
+                <select2 placeholder="{{ 'select_role' | translate }}" [limitSelection]="0" [minCountForSearch]="0"
+                  [overlay]="overlay" [data]="staffRole" [(ngModel)]="roleSelceted" formControlName="role">
+                </select2>
+                <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['role'].errors?.['required']">
+                  {{ "select_role" | translate }}*
+                </span>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+              <div class="form_field_wrapper speciality-select-block">
+                <label>
+                  {{ "specialty" | translate
+                  }}<span class="danger">*</span></label>
+                <select2 placeholder="{{ 'select_specialty' | translate }}" [limitSelection]="0" [minCountForSearch]="0"
+                  multiple="multiple" [overlay]="overlay" [data]="specialtyList" [(ngModel)]="specialitySelceted"
+                  formControlName="specialty" (update)="onSpecialityChange($event)">
+                </select2>
+              </div>
+            </div>
+            <div class="item col-md-12">
+              <div class="form_field_wrapper">
+                <label>{{ "about_staff" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <textarea matInput placeholder="{{ 'describe_about_staff' | translate }}*"
+                    formControlName="about_staff"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="primary_btn mt-4">
+          <button type="button" (click)="handleClose()" class="btn btn-secondary">
+            {{ "cancel" | translate }}
+          </button>
+          <button type="button" (click)="EditSraffDetails()" class="btn btn-primary">
+            {{ "update_staff" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-------------------------- Delete modal --------------------->
+
+<ng-template #modalPopupStaff let-modal>
+  <div class="custome_modal login_time">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ action.charAt(0).toUpperCase() + action.slice(1) }} Staff
+      </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="handleClose()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="row">
+          <p>
+            {{ "sure" | translate }} {{ action }} {{ "this_staff" | translate }}
+          </p>
+        </div>
+        <div class="primary_btn">
+          <button (click)="handleClose()" type="button" class="btn btn-secondary">
+            {{ "cancel" | translate }}
+          </button>
+          <button type="submit" (click)="submitAction()" class="btn btn-primary">
+            {{ "submit" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>

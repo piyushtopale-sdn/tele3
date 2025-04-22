@@ -1,0 +1,38 @@
+<div class="home_wrapper">
+  <app-header></app-header>
+  <div class="breadcum_wrapper" aria-label="breadcrumb">
+    <div class="container">
+      <div class="breadcrumb_title"> {{ type | titlecase }} </div>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/patient/homepage']">Home</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ type | titlecase }}
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="back_button mt-4 justify-content-start" [routerLink]="['/patient/homepage/articles']">
+    <div class="container">
+      <button class="btn btn-primary">{{ "back" | translate }}</button>
+    </div>
+  </div>
+
+  <div class="main_section article-main-section mb-3">
+    <div class="main_section_inner">
+      <div class="container">
+        <div class="article-detail-wrap d-flex flex-column flex-md-row">
+          <div class="img-block">
+            <img [src]="showImage" />
+          </div>
+          <div class="article-data-block">
+            <p [innerHTML]="showData"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

@@ -1,0 +1,146 @@
+@import '../../../../assets/css/variable/variable';
+
+.entercode {
+    .login_inner {
+        .left_part {
+            background-image: url(../../../../assets/img/code.svg);
+        }
+
+        .right_part {
+            .rightpart_inner {
+                form {
+                    width: 400px;
+
+                    .login_title {
+                        margin: 0 0 15px;
+                    }
+
+                    .title_wrapper {
+                        margin: 0 0 30px;
+                    }
+
+                    .form_field_wrapper {
+                        margin: 0 0 30px;
+
+                        .ng-otp-input-wrapper {
+                            text-align: center;
+
+                            .otp-input {
+                                text-align: center;
+                                font-weight: 500;
+                                font-size: 18px;
+                                line-height: 24px;
+                                letter-spacing: 0.02em;
+                                color: #000000;
+                                background: #F0F0F0;
+                                border: 1px solid #9E9E9E;
+                                border-radius: 8px;
+                                margin-right: 15px;
+                                width: 50px;
+                                height: 50px;
+
+                                &:last-child {
+                                    margin: 0;
+                                }
+
+                                &:focus-visible {
+                                    outline-color: $bodycolor;
+                                }
+                            }
+                        }
+                    }
+
+                    .back_section {
+                        p {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .get_code_screen .form_field_wrapper .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+        border-top-width: 4px;
+        padding: 4px 0 8px;
+        font-size: 16px;
+        display: flex !important;
+        justify-content: space-between;
+    }
+
+    .get_code_screen .mat-input-element {
+        background: #F0F0F0;
+        border: 1px solid #9E9E9E;
+        border-radius: 8px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .get_code_screen .form_field_wrapper .mat-form-field .mat-form-field-wrapper .mat-form-field-flex {
+        border: none;
+        padding: 0;
+    }
+
+    .back_section {
+        display: flex;
+        justify-content: center;
+        padding-top: 25px;
+        color: #000;
+
+        p {
+            display: flex;
+            align-items: center;
+
+        }
+    }
+}
+
+.circle-key-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #D6D9FB;
+    background: #FAFAFA;
+}
+
+.keyimg{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+.signup_link.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+@media screen and (max-width:$tablet) {
+    .entercode .login_inner .right_part .rightpart_inner .login_form_inner form {
+        width: 340px;
+    }
+
+    .entercode .login_inner .right_part .rightpart_inner form .form_field_wrapper .ng-otp-input-wrapper .otp-input {
+        margin-right: 8px;
+    }
+}
+
+@media screen and (max-width:$tablet) {
+    .entercode .login_inner .right_part .rightpart_inner .login_form_inner form {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:$small_phone) {
+    .entercode .login_inner .right_part .rightpart_inner form .login_title {
+        font-size: 25px;
+        line-height: 30px;
+    }
+
+    .entercode .login_inner .right_part .rightpart_inner form .form_field_wrapper .ng-otp-input-wrapper .otp-input {
+        width: 40px;
+        height: 40px;
+    }
+}

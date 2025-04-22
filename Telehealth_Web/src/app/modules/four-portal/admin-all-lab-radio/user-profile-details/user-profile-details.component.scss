@@ -1,0 +1,187 @@
+@import '../../../../../assets/css/variable/variable';
+
+.pharmacy_details{
+    h3{
+        font-size: 18px;
+        font-weight: 600;
+        color: rgba(12, 47, 73, 0.8);
+    }
+    .profile_data{
+        background: #ffffff;
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        background: #ffffff;
+        margin: 0 0 25px;
+        .profile_info{
+            position: relative; 
+            ul{
+                display: grid;
+                align-items: baseline;
+                grid-gap: 15px;
+                grid-template-columns: 320px repeat(3, 1fr);
+                border-bottom: 1px solid #C4CDEA;
+                margin-bottom: 0;
+                padding: 25px;
+                .col_item{
+                    display: flex;
+                    align-items: flex-start;
+                    min-height: 60px;
+                    .profile_image{
+                        width: 95px;
+                        height: 95px;
+                        margin: 0 20px 0 0;
+                        border-radius: 10px;
+                        overflow: hidden;
+                        display: inline-block;
+
+                        img {
+                            width: 100%;
+                            height: 100%;
+                            display: block;
+                        }
+                    }
+                    .profile_contact{
+                        width: calc(100% - 100px);
+                        .profile_title{
+                            font-size: 20px;
+                            font-weight: 600;
+                            line-height: 24px;
+                            letter-spacing: 0em;
+                            color: $linkcolor;
+                            margin: 0 0 15px;
+                        }
+                        .lable{
+                            font-size: 14px;
+                            font-weight: 400;
+                            line-height: 16px;
+                            letter-spacing: 0.05em;
+                            color: $bodyopacitylightcolor;
+                            margin: 0 0 6px;
+                        }
+                        .user_value{
+                            font-weight: 500;
+                            font-size: 14px;
+                            line-height: 20px;
+                            color: $linkcolor;
+                            letter-spacing: 0.05em;
+                            white-space: pre-wrap;
+                            word-break: break-all;
+                        }
+                    }
+                }
+                &:last-child{
+                    border-bottom:none;
+                    margin-bottom: 0;
+                }
+            }
+            p{
+                padding: 25px;
+            }
+            .row{
+                align-items: center;
+                padding: 25px 25px 0;            
+                .item_info{
+                    width: auto;
+                    min-width: 15%;
+                    margin: 0 0 20px;
+                    .user_img{
+                        width: 200px;
+                        height: 99px;
+                        border-radius: 15px;
+                        overflow: hidden;
+                    }
+                    label{
+                        font-weight: 400;
+                        margin: 0 0 5px;
+                    }
+                    .value{
+                        font-weight: 500;
+                        color: #26323C;
+                    }
+                }
+            }
+        }
+        &.bank_details{
+            .profile_info {
+                .user_img_wrap{
+                    display: flex;
+                    align-items: center;
+                    .user_img{
+                        border: 1px solid #B6C8D6;
+                        border-radius: 15px;
+                        width: 75px;
+                        height: 65px;
+                        line-height: 65px;
+                        margin: 0 15px 0 0;
+                        text-align: center;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+    .primary_btn{
+        justify-content: flex-end;
+    }
+    .hospital_img{
+        margin: 0 0 25px;
+    }
+
+
+}
+
+.license_img { 
+    width: 250px !important;
+    height: 150px !important;
+}
+
+@media screen and (max-width:$desktop) {
+    .pharmacy_details .profile_data .profile_info ul{
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .pharmacy_details .profile_data .profile_info ul .col_item{
+        min-height: 70px;
+    }
+
+}
+@media screen and (max-width:$large_phone) {
+    .pharmacy_details .profile_data .profile_info ul{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .pharmacy_details .profile_data .profile_info ul .col_item{
+        min-height: 55px;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .pharmacy_details .hospital_img .item{
+        width: 33.33%;
+        margin: 0 0 25px;
+    }
+    .pharmacy_details .profile_data .profile_info ul{
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+@media screen and (max-width:$medium_phone) {
+    .pharmacy_details .hospital_img .item{
+        width: 50%;
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .pharmacy_details .hospital_img .item{
+        width: 100%;
+    }
+    .pharmacy_details .profile_data .profile_info ul .profile_image_wrapper {
+        flex-direction: column;
+    }
+    .pharmacy_details .profile_data .profile_info ul .profile_image_wrapper .profile_image{
+        width: 70px;
+        height: 70px;
+        margin: 0 0 20px;
+    }
+}
+
+.button-container {
+    display: flex;
+    justify-content:flex-end;
+    margin-bottom: 1rem;
+  }

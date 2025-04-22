@@ -1,0 +1,186 @@
+<div class="patient_detail dashboard_main_content">
+  <div class="back_button mt-2">
+    <button class="btn btn-primary" (click)="handleBack()">
+      {{ "back" | translate }}
+    </button>
+  </div>
+  <div class="profile_data mt-2">
+    <div class="profile_info">
+      <div class="primary_btn"></div>
+      <ul class="profile_info_inner profile_info_with_img">
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="profile_title">
+              {{ centreDetails?.for_portal_user?.centre_name }}
+
+            </div>
+            <div class="lable">{{ "mobile_number" | translate }}</div>
+            <div class="user_value">
+              ({{centreDetails?.for_portal_user?.country_code}}) {{centreDetails?.for_portal_user?.phone_number
+              ?centreDetails?.for_portal_user?.phone_number : "-" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "email" | translate }}</div>
+            <div class="user_value">
+              {{centreDetails?.for_portal_user?.email ?centreDetails?.for_portal_user?.email : "-" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "address" | translate }}</div>
+            <div class="user_value">
+              {{ centreDetails?.address ? centreDetails?.address : "-" }}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+   <div class="table-container" *ngIf="testREsultDetails && testREsultDetails.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th> {{testName}}</th>
+          <th *ngFor="let result of testREsultDetails">
+            {{ result.updatedAt | date: 'dd/MM/yyyy' }}<br>{{ result.updatedAt | date: 'HH:mm' }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let procedure of getUniqueProcedures()">
+          <td>{{ procedure }} <mat-icon class="info-icon" (click)="openTestInfoPopup(labinfopopup, procedure)">info</mat-icon> </td>
+          <td *ngFor="let result of testREsultDetails">
+            <ng-container *ngIf="getResultForProcedure(result.manualResultData, procedure) as resultInfo">
+              <span 
+                [ngClass]="{
+                  'critical-high': resultInfo.flag === 'CH',
+                  'critical-low': resultInfo.flag === 'CL',
+                  '_high': resultInfo.flag === 'H',
+                  '_low': resultInfo.flag === 'L',
+                  'normal': resultInfo.flag === 'N'
+                }">
+                {{ resultInfo.data }} 
+              </span>
+              ({{ resultInfo.ref_range}})
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+      
+      
+    </table>
+  </div>
+
+</div>
+
+<div class="status-indicators justify-content-end mt-2">
+  <div class="indicator">
+    <span class="square criticalHigh"></span>
+    {{ "critical_high" | translate }}
+  </div>
+  <div class="indicator">
+    <span class="square criticalLow"></span>
+    {{ "critical_low" | translate }}
+  </div>
+  <div class="indicator">
+    <span class="square high"></span> {{ "high" | translate }}
+  </div>
+  <div class="indicator">
+    <span class="square low"></span> {{ "low" | translate }}
+  </div>
+  <div class="indicator">
+    <span class="square normal"></span> {{ "normal" | translate }}
+  </div>
+</div>
+
+<ng-template #labinfopopup let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ procedureName }}
+      </h4>
+      <button type="button" class="btn-close" aria-label="Close"  (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-container" style="border-radius: 8px; padding: 16px;">
+        <div class="top_bar" *ngIf="shouldShowGraph">
+          <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'" [legend]="true"></canvas>
+        </div>
+        <div class="spacer" style="height: 20px;"></div> <!-- Add space between the graph and the table -->
+        <div class="bottom_bar">
+          <div class="table-wrap">
+            <div class="table-inner d-flex flex-column mt-2">
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 medtableinfo">
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "date" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.updatedAt | date: "dd/MM/yyyy | hh:mm" }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="result">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "results" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.result ? element?.result : "-" }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="referenceRange">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "reference_ranges" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.referenceRange ? element?.referenceRange : "-" }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="flag">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "flags" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.flag ? element?.flag : "-" }}
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "status" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.status ? element?.status : "-" }}
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedLabColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedLabColumns"></tr>
+              </table>
+            </div>
+            <div *ngIf="dataSource?.length === 0" class="text-center mt-2">
+              <b>{{ "no_record_found" | translate }}</b>
+            </div>
+            <mat-paginator
+              class="pagination"
+              *ngIf="dataSource?.length > 0"
+              [length]="totalLength"
+              (page)="handlePageEvent($event)"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="[2, 5, 20, 50, 100]"
+              showFirstLastButtons
+              aria-label="Select page of periodic elements"
+            ></mat-paginator>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="procedure_Details?.length === 0" class="text-center mt-3">
+        <b>{{ "no_record_found" | translate }}</b>
+      </div>
+    </div>
+  </div>
+</ng-template>

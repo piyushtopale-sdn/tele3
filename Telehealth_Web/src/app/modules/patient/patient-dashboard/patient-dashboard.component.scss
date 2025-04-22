@@ -1,0 +1,318 @@
+@import '../../../../assets/css/variable/variable';
+
+
+.patient_dashboard{
+    padding: 0;
+    .counter_section {
+        &.common_space{
+            padding: 0;
+            .counter_item_wrap{
+                .main_title{
+                    margin: 0 0 20px;
+                }
+                .counter_item{
+                    border-right: 1px solid #B6C8D6;
+                    padding: 40px;
+                    &:last-child{
+                        border: none;
+                    }
+                    .row{
+                        margin-bottom: 35px;
+                        .cust_col{
+                            border-radius: 15px;
+                            padding: 20px 15px;
+                            position: relative;
+                            .cust_col_inner{
+                                display: flex;
+                                align-items:flex-start;
+                                flex-direction: column;
+                                margin: 0 -5px;
+                                .left{
+                                    padding: 0 5px;
+                                    display: flex;
+                                    align-items: center;
+                                    margin: 0 0 10px;
+                                    .counter_img{
+                                        background: $white_color;
+                                        box-shadow: 0px 0px 20px rgba(8, 48, 79, 0.08);
+                                        border-radius: 8px;
+                                        width: 40px;
+                                        min-width: 40px;
+                                        height: 40px;
+                                        line-height: 40px;  
+                                        text-align: center;
+                                        display: inline-block;
+                                        margin: 0 10px 0 0;
+                                        img{
+                                            width: 20px;
+                                        }
+                                    }
+                                    .counter_title{
+                                        font-size: $font_medium;
+                                        line-height: 20px;
+                                        color: $black_color;
+                                        word-break: break-word;
+                                    }
+                                }  
+                                .right {
+                                    padding: 0 5px;
+                                    text-align: right;
+                                    .counter{
+                                        font-weight: 600;
+                                        font-size: 20px;
+                                        line-height: 24px;
+                                        color: $black_color;
+                                    }
+                                }
+                            }
+                            &.bright_blue{
+                                background: $bright_blue;
+                            }
+                            &.light_red{
+                                background: $light_red;
+                            }
+                            &.light_blue{
+                                background: $light_blue;
+                            }
+                            &.dark_blue{
+                                background: $dark_blue;
+                            }
+                            &.light_green{
+                                background: $light_green;  
+                            }
+                            &.light_orange{
+                                background: $light_orange;
+                            }
+                            &.light_yellow{
+                                background: $light_yellow;
+                            }
+                            &.light_violet{
+                                background: $light_violet;
+                            }
+                            &.light_skyblue{
+                                background: $light_skyblue;
+                            }
+                        }
+                        &:last-child{
+                            margin-bottom: 0;
+                        }
+                    }
+
+                    &.claims_wrapper{
+                        .claims{
+                            margin: 0 0 35px;
+                            .cust_col{
+                                .cust_col_inner{
+                                    flex-direction: row;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                    margin: 0 -10px;
+                                    .left{
+                                        flex-wrap: wrap;
+                                        margin: 0;
+                                        padding: 0 10px;
+                                        .claim_title{
+                                            font-weight: 500;
+                                            font-size: 22px;
+                                            line-height: 26px;
+                                            margin: 0 0 10px;
+                                            color: $table_color;
+                                            width: 100%;
+                                            word-break: break-word;
+                                        }
+                                        .counter_wrapper{
+                                            margin: 0 10px 0 0;
+                                            .counter{
+                                                font-size: 18px;
+                                                font-weight: 600;
+                                                line-height: 24px;
+                                                color: $black_color;
+                                                margin: 3px 0;
+                                            }
+                                            .counter_title{
+                                                font-size: 14px;
+                                                line-height: 20px;
+                                                color: $black_color;
+                                            } 
+                                            &:last-child{
+                                                margin: 0;
+                                            }
+                                        }
+                                    }
+                                    .right{
+                                        padding: 0 10px;
+                                        .counter_img{
+                                            background: $white_color;
+                                            box-shadow: 0px 0px 20px rgb(8 48 79 / 8%);
+                                            border-radius: 20px;
+                                            width: 60px;
+                                            min-width: 60px;
+                                            height: 60px;
+                                            line-height: 60px;
+                                            text-align: center;
+                                            display: inline-block;
+                                            img{
+                                                width: 32px;
+                                            }
+                                        }
+                                       
+                                    }
+                                }
+                            }
+                            &:last-child{
+                                margin: 0;
+                            }  
+                        }
+                         
+                    }
+                   
+                }
+
+            }
+        
+        }
+     
+    }
+
+    .appointment_section {
+        .main_title{
+            margin: 0 0 20px;
+        }
+        .mat-tab-group{
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+            .mat-tab-header {
+                border-color:#B6C8D6;
+                .mat-tab-list {
+                    .mat-tab-labels {
+                        padding: 7px 12px;
+                        .mat-tab-label {
+                            font-family: $font_family_body,$font_sans_sarif;
+                            height: 40px;
+                            padding: 0 30px;
+                            min-width: 120px;
+                            font-size: 14px;
+                            font-weight: 500;
+                            color: $bodyopacitylightcolor;
+                            opacity: 1;
+                        }
+                        .mat-tab-label.mat-tab-label-active {
+                            font-weight: 700;
+                            color: $table_color;
+                        }
+                    }
+                    .mat-ink-bar {
+                        background-color: $bodycolor;
+                    }
+                }
+            }
+            .tab_content {
+                .table-wrap {
+                    .table-inner{
+                        // border-radius: unset;
+                        table{
+                            border:none;
+                            border-radius: unset;
+                        }
+                    }
+                    .pagination{
+                        border: none;
+                    }
+                }
+            }
+        }
+    }
+    .vitals_details{
+        .main_title{
+            margin: 0 0 20px;
+        }
+        .chart-container{
+            border: 1px solid #B6C8D6;
+            border-radius: 16px;
+            padding: 25px;
+        }
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (min-device-width: $desktop_up) and (max-device-width: $desktop_large) { 
+        .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item.claims_wrapper .claims .cust_col .cust_col_inner .left{
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item.claims_wrapper .claims .cust_col .cust_col_inner .left .counter_wrapper{
+            margin: 0 0 5px;
+        }
+
+    }
+
+@media screen and (max-width:$desktop_large) {
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item .row .cust_col .cust_col_inner {
+        align-items: center;
+    }
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item .row .cust_col .cust_col_inner .left{
+        flex-direction: column;
+        margin: 0 0 7px;
+    }   
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item .row .cust_col .cust_col_inner .left .counter_img{
+        margin: 0 0 10px;
+    }
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item .row .cust_col .cust_col_inner .right{
+        text-align: center;
+    }
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item .row .cust_col .cust_col_inner .right .counter{
+        font-size: 18px;
+        line-height: 20px;
+    }   
+}
+@media screen and (max-width:$desktop) {
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item.claims_wrapper .claims .cust_col .cust_col_inner .left{
+        flex-direction: row;
+    }
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item{
+        padding: 0;
+        border: none;
+    }
+    .patient_dashboard .counter_section.common_space{
+        padding: 40px;
+    }
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item .row:last-child{
+        margin-bottom: 35px;
+    }
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item.claims_wrapper .row:last-child,
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item.claims_wrapper .claims{
+        margin-bottom: 0;
+    }
+}
+@media screen and (max-width:$large_phone) {
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item .row .cust_col{
+        margin: 0 0 20px;
+    }
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item .row,
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item .row:last-child,
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item.claims_wrapper .claims{
+        margin-bottom: 0;
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item.claims_wrapper .claims .cust_col .cust_col_inner .left .counter_wrapper,
+    .patient_dashboard .counter_section.common_space .counter_item_wrap .counter_item.claims_wrapper .claims .cust_col .cust_col_inner .left .counter_wrapper:last-child{
+        margin-bottom: 10px;
+    }
+    .patient_dashboard .vitals_details .chart-container{
+        padding: 10px;
+    }
+}

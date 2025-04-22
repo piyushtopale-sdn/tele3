@@ -1,0 +1,453 @@
+<div class="doctor_list dashboard_main_content">
+  <div class="top_bar">
+    <div class="left_part">
+      <div class="search_bar common_content">
+        <div class="input-group">
+          <button class="btn search-btn">
+            <mat-icon>search</mat-icon>
+          </button>
+          <input
+            type="search"
+            class="form-control"
+            placeholder="Search..."
+            aria-label="Search"
+            [ngModel]="searchText"
+            #text
+            (keyup)="handleSearchFilter(text.value)"
+            (search)="handleSearchFilter(text.value)"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="right_part">
+      <div class="primary_btn">
+        <ng-container *ngIf="giveInnerPermission('export')">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="exportManageTest()"
+          >
+            <mat-icon>download</mat-icon>{{ "export" | translate }}
+          </button>
+        </ng-container>        
+      </div>      
+    </div>
+  </div>
+
+  <div class="bottom_bar" *ngIf="portalType === 'Laboratory'">
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table
+          mat-table
+          [dataSource]="pendingdataSource"
+          class="mat-elevation-z8"
+        >       
+          <ng-container matColumnDef="test_name">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('testName')"
+            >
+              {{ "test_name" | translate }}
+              <span
+                *ngIf="sortColumn === 'testName'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{ element?.testName ? element?.testName : "-" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="type_of_result">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('testConfiguration')"
+            >
+              {{ "type_of_result" | translate }}
+              <span
+                *ngIf="sortColumn === 'testConfiguration'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{ element?.testConfiguration.replace("_", " ") }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="high">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('referenceRange[0].high')"
+            >
+              {{ "high" | translate }}
+              <span
+                *ngIf="sortColumn === 'referenceRange[0].high'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{
+                element?.referenceRange[0]?.high
+                  ? element?.referenceRange[0]?.high
+                  : "-"
+              }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="low">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('referenceRange[0].low')"
+            >
+              {{ "low" | translate }}
+              <span
+                *ngIf="sortColumn === 'referenceRange[0].low'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{
+                element?.referenceRange[0]?.low
+                  ? element?.referenceRange[0]?.low
+                  : "-"
+              }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="critical_high">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('referenceRange[0].criticalHigh')"
+            >
+              {{ "critical_high" | translate }}
+              <span
+                *ngIf="sortColumn === 'referenceRange[0].criticalHigh'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{
+                element?.referenceRange[0]?.criticalHigh
+                  ? element?.referenceRange[0]?.criticalHigh
+                  : "-"
+              }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="critical_low">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('referenceRange[0].criticalLow')"
+            >
+              {{ "critical_low" | translate }}
+              <span
+                *ngIf="sortColumn === 'referenceRange[0].criticalLow'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{
+                element?.referenceRange[0]?.criticalLow
+                  ? element?.referenceRange[0]?.criticalLow
+                  : "-"
+              }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="interpretive_data">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('alphaResult')"
+            >
+              {{ "alpha_results" | translate }}
+              <span
+                *ngIf="sortColumn === 'alphaResult'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{ element?.alphaResult }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "action" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="icon_group">
+                <a class="svgicon" (click)="routeToview(element?._id)">
+                    <mat-icon
+                      type="button"
+                      aria-expanded="false"                   
+                    >
+                      visibility
+                    </mat-icon>
+                  </a>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <div *ngIf="pendingdataSource?.length === 0" class="text-center">
+        <b>{{ "no_record_found" | translate }}</b>
+      </div>
+      <mat-paginator
+        #paginator
+        class="pagination"
+        [length]="totalLength"
+        (page)="handlePageEvent($event)"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[2, 5, 10, 20]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </div>
+  </div>
+
+  <div class="bottom_bar" *ngIf="portalType === 'Radiology'">
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">        
+
+          <ng-container matColumnDef="test">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('testName')"
+            >
+              {{ "test_name" | translate }}
+              <span
+                *ngIf="sortColumn === 'testName'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{ element?.testName ? element?.testName : "-" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="notes">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('notes')">
+              {{ "notes" | translate }}
+              <span
+                *ngIf="sortColumn === 'notes'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{ element?.notes ? element?.notes : "-" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "action" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="icon_group">               
+                <a class="svgicon" (click)="openVerticallyCenteredViewcontent(viewcontent, element)" >
+                  <mat-icon
+                    type="button"
+                    aria-expanded="false"                   
+                  >
+                    visibility
+                  </mat-icon>
+                </a>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <mat-paginator
+        #paginator
+        class="pagination"
+        [length]="totalLength"
+        (page)="handlePageEvent($event)"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[2, 5, 10, 20]"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #viewcontent let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "view_tests" | translate }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="closePopup()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="radioTestForm">
+        <div class="modal_content flex-column">
+          <div class="row modal_content_inner">
+            <div class="item form-group">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "test_name" | translate
+                  }}</label
+                >
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    placeholder="{{ 'test_name' | translate }}"
+                    matInput
+                    formControlName="test"
+                    [readonly]=true
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item-box d-flex form-row">
+              <div class="item form-group">
+                <div class="form_field_wrapper">
+                  <label
+                    >{{ "radio_centre" | translate
+                    }}</label
+                  >
+                  <select2
+                    [placeholder]="'select_centre' | translate"
+                    [overlay]="true"
+                    [limitSelection]="0"
+                    [minCountForSearch]="1"
+                    [data]="radioUserList"
+                    formControlName="centre_name"
+                  >
+                  </select2>
+                </div>
+              </div>    
+              <div class="item form-group">
+                <div class="form_field_wrapper">
+                  <label
+                  >{{ "select_loinc_code" | translate
+                  }}</label
+                >
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    placeholder="{{ 'test_name' | translate }}"
+                    matInput
+                    formControlName="loincCode"
+                   [readonly]=true
+                  />
+                </mat-form-field>
+                </div>
+              </div>     
+            </div>
+            <div class="item-box d-flex form-row">
+            <div class="item form-group">
+              <div class="form_field_wrapper">
+                <label>{{ "study_type" | translate }}
+                </label
+                >
+                <select2
+                  [placeholder]="'study_type' | translate"
+                  [overlay]="true"
+                  [limitSelection]="0"
+                  [minCountForSearch]="1"
+                  [data]="studyUserList"
+                  formControlName="studyTypeId"
+                >
+                </select2>
+              </div>
+            </div>  
+          </div>
+            <div class="item-box d-flex form-row">
+              <div class="item form-group">
+                <div class="form_field_wrapper">
+                <label
+                  >{{ "fees" | translate
+                  }}(SAR)</label
+                >
+                <mat-form-field appearance="fill">
+                  <input
+                    type="number"
+                    placeholder="{{ 'fees' | translate }}"
+                    matInput
+                    formControlName="testFees"
+                    min="0"
+                   [readonly]=true
+                  />
+                </mat-form-field> 
+              </div>               
+            </div>       
+              <div class="item form-group">
+                <div class="form_field_wrapper">
+                  <label>{{ "select_coupon_code" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      placeholder="{{ 'test_name' | translate }}"
+                      matInput
+                      formControlName="couponCode"
+                      [readonly]=true
+                    />
+                  </mat-form-field>
+                </div>
+              </div>            
+            </div>                    
+            <div class="item-box d-flex">
+              <div class="item full-width">
+                <div class="form_field_wrapper">
+                  <label
+                    >{{ "notes" | translate
+                    }}</label
+                  >
+                  <mat-form-field appearance="fill">
+                    <textarea
+                      type="text"
+                      placeholder="{{ 'notes' | translate }}"
+                      matInput
+                      formControlName="notes"
+                      [readonly]=true
+                    ></textarea>
+                  </mat-form-field>
+                </div>              
+            </div>
+          </div>
+          </div>
+        </div>       
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<router-outlet></router-outlet>
+

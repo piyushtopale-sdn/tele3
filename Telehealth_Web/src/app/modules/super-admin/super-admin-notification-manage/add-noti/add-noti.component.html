@@ -1,0 +1,175 @@
+<div class="main_block">
+  <div class="main_section">
+    <div class="create_profile login_time">
+      <form [formGroup]="notifiForm" (ngSubmit)="submitForm()">
+        <div class="container">
+          <div class="create_profile_inner">
+            <div class="form">
+              <div class="row">
+                <div class="col-sm-12 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "title" | translate }}<span class="danger">*</span></label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="title" #address />
+                    </mat-form-field>
+                    <mat-error *ngIf=" notifiForm.get('title').invalid && notifiForm.get('title').touched">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "answer_type" | translate }}
+                      <span class="danger">*</span></label>
+                    <mat-form-field appearance="fill">
+                      <!-- <mat-label>Sub-admin</mat-label> -->
+                      <mat-select disableRipple formControlName="type">
+                        <mat-option value="email">{{
+                          "email" | translate
+                          }}</mat-option>
+                        <mat-option value="sms">{{
+                          "sms" | translate
+                          }}</mat-option>
+                        <mat-option value="push_notification">{{
+                          "push_notification" | translate
+                          }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="isSubmitted && 
+                          notifiForm.get('type').invalid">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+
+
+                <div class="col-sm-12 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "condition" | translate }}
+                      <span class="danger">*</span></label>
+                    <mat-form-field appearance="fill">
+                      <!-- <mat-label>Sub-admin</mat-label> -->
+                      <mat-select disableRipple formControlName="condition">
+                        <mat-option *ngFor="let condition of conditions" [value]="condition.value">
+                          {{ condition.label | translate }}
+                        </mat-option>
+                      </mat-select>
+                      <!-- <mat-select disableRipple formControlName="condition">
+                        <mat-option value="BOOKING_REQUEST">{{
+                          "booking_request" | translate
+                          }}</mat-option>
+                        <mat-option value="BOOKING_CONFIRMATION">{{
+                          "booking_confirmation" | translate
+                          }}</mat-option>
+                        <mat-option value="BOOKING_CANCELLATION">{{
+                          "booking_cancellation" | translate
+                          }}</mat-option>
+                        <mat-option value="PRESCRIPTION_PICKUP">{{
+                          "prescription_pickup" | translate
+                          }}</mat-option>
+                        <mat-option value="TEST_RESULT_RECEIVED">{{
+                          "test_result_received" | translate
+                          }}</mat-option>
+                        <mat-option value="MEDICATION_REMINDER">{{
+                          "medication_reminder" | translate
+                          }}</mat-option>
+                        <mat-option value="NEW_MESSAGE">{{
+                          "new_message" | translate
+                          }}</mat-option>
+                      </mat-select> -->
+                    </mat-form-field>
+                    <mat-error *ngIf=" isSubmitted &&
+                          notifiForm.get('condition').invalid">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 mb-3" *ngIf="notifiForm.get('type').value === 'sms' || notifiForm.get('type').value === 'push_notification'">
+                  <div class="form_field_wrapper">
+                    <label>{{ "content" | translate
+                      }}<span class="danger">*</span></label>
+                    <mat-form-field appearance="fill">
+                      <textarea type="text" formControlName="sms_text" matInput></textarea>
+                    </mat-form-field>
+                    <mat-error *ngIf="isSubmitted &&
+                          notifiForm.get('sms_text').invalid &&
+                          notifiForm.get('sms_text').touched
+                        ">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+                <!-- <div class="col-sm-12 mb-3" *ngIf="notifiForm.get('type').value === 'sms' || notifiForm.get('type').value === 'push_notification'">
+                  <div class="form_field_wrapper">
+                    <label>{{ "title_arabic" | translate
+                      }}<span class="danger">*</span></label>
+                    <mat-form-field appearance="fill">
+                      <textarea type="text" formControlName="sms_text_arabic" matInput></textarea>
+                    </mat-form-field>
+                    <mat-error *ngIf="isSubmitted &&
+                          notifiForm.get('sms_text_arabic').invalid &&                      [[6 Feb 2025 comment content arabic ]]
+                          notifiForm.get('sms_text_arabic').touched
+                        ">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div> -->
+
+                <div class="col-sm-12 mb-3" *ngIf="notifiForm.get('type').value === 'email'">
+                  <div class="form_field_wrapper">
+                    <label>{{ "content" | translate
+                      }}<span class="danger">*</span></label>
+
+                    <div class="editor_inner">
+                      <ngx-editor-menu [editor]="abouteditor" [toolbar]="toolbar">
+                      </ngx-editor-menu>
+                      <ngx-editor [editor]="abouteditor" formControlName="email_text">
+                      </ngx-editor>
+                    </div>
+                    <mat-error *ngIf=" isSubmitted &&
+                          notifiForm.get('email_text').invalid &&
+                          notifiForm.get('email_text').touched
+                        ">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+
+                <!-- <div class="col-sm-12 mb-3" *ngIf="notifiForm.get('type').value === 'email'">
+                  <div class="form_field_wrapper">
+                    <label>{{ "title_arabic" | translate
+                      }}<span class="danger">*</span></label>
+
+                    <div class="editor_inner">
+                      <ngx-editor-menu [editor]="abouteditor_arabic" [toolbar]="toolbar_arabic">
+                      </ngx-editor-menu>
+                      <ngx-editor [editor]="abouteditor_arabic" formControlName="email_text_arabic">
+                      </ngx-editor>
+                    </div>                                                                    [[6 Feb 2025 comment content arabic ]]
+                    <mat-error *ngIf=" isSubmitted &&
+                          notifiForm.get('email_text_arabic').invalid &&
+                          notifiForm.get('email_text_arabic').touched
+                        ">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div> -->
+
+                <div class="add_form_action primary_btn btn_wrap mt-4">
+                  <button type="button" class="btn btn-secondary" [routerLink]="['/super-admin/notification']">
+                    {{ "cancel" | translate }}
+                  </button>
+                  <button type="submit" mat-stroked-button class="btn btn-primary">
+                    {{ "save" | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

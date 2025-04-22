@@ -1,0 +1,44 @@
+<div class="add_doctor dashboard_main_content">
+  <div class="step_counter">
+    <mat-stepper
+      #mainStepper
+      [orientation]="(stepperOrientation | async)!"
+      linear
+      (selectionChange)="onStepSelectionChange($event)"
+    >
+      <mat-step [completed]="basicInfo">
+        <ng-template matStepLabel>{{ "basic_info" | translate }}</ng-template>
+        <ng-template [ngIf]="stepIndex === 0">
+          <app-basicinfo
+            [mstepper]="passToChild"            
+            (calldoctordata)="getDoctorDetails()"
+            (fromChild)="handleEvent($event)"
+            *ngIf="isEnable"
+            (callParent)="getDoctorDetails()"
+          ></app-basicinfo>
+        </ng-template>
+      </mat-step>
+      <mat-step [completed]="availability">
+        <ng-template matStepLabel>{{ "availability" | translate }}</ng-template>
+        <ng-template [ngIf]="stepIndex === 1">
+          <app-availability
+            [mstepper]="passToChild"
+            (calldoctordata)="getDoctorDetails()"
+            (fromChild)="handleEvent($event)"
+            (callParent)="getDoctorDetails()"
+            *ngIf="isEnable"
+          ></app-availability>
+        </ng-template>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>{{
+          "manage_permissions" | translate
+        }}</ng-template>
+        <ng-template [ngIf]="stepIndex === 2">
+          <app-managepermission></app-managepermission>
+        </ng-template>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>

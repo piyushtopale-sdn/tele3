@@ -1,0 +1,146 @@
+@import '../../../../../../assets/css/variable/variable';
+
+
+.material-icons{
+    cursor: pointer;
+}
+.notification_manage {
+    .top_bar{
+        margin: 0 0 35px;
+        .left_part{
+            display: flex;
+            .search_bar{
+                .input-group{
+                    background: #F6F8FC;
+                    border-radius: 6px;
+                    .form-control{
+                        border: none;
+                        background-color: transparent;
+                        padding: 12px 12px 12px 0;
+                        width: 210px;
+                        &::placeholder{
+                            font-weight: 400;
+                            font-size: $font_small;
+                            line-height: 24px;
+                        }
+                        &:focus{
+                            box-shadow: none;
+                        }
+                    }
+                    .btn{
+                        padding: 0;
+                        border: none;
+                        .mat-icon{
+                            line-height: 50px;
+                            height: 50px;
+                            width: 50px;
+                            color: #9B9B9B;
+                            font-size: 24px;
+                        }
+                    }
+                }
+            }
+            .content_wrap{
+                .policy{
+                    margin: 0 0 0 20px;
+                    label{
+                        margin-right: 12px;
+                    }
+                    .mat-form-field{
+                        .mat-form-field-wrapper{
+                            padding: 0;
+                            .mat-form-field-flex{
+                                background-color: #EBF0F4;
+                                border: 1px solid #EBF0F4;
+                                .mat-form-field-infix{
+                                    width: 200px;
+                                    .mat-select{
+                                        .mat-select-value{
+                                            color: $formfiled_color;
+                                            font-weight: 500;
+                                        }
+                                    }
+                                }
+                            }
+                            .mat-form-field-underline{
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Modal css
+.notification_manage{
+    .form_field_wrapper {
+        label{
+            font-weight: 500;
+            color: $table_color;
+        }
+        // .mat-form-field{
+        //     .mat-form-field-wrapper{     
+        //         padding-bottom: 15px;
+        //     }
+        // }
+    }
+}
+
+
+@media screen and (max-width:$desktop) {
+    .notification_manage .top_bar{
+        flex-direction: column;
+    }
+    .notification_manage .top_bar .right_part{
+        margin-top: 20px;
+    }
+}   
+@media screen and (max-width:$large_phone) {
+    .notification_manage .top_bar .left_part{
+        flex-direction: column;
+    }
+    .notification_manage .top_bar .left_part .content_wrap .policy {
+        margin: 0;
+        width: 100%;
+    }
+    .notification_manage .top_bar .left_part .primary_btn{
+        margin-top: 10px;
+    }
+}
+.patientDropdown{
+    padding: 0px !important;
+}
+@media screen and (max-width:$medium_phone) {
+    .notification_manage .top_bar .left_part .content_wrap .policy .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+        width: 100%;
+    }
+    .notification_manage .top_bar .left_part .content_wrap .mat-form-field{
+        display: block;
+    }
+}
+
+//POPUP STYLING                  //[[11 Feb Task Show popup with multiselect patient list and submit button.]]
+
+  
+.sel-patient{
+    .select2-container{
+        .select2-selection{
+            max-height: 122px !important;
+            height: 100% !important;
+        }
+        .select2-selection--multiple{
+            min-height: 50.67px !important;
+            border: none !important;
+
+            .select2-selection__rendered{
+                border: 1px solid rgba(228, 228, 228, 0.9);
+                border-radius: 5px;
+                min-height: inherit;
+            }
+        }
+    }
+    
+}
+  

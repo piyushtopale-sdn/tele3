@@ -1,0 +1,520 @@
+@import '../../../../../../assets/css/variable/variable';
+
+.validate_prescription{
+    .validate_content{
+            border: 1px solid #B6C8D6;
+            border-radius: 20px;
+            overflow: hidden;
+        .validate_content_inner{
+            .part{
+                padding: 30px;
+                @media print {
+                    padding: 20px !important;
+                }
+                &.top_part{
+                    // background-image: url(../../../../../../assets/img/immunization_frame.png);
+                    background-color: rgba(61, 167, 200, 0.1);
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    position: relative;
+                    @media print {
+                        padding: 20px 30px !important;
+                    }
+                    h2{
+                        font-size: 20px;
+                        font-weight: 600;
+                        color: $linkcolor;
+                        margin: 0 0 5px;
+                        @media print {
+                            font-size: 14px !important;
+                        }
+                    }
+                    .address{
+                        font-size: 16px;
+                        font-weight: 400;
+                        color: $linkcolor;
+                        @media print {
+                            font-size: 14px !important;
+                        }
+                    }
+                    .right_part{
+                        display: flex;
+                        align-items: flex-end;
+                        flex-direction: column;
+                        .immunization_img{
+                            width: 165px;
+                            margin: 0 0 15px;
+                        }
+                    }
+                    .bg-img-pdf {
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                    }
+                }
+                &.bottom_part{
+                    .part_wrapper{
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom:30px;
+                        @media print {
+                            align-items: center !important;
+                        }
+                        .left_part{
+                            // width: auto;
+                            @media print {
+                                width: calc(100% - 160px) !important;
+                            }
+                            .profile_data{
+                                    background: rgba(182, 200, 214, 0.2);
+                                    border-radius: 5px;
+                                    @media print {
+                                        background-color: rgba(182, 200, 214, 0.2) !important;
+                                        border-radius: 5px !important;
+                                    }
+                                .profile_info{
+                                    padding: 20px;
+                                    position: relative; 
+                                    ul{
+                                        // display: grid;
+                                        align-items: end;
+                                        grid-gap: 25px;
+                                        // grid-template-columns: repeat(4, 1fr);
+                                        border-bottom: 1px solid #C4CDEA;
+                                        padding-bottom: 25px;
+                                        margin-bottom: 25px;
+                                        padding-left: 0;
+                                        padding-right: 0;
+                                        display: flex;
+                                        flex-wrap: wrap;
+                                        .col_item{
+                                            display: flex;
+                                            align-items:flex-end;
+                                            min-height: 60px;
+                                            flex: auto;
+
+                                            .profile_image{
+                                                width: 75px;
+                                                height: 75px;
+                                                min-width: 75px;
+                                                margin: 0 15px 0 0;
+                                                border-radius: 50%;
+                                                overflow: hidden;
+                                            }
+                                            .profile_contact{
+                                                .profile_title{
+                                                    font-size: $font_large;
+                                                    font-weight: 600;
+                                                    line-height: 20px;
+                                                    letter-spacing: 0em;
+                                                    color: $linkcolor;
+                                                    margin: 0 0 10px;
+                                                    @media print {
+                                                        font-size: 14px !important;
+                                                    }
+                                                }
+                                                .lable{
+                                                    font-size: 14px;
+                                                    font-weight: 400;
+                                                    line-height: 16px;
+                                                    letter-spacing: 0.05em;
+                                                    color: $bodyopacitylightcolor;
+                                                    margin: 0 0 6px;
+                                                    @media print {
+                                                        font-size: 14px !important;
+                                                    }
+                                                }
+                                                .user_value{
+                                                    font-weight: 500;
+                                                    font-size: 14px;
+                                                    line-height: 20px;
+                                                    color: $linkcolor;
+                                                    letter-spacing: 0.05em;
+                                                    @media print {
+                                                        font-size: 14px !important;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        // &.profile_info_with_img{
+                                            // grid-template-columns: 215px repeat(2, 1fr);
+                                        // }
+                                        &:last-child{
+                                            border-bottom: none;
+                                            margin-bottom: 0;
+                                            padding-bottom: 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .right_part{
+                            width: auto;
+                            margin-top: 15px;
+                            @media print {
+                                width: 150px !important;
+                            }
+                            .date{
+                                border: 1px solid #B6C8D6;
+                                border-radius: 5px;
+                                font-size: $font_medium;
+                                font-weight: 600;
+                                color: $linkcolor;
+                                background-color: rgba(255, 255, 255, 0.5);
+                                padding: 12px 24px;
+                                @media print {
+                                    font-size: 14px !important;
+                                    padding: 8px 12px !important;
+                                }
+                            }
+                        }
+                    }
+
+                    .validate_info{
+                        padding: 25px;
+                        margin: 0 0 40px;
+                        border: 1px solid #B6C8D6;
+                        border-radius: 5px;
+                        .prescrib_list{
+                            padding: 0;
+                            margin: 0;
+                            font-weight: 600;
+                            font-size: $font_medium;
+                            color: $linkcolor;
+                            list-style-position: inside;
+                            @media print {
+                                font-size: 14px !important;
+                            }
+                            li{
+                                margin: 0 0 30px;
+                                .prescrib_text{
+                                    font-size: $font_small;
+                                    font-weight: 600;
+                                    line-height: 19px;
+                                    color: $linkcolor;
+                                    margin: 8px 0;
+                                    display: inline;
+                                    @media print {
+                                        font-size: 14px !important;
+                                    }
+                                    &.prescrib_unit{
+                                        display: block;
+                                        font-weight: 400;
+                                        color: rgba(38, 50, 60, 0.75);
+                                    }
+                                }
+                                &:last-child{
+                                    padding-bottom: 0;
+                                    margin-bottom: 0;
+                                }
+                            }
+                        }
+                        .prescription_content{
+                            text-align: right;
+                            .prescription_no{
+                                display: inline-block;
+                                background: #F6F8FC;
+                                border: 1px solid #B6C8D6;
+                                border-radius: 10px;
+                                padding: 12px 15px;
+                                color: rgba(38, 50, 60, 0.75);
+                                @media print {
+                                    font-size: 12px !important;
+                                    padding: 8px 12px !important;
+                                }
+                                span{
+                                    font-weight: 600;
+                                    color: $linkcolor;
+                                }
+                            }
+                        }
+                        .prescrib_content {
+                            display: inline-flex;
+                            flex-direction: column;
+                        }
+                        .col-md-8 {
+                            @media print {
+                                width: 66.66666667%;
+                            }
+                        }
+                        .col-md-4 {
+                            @media print {
+                                width: 33.33333333%;
+                            }
+                        }
+                    }
+                    .validate_secondary_info{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: flex-end;
+                    }
+                }
+            }
+           
+        }
+    }  
+}
+
+
+// Add signature modal css
+.addsignature{
+    .custome_modal{
+        .modal-body{
+            .signature_content{
+                border: 1px solid #B6C8D6;
+                border-radius: 15px;
+                padding: 20px 15px 0;
+                margin: 0 0 30px;
+                ul{
+                    display: flex;
+                    flex-wrap: wrap;
+                    padding: 0;
+                    margin: 0;
+                    list-style: none;
+                    li{ 
+                        display: flex;
+                        align-items: center;
+                        flex-wrap: wrap;
+                        width: 50%;
+                        padding: 0 20px;
+                        border-right: 1px solid #ddd;
+                        margin: 0 0 20px;
+                        label{
+                            font-weight: 400;
+                            line-height: 24px;
+                            margin: 0 12px 0 0;
+                            color: $bodyopacitylightcolor;
+                        }
+                        .value{
+                            font-weight: 500;
+                            font-size: $font_medium;
+                            color: $table_color;
+                        }
+                        &:nth-child(even){
+                            border: none;
+                        }
+                    }
+                }
+            }
+            .signature_part{
+                margin: 0 0 30px;
+                label{
+                    color: #0B4977;
+                    font-weight: 500;
+                    font-size: $font_medium;
+                }
+                .signature{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    background: #F5F5F5;
+                    border-radius: 5px;
+                    padding: 10px 15px;
+                    position: relative;
+                    .upload_input{
+                        margin: 0 0 0 15px;
+                        .upload_input_content{
+                            background: #0B4977;
+                            border-radius: 5px;
+                            width: 70px;
+                            height: 70px;
+                            line-height: 70px;
+                            text-align: center;
+                        }
+                        .user_upload_input{
+                            opacity: 0;
+                            width: 70px;
+                            height: 70px;
+                            line-height: 70px;
+                            position: absolute;
+                            top: 0;
+                            bottom: auto;
+                            right: auto;
+                        }
+                    }
+                }
+            }
+            .primary_btn{
+                justify-content: center;
+                .btn{
+                    min-width: 120px;
+                }
+            }
+        }
+    }
+
+
+}
+
+.qrcodeshadow {
+    max-width: 150px;
+    max-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // filter: drop-shadow(15px 15px 15px #e42424);
+    // opacity: .5;
+}
+
+@media print {
+    body * {
+      visibility: hidden;
+      border: hidden;
+    }
+    
+    #previewdiv, #previewdiv * {
+      visibility: visible;
+    }
+    #previewdiv {
+      position: absolute;
+      left: 0;
+      top: 0;      
+    }
+    .sidebar_section {
+        display: none;
+    }
+  }
+  
+  .position-relative {
+    position: relative;
+  }
+
+@media screen and (max-width:$desktop) {
+    .validate_prescription .validate_content .validate_content_inner .part.top_part h2{
+        font-size: 18px;
+    }
+}
+@media screen and (max-width:$large_phone) {
+    .validate_prescription .validate_content .validate_content_inner .part.top_part{
+        flex-direction: column;
+        text-align: center;
+    }
+    .validate_prescription .validate_content .validate_content_inner .part.top_part .right_part{
+        align-items: center;
+    }
+    .validate_prescription .validate_content .validate_content_inner .part.top_part .right_part .immunization_img{ 
+        width: 165px;
+        margin: 15px 0;
+    }
+    .validate_prescription .validate_content .validate_content_inner .part.bottom_part .validate_info .row > *:not(:last-child){
+        margin: 0 0 30px;
+    }   
+    .validate_prescription .validate_content .validate_content_inner .part.bottom_part .validate_info .prescription_content {
+        text-align: left;
+    }
+    .validate_prescription .validate_content .validate_content_inner .part.bottom_part .part_wrapper .left_part{
+        width: 100%;
+    }
+    .validate_prescription .validate_content .validate_content_inner .part {
+        padding: 20px;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .validate_prescription .validate_content .validate_content_inner .part.bottom_part .part_wrapper .left_part .profile_data .profile_info ul.profile_info_with_img{
+        grid-template-columns: repeat(1, 1fr);
+        grid-gap: 20px;
+    }
+    .validate_prescription .validate_content .validate_content_inner .part.bottom_part .part_wrapper .left_part .profile_data .profile_info ul .col_item{
+        min-height: auto;
+    }
+}
+@media screen and (max-width:$medium_phone) {
+    .addsignature .custome_modal .modal-body .signature_content ul li{
+        width: 100%;
+        border: none;
+        justify-content: flex-start;
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .validate_prescription .validate_content .validate_content_inner .part.bottom_part .validate_secondary_info{
+        flex-direction: column;
+        align-items: center;
+    }
+    .validate_prescription .validate_content .validate_content_inner .part.bottom_part .validate_secondary_info .signature{
+        margin: 0 0 20px;
+    }
+    .validate_prescription .validate_content .validate_content_inner .part.bottom_part .part_wrapper .left_part .profile_data .profile_info ul .col_item .profile_image{
+        margin: 0 0 20px;
+    }
+    .validate_prescription .validate_content .validate_content_inner .part.bottom_part .part_wrapper .left_part .profile_data .profile_info ul .col_item{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .addsignature .custome_modal .modal-body .signature_part .signature{
+        flex-direction: column;
+        padding: 20px;
+    }
+    .addsignature .custome_modal .modal-body .signature_part .signature .upload_input {
+        margin: 15px 0 0;
+    }
+   .clearbtn
+   {
+    margin-right: 10px;
+   }    
+
+}
+
+.primary_btn {
+    position: relative;
+    padding: 20px;
+  }
+  
+  .exit-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .btn-svg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .profile_image {
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+
+    img {
+        // display: block;
+        width: 100%;
+        height: 100%;
+        // border: 1px solid #0015ff;
+        border-radius: 100%;
+    }
+
+}
+.profile_image_wrapper {
+    display: flex;
+    align-items: center;
+}
+
+// #previewdiv {
+//     width: 100%;
+//     max-width: 800px; /* Example fixed width */
+//   }
+.profile_image {
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+
+    img {
+        // display: block;
+        width: 100%;
+        height: 100%;
+        border: 1px solid #0015ff;
+        border-radius: 100%;
+    }
+
+}

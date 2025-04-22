@@ -1,0 +1,786 @@
+@import '../../../../../assets/css/variable/variable';
+
+.back_button {
+   margin-left: 10%;
+   margin-top: 10px;
+  }
+// mat radiobtn common css
+.home_wrapper .mat-radio-button.mat-accent.mat-radio-checked{
+    .mat-radio-label{
+        color: $homepage_hovercolor;
+    }
+    .mat-radio-outer-circle{
+        border-color: $homepage_hovercolor;
+    }
+    .mat-radio-inner-circle{
+        background-color: $homepage_hovercolor;
+    }
+    .mat-radio-persistent-ripple{
+        background-color: $homepage_hovercolor;
+    }
+}
+.home_wrapper .mat-radio-button .mat-radio-ripple{
+    display: none;
+}
+.home_wrapper .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+.home_wrapper .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
+.home_wrapper .mat-radio-button.mat-accent:active .mat-radio-persistent-ripple{
+    background-color: $homepage_hovercolor;
+}
+// mat Checkbox common css
+.home_wrapper .mat-checkbox .mat-checkbox-ripple{
+    display: none;
+}
+.home_wrapper .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element, 
+.home_wrapper .mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element{
+    background: $homepage_hovercolor;
+}
+.home_wrapper .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, 
+.home_wrapper .mat-checkbox-checked.mat-accent .mat-checkbox-background{
+    background: $homepage_hovercolor;
+}
+
+
+.main_section{
+    margin-top: 40px;
+    .main_section_inner{
+        .content_area {
+            position: relative;
+            .bottom_section{
+                .appointment_doctor_details{
+                    margin: 0 0 30px;
+                    .top_bar{
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        background-color: #ffffff;
+                        border-radius: 15px 15px 0 0;
+                        padding: 15px 25px;
+                        border-style: solid;
+                        border-color: #B6C8D6;
+                        border-width: 1px;
+                        .verify{
+                            font-size: $font_medium;
+                            font-weight: 700;
+                            color: #302229;
+                            .icon{
+                                margin: 0 5px;
+                            }
+                        }
+                        .title{
+                            font-size: $font_medium;
+                            font-weight: 400;
+                            color: #45AB15;
+                            .dot{
+                                position: relative;
+                                width: 18px;
+                                height: 18px;
+                                line-height: 18px;
+                                background: rgba(69, 171, 21, 0.2);
+                                display: inline-block;
+                                vertical-align: middle;
+                                border-radius: 50%;
+                                text-align: center;
+                                margin-right: 5px;
+                                &:before{
+                                    content: "";
+                                    width: 10px;
+                                    height: 10px;
+                                    background:#45AB15;
+                                    display: inline-block;
+                                    border-radius: 50%;
+                                }
+                            } 
+                        }
+                    }
+                    .bottom_bar{
+                        border-style: solid;
+                        border-color: #B6C8D6;
+                        border-width: 0 1px 1px;
+                        border-radius: 0 0 15px 15px;
+                        padding: 25px;
+                            .medicine_details{
+                                display: flex;
+                                .image{
+                                    margin: 0 25px 0 0;
+                                    cursor: pointer;
+                                    img{
+                                        border-radius: 10px;
+                                        width: 133px;
+                                        min-width: 133px;
+                                        height: 133px;
+                                    }
+                                }
+                                .medicine_info{
+                                    width: 100%;
+                                    h2{
+                                        font-weight: 500;
+                                        font-size: 22px;
+                                        line-height: 26px;
+                                        color: $table_color;
+                                        margin: 0 0 8px;
+                                        cursor: pointer;
+                                    }
+                                    .desc_wrapper{
+                                        display: flex;
+                                        justify-content: space-between;
+                                        margin-bottom: 22px;
+                                        .desc{
+                                            font-size: $font_medium;
+                                            line-height: 20px;
+                                            font-weight: 600;
+                                        }
+                                        .rating_section{
+                                            text-align: right;
+                                            .ratings-star{
+                                                font-weight: 400;
+                                                font-size: 16px;
+                                                line-height: 19px;
+                                                color: $table_color;
+                                                i{
+                                                    color: $star_color;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .content_list{
+                                        list-style: none;
+                                        padding: 0;
+                                        margin: 0 -20px 0;
+                                        align-items: center;
+                                        .content_item{
+                                            width: auto;
+                                            margin: 0 0 7px;
+                                            padding: 0 20px;
+                                            .title{
+                                                font-size: $font_small;
+                                                color: $table_color;
+                                            }
+                                            .content_desc{
+                                                font-weight: 600;
+                                                font-size: $font_small;
+                                                line-height: 19px;
+                                                color: $table_color;
+                                                a{
+                                                    color: #3DA7C8;
+                                                    text-decoration: none;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+               
+                    }
+                }
+                
+
+                .mat-accordion{
+                    .mat-expansion-panel{
+                        .mat-expansion-panel-header{
+                            .mat-expansion-panel-header-title{
+                                font-weight: 600;
+                                font-size: 20px;
+                                line-height: 24px;
+                                color: $bodycolor;
+                            }
+                        }
+                        .mat-expansion-panel-body{
+                            .expansion_panel_inner{
+                                padding: 0;
+                                h2{
+                                    color: $table_color;
+                                    font-size: $font_large;
+                                    font-weight: 600;
+                                }
+                                .expansion_item{
+                                    padding: 25px 30px;
+                                    // border-bottom: 1px solid #B6C8D6;
+                                    .mat-button-toggle-group{
+                                        border: none;
+                                        flex-wrap: wrap;
+                                        margin: 0 -15px;
+                                        .mat-button-toggle{
+                                            border-left: none;
+                                            margin: 0 15px 15px;
+                                            border: 1px solid rgba(11, 73, 119, 0.15);
+                                            border-radius: 10px;
+                                            .mat-button-toggle-label-content{
+                                                font-weight: 600;
+                                                font-size: $font_medium;
+                                                white-space: break-spaces;
+                                                color: #214469;        
+                                                padding: 14px 20px;
+                                                line-height: 22px;
+                                                white-space: break-spaces;
+                                            }
+                                            &:hover{
+                                                background-color: $bodycolor;
+                                                border-color: $bodycolor;
+                                                .mat-button-toggle-label-content{
+                                                    color: $white_color;
+                                                }
+                                            }
+                                            &.mat-button-toggle-checked{
+                                                background-color: $bodycolor;
+                                                border-color: $bodycolor;
+                                                .mat-button-toggle-label-content{
+                                                    color: $white_color;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    &.medical_doc{
+                                        padding: 0;
+                                        border-bottom: none;
+                                        .bar{
+                                            padding: 25px 30px;
+                                            &.top_bar{
+                                                border-bottom: 1px solid #B6C8D6;
+                                                display: flex;
+                                                justify-content: space-between;
+                                                align-items: center;
+                                                .primary_btn{
+                                                    flex-wrap: wrap;
+                                                    .btn {
+                                                        margin-bottom: 10px;
+                                                    }
+                                                }
+                                            }
+                                            &.bottom_bar{
+            
+                                                .row{
+                                                    margin: 25px -25px 0;
+                                                    .item {
+                                                        margin-bottom: 35px;
+                                                        padding: 0 25px;
+                                                        text-align: center;
+                                                        width: auto;
+                                                        .item_inner{
+                                                            display: inline-block;
+                                                            vertical-align: top;
+                                                            text-align: left;
+                                                            .doc_img{
+                                                                position: relative;
+                                                                img{
+                                                                    border-radius: 10px;
+                                                                    overflow: hidden;
+                                                                    width: 207px;
+                                                                    height: 176px;
+                                                                }
+                                                                .quick_view{
+                                                                    display: inline-block;
+                                                                    vertical-align: top;
+                                                                    width: 30px;
+                                                                    height: 30px;
+                                                                    line-height: 25px;
+                                                                    background-color: #FEEAEA;
+                                                                    border: 0.8px solid #D93636;
+                                                                    border-radius: 50%;                         
+                                                                    text-align: center;
+                                                                    position: absolute;
+                                                                    left: auto;
+                                                                    right: -15px;
+                                                                    top: -15px;
+                                                                    bottom: auto;
+                                                                    cursor: pointer;
+                                                                    z-index: 9 !important;
+                                                                    img{
+                                                                        width: auto;
+                                                                        height: auto;
+                                                                    }
+                                                                }
+                                                             
+                                                            }
+                                                            .doc_desc{
+                                                                margin-top: 15px;
+                                                                .name{
+                                                                    font-weight: 700;
+                                                                    font-size: 16px;
+                                                                    line-height: 19px;
+                                                                    color: $table_color;
+                                                                    margin: 0 0 5px;
+                                                                }
+                                                                .date{
+                                                                    font-weight: 500;
+                                                                    font-size: 12px;
+                                                                    line-height: 18px;
+                                                                    color: $bodyopacitycolor;
+                                                                }
+                                                            }
+                                                            .doc_img.selected {
+                                                                border: 2px solid blue; /* Replace with your desired styling */
+                                                              }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                     
+                                       
+                                      
+                                    }
+                                }
+                                .appointment_type{
+                                    margin: 0;
+                                    .expansion_item {
+                                        border-right: 1px solid #B6C8D6;  
+                                        .mat-radio-group{
+                                            .mat-radio-button{
+                                                margin: 10px 25px 0 0;
+                                                .mat-radio-label{
+                                                    .mat-radio-label-content{
+                                                        padding-left: 12px;
+                                                    }
+                                                }
+                                                &:last-child{
+                                                    margin-right: 0;
+                                                }
+                                            }
+                                        }
+            
+                                        &:last-child{
+                                            border-right: none;
+                                        }
+                                    }
+                                }
+                                .consult_user{
+                                    .expansion_item {
+                                        border-right: 1px solid #B6C8D6;  
+                                        .mat-radio-group{
+                                            margin: 0 0 25px;
+                                            display: block;
+                                            .mat-radio-button{
+                                                margin: 10px 25px 0 0;
+                                                .mat-radio-label{
+                                                    .mat-radio-label-content{
+                                                        padding-left: 12px;
+                                                    }
+                                                }
+                                                &:last-child{
+                                                    margin-right: 0;
+                                                }
+                                            }
+                                        }
+            
+                                        &:last-child{
+                                            border-right: none;
+                                        }
+                                    } 
+                                }
+
+                                .consultation_datetime{
+                                    padding: 35px 20px 20px;
+                                    .consultation_datetime_inner{
+                                        margin: 0;
+                                        border: 1px solid #B6C8D6;
+                                        border-radius: 15px;
+                                        .expansion_item {
+                                            border-right: 1px solid #B6C8D6;  
+                                            border-bottom: none;
+                                            padding: 20px;
+                                            .primary_btn{
+                                                flex-wrap: wrap;
+                                                margin: 0 -10px;
+                                                .btn{
+                                                    font-size: $font_small;
+                                                    font-weight: 600;
+                                                    min-width: 120px;
+                                                    margin: 0 10px 15px;
+                                                    &.active {
+                                                        background-color: $bodycolor;
+                                                        border-color: $bodycolor;
+                                                        color: $white_color;
+                                                    }
+                                                    &.disable {
+                                                        opacity: 0.6;
+                                                        cursor: not-allowed;
+                                                        &:hover{
+                                                            background-color: $white_color;
+                                                            border-color: #B6C8D6;
+                                                            color: #212529;
+                                                        }
+                                                    }
+                                                    
+                                                }
+                                            }
+                                            &:last-child{
+                                                border: none;
+                                            }
+                                            &.calender {
+                                                padding: 0;
+                                            }
+                                        }
+                                    }
+                                }
+                                .form_field_wrapper{
+                                    label{
+                                        color: $bodyopacitylightcolor;
+                                        font-weight: 400;
+                                    }
+                                }
+            
+                            }
+                        }   
+                    }
+                }
+                .continue_btn{
+                    margin: 30px 0;
+                    justify-content: flex-end;
+                }
+            }
+ 
+        }
+    }
+}
+
+
+
+// Existing doc modal css
+.existingdoc {
+    .existing_doc_content{
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        padding: 25px 25px 0;
+        .item {
+            margin-bottom: 25px;
+            text-align: center;
+            .item_inner{
+                display: inline-block;
+                vertical-align: top;
+                text-align: left;
+                .doc_img{
+                    position: relative;
+                    img{
+                        border-radius: 10px;
+                        overflow: hidden;
+                        width: 207px;
+                        height: 176px;
+                    }
+                }
+                .doc_desc{
+                    margin-top: 15px;
+                    .name{
+                        font-weight: 700;
+                        font-size: 16px;
+                        line-height: 19px;
+                        color: $table_color;
+                        margin: 0 0 5px;
+                    }
+                    .date{
+                        font-weight: 500;
+                        font-size: 12px;
+                        line-height: 18px;
+                        color: $bodyopacitycolor;
+                    }
+                }
+            }
+        }
+    }
+    .primary_btn{
+        margin-top: 30px;
+    }
+}
+
+// Add Medical Doc modal css
+.medicaldoc {
+    .increse_content{
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        margin: 0 0 5px;
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        padding: 20px 20px 10px;
+        .increse_content_inner{
+            .item{
+                label{
+                    font-weight: 400;
+                    line-height: 18px;
+                    color: $table_color;
+                }
+                .form_field_wrapper{
+                    .mat-form-field{
+                        .mat-form-field-wrapper{
+                            .mat-form-field-flex{
+                                .mat-form-field-infix{
+                                    width: 100%;
+                                }
+                            }
+                        }
+                    }
+                }
+            
+                .upload_input{
+                    padding: 9px 15px;
+                    background-color: #ffffff;
+                    border: 1px solid rgba(228, 228, 228, 0.9);
+                    font-size: $font_small;
+                    border-radius: 5px;
+                    width: 100%;
+                    margin-bottom: 15px;
+                    position: relative;
+                    .user_upload_input{
+                        opacity: 0;
+                        z-index: 0;        
+                        width: 100%;
+                    }
+                    .upload_input_content{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        position: absolute;
+                        top: 15px;
+                        bottom: auto;
+                        left: 0;
+                        right: 0;
+                        label{
+                            color: #3DA7C8;
+                            margin: 0;
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+        }
+        .row_generate{
+            border-radius: 5px;
+            height: auto;
+            margin: 30px 0 15px 15px;
+            &.row_add{
+                background: $bodycolor;
+                .mat-icon{
+                    color: #ffffff;
+                }
+            }
+            &.row_minus{
+                background: #FDE6E5;
+                .mat-icon{
+                    color: #F05A4F;
+                }
+            }
+            .mat-icon{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 50px;
+                width: 50px;
+                height: 100%;
+            }
+        }
+    }
+    .primary_btn{
+        margin-top: 20px;
+    }
+}
+
+
+
+@media screen and (min-width:$desktop_up) {
+    .existingdoc .existing_doc_content .item{
+        width: auto;
+    }
+    .existingdoc {
+        .modal-dialog{
+            max-width: 1015px;
+        }
+    }
+}
+@media screen and (max-width:$large_phone) {
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-body .expansion_panel_inner .expansion_item.medical_doc .bar.top_bar{
+        flex-direction: column;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-body .expansion_panel_inner .consultation_datetime .consultation_datetime_inner .expansion_item{
+        border-right: none;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-body .expansion_panel_inner .consultation_datetime .consultation_datetime_inner .expansion_item{
+        border-right: none; 
+    }
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-body .expansion_panel_inner .consultation_datetime .consultation_datetime_inner .expansion_item:first-child{
+        padding: 20px 0;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .appointment_doctor_details .bottom_bar .medicine_details .medicine_info .desc_wrapper .rating_section {
+        text-align: left;
+        margin: 15px 0 0;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-header .mat-expansion-panel-header-title{
+        font-size: 16px;
+        line-height: 20px;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-body .expansion_panel_inner .expansion_item.medical_doc .bar.bottom_bar .row .item{
+        width: 100%;
+    }
+}
+@media screen and (max-width:$medium_phone) {
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-body .expansion_panel_inner .expansion_item.medical_doc .bar.top_bar .primary_btn .btn{
+        width: 100%;
+        margin: 0 0 15px;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .appointment_doctor_details .top_bar{
+        flex-direction: column;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .appointment_doctor_details .top_bar .title{
+        margin: 5px 0 0;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .appointment_doctor_details .bottom_bar .medicine_details{
+        flex-direction: column;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .appointment_doctor_details .bottom_bar .medicine_details .image{
+        margin: 0 0 15px;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .appointment_doctor_details .bottom_bar .medicine_details .image img{
+        width: 100px;
+        min-width: 100px;
+        height: 100px;
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-body .expansion_panel_inner .consultation_datetime .consultation_datetime_inner .expansion_item .mat-button-toggle-group .mat-button-toggle{
+        width: 100%;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-body .expansion_panel_inner .consultation_datetime {
+        padding: 35px 0 0;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-body .expansion_panel_inner .consultation_datetime .consultation_datetime_inner{
+        margin: -1px;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-body .expansion_panel_inner .consultation_datetime h2{
+        padding: 0 10px;
+    } 
+    .main_section .main_section_inner .content_area .bottom_section .mat-accordion .mat-expansion-panel .mat-expansion-panel-body .expansion_panel_inner .consultation_datetime .consultation_datetime_inner .expansion_item .primary_btn .btn{
+        width: 100%;
+        margin: 0 10px 15px;
+    }
+}
+
+
+.custome_modal{
+    .primary_btn{
+        justify-content: flex-end;
+    }
+    &.requestamount {
+        .modal-body label{
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 24px;
+            letter-spacing: 0.2px;
+            color: #25282B;
+        }
+        p{
+            font-weight: 500;
+            font-size: 18px;
+            line-height: 24px;
+            letter-spacing: 0.2px;
+            color: #25282B;
+        }
+    }
+    &.approver{
+        .image_block{
+            text-align: center;
+        }
+        .primary_btn{
+            text-align: center;
+            justify-content: center;
+            .btn {
+                min-width: 40%;
+            }
+        }
+        p{
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 24px;
+            text-align: center;
+            letter-spacing: 0.2px;
+            color: #25282B;
+        }
+    }
+    &.wanttosign {
+        p{
+            font-weight: 600;
+            font-size: 18px;
+            line-height: 24px;
+            text-align: center;
+            letter-spacing: 0.2px;
+            color: #25282B;
+        } 
+        .primary_btn{
+            text-align: center;
+            justify-content: center;
+            .btn {
+                min-width: 20%;
+               margin: 0 10px;
+            }
+        }
+        .expansion_panel{
+            margin-top: 20px;
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+        }
+        .siganature{
+            p{
+                text-align: left;
+            }
+            .signature_block{
+                display: flex;
+                justify-content: space-between;
+                background: #F5F5F5;
+                border-radius: 5px;
+                align-items: center;
+            }
+            .signature_iamge{
+               padding: 15px;
+            }
+            .icon_img{
+                background: #0B4977;
+                border-radius: 5px;
+                padding: 21px;
+            }
+           
+        }
+        .mat-form-field-flex {
+            background-color: #0B4977 !important;
+           
+        }
+        .mat-select-placeholder{
+            color: white;
+        }
+        .mat-select-arrow{
+            border: solid #ffffff !important;
+            border-width: 0 3px 3px 0 !important; 
+        }
+        .mat-form-field{
+            max-width: 230px;
+            margin: 0 auto;
+        }
+        .mat-select-value{
+            color: white;
+        }
+        .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 17px;
+            color: #0B4977 !important;
+        }
+        
+        .mat-option-text{
+            color: #0B4977 !important;
+        }
+        .mat-option.mat-active {
+            color: #0B4977 !important;
+        }
+    }
+}
+
+.doc_img.selected {
+    border: 4px solid rgb(238, 123, 7); 
+    border-radius: 13px;
+  }
+
+  .scrolling{
+    overflow-x: scroll;
+    max-height: 500px;
+  }
+
+

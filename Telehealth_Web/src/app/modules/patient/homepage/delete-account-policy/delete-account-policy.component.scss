@@ -1,0 +1,84 @@
+@import '../../../../../assets/css/variable/variable';
+
+
+.main_section {
+    margin-top: 40px;
+}
+
+.contact-main-section {
+    .title {
+        font-size: 18px;
+        font-weight: 600;
+        color: $black_color;
+    }
+    p {
+        font-size: 15px;
+        color: $black_color;
+    }
+    .contact-card-wrap {
+        border: 2px solid $sidebarcolor;
+        border-radius: 8px;
+    }
+    header {
+        background-color: #007bff;
+        color: white;
+        padding: 20px;
+        text-align: center;
+    }
+
+    section {
+        margin: 20px auto;
+        padding: 20px;
+        max-width: 800px;
+        background: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+
+    h1 {
+        font-size: 24px;
+        color: #000000;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    h2 {
+        font-size: 20px;
+        color: #555;
+    }
+
+    p {
+        margin-bottom: 10px;
+    }
+
+    ul, ol {
+        margin-left: 20px;
+    }
+
+    li {
+        margin-bottom: 5px;
+    }
+
+    strong {
+        color: #000000;
+    }
+
+    a {
+        color: #000000;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    footer {
+        background: #333;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+    }
+}

@@ -1,0 +1,126 @@
+@import '../../../../../assets/css/variable/variable';
+
+.profile_image {
+    height: 100px;
+    width: 100px;
+    display: inline-block;
+
+    img {
+        // display: block;
+        width: 100%;
+        height: 100%;
+        border: 1px solid #0015ff;
+        border-radius: 100%;
+    }
+
+}
+
+.profile_data {
+    padding: 20px;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    background-color: #f0f4fc;
+    max-width: 100%;
+}
+
+.profile_info_inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.profile_info_with_img {
+    justify-content: space-between;
+}
+
+.col_item {
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+.profile_image_wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.profile_image img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    margin-right: 15px;
+}
+
+.profile_title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.profile_contact {
+    display: flex;
+    flex-direction: column;
+}
+
+.lable {
+    font-weight: bold;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.user_value {
+    font-size: 14px;
+    color: #333;
+}
+
+.truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    /* Adjust this based on your layout */
+}
+
+@media screen and (max-width: 768px) {
+    .profile_info_inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .col_item {
+        margin-right: 0;
+        width: 100%;
+    }
+}
+
+.docName {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.upload_input {
+    padding: 11px 15px;
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    border: 1px solid rgba(228, 228, 228, 0.9);
+    font-size: $font_small;
+    border-radius: 5px;
+    width: 100%;
+    position: relative;
+
+    .user_upload_input {
+        opacity: 0;
+        z-index: 0;
+    }
+
+    .upload_input_content {
+        display: flex;
+        align-items: center;
+
+        // position: absolute;
+        // top: 10px;
+        // bottom: auto;
+        label {
+            margin: 0 0 0 10px;
+        }
+    }
+
+}

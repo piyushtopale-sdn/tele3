@@ -1,0 +1,95 @@
+
+<div [ngClass]="{ 'main_block': !dontShowSidebard }">
+    <div class="sidebar_section" *ngIf="!dontShowSidebard">
+        <app-individual-doctor-sidebar></app-individual-doctor-sidebar>
+    </div>
+    <div class="main_section">
+        <div *ngIf="!dontShowSidebard" >
+            <app-individual-doctor-header></app-individual-doctor-header>
+        </div>
+
+        <div *ngIf="dontShowSidebard">
+            <div class="header">
+                <button
+                  class="d-md-block d-lg-none menu"
+                  data-bs-toggle="offcanvas"
+                  data-bs-target="#offcanvasExample"
+                  aria-controls="offcanvasExample"
+                >
+                  <mat-icon>menu</mat-icon>
+                </button>
+              
+                <div class="header_logo d-lg-none">
+                  <!-- <img class="img-flui" src="../../../../assets/img/logo.svg" alt="logo" /> -->
+                </div>
+              
+                <nav class="navbar navbar-expand-lg">
+                  <div class="navbar-inner container-fluid">
+                    <button
+                      class="navbar-toggler"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#navbarSupportedContent"
+                      aria-controls="navbarSupportedContent"
+                      aria-expanded="false"
+                      aria-label="Toggle navigation"
+                    >
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                      <div class="header-left-content">
+                        <div class="header-left-content">
+                          <h2>{{ menuSelected | translate }}</h2>
+                        </div>
+                      </div>
+                      <div class="header-right-content">       
+                        <div class="user common_content">
+                          <div
+                            class="user_inner"
+                            id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                          >
+                            <div class="profile_img">
+                              <!-- <img
+                                src="{{
+                                  doctorProfile ==
+                                    ? doctorProfile
+                                    : '../../../../../../assets/img/default_user.png'
+                                }}"
+                              /> -->
+                            </div>
+                            <div class="user_wrapper dropdown-toggle">
+                              <div class="user_name_wrapper">
+                                <div class="user_name roles-names"> Select Language</div>
+                              </div>
+                            </div>
+                          </div>
+                          <ul
+                            class="profile dropdown-menu"
+                            aria-labelledby="dropdownMenuButton1"
+                          >
+                            <li style="cursor: pointer">
+                              <a class="dropdown-item">
+                                <mat-icon>g_translate</mat-icon
+                                ><span class="item_text">{{ "languages" | translate }}</span>
+                                <div class="dropdown_language dropdown-menu show">
+                                  <app-language></app-language>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </nav>
+              </div> 
+        </div>
+
+        <div>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+<app-video-calling [loggedInUserName]="loggedInUserName" ></app-video-calling>

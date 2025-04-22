@@ -1,0 +1,70 @@
+
+@import '../../../../../assets/css/variable/variable';
+.material-icons{
+    cursor: pointer;
+}
+
+.eprescriptionlist{
+    .top_bar{
+        justify-content: flex-end;
+        margin: 0 0 25px;
+            .content_wrap{
+                flex-wrap: wrap;
+                .top_item{
+                    margin: 0 15px 20px 0;
+                    .form_field_wrapper{
+                        display: flex;
+                        align-items: center;
+                        flex-wrap: wrap;
+                        label{
+                            margin: 0 15px 0 0;
+                            color: $bodyopacitylightcolor;
+                        }
+                        .mat-form-field{
+                            .mat-form-field-wrapper{
+                                padding: 0;
+                                .mat-form-field-flex{
+                                    background-color: #F6F8FC;
+                                    border: 1px solid #F6F8FC;
+                                    .mat-form-field-infix{
+                                        .mat-select{
+                                            .mat-select-arrow-wrapper{
+                                                transform: translateY(0);
+                                            }
+                                            .mat-select-value{
+                                                color: $formfiled_color;
+                                                font-weight: 500;
+                                            }
+                                        }
+                                        width: 100px;
+                                    }
+                                }
+                                .mat-form-field-underline{
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                    &:last-child{
+                        margin-right: 0;
+                    }
+                }
+            } 
+    }
+}
+
+@media screen and (max-width:$large_phone) {
+    .eprescriptionlist .top_bar .content_wrap{
+        margin: 0;
+    }
+    .eprescriptionlist .top_bar .content_wrap .top_item {
+        margin: 0 0 20px;
+        width: 100%;
+    }
+    .eprescriptionlist .top_bar .content_wrap .top_item .form_field_wrapper .mat-form-field{
+        width: 100%;   
+    }
+    .eprescriptionlist .top_bar .content_wrap .top_item .form_field_wrapper label{
+        margin-bottom: 15px;
+    }
+}

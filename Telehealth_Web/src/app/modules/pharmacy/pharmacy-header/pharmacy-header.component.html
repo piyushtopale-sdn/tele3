@@ -1,0 +1,227 @@
+<div class="header">
+  <button
+    class="d-md-block d-lg-none menu"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasExample"
+    aria-controls="offcanvasExample"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <div class="header_logo d-lg-none">
+    <img class="img-flui" src="../../../../assets/img/logo.svg" alt="logo" />
+  </div>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="navbar-inner container-fluid">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="header-left-content">
+          <!-- <div class="content" [routerLink]="['/insurance/policyclaim']">
+                        <div class="content_img">
+                          <mat-icon>description</mat-icon>
+                        </div>
+                          <span class="content_text">{{'policy_claims_analysis'|translate}}</span>
+                      </div>
+                      <div class="content" [routerLink]="['/insurance/insuranceanalysis']">
+                        <div class="content_img">
+                          <mat-icon>add_moderator</mat-icon>
+                        </div>
+                          <span class="content_text">{{'insurance_analysis'|translate}}</span>
+                      </div> -->
+        </div>
+        <div class="header-right-content">        
+          <div
+            class="notification common_content"
+            (click)="changeIsViewStatus()"
+          >
+            <div
+              class="user_inner"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span
+                *ngIf="notiCount > 0"
+                style="
+                  position: absolute;
+                  background: red;
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 70%;
+                  color: white;
+                  font-weight: bold;
+                  font-size: 12px;
+                  z-index: 1;
+                  margin-left: 54%;
+                  margin-top: 5px;
+                "
+              >
+                <span
+                  style="margin-left: 6px; margin-top: -1px; position: absolute"
+                >
+                  {{ notiCount }}
+                </span>
+              </span>
+              <mat-icon>notifications</mat-icon>
+            </div>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li class="head text-light">
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12 col-12 head_inner">
+                    <span
+                      >{{ "notifications" | translate }} ({{
+                        isViewcount
+                      }})</span
+                    >
+                    <a (click)="markAllRead()">
+                      {{ "mark_all_as_read" | translate }}
+                    </a>
+                  </div>
+                </div>
+              </li>
+              <div
+                style="max-height: 300px; overflow-y: auto; overflow-x: hidden"
+              >
+                <ng-container *ngFor="let data of notificationlist">
+                  <li
+                    class="notification-box"
+                    [ngClass]="data?.isView ? '' : 'activenoti'"
+                  >
+                    <div
+                      class="row"
+                      (click)="markReadById(data)"
+                      style="cursor: pointer"
+                    >
+                      <span
+                        *ngIf="data.created_by == userID; else Notification"
+                      >
+                      </span>
+                      <ng-template #Notification>
+                        <div class="col-lg-3 col-sm-3 col-3 text-center">
+                          <img
+                            src="../../../../assets/img/default_user.png"
+                            class="w-75 rounded-circle"
+                          />
+                        </div>
+                        <div class="col-lg-8 col-sm-8 col-8">
+                          <strong class="notify_title">{{
+                            data?.notitype ? data?.notitype.split('_').join(' ') : ""
+                          }}</strong>
+                          <ng-container *ngIf="data?.content; else chatMessage">
+                            <div class="notify_desc">
+                              {{data?.content.split('_').join(' ')}}
+                            </div>
+                          </ng-container>
+                          <ng-template #chatMessage>
+                            <ng-container *ngIf="data?.content != '' && data?.notitype == 'chat';else noChat">
+                              <div class="notify_desc">
+                                {{data?.content }}
+                              </div>
+                            </ng-container>
+                            <ng-template #noChat>
+                              <div class="notify_desc">
+                                <i class="fa fa-image"></i>
+                              </div>
+                            </ng-template>
+                          </ng-template>
+                          <!-- <div class="notify_desc">
+                            {{ data?.content }}
+                          </div> -->
+                          <small class="notify_time">
+                            {{ data?.createdAt | date : "dd/MM/yyy" }} |
+                            <span
+                              >{{ data?.createdAt | date : "hh:mm " }}
+                            </span>
+                          </small>
+                          <!-- <small class="notify_time">{{data?.createdAt | date : 'hh:mm a'}}</small> -->
+                        </div>
+                      </ng-template>
+                    </div>
+                  </li>
+                </ng-container>
+              </div>
+              <li class="footer text-center">
+                <a href="" class="text-light" [routerLink]="['/pharmacy/notification']">{{ "view_all" | translate }}</a>
+              </li>
+            </ul>
+          </div>
+          <div class="user common_content">
+            <div
+              class="user_inner"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <div class="profile_img">
+                <img
+                  src="{{
+                    profile
+                      ? profile
+                      : '../../../../../../assets/img/default_user.png'
+                  }}"
+                />
+
+                <!-- <img src="../../../../assets/img/vector.png"> -->
+              </div>
+
+              <div class="user_wrapper dropdown-toggle">
+                <div class="user_name_wrapper">
+                  <div class="user_name">{{ username }}</div>
+                  <div class="user_name">{{ staffName }}</div>
+                  <div class="user_name" style="font-size: 9px">
+                    {{ userRole }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul
+              class="profile dropdown-menu"
+              aria-labelledby="dropdownMenuButton1"
+            >
+              <li *ngIf="!isLoggedIn">
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/pharmacy/createprofile']"
+                  ><mat-icon>person</mat-icon
+                  ><span class="item_text">{{ "profile" | translate }}</span></a
+                >
+              </li>
+              <li *ngIf="isLoggedIn">
+                <a class="dropdown-item" [routerLink]="['/pharmacy/profile']"
+                  ><mat-icon>person</mat-icon
+                  ><span class="item_text">{{ "profile" | translate }}</span></a
+                >
+              </li>
+              <li style="cursor: pointer">
+                <a class="dropdown-item">
+                  <mat-icon>g_translate</mat-icon
+                  ><span class="item_text">{{ "languages" | translate }}</span>
+                  <div class="dropdown_language dropdown-menu show">
+                    <app-language></app-language>
+                  </div>
+                </a>
+              </li>
+              <li style="cursor: pointer">
+                <a class="dropdown-item" (click)="logout()"
+                  ><mat-icon>logout</mat-icon
+                  ><span class="item_text">{{ "logout" | translate }}</span></a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>

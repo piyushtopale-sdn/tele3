@@ -1,0 +1,43 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'ngx-toastr/toastr';
+@import 'ngx-toastr/toastr-bs4-alert';
+@import 'ngx-toastr/toastr-bs5-alert';
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@import "~igniteui-angular/lib/core/styles/themes/index";
+// Uncomment the following lines if you want to add a custom palette:
+// $primary: #731963 !default;
+// $secondary: #ce5712 !default;
+// $app-palette: igx-palette($primary, $secondary);
+
+/* autoprefixer grid: on */
+
+@include igx-core();
+@include igx-typography($font-family: $material-typeface, $type-scale: $material-type-scale);
+@include igx-theme($default-palette);
+
+.danger {
+  color: red
+}
+
+.ngx-overlay {
+  z-index: 99998999 !important;
+}
+
+
+// .red-text {
+//   color: red !important;
+// }
+.select21 .select2-selection__rendered {
+  color: red !important;
+  /* Change the color for the first select2 */
+}

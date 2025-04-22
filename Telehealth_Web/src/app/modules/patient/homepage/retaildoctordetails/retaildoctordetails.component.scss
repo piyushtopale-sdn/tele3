@@ -1,0 +1,1538 @@
+@import '../../../../../assets/css/variable/variable';
+
+.back_button {
+    display: flex;
+    justify-content: flex-end;
+  }
+.main_section{
+    margin-top: 40px;
+    &.retail_doctor_detail{
+        .main_section_inner{
+            .sidebar {
+                .sidebar_inner{
+                    .box{
+                        margin: 0 0 20px;
+                        .title-wrapper{
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            padding: 15px;
+                            border-bottom: 1px solid rgba(182, 200, 214, 0.38);
+                            .box-heading{
+                                font-weight: 500;
+                                font-size: 20px;
+                                line-height: 24px;
+                                color: $table_color;
+                            }
+                            .btn{
+                                padding: 0;
+                                text-decoration: none;
+                                color: $bodycolor;
+                                min-width: 70px;
+                                &:hover{
+                                  color: $homepage_hovercolor;
+                                }
+                            }
+                        }
+                        &.searchbar {
+                            .common_search {
+                                margin: 0 0 15px;
+                                .input-group{
+                                    background: #F6F8FC;
+                                    border-radius: 6px;
+                                    overflow: hidden;
+                                    .btn {
+                                        padding: 0;
+                                        border: none;
+                                        min-width: auto;
+                                        line-height: 50px;
+                                        height: 50px;
+                                        width: 50px;
+                                    }
+                                    .form-control{
+                                        border: none;
+                                        background-color: #F6F8FC;
+                                        padding: 13px 13px 13px 0;
+                                        color: #0B4977;
+                                        font-weight: 500;
+                                        &::placeholder{
+                                            color: rgba(11, 73, 119, 0.5);
+                                        }
+                                    }
+                                }
+                                .form_field_wrapper{
+                                    img{
+                                        position: absolute;
+                                        z-index: 9;
+                                        left: 15px;
+                                        top: 18px;
+                                        font-size: 18px;
+                                        color: rgba(11, 73, 119, 0.5);
+                                    }
+                                    .mat-form-field{
+                                        .mat-form-field-wrapper{
+                                            padding-bottom: 0;
+                                            .mat-form-field-flex{
+                                                background-color: #F6F8FC;
+                                                border-color: #F6F8FC;
+                                                border-radius: 6px;
+                                                padding-left: 45px;
+                                                .mat-form-field-infix{
+                                                    .mat-select-value{
+                                                        color: #0B4977;
+                                                        font-weight: 500;
+                                                    }
+                                                    .mat-form-field-label-wrapper{
+                                                        label{
+                                                            font-weight: 400;
+                                                            color: rgba(11, 73, 119, 0.5);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                select2 {
+                                    .select2-container {
+                                        .select2-selection__placeholder {
+                                            margin: 0px !important;
+                                        }
+                                        .select2-selection__rendered{
+                                            padding-left: 46px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        &.advance_search {
+                            border: 1px solid rgba(182, 200, 214, 0.5);
+                            border-radius: 10px;
+                            .common_adsearch{
+                                padding: 15px;
+                                border-bottom: 1px solid rgba(182, 200, 214, 0.5);
+                               .mat-accordion{
+                                 .mat-expansion-panel{
+                                    border-radius: unset !important;
+                                        .mat-expansion-panel-header{
+                                            height: 35px;
+                                            padding: 0;
+                                            .mat-panel-title{
+                                                color: #0c2f49;
+                                            }
+                                            .mat-expansion-indicator {
+                                                margin: 0 5px;
+                                                &:after{               
+                                                    padding: 4px;
+                                                }
+                                            }
+                                            &:hover{
+                                                background: transparent;
+                                            }
+                                        }
+                                        .mat-expansion-panel-content{
+                                            border-top: none;
+                                            .expansion_panel {
+                                                margin-top: 10px;
+                                                .expansion_panel_inner{
+                                                    padding: 0;
+                                                    .mat-radio-button{
+                                                        display: block;
+                                                        margin: 0 0 12px;
+                                                        .mat-radio-label{
+                                                            color: $bodyopacitylightcolor;
+                                                            font-weight: 500;
+                                                            font-size: 14px;
+                                                            margin: 0 0 3px;
+                                                            .mat-radio-outer-circle{
+                                                                border: 1px solid #B6C8D6;
+                                                            }
+                                                        }
+                                                        &.mat-radio-checked{
+                                                            .mat-radio-label{
+                                                                color: $table_color;
+                                                                font-weight: 500;
+                                                            } 
+                                                        }
+                                                        &:last-child{
+                                                            margin: 0;
+                                                        }
+                                                    }
+                                                    .mat-checkbox{
+                                                        margin-bottom: 10px;
+                                                        display: block;
+                                                        .mat-checkbox-layout{
+                                                            .mat-checkbox-inner-container{
+                                                                width: 18px;
+                                                                height: 18px;
+                                                                .mat-checkbox-frame{
+                                                                    border: 1px solid #B6C8D6;
+                                                                    border-radius: 5.17649px;
+                                                                }
+                                                            }
+                                                            .mat-checkbox-label{
+                                                                color: rgba(12, 47, 73, 0.75);
+                                                                font-weight: 500;
+                                                                font-size: 14px;
+                                                                line-height: 18px;
+                                                                white-space: normal;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                               } 
+                               &:last-child{
+                                    border-bottom: none;
+                               }    
+                            }
+                        }
+                    }
+               
+                }
+            
+            }
+            .content_area {
+                position: relative;
+                .top_section{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 0 0 40px;
+                    .primary_btn {
+                        .btn{
+                            margin: 0 0 0 30px;
+                            &:first-child{
+                                margin: 0;
+                            }
+                        }
+                    }
+                    
+                    .select_pharmacy {
+                        .mat-checkbox-label{
+                            color: $table_color;
+                            font-weight: 400;
+                            font-size: 14px;
+                            line-height: 17px;
+                        }
+                    }
+                }
+                .bottom_section{
+                    .order_medicine{
+                        margin: 0 0 30px;
+                        .top_bar{
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            background-color: rgba(61, 167, 200, 0.1);
+                            border-radius: 15px 15px 0 0;
+                            padding: 15px 25px;
+                            border-style: solid;
+                            border-color: #B6C8D6;
+                            border-width: 1px 1px 0;
+                            .title{
+                                font-size: $font_small;
+                                font-weight: 600;
+                                color: #45AB15;
+                                .dot{
+                                    position: relative;
+                                    width: 18px;
+                                    height: 18px;
+                                    line-height: 18px;
+                                    background: rgba(69, 171, 21, 0.2);
+                                    display: inline-block;
+                                    vertical-align: middle;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    margin-right: 5px;
+                                    &:before{
+                                        content: "";
+                                        width: 10px;
+                                        height: 10px;
+                                        background:#45AB15;
+                                        display: inline-block;
+                                        border-radius: 50%;
+                                    }
+                                } 
+                            }
+                            .mat-checkbox-label{
+                                font-weight: 400;
+                                font-size: 14px;
+                                line-height: 17px;
+                                color: #0C2F49;
+                            }
+                        }
+                        .bottom_bar{
+                            border-style: solid;
+                            border-color: #B6C8D6;
+                            border-width: 1px 1px 1px;
+                            border-radius:15px;
+                            padding: 25px;
+                            .row{
+                                align-items: flex-end;
+                                .left_part {
+                                    .medicine_details{
+                                        display: flex;
+                                        .image{
+                                            margin: 0 25px 0 0;
+                                            img{
+                                                border-radius: 10px;
+                                                width: 115px;
+                                                min-width: 115px;
+                                                height: 120px;
+                                            }
+                                        }
+                                        .medicine_info{
+                                            width: 100%;
+                                            h2{
+                                                font-weight: 500;
+                                                font-size: 22px;
+                                                line-height: 26px;
+                                                color: $table_color;
+                                                margin: 0 0 10px;
+                                                cursor: pointer;
+                                                .icon{
+                                                    margin: 0 5px;
+                                                }
+                                            }
+                                            .desc{
+                                                font-size: $font_medium;
+                                                line-height: 20px;
+                                                font-weight: 500;
+                                                margin: 0 0 14px;
+                                            }
+                                            .content_list{
+                                                list-style: none;
+                                                padding: 0;
+                                                margin-bottom: 0;
+                                                align-items: center;
+                                                .content_item{
+                                                    width: auto;
+                                                    margin: 0 0 7px;
+                                                    .title{
+                                                        font-size: 12px;
+                                                        color: $table_color;
+                                                    }
+                                                    .content_desc{
+                                                        font-weight: 600;
+                                                        font-size: 16px;
+                                                        line-height: 19px;
+                                                        color: $table_color;
+                                                        .rating{
+                                                            font-weight: 400;                         
+                                                            font-size: $font_small;
+                                                            i{
+                                                                color: $star_color;
+                                                            }
+                                                            span{
+                                                                font-weight: 600;
+                                                                font-size: $font_medium;
+                                                                margin: 0 3px;
+                                                            }
+                                                        }
+                                                       
+            
+                                                    }
+                                                }
+                                            }
+                                            .order_location{
+                                                .location{
+                                                    border: 1px solid #B6C8D6;
+                                                    border-radius: 8px;
+                                                    padding: 15px;
+                                                    .label{
+                                                        font-weight: 600;
+                                                        font-size: 16px;
+                                                        line-height: 19px;
+                                                        color: $table_color;
+                                                        margin: 0 0 5px;
+                                                    }
+                                                    .value{
+                                                        font-weight: 400;
+                                                        font-size: 14px;
+                                                        line-height: 22px;
+                                                        color: $table_color;
+                                                        .mat-icon{
+                                                            vertical-align: middle;
+                                                            margin: 0 5px 0 0;
+                                                            height: 22px;
+                                                            width: 22px;
+                                                            font-size: 22px;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                .right_part{
+                                    .primary_btn{
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: end;
+                                        flex-direction: row;
+                                        margin: 25px 0 0 0;
+                                        flex-wrap: wrap;
+                                        .btn{
+                                            margin: 0 0 10px 10px;
+                                            flex-direction: column;
+                                            font-size: 16px;
+                                            line-height: 22px;
+                                            font-weight: 500; 
+                                            padding: 8px 10px;
+                                            min-width: 216px;
+                                            color: $bodycolor;  
+                                            span{
+                                                font-size: $font_small;
+                                                font-weight: 400;  
+                                            }
+                                            &:hover{
+                                                color: $white_color;
+                                            }
+                                        }
+                                    }
+                                    .open_today{
+                                        display: flex;
+                                        justify-content: end;
+                                        p{
+                                            margin: 0;
+                                            margin-left: 10px;
+                                            color: #71C34A;
+                                        }
+                                        .green_circle{
+                                            display: flex;
+                                            align-items: center;
+                                            .circle{
+                                                background: rgba(113, 196, 74, 0.4);
+                                                width: 17px;
+                                                height: 17px;
+                                                border-radius: 50px;
+                                                display: flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                                .inner_green{
+                                                    width: 11px;
+                                                    height: 11px;
+                                                    background-color: #71C34A;
+                                                    border-radius: 50px;
+                                                }
+                                            }
+                                            
+                                        }
+                                    }
+                                    .close_today{
+                                        display: flex;
+                                        justify-content: end;
+                                        p{
+                                            margin: 0;
+                                            margin-left: 10px;
+                                            color: #f80414;
+                                        }
+                                        .red_circle{
+                                            display: flex;
+                                            align-items: center;
+                                            .circle{
+                                                width: 17px;
+                                                height: 17px;
+                                                border-radius: 50px;
+                                                display: flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                                .inner_green{
+                                                    width: 11px;
+                                                    height: 11px;
+                                                    background-color: #eb0707;
+                                                    border-radius: 50px;
+                                                }
+                                            }
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .dermatologists{
+                        margin: 0 0 30px;
+                        .main_title{
+                            font-weight: 600;
+                            margin: 40px 0 25px;
+                        }
+                        ul{
+                            list-style: none;
+                            padding: 0;
+                            margin-bottom: 0;
+                            .item{
+                                margin: 0 0 25px;
+                                .item_inner{
+                                    border: 1px solid #B6C8D6;
+                                    border-radius: 15px;
+                                    padding: 20px;
+                                    .dermatologists_details{
+                                        display: flex;
+                                        margin: 0 0 15px;
+                                        .image{
+                                            margin: 0 15px 0 0;
+                                            img{
+                                                border-radius: 10px;
+                                                width: 85px;
+                                                min-width: 85px;
+                                                height: 89px;
+                                            }
+                                        }
+                                        .dermatologists_info{
+                                            width: 100%;
+                                            h2{
+                                                font-weight: 500;
+                                                font-size: $font_large;
+                                                line-height: 22px;
+                                                color: $table_color;
+                                                margin: 0 0 8px;
+                                                cursor: pointer;
+                                                .icon{
+                                                    margin: 0 5px;
+                                                }
+                                            }
+                                            .desc{
+                                                font-size: $font_medium;
+                                                line-height: 20px;
+                                                font-weight: 500;
+                                                margin: 0 0 14px;
+                                            }
+                                            .content_list{
+                                                list-style: none;
+                                                padding: 0;
+                                                margin: 0 -10px 0;
+                                                align-items: flex-start;
+                                                .content_item{
+                                                    margin: 0 0 7px;
+                                                    padding: 0 10px;
+                                                    width: auto;
+                                                    .title{
+                                                        font-size: 12px;
+                                                        line-height: 16px;
+                                                        color: $table_color;
+                                                    }
+                                                    .content_desc{
+                                                        font-weight: 600;
+                                                        font-size: 14px;
+                                                        line-height: 19px;
+                                                        color: $table_color;
+                                                        .rating{
+                                                            font-weight: 400;                         
+                                                            font-size: $font_small;
+                                                            i{
+                                                                color: $star_color;
+                                                            }
+                                                            span{
+                                                                font-weight: 600;
+                                                                font-size: $font_small;
+                                                                margin: 0 3px;
+                                                            }
+                                                        }
+                                                       
+            
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .primary_btn{
+                                        .btn{
+                                            margin: 0;
+                                            width: 100%;
+                                        }
+                                    }
+                                }
+                             
+                            }
+                        }
+                    }
+                }
+     
+            }
+        }
+    }
+  
+}
+
+.primary_btn{
+    .btn{
+        margin-left: 10px;
+        line-height: 32px;
+        border-radius: 10px;
+    }
+}
+
+// Order medicine modal css
+.order_medicine {
+    .modal_title{
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 24px;
+        color: #214469;
+        margin: 0 0 20px;
+    }
+    .order_medicine_tab{
+        .mat-tab-header{
+            margin: 0 0 30px;
+            border-bottom: none;
+            .mat-tab-list{
+                .mat-tab-labels{
+                    display: inline-flex;
+                    .mat-tab-label {
+                        font-family: $font_family_body,$font_sans_sarif;
+                        height: 55px;
+                        padding: 0 10px;
+                        min-width: 230px;
+                        font-size: $font_medium;
+                        font-weight: 500;
+                        color: $bodycolor;
+                        background-color: $white_color;
+                        border: 1px solid rgba(11, 73, 119, 0.15);
+                        border-radius: 10px;
+                        opacity: 1;
+                        margin-left: 30px;
+                        &:first-child{
+                            margin-left: 0;
+                        }
+                    }
+                    .mat-tab-label.mat-tab-label-active{
+                        color: $white_color;
+                        background-color: $bodycolor;
+                    }
+                }
+                .mat-ink-bar{
+                    display: none;
+                }
+                .mat-ink-bar{
+                    background-color: $bodycolor;
+                }
+            }
+        }
+        .tab_content {
+            margin: 0 0 15px;
+            .upload_docs{
+                border: 1px dashed #B6C8D6;
+                border-radius: 5px;
+                padding: 20px;
+                text-align: center;
+                margin: 0 0 25px;
+                position: relative;
+                .upload_input{
+                    .upload_input_content{
+                        position: absolute;
+                        top: 0;
+                        bottom: auto;
+                        left: 0;
+                        right: 0;
+                        display: flex;
+                        min-height: 100%;
+                        justify-content: center;
+                        text-align: center;
+                        align-items: center;
+                        flex-direction: column;
+                        label{
+                            display: block;
+                            margin: 10px 0 0;
+                            font-weight: 500;
+                            font-size: 14px;
+                            line-height: 17px;
+                            color: $table_color;
+                        }
+                    }
+                    .user_upload_input{
+                        opacity: 0;
+                        z-index: 0;
+                        min-height: 65px;
+                        width: 100%;
+                    }
+                }
+            }
+            .form_field_wrapper{
+                label{
+                    .info{
+                        margin: 0 0 0 5px;
+                    }
+                }
+            }
+            .upload_doc_img{
+                margin: 25px 0 0;
+                .upload_img{
+                    position: relative;
+                    display: inline-block;
+                    img{
+                        width: 207px;
+                        height: 122px;
+                        border: 3px solid #75C868;
+                        border-radius: 10px;
+                    }
+                    .btn-close{
+                        border: 1px solid #B6C8D6;
+                        background-color: #ffffff;
+                        border-radius: 50%;
+                        width: 28px;
+                        height: 28px;
+                        padding: 0;
+                        color: #130F26;
+                        background-size: 10px;
+                        position: absolute;
+                        top: -15px;
+                        right: -15px;
+                        opacity: 1;
+                    }
+                }
+                h3{
+                    margin-top: 15px;
+                    font-weight: 700;
+                    color: $table_color;
+                }
+            }
+            .table-wrap{
+                .table-inner{
+                    tr{
+                        td{
+                            .form_field_wrapper{
+                                .mat-form-field{
+                                    .mat-form-field-flex {
+                                        border-radius: 10px;
+                                        padding: 5px 15px;
+                                        .mat-form-field-infix{
+                                            width: 100px;
+                                        }
+                                    }
+                                }
+                            }
+                            &:last-child{
+                                .svgicon{
+                                    padding: 0;
+                                    height: 50px;
+                                    width: 50px;
+                                    background: transparent;   
+                                    margin-top: -12px;
+                                }
+                            }
+                            .search_medicine_form{
+                                display: inline-block;
+                                position: relative;
+                                .mat-form-field{
+                                    .mat-form-field-flex {
+                                        padding: 3px 15px 3px 45px;
+                                        .mat-form-field-infix{
+                                            width: 175px;
+                                            border-top-width: 7px;
+                                            padding: 10px 0 3px;
+                                        }
+                                    }
+                                }
+                                .btn-link{
+                                    position: absolute;
+                                    left: 0;
+                                    right: auto;
+                                    top: 0;
+                                    bottom: auto;
+                                    padding: 0;
+                                    z-index: 1;
+                                    width: 50px;
+                                    height: 50px;
+                                    border: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .request_medicine_form{
+                position: relative;
+                .btn-link{
+                    position: absolute;
+                    left: 0;
+                    right: auto;
+                    top: 0;
+                    bottom: auto;
+                    padding: 0;
+                    z-index: 1;
+                    width: 50px;
+                    height: 50px;
+                    border: none;
+                }
+                .mat-form-field{
+                    .mat-form-field-flex{
+                        padding: 3px 15px 3px 45px;
+                        background: #F6F8FC;
+                        border-color: #F6F8FC;
+                        .mat-form-field-infix{
+                            width: 175px;
+                            border-top-width: 7px;
+                            padding: 10px 0 3px;
+                        }
+                    }
+                }
+            }
+
+            
+
+        }
+        .mat-tab-body-content{
+            overflow: hidden;
+        }  
+    }  
+}
+
+.tabing_section{
+    border: 1px solid #B6C8D6;
+    border-radius: 15px;
+    .mat-tab-labels{
+        background: rgba(55, 103, 177, 0.05);
+        border: 1px solid rgba(38, 50, 60, 0.08);
+        border-radius: 15px 15px 0px 0px;
+      
+    }
+   
+    .mat-tab-label-active{
+        position: relative;
+       
+    }
+    // .mat-ink-bar {
+    //     position: absolute;
+    //     bottom: 0;
+    //     height: 2px;
+    //     width: 20px;
+    //     visibility: visible;
+    //     width: 25px !important;
+    // }
+    .mat-ink-bar {
+        background-color: transparent !important;
+        &::before {
+          content: '';
+          display: block;
+          width: 25%;
+          background-color:  #3767B1;
+          height: 6px;
+          border-bottom-right-radius: 70px;
+          border-bottom-left-radius: 70px;
+          left: 36%;
+          position: relative;
+        }
+      }
+      .mat-tab-label-active {
+        &.mat-tab-label{
+            opacity: 1 !important;
+        }
+        .mat-tab-label-content{
+                font-weight: 600;
+                font-size: 14px;
+                line-height: 17px;
+                text-align: center;
+                color: #26323C;
+                
+        }
+    }
+}
+
+.main_outer{
+    overflow: hidden;
+   .about_section,.association_grp,.contact_info,.education_section,.specialization,.services,.fees,.accept_insurance,.reviews_outer,.location{
+    padding: 25px;
+   }
+
+   h2{
+        color: $table_color;
+        font-size: $font_large;
+        font-weight: 600;
+    }
+    .location_appointment{
+        border-bottom: 1px solid #B6C8D6;
+        margin:  0;
+        .expansion_item{
+            padding: 25px 30px;
+            .mat-button-toggle-group{
+                border: none;
+                flex-wrap: wrap;
+                margin: 0 -10px;
+                .mat-button-toggle{
+                    border-left: none;
+                    margin: 0 10px 15px;
+                    border: 1px solid rgba(11, 73, 119, 0.15);
+                    border-radius: 10px;
+                    .mat-button-toggle-label-content{
+                        font-weight: 600;
+                        font-size: $font_medium;
+                        white-space: break-spaces;
+                        color: #214469;        
+                        padding: 10px 15px;
+                        min-width: 85px;
+                        line-height: 20px;
+                        white-space: break-spaces;
+                    }
+                    &:hover{
+                        background-color: $bodycolor;
+                        border-color: $bodycolor;
+                        .mat-button-toggle-label-content{
+                            color: $white_color;
+                        }
+                    }
+                    &.mat-button-toggle-checked{
+                        background-color: $bodycolor;
+                        border-color: $bodycolor;
+                        .mat-button-toggle-label-content{
+                            color: $white_color;
+                        }
+                    }
+                }
+            }
+            &.location{
+                border-right: 1px solid #B6C8D6;
+            }
+            &.appointment{
+                .mat-radio-group{
+                    .mat-radio-button{
+                        margin: 10px 25px 0 0;
+                        .mat-radio-label{
+                            .mat-radio-label-content{
+                                padding-left: 12px;
+                                text-transform: capitalize;
+                            }
+                        }
+                        &:last-child{
+                            margin-right: 0;
+                        }
+                    }
+                }   
+            }
+        }
+    }
+ 
+    .header_section{
+        p{
+            font-weight: 600;
+            font-size: 22px;
+            line-height: 20px;
+            color: #0C2F49;
+            margin: 0;
+            margin-bottom: 20px;
+        }
+    }
+    .content{
+        p{
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 30px;
+            color: #0C2F49;
+        }
+    }
+   
+    hr {
+        margin: 0rem 0;
+    }
+    .consultation_datetime{
+        padding: 35px 20px 20px;
+        .consultation_datetime_inner{
+            margin: 0;
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+            .expansion_item {
+                border-right: 1px solid #B6C8D6;  
+                border-bottom: none;
+                padding: 20px;
+                .mat-button-toggle-group-wrapper{
+                    margin: 0 -10px;
+                    .mat-button-toggle-group{
+                        border: none;
+                        flex-wrap: wrap;
+                        margin: 0 10px 10px;
+                        .mat-button-toggle{
+                            border-left: none;
+                            border: 1px solid rgba(11, 73, 119, 0.15);
+                            border-radius: 10px;
+                            .mat-button-toggle-label-content{
+                                padding: 10px 15px;
+                                font-weight: 600;
+                                font-size: $font_small;
+                                white-space: break-spaces;
+                                color: #214469;        
+                                line-height: 22px;
+                                white-space: break-spaces;
+                            }
+                            &:hover{
+                                .mat-button-toggle-focus-overlay{
+                                    opacity: 0;
+                                }
+                                // background-color: $bodycolor;
+                                // border-color: $bodycolor;
+                                // .mat-button-toggle-label-content{
+                                //     color: $white_color;
+                                // }
+                            }
+                            &.mat-button-toggle-checked{
+                                background-color: $white_color;
+                                border-color: #B6C8D6;
+                                .mat-button-toggle-label-content{
+                                    color: $table_color;
+                                }
+                            }
+                            button{
+                                pointer-events: none;
+                            }
+                        }
+                    }
+                }
+               
+                &:last-child{
+                    border: none;
+                }
+                &.calender{
+                    padding: 0;
+                }
+            }
+        }
+    }
+    .location{
+        .mat-button-toggle-group{    
+            border: none;
+            flex-wrap: wrap;
+            margin: 0 -10px;
+            .mat-button-toggle{
+                border-left: none;
+                margin: 0 15px 15px;
+                border: 1px solid rgba(11, 73, 119, 0.15);
+                border-radius: 10px;
+                .mat-button-toggle-label-content{
+                    font-weight: 600;
+                    font-size: 16px;
+                    color: #214469;
+                    padding: 14px 20px;
+                    line-height: 22px;
+                    text-transform: capitalize;
+                    white-space: break-spaces;
+                }
+                &:hover{
+                    background-color: $bodycolor;
+                    border-color: $bodycolor;
+                    .mat-button-toggle-label-content{
+                        color: $white_color;
+                    }
+                }
+                &.mat-button-toggle-checked{
+                    background-color: $bodycolor;
+                    border-color: $bodycolor;
+                    .mat-button-toggle-label-content{
+                        color: $white_color;
+                    }
+                }
+            }
+        }
+        .contact_information{
+            margin: 20px 0;
+        }
+        .open_hours{
+            .mat-radio-button{
+                margin: 0 25px 10px 0;
+                .mat-radio-label {
+                    .mat-radio-label-content{
+                        padding-left: 12px;
+                        text-transform: capitalize;
+                    }
+                }
+            }
+        }
+    }
+
+    .list_group_section{
+        ul{
+            padding: 0;
+            margin: 0 -15px;
+            li{
+                list-style: none;
+                display: inline-block;
+                margin: 0 0 15px;
+                padding: 0 15px;
+            img{
+                border-radius: 5px;   
+                width: 205px;
+                height: 187px;
+            }
+
+             p{
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 22px;
+                color: #0C2F49;
+             }
+             h2{
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 22px;
+                color: #0C2F49;
+                a{
+                    color: #3DA7C8;
+                    text-decoration: none;
+                }
+
+             }
+             .small_text{
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 19px;
+                color: #0C2F49;
+                margin-bottom: 10px;
+             }
+
+            }
+        }
+    }
+    .accept_insurance{
+        .companies{
+            font-weight: 500;
+            font-size: $font_small;
+            line-height: 22px;
+            text-align: center;
+            text-transform: uppercase;
+            background: #FFFFFF;
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+            min-width: 130px;
+            line-height: 26px;
+            padding: 12px;
+            p{
+                margin: 0;
+                text-transform: uppercase;
+            }
+        }
+        ul{
+            li{
+                margin: 0 0 15px;
+            }
+        }
+    }
+}
+
+
+.reviews_outer{
+    padding: 25px;
+    .header_section{
+        p{
+            font-weight: 600;
+            font-size: 22px;
+            line-height: 20px;
+            color: #0C2F49;
+            margin: 0;
+        }
+    }
+    .header_review{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .primary_btn{
+            .btn {
+               svg{
+                    path{
+                        stroke: $white_color;
+                    }
+               }  
+               &:hover{
+                svg{
+                    path{
+                        stroke: $bodycolor;
+                    }
+                } 
+               }
+            }
+        }
+     
+    }
+  
+    .rating_title{
+        font-size: 12px;
+        color: $table_color;
+    }
+        .ratings-star{
+            font-weight: 400;
+            font-size: 16px;
+            line-height: 19px;
+            color: $table_color;
+            i{
+                color: $star_color;
+                font-size: 15px;
+            }
+            span{
+                font-weight: 600;
+                margin: 0 3px;
+            }
+
+        }
+        .star_rating{
+            background: #FFFFFF;
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+            padding: 15px 30px;
+            p{
+                font-weight: 500;
+                font-size: 18px;
+                line-height: 22px;
+                color: #0C2F49;
+                margin-bottom: 10px;
+
+            }
+        }
+    
+        .average_rating{
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            align-items: center;
+            .rating{
+                font-weight: 700;
+                font-size: 35px;
+                line-height: 24px;
+                color: #0C2F49;
+                display: flex;
+                align-items: center;
+            }
+        }
+        .feedback{
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+            padding: 25px;
+            .feedback_inner{
+                .part_wrapper{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 0 0 15px;
+                    .part{
+                        &.left_part {
+                            display: flex;
+                            align-items: center;
+                            .icon{
+                                margin: 0 15px 0 0;
+                                width: 60px;
+                                height: 60px;
+                                min-width: 60px;
+                                line-height: 60px;
+                                border-radius: 50%;
+                                background: #E8E8E8;
+                                font-size: 28px;
+                                font-weight: 500;
+                                text-align: center;
+                            }
+                            .desc{
+                                h2{
+                                    color: $table_color;
+                                    font-size: $font_medium;
+                                    line-height: 20px;
+                                    margin: 0 0 3px;
+                                }
+                            }
+                        }
+                        &.right_part {
+                            .date{
+                                font-size: $font_medium;
+                            }   
+                        }
+                    }
+                }
+                p{
+                    margin: 0;
+                    color: $table_color;
+                    font-size: $font_medium;
+                }
+            } 
+        }
+        .progress_rating{
+            width: 50%;
+            .progress_rating_block{
+                display: flex;
+                align-items: center;
+                width: 100%;
+                margin-bottom: 8px;
+                p{
+                 margin: 0 5px 0 0;
+                }
+                i{
+                    color: $star_color;
+                    font-size: 15px;
+                    margin: 0 5px 0 0;
+                }
+                .mat-progress-bar{
+                    margin: 0 5px 0 0;
+                }
+                .mat-progress-bar-fill::after {
+                    background-color:  $star_color;
+                }
+                .mat-progress-bar {
+                    display: block;
+                    height: 6px;
+                }
+            }
+           
+        }
+        .user_list{
+            background: #FFFFFF;
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+            margin-top: 30px;
+            padding: 20px;
+            .user_list_heading{
+                .left_side_detail{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    .detail_name{
+                        .name_list{
+                            background: #E8E8E8;
+                            width: 60px;
+                            height: 60px;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            border-radius: 50px;
+                            font-weight: 400;
+                            font-size: 30px;
+                            line-height: 36px;
+                            color: #0C2F49;
+                        }
+                    }
+                    .heading_top{
+                        display: flex;
+                        align-items: center;
+                        .name_detail{
+                            margin-left: 30px;
+                            p{
+                               margin: 0;
+                               font-weight: 500;
+                                font-size: 18px;
+                                line-height: 22px;
+                                color: #0C2F49;
+                            }
+                            .rating_star{
+                                i{
+                                    color: $star_color;
+                                    font-size: 15px;
+                                }
+                            }
+                        }
+                        
+                    }
+                    .date_line{
+                        font-weight: 400;
+                        font-size: 16px;
+                        line-height: 22px;
+                        color: #0C2F49;
+                        
+                    }
+                
+                }
+                .content_block{
+                    margin-top: 20px;
+                    p{
+                        margin-bottom: 0;
+                        font-weight: 400;
+                        font-size: 16px;
+                        line-height: 30px;
+                        color: #0C2F49;
+                    }
+                }
+            }
+        }
+   }
+
+// Review modal css
+.review{
+    .custome_modal {
+        form{
+            .form_field_wrapper{
+                margin: 0 0 25px;
+                
+                label{
+                    color: #25282B;
+                    font-size: $font_medium;
+                    font-weight: 500;
+                }
+                .ratings-star{
+                    margin: 0 0 10px;
+                    ngb-rating{
+                        span{
+                            color: $star_color;
+                            font-size: 26px;
+                        }
+                    }
+                }
+                .mat-form-field{
+                    .mat-form-field-wrapper{
+                            padding-bottom: 0;
+                    }
+                }
+            }
+           
+        }
+    }
+}
+
+
+
+
+
+
+@media screen and (min-device-width: $desktop_pro_up) and (max-device-width: $desktop) { 
+    .main_section.retail_doctor_detail .main_section_inner .content_area .bottom_section .order_medicine .bottom_bar .row .right_part .primary_btn .btn{
+        min-width: 100%;
+    }
+}
+@media screen and (min-width:$desktop_pro_up) {
+.order_medicine .modal-dialog{
+    max-width: 885px
+}
+}
+@media screen and (max-width:$desktop) {
+    .retail_doctor_detail.main_section .main_section_inner .sidebar .sidebar_inner .box .title-wrapper .box-heading{
+        font-size: 16px;
+        line-height: 20px;
+    }
+    .retail_doctor_detail.mat-accordion .mat-expansion-panel .mat-expansion-panel-header .mat-expansion-panel-header-title{
+        font-size: 14px;
+        line-height: 18px;
+    }
+}
+@media screen and (max-width:$tablet) {
+    #column_left{
+        margin: 0 0 25px;
+    }
+    .main_section.retail_doctor_detail .main_section_inner .content_area .bottom_section .order_medicine .bottom_bar .row .right_part .primary_btn .btn{
+        min-width: 100%;
+    }
+}
+@media screen and (max-width:$large_phone) {
+    .retail_doctor_detail.main_section .main_section_inner .content_area .bottom_section .order_medicine .bottom_bar .row .left_part .order_location .location{
+        margin: 0 0 20px;
+    }
+    .reviews_outer .average_rating {
+        display: block;
+    }
+    .reviews_outer .progress_rating {
+        margin-top: 20px;
+        width: 100%;
+    }
+    .main_outer .consultation_datetime .consultation_datetime_inner .expansion_item{
+        border-right:none;
+        border-bottom: 1px solid #B6C8D6;
+    }
+    .main_outer .consultation_datetime .consultation_datetime_inner .expansion_item:first-child{
+        padding: 0;
+    }
+    .main_outer .location_appointment .expansion_item.location{
+        border-bottom: 1px solid #B6C8D6;
+        border-right: none;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .retail_doctor_detail.main_section .main_section_inner .content_area .bottom_section .order_medicine .bottom_bar .row .right_part .primary_btn .btn,
+    .retail_doctor_detail.main_section .main_section_inner .content_area .bottom_section .order_medicine .bottom_bar .row .right_part .primary_btn .btn:last-child {
+        margin: 0 0 10px;
+        width: 100%;
+    }
+    .retail_doctor_detail.main_section .main_section_inner .content_area .bottom_section .order_medicine .bottom_bar .row .right_part .primary_btn {
+        display: block;
+        margin: 15px 0 0 0;
+    }
+    .reviews_outer .header_review {
+        display: block;
+    }
+    .header_review .primary_btn{
+              margin-top: 22px;
+    }
+    .retail_doctor_detail.main_section .main_section_inner .content_area .bottom_section .order_medicine .bottom_bar .row .left_part .medicine_details{
+        flex-direction: column;
+    }
+    .retail_doctor_detail.main_section .main_section_inner .content_area .bottom_section .order_medicine .bottom_bar .row .left_part .medicine_details .image{
+        margin: 0 0 15px;
+        display: inline-block;
+    }
+    
+}
+@media screen and (max-width:$medium_phone) {
+
+    .retail_doctor_detail.main_section .main_section_inner .content_area .bottom_section .order_medicine .bottom_bar .row .left_part .medicine_details .image img {
+        width: 100px;
+        min-width: 100px;
+        height: 104px; 
+    }
+    .reviews_outer .user_list .user_list_heading .left_side_detail {
+        display: block;
+    }
+    .reviews_outer .user_list .user_list_heading .left_side_detail .date_line {
+        margin-top: 12px;
+        text-align: right;
+    }
+    .reviews_outer .feedback .feedback_inner .part_wrapper{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .reviews_outer .feedback .feedback_inner .part_wrapper .part.left_part{
+        margin:  0 0 12px;
+    }
+}
+
+@media screen and (max-width:$small_phone) {
+    .main_outer .consultation_datetime {
+        padding: 35px 0 0;
+    }
+    .main_outer .consultation_datetime .consultation_datetime_inner{
+        margin: -1px;
+    }
+    .main_outer .consultation_datetime h2{
+        padding: 0 10px;
+    }
+}
+
+
+.main_outer_new{
+    overflow: hidden;
+   .about_section,.association_grp,.contact_info,.accept_insurance,.reviews_outer{
+    padding: 25px;
+   }
+    hr {
+        margin: 0rem 0;
+    }
+    .our_team{
+        .cat_list_item{
+            padding: 30px;
+            border-bottom: 1px solid #B6C8D6;
+            .cat_title{
+                font-weight: 600;
+                color: $table_color;
+            }
+            .item {
+                margin: 0 0 15px;
+                .item_inner{
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    background: #F5F7FB;
+                    border-radius: 15px;
+                    padding: 20px; 
+                    .desc{
+                        .title{
+                            font-size: $font_medium;
+                            font-weight: 600;
+                            line-height: 20px;
+                            color: $table_color;
+                            margin: 0 0 5px;
+                        }
+                        .desc{
+                            font-size: $font_small;
+                            font-weight: 500;
+                            color: $bodyopacitylightcolor;
+                        }
+                    }
+                }
+            }
+            &:last-child{
+                border-bottom: none;
+            }
+        }
+    }
+}

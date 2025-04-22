@@ -1,0 +1,38 @@
+<div class="rolepermission dashboard_main_content">
+    <div class="row">
+      <div class="col-xl-3 role_item">
+        <div class="form_field_wrapper">
+          <mat-checkbox class="example-margin" (change)="makeSelectAll($event)">{{
+            "select_all" | translate
+          }}</mat-checkbox>
+        </div>
+      </div>
+      <div class="col-xl-3 role_item" *ngFor="let menu of allMenus">
+        <div class="form_field_wrapper">
+          <mat-checkbox
+            class="example-margin"
+            checked="{{ checkedMenuArray.includes(menu.id) ? true : false }}"
+            (change)="makeJSON($event.checked, menu.id, menu.menu_order)"
+            >{{ menu.name }}</mat-checkbox
+          >
+        </div>
+      </div>
+    </div>
+    <div class="primary_btn">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        [routerLink]="['/super-admin/profile']"
+      >
+        {{ "cancel" | translate }}
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="handleAssignPerminssions()"
+      >
+        {{ "assign" | translate }}
+      </button>   
+    </div>
+  </div>
+  

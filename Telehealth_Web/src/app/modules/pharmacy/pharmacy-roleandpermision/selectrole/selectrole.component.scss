@@ -1,0 +1,335 @@
+@import '../../../../../assets/css/variable/variable';
+.rolepermission {
+    .top_bar {
+        margin: 0 0 35px;
+        .left_part {
+            display: flex;
+            .content_wrap {
+                .policy {
+                    margin: 0 0 0 20px;
+                    width: 300px;
+                    label {
+                        margin-right: 12px;
+                        color: $table_color;
+                    }
+                    .mat-form-field {
+                        .mat-form-field-wrapper {
+                            padding: 0;
+                            .mat-form-field-flex {
+                                background-color: $white_color;
+                                border: 1px solid #B6C8D6;
+                                border-radius: 10px;
+                                .mat-form-field-infix {
+                                    width: 200px;
+                                    .mat-select {
+                                        .mat-select-value {
+                                            color: $formfiled_color;
+                                            font-weight: 500;
+                                        }
+                                    }
+                                }
+                            }
+                            .mat-form-field-underline {
+                                display: none;
+                            }
+                        }
+                    }
+                    &:first-child {
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+    .bottom_bar {
+        .role_item {
+            margin-bottom: 25px;
+            &.roleNameAdjust {
+                .form_field_wrapper {
+                    .mat-checkbox {
+                        label {
+                            .mat-checkbox-label  {
+                                white-space: break-spaces;
+                            }
+                        }
+                    }
+                }
+            }
+            .form_field_wrapper {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: #FFFFFF;
+                border: 1px solid rgba(11, 73, 119, 0.15);
+                border-radius: 10px;
+                padding: 10px;
+                padding: 15px 10px;
+                .mat-checkbox {
+                    width: 100%;
+                    .mat-checkbox-layout {
+                        display: flex;
+                        .mat-checkbox-inner-container {
+                            order: 2;
+                        }
+                        .mat-checkbox-label {
+                            order: 1;
+                            color: $bodycolor;
+                            font-size: 15px;
+                            font-weight: 500;
+                            margin: 0 10px 0 0;
+                        }
+                    }
+                }
+                .mat-icon {
+                    color: #130F26;
+                }
+                &:hover {
+                    background: $bodycolor;
+                    border: 1px solid $bodycolor;
+                    .mat-checkbox {
+                        .mat-checkbox-layout {
+                            .mat-checkbox-label {
+                                color: $white_color;
+                            }
+                        }
+                    }
+                    .mat-icon {
+                        color: $white_color;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.role_common_body {
+    .table-wrap {
+        table {
+            tr {
+                height: 50px;
+                th {
+                    background: #ffffff;
+                    padding-top: 15px;
+                    padding-bottom: 15px;
+                    &.mat-column-selectall {
+                        .mat-checkbox {
+                            margin-left: 5px;
+                        }
+                    }
+                }
+                td {
+                    color: #130F26;
+                    font-weight: 500;
+                    font-size: 14px;
+                    .user_image_wrapper {
+                        margin: 0 15px 0 0;
+                        img {
+                            border: 1px solid #D8D8D8;
+                            border-radius: 5px;
+                            width: 38px;
+                            height: 38px;
+                        }
+                    }
+                    .section_icon {
+                        display: inline-block;
+                        vertical-align: middle;
+                        height: 24px;
+                        width: 24px;
+                        margin: 0 10px 0 0;
+                        text-align: center;
+                        .mat-icon {
+                            background: #FFFFFF;
+                            border: 1px solid rgba(11, 73, 119, 0.15);
+                            border-radius: 4px;
+                            font-size: 22px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .primary_btn {
+        margin-top: 20px;
+    }
+}
+
+.appointment {
+    .modal-dialog {
+        max-width: 960px;
+    }
+}
+
+.permission_commit {
+    .primary_btn {
+        margin-top: 20px;
+    }
+    .form_frame {
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        .heading {
+            border-bottom: 1px solid #B6C8D6;
+            .inner_heading {
+                display: flex;
+                justify-content: space-between;
+                padding: 15px 24px 15px 18px;
+                align-items: center;
+            }
+        }
+        .mat-accordion {
+            .mat-expansion-panel {
+                border-bottom: 1px solid #B6C8D6;
+                border-radius: 0 !important;
+                &:last-child {
+                    border-radius: 15px !important;
+                }
+                &:last-of-type {
+                    border-bottom: none !important;
+                }
+                .mat-expansion-panel-header-title {
+                    margin-left: 25px;
+                }
+                .mat-expansion-indicator {
+                    position: absolute;
+                    left: 10px;
+                    right: auto;
+                    background: #FFFFFF;
+                    border: 1px solid rgba(11, 73, 119, 0.15);
+                    border-radius: 4px;
+                    transform: rotate(0deg) !important;
+                    width: 24px;
+                    height: 24px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    &:after {
+                        border-style: none !important;
+                        border-width: 0 2px 2px 0;
+                        content: "\e61a" !important;
+                        font-family: "themify-icons" !important;
+                        display: inline-block;
+                        padding: 0px !important;
+                        transform: none !important;
+                        vertical-align: middle;
+                        color: #0C2F49;
+                        font-weight: 600;
+                        font-size: 15px;
+                    }
+                }
+                .mat-expanded {
+                    .mat-expansion-indicator {
+                        &:after {
+                            border-style: none !important;
+                            border-width: 0 2px 2px 0;
+                            content: "\e622" !important;
+                            font-family: "themify-icons" !important;
+                            display: inline-block;
+                            padding: 0px !important;
+                            transform: rotate(0deg) !important;
+                            vertical-align: middle;
+                            color: #0C2F49;
+                            font-weight: 600;
+                            font-size: 15px;
+                        }
+                    }
+                }
+                .mat-expansion-panel-header {
+                    font-weight: 600;
+                    font-size: 18px;
+                    line-height: 20px;
+                    color: #0C2F49;
+                    height: 60px;
+                    border-bottom: none !important;
+                    // font-size: 15px;
+                    &:last-child {
+                        border-bottom: none !important;
+                    }
+                }
+                .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover:not([aria-disabled=true]) {
+                    background: transparent;
+                }
+            }
+            .mat-expansion-panel-body {
+                p {
+                    padding: 6px 27px;
+                }
+            }
+        }
+    }
+}
+
+.checklist {
+    padding: 10px 20px;
+}
+
+.icon_group_check {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mat-expansion-panel-spacing {
+    margin: 0px 0 !important;
+}
+
+@media screen and (max-width:$desktop_large) {
+    .rolepermission .bottom_bar .role_item {
+        width: auto;
+        min-width: 250px;
+    }
+}
+
+@media screen and (max-width:$desktop) {
+    .rolepermission .top_bar {
+        flex-direction: column;
+    }
+    .rolepermission .top_bar .right_part {
+        margin-top: 20px;
+    }
+}
+
+@media screen and (max-width:$tablet) {
+    .appointment .modal-dialog {
+        max-width: 550px;
+    }
+}
+
+@media screen and (max-width:$large_phone) {
+    .rolepermission .top_bar .left_part {
+        flex-direction: column;
+    }
+    .rolepermission .top_bar .left_part .primary_btn {
+        margin-top: 10px;
+    }
+    .rolepermission .top_bar .left_part .content_wrap .policy {
+        margin: 0 0 0 7px;
+    }
+    // .dashboard_main_content.rolepermission .top_bar .content_wrap {
+    //     display: block;
+    // }
+    // .rolepermission .top_bar .left_part .content_wrap .policy {
+    //     margin: 0 0 20px 0;
+    // }
+}
+
+@media screen and (max-width:$medium_iphone) {
+    .rolepermission .bottom_bar .role_item {
+        width: 100%;
+        min-width: auto;
+    }
+    .rolepermission .top_bar .content_wrap {
+        flex-direction: column;
+    }
+    .rolepermission .top_bar .left_part .content_wrap .policy {
+        margin: 15px 0 0;
+        width: 100%;
+    }
+    .rolepermission .top_bar .left_part {
+        display: block;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width:$medium_phone) {
+    .rolepermission .top_bar .left_part .content_wrap .mat-form-field {
+        display: block;
+    }
+}

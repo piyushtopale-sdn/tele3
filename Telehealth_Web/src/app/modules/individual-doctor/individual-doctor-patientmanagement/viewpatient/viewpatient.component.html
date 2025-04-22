@@ -1,0 +1,176 @@
+<div class="patient_view dashboard_main_content">
+  <div class="top_bar">
+    <div class="left_part">
+      <div class="search_bar common_content">
+        <div class="input-group">
+          <button class="btn search-btn">
+            <mat-icon>search</mat-icon>
+          </button>
+          <input type="search" class="form-control" placeholder="{{ 'search' | translate }}" aria-label="Search"
+            [ngModel]="searchText" #text (keyup)="handleSearchFilter(text.value)"
+            (search)="handleSearchFilter(text.value)" />
+        </div>
+      </div>
+      <div class="form_field_wrapper" style="width: 300px;" *ngIf="fromParent !== undefined">
+        <label>{{ "select_doctor" | translate }}</label>
+        <select2 class="test select-dropdown-box" [overlay]="true" [limitSelection]="0" [minCountForSearch]="0"
+          [data]="userList" [value]="selecteduser" (update)="onSelect2Change($event)"
+          placeholder='{{"select_doctor" | translate}}'>
+        </select2>
+      </div>
+    </div>
+  </div>
+  <div class="bottom_bar">
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!-- Patient Name  Column -->
+          <ng-container matColumnDef="patientname">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('fullName')">
+              {{ "patient_name" | translate }}
+              <span *ngIf="sortColumn === 'fullName'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="user_image_wrapper">
+                <img class="user_image" src="{{element?.profile_pic ? element?.profile_pic :'../../../../../assets/img/default_user.png'}}" />
+              </span>
+              <span class="name_user"> {{ element?.fullName }} </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="mrn_number">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('mrn_number')">
+              {{ "mrn_number" | translate }}
+              <span *ngIf="sortColumn === 'mrn_number'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element"> {{ element?.mrn_number ? element?.mrn_number : "-" }} </td>
+          </ng-container>
+          <ng-container matColumnDef="gender">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('gender')">
+              {{ "gender" | translate }}
+              <span *ngIf="sortColumn === 'gender'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element"> {{ element?.gender }} </td>
+          </ng-container>
+
+          <!--Age Column -->
+          <ng-container matColumnDef="age">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('dob')">
+              {{ "age" | translate }}
+              <span *ngIf="sortColumn === 'dob'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ calculateAge(element?.dob) }}
+            </td>
+          </ng-container>
+
+          <!--Phone Number Column -->
+          <ng-container matColumnDef="phonenumber">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('mobile')">
+              {{ "phone_number" | translate }}
+              <span *ngIf="sortColumn === 'mobile'" class="material-icons sorticon">{{ sortIconClass
+                }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.mobile }}
+            </td>
+          </ng-container>
+
+          <!--Location Column -->
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('address')">
+              {{ "location" | translate }}
+              <span *ngIf="sortColumn === 'address'" class="material-icons sorticon">
+                {{ sortIconClass }}
+              </span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.address }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "action" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="icon_group">
+                <ng-container *ngIf="giveInnerPermission('view')">
+                  <a class="svgicon" (click)="routeBack(element?.portalUserId)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="9" viewBox="0 0 17 9" fill="none">
+                      <path
+                        d="M8.73047 0C3.48167 0 0.730469 3.88286 0.730469 4.5C0.730469 5.11554 3.48167 9 8.73047 9C13.9785 9 16.7305 5.11554 16.7305 4.5C16.7305 3.88286 13.9785 0 8.73047 0ZM8.73047 7.96098C6.76647 7.96098 5.17447 6.4117 5.17447 4.5C5.17447 2.5883 6.76647 1.03741 8.73047 1.03741C10.6945 1.03741 12.2857 2.5883 12.2857 4.5C12.2857 6.4117 10.6945 7.96098 8.73047 7.96098ZM8.73047 4.5C8.40487 4.1408 9.26087 2.76911 8.73047 2.76911C7.74807 2.76911 6.95207 3.54455 6.95207 4.5C6.95207 5.45545 7.74807 6.23089 8.73047 6.23089C9.71207 6.23089 10.5089 5.45545 10.5089 4.5C10.5089 4.06045 9.00727 4.80455 8.73047 4.5Z" />
+                    </svg>
+                  </a>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <div *ngIf="dataSource.length === 0" class="text-center">
+        <b>{{ "no_record_found" | translate }}</b>
+      </div>
+      <mat-paginator #paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)"
+        [pageSize]="pageSize" [pageSizeOptions]="[2, 5, 10, 20]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+
+<!-- Lock or Unlock modal -->
+<ng-template #lockOrUnloackmodal let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img class="img-fluid" src="../../../../assets/img/reject.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>
+          {{ "you_want_to" | translate }} {{ abc }}
+          {{ "this_patient" | translate }}
+        </p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="
+              activeLockDeleteDoctor('lock', abc === 'Lock' ? true : false)
+            ">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Actiate DeActivate modal -->
+<ng-template #activateDeactivate let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img class="img-fluid" src="../../../../assets/img/reject.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>
+          {{ "you_want_to" | translate }} {{ efg }}
+          {{ "this_patient" | translate }}
+        </p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary"
+            (click)="activeLockDeleteDoctor( 'active', efg === 'Deactivate' ? false : true)">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

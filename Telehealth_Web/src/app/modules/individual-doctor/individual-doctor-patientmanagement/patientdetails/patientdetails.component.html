@@ -1,0 +1,3124 @@
+<div class="patient_detail dashboard_main_content">
+  <div class="back_button">
+    <button class="btn btn-primary" (click)="handleBack()" *ngIf="!showAddButtton">
+      {{ "back" | translate }}
+    </button>
+  </div>
+  <div class="main_title">{{ "patient_details" | translate }}</div>
+  <div class="profile_data">
+    <div class="profile_info">
+      <div class="primary_btn"></div>
+      <ul class="profile_info_inner profile_info_with_img">
+        <li class="col_item profile_image_wrapper">
+          <div class="profile_image">
+            <img src="{{profile_pic ? profile_pic : '../../../../../assets/img/default_user.png'}}" />
+          </div>
+          <div class="profile_contact">
+            <div class="profile_title">
+              {{ profile?.first_name }} {{ profile?.middle_name }}
+              {{ profile?.last_name }}
+            </div>
+            <div class="lable">{{ "mobile_number" | translate }}</div>
+            <div class="user_value">
+            ({{profile?.country_code}}){{ profile?.mobile ? profile?.mobile : "-" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "email" | translate }}</div>
+            <div class="user_value">
+              {{ profile?.email ? profile?.email : "-" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "address" | translate }}</div>
+            <div class="user_value">
+              {{ locationData?.address ? locationData?.address : "-" }}
+            </div>
+          </div>
+        </li>
+      </ul>
+      <ul class="profile_info_inner">
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "date_of_birth" | translate }}</div>
+            <div class="user_value">
+              {{ profile?.dob | date : "dd/MM/yyyy" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "age" | translate }}</div>
+            <div class="user_value">
+              {{ profile?.dob ? calculateAge(profile.dob) : "-" }} {{"years" | translate}}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "gender" | translate }}</div>
+            <div class="user_value">
+              {{ profile?.gender ? profile?.gender : "-" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "blood_group" | translate }}</div>
+            <div class="user_value">
+              {{ profile?.blood_group ? profile.blood_group : "-" }}
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div class="emergency_contact">
+        <ul class="profile_info_inner">
+          <li class="col_item" *ngIf="profile?.iqama_number">
+            <div class="profile_contact">
+              <div class="lable">{{ "iqama_number" | translate }}</div>
+              <div class="user_value">
+                {{ profile?.iqama_number }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item" *ngIf="profile?.passport">
+            <div class="profile_contact">
+              <div class="lable">{{ "passport" | translate }}</div>
+              <div class="user_value">
+                {{ profile?.passport }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item" *ngIf="profile?.saudi_id">
+            <div class="profile_contact">
+              <div class="lable">{{ "saudi_id" | translate }}</div>
+              <div class="user_value">
+                {{ profile?.saudi_id }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "marital_status" | translate }}</div>
+              <div class="user_value">
+                {{ profile?.marital_status ? profile?.marital_status : "-" }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "mrn_number" | translate }}</div>
+              <div class="user_value">
+                {{
+                profile?.mrn_number
+                ? profile?.mrn_number
+                : "-"
+                }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "emergency_contact" | translate }}</div>
+              <div class="user_value">
+                {{
+                profile?.emergency_contact?.phone_number
+                ? profile?.emergency_contact?.phone_number
+                : "-"
+                }}
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="patient_details_tab " style="margin-top: 10px">
+    <mat-tab-group animationDuration="0ms" (selectedTabChange)="onTabChange($event)">
+      <mat-tab label="{{ 'vitals' | translate }}">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="left_part flex-wrap">
+              <div class="comparevitals d-flex align-items-center">
+                <div class="primary_btn">
+                  <button type="button" class="btn btn-primary gap-1"  (click)="openVitalModal(vitalModal)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                      <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+                    </svg> {{ "add_vitals" | translate }}
+                  </button>
+                </div>
+              </div> 
+              <div class="vitals_tab_title mt-2 flex-wrap">
+                  <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                      (click)="showSection('height')" [ngClass]="{
+              'selected-button': selectedSection1 === 'height'
+            }">
+                      {{'height' | translate}}
+                  </button>
+                  <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                      (click)="showSection('weight')" [ngClass]="{ 'selected-button': selectedSection1 === 'weight' }">
+                      {{'weight' | translate}}
+                  </button>
+                  <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                      (click)="showSection('heart_rate')"
+                      [ngClass]="{ 'selected-button': selectedSection1 === 'heart_rate' }">
+                      {{'heart_rate' | translate}}
+                  </button>
+                  <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                      (click)="showSection('bmi')" [ngClass]="{ 'selected-button': selectedSection1 === 'bmi' }">
+                      {{'bmi' | translate}}
+                  </button>
+                  <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                      (click)="showSection('bpsystolic')"
+                      [ngClass]="{ 'selected-button': selectedSection1 === 'bpsystolic' }">
+                      {{'bp_systolic' | translate}}
+                  </button>
+                  <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                      (click)="showSection('bpdiastolic')"
+                      [ngClass]="{ 'selected-button': selectedSection1 === 'bpdiastolic' }">
+                      {{'bp_diastolic' | translate}}
+                  </button>
+                  <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                      (click)="showSection('pulse')" [ngClass]="{ 'selected-button': selectedSection1 === 'pulse' }">
+                      {{'pulse' | translate}}
+                  </button>
+                  <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                      (click)="showSection('temp')" [ngClass]="{ 'selected-button': selectedSection1 === 'temp' }">
+                      {{'temp(c)' | translate}}
+                  </button>
+                  <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                      (click)="showSection('blood_glucose')"
+                      [ngClass]="{ 'selected-button': selectedSection1 === 'blood_glucose' }">
+                      {{'blood_glucose' | translate}}
+                  </button>
+              </div>
+          </div>
+            <div class="right_part d-flex flex-wrap">               
+              <form [formGroup]="dateRangeForm">
+                <div class="form_field_wrapper d-flex align-items-center gap-1 flex-wrap">
+                  <div class="d-flex">
+                    <div class="main_title_common d-flex align-items-center gap-1">{{ "from" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker1" formControlName="fromDate"
+                      (dateChange)="onDateChange('from', $event.value,'vitals')" (click)="picker1.open()" readonly />
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                  </div>
+                  <div class="d-flex">
+                    <div class="main_title_common d-flex align-items-center gap-1">{{ "to" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker2" formControlName="toDate"
+                      (dateChange)="onDateChange('to', $event.value, 'vitals')" (click)="picker1.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                  </div>
+                </div>
+              </form>
+                      
+            </div>
+          </div>
+          <div class="bottom_bar" *ngIf="selectedSection1 === 'height'">
+            <div class="acc_tab_title" style="display: flex; align-items: baseline; justify-content: space-between;">
+                <b>{{ "height" | translate }}</b>
+            </div>
+            <div class="table-wrap mt-2">
+                <div class="table-inner without_pagination_block">
+                    <table mat-table [dataSource]="heightdisplayedData" class="mat-elevation-z8 withoutpagination">
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "date_and_time" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.endDate | date: 'dd/MM/yyyy | HH:mm'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="height">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "height" | translate }} (cm)
+                                <a (click)="openvitalGraph(vgraphpopup,'Height')">
+                                    <img src="../../../../../assets/img/emr/height.svg">
+                                </a>
+                            </th>
+                            <td mat-cell *matCellDef="let element"
+                                (dblclick)="opendetailsPopup(infopopup,element,'HEIGHT')"
+                                [ngClass]="getVitalClass(element?.value,'HEIGHT')">
+                                {{ element?.value }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ismanual">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "manual_result" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element?.ismanual ? ('yes' | translate) : ('no' | translate) }}
+
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="heightdisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: heightdisplayedColumns"></tr>
+                    </table>
+                    <div class="text-center" *ngIf="heightdisplayedData?.length === 0">
+                        <b>{{ "no_record_found" | translate }}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-controls d-flex justify-content-end">
+                <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                    {{'previous' | translate}}
+                </button>
+
+                <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                    {{ page }}
+                </button>
+
+                <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    {{'next' | translate}}
+                </button>
+            </div>
+        </div>
+        <div class="bottom_bar" *ngIf="selectedSection1 === 'weight'">
+            <div class="acc_tab_title" style="display: flex; align-items: baseline; justify-content: space-between;">
+                <b>{{ "weight" | translate }}</b>
+            </div>
+            <div class="table-wrap mt-2">
+                <div class="table-inner without_pagination_block">
+                    <table mat-table [dataSource]="weightdisplayedData" class="mat-elevation-z8 withoutpagination">
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "date_and_time" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.endDate | date: 'dd/MM/yyyy | HH:mm'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="weight">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "weight" | translate }} (kg)
+                                <a (click)="openvitalGraph(vgraphpopup,'Weight')">
+                                    <img src="../../../../../assets/img/emr/weight.svg">
+                                </a>
+                            </th>
+                            <td mat-cell *matCellDef="let element"
+                              (dblclick)="opendetailsPopup(infopopup,element,'WEIGHT')"
+                              [ngClass]="getVitalClass(element?.value,'WEIGHT')">
+                              {{ element?.value }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ismanual">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "manual_result" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element?.ismanual ? ('yes' | translate) : ('no' | translate) }}
+
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="weightdisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: weightdisplayedColumns"></tr>
+                    </table>
+                    <div class="text-center" *ngIf="weightdisplayedData?.length === 0">
+                        <b>{{ "no_record_found" | translate }}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-controls d-flex justify-content-end">
+                <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                    {{'previous' | translate}}
+                </button>
+
+                <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                    {{ page }}
+                </button>
+
+                <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    {{'next' | translate}}
+                </button>
+            </div>
+        </div>
+        <div class="bottom_bar" *ngIf="selectedSection1 === 'bmi'">
+            <div class="acc_tab_title" style="display: flex; align-items: baseline; justify-content: space-between;">
+                <b>{{ "bmi" | translate }}</b>
+            </div>
+            <div class="table-wrap mt-2">
+                <div class="table-inner without_pagination_block">
+                    <table mat-table [dataSource]="bmidisplayedData" class="mat-elevation-z8 withoutpagination">
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "date_and_time" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.endDate | date: 'dd/MM/yyyy | HH:mm'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="bmi">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "bmi" | translate }}
+                                <a (click)="openvitalGraph(vgraphpopup,'BMI')">
+                                    <img src="../../../../../assets/img/emr/bmi.svg">
+                                </a>
+                            </th>
+                            <td mat-cell *matCellDef="let element"
+                                (dblclick)="opendetailsPopup(infopopup,element,'BMI')">
+                                {{ element?.value }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ismanual">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "manual_result" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element?.ismanual ? ('yes' | translate) : ('no' | translate) }}
+
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="bmidisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: bmidisplayedColumns"></tr>
+                    </table>
+                    <div class="text-center" *ngIf="bmidisplayedData?.length === 0">
+                        <b>{{ "no_record_found" | translate }}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-controls d-flex justify-content-end">
+                <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                    {{'previous' | translate}}
+                </button>
+
+                <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                    {{ page }}
+                </button>
+
+                <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    {{'next' | translate}}
+                </button>
+            </div>
+        </div>
+        <div class="bottom_bar" *ngIf="selectedSection1 === 'heart_rate'">
+            <div class="acc_tab_title" style="display: flex; align-items: baseline; justify-content: space-between;">
+                <b>{{ "heart_rate" | translate }}</b>
+            </div>
+            <div class="table-wrap mt-2">
+                <div class="table-inner without_pagination_block">
+                    <table mat-table [dataSource]="heart_ratedisplayedData" class="mat-elevation-z8 withoutpagination">
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "date_and_time" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.endDate | date: 'dd/MM/yyyy | HH:mm'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="heart_rate">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "h_rate" | translate }} (bpm)
+                                <a (click)="openvitalGraph(vgraphpopup,'Heart-Rate')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-heart-pulse-fill" viewBox="0 0 16 16">
+                                        <path
+                                            d="M1.475 9C2.702 10.84 4.779 12.871 8 15c3.221-2.129 5.298-4.16 6.525-6H12a.5.5 0 0 1-.464-.314l-1.457-3.642-1.598 5.593a.5.5 0 0 1-.945.049L5.889 6.568l-1.473 2.21A.5.5 0 0 1 4 9z" />
+                                        <path
+                                            d="M.88 8C-2.427 1.68 4.41-2 7.823 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C11.59-2 18.426 1.68 15.12 8h-2.783l-1.874-4.686a.5.5 0 0 0-.945.049L7.921 8.956 6.464 5.314a.5.5 0 0 0-.88-.091L3.732 8z" />
+                                    </svg>
+                                </a>
+                            </th>
+                            <td mat-cell *matCellDef="let element"
+                                (dblclick)="opendetailsPopup(infopopup,element,'HEART_RATE')"
+                                [ngClass]="getVitalClass(element?.value,'HEART_RATE')">
+                                {{ element?.value }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ismanual">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "manual_result" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element?.ismanual ? ('yes' | translate) : ('no' | translate) }}
+
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="heart_ratedisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: heart_ratedisplayedColumns"></tr>
+                    </table>
+                    <div class="text-center" *ngIf="heart_ratedisplayedData?.length === 0">
+                        <b>{{ "no_record_found" | translate }}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-controls d-flex justify-content-end">
+                <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                    {{'previous' | translate}}
+                </button>
+
+                <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                    {{ page }}
+                </button>
+
+                <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    {{'next' | translate}}
+                </button>
+            </div>
+        </div>
+        <div class="bottom_bar" *ngIf="selectedSection1 === 'bpsystolic'">
+            <div class="acc_tab_title" style="display: flex; align-items: baseline; justify-content: space-between;">
+                <b>{{ "bp_systolic" | translate }}</b>
+            </div>
+            <div class="table-wrap mt-2">
+                <div class="table-inner without_pagination_block">
+                    <table mat-table [dataSource]="bpsystolicdisplayedData" class="mat-elevation-z8 withoutpagination">
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "date_and_time" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.endDate | date: 'dd/MM/yyyy | HH:mm'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="bpsystolic">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "bp_systolic" | translate }} (mmHg)
+                                <a (click)="openvitalGraph(vgraphpopup,'BP Systolic')">
+                                    <img src="../../../../../assets/img/emr/bp.svg">
+                                </a>
+                            </th>
+                            <td mat-cell *matCellDef="let element"
+                              (dblclick)="opendetailsPopup(infopopup,element,'systolic')"
+                              [ngClass]="getBpClass(element?.value, 'systolic')"> 
+                              {{ element?.value }}
+                            </td>
+                            
+                        </ng-container>
+                        <ng-container matColumnDef="ismanual">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "manual_result" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element?.ismanual ? ('yes' | translate) : ('no' | translate) }}
+
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="bpsystolicdisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: bpsystolicdisplayedColumns"></tr>
+                    </table>
+                    <div class="text-center" *ngIf="bpsystolicdisplayedData?.length === 0">
+                        <b>{{ "no_record_found" | translate }}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-controls d-flex justify-content-end">
+                <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                    {{'previous' | translate}}
+                </button>
+
+                <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                    {{ page }}
+                </button>
+
+                <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    {{'next' | translate}}
+                </button>
+            </div>
+        </div>
+        <div class="bottom_bar" *ngIf="selectedSection1 === 'bpdiastolic'">
+            <div class="acc_tab_title" style="display: flex; align-items: baseline; justify-content: space-between;">
+                <b>{{ "bp_diastolic" | translate }}</b>
+            </div>
+            <div class="table-wrap mt-2">
+                <div class="table-inner without_pagination_block">
+                    <table mat-table [dataSource]="bpdiastolicdisplayedData" class="mat-elevation-z8 withoutpagination">
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "date_and_time" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.endDate | date: 'dd/MM/yyyy | HH:mm'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="bpdiastolic">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "bp_diastolic" | translate }} (mmHg)
+                                <a (click)="openvitalGraph(vgraphpopup,'BP Diastolic')">
+                                    <img src="../../../../../assets/img/emr/bp.svg">
+                                </a>
+                            </th>
+                            <td mat-cell *matCellDef="let element"
+                              (dblclick)="opendetailsPopup(infopopup,element,'diastolic')"
+                              [ngClass]="getBpClass(element?.value, 'diastolic')">
+                              {{ element?.value }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ismanual">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "manual_result" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element?.ismanual ? ('yes' | translate) : ('no' | translate) }}
+
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="bpdiastolicdisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: bpdiastolicdisplayedColumns"></tr>
+                    </table>
+                    <div class="text-center" *ngIf="bpdiastolicdisplayedData?.length === 0">
+                        <b>{{ "no_record_found" | translate }}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-controls d-flex justify-content-end">
+                <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                    {{'previous' | translate}}
+                </button>
+
+                <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                    {{ page }}
+                </button>
+
+                <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    {{'next' | translate}}
+                </button>
+            </div>
+        </div>
+        <div class="bottom_bar" *ngIf="selectedSection1 === 'pulse'">
+            <div class="acc_tab_title" style="display: flex; align-items: baseline; justify-content: space-between;">
+                <b>{{ "pulse" | translate }}</b>
+            </div>
+            <div class="table-wrap mt-2">
+                <div class="table-inner without_pagination_block">
+                    <table mat-table [dataSource]="pulsedisplayedData" class="mat-elevation-z8 withoutpagination">
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "date_and_time" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.endDate | date: 'dd/MM/yyyy | HH:mm'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="pulse">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "pulse" | translate }} (bpm)
+                                <a (click)="openvitalGraph(vgraphpopup,'Pulse')">
+                                    <img src="../../../../../assets/img/emr/pulse 1.svg">
+                                </a>
+                            </th>
+                            <td mat-cell *matCellDef="let element"
+                                (dblclick)="opendetailsPopup(infopopup,element,'PULSE')"
+                                [ngClass]="getVitalClass(element?.value, 'PULSE')">
+                                {{ element?.value }} 
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ismanual">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "manual_result" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element?.ismanual ? ('yes' | translate) : ('no' | translate) }}
+
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="pulsedisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: pulsedisplayedColumns"></tr>
+                    </table>
+                    <div class="text-center" *ngIf="pulsedisplayedData?.length === 0">
+                        <b>{{ "no_record_found" | translate }}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-controls d-flex justify-content-end">
+                <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                    {{'previous' | translate}}
+                </button>
+
+                <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                    {{ page }}
+                </button>
+
+                <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    {{'next' | translate}}
+                </button>
+            </div>
+        </div>
+        <div class="bottom_bar" *ngIf="selectedSection1 === 'temp'">
+            <div class="acc_tab_title" style="display: flex; align-items: baseline; justify-content: space-between;">
+                <b>{{ "temp(c)" | translate }}</b>
+            </div>
+            <div class="table-wrap mt-2">
+                <div class="table-inner without_pagination_block">
+                    <table mat-table [dataSource]="tempdisplayedData" class="mat-elevation-z8 withoutpagination">
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "date_and_time" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.endDate | date: 'dd/MM/yyyy | HH:mm'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="temp">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "temp(c)" | translate }}
+                                <a (click)="openvitalGraph(vgraphpopup,'Temperature')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-thermometer-high" viewBox="0 0 16 16">
+                                        <path
+                                            d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V2.5a.5.5 0 0 1 1 0v8.585a1.5 1.5 0 0 1 1 1.415" />
+                                        <path
+                                            d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1" />
+                                    </svg>
+                                </a>
+                            </th>
+                            <td mat-cell *matCellDef="let element"
+                                (dblclick)="opendetailsPopup(infopopup,element,'TEMPERATURE')"
+                                [ngClass]="getVitalClass(element?.value, 'TEMPERATURE')">
+                                {{ element?.value }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ismanual">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "manual_result" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element?.ismanual ? ('yes' | translate) : ('no' | translate) }}
+
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="tempdisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: tempdisplayedColumns"></tr>
+                    </table>
+                    <div class="text-center" *ngIf="tempdisplayedData?.length === 0">
+                        <b>{{ "no_record_found" | translate }}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-controls d-flex justify-content-end">
+                <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                    {{'previous' | translate}}
+                </button>
+
+                <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                    {{ page }}
+                </button>
+
+                <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    {{'next' | translate}}
+                </button>
+            </div>
+        </div>
+        <div class="bottom_bar" *ngIf="selectedSection1 === 'blood_glucose'">
+            <div class="acc_tab_title" style="display: flex; align-items: baseline; justify-content: space-between;">
+                <b>{{ "blood_glucose" | translate }}</b>
+            </div>
+            <div class="table-wrap mt-2">
+                <div class="table-inner without_pagination_block">
+                    <table mat-table [dataSource]="blood_glucosedisplayedData" class="mat-elevation-z8 withoutpagination">
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "date_and_time" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.endDate | date: 'dd/MM/yyyy | HH:mm'}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="blood_glucose">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "blood_glucose" | translate }}
+                                <a (click)="openvitalGraph(vgraphpopup,'Blood Glucose')">
+                                    <img src="../../../../../assets/img/emr/BGlu.svg">
+                                </a>
+                            </th>
+                            <td mat-cell *matCellDef="let element"
+                                (dblclick)="opendetailsPopup(infopopup,element,'BLOOD_GLUCOSE')"
+                                [ngClass]="getVitalClass(element?.value, 'BLOOD_GLUCOSE')">
+                                {{ element?.value }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ismanual">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ "manual_result" | translate }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element?.ismanual ? ('yes' | translate) : ('no' | translate) }}
+
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="blood_glucosedisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: blood_glucosedisplayedColumns"></tr>
+                    </table>
+                    <div class="text-center" *ngIf="blood_glucosedisplayedData?.length === 0">
+                        <b>{{ "no_record_found" | translate }}</b>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-controls d-flex justify-content-end">
+                <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                    {{'previous' | translate}}
+                </button>
+
+                <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                    {{ page }}
+                </button>
+
+                <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    {{'next' | translate}}
+                </button>
+            </div>
+        </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="{{ 'history' | translate }}">
+        <div class="tab_content">
+          <div class="top_bar d-flex">
+            <div class="left_part">
+              <div class="acc_tab_title mt-2">              
+                <button type="button" *ngIf="selectedSection === 'allergies'" class="btn btn-primary gap-1" (click)="openVerticallyPopupformedicalHistory(medicalHistory)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+                  </svg> {{ "add_allergies" | translate }}
+                </button>
+                <button type="button" *ngIf="selectedSection === 'social'" class="btn btn-primary gap-1" (click)="openVerticallyPopupforsocialHistory(socialHistory)"> 
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+                  </svg> {{ "add_social" | translate }}
+                </button>
+              </div>
+              
+             
+            </div>
+            <div class="right_part">
+              <div class="acc_tab_title">
+                <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                  (click)="showSection1('allergies')" [ngClass]="{
+                      'selected-button': selectedSection === 'allergies'
+                    }">
+                  {{'allergy_history' | translate}}
+                </button>            
+                <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                  (click)="showSection1('social')" [ngClass]="{ 'selected-button': selectedSection === 'social' }">
+                  {{'social_history' | translate}}
+                </button>
+                <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                  (click)="showSection1('family')" [ngClass]="{ 'selected-button': selectedSection === 'family' }">
+                  {{'family_history' | translate}}
+                </button>            
+              </div>
+            </div>
+          </div>
+          <div class="bottom_bar" *ngIf="selectedSection === 'allergies'">
+            <div class="acc_tab_title" *ngIf="userRole !== 'INDIVIDUAL_DOCTOR_ADMIN'" style="display: flex; align-items: baseline; justify-content: space-between;">
+              <b>{{ "allergy_history" | translate }}</b>             
+            </div>
+            <div class="table-wrap mt-2">
+              <div class="table-inner without_pagination_block">
+                <table mat-table [dataSource]="displayedData" class="mat-elevation-z8 withoutpagination">
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date_and_time" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.createdAt | date: 'dd/MM/yyyy | HH:mm'}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="allergyname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "allergy_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.allergen }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="allergytype">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "allergy_type" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.allergyType }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="reaction">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "reaction" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.reaction }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="saverity">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "status" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.status }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="startdate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.createdAt | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="note">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "note" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.note }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="icon_group" *ngIf="userRole !== 'INDIVIDUAL_DOCTOR_ADMIN'">
+                        <a class="svgicon" (click)="openVerticallyPopupformedicalHistory(medicalHistory, element)">
+                          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z" />
+                          </svg>
+                        </a>
+                        <a class="svgicon"
+                          (click)="openVerticallyCenteredsecondV(deleteModal,element._id,'medical')"><svg
+                            xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z" />
+                          </svg>
+                        </a>
+
+                      </div>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="allergiesdisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: allergiesdisplayedColumns"></tr>
+                </table>
+                <div *ngIf="!displayedData || displayedData.length === 0" class="text-center">
+                    <b>{{ "no_record_found" | translate }}</b>
+                  </div>
+              </div>
+            </div>
+            <div class="pagination-controls d-flex justify-content-end">
+              <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                {{'previous' | translate}}
+              </button>
+
+              <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                {{ page }}
+              </button>
+
+              <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                {{'next' | translate}}
+              </button>
+            </div>
+          </div>
+          <div class="bottom_bar" *ngIf="selectedSection === 'social'">
+            <div class="acc_tab_title" *ngIf="userRole !== 'INDIVIDUAL_DOCTOR_ADMIN'" style="display: flex; align-items: baseline; justify-content: space-between;">
+              <b>{{ "social_history" | translate }}</b>         
+            </div>
+            <div class="table-wrap mt-2">
+              <div class="table-inner without_pagination_block">
+                <table mat-table [dataSource]="social_displayedData" class="mat-elevation-z8 withoutpagination">
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date_and_time" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.createdAt | date: "dd/MM/yyyy | HH:mm" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="alcohol">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "alcohol" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.alcohol ? "Yes" : "No" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="tobacco">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "tobacco" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.tobacco ? "Yes" : "No" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="drugs">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "drugs" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.drugs ? "Yes" : "No" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="icon_group" *ngIf="userRole !== 'INDIVIDUAL_DOCTOR_ADMIN'">
+                        <a class="svgicon" (click)="openVerticallyPopupforsocialHistory(socialHistory, element)">
+                          <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z" />
+                          </svg>
+                        </a>
+                        <!-- <a class="svgicon" (click)="openVerticallyCenteredsecondV(deleteModal,element._id,'social')
+                          "><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16"
+                            fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z" />
+                          </svg></a> -->
+
+                      </div>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="socialdisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: socialdisplayedColumns"></tr>
+                </table>
+                <div class="text-center" *ngIf="social_displayedData?.length === 0">
+                  <b>{{ "no_allergies_found" | translate }}</b>
+                </div>
+              </div>
+            </div>
+
+            <div class="pagination-controls d-flex justify-content-end">
+              <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                {{'previous' | translate}}
+              </button>
+
+              <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                {{ page }}
+              </button>
+
+              <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                {{'next' | translate}}
+              </button>
+            </div>
+          </div>
+          <div class="bottom_bar" *ngIf="selectedSection === 'family' &&  !isFamilyMember">
+            <div class="acc_tab_title">
+              <b>{{ "family_history" | translate }}</b>
+            </div>
+            <div class="table-wrap mt-2">
+              <div class="table-inner without_pagination_block">
+                <table mat-table [dataSource]="family_displayedData" class="mat-elevation-z8 withoutpagination">
+                  <ng-container matColumnDef="fullname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "history_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.first_name }} {{ element?.last_name }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="mobile">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "phone_number" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.country_code }} {{ element?.mobile_number }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="gender">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "gender" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.gender }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="relationship">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "Relationship" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.relationship }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.identified_date | date : "dd/MM/yyyy" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="routeToDetailsPage(element?.familyMemberId)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+                            <path
+                              d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                          </svg>
+                        </a>                 
+                      </div>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="familyhistorydisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: familyhistorydisplayedColumns"></tr>
+                </table>
+                <div class="text-center" *ngIf="family_displayedData?.length === 0">
+                  <b>{{ "no_family_history_found" | translate }}</b>
+                </div>
+              </div>
+            </div>
+            <div class="pagination-controls d-flex justify-content-end">
+              <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                {{'previous' | translate}}
+              </button>
+
+              <button *ngFor="let page of pages" [class.active]="currentPage === page" (click)="changePage(page)">
+                {{ page }}
+              </button>
+
+              <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                {{'next' | translate}}
+              </button>
+            </div>
+          </div>
+          <div class="bottom_bar" *ngIf="selectedSection === 'family' &&  isFamilyMember">
+            <div class="acc_tab_title">
+              <b>{{ "family_history" | translate }}</b>
+            </div>
+            <div class="table-wrap mt-2">
+              <div class="table-inner without_pagination_block">
+                <table mat-table [dataSource]="familyhistoryparent" class="mat-elevation-z8 withoutpagination">
+                  <ng-container matColumnDef="fullname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "history_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.full_name}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="mobile">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "phone_number" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.country_code }} {{ element?.mobile_number }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="gender">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "gender" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.gender }}
+                    </td>
+                  </ng-container>                 
+              
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="routeToDetailsPage(element?._id)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+                            <path
+                              d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                          </svg>
+                        </a>                 
+                      </div>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="familyhistoryparentdisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: familyhistoryparentdisplayedColumns"></tr>
+                </table>
+                <div class="text-center" *ngIf="familyhistoryparent?.length === 0">
+                  <b>{{ "no_family_history_found" | translate }}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="{{ 'assessment' | translate }}">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="left_part">
+              <form [formGroup]="dateRangeForm">
+                <div class="form_field_wrapper d-flex align-items-center gap-1">
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "from" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker3" formControlName="fromDate"
+                      (dateChange)="onDateChange('from', $event.value,'assessment')" (click)="picker3.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                  </mat-form-field>
+                  </div>
+
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "to" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker4" formControlName="toDate"
+                      (dateChange)="onDateChange('to', $event.value, 'assessment')" (click)="picker4.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                    <mat-datepicker #picker4></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                </div>
+              </form>
+            </div>
+            <div class="right_part"> </div>
+          </div>
+          <div class="tab_content assessment" *ngFor="let assessmentEntry of assessmentsList; let index1 = index">
+            <div class="date">
+              <b>
+                {{ "assessment" | translate }} {{ "date" | translate }} -
+                {{ assessmentEntry.createdAt | date : "dd/MM/YYYY" }}
+              </b>
+            </div>
+            <div class="bottom_bar">
+              <!-- Loop through each assessment inside the assessments array of the assessmentEntry -->
+              <div class="assessment_item" *ngFor="
+                  let data of assessmentEntry.assessments;
+                  let index2 = index
+                ">
+                <label>{{ "q" | translate }}.{{ index2 + 1 }}
+                  {{ data.question }}</label>
+                <div class="answer">
+                  {{ "ans" | translate }}. {{ data.answer }}
+                </div>
+              </div>
+              <br /><br />
+            </div>
+          </div>
+          <div *ngIf="assessmentsList?.length === 0" class="text-center">
+            <b>{{ "no_record_found" | translate }}</b>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="{{ 'diagnosis' | translate }}">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="left_part">
+              <div class="primary_btn" *ngIf="patientId !== undefined">
+                <button
+                  type="button"
+                  class="btn btn-primary" 
+                  *ngIf="showAddButtton"
+                  (click)="openVerticallyCentered_addconsultation_notes(add_consultation_notes)"                 
+                >
+                  {{ "add_consultation_notes" | translate }}
+                </button>
+              </div>
+              <form [formGroup]="dateRangeForm">
+                <div class="form_field_wrapper d-flex align-items-center gap-1">
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "from" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker7" formControlName="fromDate"
+                      (dateChange)="onDateChange('from', $event.value,'diagnosis')" (click)="picker7.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                    <mat-datepicker #picker7></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "to" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker8" formControlName="toDate"
+                      (dateChange)="onDateChange('to', $event.value, 'diagnosis')" (click)="picker8.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
+                    <mat-datepicker #picker8></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                </div>
+              </form>  
+            </div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table mat-table [dataSource]="dataDiagnosisSource" class="mat-elevation-z8">
+                  <!--Name  Column -->
+                  <ng-container matColumnDef="datetime">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date_and_time" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.createdAt | date : "dd/MM/yyy | HH:mm" }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="appointmentId">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "appointmentId" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.appointment_id }}
+                    </td>
+                  </ng-container>
+
+                  <!--Administered Date Column -->
+                  <!-- Subjective Column -->
+<ng-container matColumnDef="subject">
+  <th mat-header-cell *matHeaderCellDef>
+    {{ "subjective" | translate }}
+  </th>
+  <td mat-cell *matCellDef="let element">
+    {{ truncateWords(element?.subject, 10) }}
+  </td>
+</ng-container>
+
+<!-- Objective Column -->
+<ng-container matColumnDef="object">
+  <th mat-header-cell *matHeaderCellDef>
+    {{ "objective" | translate }}
+  </th>
+  <td mat-cell *matCellDef="let element">
+    {{ truncateWords(element?.object, 10) }}
+  </td>
+</ng-container>
+
+<!-- Assessment Column -->
+<ng-container matColumnDef="assessment">
+  <th mat-header-cell *matHeaderCellDef>
+    {{ "assessment" | translate }}
+  </th>
+  <td mat-cell *matCellDef="let element">
+    {{ truncateWords(element?.assessment, 10) }}
+  </td>
+</ng-container>
+
+<!-- ICD Code Column (unchanged) -->
+<ng-container matColumnDef="icd">
+  <th mat-header-cell *matHeaderCellDef>
+    {{ "icdcode" | translate }}
+  </th>
+  <td mat-cell *matCellDef="let element">
+    {{ element?.slicedIcdCode }}
+  </td>
+</ng-container>
+
+<!-- Plan Column -->
+<ng-container matColumnDef="plan">
+  <th mat-header-cell *matHeaderCellDef>
+    {{ "plan" | translate }}
+  </th>
+  <td mat-cell *matCellDef="let element">
+    {{ truncateWords(element?.plan, 10) }}
+  </td>
+</ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="icon_group">
+                        <a class="svgicon" (click)="
+                            openVerticallyCenteredconsultation_notes(
+                              consultation_notes_content,
+                              element,
+                              'edit'
+                            )
+                          ">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-eye" viewBox="0 0 16 16">
+                            <path
+                              d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+                            <path
+                              d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
+                          </svg>
+                        </a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="diagnosisdisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: diagnosisdisplayedColumns"></tr>
+                </table>
+              </div>
+              <div *ngIf="dataDiagnosisSource?.length === 0" class="text-center mt-2">
+                <b>{{ "no_diagnosis_found" | translate }}</b>
+              </div>
+              <!-- <mat-paginator
+                class="pagination"
+                [length]="totalLength"
+                (page)="handlePageEvent($event)"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[2, 5, 10, 20]"
+                showFirstLastButtons
+                aria-label="Select page of periodic elements"
+              >
+              </mat-paginator> -->
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+        <mat-tab label="{{'medical_info' | translate}}">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="left_part">
+              <div class="comparevitals d-flex align-items-center">
+                <div class="primary_btn">
+                  <button type="button" class="btn btn-primary" *ngIf="showAddButtton" (click)="routeToMedicine()">
+                    {{ "add_medications" | translate }}
+                  </button>
+                </div>
+              </div>
+              <form [formGroup]="dateRangeForm">
+                <div class="form_field_wrapper d-flex align-items-center gap-1">
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "from" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker9" formControlName="fromDate"
+                      (dateChange)="onDateChange('from', $event.value,'medical_info')" (click)="picker9.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker9"></mat-datepicker-toggle>
+                    <mat-datepicker #picker9></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "to" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker10" formControlName="toDate"
+                      (dateChange)="onDateChange('to', $event.value, 'medical_info')" (click)="picker10.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker10"></mat-datepicker-toggle>
+                    <mat-datepicker #picker10></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              </form>
+            </div>
+            <div class="right_part">
+              <div class="vitals_tab_title flex-wrap">
+                <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button (click)="tabSelection('order_medicine')"
+                [ngClass]="{'selected-button': selected_tab === 'order_medicine'}">{{'order_list' | translate}}</button> 
+                <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button (click)="tabSelection('prescribed_medicine')"
+                [ngClass]="{ 'selected-button': selected_tab === 'prescribed_medicine' }">{{'prescribed_medicine' | translate}}</button>                                
+              </div>           
+            </div>
+          </div>
+          <div class="bottom_bar" *ngIf="selected_tab === 'order_medicine'">
+            <div class="table-wrap">
+              <div class="table-inner d-flex flex-column mt-2" *ngFor="let item of res_details_med">
+                <div class="main_title_common">
+                  {{ "date" | translate }}:{{
+                  item?.createdAt | date : "dd/MM/yyyy | HH:mm"
+                  }}
+                </div>
+                <table mat-table [dataSource]="item?.dosageData" class="mat-elevation-z8 medtableinfo">
+                  <ng-container matColumnDef="orderid">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "order_id" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                      item?.orderId ? item?.orderId : "-"
+                      }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="medicinename">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "medicine_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.medicineName ? element?.medicineName : "-" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="dose">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "dose" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.dose ? element?.dose : "-" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="doseunit">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "dose_unit" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.doseUnit ? element?.doseUnit : "-" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="routeofadminst">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "route_Of_administration" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                      element?.routeOfAdministration
+                      ? element?.routeOfAdministration
+                      : "-"
+                      }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="quantity">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "quantity" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      {{ element?.quantity ? element?.quantity : "0" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="fequency">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "frequency" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ "morning" | translate }}
+                      {{
+                      element?.frequency?.morning
+                      ? element?.frequency?.morning
+                      : "0"
+                      }}, {{ "midday" | translate }}
+                      {{
+                      element?.frequency?.midday
+                      ? element?.frequency?.midday
+                      : "0"
+                      }}, {{ "evening" | translate }}
+                      {{
+                      element?.frequency?.evening
+                      ? element?.frequency?.evening
+                      : "0"
+                      }}, {{ "night" | translate }}
+                      {{
+                      element?.frequency?.night
+                      ? element?.frequency?.night
+                      : "0"
+                      }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="takefor">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "take_for" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                      element?.takeFor?.quantity
+                      ? element?.takeFor?.quantity
+                      : "0"
+                      }}
+                      -
+                      {{
+                      element?.takeFor?.type ? element?.takeFor?.type : "-"
+                      }}
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="medicationdisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: medicationdisplayedColumns"></tr>
+                </table>
+              </div>
+              <div *ngIf="res_details_med?.length === 0" class="text-center mt-2">
+                <b>{{ "no_record_found" | translate }}</b>
+              </div>
+              <mat-paginator class="pagination" *ngIf="res_details_med?.length > 0" [length]="totalLength"
+                (page)="handlePageEventMedication($event)" [pageSize]="pageSize" [pageSizeOptions]="[2, 5, 20, 50, 100]"
+                showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+          </div>
+
+          <div class="bottom_bar" *ngIf="selected_tab === 'prescribed_medicine'">
+            <div class="table-wrap">
+              <div
+                class="table-inner d-flex flex-column mt-2"
+                *ngFor="let item of res_detailsPrescribeMed"
+              >
+              <table
+                  mat-table
+                  [dataSource]="item?.dosageData"
+                  class="mat-elevation-z8 medtableinfo"
+                >
+                  <ng-container matColumnDef="prescribeddate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "prescribed_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.createdAt | date : "dd/MM/yyy | HH:mm" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="medicinename">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "medicine_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.medicineName ? element?.medicineName : "-" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="dose">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "dose" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.dose ? element?.dose : "-" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="doseunit">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "dose_unit" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.doseUnit ? element?.doseUnit : "-" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="routeofadminst">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "route_Of_administration" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                        element?.routeOfAdministration
+                          ? element?.routeOfAdministration
+                          : "-"
+                      }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="quantity">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "quantity" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = index">
+                      {{ element?.quantity ? element?.quantity : "0" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="fequency">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "frequency" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ "morning" | translate }}
+                      {{
+                        element?.frequency?.morning
+                          ? element?.frequency?.morning
+                          : "0"
+                      }}, {{ "midday" | translate }}
+                      {{
+                        element?.frequency?.midday ? element?.frequency?.midday : "0"
+                      }}, {{ "evening" | translate }}
+                      {{
+                        element?.frequency?.evening
+                          ? element?.frequency?.evening
+                          : "0"
+                      }}, {{ "night" | translate }}
+                      {{
+                        element?.frequency?.night ? element?.frequency?.night : "0"
+                      }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="takefor">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "take_for" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                        element?.takeFor?.quantity ? element?.takeFor?.quantity : "0"
+                      }}
+                      -
+                      {{ element?.takeFor?.type ? element?.takeFor?.type : "-" }}
+                    </td>
+                  </ng-container>
+      
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsPrescribeMed"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsPrescribeMed"></tr>
+                </table>
+              </div>
+              <div *ngIf="res_detailsPrescribeMed?.length === 0" class="text-center">
+                <div class="text-center">
+                  <b>{{ "no_medication_available" | translate }}</b>
+                </div>
+              </div>
+              <mat-paginator
+                class="pagination"
+                *ngIf="res_detailsPrescribeMed?.length > 0"
+                [length]="totalLength"
+                (page)="handlePageEventMedPrescribed($event)"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[2, 5, 20, 50, 100]"
+                showFirstLastButtons
+                aria-label="Select page of periodic elements"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+        <mat-tab label="{{'laboratory' | translate }}">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="right_part_lab" *ngIf="showAddButtton">
+              <div class="comparevitals d-flex align-items-center">
+                <div class="primary_btn">
+                  <button type="button" class="btn btn-primary gap-1" (click)="routeToLab()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                      <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+                    </svg> {{ "add_laboratory_test" | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="left_part flex-wrap">
+              <form [formGroup]="dateRangeForm">
+                <div class="form_field_wrapper d-flex align-items-center gap-1">
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "from" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker11" formControlName="fromDate"
+                      (dateChange)="onDateChange('from', $event.value,'laboratory_test')" (click)="picker11.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker11"></mat-datepicker-toggle>
+                    <mat-datepicker #picker11></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "to" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker12" formControlName="toDate"
+                      (dateChange)="onDateChange('to', $event.value, 'laboratory_test')" (click)="picker12.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker12"></mat-datepicker-toggle>
+                    <mat-datepicker #picker12></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              </form>
+          </div>
+            <div class="right_part">
+              <div class="vitals_tab_title flex-wrap">
+                <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button (click)="tabSelection('laboratory_test')"
+                [ngClass]="{
+                  'selected-button': selected_tab === 'laboratory_test'
+                }">
+                {{'order_list' | translate}}
+               </button> 
+                <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                      (click)="tabSelection('lab_test_prescribed')"
+                      [ngClass]="{ 'selected-button': selected_tab === 'lab_test_prescribed' }">
+                      {{'prescribed_tests' | translate}}
+                </button>                                
+              </div>           
+            </div>
+
+          </div>
+          <div class="bottom_bar" *ngIf="selected_tab === 'laboratory_test'">
+            <div class="table-wrap">
+              <div class="table-inner d-flex flex-column mt-2" *ngFor="let item of dataLabSource">
+                <div class="main_title_common d-flex justify-content-between" style="gap:8px">
+                  <div class="profileinfo_title">
+                    {{ "prescribed_by" | translate }} : {{ item?.doctorName }} 
+                    <p class="m-0 date-history">
+                        {{
+                          item?.consultationDate | date: "dd/MM/yyyy" 
+                        }} 
+                        | 
+                        {{ item?.consultationTime }}
+                    </p>
+                </div>
+                
+                  <div class="d-flex show-history">
+                    <button type="button" mat-stroked-button class="btn btn-primary" mat-button
+                      (click)="openHistoryPopup(viewhistory, item._id)">
+                      {{'show_history' | translate}}
+                    </button>
+                  </div>
+                </div>
+
+                <table mat-table [dataSource]="item?.labTestResult
+                                " class="mat-elevation-z8 medtableinfo">
+                  <ng-container matColumnDef="testname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "testname" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.testName ? element?.testName : "-" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Strength Column -->
+                  <ng-container matColumnDef="centrename">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "labCenterName" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                      item?.centreName ? item?.centreName : "-"
+                      }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="orderid">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "order_id" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                      item?.appointmentId ? item?.appointmentId : "-"
+                      }}
+                    </td>
+                  </ng-container>
+
+                  <!--Start Date Column -->
+                  <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "status" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.status ? element?.status : "-" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Start Date Column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "view_result" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="icon_group">
+                        <a class="svgicon" *ngIf="element?.resultType === 'manual'"
+                          (click)="routeToViewResult(item?._id, element?.testId, element?.testName)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+                            <path
+                              d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                          </svg>
+                        </a>
+                        <a class="svgicon" *ngIf="element?.resultType === 'upload'"
+                          (click)="downloadTestResult(element?.testResultId)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-download" viewBox="0 0 16 16">
+                            <title>{{ "download_result" | translate }}</title>
+                            <path
+                              d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                            <path
+                              d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                          </svg>
+                        </a>
+                        <a class="external-result" *ngIf="element?.externalResults?.link" style="cursor: pointer;" 
+                          (click)="downloadTestResult_forExternalLabs(element?.externalResults?.link, element?.externalResults?.serviceName)"
+                          >
+                          {{"external_lab_result" | translate}} <mat-icon>open_in_new</mat-icon>
+                        </a>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedLabColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedLabColumns"></tr>
+                </table>
+              </div>
+              <div *ngIf="dataLabSource?.length === 0" class="text-center mt-2">
+                <b>{{ "no_record_found" | translate }}</b>
+              </div>
+              <mat-paginator class="pagination" *ngIf="dataLabSource?.length > 0" [length]="totalLength"
+                (page)="handlePageEventLab($event)" [pageSize]="pageSize" [pageSizeOptions]="[2, 5, 20, 50, 100]"
+                showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+          </div>
+          <div class="bottom_bar" *ngIf="selected_tab === 'lab_test_prescribed'">
+            <div class="table-wrap">
+              <div class="table-inner d-flex flex-column mt-2" *ngFor="let item of res_detailsLab">            
+                <table mat-table [dataSource]="item?.labTest" class="mat-elevation-z8 medtableinfo">
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date_and_time" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ item?.createdAt | date: "dd/MM/yyyy | HH:mm" }}
+      
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="testname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "testname" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.labtestName ? element?.labtestName : "-" }}
+                    </td>
+                  </ng-container>
+      
+                  <!--Strength Column -->
+                  <ng-container matColumnDef="centrename">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "labCenterName" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.labCenterName ? element?.labCenterName : "-" }}
+                    </td>
+                  </ng-container>
+      
+                  <!--Start Date Column -->
+                  <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "status" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.status ? element?.status : "-" }}
+                    </td>
+                  </ng-container>      
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsLab"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsLab"></tr>
+                </table>
+              </div>
+              <div *ngIf="res_detailsLab?.length === 0" class="text-center">
+                <div class="text-center">
+                  <b>{{ "test_not_added" | translate }}</b>
+                </div>              
+              </div>
+              <mat-paginator class="pagination" *ngIf="res_detailsLab?.length > 0" [length]="totalLength"
+                (page)="handlePageEventLabprescribedTest($event)" [pageSize]="pageSize" [pageSizeOptions]="[2, 5, 20, 50, 100]"
+                showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+        <mat-tab label="{{ 'radiology' | translate }}">
+        <div class="tab_content">
+          <div class="top_bar">
+            <div class="right_part" *ngIf="showAddButtton">
+              <div class="comparevitals d-flex align-items-center">
+                <div class="primary_btn" >                 
+                  <button type="button" class="btn btn-primary gap-1" (click)="routeToRadiology()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                      <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+                    </svg>{{ "add_radiology_test" | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="left_part flex-wrap">
+              <form [formGroup]="dateRangeForm">
+                <div class="form_field_wrapper d-flex align-items-center gap-1">
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "from" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker13" formControlName="fromDate"
+                      (dateChange)="onDateChange('from', $event.value,'radiology_test')" (click)="picker13.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker13"></mat-datepicker-toggle>
+                    <mat-datepicker #picker13></mat-datepicker>
+                  </mat-form-field>
+                </div>
+
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "to" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker14" formControlName="toDate"
+                      (dateChange)="onDateChange('to', $event.value, 'radiology_test')" (click)="picker14.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker14"></mat-datepicker-toggle>
+                    <mat-datepicker #picker14></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                </div>
+              </form>
+            
+          </div>
+            <div class="right_part">
+              <div class="vitals_tab_title flex-wrap">
+                <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button (click)="tabSelection('radio_test')"
+                [ngClass]="{'selected-button': selected_tab === 'radio_test'}">
+                {{'order_list' | translate}}
+               </button> 
+                <button type="button" mat-stroked-button class="btn emr_tabs_dark" mat-button
+                      (click)="tabSelection('radio_test_prescribed')"
+                      [ngClass]="{ 'selected-button': selected_tab === 'radio_test_prescribed' }">
+                      {{'prescribed_tests' | translate}}
+                </button>                                
+              </div>
+            </div>
+          </div>
+          <div class="bottom_bar" *ngIf="selected_tab === 'radio_test'">
+            <div class="table-wrap">
+              <div class="table-inner d-flex flex-column mt-2" *ngFor="let item of dataRadioSource">
+                <div class="main_title_common d-flex justify-content-between" style="gap:8px">
+                  <div class="profileinfo_title">
+                    {{ "prescribed_by" | translate }} : {{ item?.doctorName }} 
+                    <p class="m-0 date-history">
+                        {{
+                          item?.consultationDate | date: "dd/MM/yyyy"
+                        }} 
+                        | 
+                        {{ item?.consultationTime }}
+                    </p>
+                </div>
+                
+                  <div class="d-flex show-history">
+                    <button type="button" mat-stroked-button class="btn btn-primary" mat-button
+                      (click)="openHistoryPopup(viewhistory, item._id)">
+                      {{'show_history' | translate}}
+                    </button>
+                  </div>
+                </div>
+                <table mat-table [dataSource]="item?.radiologyTestResult
+                  " class="mat-elevation-z8 medtableinfo">
+                  <ng-container matColumnDef="testname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "testname" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                      element?.testName
+                      ? element?.testName
+                      : "-"
+                      }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="centrename">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "radioCenterName" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                      item?.centreName
+                      ? item?.centreName
+                      : "-"
+                      }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="orderid">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "order_id" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                      item?.appointmentId ? item?.appointmentId : "-"
+                      }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "status" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.status ? element?.status : "-" }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "view_result" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="icon_group">
+                        <a class="svgicon"  *ngIf="element?.status === 'COMPLETED'" (click)="downloadTestResult(element?.testResultId)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-download" viewBox="0 0 16 16">
+                            <title>{{ "download_result" | translate }}</title>
+                            <path
+                              d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                            <path
+                              d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                          </svg>
+                        </a>                        
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedRadioColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedRadioColumns"></tr>
+                </table>
+              </div>
+              <div *ngIf="dataRadioSource?.length === 0" class="text-center mt-2">
+                <b>{{ "no_record_found" | translate }}</b>
+              </div>
+              <mat-paginator class="pagination" *ngIf="dataRadioSource?.length > 0" [length]="totalLength"
+                (page)="handlePageEventRadio($event)" [pageSize]="pageSize" [pageSizeOptions]="[2, 5, 20, 50, 100]"
+                showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+          </div>
+          <div class="bottom_bar" *ngIf="selected_tab === 'radio_test_prescribed'">
+            <div class="table-wrap">
+              <div
+                class="table-inner d-flex flex-column mt-2"
+                *ngFor="let item of res_detailsRadio"
+              >
+                <table
+                  mat-table
+                  [dataSource]="item?.radiologyTest"
+                  class="mat-elevation-z8 medtableinfo"
+                >
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date_and_time" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ item?.createdAt | date : "dd/MM/yyyy | HH:mm" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="testname">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "testname" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                        element?.radiologyTestName ? element?.radiologyTestName : "-"
+                      }}
+                    </td>
+                  </ng-container>
+      
+                  <!--Strength Column -->
+                  <ng-container matColumnDef="centrename">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "radioCenterName" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{
+                        element?.radiologyCenterName
+                          ? element?.radiologyCenterName
+                          : "-"
+                      }}
+                    </td>
+                  </ng-container>
+      
+                  <!--Start Date Column -->
+                  <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "status" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.status ? element?.status : "-" }}
+                    </td>
+                  </ng-container>
+                  
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsRadio"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsRadio"></tr>
+                </table>
+              </div>
+              <div *ngIf="res_detailsRadio?.length === 0" class="text-center">
+                <div class="text-center">
+                  <b>{{ "test_not_added" | translate }}</b>
+                </div>              
+              </div>
+              <mat-paginator
+                class="pagination"
+                *ngIf="res_detailsRadio?.length > 0"
+                [length]="totalLength"
+                (page)="handlePageEventRadioPrescribedTest($event)"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[2, 5, 20, 50, 100]"
+                showFirstLastButtons
+                aria-label="Select page of periodic elements"
+              >
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </mat-tab>     
+      <mat-tab label="{{ 'past_appointment' | translate }}">
+        <div class="tab_content">
+          <div class="top_bar d-flex">
+            <div class="left_part">
+              <form [formGroup]="dateRangeForm">
+                <div class="form_field_wrapper d-flex align-items-center gap-1">
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "from" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker5" formControlName="fromDate"
+                      (dateChange)="onDateChange('from', $event.value,'past_appointment')" (click)="picker5.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                    <mat-datepicker #picker5></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                  <div class="main_title_common d-flex align-items-center gap-1">{{ "to" | translate }}:
+                  <mat-form-field class="example-full-width choosedate" appearance="fill">
+                    <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                      [matDatepicker]="picker6" formControlName="toDate"
+                      (dateChange)="onDateChange('to', $event.value, 'past_appointment')" (click)="picker6.open()" readonly/>
+                    <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                    <mat-datepicker #picker6></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="bottom_bar">
+            <div class="table-wrap">
+              <div class="table-inner without_pagination_block">
+                <table mat-table [dataSource]="pastappointmentdataSource" class="mat-elevation-z8">
+                  <!--Date & Time Column -->
+                  <ng-container matColumnDef="dateandtime">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date_and_time" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.consultationDate | date: 'dd/MM/YYYY' }} |
+                      {{ element?.consultationTime }}
+                    </td>
+                  </ng-container>
+
+                  <!--appointmentId  Column -->
+                  <ng-container matColumnDef="orderid">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "appointmentId" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <a href="javascript:void(0)" (click)="routeTOdetails(element?._id)">
+                        {{ element.appointmentId }}
+                      </a>
+                    </td>
+                  </ng-container>
+
+                  <!--Doctor  Column -->
+                  <ng-container matColumnDef="doctor">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "doctor" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <!-- <span class="user_image_wrapper">
+                        <img class="user_image" src="../../../../../assets/img/user_profile.svg" />
+                      </span> -->
+                      <span class="name_user">
+                        {{ element?.doctorName ? element?.doctorName : "-" }}
+                      </span>
+                    </td>
+                  </ng-container>
+
+                  <!--Patient  Column -->
+                  <ng-container matColumnDef="patient">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "patient" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <!-- <span class="user_image_wrapper">
+                        <img class="user_image" src="../../../../../assets/img/user_profile.svg" />
+                      </span> -->
+                      <span class="name_user">
+                        {{ element?.patientName }}
+                      </span>
+                    </td>
+                  </ng-container>
+
+                  <!-- Status -->
+                  <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "status" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                       <div
+                class="status {{
+                  element.status === 'Upcoming'
+                    ? 'upcoming'
+                    : element.status === 'Cancelled'
+                    ? 'cancelled'
+                    : element.status === 'Completed'
+                    ? 'completed'
+                    : element.status === 'Missed'
+                    ? 'missed'
+                    : element.status === 'Pending'
+                    ? 'pending'
+                    : ''
+                }}"
+              >
+                {{
+                  element.status === "Cancelled" &&
+                  element.cancel_by === "patient"
+                    ? "Cancelled By Patient"
+                    : element.status
+                }}
+              </div>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="pastappointmentdisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="
+                      let row;
+                      columns: pastappointmentdisplayedColumns
+                    "></tr>
+                </table>
+                <div class="text-center" *ngIf="pastappointmentdataSource?.length === 0">
+                  <b>{{ "no_past_appointments_found" | translate }}</b>
+                </div>
+              </div>
+              <!-- <mat-paginator class="pagination" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator> -->
+              <mat-paginator class="pagination" *ngIf="pastappointmentdataSource?.length > 0" [length]="totalLength"
+                (page)="handlePageEventPast($event)" [pageSize]="pageSize" [pageSizeOptions]="[2, 5, 20, 50, 100]"
+                showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="{{ 'medical_document' | translate }}">
+        <div class="tab_content">
+          <div class="top_bar"></div>
+          <div class="bottom_bar">
+            <div class="table-wrap mt-2">
+              <div class="table-inner without_pagination_block">
+                <table mat-table [dataSource]="medicalDocuments" class="mat-elevation-z8 withoutpagination">
+                  <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "date_and_time" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.createdAt | date: 'dd/MM/yyyy | HH:mm'}}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="documnet_name">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "document_name" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.documentName }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="issueDate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "issue_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.issueDate ? element?.issueDate :"-" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="expirydate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "expiration_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.expiryDate ? element?.expiryDate :"-" }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "view" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="icon_group">
+                        <ng-container *ngIf="isPDF(element?.fileKey); else viewImageIcon">
+                          <!-- Download PDF Icon -->
+                          <a class="svgicon" (click)="triggerFileDownload(element?.signedUrl,element?.fileKey)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                              class="bi bi-download" viewBox="0 0 16 16">
+                              <title>{{ "download" | translate }}</title>
+                              <path
+                                d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                              <path
+                                d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
+                            </svg>
+                          </a>
+                        </ng-container>
+                        <ng-template #viewImageIcon>
+                          <!-- View Image Icon -->
+                          <a class="svgicon" (click)="openVerticallyCenteredquickview(quick_view, element?.signedUrl)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9"
+                              fill="none">
+                              <path
+                                d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                            </svg>
+                          </a>
+                        </ng-template>
+                      </div>
+                    </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="documentdisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: documentdisplayedColumns"></tr>
+                </table>
+              </div>
+              <div *ngIf="medicalDocuments?.length === 0" class="text-center mt-2">
+                <b>{{ "no_record_found" | translate }}</b>
+              </div>
+              <mat-paginator class="pagination" *ngIf="medicalDocuments?.length > 0" [length]="totalDocLength"
+                (page)="handlePageEventDoc($event)" [pageSize]="pageSize" [pageSizeOptions]="[2,5, 10, 20, 50, 100]"
+                showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+          </div>
+
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+</div>
+
+<!-------------------------- Delete modal --------------------->
+
+<ng-template #deleteModal let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img class="img-fluid" src="../../../../assets/img/delete.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "you_want_to_delete" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="deleteItem()">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Quickview Modal -->
+
+<ng-template #quick_view let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <!-- <div class="docview_img"> -->
+      <img src="{{ setDocToView }}" />
+      <!-- </div> -->
+    </div>
+  </div>
+</ng-template>
+
+<!-- ---------------------------------------Add Vital Model ---------------------------------------- -->
+<ng-template #vitalModal let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{ "add_vitals" | translate }}</h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="vitalForm">
+        <div class="modal_content1" style="border: 1px solid rgba(228, 228, 228, 0.9);">
+          <div class="row">
+            <div class="col-12">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>{{ "vitals" | translate }}</th>
+                    <th>{{ "values" | translate }}</th>
+                    <th>{{ "reference_ranges" | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ "height" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="height"  style="text-align: center"/>
+                      </mat-form-field>
+                      <mat-error
+                      *ngIf="
+                        vitalForm.get('height').invalid &&
+                        vitalForm.get('height').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>                  
+                    </td>
+                    <td *ngIf="patientGender == heightRange?.gender; else defaultHeight">
+                      {{ heightRange?.low }} {{heightRange?.unit}} - {{ heightRange?.high }} {{heightRange?.unit  }}
+                    </td>
+                    <ng-template #defaultHeight>
+                      <td>{{"163.2 cms - 193.6 cms"  | translate}}</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "weight" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="weight"  style="text-align: center"/>
+                      </mat-form-field>
+                      <mat-error
+                      *ngIf="
+                        vitalForm.get('weight').invalid &&
+                        vitalForm.get('weight').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                    </td>
+                    <td *ngIf="patientGender == weightRange?.gender; else defaultWeight">
+                      {{ weightRange?.low }} {{weightRange?.unit}} - {{ weightRange?.high }} {{weightRange?.unit}}
+                    </td>
+                    <ng-template #defaultWeight>
+                      <td>{{ 50 }} kgs - {{ 80 }} kgs</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "heart_rate" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="h_rate"   style="text-align: center"/>
+                      </mat-form-field>
+                      <mat-error
+                      *ngIf="
+                        vitalForm.get('h_rate').invalid &&
+                        vitalForm.get('h_rate').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                    </td>
+                    <td *ngIf="patientGender == HeartRateRange?.gender; else defaultHeartRate">
+                      {{ HeartRateRange?.low }} {{ HeartRateRange?.unit }} - {{ HeartRateRange?.high }} {{HeartRateRange?.unit}}
+                    </td>
+                    <ng-template #defaultHeartRate>
+                      <td>{{ 100 }} bpm - {{ 190 }} bpm</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "bmi" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput  formControlName="bmi" style="text-align: center" />
+                      </mat-form-field>                     
+                    </td>
+                    <!-- <td>{{ bpiRange?.low }} - {{ bpiRange?.high }}</td> -->
+                    <td>{{"18.5 - 24.9" | translate}}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ "bp_systolic" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="bp_systolic"  style="text-align: center"/>
+                      </mat-form-field>                     
+                    </td>
+                    <td *ngIf="patientGender == bloodPressureSystolic?.gender; else defaultBPS">
+                      {{ bloodPressureSystolic?.low }} {{ bloodPressureSystolic?.unit }} - {{ bloodPressureSystolic?.high }}
+                      {{ bloodPressureSystolic?. unit }}
+                    </td>
+                    <ng-template #defaultBPS>
+                      <td>{{ 90 }} mmHg - {{ 120}} mmHg</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "bp_diastolic" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="bp_diastolic"  style="text-align: center"/>
+                      </mat-form-field>                      
+                    </td>
+                    <td *ngIf="patientGender == bloodPressureBPDiastolic?.gender; else defaulBPD">
+                      {{ bloodPressureBPDiastolic?.low }} {{  bloodPressureBPDiastolic?.unit }} - {{ bloodPressureBPDiastolic?.high }} {{ bloodPressureBPDiastolic?.unit }}
+                    </td>
+                    <ng-template #defaulBPD>
+                      <td>{{ 60 }} mmHg - {{ 80 }} mmHg</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "pulse" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="pulse"  style="text-align: center"/>
+                      </mat-form-field>                     
+                    </td>
+                    <td *ngIf="patientGender == pulseRange?.gender; else defaultPulse">
+                      {{ pulseRange?.low }} {{pulseRange?.unit}} - {{ pulseRange?.high }} {{pulseRange?.unit}}
+                    </td>
+                    <ng-template #defaultPulse>
+                      <td>{{ 60 }} bpm - {{ 100 }} bpm</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "temp(c)" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="temp"  style="text-align: center"/>
+                      </mat-form-field>                     
+                    </td>
+                    <td *ngIf="patientGender == temperatureRange?.gender; else defaultTemp">
+                      {{ temperatureRange?.low }} °{{temperatureRange?.unit}} - {{ temperatureRange?.high }} °{{temperatureRange?.unit}}
+                    </td>
+                    <ng-template #defaultTemp>
+                      <td>{{36.1}} °C - {{ 37.5}} °C</td>
+                    </ng-template>
+                  </tr>
+                  <tr>
+                    <td>{{ "blood_glucose" | translate }}</td>
+                    <td>
+                      <mat-form-field class="input-box" appearance="fill">
+                        <input type="number" matInput class="center-text" formControlName="blood_glucose"  style="text-align: center"/>
+                      </mat-form-field>                     
+                    </td>
+                    <td *ngIf="patientGender == bloodGlucoseRange?.gender; else defaultBG">
+                      {{ bloodGlucoseRange?.low }} {{bloodGlucoseRange?.unit}} - {{ bloodGlucoseRange?.high }} {{bloodGlucoseRange?.unit}}
+                    </td>
+                    <ng-template #defaultBG>
+                      <td>{{80}} mg/dL - {{ 140}}  mg/dL</td>
+                      <!-- <td>{{"70 mg/dL- 100 mg/dL" | translate}}</td> -->
+                    </ng-template>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="primary_btn d-flex justify-content-center mt-3">
+          <button type="button" class="btn btn-secondary" (click)="closePopup()">{{ "cancel" | translate }}</button>
+          <button type="submit" class="btn btn-primary" (click)="handleAddVitals()">{{ "save" | translate }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #consultation_notes_content let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "consultation_notes" | translate }}
+      </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">   
+      <form [formGroup]="notesForm" > 
+            <div class="modal_content category_service">
+              <div class="row modal_content_inner">
+                <div class="item mb-3">
+                  <div class="form_field_wrapper consult_note">
+                    <label>{{ "subjective" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <textarea type="text" formControlName="subject" matInput [readonly]=true></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="item mb-3">
+                  <div class="form_field_wrapper consult_note">
+                    <label>{{ "objective" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <textarea type="text" formControlName="object" matInput [readonly]=true></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="item mb-3">
+                  <div class="form_field_wrapper consult_note">
+                    <label>{{ "icdcode" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <textarea type="text" formControlName="icd10" matInput [readonly]=true></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="item mb-3">
+                  <div class="form_field_wrapper consult_note">
+                    <label>{{ "assessment" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <textarea type="text" formControlName="assessment" matInput [readonly]=true></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="item mb-3">
+                  <div class="form_field_wrapper consult_note">
+                    <label>{{ "plan" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <textarea type="text" formControlName="plan" matInput [readonly]=true></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- --------------------------------Show-History-------------------------------- -->
+<ng-template #viewhistory let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body p-0">
+      <div *ngIf="orderHistory?.length === 0 && _testHistoryData?.length === 0" class="text-center mt-2">
+        <b>{{ "no_record_found" | translate }}</b>
+      </div>
+      <div class="show-history-popup">
+        <div class="modal-header mb-4 p-0" *ngIf="orderHistory.length > 0">
+          <h4 class="modal-title test-history-heading" id="modal-basic-title">
+            {{ "order_history" | translate }}
+          </h4>
+        </div>
+        <div class="timeline mb-4">
+          <div class="timeline-item" *ngFor="let order of orderHistory">
+            <div class="timeline-content">
+              <p class="text-name-f m-0">{{ order.name }}</p>
+              <p class="status m-0" [ngClass]="order.status | lowercase">{{ removeUnderscores(order.status) }}</p>
+
+
+              <p class="time m-0">{{ order.updatedAt | date: 'dd/MM/yyyy, HH:mm' }}</p>
+            </div>
+            <div class="line" *ngIf="!isLastItem(order, orderHistory)"></div>
+            <div class="circle ordered" *ngIf="!isLastItem(order, orderHistory)"></div>
+          </div>
+        </div>
+
+        <div class="modal-header mb-4 p-0" *ngIf="_testHistoryData.length > 0">
+          <h4 class="modal-title test-history-heading" id="modal-basic-title">
+            {{ "test_history" | translate }}
+          </h4>
+        </div>
+        <div class="timeline" *ngFor="let test of _testHistoryData">
+          <div class="test-header">
+            <h4 class="text-name-f m-0">{{ test.testName }}</h4>
+          </div>
+          <div class="timeline-item" *ngFor="let historyItem of test.testHistory">
+            <div class="timeline-content">
+              <p class="text-name-f status m-0">{{ historyItem.name }}</p>
+              <p class="status m-0" [ngClass]="historyItem.status.toLowerCase()">
+                {{ historyItem.status }}
+              </p>
+              <p class="time">{{ historyItem.updatedAt | date: 'dd/MM/yyyy, HH:mm' }}</p>
+            </div>
+
+            <div class="line" *ngIf="!isLastItem(historyItem, test.testHistory)"></div>
+            <div class="circle ordered" *ngIf="!isLastItem(historyItem, test.testHistory)"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<!-- ---------------------------medical-history-------------------------- -->
+<ng-template #medicalHistory let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "allergies" | translate }}
+      </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="medicalHistoryForm" (ngSubmit)="submitMedicalHistory()">
+        <div class="modal_content category_service">
+          <div class="row modal_content_inner">
+            <div class="item mb-3">
+              <div class="form_field_wrapper consult_note">
+                <label>{{ "allergen" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput formControlName="allergen" />
+                  <mat-error *ngIf="medicalHistoryForm.get('allergen').hasError('required')">
+                    This field is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+      
+            <div class="item mb-3">
+              <div class="form_field_wrapper consult_note">
+                <label>{{ "allergyType" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <mat-select disableRipple formControlName="allergyType">
+                    <mat-option value="No Allergy">{{ "No Allergy" | translate }}</mat-option>
+                    <mat-option value="Food">{{ "Food" | translate }}</mat-option>
+                    <mat-option value="Environmental">{{ "Environmental" | translate }}</mat-option>
+                    <mat-option value="Contact">{{ "Contact" | translate }}</mat-option>
+                    <mat-option value="Drug">{{ "Drug" | translate }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="medicalHistoryForm.get('allergyType').hasError('required')">
+                    This field is required
+                  </mat-error>
+                </mat-form-field>
+
+              </div>
+            </div>
+      
+            <div class="item mb-3">
+              <div class="form_field_wrapper consult_note">
+                <label>{{ "reaction" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <mat-select disableRipple formControlName="reaction">
+                    <mat-option value="No Reaction">{{ "No Reaction" | translate }}</mat-option>
+                    <mat-option value="Anaphylaxis">{{ "Anaphylaxis" | translate }}</mat-option>
+                    <mat-option value="Sneezing">{{ "Sneezing" | translate }}</mat-option>
+                    <mat-option value="Swelling, Hives">{{ "Swelling, Hives" | translate }}</mat-option>
+                    <mat-option value="Rash, Itching">{{ "Rash, Itching" | translate }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="medicalHistoryForm.get('reaction').hasError('required')">
+                    This field is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+      
+            <div class="item mb-3">
+              <div class="form_field_wrapper consult_note">
+                <label>{{ "status" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <mat-select disableRipple formControlName="status">
+                    <mat-option value="Active">{{ "active" | translate }}</mat-option>
+                    <mat-option value="InActive">{{ "in_active" | translate }}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="medicalHistoryForm.get('status').hasError('required')">
+                    This field is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+      
+            <div class="item mb-3">
+              <div class="form_field_wrapper consult_note">
+                <label>{{ "note" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <textarea type="text" formControlName="note" matInput></textarea>
+                  <mat-error *ngIf="medicalHistoryForm.get('note').hasError('required')">
+                    This field is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      
+      <div class="primary_btn">
+        <button type="button" class="btn btn-secondary" (click)="closePopup()">
+          {{ "cancel" | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="submitMedicalHistory()">
+          {{ "save" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- -------------------------social-history------------------------------------ -->
+<ng-template #socialHistory let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "social_history" | translate }}
+      </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="socialHistoryForm">
+
+        <div class="modal_content category_service">
+          <div class="row modal_content_inner">
+
+            <div class="form_field_wrapper consult_note">
+              <mat-checkbox formControlName="alcohol">{{ "alcohol" | translate }}</mat-checkbox>
+            </div>
+
+
+            <div class="form_field_wrapper consult_note">
+              <mat-checkbox formControlName="tobacco">{{ "tobacco" | translate }}</mat-checkbox>
+            </div>
+
+
+            <div class="form_field_wrapper consult_note">
+              <mat-checkbox formControlName="drugs">{{ "drugs" | translate }}</mat-checkbox>
+
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="primary_btn">
+        <button type="button" class="btn btn-secondary" (click)="closePopup()">
+          {{ "cancel" | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="submitSocialHistory()">
+          {{ "save" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #vgraphpopup let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="vitalsdataSource.length > 0">
+        <h4>{{ graphType }}</h4>
+        <canvas baseChart
+        [datasets]="lineChartData"
+        [labels]="lineChartLabels"
+        [options]="lineChartOptions"
+        [legend]="true"
+        [type]="'line'">
+      </canvas>
+      
+        </div>
+        <div *ngIf="vitalsdataSource?.length === 0" class="text-center">
+          <b>{{ "no_record_found" | translate }}</b>
+        </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #infopopup let-modal>
+  <div class="infopopup-modal">
+    <div class="infopopup-header">
+      <div class="d-flex flex-column">
+        <h2>
+          {{infoLabel}}
+          <span *ngIf="unit"> {{unit}}</span>
+        </h2>
+      <p class="modal-date m-0">{{currentDate | date: 'dd/MM/YYYY'}}</p>
+      </div>
+      <button type="button" class="d-block close-btn" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body m-0">
+      <div class="card">
+        <div class="row">
+          <div class="col">
+            <p><strong>{{"current_value" | translate}}:</strong> {{currentValue}} {{unit}}</p>
+          </div>
+        </div>
+        <ng-container *ngIf="infoLabel !== 'BMI'">
+
+          <div class="row">
+            <div class="col" *ngIf="criticalHigh">
+              <p><strong>{{ "critical_high" | translate}}:</strong> {{criticalHigh ? criticalHigh : "-"}} {{unit}}</p>
+            </div>
+            <div class="col" *ngIf="criticalLow">
+              <p><strong>{{ "critical_low" | translate}}:</strong> {{criticalLow ? criticalLow : "-"}} {{unit}}</p>
+            </div>
+           
+          </div>
+          <div class="row">
+            <div class="col" *ngIf="normalHigh">
+              <p><strong>{{"high" | translate}}:</strong> {{normalHigh ? normalHigh: "-"}} {{unit}}</p>
+            </div>
+            <div class="col" *ngIf="normalLow">
+              <p><strong>{{"low" | translate}}:</strong> {{normalLow ? normalLow :"-"}} {{unit}}</p>
+            </div>          
+          </div>
+      </ng-container>
+
+        <ng-container  *ngIf="infoLabel === 'BMI'" >       
+          <div class="row">         
+          <div class="col">
+            <p><strong>{{"low" | translate}}:</strong> {{ "18.5" | translate }}</p>
+          </div>  
+          <div class="col" >
+            <p><strong>{{"obese" | translate}}:</strong> {{"above_30" | translate}}</p>
+          </div>        
+        </div>
+        <div class="row">
+          <div class="col" >
+            <p><strong>{{"overweight" | translate}}:</strong> {{"between_25_and_29.9" | translate}}</p>
+          </div>
+          <div class="col">
+            <p><strong>{{"normal" | translate}}:</strong> {{"between_18.5_and_24.9" | translate}}</p>
+          </div>          
+        </div>
+        </ng-container>        
+      </div>      
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #add_consultation_notes let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "consultation_notes" | translate }}
+      </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+    
+      <form [formGroup]="notesForm" (ngSubmit)="handleSaveNotes()" >
+       
+            <div class="modal_content category_service">
+              <div class="row modal_content_inner">
+                <div class="item mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "subjective" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <textarea
+                      type="text"
+                      formControlName="subject"
+                      matInput
+                    ></textarea>                    
+                    </mat-form-field>
+                    <mat-error
+                      *ngIf="
+                        notesForm.get('subject').invalid &&
+                        notesForm.get('subject').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+                <div class="item mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "objective" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <textarea
+                      type="text"
+                      formControlName="object"
+                      matInput
+                    ></textarea>                        
+                    </mat-form-field>
+                    <mat-error
+                      *ngIf="
+                        notesForm.get('object').invalid &&
+                        notesForm.get('object').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+                <!-- <div class="item mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "icdcode" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <mat-select
+                        disableRipple
+                        formControlName="icd10"
+                        multiple
+                        placeholder="{{ 'select_test' | translate }}"
+                      >
+                        <mat-option
+                          *ngFor="let item of totalICDList; let i = index"
+                          value="{{ item._id }}"
+                          >{{ item.code }} : {{
+                            item.disease_title
+                          }}</mat-option
+                        >
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error
+                      *ngIf="
+                        notesForm.get('icd10').invalid &&
+                        notesForm.get('icd10').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div> -->
+                <div class="item mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "icdcode" | translate }}</label>
+
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput [formControl]="searchControl" [matAutocomplete]="auto"
+                        placeholder="Search and Select ICD Codes" />
+                    </mat-form-field>
+
+                    <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option *ngFor="let item of filteredICDList">
+                        <mat-checkbox [checked]="isSelected(item._id)" (click)="$event.stopPropagation()" class="checkbor_for_icd"
+                          (change)="toggleSelection(item, $event)">
+                          {{ item.code }} : {{ item.disease_title }}
+                        </mat-checkbox>
+                      </mat-option>
+                      <mat-option *ngIf="noDataFound" disabled>
+                        No Data Found
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="notesForm.get('icd10').invalid && notesForm.get('icd10').touched">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                  <div class="mt-2" *ngIf="selectedICDCodes.length > 0">
+                    <mat-chip-list>
+                      <mat-chip *ngFor="let item of selectedICDCodes" (removed)="removeSelected(item)">
+                        {{ item.code }} : {{ item.disease_title }}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                      </mat-chip>
+                    </mat-chip-list>
+                  </div>
+                </div>
+                <div class="item mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "assessment" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <textarea
+                      type="text"
+                      formControlName="assessment"
+                      matInput
+                    ></textarea> 
+                    </mat-form-field>
+                    <mat-error
+                      *ngIf="
+                        notesForm.get('assessment').invalid &&
+                        notesForm.get('assessment').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+                <div class="item mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "plan" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <textarea
+                      type="text"
+                      formControlName="plan"
+                      matInput
+                    ></textarea>                     
+                    </mat-form-field>
+                    <mat-error
+                      *ngIf="
+                        notesForm.get('plan').invalid &&
+                        notesForm.get('plan').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+            </div>
+         
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closePopup()"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button type="submit" class="btn btn-primary">
+            {{ "save" | translate }}
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</ng-template>
+
+

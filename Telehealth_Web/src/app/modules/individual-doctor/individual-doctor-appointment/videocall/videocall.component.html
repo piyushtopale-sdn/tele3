@@ -1,0 +1,349 @@
+<div class="video_call dashboard_main_content">
+  <div class="top_bar">
+    <div class="primary_btn">
+      <button
+        class="btn btn-secondary"
+        (click)="openVerticallyCenteredassessment(assessment)"
+      >
+        {{ "view_assessment" | translate }}
+      </button>
+      <button class="btn btn-secondary" (click)="handleRouting()">
+        {{ "view_profile" | translate }}
+      </button>
+    </div>
+  </div>
+  <div class="bottom_bar">
+    <div class="video_part">
+      <img src="../../../../../assets/img/video_img.png" />
+    </div>
+    <div class="video_btn primary_btn">
+      <button class="btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="33"
+          height="22"
+          viewBox="0 0 33 22"
+          fill="none"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M2.96017 4.50813C2.96017 3.78482 3.54654 3.19845 4.26985 3.19845H18.6763C19.3996 3.19845 19.986 3.78482 19.986 4.50813V17.6049C19.986 18.3282 19.3996 18.9146 18.6763 18.9146H4.26985C3.54654 18.9146 2.96017 18.3282 2.96017 17.6049V4.50813ZM4.26985 0.579102C2.09991 0.579102 0.34082 2.33819 0.34082 4.50813V17.6049C0.34082 19.7748 2.09991 21.5339 4.26985 21.5339H18.6763C20.8462 21.5339 22.6053 19.7748 22.6053 17.6049V13.601L29.7023 18.6702C30.1015 18.9554 30.6266 18.9935 31.0628 18.769C31.499 18.5445 31.7732 18.0951 31.7732 17.6045V4.50771C31.7732 4.01712 31.499 3.56767 31.0628 3.34319C30.6266 3.1187 30.1015 3.15683 29.7023 3.44198L22.6053 8.51122V4.50813C22.6053 2.33819 20.8462 0.579102 18.6763 0.579102H4.26985ZM29.1538 15.0595L23.549 11.0561L29.1538 7.05266V15.0595Z"
+            fill="#0B4977"
+          />
+          <path
+            d="M22.6053 13.601L22.7576 13.3878C22.6777 13.3308 22.5727 13.3232 22.4855 13.3681C22.3982 13.413 22.3434 13.5028 22.3434 13.601H22.6053ZM29.7023 18.6702L29.55 18.8833L29.7023 18.6702ZM31.0628 18.769L30.9429 18.5361H30.9429L31.0628 18.769ZM31.0628 3.34319L30.9429 3.57609H30.9429L31.0628 3.34319ZM29.7023 3.44198L29.8545 3.65513L29.7023 3.44198ZM22.6053 8.51122H22.3434C22.3434 8.60934 22.3982 8.69923 22.4855 8.74413C22.5727 8.78903 22.6777 8.7814 22.7576 8.72437L22.6053 8.51122ZM23.549 11.0561L23.3968 10.8429C23.3279 10.8921 23.2871 10.9715 23.2871 11.0561C23.2871 11.1407 23.3279 11.2201 23.3968 11.2692L23.549 11.0561ZM29.1538 15.0595L29.0016 15.2727C29.0814 15.3297 29.1864 15.3373 29.2737 15.2924C29.3609 15.2475 29.4158 15.1576 29.4158 15.0595H29.1538ZM29.1538 7.05266H29.4158C29.4158 6.95454 29.3609 6.86465 29.2737 6.81975C29.1864 6.77486 29.0814 6.78248 29.0016 6.83951L29.1538 7.05266ZM4.26985 2.93652C3.40187 2.93652 2.69824 3.64015 2.69824 4.50813H3.22211C3.22211 3.92948 3.6912 3.46039 4.26985 3.46039V2.93652ZM18.6763 2.93652H4.26985V3.46039H18.6763V2.93652ZM20.2479 4.50813C20.2479 3.64015 19.5443 2.93652 18.6763 2.93652V3.46039C19.2549 3.46039 19.724 3.92948 19.724 4.50813H20.2479ZM20.2479 17.6049V4.50813H19.724V17.6049H20.2479ZM18.6763 19.1765C19.5443 19.1765 20.2479 18.4729 20.2479 17.6049H19.724C19.724 18.1835 19.2549 18.6526 18.6763 18.6526V19.1765ZM4.26985 19.1765H18.6763V18.6526H4.26985V19.1765ZM2.69824 17.6049C2.69824 18.4729 3.40187 19.1765 4.26985 19.1765V18.6526C3.6912 18.6526 3.22211 18.1835 3.22211 17.6049H2.69824ZM2.69824 4.50813V17.6049H3.22211V4.50813H2.69824ZM0.602756 4.50813C0.602756 2.48285 2.24457 0.841037 4.26985 0.841037V0.317166C1.95524 0.317166 0.078885 2.19352 0.078885 4.50813H0.602756ZM0.602756 17.6049V4.50813H0.078885V17.6049H0.602756ZM4.26985 21.272C2.24457 21.272 0.602756 19.6302 0.602756 17.6049H0.078885C0.078885 19.9195 1.95524 21.7959 4.26985 21.7959V21.272ZM18.6763 21.272H4.26985V21.7959H18.6763V21.272ZM22.3434 17.6049C22.3434 19.6302 20.7016 21.272 18.6763 21.272V21.7959C20.9909 21.7959 22.8673 19.9195 22.8673 17.6049H22.3434ZM22.3434 13.601V17.6049H22.8673V13.601H22.3434ZM29.8545 18.4571L22.7576 13.3878L22.4531 13.8141L29.55 18.8833L29.8545 18.4571ZM30.9429 18.5361C30.594 18.7157 30.1739 18.6852 29.8545 18.4571L29.55 18.8833C30.0291 19.2255 30.6592 19.2713 31.1826 19.0019L30.9429 18.5361ZM31.5112 17.6045C31.5112 17.9969 31.2919 18.3565 30.9429 18.5361L31.1826 19.0019C31.7061 18.7325 32.0351 18.1932 32.0351 17.6045H31.5112ZM31.5112 4.50771V17.6045H32.0351V4.50771H31.5112ZM30.9429 3.57609C31.2919 3.75568 31.5112 4.11524 31.5112 4.50771H32.0351C32.0351 3.919 31.7061 3.37966 31.1826 3.11028L30.9429 3.57609ZM29.8545 3.65513C30.1739 3.42701 30.594 3.39651 30.9429 3.57609L31.1826 3.11028C30.6592 2.8409 30.0291 2.88666 29.55 3.22884L29.8545 3.65513ZM22.7576 8.72437L29.8545 3.65513L29.55 3.22884L22.4531 8.29808L22.7576 8.72437ZM22.3434 4.50813V8.51122H22.8673V4.50813H22.3434ZM18.6763 0.841037C20.7016 0.841037 22.3434 2.48285 22.3434 4.50813H22.8673C22.8673 2.19352 20.9909 0.317166 18.6763 0.317166V0.841037ZM4.26985 0.841037H18.6763V0.317166H4.26985V0.841037ZM23.3968 11.2692L29.0016 15.2727L29.3061 14.8464L23.7013 10.8429L23.3968 11.2692ZM29.0016 6.83951L23.3968 10.8429L23.7013 11.2692L29.3061 7.2658L29.0016 6.83951ZM29.4158 15.0595V7.05266H28.8919V15.0595H29.4158Z"
+            fill="white"
+          />
+        </svg>
+      </button>
+      <button class="btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="23"
+          height="29"
+          viewBox="0 0 23 29"
+          fill="none"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M11.4647 28.6024C10.9225 28.6024 10.4824 28.1624 10.4824 27.6202V23.4803C10.4824 22.9381 10.9225 22.498 11.4647 22.498C12.0069 22.498 12.4469 22.9381 12.4469 23.4803V27.6202C12.4469 28.1624 12.0069 28.6024 11.4647 28.6024Z"
+            fill="#0B4977"
+          />
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M11.4642 2.40896C9.07275 2.40896 7.12657 4.36561 7.12657 6.77149V12.9113C7.12657 15.3145 9.07275 17.2725 11.4642 17.2725C13.8557 17.2725 15.8019 15.3145 15.8019 12.9113V6.77149C15.8019 4.36561 13.8557 2.40896 11.4642 2.40896ZM11.4643 19.2369C7.9897 19.2369 5.16211 16.3988 5.16211 12.9111V6.77138C5.16211 3.2824 7.9897 0.444336 11.4643 0.444336C14.9388 0.444336 17.7664 3.2824 17.7664 6.77138V12.9111C17.7664 16.3988 14.9388 19.2369 11.4643 19.2369Z"
+            fill="#0B4977"
+          />
+          <mask
+            id="mask0_9753_18907"
+            style="mask-type: luminance"
+            maskUnits="userSpaceOnUse"
+            x="0"
+            y="11"
+            width="23"
+            height="14"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M0.00585938 11.9707H22.9245V24.4624H0.00585938V11.9707Z"
+              fill="white"
+            />
+          </mask>
+          <g mask="url(#mask0_9753_18907)">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M11.4646 24.4624C5.14536 24.4624 0.00488281 19.2997 0.00488281 12.953C0.00488281 12.4108 0.444934 11.9707 0.98714 11.9707C1.53066 11.9707 1.9694 12.4108 1.9694 12.953C1.9694 18.2152 6.22847 22.4979 11.4646 22.4979C16.7006 22.4979 20.9597 18.2152 20.9597 12.953C20.9597 12.4108 21.3998 11.9707 21.942 11.9707C22.4855 11.9707 22.9242 12.4108 22.9242 12.953C22.9242 19.2997 17.7837 24.4624 11.4646 24.4624Z"
+              fill="#0B4977"
+            />
+          </g>
+        </svg>
+      </button>
+      <button class="btn" (click)="openVerticallyCenteredmakeclaim(make_claim)">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="29"
+          height="32"
+          viewBox="0 0 29 32"
+          fill="none"
+        >
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M26.2081 0.32668C26.0393 0.477199 25.4808 1.59915 25.4818 1.78561C25.4821 1.84533 28.1804 3.0814 28.3103 3.0814C28.4188 3.0814 28.9492 1.79802 28.9492 1.53539C28.9492 1.18675 28.735 1.00902 27.7983 0.580411C26.8265 0.135803 26.4833 0.0810208 26.2081 0.32668ZM22.7652 7.77919L20.4653 12.9093L20.3207 14.3666C20.2412 15.1682 20.154 16.1855 20.127 16.6274C20.0794 17.4081 20.0823 17.4308 20.2341 17.4308C20.3406 17.4308 20.8241 16.9666 21.7544 15.9711C22.5046 15.1683 23.1959 14.4026 23.2906 14.2695C23.3853 14.1365 24.0877 12.6325 24.8516 10.9274C25.6154 9.22228 26.6287 6.95977 27.1034 5.89956C27.578 4.83942 27.9538 3.9597 27.9384 3.9446C27.923 3.92958 27.4396 3.70791 26.8641 3.45216C26.2886 3.19634 25.6484 2.911 25.4415 2.81802L25.0652 2.64912L22.7652 7.77919ZM4.7121 6.19365C2.58569 6.5621 0.8953 8.09899 0.280293 10.223L0.108398 10.8166V21.3011C0.108398 30.5394 0.121702 31.7941 0.220503 31.8565C0.552259 32.0663 0.645829 31.9911 3.06094 29.5739C5.03174 27.6015 5.46335 27.2049 5.71364 27.1363C5.92268 27.0789 7.77704 27.0623 11.8794 27.0809C17.7215 27.1073 17.7491 27.1067 18.4272 26.9423C21.1053 26.2928 23.3731 24.7311 24.8418 22.5251C25.9916 20.7978 26.3236 19.6339 26.5257 16.6214C26.6098 15.3661 26.6319 11.1734 26.5539 11.2514C26.5271 11.2781 26.1596 12.0759 25.7371 13.0241C25.3146 13.9722 24.8691 14.9061 24.747 15.0992C24.5366 15.432 24.5207 15.5146 24.4413 16.6835C24.2936 18.8576 24.0765 19.7645 23.448 20.8313C22.2131 22.9277 20.2971 24.3525 17.949 24.9205C17.7077 24.9788 15.6317 25.0192 11.3545 25.0485L5.11239 25.0913L4.62824 25.3341C4.28072 25.5084 3.87011 25.8382 3.1726 26.5032L2.20102 27.4294L2.18077 19.5341C2.16717 14.2457 2.18667 11.4674 2.23974 11.1197C2.43345 9.85103 3.24285 8.88581 4.53759 8.37947L4.96628 8.21184L12.823 8.23291C19.3717 8.25055 20.6905 8.23717 20.7444 8.15272C20.78 8.09697 20.9991 7.63098 21.2313 7.11717L21.6535 6.18296L21.3814 6.1663C21.2318 6.1571 17.531 6.14029 13.1573 6.12893C7.4429 6.11406 5.06657 6.13229 4.7121 6.19365ZM6.06535 12.2927L6.08732 12.8345L7.63811 12.8547L9.18889 12.875V12.3129V11.7508H7.61614H6.04338L6.06535 12.2927ZM10.4001 12.2927L10.422 12.8345L14.5048 12.8538L18.5876 12.8732L18.6754 12.5249C18.7236 12.3334 18.8126 12.0809 18.8731 11.9638L18.9832 11.7508H14.6807H10.3781L10.4001 12.2927ZM21.865 13.4036C22.2304 13.5726 22.6073 13.7408 22.7026 13.7773C22.8682 13.8407 22.8469 13.8748 22.2168 14.5535C21.8543 14.944 21.5141 15.2634 21.4606 15.2634C21.4073 15.2635 21.2606 15.2102 21.1347 15.1452L20.9059 15.0268L20.9549 14.3791C21.023 13.4782 21.0796 13.0961 21.1448 13.0961C21.1754 13.0961 21.4996 13.2344 21.865 13.4036ZM6.09981 15.687C6.07238 15.7143 6.04996 15.9666 6.04996 16.2475V16.7582H12.1312H18.2124L18.2588 16.4779C18.2843 16.3238 18.3055 16.0716 18.3059 15.9174L18.3068 15.6371H12.2282C8.88494 15.6371 6.12716 15.6596 6.09981 15.687ZM6.04996 20.1213V20.6445H10.0484H14.0468V20.1213V19.5982H10.0484H6.04996V20.1213ZM15.2426 20.14L15.2425 20.6819L17.9331 20.6614L20.6236 20.6408V20.1195V19.5982H17.9331H15.2426V20.14Z"
+            fill="#0B4977"
+          />
+        </svg>
+      </button>
+      <button
+        class="btn"
+        (click)="openVerticallyCenteredaddeprescription(add_eprescription)"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30"
+          height="30"
+          viewBox="0 0 30 30"
+          fill="none"
+        >
+          <path
+            d="M8.46795 10.7266H7.1462C4.26328 10.7266 1.92578 13.0641 1.92578 15.947L1.92578 22.8533C1.92578 25.7348 4.26328 28.0723 7.1462 28.0723H22.9137C25.7966 28.0723 28.1341 25.7348 28.1341 22.8533V15.9328C28.1341 13.0584 25.8037 10.7266 22.9293 10.7266H21.5934"
+            stroke="#0B4977"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M15.0296 1.10305L15.0296 18.1611"
+            stroke="#0B4977"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M10.9004 5.25098L15.03 1.10298L19.161 5.25098"
+            stroke="#0B4977"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+      <button class="btn call_end" (click)="openVerticallyCenteredstop(stop)">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="38"
+          height="17"
+          viewBox="0 0 38 17"
+          fill="none"
+        >
+          <path
+            d="M5.14075 14.5568L2.3625 11.7786C2.10354 11.5217 1.90108 11.2136 1.76809 10.874C1.6351 10.5343 1.57451 10.1707 1.5902 9.80624C1.6059 9.44183 1.69752 9.08471 1.85922 8.75776C2.02091 8.43081 2.24911 8.14124 2.5292 7.90758C5.68855 5.36752 9.39966 3.60395 13.3643 2.75857C17.0238 1.94284 20.8179 1.94284 24.4773 2.75857C28.4584 3.60943 32.183 5.38609 35.3495 7.94462C35.6287 8.17757 35.8564 8.46611 36.018 8.79187C36.1796 9.11763 36.2716 9.47348 36.2882 9.83674C36.3048 10.2 36.2455 10.5627 36.1142 10.9019C35.9828 11.241 35.7824 11.549 35.5255 11.8064L32.7472 14.5846C32.3022 15.0385 31.7074 15.315 31.0735 15.3627C30.4397 15.4105 29.8101 15.2261 29.3022 14.8439C28.2958 14.0721 27.2054 13.4166 26.0517 12.8899C25.5956 12.683 25.2084 12.3498 24.9359 11.9296C24.6635 11.5094 24.5172 11.0199 24.5144 10.5191V8.16688C20.8775 7.16673 17.0382 7.16673 13.4014 8.16688V10.5191C13.3986 11.0199 13.2523 11.5094 12.9798 11.9296C12.7074 12.3498 12.3202 12.683 11.8641 12.8899C10.7104 13.4166 9.61991 14.0721 8.61355 14.8439C8.10023 15.2303 7.46279 15.4146 6.82248 15.3616C6.18217 15.3087 5.58365 15.0223 5.14075 14.5568Z"
+            stroke="white"
+            stroke-width="2.61935"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Assessment modal -->
+<ng-template #assessment let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "assessment" | translate }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="assessment_item">
+          <label
+            >Q.01 Lorem Ipsum is simply dummy text of the printing and
+            typesetting</label
+          >
+          <div class="answer">
+            Ans. It is a long established fact that a reader will be distracted
+            by the readable content of a page when looking at its layout
+            established fact that a reader will be distracted by the readable
+            content of a page when looking at its layout.
+          </div>
+        </div>
+        <div class="assessment_item">
+          <label
+            >Q.01 Lorem Ipsum is simply dummy text of the printing and
+            typesetting</label
+          >
+          <div class="answer">
+            Ans. It is a long established fact that a reader will be distracted
+            by the readable content of a page when looking at its layout
+            established fact that a reader will be distracted by the readable
+            content of a page when looking at its layout.
+          </div>
+        </div>
+        <div class="assessment_item">
+          <label
+            >Q.01 Lorem Ipsum is simply dummy text of the printing and
+            typesetting</label
+          >
+          <div class="answer">
+            Ans. It is a long established fact that a reader will be distracted
+            by the readable content of a page when looking at its layout
+            established fact that a reader will be distracted by the readable
+            content of a page when looking at its layout.
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Stop Consulation modal -->
+<ng-template #stop let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image stop">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/stop_consult.svg"
+            alt=""
+          />
+        </div>
+        <span class="single_text">{{
+          "do_you_want_to_stop_consultation" | translate
+        }}</span>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Add ePrescription  modal -->
+<ng-template #add_eprescription let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image stop">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/eprescription.svg"
+            alt=""
+          />
+        </div>
+        <span class="single_text">{{
+          "do_you_want_add_eprescription" | translate
+        }}</span>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Claim  modal -->
+<ng-template #make_claim let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image stop">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/make_claim.svg"
+            alt=""
+          />
+        </div>
+        <span class="single_text"
+          >{{ "do_you_want_to_make" | translate }} <br />
+          {{ "claim_now" | translate }}</span
+        >
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Shop Notes modal -->
+<ng-template #shop_notes let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "soap_notes" | translate }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="row">
+          <div class="item col-md-12">
+            <div class="form_field_wrapper">
+              <label>{{ "notes" | translate }}</label>
+              <mat-form-field appearance="fill">
+                <textarea matInput></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="primary_btn mt-2">
+        <button type="button" class="btn btn-primary">
+          {{ "submit" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,237 @@
+<div class="sidebar_main">
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <button type="button" class="close text-reset d-lg-none d-md-block" data-bs-dismiss="offcanvas"
+        aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="inner_sidebar">
+        <div class="header_logo">
+          <img class="img-flui" src="../../../../assets/img/logo2.svg" alt="logo" />
+        </div>
+        <div class="menu_list" id="sidebar">
+          <ul class="menu_list_main">
+            <ng-container *ngIf="doctorRole === 'INDIVIDUAL' || doctorRole === 'STAFF'">
+              <ng-container *ngFor="let menu of userMenu | keyvalue">
+                <li class="nav-item" *ngIf="menu.value['children'].length === 0" (click)="
+                  handleNavigationClick(
+                    menu.value['route_path'],
+                    menu.value['name']
+                  )
+                ">
+                  <!-- <a  class="nav-link {{menu.value['route_path'] == activeMenu ? 'active' : ''}}" [routerLink]="[menu.value['route_path']]"> -->
+                  <a class="nav-link {{
+                    menu.value['route_path'] == activeMenu ? 'active' : ''
+                  }}" (click)="handleRouting(menu.value['route_path'])">
+                    <div class="menu_list_block">
+                      <div class="sidebar_icon">
+                        <img class="icon" src="../../../../assets/img/sidebaricon/{{
+                          menu.value['icon']
+                        }}" alt="" />
+                        <img class="icon_hover" src="../../../../assets/img/sidebaricon/{{
+                          menu.value['icon_hover']
+                        }}" alt="" />
+                      </div>
+                      <span>{{ menu.value["name"] | translate }}</span>
+                    </div>
+                  </a>
+                </li>
+                <li #itemEl class="nav-item sidebar-dropdown dropmenu" *ngIf="menu.value['children'].length > 0">
+                  <a (click)="showSubmenu(itemEl)" class="nav-link">
+                    <div class="menu_list_block">
+                      <div class="sidebar_icon">
+                        <img class="icon" src="../../../../assets/img/sidebaricon/{{
+                          menu.value['icon']
+                        }}" alt="" />
+                        <img class="icon_hover" src="../../../../assets/img/sidebaricon/{{
+                          menu.value['icon_hover']
+                        }}" alt="" />
+                      </div>
+                      <span>{{ menu.value["name"] | translate }}</span>
+                    </div>
+                  </a>
+                  <div class="sidebar-submenu">
+                    <ul>
+                      <li *ngFor="let childMenu of menu.value['children']">
+                        <!-- <a class="{{childMenu.route_path == activeMenu ? 'active' : ''}}" [routerLink]="[childMenu.route_path]" (click)="handleNavigationClick(childMenu.route_path,childMenu.name)">{{childMenu.name}}</a> -->
+                        <a class="{{
+                          childMenu.route_path == activeMenu ? 'active' : ''
+                        }}" (click)="handleRouting(childMenu.route_path)" (click)="
+                          handleNavigationClick(
+                            childMenu.route_path,
+                            childMenu.name
+                          )
+                        ">{{ childMenu.name | translate }}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ng-container>
+            </ng-container>
+
+
+            <ng-container *ngIf="doctorRole === 'ADMIN' && userType === 'Laboratory'">
+              <li class="nav-item" (click)="handleNavigationClick('/portals/admin-dashboard/Laboratory','Dashboard')">
+                <a class="nav-link {{
+                  '/portals/admin-dashboard/Laboratory' === activeMenu ? 'active' : ''
+                }}" [routerLink]="['/portals/admin-dashboard/Laboratory']">
+                  <div class="menu_list_block">
+                    <div class="sidebar_icon">
+                      <img class="icon" src="../../../../assets/img/sidebaricon/dashboard.svg" alt="" />
+                      <img class="icon_hover" src="../../../../assets/img/sidebaricon/dashboard_hover.svg" alt="" />
+                    </div>
+                    <span>{{"Dashboard" | translate}}</span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item"
+                (click)="handleNavigationClick('/portals/all-lab-radio-users/Laboratory','All Laboratory')">
+                <a class="nav-link {{
+                  '/portals/all-lab-radio-users/Laboratory' === activeMenu ? 'active' : ''
+                }}" [routerLink]="['/portals/all-lab-radio-users/Laboratory']">
+                  <div class="menu_list_block">
+                    <div class="sidebar_icon">
+                      <div class="sidebar_icon">
+                        <img class="icon" src="../../../../assets/img/sidebaricon/revenue.svg" alt="" />
+                        <img class="icon_hover" src="../../../../assets/img/sidebaricon/revenue_hover.svg" alt="" />
+                      </div>
+                    </div>
+                    <span>{{"All Laboratory" | translate}}</span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item"
+                (click)="handleNavigationClick('/portals/all-request-list/Laboratory','All Laboratory Request')">
+                <a class="nav-link {{
+                  '/portals/all-request-list/Laboratory' === activeMenu ? 'active' : ''
+                }}" [routerLink]="['/portals/all-request-list/Laboratory']">
+                  <div class="menu_list_block">
+                      <div class="sidebar_icon">
+                        <img class="icon" src="../../../../assets/img/sidebaricon/calender.svg" alt="" />
+                        <img class="icon_hover" src="../../../../assets/img/sidebaricon/calender_hover.svg" alt="" />
+                      </div>
+                    <span>{{ "all_laboratory_request" | translate }}</span>
+                  </div>
+                </a>
+              </li>
+              <li #itemEl class="sidebar-dropdown nav-item dropmenu">
+                <a class="nav-link" (click)="showSubmenu(itemEl)">
+                  <div class="menu_list_block">
+                    <div class="sidebar_icon">
+                      <img class="icon" src="../../../../assets/img/sidebaricon/hospitalization.svg" alt="" />
+                      <img class="icon_hover" src="../../../../assets/img/sidebaricon/hospitalization_hover.svg"
+                        alt="" />
+                    </div>
+                    <span>{{ "Manage Laboratory" | translate }}</span>
+                  </div>
+                </a>
+                <div class="sidebar-submenu sub-dropdownmenu">
+                  <ul>
+                    <li>
+                      <a [ngClass]="{ active: Url == 'test-config' }" (click)="setHeader('Test configuration')"
+                        (click)="handleRouting('/portals/test-config/Laboratory')">
+                        {{ "Test configuration" | translate }}</a>
+                    </li>
+                    <li>
+                      <a [ngClass]="{ active: Url == 'lab-test-profile' }" (click)="setHeader('Profile Manage')"
+                        (click)="handleRouting('/portals/lab-test-profile')">
+                        {{ "Profile Manage" | translate }}</a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ng-container>
+
+
+            <ng-container *ngIf="doctorRole === 'ADMIN' && userType === 'Radiology'">
+              <li class="nav-item" (click)="handleNavigationClick('/portals/admin-dashboard/Radiology','Dashboard')">
+                <a class="nav-link {{
+                  '/portals/admin-dashboard/Radiology' === activeMenu ? 'active' : ''
+                }}" [routerLink]="['/portals/admin-dashboard/Radiology']">
+                  <div class="menu_list_block">
+                    <div class="sidebar_icon">
+                      <img class="icon" src="../../../../assets/img/sidebaricon/dashboard.svg" alt="" />
+                      <img class="icon_hover" src="../../../../assets/img/sidebaricon/dashboard_hover.svg" alt="" />
+                    </div>
+                    <span>{{"Dashboard" | translate}}</span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item"
+                (click)="handleNavigationClick('/portals/all-lab-radio-users/Radiology','All Radiology')">
+                <a class="nav-link {{
+                  '/portals/all-lab-radio-users/Radiology' === activeMenu ? 'active' : ''
+                }}" [routerLink]="['/portals/all-lab-radio-users/Radiology']">
+                  <div class="menu_list_block">
+                    <div class="sidebar_icon">
+                      <img class="icon" src="../../../../assets/img/sidebaricon/revenue.svg" alt="" />
+                      <img class="icon_hover" src="../../../../assets/img/sidebaricon/revenue_hover.svg" alt="" />
+                    </div>
+                    <span>{{"all_radiology" | translate}}</span>
+                  </div>
+                </a>
+              </li>
+
+              <li class="nav-item" (click)="handleNavigationClick('/portals/all-request-list/Radiology','All Radiology Request')">
+                <a class="nav-link {{
+                  '/portals/all-request-list/Radiology' === activeMenu ? 'active' : ''
+                }}" [routerLink]="['/portals/all-request-list/Radiology']">
+                  <div class="menu_list_block">
+                    <div class="sidebar_icon">
+                      <img class="icon" src="../../../../assets/img/sidebaricon/calender.svg" alt="" />
+                      <img class="icon_hover" src="../../../../assets/img/sidebaricon/calender_hover.svg" alt="" />
+                    </div>
+                    <span>{{ "all_radiology_request" | translate }}</span>
+                  </div>
+                </a>
+              </li>
+              <li class="nav-item" (click)="handleNavigationClick('/portals/test-config/Radiology','Manage Test')">
+                <a class="nav-link {{
+                  '/portals/test-config/Radiology' === activeMenu ? 'active' : ''
+                }}" [routerLink]="['/portals/test-config/Radiology']">
+                  <div class="menu_list_block">
+                    <div class="sidebar_icon">
+                      <img class="icon" src="../../../../assets/img/sidebaricon/eprescription.svg" alt="" />
+                      <img class="icon_hover" src="../../../../assets/img/sidebaricon/eprescription_hover.svg" alt="" />
+                    </div>
+                    <span>{{ "Manage Test" | translate }}</span>
+                  </div>
+                </a>
+              </li>
+            </ng-container>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Role Popup -->
+<ng-template #confirmationModel let-modal>
+  <div class="custome_modal approver">
+    <div class="modal-header">
+      <!-- <h4 class="modal-title" id="modal-basic-title">Requested Amount</h4> -->
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="image_block">
+        <img class="img-fluid" src="../../../../../assets/img/insurance-medicines/apprv.svg" alt="approve" />
+      </div>
+      <p class="mt-4">{{ "no_plan_purchased" | translate }}</p>
+
+      <div class="primary_btn mt-4">
+        <button type="button" class="btn btn-secondary" (click)="handleClose()">
+          {{ "cancel" | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="purchasePlan()">
+          {{ "purchase_plan" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

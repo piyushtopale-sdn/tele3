@@ -1,0 +1,127 @@
+@import '../../../../../assets/css/variable/variable';
+
+.scheduler{
+    .top_part{
+        .form_field_wrapper{
+            label{
+                color: rgba(15, 18, 63, 0.57);
+                font-size: $font_small;
+                font-weight: 600;
+            }
+            .label_value{
+                color: rgba(15, 18, 63, 0.57);
+                font-size: $font_small;
+                font-weight: 600;
+                b{
+                    color: #0F123F;
+                }
+            }
+            .mat-form-field{
+                .mat-form-field-wrapper{
+                    .mat-form-field-flex{
+                        background-color: #EBF0F4;
+                        border: 1px solid #EBF0F4;
+                        border-radius: 10px;
+                    }
+                }
+                .example-additional-selection {
+                    opacity: 0.75;
+                    font-size: 0.75em;
+                  }
+            }
+        }
+    }
+    .bottom_part{
+        .calender_section{
+            margin: 0 0 25px;
+            .app-calendar{
+                .calender_top{
+                    justify-content: space-between;
+                    display: flex;
+                    align-items: center;
+                    background-color: #2839FF;
+                    color: #ffffff;
+                    padding: 12px 22px;
+                    border: 1.00024px solid rgba(19, 15, 38, 0.05);
+                    box-shadow: 0px 5.00121px 10.0024px rgba(44, 121, 202, 0.05);
+                    border-radius: 15.0036px 15.0036px 0px 0px;
+                    .left_part{
+                        .calender_date{
+                            h2{
+                                margin: 0;
+                                font-size: $font_medium;
+                            }
+                        }
+                    }
+                    .right_part{
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        .calender_view{
+                            .btn{
+                                background: rgba(255, 255, 255, 0.2);
+                                font-size: $font_small;
+                                font-weight: 500;
+                                padding: 10px 18px;
+                                border-style: solid;
+                                border-width: 0 1px 0 0;
+                                border-color: rgba(255, 255, 255, 0.2);
+                                &:last-child{
+                                    border: none;
+                                }
+                                &.active,&:hover{
+                                    background: rgba(255, 255, 255, 0.4);
+                                    color: $white_color;
+                                }
+                            }
+                        }
+                        .calender_nav{
+                            .btn-group{
+                                .mat-icon{
+                                    height: 30px;
+                                    width: 30px;
+                                    line-height: 30px;
+                                    font-size: 12px;
+                                    border:1px solid #ffffff;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    margin: 0 0 0 15px;
+                                    cursor: pointer;
+                                    &:hover{
+                                        background-color: #ffffff;
+                                        color: #000000;
+                                    }
+                                }
+                            }
+                        }
+                    }
+    
+    
+                   
+    
+                   
+                }
+                .cal-month-view{
+                    .cal-header{
+                        .cal-cell{
+                            font-size: $font_medium;
+                            font-weight: 400;
+                            font-family: $font_family_body,$font_sans_sarif;
+                            padding: 15px 0 15px 2px;
+                            margin: 0 -1px 0 0;
+                            border-color: #e1e1e1;
+                            background-color: #ffffff;
+                            border-style: solid;
+                            border-width: 1px 1px 0;
+                        }
+                    }
+                    .cal-days{
+                        box-shadow: 0px 5.00121px 10.0024px rgb(44 121 202 / 5%);
+                        border-radius: 0 0 15.0036px 15.0036px;
+                        overflow: hidden;
+                    }
+                }
+            }
+        }
+    }
+}

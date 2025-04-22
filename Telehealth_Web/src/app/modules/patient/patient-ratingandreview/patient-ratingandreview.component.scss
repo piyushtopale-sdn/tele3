@@ -1,0 +1,90 @@
+@import '../../../../assets/css/variable/variable'; 
+.material-icons{
+    cursor: pointer;
+}
+
+.feedback{
+    .export_list{
+      .inner_exprot_list{
+         .status_list{
+             display: flex;
+             align-items: center;
+             padding: 5px 10px;
+             background: #FFFFFF;
+             border: 1px solid rgba(11, 73, 119, 0.15);
+             border-radius: 10px; 
+             img{
+                max-width: 100%;
+                object-fit: cover;
+             }
+             p{
+                 margin-bottom: 0;
+                 font-weight: 500;
+                 font-size: 18px;
+                 line-height: 20px;
+                 color: $bodycolor;
+                 margin-left: 10px;
+             }
+             &.active,&:hover{
+                 background: $bodycolor; 
+                 p{
+                     color: $white_color;
+                 }
+             }
+         }
+         .primary_btn{
+             display: flex;
+             justify-content: end;
+             margin: 5px 0;
+         }
+         ul{
+             list-style: none;
+             padding: 0;
+             flex-wrap: wrap;
+             li{
+                 width: auto;
+                 margin: 10px 0;
+             }
+         }
+      }
+    }  
+ }
+
+
+.feedback{
+    .export_list{
+      .inner_exprot_list{
+         .status_list{
+             display: flex;
+             align-items: center;
+             padding: 5px 10px;
+             background: #FFFFFF;
+             border: 1px solid rgba(11, 73, 119, 0.15);
+             border-radius: 10px; 
+             margin: 5px 0;
+             img{
+                max-width: 100%;
+                object-fit: cover;
+             }
+             p{
+                 margin-bottom: 0;
+                 font-weight: 500;
+                 font-size: 18px;
+                 line-height: 20px;
+                 color: $bodycolor;
+                 margin-left: 10px;
+             }
+         }
+         .primary_btn{
+             display: flex;
+             justify-content: end;
+             margin: 5px 0;
+         }
+      }
+    }  
+ }
+ 
+
+
+
+ 

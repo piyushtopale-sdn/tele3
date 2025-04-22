@@ -1,0 +1,320 @@
+<div class="main_block">
+  <div class="main_section">
+    <div class="create_profile login_time">
+      <form [formGroup]="questionForm" (ngSubmit)="submitForm()">
+        <div class="container">
+          <div class="create_profile_inner">
+            <div class="form">
+              <div class="row">
+                <div class="col-sm-12 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "question_for" | translate
+                      }}<span class="danger">*</span></label>
+                    <mat-form-field appearance="fill">
+                      <!-- <mat-label>Sub-admin</mat-label> -->
+                      <mat-select disableRipple formControlName="questionFor">
+                        <mat-option value="DOCTOR_SELECTION">{{
+                          "doctor_selection" | translate
+                          }}</mat-option>
+                        <mat-option value="ASSESSMENT">{{
+                          "patient_assessment" | translate
+                          }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="
+                        questionForm.get('questionFor').invalid &&
+                        questionForm.get('questionFor').touched
+                      ">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "answer_type" | translate }}
+                      <span class="danger">*</span></label>
+                    <mat-form-field appearance="fill">
+                      <!-- <mat-label>Sub-admin</mat-label> -->
+                      <mat-select disableRipple formControlName="type">
+                        <mat-option value="dropdown">{{
+                          "dropdown" | translate
+                          }}</mat-option>
+                        <mat-option value="radio">{{
+                          "radio" | translate
+                          }}</mat-option>
+                        <mat-option value="text" *ngIf="
+                            questionForm.get('questionFor').value !==
+                            'DOCTOR_SELECTION'
+                          ">{{ "text" | translate }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="
+                        questionForm.get('type').invalid &&
+                        questionForm.get('type').touched
+                      ">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 col-md-4 mb-3" *ngIf="
+                questionForm.get('questionFor').value !==
+                'DOCTOR_SELECTION'
+              ">
+                  <div class="form_field_wrapper">
+                    <label>{{ "specify_gender" | translate }} ({{
+                      "optional" | translate
+                      }})</label>
+                    <mat-form-field appearance="fill">
+                      <!-- <mat-label>Sub-admin</mat-label> -->
+                      <mat-select disableRipple formControlName="genderSpecific">
+                        <mat-option value="male">{{
+                          "male" | translate
+                          }}</mat-option>
+                        <mat-option value="female">{{
+                          "female" | translate
+                          }}</mat-option>
+                        <mat-option value="other">{{
+                          "others" | translate
+                          }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "question" | translate }}<span class="danger">*</span></label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="question" #address />
+                    </mat-form-field>
+                    <mat-error *ngIf="questionForm.get('question').invalid && questionForm.get('question').touched">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "question_arabic" | translate }}<span class="danger">*</span></label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="questionArabic" #address />
+                    </mat-form-field>
+                    <mat-error *ngIf="questionForm.get('questionArabic').invalid && questionForm.get('questionArabic').touched">
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+
+                <div formArrayName="options" *ngIf="questionForm.get('type').value !== 'text'">
+                  <div *ngFor="let option of options.controls; let i = index" [formGroupName]="i">
+                    <div class="col-sm-6 mb-3 d-flex align-items-center justify-content-between options_block">
+                      <div class="form_field_wrapper">
+                        <label>{{ "option" | translate }}</label>
+                        <mat-form-field appearance="fill">
+                          <input type="text" matInput formControlName="option" name="province" />
+                        </mat-form-field>
+                        <!-- <mat-error *ngIf="option.get('option').invalid && option.get('option').touched">
+                          {{ "field_is_required" | translate }}
+                        </mat-error> -->
+                      </div>
+                      <div class="form_field_wrapper">
+                        <label>{{ "option_arabic" | translate }}</label>
+                        <mat-form-field appearance="fill">
+                          <input type="text" matInput formControlName="optionArabic" />
+                        </mat-form-field>
+                        <!-- <mat-error *ngIf="option.get('optionArabic').invalid && option.get('optionArabic').touched">
+                          {{ "field_is_required" | translate }}
+                        </mat-error> -->
+                      </div>
+                      <ng-container *ngIf="i === options.length - 1; else remove">
+                        <div class="row_generate addbtn" (click)="removeOption(i)" *ngIf="options.length > 1">
+                          <mat-icon class="plus btnminus">remove</mat-icon>
+                        </div>
+                        <div class="row_generate addbtn" (click)="addOption()">
+                          <mat-icon class="plus addbtn">add</mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-template #remove>
+                        <div class="row_generate addbtn" (click)="removeOption(i)">
+                          <mat-icon class="plus btnminus">remove</mat-icon>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </div>
+                </div>
+                
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div
+          class="dependent-block d-flex align-items-center justify-content-between container"
+        >
+          <div class="dependent_title question_title">
+            {{ "dependent_question" | translate }}
+          </div>
+        </div>
+        <div formArrayName="subQuestions">
+          <div
+            *ngFor="
+              let subQuestion of subQuestionsControl.controls;
+              let i = index
+            "
+            [formGroupName]="i"
+            class="container"
+          >
+            <ng-container
+              *ngIf="i === subQuestionsControl.length - 1; else remove"
+            >
+              <div class="d-flex justify-content-end">
+                <div
+                  class="row_generate right-btn"
+                  (click)="removeSubQuestions(i)"
+                  *ngIf="subQuestionsControl.length > 1"
+                >
+                  <mat-icon class="plus btnminus">remove</mat-icon>
+                </div>
+                <div class="row_generate right-btn" (click)="addSubQuestion()">
+                  <mat-icon class="plus addbtn">add</mat-icon>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #remove>
+              <div
+                class="row_generate right-btn"
+                (click)="removeSubQuestions(i)"
+              >
+                <mat-icon class="plus btnminus">remove</mat-icon>
+              </div>
+            </ng-template>
+
+            <div class="create_profile_inner">
+              <div class="form">
+                <div class="row">
+                  <div class="col-sm-6 mb-3">
+                    <div class="form_field_wrapper">
+                      <label
+                        >{{ "select_option" | translate
+                        }}</label
+                      >
+                      <mat-form-field appearance="fill">
+                        <mat-select
+                          disableRipple
+                          formControlName="selectedOption"
+                        >
+                        <mat-option *ngFor="let option of options.controls" [value]="option.get('option').value">
+                          {{ option.get('option').value }}
+                        </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6 mb-3">
+                    <div class="form_field_wrapper">
+                      <label
+                        >{{ "answer_type" | translate
+                        }}</label
+                      >
+                      <mat-form-field appearance="fill">
+                        <mat-select disableRipple formControlName="type">
+                          <mat-option value="dropdown">{{
+                            "dropdown" | translate
+                          }}</mat-option>
+                          <mat-option value="radio">{{
+                            "radio" | translate
+                          }}</mat-option>
+                          <mat-option value="text">{{
+                            "text" | translate
+                          }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12">
+                    <div class="form_field_wrapper">
+                      <label
+                        >{{ "question" | translate
+                        }}</label
+                      >
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="question"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div formArrayName="optionsSQ"  *ngIf="subQuestion.get('type').value !== 'text'">
+                    <div
+                      *ngFor="
+                        let option of getOptionsSQ(i).controls;
+                        let j = index
+                      "
+                      [formGroupName]="j"
+                    >
+                      <div class="col-sm-6 mb-3 d-flex align-items-center justify-content-between options_block">
+                        <div class="form_field_wrapper">
+                          <label
+                            >{{ "option" | translate
+                            }}</label
+                          >
+                          <mat-form-field appearance="fill">
+                            <input
+                              type="text"
+                              matInput
+                              formControlName="option"
+                            />
+                          </mat-form-field>
+                        </div>
+                        <ng-container
+                        *ngIf="i === getOptionsSQ(i).length - 1; else removeSQ"
+                      >
+                        <div
+                          class="row_generate addbtn"
+                          (click)="removeOptionSQ(i, j)"
+                          *ngIf="getOptionsSQ(i).length > 1"
+                        >
+                          <mat-icon class="plus btnminus">remove</mat-icon>
+                        </div>
+                        <div class="row_generate addbtn" (click)="addOptionSQ(i)">
+                          <mat-icon class="plus addbtn">add</mat-icon>
+                        </div>
+                        </ng-container>
+                        <ng-template #removeSQ>
+                          <div
+                          class="row_generate addbtn"
+                          (click)="removeOptionSQ(i, j)"                        
+                        >
+                          <mat-icon class="plus btnminus">remove</mat-icon>
+                        </div>
+                     
+                      <div class="row_generate addbtn"  *ngIf="j === getOptionsSQ(i).length - 1" (click)="addOptionSQ(i)">
+                        <mat-icon class="plus addbtn">add</mat-icon>
+                      </div>
+                        </ng-template>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="add_form_action primary_btn btn_wrap mt-5">
+          <button type="button" class="btn btn-secondary" [routerLink]="['/super-admin/questionnaire-management']">
+            {{ "cancel" | translate }}
+          </button>
+          <button type="submit" mat-stroked-button class="btn btn-primary">
+            {{ "save" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,381 @@
+<div class="main_block">
+  <div class="main_section">
+    <div class="lab-p addtest">
+      <p>{{ "view_tests" | translate }}</p>
+    </div>
+
+    <div class="create_profile login_time">
+      <form [formGroup]="testConfigForm">
+        <div class="container">
+          <div class="create_profile_inner">
+            <div class="form">
+              <div class="row">
+                <div class="col-sm-12 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label
+                      >{{ "lab_centre" | translate
+                      }}<span class="danger">*</span></label
+                    >
+                    <select2
+                      [placeholder]="'select_centre' | translate"
+                      [overlay]="true"
+                      [limitSelection]="0"
+                      [minCountForSearch]="1"
+                      [data]="labUserList"
+                      formControlName="lab_centre"
+                      [(ngModel)]="centerName"
+                      [disabled]="isReadOnly"
+                    >
+                    </select2>
+                    <mat-error
+                      *ngIf="
+                        testConfigForm.get('lab_centre').invalid &&
+                        testConfigForm.get('lab_centre').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label
+                      >{{ "test_name" | translate }}
+                      <span class="danger">*</span></label
+                    >
+                    <mat-form-field appearance="fill">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="test_name"
+                        [readonly]="true"
+                      />
+                    </mat-form-field>
+                    <mat-error
+                      *ngIf="
+                        testConfigForm.get('test_name').invalid &&
+                        testConfigForm.get('test_name').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+
+                <div class="col-sm-12 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "select_result_type" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <mat-select
+                        disableRipple
+                        formControlName="test_config"
+                        [disabled]="true"
+                      >
+                        <mat-option value="NUMERIC_RESULT">{{
+                          "numeric_results" | translate
+                        }}</mat-option>
+                        <mat-option value="ALPHA_RESULT">{{
+                          "alpha_results" | translate
+                        }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error
+                      *ngIf="
+                        testConfigForm.get('test_config').invalid &&
+                        testConfigForm.get('test_config').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+              </div>
+              <div class="container">
+                <p
+                  style="font-weight: 500; margin-left: -9px; font-size: 1rem"
+                  *ngIf="
+                    testConfigForm.get('test_config').value === 'NUMERIC_RESULT'
+                  "
+                >
+                  {{ "reference_ranges" | translate }}
+                </p>
+                <div
+                  formArrayName="refrence_range"
+                  *ngIf="
+                    testConfigForm.get('test_config').value === 'NUMERIC_RESULT'
+                  "
+                >
+                  <div
+                    *ngFor="let option of options.controls; let i = index"
+                    [formGroupName]="i"
+                  >
+                    <div class="create_profile_inner refrence">
+                      <div class="form">
+                        <div class="row-refrence">
+                          <div class="mb-3">
+                            <div class="form_field_wrapper">
+                              <label
+                                >{{ "gender" | translate }}
+                                <span class="danger">*</span></label
+                              >
+                              <mat-form-field appearance="fill">
+                                <mat-select
+                                  disableRipple
+                                  formControlName="gender"
+                                  [disabled]="true"
+                                >
+                                  <mat-option value="male">{{
+                                    "male" | translate
+                                  }}</mat-option>
+                                  <mat-option value="female">{{
+                                    "female" | translate
+                                  }}</mat-option>
+                                  <mat-option value="all">{{
+                                    "all" | translate
+                                  }}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-error
+                                *ngIf="
+                                  options.at(i).get('gender').invalid &&
+                                  options.at(i).get('gender').touched
+                                "
+                              >
+                                {{ "field_is_required" | translate }}
+                              </mat-error>
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <div class="form_field_wrapper">
+                              <label
+                                >{{ "age" | translate }}(yr)
+                                <span class="danger">*</span></label
+                              >
+                              <mat-form-field appearance="fill">
+                                <mat-select
+                                  disableRipple
+                                  formControlName="age"
+                                  [disabled]="true"
+                                >
+                                  <mat-option
+                                    *ngFor="let range of ageRanges"
+                                    [value]="range"
+                                  >
+                                    {{ range }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                              <mat-error
+                                *ngIf="
+                                  options.at(i).get('age').invalid &&
+                                  options.at(i).get('age').touched
+                                "
+                              >
+                                {{ "field_is_required" | translate }}
+                              </mat-error>
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <div class="form_field_wrapper">
+                              <label
+                                >{{ "high" | translate }}
+                                <span class="danger">*</span></label
+                              >
+                              <mat-form-field appearance="fill">
+                                <input
+                                  type="number"
+                                  matInput
+                                  formControlName="high"
+                                  (keydown)="validateNumberInput($event)"
+                                  [readonly]="true"
+                                />
+                              </mat-form-field>
+                              <mat-error
+                                *ngIf="
+                                  options.at(i).get('high').invalid &&
+                                  options.at(i).get('high').touched
+                                "
+                              >
+                                {{ "field_is_required" | translate }}
+                              </mat-error>
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <div class="form_field_wrapper">
+                              <label
+                                >{{ "low" | translate }}
+                                <span class="danger">*</span></label
+                              >
+                              <mat-form-field appearance="fill">
+                                <input
+                                  type="number"
+                                  matInput
+                                  formControlName="low"
+                                  (keydown)="validateNumberInput($event)"
+                                  [readonly]="true"
+                                />
+                              </mat-form-field>
+                              <mat-error
+                                *ngIf="
+                                  options.at(i).get('low').invalid &&
+                                  options.at(i).get('low').touched
+                                "
+                              >
+                                {{ "field_is_required" | translate }}
+                              </mat-error>
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <div class="form_field_wrapper">
+                              <label
+                                >{{ "critical_high" | translate }}
+                                <span class="danger">*</span></label
+                              >
+                              <mat-form-field appearance="fill">
+                                <input
+                                  type="number"
+                                  matInput
+                                  formControlName="criticalHigh"
+                                  (keydown)="validateNumberInput($event)"
+                                  [readonly]="true"
+                                />
+                              </mat-form-field>
+                              <mat-error
+                                *ngIf="
+                                  options.at(i).get('criticalHigh').invalid &&
+                                  options.at(i).get('criticalHigh').touched
+                                "
+                              >
+                                {{ "field_is_required" | translate }}
+                              </mat-error>
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <div class="form_field_wrapper">
+                              <label
+                                >{{ "critical_low" | translate }}
+                                <span class="danger">*</span></label
+                              >
+                              <mat-form-field appearance="fill">
+                                <input
+                                  type="number"
+                                  matInput
+                                  formControlName="criticalLow"
+                                  (keydown)="validateNumberInput($event)"
+                                  [readonly]="true"
+                                />
+                              </mat-form-field>
+                              <mat-error
+                                *ngIf="
+                                  options.at(i).get('criticalLow').invalid &&
+                                  options.at(i).get('criticalLow').touched
+                                "
+                              >
+                                {{ "field_is_required" | translate }}
+                              </mat-error>
+                            </div>
+                          </div>
+                          <div class="mb-3">
+                            <div class="form_field_wrapper">
+                              <label
+                                >{{ "unit" | translate }}
+                                <span class="danger">*</span></label
+                              >
+                              <mat-form-field appearance="fill">
+                                <input
+                                  type="text"
+                                  matInput
+                                  formControlName="unit"
+                                  [readonly]="true"
+                                />
+                              </mat-form-field>
+                              <mat-error
+                                *ngIf="
+                                  options.at(i).get('unit').invalid &&
+                                  options.at(i).get('unit').touched
+                                "
+                              >
+                                {{ "field_is_required" | translate }}
+                              </mat-error>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <mat-error
+                  *ngIf="
+                    testConfigForm.get('test_config').value ===
+                      'NUMERIC_RESULT' &&
+                    options.hasError('duplicateCombination')
+                  "
+                >
+                  {{
+                    "Duplicate gender and age combination is not allowed."
+                      | translate
+                  }}
+                </mat-error>
+
+                <div
+                  class="col-sm-12 col-md-4 mb-3"
+                  *ngIf="
+                    testConfigForm.get('test_config').value === 'ALPHA_RESULT'
+                  "
+                >
+                  <div class="form_field_wrapper">
+                    <label>{{ "alpha_results" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <mat-select
+                        disableRipple
+                        formControlName="alpha_results"
+                        [disabled]="true"
+                      >
+                        <mat-option
+                          *ngFor="let item of aplharesults_list; let i = index"
+                          value="{{ item.alphaResultName }}"
+                          >{{ item.alphaResultName }}</mat-option
+                        >
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-error
+                      *ngIf="
+                        testConfigForm.get('alpha_results').invalid &&
+                        testConfigForm.get('alpha_results').touched
+                      "
+                    >
+                      {{ "field_is_required" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+                <div class="col-sm-12 mt-3 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "interpretive_data" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <textarea
+                        type="text"
+                        formControlName="notes"
+                        matInput
+                        [readonly]="true"
+                      ></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="add_form_action primary_btn btn_wrap mt-5">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click) = routeBack()          
+          >
+            {{ "cancel" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

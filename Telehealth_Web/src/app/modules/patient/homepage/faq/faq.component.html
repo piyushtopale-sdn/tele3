@@ -1,0 +1,74 @@
+<div class="home_wrapper">
+  <app-header></app-header>
+
+  <div class="breadcum_wrapper" aria-label="breadcrumb">
+    <div class="container">
+      <div class="breadcrumb_title">{{ "faq" | translate }}</div>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/patient/homepage']">{{ "home" | translate }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ "faq" | translate }}
+        </li>
+      </ol>
+      <div class="faq-content-block">
+        <!-- <div class="logo"><h1>How can we help you?</h1></div> -->
+          <!-- <div class="search-bar">
+            <div class="input-box">
+          <input
+            type="search"
+            class="search-box"
+            id="search-panel"
+            placeholder="Describe your issues..."
+          />
+        </div>
+        <div class="search-icon">
+          <button type="button" class="btn btn-primary">Search</button>
+        </div>
+      </div> -->
+      <!-- <h3 class="mt-5">Browse Your Topics</h3> -->
+      <div class="accordion accordion-block" id="accordionExample">
+        <div class="accordion-item" *ngFor="let list of showData; let i = index">
+          <h2 class="accordion-header mb-0 p-2">
+            <button
+              class="accordion-button"
+              type="button"
+              data-bs-toggle="collapse"
+              [attr.data-bs-target]="'#collapse' + i"
+              aria-expanded="false"
+              [attr.aria-controls]="'collapse' + i"
+            >
+              {{ list.faqs[0]?.question }}
+            </button>
+          </h2>
+          <div
+            [id]="'collapse' + i"
+            class="accordion-collapse collapse"
+            data-bs-parent="#accordionExample"
+          >
+            <div class="accordion-body">
+              <!-- Loop through all FAQs within the item -->
+              <div *ngFor="let faq of list.faqs">
+                <p class="fw-bold">{{ faq.question }}</p>
+                <p>{{ faq.answer }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="main_section">
+      <div class="main_section_inner">
+        <div class="container"> -->
+
+  <!-- </div>
+      </div>
+    </div> -->
+
+  <app-footer></app-footer>
+</div>

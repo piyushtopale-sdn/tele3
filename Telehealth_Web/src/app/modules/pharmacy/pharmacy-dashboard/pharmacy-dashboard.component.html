@@ -1,0 +1,152 @@
+<div class="hospital_dashboad dashboard_main_content">
+  <div class="top_bar up_bar common_space">
+    <div class="content_wrap">
+      <div class="policy">
+        <form [formGroup]="dateRangeForm">
+          <div class="form_field_wrapper d-flex align-items-center gap-3" style="margin: 10px;">
+            <div class="main_title">{{ "from" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker1" formControlName="fromDate"
+                (dateChange)="onDateChange('from', $event.value)" (click)="picker1.open()" readonly />
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <div class="main_title">{{ "to" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker2" formControlName="toDate" (dateChange)="onDateChange('to', $event.value)" (click)="picker2.open()" readonly />
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="counter_section common_space"(click)="onNavigate('/pharmacy/presciptionorder')">
+    <div class="row">
+      <div class="col-md col-sm-4">
+        <div class="cust_col light_blue">
+          <div class="cust_col_inner">
+            <div class="left">
+              <div class="counter">
+                {{ TotalorderCount ? TotalorderCount : "0" }}
+              </div>
+              <div class="counter_title">
+                <br />
+                {{ "total_order" | translate }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img">
+                <img src="assets/img/dashboard/dashboard47.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md col-sm-4"(click)="onNavigate('/pharmacy/presciptionorder')">
+        <div class="cust_col light_yellow">
+          <div class="cust_col_inner">
+            <div class="left">
+              <div class="counter">
+                {{ totalNewOrder ? totalNewOrder : "0" }}
+              </div>
+              <div class="counter_title">
+                <br />
+                {{ "new_order" | translate }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img">
+                <img src="assets/img/dashboard/dashboard4.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md col-sm-4"(click)="onNavigate('/pharmacy/presciptionorder')">
+        <div class="cust_col light_orange">
+          <div class="cust_col_inner">
+            <div class="left">
+              <div class="counter">
+                {{ cancelledCount ? cancelledCount : "0" }}
+              </div>
+              <div class="counter_title">
+                <br />
+                {{ "cancelled_order" | translate }}
+              </div>
+            </div>
+            <div class="right">
+
+              <div class="counter_img">
+                <img src="assets/img/dashboard/dashboard3.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md col-sm-4"(click)="onNavigate('/pharmacy/presciptionorder')">
+        <div class="cust_col light_green">
+          <div class="cust_col_inner">
+            <div class="left">
+              <div class="counter">{{ totalcompletedOrder ? totalcompletedOrder : "0" }}</div>
+              <div class="counter_title">
+                <br />
+                {{ "completed_order" | translate }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img">
+                <img src="assets/img/dashboard/dashboard2.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="graph_section common_space">
+    <div class="row">
+      <div class="total_claim revenue_claim">
+        <div class="total_claim_inner common_space">
+          <div class="top_bar">
+            <div class="left_part">
+              <div class="main_title">{{"total_prescriptions" | translate}}</div>
+            </div>
+            <div class="right_part">
+              <div class="policy" style="display: flex; justify-content: right;">
+                <div class="form_field_wrapper month-year-wrapper">
+
+                  <mat-form-field appearance="fill" class="month-dropdown">
+                    <mat-select [(ngModel)]="selectedMonth" (selectionChange)="onMonthChange($event.value)"
+                      placeholder="{{ 'select_month' | translate }}">
+                      <mat-option *ngFor="let month of months" [value]="month">{{ month }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill" class="year-dropdown">
+                    <mat-select [(ngModel)]="selectedYear" (selectionChange)="getgraphYear($event.value)"
+                      placeholder="{{ 'select_year' | translate }}">
+                      <mat-option *ngFor="let year of years" [value]="year">{{ year }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bottom_bar mt-4">
+            <div class="chart-container">
+              <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" [type]="'line'" [legend]="true">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

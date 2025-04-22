@@ -1,0 +1,165 @@
+<div class="step_counter_inner">
+  <form [formGroup]="educationalForm">
+    <div class="educational">
+      <ng-container formArrayName="education">
+        <ng-container *ngFor="let _ of education.controls; let i = index">
+          <ng-container [formGroupName]="i">
+            <div class="increse_content">
+              <div class="row increse_content_inner">
+                <div class="item col-sm-6 col-md-4">
+                  <div class="form_field_wrapper">
+                    <label>{{ "course_degree" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="degree" />
+                    </mat-form-field>
+                  </div>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && validation(i).controls['degree'].errors?.['required'] "
+                    >{{ "select_course" | translate }}*</span
+                  >
+                </div>
+                <div class="item col-sm-6 col-md-4">
+                  <div class="form_field_wrapper">
+                    <label>{{ "university" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="university"
+                      />
+                    </mat-form-field>
+                  </div>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && validation(i).controls['university'].errors?.['required'] "
+                    >{{ "enter_university" | translate }}*</span
+                  >
+                </div>
+                <div class="item col-sm-6 col-md-4">
+                  <div class="form_field_wrapper">
+                    <label>{{ "city" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="city" />
+                    </mat-form-field>
+                  </div>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && validation(i).controls['city'].errors?.['required'] "
+                    >{{ "select_city" | translate }}*</span
+                  >
+                </div>
+                <div class="item col-sm-6 col-md-4">
+                  <div class="form_field_wrapper">
+                    <label>{{ "country" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="country" />
+                    </mat-form-field>
+                  </div>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && validation(i).controls['country'].errors?.['required'] "
+                    >{{ "select_country" | translate }}*</span
+                  >
+                </div>
+                <div class="item col-sm-6 col-md-4">
+                  <div class="form_field_wrapper">
+                    <label>{{ "start_date" | translate }}</label>
+                    <mat-form-field
+                      class="example-full-width"
+                      appearance="fill"
+                    >
+                      <input
+                        matInput
+                        [matDatepickerFilter]="myFilter"
+                        [matDatepicker]="picker70"
+                        formControlName="start_date"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker70"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker70></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && validation(i).controls['start_date'].errors?.['required'] "
+                    >{{ "select_start_date" | translate }}*</span
+                  >
+                </div>
+                <div class="item col-sm-6 col-md-4">
+                  <div class="form_field_wrapper">
+                    <label>{{ "end_date" | translate }}</label>
+                    <mat-form-field
+                      class="example-full-width"
+                      appearance="fill"
+                    >
+                      <input
+                        matInput
+                        [matDatepickerFilter]="myFilter"
+                        [matDatepicker]="picker71"
+                        formControlName="end_date"
+                      />
+                      <mat-datepicker-toggle
+                        matSuffix
+                        [for]="picker71"
+                      ></mat-datepicker-toggle>
+                      <mat-datepicker #picker71></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && validation(i).controls['end_date'].errors?.['required'] "
+                    >{{ "select_end_date" | translate }}*</span
+                  >
+                </div>
+              </div>
+              <ng-container *ngIf="i === education.length - 1; else remove">
+                <div
+                  class="row_generate row_minus"
+                  *ngIf="education.length > 1"
+                >
+                  <mat-icon class="minus" (click)="removeEducation(i)"
+                    >remove</mat-icon
+                  >
+                </div>
+                <div class="row_generate row_add">
+                  <mat-icon class="plus" (click)="addNewEducation()"
+                    >add</mat-icon
+                  >
+                </div>
+              </ng-container>
+              <ng-template #remove>
+                <div class="row_generate row_minus">
+                  <mat-icon class="minus" (click)="removeEducation(i)"
+                    >remove</mat-icon
+                  >
+                </div>
+              </ng-template>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </form>
+  <div class="primary_btn btn_wrap">
+    <button type="button" class="btn btn-secondary" (click)="previousPage()">
+      {{ "back" | translate }}
+    </button>
+    <!-- <button type="button" class="btn btn-primary" (click)="handleSave()">
+      {{ "save" | translate }}
+    </button> -->
+    <button type="button" class="btn btn-primary" (click)="handleSave('yes')">
+      {{ "save_and_next" | translate }}
+    </button>
+    <!-- <button
+      type="button"
+      style="margin-left: 10px"
+      class="btn btn-danger"
+      [routerLink]="['/individual-doctor/editprofile']"
+    >
+      {{ "exit" | translate }}
+    </button> -->
+  </div>
+</div>

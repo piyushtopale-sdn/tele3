@@ -1,0 +1,355 @@
+<div class="edit_staff">
+  <ng-template #editstaffcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "edit_staff" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="handleClose()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="staffForm">
+          <div class="profile_img">
+            <img src="/assets/img/create_profile.png" />
+            <input
+              class="ng-hide user_upload_input"
+              (change)="selectFile($event)"
+              formControlName="staff_profile"
+              accept="image/*"
+              id="input-file-id"
+              type="file"
+            />
+          </div>
+
+          <div class="row">
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "staff_name" | translate }}*</label>
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="{{ 'enter_staff_name' | translate }}"
+                    formControlName="staff_name"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "date_of_birth" | translate }} </label>
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input
+                    matInput
+                    [matDatepickerFilter]="myFilter"
+                    [matDatepicker]="picker"
+                    placeholder="{{ 'date_of_birth' | translate }}"
+                    formControlName="dob"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "language" | translate }}</label>
+                <mat-form-field class="inner_label" appearance="fill">
+                  <mat-label>{{ "language" | translate }}</mat-label>
+                  <mat-select disableRipple formControlName="language">
+                    <mat-option value="English">{{ "english" | translate }}</mat-option>
+                    <mat-option value="French">{{ "french" | translate }}</mat-option>
+                    <mat-option value="Spanish">{{ "spanish" | translate }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "address" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="{{ 'enter_address' | translate }}"
+                    formControlName="address"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "neighborhood" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="{{ 'enter_neighborhood' | translate }}"
+                    formControlName="neighbourhood"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "country" | translate }}</label>
+                <mat-form-field class="inner_label" appearance="fill">
+                  <mat-label>{{ "country" | translate }}</mat-label>
+                  <mat-select
+                    disableRipple
+                    placeholder="{{ 'select_country' | translate }}"
+                    formControlName="country"
+                    (selectionChange)="getRegionList($event.value)"
+                  >
+                    <mat-option
+                      *ngFor="let country of countryList"
+                      [value]="country._id"
+                      >{{ country?.name }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "region" | translate }}</label>
+                <mat-form-field class="inner_label" appearance="fill">
+                  <mat-label>{{ "region" | translate }}</mat-label>
+                  <mat-select
+                    disableRipple
+                    placeholder="{{ 'select_region' | translate }}"
+                    formControlName="region"
+                    (selectionChange)="getProvienceList($event.value)"
+                  >
+                    <mat-option
+                      *ngFor="let region of regionList"
+                      [value]="region._id"
+                      >{{ region?.name }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "province" | translate }}</label>
+                <mat-form-field class="inner_label" appearance="fill">
+                  <mat-label>{{ "province" | translate }}</mat-label>
+                  <mat-select disableRipple formControlName="province">
+                    <mat-option value="province1">{{ "province" | translate }} 1</mat-option>
+                    <mat-option value="province2">{{ "province" | translate }} 2</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "department" | translate }}</label>
+                <mat-form-field class="inner_label" appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="{{ 'department' | translate }}"
+                    formControlName="department"
+                  />
+                  <mat-select
+                    disableRipple
+                    placeholder="{{ 'select_department' | translate }}"
+                    formControlName="province"
+                    (selectionChange)="getDepartmentList($event.value)"
+                  >
+                    <mat-option
+                      *ngFor="let provience of provienceList"
+                      [value]="provience._id"
+                      >{{ provience?.name }}</mat-option
+                    >
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "city" | translate }}</label>
+                <mat-form-field class="inner_label" appearance="fill">
+                  <mat-label>{{ "city" | translate }}</mat-label>
+                  <mat-select disableRipple formControlName="city">
+                    <mat-option value="valsad">{{
+                      "valsad" | translate
+                    }}</mat-option>
+                    <mat-option value="vapi">{{
+                      "vapi" | translate
+                    }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "village" | translate }}</label>
+                <mat-form-field class="inner_label" appearance="fill">
+                  <mat-label>{{ "village" | translate }}</mat-label>
+                  <mat-select disableRipple formControlName="village">
+                    <mat-option value="village1">village1</mat-option>
+                    <mat-option value="village2">village2</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "pincode" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    placeholder="{{ 'enter_pincode' | translate }}"
+                    matInput
+                    formControlName="pincode"
+                    minlength="5"
+                    maxlength="6"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "degree" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="{{ 'degree' | translate }}"
+                    formControlName="degree"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "phone_number" | translate }}*</label>
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    maxlength="10"
+                    #countryPhone
+                    (focus)="onFocus()"
+                    formControlName="phone"
+                    ng2TelInput
+                    placeholder="{{ 'enter_phone_number' | translate }}"
+                    matInput
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "email" | translate }}*</label>
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="{{ 'enter_email' | translate }}"
+                    formControlName="email"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+              <div class="form_field_wrapper">
+                <label>{{ "role" | translate }}</label>
+                <mat-form-field class="inner_label" appearance="fill">
+                  <mat-label>{{ "select_role" | translate }}</mat-label>
+                  <mat-select disableRipple formControlName="role">
+                    <mat-option
+                      *ngFor="let rol of staffRole"
+                      value="{{ rol._id }}"
+                      >{{ rol.name }}
+                    </mat-option>
+                    <mat-option value="Receptionist">{{
+                      "receptionist" | translate
+                    }}</mat-option>
+                    <mat-option value="Medical Advisor">{{
+                      "medical_advisor" | translate
+                    }}</mat-option>
+                    <mat-option value="Contract Advisor">{{
+                      "contract_advisor" | translate
+                    }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && addStaffFormControl['role'].errors?.['required']"
+                >
+                  {{ "select_role" | translate }}*
+                </span>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4">
+              <div class="form_field_wrapper">
+                <label>{{ "user_name" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="{{ 'user_name' | translate }}"
+                    formControlName="userName"
+                  />
+                </mat-form-field>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && addStaffFormControl['userName'].errors?.['required']"
+                >
+                  {{ "user_name_is_required" | translate }}*
+                </span>
+              </div>
+            </div>
+
+            <div class="item col-md-12">
+              <div class="form_field_wrapper">
+                <label>{{ "about_staff" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <textarea
+                    matInput
+                    placeholder="{{ 'describe_about_staff' | translate }}*"
+                    formControlName="about_staff"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="primary_btn">
+          <button
+            type="button"
+            (click)="handleClose()"
+            class="btn btn-secondary"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="updateStaffGroup()"
+          >
+            {{ "edit_staff" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

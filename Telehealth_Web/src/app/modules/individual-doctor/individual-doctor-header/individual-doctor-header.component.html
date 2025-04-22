@@ -1,0 +1,406 @@
+<div class="header">
+  <button
+    class="d-md-block d-lg-none menu"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasExample"
+    aria-controls="offcanvasExample"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <div class="header_logo d-lg-none">
+    <!-- <img class="img-flui" src="../../../../assets/img/logo.svg" alt="logo" /> -->
+  </div>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="navbar-inner container-fluid">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="header-left-content">
+          <div class="header-left-content" *ngIf="isLoggedIn">
+            <h2>{{ menuSelected | translate }}</h2>
+          </div>
+        </div>
+        <div class="header-right-content">       
+
+          <!-- <div class="mail common_content">
+            <mat-icon>mail</mat-icon>
+          </div> -->
+<!-- 
+          <div
+            class="notification common_content"
+            (click)="changeIsViewStatus()"
+          >
+            <div
+              class="user_inner"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span
+                *ngIf="notiCount > 0"
+                style="
+                  position: absolute;
+                  background: red;
+                  width: 20px;
+                  height: 20px;
+                  border-radius: 70%;
+                  color: white;
+                  font-weight: bold;
+                  font-size: 12px;
+                  z-index: 1;
+                  margin-left: 54%;
+                  margin-top: 5px;
+                "
+              >
+                <span
+                  style="margin-left: 6px; margin-top: -1px; position: absolute"
+                >
+                  {{ notiCount }}
+                </span>
+              </span>
+              <mat-icon>notifications</mat-icon>
+            </div>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li class="head text-light">
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12 col-12 head_inner">
+                    <span
+                      >{{ "notifications" | translate }} ({{
+                        isViewcount
+                      }})</span
+                    >
+                    <a (click)="markAllRead()">{{
+                      "mark_all_as_read" | translate
+                    }}</a>
+                  </div>
+                </div>
+              </li>
+              <div
+                style="max-height: 300px; overflow-y: auto; overflow-x: hidden"
+              >
+                <ng-container
+                  *ngFor="let notificationlist1 of notificationlist"
+                >
+                  <li
+                    class="notification-box"
+                    [ngClass]="notificationlist1?.isView ? '' : 'activenoti'"
+                  >
+                    <div
+                      class="row"
+                      (click)="markReadById(notificationlist1)"
+                      style="cursor: pointer"
+                    >
+                      <div class="col-lg-3 col-sm-3 col-3 text-center">
+                        <img
+                          src="{{
+                            notificationlist1.picture
+                              ? notificationlist1.picture
+                              : '../../../../../../assets/img/default_user.png'
+                          }}"
+                          class="w-75 rounded-circle" style="height: 90px;"
+                        />
+                      </div>
+                      <div class="col-lg-8 col-sm-8 col-8">
+                        <strong class="notify_title">
+                          {{ notificationlist1?.notitype }}</strong
+                        >
+                        <ng-container *ngIf="notificationlist1?.content; else chatMessage">
+                          <div class="notify_desc">
+                            {{notificationlist1?.content}}
+                          </div>
+                      </ng-container>
+                      <ng-template #chatMessage>
+                        <ng-container
+                          *ngIf="notificationlist1?.content != '' && notificationlist1?.notitype == 'chat';else noChat"
+                        >
+                        <div class="notify_desc">
+                         {{notificationlist1?.content }}
+                        </div>
+                        </ng-container>
+                        <ng-template #noChat>
+                          <div class="notify_desc">
+                            <i class="fa fa-image"></i>
+                          </div>
+                        </ng-template>
+                      </ng-template>
+
+
+
+
+
+                        <small class="notify_time">
+                          {{
+                            notificationlist1?.createdAt | date : "dd/MM/yyy"
+                          }}
+                          |
+                          <span
+                            >{{
+                              notificationlist1?.createdAt | date : "hh:mm "
+                            }}
+                          </span>
+                        </small>
+                      </div>
+                     
+
+
+
+
+
+
+                    </div>
+                  </li>
+                </ng-container>
+              </div>
+
+
+
+
+
+
+
+
+
+
+
+              <li class="footer text-center">
+                <a
+                  href=""
+                  class="text-light"
+                  [routerLink]="['/individual-doctor/notification']"
+                  >{{ "view_all" | translate }}</a
+                >
+              </li>
+            </ul>
+          </div> -->
+                                  <!-- <div class="notify_desc">
+                          {{ notificationlist1?.content }}
+                        </div> -->
+
+                         <!-- <small class="notify_time">{{notificationlist1?.createdAt | date : 'hh:mm
+                        a'}}</small> -->
+
+                                      <!-- <mat-paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+              </mat-paginator> -->
+
+
+
+
+
+
+
+
+
+
+            <div class="notification common_content" (click)="changeIsViewStatus()">
+              <div
+                class="user_inner"
+                id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <span
+                  *ngIf="notiCount > 0"
+                  style="
+                    position: absolute;
+                    background: red;
+                    width: 28px;
+                    height: 28px;
+                    border-radius: 70%;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 12px;
+                    z-index: 1;
+                    margin-left: 54%;
+                    margin-top: 5px;
+                    top: -9px;
+                  "
+                >
+                  <span style="margin-top: 2px;position: absolute;width: inherit;height: inherit;text-align: center;">
+                    {{ notiCount }}
+                  </span>
+                </span>
+                <mat-icon>notifications</mat-icon>
+              </div>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                <li class="head text-light">
+                  <div class="row">
+                    <div class="col-lg-12 col-sm-12 col-12 head_inner">
+                      <span>{{ "notifications" | translate }} ({{ isViewcount }})</span>
+                      <a (click)="markAllRead()" style="cursor: pointer">{{ "mark_all_as_read" | translate }}</a>
+                    </div>
+                  </div>
+                </li>
+                <div style="max-height: 300px; overflow-y: auto; overflow-x: hidden">
+                  <!-- <ng-container *ngIf="notificationlist.length > 0;">
+                    <ng-container *ngFor="let notification of notificationlist">
+                      <li
+                        class="notification-box"
+                        [ngClass]="notification?.isView ? '' : 'activenoti'"
+                      >
+                        <div
+                          class="row"
+                          (click)="markReadById(notification)" 
+                          style="cursor: pointer"
+                        >
+                          <div class="col-lg-3 col-sm-3 col-3 text-center">
+                            <img
+                              src="{{
+                                notification.picture
+                                  ? notification.picture
+                                  : '../../../../../../assets/img/default_user.png'
+                              }}"
+                              class="w-75 rounded-circle"
+                              style="height: 90px;"
+                            />
+                          </div>
+                          <div class="col-lg-8 col-sm-8 col-8">
+                            <strong class="notify_title">{{ notification?.notitype }}</strong>
+                            <ng-container *ngIf="notification?.content; else chatMessage">
+                              <div class="notify_desc">{{ notification?.content }}</div>
+                            </ng-container>
+                            <ng-template #chatMessage>
+                              <ng-container
+                                *ngIf="
+                                  notification?.content != '' &&
+                                  notification?.notitype == 'chat';
+                                  else noChat
+                                "
+                              >
+                                <div class="notify_desc">
+                                  {{ notification?.content }}
+                                </div>
+                              </ng-container>
+                              <ng-template #noChat>
+                                <div class="notify_desc">
+                                  <i class="fa fa-image"></i>
+                                </div>
+                              </ng-template>
+                            </ng-template>
+                            <small class="notify_time">
+                              {{ notification?.createdAt | date: "dd/MM/yyy" }} |
+                              <span>{{ notification?.createdAt | date: "hh:mm " }}</span>
+                            </small>
+                          </div>
+                        </div>
+                      </li>
+                    </ng-container>
+
+                  <ng-template #noNotifications>
+                    <li class="text-center text-light">No notifications</li>
+                  </ng-template> -->
+
+
+                  <ng-container *ngIf="notificationlist && notificationlist.length > 0; else noNotifications">
+                    <ng-container *ngFor="let notification of notificationlist">
+                      <li class="notification-box" [ngClass]="notification?.isView ? '' : 'activenoti'">
+                        <div class="row" (click)="markReadById(notification)" style="cursor: pointer">
+                          <div class="col-lg-3 col-sm-3 col-3 text-center">
+                            <img
+                              src="{{ notification.picture ? notification.picture : '../../../../../../assets/img/default_user.png' }}"
+                              class="w-75 rounded-circle"
+                              style="height: 90px;"
+                            />
+                          </div>
+                          <div class="col-lg-8 col-sm-8 col-8">
+                            <strong class="notify_title">{{ notification?.notitype }}</strong>
+                            <div class="notify_desc">{{ notification?.content }}</div>
+                            <small class="notify_time">
+                              {{ notification?.createdAt | date: "dd/MM/yyyy" }} |
+                              <span>{{ notification?.createdAt | date: "hh:mm " }}</span>
+                            </small>
+                          </div>
+                        </div>
+                      </li>
+                    </ng-container>
+                  </ng-container>
+                  <ng-template #noNotifications>
+                    <li class="text-center text-light">No notifications</li>
+                  </ng-template>
+                  
+                </div>
+                <li class="footer text-center">
+                  <a
+                    href=""
+                    class="text-light"
+                    [routerLink]="['/individual-doctor/notification']"
+                    >{{ "view_all" | translate }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+              
+          <div class="user common_content">
+            <div
+              class="user_inner"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <div class="profile_img">
+                <img
+                  src="{{
+                    doctorProfile
+                      ? doctorProfile
+                      : '../../../../../../assets/img/default_user.png'
+                  }}"
+                />
+                <!-- <img src="../../../../assets/img/vector.png"> -->
+              </div>
+              <div class="user_wrapper dropdown-toggle">
+                <div class="user_name_wrapper">
+                  <div class="user_name roles-names">{{ doctorName }}</div>
+                  <div class="user_name roles-text">
+                    {{ doctorRole }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul
+              class="profile dropdown-menu"
+              aria-labelledby="dropdownMenuButton1"
+            >
+              <li style="cursor: pointer">
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  [routerLink]="['/individual-doctor/editprofile']"
+                >
+                  <mat-icon>person</mat-icon
+                  ><span class="item_text">{{ "profile" | translate }}</span>
+                </a>
+              </li>
+              <li style="cursor: pointer">
+                <a class="dropdown-item">
+                  <mat-icon>g_translate</mat-icon
+                  ><span class="item_text">{{ "languages" | translate }}</span>
+                  <div class="dropdown_language dropdown-menu show">
+                    <app-language></app-language>
+                  </div>
+                </a>
+              </li>
+              <li style="cursor: pointer">
+                <a class="dropdown-item" (click)="logout()">
+                  <mat-icon>logout</mat-icon
+                  ><span class="item_text">{{ "logout" | translate }}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+

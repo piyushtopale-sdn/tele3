@@ -1,0 +1,146 @@
+<div class="rolepermission dashboard_main_content">
+  <div class="bottom_bar">
+    <div class="row">
+      <div class="col-xl-3 role_item">
+        <div class="form_field_wrapper">
+          <mat-checkbox
+            class="example-margin"
+            (change)="makeJSONAll($event.checked)"
+            >{{ "select_all" | translate }}</mat-checkbox
+          >
+        </div>
+      </div>
+
+      <div class="col-xl-3 role_item" *ngFor="let menu of allMenus">
+        <div class="form_field_wrapper">
+          <mat-checkbox
+            class="example-margin"
+            checked="{{ checkedmainMenuArray(menu.id) ? true : false }}"
+            (change)="makeJSON($event.checked, menu.id, menu.menu_order)"
+            >{{ menu.name | translate }}</mat-checkbox
+          >
+          <span *ngFor="let submenu of allSubmenuesData" class="mt-1">
+           
+            <mat-icon *ngIf="submenu.parent_id === menu.id"
+              (click)="
+                openVerticallyCommonModal(commanModalForAll, menu.id, menu.name)
+              "
+              >add</mat-icon
+            >
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="primary_btn float-right">
+      <button type="button" (click)="handleClick()" class="btn btn-secondary">
+        {{ "cancel" | translate }}
+      </button>
+      <button type="button" (click)="assignSubmit()" class="btn btn-primary">
+        {{ "assign" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Popup -->
+<div class="permission_commit">
+  <ng-template #commanModalForAll let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ menuName | translate }}
+        </h4>
+      </div>
+      <div class="modal-body">
+        <div class="form_frame">
+          <div class="heading">
+            <div class="inner_heading">
+              <p>{{ "select_all" | translate }}</p>
+              <div class="icon_group">
+                <mat-checkbox
+                  class="example-margin"
+                  aria-label="Select All"
+                  checked="{{
+                    checkedmainMenuArray(activemainmenuselectedid)
+                      ? true
+                      : false
+                  }}"
+                  (change)="
+                    makeJSON($event.checked, activemainmenuselectedid, 0)
+                  "
+                ></mat-checkbox>
+              </div>
+            </div>
+          </div>
+          <mat-accordion>
+            <mat-expansion-panel
+              *ngFor="
+                let submenues of objectKeys(menuWiseSubmenu);
+                let i = index
+              "
+            >
+              <mat-expansion-panel-header (click)="check(i, submenues)" class="mt-2 header-block">
+                <mat-panel-title>
+                  {{ menuWiseSubmenu[submenues].name | translate }}
+                </mat-panel-title>
+                <div class="icon_group">
+                  <mat-checkbox
+                    class="example-margin"
+                    checked="{{
+                      checkedsubMenuArray(activemainmenuselectedid, submenues)
+                        ? true
+                        : false
+                    }}"
+                    (change)="
+                      removesubmenu(activemainmenuselectedid, submenues, $event)
+                    "
+                    (click)="$event.stopPropagation()"
+                  ></mat-checkbox>
+                </div>
+              </mat-expansion-panel-header>
+              <div
+                class="checklist"
+                *ngFor="let innerSubmenus of objectMenus[activeSubmenuId]"
+              >
+                <div class="icon_group_check">
+                  <label>{{ innerSubmenus.name | translate }} </label>
+                  <mat-checkbox
+                    class="example-margin"
+                    checked="{{
+                      checkedinnnersubMenuArray(
+                        activemainmenuselectedid,
+                        activeSubmenuIdsubmenu,
+                        innerSubmenus.slug
+                      )
+                        ? true
+                        : false
+                    }}"
+                    (change)="
+                      removeinnersubmenu(
+                        activemainmenuselectedid,
+                        activeSubmenuIdsubmenu,
+                        innerSubmenus.slug,
+                        $event
+                      )
+                    "
+                    (click)="$event.stopPropagation()"
+                  ></mat-checkbox>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-primary"
+            aria-label="Close"
+            (click)="closePopup()"
+          >
+            {{ "done" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

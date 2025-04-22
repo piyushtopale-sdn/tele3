@@ -1,0 +1,15 @@
+
+<div class="main_block">
+    <div class="sidebar_section">
+        <app-patient-sidebar></app-patient-sidebar>
+    </div>
+    <div class="main_section">
+        <div>
+            <app-patient-header></app-patient-header>
+        </div>
+        <div>
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+<app-video-calling [loggedInUserName]="loggedInUserName" [portaltype]="'patient'"></app-video-calling>

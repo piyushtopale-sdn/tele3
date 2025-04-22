@@ -1,0 +1,230 @@
+<div class="plan_history dashboard_main_content">
+  <div class="top_bar">
+    <div class="left_part">
+      <div class="primary_btn">
+        <button type="button" class="btn btn-light">
+          {{ "subscription_plan_history" | translate }}
+        </button>
+      </div>
+    </div>
+    <div class="right_part">
+      <div class="primary_btn">
+        <!-- <ng-container *ngIf="globalStatus=='expired'">
+                    <button type="button" class="btn btn-primary" [routerLink]="['/patient/subscriptionplan/plan']">Purchase Subscription Plan</button>
+
+                </ng-container>
+                <ng-container *ngIf="globalStatus=='active'">
+                    <button type="button" class="btn btn-primary" disabled="disabled">Purchase Subscription Plan</button>
+
+                </ng-container> -->
+
+        <ng-container>
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="isPlanActive"
+            [routerLink]="['/patient/subscriptionplan/plan']"
+          >
+            {{ "purchase_subscription_plan" | translate }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom_bar" style="margin-top: 20px">
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!--Purchase Date Column -->
+          <ng-container matColumnDef="purchasedate">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('createdAt')"
+            >
+              {{ "purchase_date" | translate }}
+              <span
+                *ngIf="sortColumn === 'createdAt'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.purchasedate | date : "MM-dd-YYYY" }}
+            </td>
+          </ng-container>
+
+          <!--Subscription Plan Name Column -->
+          <ng-container matColumnDef="subscriptionplanname">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('subscription_plan_name')"
+            >
+              {{ "subscription_plan_name" | translate }}
+              <span
+                *ngIf="sortColumn === 'subscription_plan_name'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.subscriptionplanname }}
+            </td>
+          </ng-container>
+
+          <!-- Feature Column -->
+          <!-- <ng-container matColumnDef="features">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('services')">Features
+              <span *ngIf="sortColumn === 'services'" class="material-icons sorticon">{{ sortIconClass }}</span>
+
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngFor="let item of element?.services">
+                <div>
+                  <span
+                    >Manage
+                    {{
+                      item.is_unlimited === true ? "Unlimited" : item.max_number
+                    }}
+                    {{ item.name }}</span
+                  >
+                </div>
+              </ng-container>
+            </td>
+          </ng-container> -->
+
+          <!--Invoice No Column -->
+          <ng-container matColumnDef="invoiceno">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('invoice_number')"
+            >
+              {{ "invoice_no" | translate }}
+              <span
+                *ngIf="sortColumn === 'invoice_number'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.invoiceno }}
+            </td>
+          </ng-container>
+
+          <!--Plan Price Column -->
+          <ng-container matColumnDef="planprice">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('plan_price')"
+            >
+              {{ "plan_price" | translate }}
+              <span
+                *ngIf="sortColumn === 'plan_price'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.planprice | currency : "USD" }}
+            </td>
+          </ng-container>
+
+          <!--Plan Type Column -->
+          <ng-container matColumnDef="plantype">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('plan_type')"
+            >
+              {{ "plan_type" | translate }}
+              <span
+                *ngIf="sortColumn === 'plan_type'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.plantype }}
+            </td>
+          </ng-container>
+
+          <!--Expiry Date Column -->
+          <ng-container matColumnDef="expirydate">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('expiry_date')"
+            >
+              {{ "expiry_date" | translate }}
+              <span
+                *ngIf="sortColumn === 'expiry_date'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.expirydate | date : "dd/MM/YYYY" }}
+            </td>
+          </ng-container>
+
+          <!-- status -->
+          <ng-container matColumnDef="status">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('expiry_date')"
+            >
+              {{ "status" | translate }}
+              <span
+                *ngIf="sortColumn === 'expiry_date'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <span class="status {{ element.status }}"
+                >{{ element?.status }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!--action column -->
+          <!-- <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "action" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element" (click)="openVerticallyCenteredpaymentcontent(viewplandetails)">
+              <div class="icon_group">
+                <mat-icon>visibility</mat-icon>
+              </div>
+            </td>
+          </ng-container> -->
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <div *ngIf="dataSource?.length === 0" class="text-center">
+          <b>{{ "no_record_found" | translate }}</b>
+        </div>
+   
+      
+      </div>
+      <mat-paginator
+      #paginator
+      class="pagination"
+      [length]="totalLength"
+      (page)="handlePageEvent($event)"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[20, 50, 100]"
+      showFirstLastButtons
+      aria-label="Select page of periodic elements"
+    >
+    </mat-paginator>
+    </div>
+  </div>
+</div>

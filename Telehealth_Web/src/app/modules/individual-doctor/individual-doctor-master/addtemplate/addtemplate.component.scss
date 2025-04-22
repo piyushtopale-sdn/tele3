@@ -1,0 +1,252 @@
+@import '../../../../../assets/css/variable/variable';
+
+.add_template{
+    .main_title{
+        margin: 0 0 30px;
+    }
+    .top_bar{
+        margin: 0 0 35px;
+        .content_wrap{
+            margin: 0 -15px;
+            width: 100%;
+            .content_item{
+                padding: 0 15px;
+                width: 40%;
+                .form_field_wrapper{
+                    .mat-form-field{
+                        .mat-form-field-wrapper{
+                            padding-bottom: 0;
+                            .mat-form-field-flex{
+                                .mat-form-field-infix{
+                                    width: 230px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .bottom_bar{
+        .component_section{
+            background: #FFFFFF;
+            border: 1px solid #B6C8D6;
+            border-radius: 10px;
+            min-height: 500px;
+            .row{
+                margin: 0;
+                .left_part{
+                    text-align: center;
+                    border-right: 1px solid #B6C8D6;
+                    padding: 0;
+                    .title{
+                        padding: 15px 30px;
+                        font-weight: 500;
+                        font-size: $font_medium;
+                        line-height: 22px;
+                        color: #0C2F49;
+                        background-color: rgba(182, 200, 214, 0.2);
+                        margin: 0 0 10px;
+                    }
+                    .component{
+                        padding: 15px;
+                        .item{
+                            margin: 0 0 10px;
+                            .btn{
+                                width: 100%;
+                                padding: 10px 15px;
+                                svg{
+                                    fill: $white_color;
+                                }
+                                &:hover{
+                                    svg{
+                                        fill: $bodycolor;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .right_part{
+                    .right_part_inner{
+                        height: 100%;
+                        .top_btn{
+                            justify-content: flex-end;
+                            margin-top: 15px;
+                            .btn{
+                                padding: 0;
+                                background: #EBF0F4;
+                                border-color: #EBF0F4;
+                                border-radius: 8px;
+                                .btn_svg{
+                                    margin: 0;
+                                    background: transparent;
+                                }
+                                &:hover{
+                                    background: $bodycolor;
+                                    .btn_svg{
+                                        svg{
+                                            fill: $white_color;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .placeholder_content{
+                            height: 95%;
+                            min-height: 70vh;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            flex-direction: column;
+                            .text{
+                                margin-top: 10px;
+                                font-size: $font_medium;
+                                font-weight: 500;
+                                text-align: center; 
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        }
+        .primary_btn{
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+    }
+}
+
+// Text field component modal css
+
+.textfield_component {
+    .modal-dialog{
+        max-width: 970px;
+        form{
+            .left_part{
+                .textfield_tab{
+                    .mat-tab-header{
+                            .mat-tab-labels{
+                                .mat-tab-label{
+                                    height: 35px;
+                                    padding: 0 8px;
+                                    min-width: auto;
+                                    opacity: 1;
+                                    color: $bodycolor;
+                                    font-family: $font_family_body,$font_sans_sarif;
+                                    &.mat-tab-label-active{
+                                        background-color: $bodycolor;
+                                        color: $white_color;
+                                    }
+                                }
+                            }
+                            .mat-ink-bar{
+                                background-color: $bodycolor;
+                                display: none;
+                            }
+                    }
+                    .tab_content{    
+                        padding-top: 12px;
+                        .form_field_wrapper{
+                            label{
+                                font-size: $font_small;
+                            }
+                        }
+                        .clear_on_refresh{
+                            .custom_value{
+                                background-color: rgba(221, 221, 221, 0.5);
+                                border: 1px solid rgba(228, 228, 228, 0.9);
+                                padding: 7px 10px;
+                                margin: 10px 0;
+                            }
+                        }
+                        .mat-checkbox {
+                            display: block;
+                            margin: 0 0 5px;
+                            .mat-checkbox-layout{
+                                .mat-checkbox-label{
+                                    line-height: 20px;
+                                    white-space: normal;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .right_part{
+                .preview{
+                    border: 1px solid rgba(228, 228, 228, 0.9);
+                    .title{
+                        padding: 15px;
+                        font-size: $font_medium;
+                        font-weight: 500;
+                        background-color: rgba(221, 221, 221, 0.5);
+                        color: $bodyopacitylightcolor;
+                    }
+                    .content{
+                        padding: 15px;
+    
+                    }
+                }
+                .form-btn{
+                    margin-top: 15px;
+                    justify-content: flex-start;
+                    flex-wrap: wrap;
+                    .btn{
+                        margin: 0 10px 10px 0;
+                        &.btn-light{
+                            color: $black_color;
+                            &:hover{
+                                color: $white_color;
+                            }
+                        }
+                        &.btn-danger{
+                            background-color: rgba(220, 53, 69, 0.2);
+                            border-color: rgba(220, 53, 69, 0.2);
+                            color: #dc3545;
+                            &:hover{
+                                background-color: #dc3545;
+                                color: $white_color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+@media screen and (max-width:$desktop) {
+    .add_template .top_bar .content_wrap .content_item .form_field_wrapper .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix{
+        width: 165px;
+    }
+}
+@media screen and (max-width:$tablet) {
+    .textfield_component .modal-dialog {
+        max-width: 730px;
+    }    
+}
+@media screen and (max-width:$large_phone) {
+    .add_template .top_bar .content_wrap .content_item .form_field_wrapper .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix{
+        width: 100%;
+    }
+    .dashboard_main_content .top_bar .content_wrap{
+       flex-direction: column;
+       width: 100%;
+    }
+    .add_template .top_bar .content_wrap .content_item{
+        width: 100%;
+        margin: 0 0 15px;
+        padding: 0;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .textfield_component .modal-dialog form .right_part{
+        margin-top: 30px;
+    }  
+}

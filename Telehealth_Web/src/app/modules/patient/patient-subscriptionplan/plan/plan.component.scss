@@ -1,0 +1,226 @@
+@import '../../../../../assets/css/variable/variable';
+
+.plan {
+    .bottom_bar{
+        .plan_card_wrap{
+            margin: 0 0 25px;
+            .plan_card{
+                background: #F6F8FC;
+                border: 1px solid #B6C8D6;
+                border-radius: 15px;
+                padding: 25px;
+                height: 400px;
+                .card_icon_wrap{
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 0 0 15px;
+                    .card_icon{
+                        width: 55px;
+                        height: 55px;
+                        line-height: 55px;
+                        background-color: $bodycolor;
+                        border-radius: 50%;
+                        text-align: center;
+                    }
+                    .recommended{
+                        .btn {
+                            font-size: $font_small;
+                            border-radius: 10px;
+                            width: auto;
+                            padding: 7px 12px;
+                        }
+                    }
+                }
+               
+                .card_title{
+                    font-weight: 500;
+                    font-size: 22px;
+                    line-height: 31px;
+                    color: $bodycolor;
+                    margin: 0 0 15px;
+                }
+                .card_desc{
+                    font-weight: 500;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: $bodycolor;
+                    margin: 0 0 15px;
+                    word-wrap: break-word;
+                }
+                .card_price{
+                    font-weight: 600;
+                    font-size: 30px;
+                    line-height: 44px;
+                    color: $bodycolor;
+                    margin: 0 0 5px;
+                }
+                .card_duration{
+                    font-size: 20px;
+                    line-height: 24px;
+                    color: $bodycolor;
+                    margin: 0 0 30px;
+                }
+                .btn{
+                    width: 100%;
+                    background-color: $white_color;
+                    font-size: $font_large;
+                    padding: 12px 15px;
+                    &:hover{
+                        background-color: $btn_light_color; 
+                    }
+                }
+            }  
+            &:nth-child(even){
+                    .plan_card{
+                        .card_icon_wrap{
+                            .card_icon{
+                                background-color: #3DA7C8;
+                            }
+                        }
+                    }
+            }
+        }
+
+    }
+}
+
+.payment_details {
+    .modal-body{
+        .modal_title{
+            font-size: $font_medium;
+            font-weight: 600;
+            color: #25282B;
+            margin: 0 0 15px;
+            text-align: left;
+        }
+        .payment_type{
+            margin: 0 0 15px ;
+            .mat-radio-group{
+                .mat-radio-button{
+                    margin: 0 35px 0 0;
+                    .mat-radio-label-content{
+                        padding-left: 12px;
+                    }
+                }
+            }
+        }
+        .payment_mode{
+                .strip{
+                    .title{
+                        color: #635BFF;
+                        font-weight: 700;
+                    }
+                }
+                .mobile_money{
+                    .title{
+                        color: #0C2F49;
+                        font-weight: 700;
+                        img{
+                            margin: 0 15px 0 0;
+                        }
+                    }
+                }
+                .mat-button-toggle-group{
+                    flex-direction: column;
+                    width: 100%;
+                    border: none;
+                    .mat-button-toggle{
+                        border: 1px solid #B6C8D6;
+                        border-radius: 10px;
+                        font-size: 20px;
+                        margin: 0 0 15px;
+                        button{
+                            .mat-button-toggle-label-content{
+                                display: block;
+                                padding: 0;
+                                line-height: 60px;
+                            }
+                        }
+                        &.strip{
+                            color: #635BFF;
+                            font-weight: 700;
+                        }
+                    }
+                }
+             
+        }
+        .primary_btn{
+            margin-top: 15px;
+            justify-content: center !important;
+        }
+    }
+
+    .payment_details_popup {
+        .mat-form-field {
+            width: 100%;
+        }
+        .field-wrap-block {
+            border: 1px solid $formfiledbordercolor;
+            border-radius: 5px;
+            .mat-form-field-wrapper {
+                padding-bottom: 0;
+                .mat-select-value {
+                    position: relative;
+                    top: -5px;
+                }
+            }
+            .mat-form-field-underline {
+                display: none;
+            }
+            .mat-form-field {
+                width: 120px;
+            }
+        }
+        .input-field-block {
+            width: calc(100%  - 100px);
+            height: 50px;
+            input {
+                height: 100%;
+                padding: 0 15px;
+                color: $black_color;
+            }
+            .error-msg {
+                display: block;
+                margin: 10px 0 0 15px;
+            }
+        }
+        .payment_mode {
+            .mat-form-field-flex {
+                border: 1px solid rgba(228, 228, 228, 0.9);
+                border-radius: 5px;
+            }
+            .mat-form-field-underline {
+                display: none;
+            }
+            .mat-select-value {
+                overflow: visible;
+            }
+            .mat-select-value {
+                position: relative;
+                top: -5px;
+            }
+        }
+    }
+}
+
+.country-code-input-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .country-code-select {
+    flex: 1;
+    margin-right: 8px; /* Adjust the margin as needed */
+  }
+  
+  .mobile-number-input {
+    flex: 3; /* Adjust the flex value to control the width of the input field */
+  }
+  
+
+@media screen and (min-width:$desktop_large_up) {
+    .plan .bottom_bar .plan_card_wrap{
+        width: 25%;
+    }
+}

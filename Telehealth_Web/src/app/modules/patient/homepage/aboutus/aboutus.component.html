@@ -1,0 +1,44 @@
+<div class="home_wrapper" [attr.dir]="'dir' | translate">
+  <app-header></app-header>
+
+  <div class="breadcum_wrapper" aria-label="breadcrumb">
+    <div class="container">
+      <div class="breadcrumb_title">{{ "about_us" | translate }}</div>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/test/homepage']">{{ "home" | translate }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ "about_us" | translate }}
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="main_section">
+    <div class="main_section_inner">
+      <div class="container">
+        <section id="about-us" [attr.dir]="'dir' | translate">
+          <h1> {{ "about_test_app" | translate }}</h1>
+          <p><strong>{{ "company_backgroud_head" | translate}}</strong> 
+            {{ "company_backgroud_text" | translate}}
+          </p>
+          <p><strong>{{ "mission_head" | translate}}</strong> 
+            {{ "mission_text" | translate}}
+          </p>
+          <p><strong>{{ "vision_head" | translate}}</strong> 
+            {{ "vision_text" | translate}}
+          </p>
+          <p><strong>{{ "service_overview_head" | translate}}</strong></p>
+          <ul>
+              <li><strong>{{ "service_overview_sub1" | translate}}</strong> {{ "service_overview_sub1_text" | translate}}</li>
+              <li><strong>{{ "service_overview_sub2" | translate}}</strong> {{ "service_overview_sub2_text" | translate}}</li>
+              <li><strong>{{ "service_overview_sub3" | translate}}</strong> {{ "service_overview_sub3_text" | translate}}</li>
+          </ul>
+      </section>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

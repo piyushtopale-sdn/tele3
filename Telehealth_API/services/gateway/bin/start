@@ -1,0 +1,108 @@
+'use strict';
+
+require('@babel/register');
+require('@babel/polyfill');
+
+const app = require('../app').default;
+const http = require('http');
+require('dotenv/config');
+const NODE_ENV = process.env.NODE_ENV || "local"; //local
+const config = require('../config/config.js').get();
+const allowedOrigin = [
+    "https://dev.terstapp.com",
+    "https://dev.terstapp.com:8009",
+    "http://localhost:4200",
+    "https://meanstack.smartdatainc.com:6002",
+    "https://terstapp.com"
+];
+
+const normalizePort = function (val) {
+    const port = parseInt(val, 10);
+
+    if (isNaN(port)) {
+        return val;
+    }
+
+    if (port >= 0) {
+        return port;
+    }
+
+    return false;
+};
+
+const port = normalizePort(config.PORTS.API_PORT);
+
+/**
+ * Create HTTP server.
+ */
+const server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port);
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+server.on('error', (error) => {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+
+    const bind = typeof port === 'string'
+        ? `Pipe ${port}`
+        : `Port ${port}`;
+
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            // debug(`${bind} requires elevated privileges`);
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            // debug(`${bind} is already in use`);
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
+});
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+server.on('listening', () => {
+    console.log(`Listening on ${port}`);
+});
+
+
+
+const io = require("socket.io")(server, {
+    reconnection: true,
+    reconnectionAttempts: 10,
+    reconnectionDelay: 1000,
+    transports: ["websocket", "polling"], // Ensure both transports are allowed //"polling", 
+    maxHttpBufferSize: 1e6,
+    pingTimeout: 30000,
+    pingInterval: 15000,
+    cors: {
+        origin: (origin, callback) => {
+            // console.log("Incoming origin:", origin, "!origin", !origin);
+            if (!origin || allowedOrigin.includes(origin)) {
+                callback(null, true); // Allow the origin
+            } else {
+                console.log(`Blocked origin: ${origin}`);
+                callback(new Error(`Not allowed by CORS: ${origin}`)); // Block the origin
+            }
+        },
+        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD"],
+        credentials: true,
+        preflightContinue: false,
+        optionsSuccessStatus: 204,
+    },
+  });
+
+app.set("io", io);
+require("../middleware/socketEvents")(io);

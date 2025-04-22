@@ -1,0 +1,61 @@
+<div class="sidebar_main">
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <button type="button" class="close text-reset d-lg-none d-md-block" data-bs-dismiss="offcanvas" aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="offcanvas-body">
+    <div class="inner_sidebar">
+        <div class="header_logo" [ngClass]="{'medicine-claim-sidebar': loginLogo !=''}">
+            <ng-container *ngIf="loginLogo !=''">
+              <img class="img-flui imgAlter" src="{{loginLogo}}" alt="logo">
+            </ng-container>
+            <ng-container *ngIf="loginLogo =='' || loginLogo==undefined">
+              <img class="img-flui" src="../../../../assets/img/logo2.svg" alt="logo">
+            </ng-container>
+        </div>
+        <div class="menu_list" id="sidebar">
+          <ul class="menu_list_main">
+            <ng-container *ngFor="let menu of userMenuArray">
+              <!-- Menu Item with No Children -->
+              <li class="nav-item" *ngIf="menu['children'].length === 0" (click)="handleNavigationClick(menu['route_path'], menu['name'])">
+                <a class="nav-link {{ menu['route_path'] == activeMenu ? 'active' : '' }}" [routerLink]="[menu['route_path']]">
+                  <div class="menu_list_block">
+                    <div class="sidebar_icon">
+                      <img class="icon" src="../../../../assets/img/sidebaricon/{{ menu['icon'] }}" alt="">
+                      <img class="icon_hover" src="../../../../assets/img/sidebaricon/{{ menu['icon_hover'] }}" alt="">
+                    </div>
+                    <span class="menus-name-dashboard">{{ menu['name'] | translate }}</span>
+                  </div>
+                </a>
+              </li>
+            
+              <!-- Menu Item with Children (Submenu) -->
+              <li #itemEl class="nav-item sidebar-dropdown dropmenu" *ngIf="menu['children'] && menu['children'].length > 0">
+                <a (click)="showSubmenu(itemEl)" class="nav-link">
+                  <div class="menu_list_block">
+                    <div class="sidebar_icon">
+                      <img class="icon" src="../../../../assets/img/sidebaricon/{{ menu['icon'] }}" alt="">
+                      <img class="icon_hover" src="../../../../assets/img/sidebaricon/{{ menu['icon_hover'] }}" alt="">
+                    </div>
+                    <span>{{ menu['name'] | translate }}</span>
+                  </div>
+                </a>
+                <div class="sidebar-submenu">
+                  <ul>
+                    <!-- Loop for Child Menus -->
+                    <li *ngFor="let childMenu of menu['children']">
+                      <a class="{{ childMenu.route_path == activeMenu ? 'active' : '' }}" [routerLink]="[childMenu.route_path]" (click)="handleNavigationClick(childMenu.route_path, menu['name'])">
+                        {{ childMenu.name | translate }}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+            </ng-container>
+            
+          </ul>
+        </div>
+          </div>
+        </div>

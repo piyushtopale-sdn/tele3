@@ -1,0 +1,110 @@
+@import '../../../../../assets/css/variable/variable';
+.material-icons{
+    cursor: pointer;
+}
+
+.presciption_order{
+    padding: 0;
+    .prescription_tab{
+        .mat-tab-header{
+            padding: 30px;
+            border-bottom: 1px solid #B6C8D6;
+            .mat-tab-list{
+                .mat-tab-labels{
+                    display: inline-flex;
+                    .mat-tab-label {
+                        font-family: $font_family_body,$font_sans_sarif;
+                        height: 110px;
+                        padding: 0;
+                        font-size: $font_medium;
+                        font-weight: 500;
+                        color: $bodycolor;
+                        // background-color: #D9EFFF;
+                        border: 1px solid transparent;
+                        border-radius: 10px;
+                        justify-content: center;
+                        opacity: 1;
+                        margin-left: 22px;
+                        &:first-child{
+                            margin-left: 0;
+                        }
+                        .mat-tab-label-content{
+                            .mat_tab_label_inner {
+                                display: flex;
+                                padding: 0 13px;
+                                min-width: 215px;
+                                height: 110px;
+                                align-items: center;
+                                justify-content: space-between;
+                                &.lightblue{
+                                    background-color: #D9EFFF;
+                                }
+                                &.lightgreen {
+                                    background-color: rgba(114, 210, 132, 0.1);
+                                }
+                                &.lightred {
+                                    background-color: rgba(255, 119, 119, 0.1);
+                                }
+                                &.lightorange{
+                                    background-color: rgba(255, 115, 84, 0.1);
+                                }
+                                &.lightviolet{
+                                    background-color: rgba(190, 90, 225, 0.1);
+                                }
+                                &.lightpurple{
+                                    background-color:rgba(102, 116, 249, 0.1);
+                                }
+                                .counter_wrap {
+                                    text-align: left;
+                                    .counter{
+                                        font-weight: 600;
+                                        font-size: 32px;
+                                        line-height: 40px;
+                                        color: $black_color;
+                                    }
+                                    .title{
+                                        font-weight: 400;
+                                        font-size: 18px;
+                                        line-height: 22px;
+                                        color: $black_color;
+                                    }
+                                }
+                                .btn_svg {
+                                    height: 60px;
+                                    width: 60px;
+                                    line-height: 60px;
+                                    background: #FFFFFF;
+                                    box-shadow: 0px 0px 16.0494px rgba(8, 48, 79, 0.08);
+                                    border-radius: 16.0494px;
+                                    svg{
+                                        width: 30px;
+                                        height: 30px;
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                    .mat-tab-label.mat-tab-label-active{
+                        border-color:  #447FD9;
+                    }
+                }
+                .mat-ink-bar{
+                    display: none;
+                }
+                .mat-ink-bar{
+                    background-color: $bodycolor;
+                }
+            }
+        }
+        .mat-tab-body-wrapper{
+            overflow: hidden;
+            padding: 30px;
+        } 
+    } 
+}
+@media screen and (max-width:$small_phone) {
+    .presciption_order .prescription_tab .mat-tab-header .mat-tab-list .mat-tab-labels .mat-tab-label .mat-tab-label-content{
+        min-width: 160px;
+    }
+}

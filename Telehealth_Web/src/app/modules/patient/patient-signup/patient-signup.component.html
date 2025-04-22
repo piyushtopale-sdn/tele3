@@ -1,0 +1,422 @@
+<div class="login">
+  <div class="login_inner">
+    <div class="row">
+      <div class="left_part part col-md-6">
+        <div class="leftpart_inner">
+          <div class="logo"   (click)="goToHomePage()" style="cursor: pointer">
+            <img [src]="login_logo" alt="logo" style=" height: 100px;"/>
+          </div>
+        </div>
+      </div>
+      <div class="right_part part col-md-6">
+        <div class="lang d-flex justify-content-end me-3">
+          <app-language></app-language>
+      </div>
+        <div class="rightpart_inner">
+          <div class="login_form">
+            <div class="login_form_inner">
+              <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+                <div class="login_img">
+                  <img src="../../../../assets/img/login_img.svg" />
+                </div>
+                <!-- <div class="login_title">{{ "welcome_to_test" | translate }}</div> -->
+                <div class="title_wrapper">
+                  <h4 class="form_title">{{ "sign_up" | translate }}</h4>
+                  <div class="form_desc">
+                    {{ "enter_your_details_for_creating_account_thanks" | translate }}
+                  </div>
+                </div>
+
+                <div class="form_field_wrapper mt-3">
+                  <label>{{ "first_name" | translate }}<span class="danger">*</span></label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      placeholder='{{ "enter_first_name" | translate }}'
+                      formControlName="first_name"
+                      matInput
+                    />
+                  </mat-form-field>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="isSubmitted && patientFormControl['first_name'].errors?.['required']"
+                  >
+                    {{ "enter_first_name" | translate }}
+                  </mat-error>
+                </div>
+                
+                <!-- <div class="form_field_wrapper mt-3">
+                  <label>{{ "middle_name" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      placeholder="Enter Middle name"
+                      formControlName="middle_name"
+                      matInput
+                    />
+                  </mat-form-field>
+                </div> -->
+
+
+                <div class="form_field_wrapper mt-3">
+                  <label>{{ "last_name" | translate }}<span class="danger">*</span></label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      placeholder='{{ "enter_last_name" | translate }}'
+                      formControlName="last_name"
+                      matInput
+                    />
+                  </mat-form-field>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="isSubmitted && patientFormControl['last_name'].errors?.['required']"
+                  >
+                    {{ "enter_last_name" | translate }}
+                  </mat-error>
+                </div>
+
+
+<!--                 <div class="form_field_wrapper mt-3">
+                  <label>{{ "email_address" | translate }}<span class="danger">*</span></label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="email"
+                      placeholder="Enter email address"
+                      formControlName="email"
+                      matInput
+                    />
+                  </mat-form-field>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="isSubmitted && patientFormControl['email'].errors?.['required']"
+                  >
+                    {{ "enter_email" | translate }}
+                  </mat-error>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="isSubmitted && patientFormControl['email'].errors?.['pattern']"
+                  >
+                    {{ "invalid_email" | translate }}
+                  </mat-error>
+                </div> -->
+
+                <div class="form_field_wrapper mt-3">
+                  <label>{{ "mobile" | translate }}<span class="danger">*</span></label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      #phone
+                      (focus)="onFocus()"
+                      formControlName="mobile"
+                      ng2TelInput
+                      placeholder='{{ "enter_mobile" | translate }}'
+                      matInput
+                    />
+                  </mat-form-field>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="isSubmitted && patientFormControl['mobile'].errors?.['required']"
+                  >
+                    {{ "enter_mobile" | translate }}
+                  </mat-error>
+                </div>
+
+                
+<!--                 <div class="form_field_wrapper mt-3">
+                  <label>{{ "gender" | translate }}<span class="danger">*</span></label>
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{ "gender" | translate }}</mat-label>
+                    <mat-select formControlName="gender">
+                      <mat-option
+                        *ngFor="let gen of gender"
+                        value="{{ gen.value }}"
+                        >{{ gen.label }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="isSubmitted && patientFormControl['gender'].errors?.['required']"
+                  >
+                    {{ "please_select_gender" | translate }}
+                  </mat-error>
+                </div>
+
+                <div class="form_field_wrapper mt-3">
+                  <label>{{ "date_of_birth" | translate }}<span class="danger">*</span> </label>
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <input
+                      formControlName="dateofbirth"
+                      #dobref
+                      [matDatepicker]="pickerdob"
+                      [max]="maxDOB"
+                      matInput
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="pickerdob"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #pickerdob></mat-datepicker>
+                  </mat-form-field>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="isSubmitted && patientFormControl['dateofbirth'].errors?.['required']"
+                  >
+                    {{ "enter_date_of_birth" | translate }}
+                  </mat-error>
+                  <mat-error  class="text-danger" *ngIf="isSubmitted && addSubscriberFormControl['dateofbirth'].errors?.['dateofbageErrorirth']">
+                                        date of birth should not be less than current year
+                  </mat-error >
+                </div> -->
+
+                <!-- <div class="col-sm-6 col-md-6">
+                                    <div class="form_field_wrapper">
+                                        <label>Blood Group</label>
+                                        <mat-form-field class="inner_label" appearance="fill">
+                                            <mat-label>Blood Group</mat-label>
+
+                                            <mat-select formControlName="blood_group">
+
+                                                <mat-option *ngFor="let bld of bloodGroup" value="{{bld.value}}">{{bld.label}}</mat-option>
+                                                
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-error  class="text-danger"
+                                            *ngIf="isSubmitted && patientFormControl['blood_group'].errors?.['required']">
+                                            Please select Blood group
+                                        </mat-error >
+                                    </div>
+                                </div> -->
+
+                <!-- <div class="col-sm-6 col-md-6">
+                                    <div class="form_field_wrapper">
+                                        <label>Marital Status</label>
+                                        <mat-form-field class="inner_label" appearance="fill">
+                                            <mat-label>Marital Status</mat-label>
+                                            <mat-select formControlName="marital_status">
+
+                                                <mat-option *ngFor="let ms of maritalStatus" value="{{ms.value}}">{{ms.label}}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <mat-error  class="text-danger"
+                                            *ngIf="isSubmitted && patientFormControl['marital_status'].errors?.['required']">
+                                            Please select Marital Status
+                                        </mat-error >
+                                    </div>
+                                </div> -->
+
+<!--                 <div class="form_field_wrapper mt-3">
+                  <label>{{ "password" | translate }}<span class="danger">*</span></label>
+                  <mat-form-field appearance="fill" class="password-input-block">
+                    <input                   
+                      placeholder='{{ "enter_your_password" | translate }}'
+                      formControlName="password"
+                      matInput
+                      [type]="hide1 ? 'password' : 'text'" />
+                      <a class="password-view" (click)="hide1 = !hide1">
+                        <mat-icon>{{
+                          hide1 ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </a>
+                  </mat-form-field>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="isSubmitted && patientFormControl['password'].errors?.['required']"
+                  >
+                    {{ "enter_password" | translate }}
+                  </mat-error>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf=" patientFormControl['password'].errors?.['minlength']"
+                  >
+                    {{ "must_be_atleast_8_char" | translate }}
+                  </mat-error>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="patientFormControl['password'].errors?.['hasNumber']"
+                  >
+                    {{ "must_contain_atleast_1_number" | translate }}
+                  </mat-error>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="patientFormControl['password'].errors?.['hasCapitalCase']"
+                  >
+                    {{ "must_contain_atleast_1_capcase" | translate }}
+                  </mat-error>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="patientFormControl['password'].errors?.['hasSmallCase']"
+                  >
+                    {{ "must_contain_atleast_1_smallcase" | translate }}
+                  </mat-error>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="patientFormControl['password'].errors?.['hasSpecialCharacters']"
+                  >
+                    {{ "must_contain_atleast_1_number" | translate }}
+                  </mat-error>
+                </div>
+                <div class="form_field_wrapper mt-3">
+                  <label>{{ "confirm_password" | translate }}<span class="danger">*</span></label>
+                  <mat-form-field appearance="fill" class="password-input-block">
+                    
+                    <input matInput   placeholder='{{ "enter_your_confirm_password" | translate }}'
+                    formControlName="confirmPassword" [type]="hide ? 'password' : 'text'" />
+                    <a class="password-view" (click)="hide = !hide">
+                      <mat-icon>{{
+                        hide ? "visibility_off" : "visibility"
+                      }}</mat-icon>
+                    </a>
+                  </mat-form-field>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="isSubmitted && patientFormControl['confirmPassword'].errors?.['required']"
+                  >
+                    {{ "enter_your_confirm_password" | translate }}
+                  </mat-error>
+                  <mat-error
+                    class="text-danger"
+                    *ngIf="isSubmitted && patientFormControl['confirmPassword'].errors?.['matching']"
+                  >
+                  {{ "confim_password_does_not_match" | translate }}
+                  </mat-error>
+                </div> -->
+
+                
+                <div class="keepmesign_content mt-3">
+                  <div class="keepmesign termsandcondition">
+                    <mat-checkbox
+                      class="example-margin"
+                      formControlName="termscondition"
+                      >
+                      <div style="width : 100% !important; display: flex !important; ">
+                        <div>
+                          {{ "i_accept" | translate }}
+                          <span class="danger">*</span>
+                         </div>
+                        <span class="bold" (click)="openVerticallyCenteredterms(termsofuse)"
+                          >{{ "test_terms_of_use" | translate }}
+                        </span>
+                      </div>
+                    </mat-checkbox>
+                    <mat-error
+                      class="text-danger"
+                      *ngIf="isSubmitted && patientFormControl['termscondition'].errors?.['required']"
+                    >
+                      {{ "please_read_and_accept_terms_&_conditions" | translate }}
+                    </mat-error>
+                  </div>
+                </div>
+
+                <div class="form-btn primary_btn">
+                  <!-- <button type="submit" class="login_btn btn btn-primary"
+                                   >Sign Up</button> -->
+                  <button type="submit" class="login_btn btn btn-primary" [disabled]="!signUpForm.valid || !signUpForm.get('termscondition').value">
+                    {{ "sign_up" | translate }}
+                  </button>
+                </div>
+
+                <div class="signup_section">
+                  <div class="signup">
+                    {{ "already_have_an_account" | translate }}?<a
+                      class="signup_link"
+                      [routerLink]="['/patient/login']"
+                      >&nbsp;{{ "sign_in" | translate }}</a>
+                  </div>
+                </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #patientpopup let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title text-center" id="modal-basic-title">
+        {{ "Two_factor_authentication" | translate }}
+      </h4>
+    </div>
+    <div class="modal-body">
+      <div class="two_factore_button">
+        <p>
+          Lorem Ipsum is simply dummy text of the printing and industry. Lorem
+          Ipsum has been standard.
+        </p>
+        <div class="form-btn primary_btn mt-30">
+          <button class="btn btn-tranprent" (click)="sendTo2fa('mobile')">
+            <a class="svgicon">
+              <svg
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M9.61097 10.5599C13.635 14.5828 14.5479 9.92871 17.1101 12.4891C19.5802 14.9585 20.9999 15.4532 17.8703 18.582C17.4783 18.897 14.9876 22.6872 6.23447 13.9365C-2.51974 5.18474 1.26827 2.6915 1.58339 2.2996C4.72057 -0.837787 5.20679 0.590167 7.6769 3.05959C10.2391 5.62103 5.58689 6.53691 9.61097 10.5599Z"
+                />
+              </svg>
+            </a>
+            {{ "mobile_number" | translate }}
+          </button>
+          <button class="btn btn-tranprent" (click)="sendTo2fa('email')">
+            <a class="svgicon">
+              <svg
+                viewBox="0 0 18 15"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M13.2822 0C14.3997 0 15.4747 0.441667 16.2655 1.23417C17.0572 2.025 17.4997 3.09167 17.4997 4.20833V10.7917C17.4997 13.1167 15.608 15 13.2822 15H5.04967C2.72384 15 0.833008 13.1167 0.833008 10.7917V4.20833C0.833008 1.88333 2.71551 0 5.04967 0H13.2822ZM14.6079 5.44987L14.6746 5.3832C14.8738 5.14153 14.8738 4.79153 14.6654 4.54987C14.5496 4.4257 14.3904 4.34987 14.2246 4.3332C14.0496 4.32403 13.8829 4.3832 13.7571 4.49987L9.99962 7.49987C9.51628 7.9007 8.82378 7.9007 8.33295 7.49987L4.58295 4.49987C4.32378 4.3082 3.96545 4.3332 3.74962 4.5582C3.52462 4.7832 3.49962 5.14153 3.69045 5.39153L3.79962 5.49987L7.59128 8.4582C8.05795 8.82487 8.62378 9.02487 9.21628 9.02487C9.80712 9.02487 10.3829 8.82487 10.8488 8.4582L14.6079 5.44987Z"
+                />
+              </svg>
+            </a>
+            {{ "email_address" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #termsofuse let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title text-center" id="modal-basic-title">
+        {{ "test_terms_of_use" | translate }}
+      </h4>
+      <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="closePopUp()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+    </div>
+    <div class="modal-body">
+      <div class="two_factore_button">
+        <p>
+          Lorem Ipsum is simply dummy text of the printing and industry. Lorem
+          Ipsum has been standard.
+          Lorem Ipsum is simply dummy text of the printing and industry. Lorem
+          Ipsum has been standard.
+          Lorem Ipsum is simply dummy text of the printing and industry. Lorem
+          Ipsum has been standard.
+          Lorem Ipsum is simply dummy text of the printing and industry. Lorem
+          Ipsum has been standard.
+          Lorem Ipsum is simply dummy text of the printing and industry. Lorem
+          Ipsum has been standard.
+        </p>
+      </div>
+    </div>
+  </div>
+</ng-template>

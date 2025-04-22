@@ -1,0 +1,62 @@
+@import '../../../../../assets/css/variable/variable';
+
+.material-icons {
+    cursor: pointer;
+}
+
+.patient_view {
+    .top_bar {
+        margin: 0 0 30px;
+
+        .left_part {
+            display: flex;
+            .search_bar {
+                .input-group {
+                    background: #F6F8FC;
+                    border-radius: 6px;
+
+                    .form-control {
+                        border: none;
+                        background-color: transparent;
+                        padding: 12px 12px 12px 0;
+                        width: 210px;
+
+                        &::placeholder {
+                            font-weight: 400;
+                            font-size: $font_small;
+                            line-height: 24px;
+                        }
+
+                        &:focus {
+                            box-shadow: none;
+                        }
+                    }
+
+                    .btn {
+                        padding: 0;
+                        border: none;
+
+                        .mat-icon {
+                            line-height: 50px;
+                            height: 50px;
+                            width: 50px;
+                            color: #9B9B9B;
+                            font-size: 24px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.custom-width {
+    max-width: 400px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+.common_content {    
+    margin-right: 20px;
+    margin-top: 30px;
+}

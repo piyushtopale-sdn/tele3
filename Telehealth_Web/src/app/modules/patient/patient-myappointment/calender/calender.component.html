@@ -1,0 +1,241 @@
+<div class="calender dashboard_main_content">
+  <div class="top_bar">
+    <div class="left_part">
+      <div class="primary_btn">
+        <button type="button" class="btn btn-secondary" [routerLink]="['/patient/myappointment/list']"><a
+            class="btn_svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="19" viewBox="0 0 25 19" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M0.288748 0.364133C0.0923893 0.628986 0.0189067 1.13494 0.0189067 2.22236C0.0189067 4.20655 0.0792183 4.25863 2.38093 4.25863C3.49391 4.25863 4.18299 4.18869 4.31695 4.06208C4.453 3.9335 4.52492 3.25524 4.52492 2.1023C4.52492 -0.0296249 4.55751 2.17077e-05 2.20641 2.17077e-05C0.700009 2.17077e-05 0.535365 0.031306 0.288748 0.364133ZM6.70116 0.364133C6.50792 0.624727 6.43132 1.12626 6.43132 2.12933C6.43132 3.13239 6.50792 3.63393 6.70116 3.89452L6.97083 4.25863H15.6863C23.9095 4.25863 24.4178 4.24176 24.6885 3.95906C25.0869 3.54302 25.0994 0.895476 24.7055 0.364133L24.4358 2.17077e-05H15.7033H6.97083L6.70116 0.364133ZM0.305732 7.67027C-0.0927038 8.08631 -0.105182 10.7339 0.288748 11.2652C0.535365 11.598 0.700009 11.6293 2.20641 11.6293C4.56132 11.6293 4.52492 11.6627 4.52492 9.5C4.52492 7.33876 4.55941 7.37069 2.22356 7.37069C0.863612 7.37069 0.544898 7.42049 0.305732 7.67027ZM6.70116 7.73481C6.50792 7.9954 6.43132 8.49693 6.43132 9.5C6.43132 10.5031 6.50792 11.0046 6.70116 11.2652L6.97083 11.6293H15.7033H24.4358L24.7055 11.2652C24.8987 11.0046 24.9753 10.5031 24.9753 9.5C24.9753 8.49693 24.8987 7.9954 24.7055 7.73481L24.4358 7.37069H15.7033H6.97083L6.70116 7.73481ZM0.305732 15.0409C-0.0927038 15.457 -0.105182 18.1045 0.288748 18.6359C0.535365 18.9687 0.700009 19 2.20641 19C4.55751 19 4.52492 19.0296 4.52492 16.8977C4.52492 15.7448 4.453 15.0665 4.31695 14.9379C4.18247 14.8108 3.48715 14.7414 2.35077 14.7414C0.867598 14.7414 0.547671 14.7882 0.305732 15.0409ZM6.70116 15.1055C6.50792 15.3661 6.43132 15.8676 6.43132 16.8707C6.43132 17.8737 6.50792 18.3753 6.70116 18.6359L6.97083 19H15.7033H24.4358L24.7055 18.6359C25.1226 18.0732 25.0874 15.3795 24.6583 15.0124C24.3724 14.7677 23.4947 14.7414 15.6562 14.7414H6.97083L6.70116 15.1055Z" />
+            </svg></a>
+        </button>
+        <button type="button" class="btn btn-secondary" [routerLink]="['/patient/myappointment']"><a class="btn_svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="31" viewBox="0 0 29 31" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M21.3001 1.26827L21.3016 2.42394C25.5484 2.75677 28.3537 5.65057 28.3582 10.0883L28.375 23.0781C28.3811 27.9165 25.3414 30.8935 20.469 30.9012L8.56749 30.9166C3.7256 30.9228 0.647849 27.8749 0.64176 23.0226L0.625017 10.1854C0.618928 5.71837 3.32528 2.83228 7.57202 2.44243L7.5705 1.28676C7.56898 0.608764 8.07128 0.0987277 8.74102 0.0987277C9.41076 0.0971868 9.91306 0.605682 9.91458 1.28368L9.9161 2.3623L18.9576 2.34997L18.956 1.27135C18.9545 0.593355 19.4568 0.0848596 20.1266 0.0833187C20.7811 0.0817778 21.2986 0.590273 21.3001 1.26827ZM2.97065 10.6604L26.0157 10.6295V10.0902C25.9503 6.77731 24.2881 5.03918 21.3047 4.78031L21.3062 5.9668C21.3062 6.62938 20.7902 7.15483 20.1357 7.15483C19.466 7.15637 18.9622 6.63246 18.9622 5.96988L18.9606 4.72176L9.91917 4.73408L9.9207 5.98067C9.9207 6.64479 9.41991 7.1687 8.75018 7.1687C8.08044 7.17024 7.57661 6.64787 7.57661 5.98375L7.57509 4.79726C4.60694 5.09465 2.96456 6.83894 2.96913 10.1811L2.97065 10.6604ZM19.4945 17.6632V17.6802C19.5097 18.389 20.0881 18.9268 20.7898 18.9114C21.4748 18.8944 22.0212 18.3073 22.006 17.5985C21.9741 16.9205 21.4246 16.3673 20.7411 16.3689C20.0409 16.3843 19.493 16.9544 19.4945 17.6632ZM20.7522 24.5819C20.052 24.5665 19.4873 23.9825 19.4858 23.2737C19.4705 22.5649 20.0322 21.9778 20.7324 21.9609H20.7476C21.463 21.9609 22.0429 22.5449 22.0429 23.2691C22.0445 23.9933 21.4661 24.5804 20.7522 24.5819ZM13.2241 17.6885C13.2545 18.3973 13.8344 18.9505 14.5346 18.9197C15.2196 18.8873 15.766 18.3018 15.7356 17.593C15.7188 16.8996 15.1556 16.3603 14.4707 16.3618C13.7705 16.3926 13.2225 16.9797 13.2241 17.6885ZM14.5407 24.5136C13.8406 24.5444 13.2622 23.9912 13.2302 23.2824C13.2302 22.5736 13.7766 21.9881 14.4768 21.9557C15.1618 21.9542 15.7265 22.4935 15.7417 23.1853C15.7737 23.8957 15.2257 24.4812 14.5407 24.5136ZM6.95276 17.7419C6.9832 18.4508 7.56314 19.0055 8.26332 18.9731C8.94827 18.9423 9.49472 18.3552 9.46276 17.6464C9.44753 16.953 8.88435 16.4137 8.19786 16.4152C7.49768 16.4461 6.95124 17.0331 6.95276 17.7419ZM8.26934 24.5219C7.56916 24.5542 6.99075 23.9995 6.95878 23.2907C6.95726 22.5819 7.50523 21.9948 8.20541 21.964C8.89037 21.9625 9.45508 22.5018 9.4703 23.1952C9.50226 23.904 8.95582 24.4911 8.26934 24.5219Z" />
+            </svg></a>
+        </button>
+      </div>
+    </div>
+    <div class="right_part">
+      <div class="content_wrap">
+
+        <div class="policy">
+          <label>{{ "consultation_type" | translate }} :</label>
+          <div class="form_field_wrapper">
+            <mat-form-field appearance="fill">
+              <mat-select [(ngModel)]="consulation_filter" (selectionChange)="handleConsulationType($event.value)">
+                <mat-option value="">{{ "all" | translate }}</mat-option>
+                <mat-option value="ONLINE">{{ "online" | translate }}</mat-option>
+                <mat-option value="HOME_VISIT">{{ "home_visit" | translate }}</mat-option>
+                <mat-option value="FACE_TO_FACE">{{ "face_to_face" | translate }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="policy">
+          <label>{{ "status" | translate }}:</label>
+          <div class="form_field_wrapper">
+            <mat-form-field appearance="fill">
+              <mat-select [(ngModel)]="appointment_filter" (selectionChange)="handleAppointmentType($event.value)">
+                <mat-option value="ALL">{{ "all" | translate }}</mat-option>
+                <mat-option value="NEW">{{ "new" | translate }}</mat-option>
+                <mat-option value="TODAY">{{ "today" | translate }}</mat-option>
+                <mat-option value="UPCOMING">{{ "upcoming" | translate }}</mat-option>
+                <mat-option value="PAST">{{ "past" | translate }}</mat-option>
+                <mat-option value="REJECTED">{{ "cancelled" | translate }}</mat-option>
+                <mat-option value="MISSED">{{ "missed" | translate }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>       
+      </div>
+    </div>   
+
+  </div>
+
+  <!----MAIN CALENDER------>
+
+  <div class="bottom_bar">
+    <div class="calender_section">
+      <div class='app-calendar calender-correect'>
+
+        <div class="calender_top">
+          <div class="left_part">
+            <div class="calender_date">
+              <h2>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h2>
+            </div>
+          </div>
+          <div class="right_part">
+            <div class="btn-group calender_view">
+              <div class="btn btn-primary" (click)="setView(CalendarView.Month)"
+                [class.active]="view === CalendarView.Month">
+                {{ "month" | translate }}
+              </div>
+              <div class="btn btn-primary" (click)="setView(CalendarView.Week)"
+                [class.active]="view === CalendarView.Week">
+                {{ "week" | translate }}
+              </div>
+              <div class="btn btn-primary" (click)="setView(CalendarView.Day)"
+                [class.active]="view === CalendarView.Day">
+                {{ "day" | translate }}
+              </div>
+            </div>
+
+            <div class="calender_nav">
+              <div class="btn-group">
+                <mat-icon mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+                  (viewDateChange)="closeOpenMonthViewDay($event)">arrow_back_ios</mat-icon>
+                <mat-icon mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                  (viewDateChange)="closeOpenMonthViewDay($event)">arrow_forward_ios</mat-icon>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div *ngIf="events | async; let events">
+          <div [ngSwitch]="view">
+
+
+            <context-menu #basicMenu>
+              
+              <ng-template  contextMenuItem let-item
+                (execute)="addEvent($event,'2')">
+                {{'View Appointment'|translate}}
+              </ng-template>
+
+              <ng-template contextMenuItem  contextMenuItem let-item
+                (execute)="addEvent($event,'3')">
+                <span> {{'Reschedule'|translate}}</span>
+              </ng-template>
+
+              <ng-template contextMenuItem contextMenuItem let-item
+                (execute)="addEvent($event,'4')">
+                {{'Cancel Appointment'|translate}}
+              </ng-template>
+
+              
+
+              <ng-template contextMenuItem contextMenuItem let-item
+                (execute)="addEvent($event,'6')">
+                {{'Set Remainders'|translate}}
+              </ng-template>
+            </context-menu>            
+
+            <mwl-calendar-month-view [cellTemplate]="monthViewTemplate" *ngSwitchCase="CalendarView.Month"
+              [refresh]="refresh" [viewDate]="viewDate" [events]="events" [activeDayIsOpen]="activeDayIsOpen"
+              (eventTimesChanged)="eventTimesChanged($event)" (eventClicked)="eventClicked($event.event)"
+              (beforeViewRender)="beforeMonthViewRender($event)">
+            </mwl-calendar-month-view>
+            <mwl-calendar-week-view  *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events"
+              [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+              (eventTimesChanged)="eventTimesChanged($event)">
+            </mwl-calendar-week-view>
+            <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events"
+              [refresh]="refresh" (eventClicked)="handleEvent('Clicked', $event.event)"
+              (eventTimesChanged)="eventTimesChanged($event)">
+            </mwl-calendar-day-view>
+          </div>
+        </div>   
+
+
+        <ng-template #monthViewTemplate let-day="day">
+
+          <div [ngClass]="{'is-available-cell-re': isBoolingDateAvailable(day.date)}">
+            <div class="custom-month-evnts-box" *ngIf="day.events && day.events.length >0">              
+              <span class="month-day-num">{{toDateString(day.date)}}</span>
+              <div class="calendar-data-wrap">
+                <div *ngFor=" let e of day.events; let i = index;">
+  
+                  <div>
+                    <span [tooltip]="monthEvntsToolTip(e.title)" tooltip-class="month-title-tip-view" content-type="html"
+                      placement="top" class="  cal-day-badge month-slots-custom" [ngClass]="getBgClass(i)">
+                      <span *ngFor="let a of e.actions">
+                        <span (click)=monthViewActionCliked(a,e) [innerHtml]="a.label"></span>
+                      </span>
+  
+                      <span (click)="onContextMenu($event,e)" class="month-event-txt-s crsr-ptr">
+                        {{e.title}}
+                      </span>
+                    </span>                   
+                  </div>                  
+                </div>
+              </div>
+            </div>
+            <div class="custom-month-evnts-box" *ngIf="day.events &&  day.events.length ==0">
+              <span class="month-day-num">{{toDateString(day.date)}}</span>
+            </div>
+          </div>
+        </ng-template>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<ng-template #openDayEventsTemplate>
+  <ul class="example-list">
+    <li>{{ "item" | translate }} 1</li>
+    <li>{{ "item" | translate }} 2</li>
+    <li>{{ "item" | translate }} 3</li>
+  </ul>
+</ng-template>
+
+
+<div class="create_notification">
+  <ng-template #cancelappointmentcontent let-modal>
+    <div class="custome_modal notification_manage">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ "cancel_appointment" | translate }}</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form_field_wrapper">
+                <label>Cancellation Reason</label>
+                <mat-form-field appearance="fill">
+                  <textarea type="text" [(ngModel)]="resonText" [ngModelOptions]="{standalone: true}"
+                    matInput></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="primary_btn">
+          <button type="button" class="btn btn-secondary">Back</button>
+          <button type="button" class="btn btn-primary" (click)="openVerticallyCentereddetale(addsecondsubsriber)">
+            {{ "cancel_appointment" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #addsecondsubsriber let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img class="img-fluid" src="../../../../assets/img/delete.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "want_to_cancel_this_appointment" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="cancelAppointment()">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

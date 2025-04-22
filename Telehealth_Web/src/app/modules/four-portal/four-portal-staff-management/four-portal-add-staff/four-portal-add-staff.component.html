@@ -1,0 +1,302 @@
+<div class="add_staff dashboard_main_content staff_profile_block login_time">
+  <div class="main_title">{{"add_staff" | translate}}</div>
+  <form [formGroup]="addStaff" (ngSubmit)="onSubmit()">
+    <div class="user_image_upload">
+      <input class="ng-hide user_upload_input" (change)="onGroupIconChange($event)" accept="image/*" id="input-file-id"
+        type="file" />
+      <div class="user_upload_block">
+        <span class="user_upload_wrapper">
+          <span class="user_upload_icon">
+            <img src="{{
+                    staff_profile ? staff_profile : '/assets/img/create_profile.png'
+                  }}" />
+            <span class="quick_view" *ngIf="staff_profile ? true : false">
+              <mat-icon class="closeicon" (click)="removeSelectpic()">close</mat-icon>
+            </span>
+          </span>
+        </span>
+
+        <span class="edit_upload_wrapper">
+          <span class="edit_upload_icon"><img src="../../../assets/img/edit_profile.svg" /></span>
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{ "date_of_joined" | translate }}</label>
+
+          <mat-form-field class="example-full-width" appearance="fill">
+            <input matInput formControlName="doj" [matDatepicker]="picker1" (click)="picker1.open()" readonly/>
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"first_name" | translate}}<span style="color: red"> *</span></label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput placeholder='{{"enter_first_name" | translate}}' formControlName="first_name" />
+          </mat-form-field>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['first_name'].errors?.['required']">
+            {{"first_name_is_required" | translate}}*
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"first_name_arabic" | translate}}<span style="color: red"> *</span></label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput placeholder='{{"enter_first_name" | translate}}'
+              formControlName="first_name_arabic" />
+          </mat-form-field>
+          <span class="text-danger"
+            *ngIf="isSubmitted && addStaffFormControl['first_name_arabic'].errors?.['required']">
+            {{"first_name_is_required" | translate}}*
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"middle_name" | translate}}</label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput placeholder='{{"enter_middle_name" | translate}}'
+              formControlName="middle_name" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"middle_name_arabic" | translate}}</label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput placeholder='{{"enter_middle_name" | translate}}'
+              formControlName="middle_name_arabic" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"last_name" | translate}}<span style="color: red"> *</span></label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput placeholder='{{"enter_last_name" | translate}}' formControlName="last_name" />
+          </mat-form-field>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['last_name'].errors?.['required']">
+            {{"last_name_is_required" | translate}}*
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"last_name_arabic" | translate}}<span style="color: red"> *</span></label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput placeholder='{{"enter_last_name" | translate}}'
+              formControlName="last_name_arabic" />
+          </mat-form-field>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['last_name_arabic'].errors?.['required']">
+            {{"last_name_is_required" | translate}}*
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"date_of_birth" | translate}}<span class="danger">*</span> </label>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <input matInput [max]="maxDate" [matDatepicker]="picker" placeholder='{{"date_of_birth" | translate}}'
+              formControlName="dob" (input)="formatDate($event)" (click)="picker.open()" readonly />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['dob'].errors?.['required']">
+            {{"date_of_birth_is_required" | translate}}*
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper speciality-select-block">
+          <label>{{"Spoken Language" | translate}}</label>
+          <select2 class="test" [overlay]="overlay" multiple="multiple" [limitSelection]="0" [minCountForSearch]="0"
+            [data]="spokenLanguages" formControlName="language" (update)="onSelectionChange($event)">
+          </select2>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-8 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"address" | translate}}<span class="danger">*</span></label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput #address placeholder="Enter address" formControlName="address" />
+          </mat-form-field>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['address'].errors?.['required']">
+            {{"address_is_required" | translate}}*
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"neighborhood" | translate}}</label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput formControlName="neighborhood" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"country" | translate}}</label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput  formControlName="country" />
+          </mat-form-field>
+       
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"Region" | translate}}</label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput formControlName="region" />
+          </mat-form-field>
+        
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"province" | translate}}</label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput formControlName="province" />
+          </mat-form-field>
+      
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"department" | translate}}</label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput formControlName="department" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"City" | translate}}</label>
+
+          <mat-form-field appearance="fill">
+            <input type="text" matInput formControlName="city" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"village" | translate}}</label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput formControlName="village" />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"pincode" | translate}}</label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput formControlName="pincode"  minlength="5"
+            maxlength="6"/>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"phone_number" | translate}}<span class="danger">*</span></label>
+          <mat-form-field appearance="fill">
+            <input type="mobile" matInput #countryPhone (focus)="onFocus()" placeholder="Enter phone number"
+              (input)="onMobileInput1($event)" maxlength="11" placeholder="XX-XXX-XXXX" formControlName="mobile" />
+          </mat-form-field>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['mobile'].errors?.['required']">
+            {{"enter_mobile" | translate}}
+          </span>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['mobile'].errors?.['pattern']">
+            {{"enter_10_digit_number" | translate}}
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"email" | translate}}<span class="danger">*</span></label>
+          <mat-form-field appearance="fill">
+            <input type="text" matInput placeholder="Enter email" formControlName="email" />
+          </mat-form-field>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['email'].errors?.['required']">
+            {{"enter_email" | translate}}
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"role" | translate}}<span class="danger">*</span></label>
+          <select2 [placeholder]="('select_role' | translate)" [overlay]="overlay" [limitSelection]="0"
+            [minCountForSearch]="1" [data]="RoleList" formControlName="role">
+          </select2>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['role'].errors?.['required']">
+            {{"select_role" | translate}}*
+          </span>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"password" | translate}}<span class="danger">*</span></label>
+          <mat-form-field appearance="fill" class="password-input-block">
+            <input type="password" matInput placeholder='{{"password" | translate}}' formControlName="password"
+              [type]="hide1 ? 'password' : 'text'" />
+            <a class="password-view" (click)="hide1 = !hide1">
+              <mat-icon>{{
+                hide1 ? "visibility_off" : "visibility"
+                }}</mat-icon>
+            </a>
+          </mat-form-field>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['password'].errors?.['required']">
+            {{"enter_password" | translate}}
+          </span>
+          <span class="text-danger"
+            *ngIf="addStaffFormControl['password'].invalid && (addStaffFormControl['password'].dirty || addStaffFormControl['password'].touched)">
+            {{"password_need" | translate}}
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-4 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"confirm_password" | translate}}<span class="danger">*</span></label>
+          <mat-form-field appearance="fill" class="password-input-block">
+            <input type="password" matInput placeholder='{{"confirm_password" | translate}}'
+              formControlName="confirmPassword" [type]="hide2 ? 'password' : 'text'" />
+            <a class="password-view" (click)="hide2 = !hide2">
+              <mat-icon>{{
+                hide2 ? "visibility_off" : "visibility"
+                }}</mat-icon>
+            </a>
+          </mat-form-field>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['confirmPassword'].errors?.['required']">
+            {{"enter_confirm_password" | translate}}
+          </span>
+          <span class="text-danger" *ngIf="isSubmitted && addStaffFormControl['confirmPassword'].errors?.['matching']">
+            {{"confim_password_does_not_match" | translate}}
+          </span>
+          <span class="text-success" *ngIf="!addStaffFormControl['confirmPassword'].errors">
+            {{"password_matched" | translate}}
+          </span>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-12 mb-3">
+        <div class="form_field_wrapper">
+          <label>{{"about_staff" | translate}}</label>
+          <mat-form-field appearance="fill">
+            <textarea matInput formControlName="aboutStaff" placeholder="Describe Yourself*"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="primary_btn mb-3">
+      <button type="button" class="btn btn-secondary" (click)="routeBack()">Cancel</button>
+      <button type="submit" class="btn btn-primary">{{"add_staff" | translate}}</button>
+    </div>
+  </form>
+</div>

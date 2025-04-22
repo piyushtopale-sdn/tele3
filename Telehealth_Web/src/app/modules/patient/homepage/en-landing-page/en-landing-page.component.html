@@ -1,0 +1,549 @@
+<div class="landing-pg-en">
+    <div class="home-bg">
+      <div class="container">
+        <div class="d-flex justify-content-end lang-select">
+          <app-language (langChange)="onLangChange($event)"></app-language>
+        </div>
+      </div>
+      <header>
+        <div class="container">
+          <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <div class="navbar-brand me-auto"><img src="../../../../../assets/img/landingpage-images/test-logo.png" alt="logo"></div>
+              <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button> -->
+              <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                  <a class="nav-link active" aria-current="page" >Home</a>
+                  <a class="nav-link" (click)="scrollToDiv('aboutUs')" >About test</a>
+                  <a class="nav-link" (click)="scrollToDiv('services')">Services</a>
+                  <a class="nav-link" (click)="scrollToDiv('businessSolution')">Business Solution</a>
+                </div>
+              </div>
+              <div class="header-btns d-flex ms-auto gap-2">
+                <button type="button" class=" btn  btn-blue contact-btn" (click)="openContactModal()">Contact Us</button>
+                <div class="dropdown landing-dropdown">
+                  <a class="btn btn-blue dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Login as
+                  </a>
+              
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item"  (click)="sendOnpath('individual-doctor')">Doctor</a></li>
+                    <li><a class="dropdown-item" (click)="sendOnpathFourPortal('Laboratory')">Laboratory</a></li>
+                    <li><a class="dropdown-item" (click)="sendOnpathFourPortal('Radiology')">Radiology</a></li>
+                    <li><a class="dropdown-item" (click)="sendOnpath('pharmacy')">Pharmacy</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </header>
+      <div class="home-blk">
+        <div class="d-flex justify-content-center">
+          <div class="home-text text-center">
+            <h1><span> Comprehensive Care </span><br> For All the Family</h1>
+            <p>A modern and integrated health experience for you and your family, guided by specialized consultants… now
+              within your hands.
+            </p>
+          </div>
+        </div>
+        <div class="appstore-btns d-flex justify-content-center">
+          <!-- <button type="button" class="btn btn-white">
+            <div class="d-flex align-items-center gap-2"><img src="../../../../../assets/img/landingpage-images/apple.png" alt="">
+              <p class="m-0"><span>Download on the</span>App Store</p>
+            </div>
+          </button>
+          <button type="button" class="btn btn-white">
+            <div class="d-flex align-items-center gap-2"><img src="../../../../../assets/img/landingpage-images/playstore.svg" alt="">
+              <p class="m-0"><span>GET IT ON</span>Google Play</p>
+            </div>
+          </button> -->
+          <a href="https://apps.apple.com/in/app/test-%D8%A8%D8%A7%D9%83%D9%84%D9%8A/id6738563392" target="_blank" rel="noopener noreferrer">
+            <button type="button" class="btn btn-white">
+              <div class="d-flex align-items-center gap-2">
+                <img src="../../../../../assets/img/landingpage-images/apple.png" alt="App Store" width="30">
+                <p class="m-0"><span>Download on the</span> App Store</p>
+              </div>
+            </button>
+          </a>
+          
+          <a href="https://play.google.com/store/apps/details?id=com.test.app" target="_blank" rel="noopener noreferrer">
+            <button type="button" class="btn btn-white">
+              <div class="d-flex align-items-center gap-2">
+                <img src="../../../../../assets/img/landingpage-images/playstore.svg" alt="Google Play" width="30">
+                <p class="m-0"><span>GET IT ON</span> Google Play</p>
+              </div>
+            </button>
+          </a>
+        </div>
+        <div class="siting-img d-flex justify-content-center">
+          <img src="../../../../../assets/img/landingpage-images/sofa-man-siting.png" alt="">
+        </div>
+      </div>
+    </div>
+  
+    <section class="services">
+      <div class="container">
+        <h2 class="service-title">An innovative app that brings medical consultations to everyone’s reach, seamlessly and
+          securely.
+          We provide Preventive, Acute, and Chronic care solutions to match your Family’s needs, anytime
+          and anywhere.</h2>
+  
+      </div>
+      <div class="services-container">
+        <div class="container">
+          <div class="row services-wraper">
+            <div class="col-md-4">
+              <div class="service-box mb-3">
+                <img src="../../../../../assets/img/landingpage-images/healthcare.png" alt="">
+                <h3 class="text-left">Preventive Healthcare</h3>
+                <p class="text-left">We ensure your family’s privacy with a one dedicated consultant for you and your
+                  family
+                  who oversees your
+                  care and secures your medical records with the highest confidentiality and easiness.</p>
+              </div>
+            </div>            
+            <div class="col-md-4">
+              <div class="service-box mb-3">
+                <img src="../../../../../assets/img/landingpage-images/care.png" alt="">
+                <h3 class="text-left">Continues Care</h3>
+                <p class="text-left">You won’t feel alone on your journey with test. We provide consistent support and
+                  care, that accompanies you in every step of the way to achieve optimal health outcomes.</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="service-box mb-3">
+                <img src="../../../../../assets/img/landingpage-images/privacy.png" alt="">
+                <h3 class="text-left">Family Privacy</h3>
+                <p class="text-left">We ensure your family’s privacy with a one dedicated consultant for you and your
+                  family
+                  who oversees your
+                  care and secures your medical records with the highest confidentiality and easiness.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section  id="aboutUs"  class="About">
+      <div class="container">
+        <h2 class="text-center about-title">About test</h2>
+        <h4 class="text-center about-subtitle">An app that takes the concept of health prevention to new dimensions… with
+          preventive
+          solutions that combine secure technology with continuous care, that connects you to a
+          dedicated consultant who focuses on your health and your family’s, delivering a comfortable
+          and seamless online medical experience.</h4>
+  
+        <div class="about-content d-flex justify-content-center">
+          <div class="about-one d-flex flex-column align-items-center">
+            <div class="about-points point-gap">
+              <div class="point-img d-flex justify-content-end">
+                <img src="../../../../../assets/img/landingpage-images/prevention.png" alt="">
+              </div>
+              <h3 class=" mt-3 text-end">Assured Prevention</h3>
+              <p class="text-end">Accurate preventive follow-up, that
+                keeps you and your family always
+                reassured through clear plans and
+                guidance.
+              </p>
+            </div>
+            <div class="about-points">
+              <div class="point-img d-flex justify-content-end">
+                <img src="../../../../../assets/img/landingpage-images/tracking.png" alt="">
+              </div>
+              <h3 class="mt-3 text-end">Health Tracking</h3>
+              <p class="text-end">Your medications and health
+                appointments are scheduled and
+                directly linked to your phone and
+                smartwatch, keeping you always on
+                track with timely reminders.
+              </p>
+            </div>
+          </div>
+          <div class="about-two d-flex flex-column align-items-center">
+            <div class="img-about">
+              <img src="../../../../../assets/img/landingpage-images/about-img.png" alt="">
+            </div>
+            <div class="about-points">
+              <div class="point-img d-flex justify-content-center">
+                <img src="../../../../../assets/img/landingpage-images/records.png" alt="">
+              </div>
+              <h3 class="mt-3 text-center">Secure Records</h3>
+              <p class="text-center">Your medical records are securely stored
+                digitally, in a clear, organized, and conﬁdential
+                way, that is easily accessible to you.
+                guidance.
+              </p>
+            </div>
+          </div>
+          <div class="about-three d-flex flex-column align-items-center">
+            <div class="about-points point-gap">
+              <div class="point-img d-flex justify-content-start">
+                <img src="../../../../../assets/img/landingpage-images/by-your-side.png" alt="">
+              </div>
+              <h3 class="mt-3">By Your Side</h3>
+              <p>A consultant accompanies you 24/7 to
+                serve you in everything related to your
+                health and meet your medical needs.
+              </p>
+            </div>
+            <div class="about-points">
+              <div class="point-img d-flex justify-content-start">
+                <img src="../../../../../assets/img/landingpage-images/family-care.png" alt="">
+              </div>
+              <h3 class="mt-3">Family Care</h3>
+              <p>Personalized care with a dedicated
+                consultant for you and your family,
+                manages the family’s health and
+                medical records professionally.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section class="subscription-details">
+      <div class="container">
+        <div class="subscription-content">
+          <img src="../../../../../assets/img/landingpage-images/mobile.png" alt="">
+          <h2>Subscription Details <br> in test’s App</h2>
+  
+          <div class="subscription-points">
+            <p><span>Monthly Consultation with a Family Consultant: </span>One dedicated
+              monthly appointment with your doctor to personally follow up on
+              your health status.</p>
+  
+            <p><span>A Dedicated Doctor for Every Family: </span>A specialized doctor assigned
+              to provide precise follow-up for all family members and ensure
+              comprehensive care.</p>
+  
+            <p><span>Comprehensive Health Management: </span>A digital secure medical
+              record that includes your family’s health data, paired with smart
+              reminders for appointments and medications, synced with your
+              phone and smartwatch.</p>
+  
+            <p><span>Continuous Preventive Care: </span>Health tips and preventive plans that
+              aims to enhance your well-being and prevent you from probable
+              health issues through continuous care.</p>
+  
+          </div>
+        </div>
+        <div class="subcost-img">
+          <div class="cost-text">
+            <h2>Subscription Cost: <br>
+              250 SAR permonth</h2>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="medical-services" id= "services">
+      <div class="container">
+        <div class="medical-content">
+          <h2 class="text-center">Medical Services</h2>
+          <p class="medical-subtitle text-center">Our Comprehensive Service… Combines Technology with Reassurance <br>
+            Every step is now simpler… than ever before</p>
+          <div class="row m-0">
+            <div class="col-lg-4">
+              <div class="test-img">
+                <img src="../../../../../assets/img/landingpage-images/madical-img.svg" alt="">
+              </div>
+            </div>
+            <div class="col-lg-8">
+              <div class="med-services-blk">
+                <div class="med-points med-point-one">
+                  <div class="bg-box">
+                    <img src="../../../../../assets/img/landingpage-images/med-points-box.svg" alt="">
+                  </div>
+                  <div class="heart">
+                    <img src="../../../../../assets/img/landingpage-images/white-heart.svg" alt="">
+                  </div>
+                  <div class="point-img">
+                    <img src="../../../../../assets/img/landingpage-images/med-one.svg" alt="">
+                  </div>
+                  <div class="med-point-content">
+                    <h3>Comprehensive Health Control</h3>
+                    <p>From regular checkups with scheduled appointments to detailed health reports, we provide a thorough
+                      view of your health progress to help its improvement.</p>
+                  </div>
+                </div>
+                <div class="med-points med-point-two">
+                  <div class="bg-box">
+                    <img src="../../../../../assets/img/landingpage-images/med-points-box.svg" alt="">
+                  </div>
+                  <div class="heart">
+                    <img src="../../../../../assets/img/landingpage-images/white-heart.svg" alt="">
+                  </div>
+                  <div class="point-img">
+                    <img src="../../../../../assets/img/landingpage-images/med-two.svg" alt="">
+                  </div>
+                  <div class="med-point-content">
+                    <h3>Specialized Services</h3>
+                    <p>Personalized consultations to support your mental health in a private and comfortable environment,
+                      along with managing plans for chronic conditions.</p>
+                  </div>
+                </div>
+   
+                <div class="med-points med-point-three">
+                  <div class="bg-box">
+                    <img src="../../../../../assets/img/landingpage-images/med-points-box.svg" alt="">
+                  </div>
+                  <div class="heart">
+                    <img src="../../../../../assets/img/landingpage-images/white-heart.svg" alt="">
+                  </div>
+                  <div class="point-img">
+                    <img src="../../../../../assets/img/landingpage-images/med-three.svg" alt="">
+                  </div>
+                  <div class="med-point-content">
+                    <h3>Online Medical Consultations</h3>
+                    <p>Consultations with certified specialists through video calls or chat directly via the app, and we
+                      ensure an easy and direct access to the trusted consultants.</p>
+                  </div>
+                </div>
+   
+                <div class="med-points med-point-four">
+                  <div class="bg-box">
+                    <img src="../../../../../assets/img/landingpage-images/med-points-box.svg" alt="">
+                  </div>
+                  <div class="heart">
+                    <img src="../../../../../assets/img/landingpage-images/white-heart.svg" alt="">
+                  </div>
+                  <div class="point-img">
+                    <img src="../../../../../assets/img/landingpage-images/med-four.svg" alt="">
+                  </div>
+                  <div class="med-point-content">
+                    <h3>Digital Prescriptions</h3>
+                    <p>Your prescription with just a click, and you can send it directly to your preferred pharmacy, with
+                      managing your medication reminders within the app.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+   
+    <section class="business-solutions" id="businessSolution">
+      <div class="container">
+        <div class="business-content">
+          <h2 class="text-center">Business Solutions</h2>
+          <h3 class="text-center mb-4">A partnership to advance preventive health services</h3>
+          <p class="business-info text-center">Combining technology with healthcare solutions to open new horizons for
+            collaboration with doctors, pharmacies, and laboratories, connecting them seamlessly with users. To advance
+            the preventive healthcare experience by offering integrated solutions that meet user needs.</p>
+   
+          <p class="text-grey text-center"><span>Be a Partner Now: </span>Please fill out the form below, and we will
+            contact you as soon as possible.</p>
+            <!--[[7 feb Landing Page Bussiness Form Data Send in Payload Task ]]-->
+   
+          <form [formGroup]="bussinessForm" (ngSubmit)="submitForm()">          
+            <div class="row">
+              <div class="col-12 form-group">
+                <label>Full Name<span class="danger">*</span></label>
+                <input type="text" class="form-control" id="fullName" placeholder="Your full name" formControlName="fullName" />
+                <div *ngIf="bussinessForm.get('fullName').touched && bussinessForm.get('fullName').invalid" class="validation-message">
+                  <small *ngIf="bussinessForm.get('fullName').hasError('required')">Full Name is required.</small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <label for="email">Email Address<span class="danger">*</span></label>
+                <input type="email" class="form-control" id="email" placeholder="Your@email.com" formControlName="email" />
+                <div *ngIf="bussinessForm.get('email').touched && bussinessForm.get('email').invalid" class="validation-message">
+                  <small *ngIf="bussinessForm.get('email').hasError('required')">Email is required.</small>
+                  <small *ngIf="bussinessForm.get('email').hasError('email')">Please enter a valid email address.</small>
+                </div>
+              </div>
+              <div class="col-md-6 form-group">
+                <label for="phone" class="form-label">Phone Number<span class="danger">*</span></label>
+                <input 
+                  #phone 
+                  type="tel" 
+                  class="form-control" 
+                  id="phone" 
+                  placeholder="xxx xxxx xxx" 
+                  formControlName="phone" 
+                  (focus)="onFocus()"
+                  (input)="onMobileInput($event)"
+                  ng2TelInput
+                  maxlength="11"  
+                />
+                <div *ngIf="bussinessForm.get('phone').touched && bussinessForm.get('phone').invalid" class="validation-message">
+                  <small *ngIf="bussinessForm.get('phone').hasError('required')">Phone number is required.</small>
+                  <small *ngIf="bussinessForm.get('phone').hasError('pattern')">Please enter a valid phone number.</small>
+                </div>
+              </div>  
+            </div>
+            <div class="row">
+              <div class="col-12 form-group">
+                <label for="subject">Subject<span class="danger">*</span></label>
+                <input type="text" class="form-control" id="subject" placeholder="Enter the subject" formControlName="subject" />
+                <div *ngIf="bussinessForm.get('subject').touched && bussinessForm.get('subject').invalid" class="validation-message">
+                  <small *ngIf="bussinessForm.get('subject').hasError('required')">Subject is required.</small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 form-group">
+                <label for="message">Your Message<span class="danger">*</span></label>
+                <textarea class="form-control" id="message" rows="4" placeholder="Please write your inquiry or suggestion" formControlName="message"></textarea>
+                <div *ngIf="bussinessForm.get('message').touched && bussinessForm.get('message').invalid" class="validation-message">
+                  <small *ngIf="bussinessForm.get('message').hasError('required')">Message is required.</small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <button type="submit" class="btn btn-blue w-100" [disabled]="bussinessForm.invalid">Send</button>
+              </div>
+            </div>
+          </form>
+    
+            
+        </div>
+      </div>
+    </section>
+
+    
+  
+    <section class="faq">
+      <div class="container">
+        <div class="faq-blk">
+          <h2 class="text-center">Frequently Asked Questions</h2>
+          <div class="faq-content d-flex flex-column align-items-center">
+            <div class="accordion w-100" id="accordionExample">
+              <div class="accordion" id="accordionExample">
+                <div class="accordion-item" *ngFor="let list of showData; let i = index">
+                  <!-- Iterate over the faqs array for each item -->
+                  <div *ngFor="let faq of list.faqs; let j = index">
+                    <h2 class="accordion-header mb-0 p-2">
+                      <button
+                        class="accordion-button"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        [attr.data-bs-target]="'#collapse' + i + '-' + j"
+                        aria-expanded="true"
+                        [attr.aria-controls]="'collapse' + i + '-' + j"
+                      >
+                        {{ faq.question }} <!-- Display the question -->
+                      </button>
+                    </h2>
+                    <div
+                      [id]="'collapse' + i + '-' + j"
+                      class="accordion-collapse collapse"
+                      [attr.data-bs-parent]="'#accordionExample'"
+                    >
+                      <div class="accordion-body">
+                        <div [innerHTML]="faq.answer"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <button type="button" class="btn  btn-blue">See more</button> -->
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <footer>
+      <div class="container">
+        <div class="footer-blk">
+          <div class="footer-links d-flex flex-wrap">
+            <div class="link-section">
+              <div class="footer-logo">
+                <img src="../../../../../assets/img/landingpage-images/footer-white-logo.png" alt="">
+              </div>
+            </div>
+            <div class="link-section">
+              <p class="link-heading">General Links:</p>
+              <div class="links">
+                <p><a (click)="openContactModal()">Contact Us</a></p>
+                <p><a (click)="openTermsPolicyModal()">Privacy Policy and Terms of Service</a></p>
+                <p><a>Affiliate Marketing</a></p>
+              </div>
+            </div>
+            <div class="link-section">
+              <p class="link-heading">test Services:</p>
+              <div class="links">
+                <p><a>test for Individuals</a></p>
+                <p><a>test for Businesses</a></p>
+              </div>
+            </div>
+            <div class="link-section">
+              <p class="link-heading">For Inquiries</p>
+              <div class="links">
+                <p><a>info@testapp.com</a></p>
+              </div>
+              <div class="footer-apps d-flex gap-3">
+                <div class="insta">
+                  <a><img src="../../../../../assets/img/landingpage-images/insta-icon.png" alt=""></a>
+                </div>
+                <div class="linkedin">
+                  <a><img src="../../../../../assets/img/landingpage-images/linkedin.svg" alt=""></a>
+                </div>
+              </div>
+  
+              <p class="link-heading news-blk">Newsletter</p>
+              <div class="mail-input d-flex mb-3 mt-2 gap-3">
+                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Email Address">
+                <button type="button" class="btn btn-opacity">
+                  <p>Subscribe</p>
+                </button>
+              </div>
+              <p class="join-maillist">Join our mailing list and receive the latest offers.</p>
+            </div>
+          </div>
+          <div class="footer-info w-100 d-flex">
+            <div class="info-left">
+              <h2>test</h2>
+              <p>test is an application that allows you to easily and
+                securely access specialized medical consultations,
+                offering comprehensive healthcare services tailored to
+                the needs of individuals and families. </p>
+            </div>
+            <div class="info-ryt d-flex justify-content-end align-items-end">
+              <div class="d-flex flex-wrap align-items-center">
+                <a>Cookies Policy</a>
+                <div class="line"></div><a>Site Map</a>
+                <div class="line"></div><a (click)="openTermsPolicyModal()">Privacy Policy and Terms of Service</a>
+                <div class="line"></div><a>© 2025 test. All rights reserved</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  
+  </div>
+
+
+  <ng-template #contactModal let-modal>
+    <div class="custom_modal">   
+      <div class="modal-header">
+        <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()"></button>
+      </div>      
+      <div class="modal-body">
+        <app-contactus></app-contactus>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #terms_policy let-modal>
+    <div class="custom_modal">   
+      <div class="modal-header">
+        <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()"></button>
+      </div>      
+      <div class="modal-body">
+        <app-privacycondition [hideLanguage]="hideLanguage" ></app-privacycondition>
+      </div>
+    </div>
+  </ng-template>

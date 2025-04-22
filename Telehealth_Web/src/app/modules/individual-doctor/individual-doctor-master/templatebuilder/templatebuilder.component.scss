@@ -1,0 +1,98 @@
+@import '../../../../../assets/css/variable/variable';
+.material-icons{
+    cursor: pointer;
+}
+
+.template_builder{
+    .main_title{
+        margin: 0 0 30px;
+    }
+    .top_bar{
+        margin: 0 0 35px;
+        .left_part{
+            display: flex;
+            .search_bar{
+                .input-group{
+                    background: #F6F8FC;
+                    border-radius: 6px;
+                    .form-control{
+                        border: none;
+                        background-color: transparent;
+                        padding: 12px 0 12px 15px;
+                        width: 350px;
+                        &::placeholder{
+                            font-weight: 400;
+                            font-size: $font_small;
+                            line-height: 24px;
+                        }
+                        &:focus{
+                            box-shadow: none;
+                        }
+                    }
+                    .btn{
+                        padding: 0;
+                        border: none;
+                        .mat-icon{
+                            line-height: 50px;
+                            height: 50px;
+                            width: 50px;
+                            color: #9B9B9B;
+                            font-size: 24px;
+                        }
+                    }
+                }
+            }
+        }
+        .right_part{
+            .primary_btn{
+                .btn {
+                        background: $white_color;
+                        color: $bodycolor;
+                        border: 1px solid rgba(11, 73, 119, 0.15);
+                        padding: 8px 12px;
+                        .btn_svg{
+                            border-radius: 9px;
+                            background-color: $bodycolor;
+                            height: 33px;
+                            width: 33px;
+                            margin-right: 15px;
+                            svg{
+                                fill: $white_color;
+                            }
+                        }
+                        &:hover{
+                            background: $bodycolor;
+                            color: $white_color;
+                            .btn_svg{
+                                background-color: $white_color;
+                                svg{
+                                    fill: $bodycolor;
+                                }
+                            }
+                        }
+                    }
+            }
+        }
+    }
+}
+
+@media screen and (max-width:$desktop) {
+    .template_builder .top_bar .left_part .search_bar .input-group .form-control{
+        width: 270px;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .template_builder .top_bar .left_part{
+        flex-direction: row;
+    }
+}
+@media screen and (max-width:$medium_phone) {
+    .template_builder .top_bar .left_part{
+        flex-direction: column;
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .template_builder .top_bar .left_part .search_bar .input-group .form-control {
+        width: 210px;
+    }
+}

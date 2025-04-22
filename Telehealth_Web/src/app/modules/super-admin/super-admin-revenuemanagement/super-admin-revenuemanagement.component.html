@@ -1,0 +1,430 @@
+<div class="revenue_graph dashboard_main_content">
+  <div class="top_bar common_space">
+    <div class="content_wrap">
+      <!-- <div class="policy">
+        <div class="form_field_wrapper">
+          <mat-form-field appearance="fill">
+            <mat-select placeholder="{{ 'all' | translate }}">
+              <mat-option value="option1">{{ "option" | translate }} 1</mat-option>
+              <mat-option value="option2">{{ "option" | translate }} 2</mat-option>
+              <mat-option value="option3">{{ "option" | translate }} 3</mat-option>
+              <mat-option value="option3">{{ "option" | translate }} 4</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div> -->
+      <!-- <div class="policy">
+        <div class="form_field_wrapper">
+          <mat-form-field appearance="fill">
+            <mat-select placeholder="{{ 'activity' | translate }}">
+              <mat-option value="option1">{{ "option" | translate }} 1</mat-option>
+              <mat-option value="option2">{{ "option" | translate }} 2</mat-option>
+              <mat-option value="option3">{{ "option" | translate }} 3</mat-option>
+              <mat-option value="option3">{{ "option" | translate }} 4</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div> -->
+      <div class="policy">
+        <div class="form_field_wrapper">
+          <mat-form-field appearance="fill">
+            <mat-select
+              placeholder="{{ 'select_year' | translate }}"
+              [(ngModel)]="selectedYear"
+            >
+              <mat-option
+                (click)="getYear(year)"
+                *ngFor="let year of years"
+                [value]="year"
+                >{{ year }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="policy date">
+        <div class="form_field_wrapper">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <input
+              matInput
+              [matDatepickerFilter]="myFilter"
+              [matDatepicker]="picker1"
+              placeholder="{{ 'start_date' | translate }}"
+              (dateChange)="handleSelectStartDateFilter($event)"
+              [(ngModel)]="startDateFilter"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker1"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="policy date">
+        <div class="form_field_wrapper">
+          <mat-form-field class="example-full-width" appearance="fill">
+            <input
+              matInput
+              [matDatepickerFilter]="myFilter"
+              [matDatepicker]="picker2"
+              placeholder="{{ 'to_date' | translate }}"
+              (dateChange)="handleSelectEndDateFilter($event)"
+              [(ngModel)]="endDateFilter"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker2"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="primary_btn policy">
+        <button type="button" class="btn btn-link" (click)="clearAll()">
+          {{ "clear_all" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="counter_section common_space">
+    <div class="row">
+      <ng-container *ngIf="giveInnerPermission('subscription_commission_amount')">
+      <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="cust_col light_skyblue">
+          <div class="cust_col_inner">
+            <mat-icon class="more">more_horiz</mat-icon>
+            <div class="left">
+              <div class="counter">{{ totalAmount }} CFA</div>
+              <div class="counter_title">
+                {{ "total_subscription_commission_earned_amount" | translate }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/dashboard34.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="giveInnerPermission('view_commission_amount_transaction')">
+      <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="cust_col light_green">
+          <div class="cust_col_inner">
+            <mat-icon class="more">more_horiz</mat-icon>
+            <div class="left">
+              <div class="counter">{{ totalcommisionamount}}  CFA</div>
+              <div class="counter_title">
+                {{ "total_number_comm_transaction_amount" | translate }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/dashboard35.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="giveInnerPermission('subs_transction_amount')">
+      <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="cust_col light_violet">
+          <div class="cust_col_inner">
+            <mat-icon class="more">more_horiz</mat-icon>
+            <div class="left">
+              <div class="counter">
+                {{ totalsubscriptionamount}} CFA
+              </div>
+              <div class="counter_title">
+                {{ "total_number_sub_transaction_amount" | translate }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/dashboard36.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    </div>
+  </div>
+
+  <div class="counter_section common_space">
+    <div class="row">
+      <ng-container *ngIf="giveInnerPermission('total_subs_comm_number')">
+      <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="cust_col light_orange">
+          <div class="cust_col_inner">
+            <mat-icon class="more">more_horiz</mat-icon>
+            <div class="left">
+              <div class="counter">{{ totalnumber }}</div>
+              <div class="counter_title">
+                {{ "total_subscription_comm_number" | translate }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/dashboard37.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="giveInnerPermission('total_subscription_number')">
+      <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="cust_col light_blue">
+          <div class="cust_col_inner">
+            <mat-icon class="more">more_horiz</mat-icon>
+            <div class="left">
+              <div class="counter">{{ totalnumber }}</div>
+              <div class="counter_title">
+                {{ "total_subscription_number" | translate }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/dashboard38.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="giveInnerPermission('total_commis_number')">
+      <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="cust_col light_violet">
+          <div class="cust_col_inner">
+            <mat-icon class="more">more_horiz</mat-icon>
+            <div class="left">
+              <div class="counter">0</div>
+              <!-- As commision hasnot calculated from backend so as of now it is 0 hard coded -->
+              <div class="counter_title">
+                {{ "total_commision_number" | translate }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/dashboard39.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    </div>
+  </div>
+
+  <div class="graph_section common_space">
+    <div class="row">
+      <div class="graph_item col-md-8">
+        <div class="graph_item_inner">
+          <ng-container *ngIf="giveInnerPermission('total_transaction')">
+          <div class="total_transaction common_space">
+            <div class="top_bar">
+              <div class="title_wrap">
+                <div class="main_title">
+                  {{ "total_transaction" | translate }}
+                </div>
+              </div>
+              <div class="content_wrap">
+                <div class="policy">
+                  <label>{{ "select_year" | translate }}</label>
+                  <div class="form_field_wrapper">
+                    <mat-form-field appearance="fill">
+                      <mat-select
+                        placeholder="{{ 'select_year' | translate }}"
+                        [(ngModel)]="graphyear"
+                      >
+                        <mat-option
+                          (click)="getgraphYear(year)"
+                          *ngFor="let year of years"
+                          [value]="year"
+                          >{{ year }}</mat-option
+                        >
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="icons">
+                  <mat-icon  (click)="openVerticallyCenteredclaimlistpopup(barchartpopup)">open_in_full</mat-icon>
+                  <div class="more_action">
+                    <button
+                      class="btn btn-outline-light"
+                      type="button"
+                      id="dropdownMenuButton1"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <ul
+                      class="dropdown-menu"
+                      aria-labelledby="dropdownMenuButton1"
+                    >
+                      <li>
+                        <a class="dropdown-item" href="#">{{
+                          "action" | translate
+                        }}</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">{{
+                          "another_action" | translate
+                        }}</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">{{
+                          "something_else_here" | translate
+                        }}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="amount">
+              <ul>
+                <!-- <li>
+                  <div class="amount_inner">
+                    <div class="ring ring1"></div>
+                    <p>{{ "total_transaction" | translate }}</p>
+                  </div>
+                </li> -->
+                <li>
+                  <div class="amount_inner">
+                    <div class="ring ring2"></div>
+                    <p>{{ "total_commission" | translate }}</p>
+                  </div>
+                </li>
+                <li>
+                  <div class="amount_inner">
+                    <div class="ring ring3"></div>
+                    <p>{{ "total_subscription" | translate }}</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="transaction_barchart">
+              <div class="chart-container">
+                <canvas
+                  baseChart
+                  [data]="transactionbarChartData"
+                  [options]="transactionbarChartOptions"
+                  [plugins]="transactionbarChartPlugins"
+                  [legend]="transactionbarChartLegend"
+                  [type]="'bar'"
+                >
+                </canvas>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        </div>
+      </div>
+      <div class="graph_item col-md-4">
+        <ng-container *ngIf="giveInnerPermission('your_activity')">
+        <div class="activity common_space">
+          <div class="top_bar">
+            <div class="title_wrap">
+              <div class="main_title">{{ "your_activity" | translate }}</div>
+            </div>
+            <div class="content_wrap">
+              <div class="icons">
+                <mat-icon>open_in_full</mat-icon>
+                <div class="more_action">
+                  <button
+                    class="btn btn-outline-light"
+                    type="button"
+                    id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <ul
+                    class="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton1"
+                  >
+                    <li>
+                      <a class="dropdown-item" href="#">{{
+                        "action" | translate
+                      }}</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">{{
+                        "another_action" | translate
+                      }}</a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">{{
+                        "something_else_here" | translate
+                      }}</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity_linechart">
+            <div class="chart-container">
+              <canvas
+                baseChart
+                [type]="'line'"
+                [data]="lineChartData"
+                [options]="lineChartOptions"
+                [legend]="lineChartLegend"
+              >
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--vertical barchart modal-->
+<ng-template #barchartpopup let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "total_transaction" | translate }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="closePopup()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="transaction_barchart">
+        <div class="chart-container">
+          <canvas
+            baseChart
+            [data]="transactionbarChartData"
+            [options]="transactionbarChartOptions"
+            [plugins]="transactionbarChartPlugins"
+            [legend]="transactionbarChartLegend"
+            [type]="'bar'"
+          >
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,28 @@
+.language-here{
+    button{
+        padding: 4px 3px;
+        background: white;
+        border: none;
+        border-radius: 9px;
+        img{
+            width: 30px;
+        }
+    }
+    .dropdown-menu.show {
+        min-width: 46px;
+
+    .language-btn{
+        // border-radius: 43px;
+        // padding: 17px;
+        line-height: 36px;
+        font-weight: 700;
+    
+        @media screen and (max-width: 991px) {
+            padding: 10px;
+        }
+    }
+option {
+    cursor: pointer;
+}
+    }
+}

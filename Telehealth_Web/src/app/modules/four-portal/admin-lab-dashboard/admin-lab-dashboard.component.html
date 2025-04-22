@@ -1,0 +1,279 @@
+<div class="super_admin_dashboard dashboard_main_content">
+  <div class="top_bar up_bar common_space">
+    <div class="content_wrap">
+      <div class="policy" *ngIf="portalType === 'Laboratory'">
+        <div class="form_field_wrapper">
+          <label>{{ "select_lab" | translate }}</label>
+          <select2 class="test select-dropdown-box" [overlay]="true" [limitSelection]="0" [minCountForSearch]="0"
+            [data]="userList" [value]="selecteduser" (update)="onSelect2Change($event)"
+            placeholder='{{"select_lab" | translate}}'>
+          </select2>
+        </div>
+        <a><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle"
+            viewBox="0 0 16 16" style="margin-left: 10px; cursor: pointer;" (click)="clearSelect2()">
+            <title>{{'reset_lab' | translate}}</title>
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+          </svg></a>
+        <form [formGroup]="dateRangeForm">
+          <div class="form_field_wrapper d-flex align-items-center gap-3" style="margin: 10px;">
+            <div class="main_title">{{ "from" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker1" formControlName="fromDate"
+                (dateChange)="onDateChange('from', $event.value)" />
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <div class="main_title">{{ "to" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker2" formControlName="toDate" (dateChange)="onDateChange('to', $event.value)" />
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <style>
+            ::ng-deep .form_field_wrapper .mat-form-field-wrapper {
+              padding-bottom: 0 !important;
+            }
+          </style>
+        </form>
+      </div>
+      <div class="policy" *ngIf="portalType === 'Radiology'">
+        <div class="form_field_wrapper">
+          <label>{{ "select_radio" | translate }}</label>
+          <select2 class="test select-dropdown-box" [overlay]="true" [limitSelection]="0" [minCountForSearch]="0"
+            [data]="userList" (update)="onSelect2Change($event)" [value]="selecteduser"
+            placeholder='{{"select_radio" | translate}}'>
+          </select2>
+        </div>
+        <a><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle"
+            viewBox="0 0 16 16" style="margin-left: 10px;cursor: pointer;" (click)="clearSelect2()">
+            <title>{{'reset_radio' | translate}}</title>
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+            <path
+              d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+          </svg></a>
+        <form [formGroup]="dateRangeForm">
+          <div class="form_field_wrapper d-flex align-items-center gap-3" style="margin: 10px;">
+            <div class="main_title">{{ "from" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker1" formControlName="fromDate"
+                (dateChange)="onDateChange('from', $event.value)" />
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <div class="main_title">{{ "to" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker2" formControlName="toDate" (dateChange)="onDateChange('to', $event.value)" />
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="counter_section common_space">
+    <div class="row">
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_blue">
+          <div class="cust_col_inner header-card-inner">
+            <div class="left">
+              <div class="counter">{{totalNew ? totalNew : 0}}</div>
+              <div class="counter_title">
+                {{ "total_new_order" | translate }}
+              </div>
+            </div>
+            <div class="right" (click)="exportOrderListDataAsPerStatus('Pending')" ngbTooltip="Export new order list">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/total.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_green">
+          <div class="cust_col_inner header-card-inner">
+            <div class="left">
+              <div class="counter">{{totalCompletedOrder? totalCompletedOrder : 0}}</div>
+              <div class="counter_title">
+                {{ "total_completed_order" | translate }}
+              </div>
+            </div>
+            <div class="right" (click)="exportOrderListDataAsPerStatus('Completed')" ngbTooltip="Export complete order list">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/completed 1.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_orange">
+          <div class="cust_col_inner header-card-inner">
+            <div class="left">
+              <div class="counter">{{totalIncompletedOrder ? totalIncompletedOrder : 0 }}</div>
+              <div class="counter_title">
+                {{ "total_incomplete_order" | translate }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img" (click)="exportOrderListDataAsPerStatus('Under Process')" ngbTooltip="Export in-completed order list">
+                <img src="../../../../assets/img/dashboard/not-completed.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>     
+    </div>
+    <div class="row mt20">
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_violet">
+          <div class="cust_col_inner header-card-inner">
+            <div class="left">
+              <div class="counter">{{invoiceCancellationCount ? invoiceCancellationCount : 0 }}</div>
+              <div class="counter_title">
+                {{ "invoice_cancellation" | translate }}
+              </div>
+            </div>
+            <div class="right"  (click)="exportCancellationData()" ngbTooltip="Export invoice cancellation list">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/not-completed.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph_section common_space">
+    <div class="titlee mb-2" style="font-size: 20px; color: #222222 ;font-weight: 500;">
+      {{ "coupon_used_for_labs" | translate }}
+    </div>
+
+    <div class="row mt-4">
+      <div class="top_bar">
+        <div class="right_part">
+          <div class="policy">
+            <div class="form_field_wrapper">
+              <label>{{ "select_discount_code" | translate }}</label>
+              <select2 class="testDiscount select-dropdown-box" [overlay]="overlay" [limitSelection]="0"
+                [minCountForSearch]="0" [value]="selectedcouponCodeId" [data]="lab_radioCouponList"
+                (update)="onCouponChange($event)" placeholder="{{ 'select_discount_code' | translate }}">
+              </select2>
+
+              <a style="margin-right: 10px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"
+                  style="margin-left: 10px; cursor: pointer" (click)="clearSelect()">
+                  <title>{{ "reset" | translate }}</title>
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                  <path
+                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                </svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="primary_btn d-flex justify-content-end mb-3" style="height: 43px;">            
+          <button type="button" class="btn btn-primary" (click)="exportToExcel()"
+          [disabled]="dataSource.length === 0">
+             <mat-icon>download</mat-icon>{{ "export" | translate }}
+           </button>           
+       </div>
+      </div>
+      <div class="bottom_bar mt-2">
+          <div class="table-wrap">
+            <div class="table-inner without_pagination_block">
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 withoutpagination">
+                <ng-container matColumnDef="createdAt">
+                  <th mat-header-cell *matHeaderCellDef >
+                    {{ "applied_date" | translate }}
+                  </th>
+      
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.createdAt | date : "dd/MM/yyy" }} |
+                    <span>{{ element?.createdAt | date : "HH:mm " }} </span>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="couponCode">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "coupon_code" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.discountCoupon ? element?.discountCoupon : "-"
+                    }}
+                  </td>  
+                </ng-container>
+                <ng-container matColumnDef="testName">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "test_name" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.testName ? element?.testName : "-"
+                    }}
+                  </td>  
+                </ng-container>
+                  <ng-container matColumnDef="testPrice">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "test_price" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.testPrice ? element?.testPrice : "-"
+                      }}
+                    </td>  
+                 </ng-container>
+               
+                <ng-container matColumnDef="centreName">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "centre_name" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.center_name ? element?.center_name : "-"
+                    }}
+                  </td>  
+                </ng-container>
+                <ng-container matColumnDef="patientName">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "patient_name" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+  
+                    {{ element?.patientName ? element?.patientName : "-" }}
+  
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="mrnNumber">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "mrn_number" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+  
+                    {{ element?.mrnNumber ? element?.mrnNumber : "-" }}
+  
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table>
+              <div *ngIf="dataSource.length === 0" class="text-center">
+                <b>{{ "no_record_found" | translate }}</b>
+              </div>
+            </div>
+            <mat-paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)"
+              [pageSize]="pageSize" [pageSizeOptions]="[5, 20, 50, 100]" showFirstLastButtons
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

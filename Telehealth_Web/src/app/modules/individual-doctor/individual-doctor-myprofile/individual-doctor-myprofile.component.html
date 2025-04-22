@@ -1,0 +1,56 @@
+<div class="add_doctor dashboard_main_content">
+  <div class="step_counter">
+    <mat-stepper
+      #mainStepper
+      [orientation]="(stepperOrientation | async)!"
+      (selectionChange)="onStepSelectionChange($event)"
+    >
+      <mat-step>
+        <ng-template matStepLabel>{{ "basic_info" | translate }}</ng-template>
+        <ng-template [ngIf]="stepIndex === 0">
+          <app-basicinfo
+          (calldoctordata)="getDoctorDetails()"
+            [mstepper]="passToChild"
+            *ngIf="isEnable"
+            (callParent)="getDoctorDetails()"
+          ></app-basicinfo>
+        </ng-template>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>{{ "educational" | translate }}</ng-template>
+        <ng-template [ngIf]="stepIndex === 1">
+          <app-educational
+            [mstepper]="passToChild"
+            (calldoctordata)="getDoctorDetails()"
+            *ngIf="isEnable"
+            (callParent)="getDoctorDetails()"
+          ></app-educational>
+        </ng-template>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>{{ "availability" | translate }}</ng-template>
+        <ng-template [ngIf]="stepIndex === 2">
+          <app-availability
+          (calldoctordata)="getDoctorDetails()"
+            [mstepper]="passToChild"
+            *ngIf="isEnable"
+            (callParent)="getDoctorDetails()"
+          ></app-availability>
+        </ng-template>
+      </mat-step>
+
+      <!-- <mat-step>
+        <ng-template matStepLabel>{{ "document_manage" | translate }}</ng-template>
+        <ng-template [ngIf]="stepIndex === 3">
+          <app-documentmanage
+          (calldoctordata)="getDoctorDetails()"
+            [mstepper]="passToChild"
+            *ngIf="isEnable"
+            (callParent)="getDoctorDetails()"
+          ></app-documentmanage>
+        </ng-template>
+      </mat-step> -->
+    </mat-stepper>
+  </div>
+</div>

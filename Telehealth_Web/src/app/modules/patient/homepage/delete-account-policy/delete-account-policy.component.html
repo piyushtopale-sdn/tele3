@@ -1,0 +1,57 @@
+<div class="home_wrapper" [attr.dir]="'dir' | translate">
+  <app-header></app-header>
+
+  <div class="breadcum_wrapper" aria-label="breadcrumb">
+    <div class="container">
+      <div class="breadcrumb_title">{{ "delete_account_policy" | translate }}</div>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/test/homepage']">{{ "home" | translate }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ "delete_account_policy" | translate }}
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="main_section contact-main-section">
+    <div class="main_section_inner">
+      <div class="container">
+        <section id="contact-us" [attr.dir]="'dir' | translate">
+          <h1>{{ "delete_account_policy" | translate }}</h1>
+          <ol>
+            <li>
+              <strong>{{ "introduction" | translate }}</strong>:
+              {{"delete_policy_intro_value" | translate}}
+            </li>
+            <li>
+              <strong>{{"delete_policy_note" | translate}}</strong>:
+              <ul>
+                <li>
+                  {{"delete_policy_note_value" | translate}}
+                </li>
+              </ul>
+            </li>
+            <li>
+              <strong>{{"affected_data" | translate}}</strong>:
+              <ul>
+                <li>{{"affected_data_1" | translate}}</li>
+                <li>{{"affected_data_2" | translate}}</li>
+              </ul>
+            </li>
+            <li>
+              <strong>{{"paid_subscription" | translate}}</strong>:
+              <ul>
+                <li>{{"paid_subscription_1" | translate}}</li>
+                <li>{{"paid_subscription_2" | translate}}</li>
+              </ul>
+            </li>
+            </ol>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

@@ -1,0 +1,91 @@
+<div class="home_wrapper" [attr.dir]="'dir' | translate">
+  <div class="lang d-flex justify-content-end me-3" *ngIf="!hideLanguage">
+    <app-language></app-language>
+</div>
+  <div class="main_section">
+    <div class="main_section_inner">
+      <div class="container">
+        <!-- <div class="row" [innerHTML]="showText"></div> -->
+        <section id="privacy-policy" [attr.dir]="'dir' | translate">
+          <!-- <h1>{{ "privacy_policy_title" | translate }}</h1> -->
+          <h1>{{ "privacy_terms" | translate }}</h1>
+          <!-- <p><strong>{{ "effective_date" | translate }}</strong> 01/11/2024</p> -->
+          <ol>
+            <li>
+              <strong>{{ "introduction" | translate }}</strong>:
+              {{"privacy_policy_intro_content" | translate}}
+            </li>
+            <li>
+              <strong>{{"privacy_policy_info_collect_title" | translate}}</strong>:
+              <ul>
+                <li><strong>{{"personal_information" | translate}}:</strong>
+                  {{"privacy_policy_info_collect_personal_details" | translate}}</li>
+                <li><strong>{{"usage_data" | translate}}:</strong> {{"privacy_policy_info_collect_usage_details" |
+                  translate}}</li>
+              </ul>
+            </li>
+            <li>
+              <strong>{{"privacy_policy_how_use_info_title" | translate}}</strong>:
+              <ul>
+                <li><strong>{{"to_provide_services" | translate}}:</strong> {{"privacy_policy_how_use_services_details"
+                  | translate}}</li>
+                <li><strong>{{"to_communicate" | translate}}:</strong> {{"privacy_policy_how_use_communicate_details" |
+                  translate}}</li>
+                <li><strong>{{"to_enhance_services" | translate}}:</strong> {{"privacy_policy_how_use_enhance_details" |
+                  translate}}</li>
+                  <li>{{"privacy_policy_creditdebit_cards_details"| translate}}</li>
+                  <li>{{"privacy_policy_country_of_domicile"| translate}}</li>
+                  <li>{{"privacy_policy_website_will_not_deal"| translate}}</li>
+                  <li>{{"privacy_policy_accept_payments_online"| translate}}</li>
+                  <li>{{"privacy_policy_Refunds_will_be_done"| translate}}</li>
+                  <li>{{"privacy_policy_dispute_or_claim_arising"| translate}}</li>              
+               </ul>
+            </li>
+            <li>
+              <strong>{{"data_security" | translate}}</strong>:
+              {{"privacy_policy_data_security_content" | translate}}
+            </li>
+            <li>
+              <strong>{{"user_rights" | translate}}</strong>:
+              <ul>
+                <li><strong>{{"access" | translate}}:</strong> {{"privacy_policy_user_rights_access_details" |
+                  translate}}</li>
+                <li><strong>{{"correction" | translate}}:</strong> {{"privacy_policy_user_rights_correction_details" |
+                  translate}}</li>
+                <li><strong>{{"deletion" | translate}}:</strong> {{"privacy_policy_user_rights_deletion_details" |
+                  translate}}</li>
+              </ul>
+            </li>
+            <li>
+              <strong>{{"third_party_services" | translate}}</strong>:
+              {{"privacy_policy_third_party_services_content" | translate}}
+            </li>
+            <li>
+              <strong>{{"privacy_policy_changes_title" | translate}}</strong>:
+              {{"privacy_policy_changes_content" | translate}}
+            </li>
+            <li>
+              <strong>{{"hippa_heading" | translate}}:</strong>
+              {{"hippa_value" | translate}}
+              <div><strong>{{"hippa_objective" | translate}}:</strong></div>
+              <ul>
+                <li><strong>{{"hippa_t1" | translate}}:</strong> {{"hippa_v1" | translate}}
+                  health information.</li>
+                <li><strong>{{"hippa_t2" | translate}}:</strong> {{"hippa_v2" | translate}}
+                  protected health information (ePHI).</li>
+                <li><strong>{{"hippa_t3" | translate}}:</strong> {{"hippa_v3" | translate}}
+                  and reduce costs.</li>
+                <li><strong>{{"hippa_t4" | translate}}:</strong> {{"hippa_v4" | translate}}</li>
+              </ul>
+            </li>
+            <li>
+              <strong>{{"contact_us" | translate}}</strong>:
+              {{"privacy_policy_contact_us_content" | translate}}
+              <br>{{"email" | translate}}: info@testapp.com
+            </li>
+          </ol>
+        </section>
+      </div>
+    </div>
+  </div> 
+</div>

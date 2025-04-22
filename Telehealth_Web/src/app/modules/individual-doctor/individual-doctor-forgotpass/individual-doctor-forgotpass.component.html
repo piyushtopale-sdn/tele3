@@ -1,0 +1,84 @@
+<div class="login">
+  <div class="login_inner">
+    <div class="row">
+      <div class="left_part part col-md-6">
+        <div class="leftpart_inner">
+          <div class="logo" (click)="goToHomePage()" style="cursor: pointer">
+            <img [src]="login_logo" alt="logo" style=" height: 100px;"/>
+          </div>
+        </div>
+      </div>
+      <div class="right_part part col-md-6">
+        <div class="lang d-flex justify-content-end me-3">
+          <app-language></app-language>
+      </div>
+        <div class="rightpart_inner">
+          <div class="login_form">
+            <div class="login_form_inner">
+              <form [formGroup]="forgotPassForm">
+                <div class="login_img">
+                  <img src="../../../../assets/img/key.svg" />
+                </div>
+                <div class="title_wrapper">
+                  <h4 class="form_title">
+                    {{ "forgot_password" | translate }}
+                  </h4>
+                  <div class="form_desc">
+                    {{
+                      "no_worries_we_ll_send_you_reset_instructions" | translate
+                    }}
+                  </div>
+                </div>
+                <div class="form_field_wrapper">
+                  <label>{{ "email_address" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      formControlName="email"
+                      type="email"
+                      placeholder="{{ 'enter_email_address' | translate }}"
+                      matInput
+                    />
+                  </mat-form-field>
+                  <mat-error
+                    *ngIf="
+                      isSubmitted &&
+                      forgotPassForm.get('email').hasError('required')
+                    "
+                    >{{ "email_id_is_required" | translate }}.</mat-error
+                  >
+                  <mat-error
+                    *ngIf="
+                      isSubmitted &&
+                      forgotPassForm.get('email').hasError('email')
+                    "
+                    >{{ "invalid_email_id" | translate }}.</mat-error
+                  >
+                </div>
+
+                <div class="form-btn primary_btn mt-3">
+                  <button
+                    type="submit"
+                    class="login_btn btn btn-primary"
+                    (click)="onSubmit()"
+                    [disabled]="loading"
+                  >
+                    {{ "reset_password" | translate }}
+                  </button>
+                </div>
+
+                <div class="signup_section">
+                  <div
+                    class="signup backlogin"
+                    [routerLink]="['/individual-doctor/login']"
+                  >
+                    <mat-icon>west</mat-icon>{{ "back_to_log_in" | translate }}
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

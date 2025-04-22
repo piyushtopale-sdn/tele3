@@ -1,0 +1,651 @@
+@import '../../../../assets/css/variable/variable';
+.material-icons{
+    cursor: pointer;
+}
+
+
+.text-start{
+    display:flex;
+    }
+
+    .text-start{
+        .item{
+           
+                .btn{
+                    &.active{
+                        background-color: $bodycolor;
+                        color: $white_color;    
+                    }
+                }
+           
+        }
+    }
+
+.doctor_appointment{
+    .top_bar{
+        // justify-content: flex-end;
+            .content_wrap{
+                flex-wrap: wrap;
+                .top_item{
+                    margin: 0 15px 15px 0;
+                    .form_field_wrapper{
+                        .mat-form-field{
+                            .mat-form-field-wrapper{
+                                padding: 0;
+                                .mat-form-field-flex{
+                                    background-color: #F6F8FC;
+                                    border: 1px solid #F6F8FC;
+                                    .mat-form-field-infix{
+                                        .mat-select{
+                                            .mat-select-arrow-wrapper{
+                                                transform: translateY(0);
+                                            }
+                                            .mat-select-value{
+                                                color: $formfiled_color;
+                                                font-weight: 500;
+                                            }
+                                        }
+                                        width: 170px;
+                                    }
+                                }
+                                .mat-form-field-underline{
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                    &:last-child{
+                        margin-right: 0;
+                    }
+                }
+            } 
+            .main_title{
+                font-size: 16px;
+            }
+            .icons{
+                display: flex;
+                align-items: center;
+                margin: 0 0 0 15px;
+                .mat-icon{
+                    color: $black_color;
+                    margin: 0 0 0 5px;
+                }
+                .more_action{
+                    position: relative;
+                    .btn {
+                        padding: 0;
+                        border: none;
+                        background: $white_color;
+                        height: 24px;
+                        &:hover{
+                            background: $white_color;
+                        }
+                    }
+                    .dropdown-menu{
+                        position: absolute;
+                        right: 0 !important;
+                        left: auto !important;
+                        margin-top: 10px !important;
+                    }
+                }
+            }
+    }
+    .bottom_bar{
+        // margin-top: -65px;
+        .appointment_tab{
+            .mat-tab-header{
+                width: 11%;
+                margin: 0 0 28px;
+                border-bottom: none;
+                .mat-tab-list{
+                    .mat-tab-labels{
+                        .mat-tab-label {
+                            font-family: $font_family_body,$font_sans_sarif;
+                            height: 50px;
+                            padding: 0 10px;
+                            width: 50px;
+                            min-width: 50px;
+                            font-size: $font_medium;
+                            font-weight: 500;
+                            background-color: $white_color;
+                            border: 1px solid rgba(11, 73, 119, 0.15);
+                            border-radius: 10px;
+                            justify-content: center;
+                            opacity: 1;
+                            margin-left: 15px;
+                            &:first-child{
+                                margin-left: 0;
+                            }
+                            .mat-tab-label-content{
+                                font-size: 0;
+                                .btn_svg {
+                                    height: 35px;
+                                    width: 35px;
+                                    line-height: 35px;
+                                    border-radius: 9px;
+                                    svg{
+                                        fill: #0B4977;
+                                        width: 20px;
+                                        height: 20px;
+                                    }
+                                }
+                            }
+                        }
+                        .mat-tab-label.mat-tab-label-active{
+                            background-color: $bodycolor;
+                            .mat-tab-label-content{
+                                .btn_svg {
+                                    // background-color: #EBF0F4;
+                                    svg{
+                                        fill: #ffffff;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .mat-ink-bar{
+                        display: none;
+                    }
+                    .mat-ink-bar{
+                        background-color: $bodycolor;
+                    }
+                }
+            }
+            .mat-tab-body-content{
+                overflow: hidden;
+                .table-wrap{
+                    table{
+                        tr{
+                            td{
+                                .icon_group{
+                                    .svgicon{
+                                        .action_dropmenu {
+                                            padding: 15px;
+                                            li{
+                                                margin: 0 0 10px;
+                                                font-size: $font_small;
+                                                &:last-child{
+                                                    margin: 0;
+                                                }
+                                                &:hover{
+                                                    color: $bodycolor;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Date range modal css
+.date_range {
+    .modal-dialog {
+        max-width: 565px;
+        .modal-body{
+            .top_item{
+                margin: 0 15px 15px 0;
+                .form_field_wrapper{
+                    .mat-form-field{
+                        .mat-form-field-wrapper{
+                            padding: 0;
+                            .mat-form-field-flex{
+                                background-color: #F6F8FC;
+                                border: 1px solid #F6F8FC;
+                                .mat-form-field-infix{
+                                    .mat-select{
+                                        .mat-select-arrow-wrapper{
+                                            transform: translateY(0);
+                                        }
+                                        .mat-select-value{
+                                            color: $formfiled_color;
+                                            font-weight: 500;
+                                        }
+                                    }
+                                    width: 100px;
+                                }
+                            }
+                            .mat-form-field-underline{
+                                display: none;
+                            }
+                        }
+                    }
+                }
+                &:last-child{
+                    margin-right: 0;
+                }
+            }
+            .item {
+                .form_field_wrapper{
+                    .mat-form-field{
+                        .mat-form-field-wrapper{
+                            padding-bottom: 20px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+// Approved modal css
+.approved_data{
+    .action_modals{
+        .primary_btn {
+            .btn{
+                margin: 0 10px;
+            }
+        }
+    }
+}
+
+// Set remainder css start
+.common_plan{
+    .form_field_wrapper{
+        .fieldicon_wrap{
+            display: flex;
+            justify-content: space-between;
+            .mat-icon{
+                border-radius: 10px;
+                width: 50px;
+                height: 50px;
+                line-height: 50px;
+                min-width: 50px;
+                text-align: center;
+                margin-left: 15px;
+                &.minus{
+                    background: #FDE6E5;
+                    border: 1px solid #FDE6E5;
+                    border-radius: 10px;
+                    color: #F05A4F;
+                }
+                &.plus{
+                    background: #0B4977;
+                    color: #ffffff;  
+                }
+            }
+        }
+        .mat-form-field{
+            width: 100%;
+            padding-right: 1rem;
+            .mat-form-field-wrapper{
+                padding-bottom: 20px;
+            }
+        } 
+    }
+    .vr{
+        width: 100%;
+        background-color: transparent;
+        text-align: center;
+        margin: 0 0 20px;
+        text-transform: uppercase;
+        font-size: 16px;
+    }
+    .primary_btn{
+        &.add_popup{
+            justify-content: end;
+            .btn.btn-primary{
+                &:first-child{
+                    margin-right: 15px;
+                }
+            }
+        }
+    }
+  
+}
+
+// Reschedule appointment modal css 
+.choose_date {
+    .resshedule_appointment{
+        display: flex;
+        background: #FFFFFF;
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        align-items: center;
+        padding: 15px;
+        .image_block{
+            img{
+                border-radius: 10px;
+                width: 115px;
+                height: 115px;
+                min-width: 115px;
+            }
+        }
+        .content_block{
+            margin-left: 25px;
+            h3{
+                font-weight: 500;
+                font-size: 22px;
+                line-height: 28px;
+                color: #0C2F49;    
+                margin-bottom: 10px;        
+            }
+            p{
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 19px;
+                color: #0C2F49;
+                margin-bottom: 15px; 
+            }
+            ul{
+                margin: 0;
+                padding: 0;
+                li{
+                    list-style: none;
+                    display: inline-block;
+                    padding-right: 15px;
+                    .doctore_detail{
+                        p{
+                            margin-bottom: 5px;
+                            font-weight: 400;
+                            font-size: 12px;
+                            line-height: 15px;
+                            color: #0C2F49;
+                        }
+                        h4{
+                            font-weight: 600;
+                            font-size: 16px;
+                            line-height: 19px;
+                            color: #0C2F49;
+                            margin-bottom: 0;
+                            i{
+                                color: $star_color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .choose_slot{
+        padding: 30px 0 15px;
+        .heading{
+            h4{
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 24px;
+                letter-spacing: 0.2px;
+                color: #25282B;
+            }
+        }
+        .choose_detail{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            .nearest_slot{
+                margin: 0 0 10px;
+                p{
+                    font-weight: 400;
+                    font-size: 16px;
+                    line-height: 19px;
+                    color: $bodyopacitylightcolor;
+                }
+                h3{
+                    font-weight: 400;
+                    font-size: 18px;
+                    line-height: 22px;
+                    color: #0C2F49;
+                    margin-bottom: 0;
+                }
+            }
+            .btn{
+                margin: 0 0 10px;
+            }
+        }
+    }
+    .primary_btn{
+        flex-wrap: wrap;
+    }
+}
+
+// Reschedule Appointment1
+.select_datetime{
+    .resshedule_appointment{
+        display: flex;
+        background: #FFFFFF;
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        align-items: center;
+        padding: 15px;
+        .image_block{
+            img{
+                border-radius: 10px;
+                width: 115px;
+                height: 115px;
+                min-width: 115px;
+            }
+        }
+        .content_block{
+            margin-left: 25px;
+            h3{
+                font-weight: 500;
+                font-size: 22px;
+                line-height: 28px;
+                color: #0C2F49;    
+                margin-bottom: 10px;        
+            }
+            p{
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 19px;
+                color: #0C2F49;
+                margin-bottom: 15px; 
+            }
+            ul{
+                margin: 0;
+                padding: 0;
+                li{
+                    list-style: none;
+                    display: inline-block;
+                    padding-right: 15px;
+                    .doctore_detail{
+                        p{
+                            margin-bottom: 5px;
+                            font-weight: 400;
+                            font-size: 12px;
+                            line-height: 15px;
+                            color: #0C2F49;
+                        }
+                        h4{
+                            font-weight: 600;
+                            font-size: 16px;
+                            line-height: 19px;
+                            color: #0C2F49;
+                            margin-bottom: 0;
+                            i{
+                                color: $star_color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .choose_slot{
+        padding: 30px 0 15px;
+        .heading{
+            h4{
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 24px;
+                letter-spacing: 0.2px;
+                color: #25282B;
+            }
+        }
+        .choose_detail{
+            // display: flex;
+            // justify-content: space-between;
+            // align-items: flex-end;
+            // flex-wrap: wrap;
+            .nearest_slot{
+                margin: 0 0 10px;
+                p{
+                    font-weight: 400;
+                    font-size: 16px;
+                    line-height: 19px;
+                    color: $bodyopacitylightcolor;
+                }
+                h3{
+                    font-weight: 400;
+                    font-size: 18px;
+                    line-height: 22px;
+                    color: #0C2F49;
+                    margin-bottom: 0;
+                }
+            }
+            .btn{
+                margin: 0 0 10px;
+            }
+        }
+    }
+    .primary_btn{
+        flex-wrap: wrap;
+        margin-top: 15px;
+    }
+    .consultation_datetime{
+        .consultation_datetime_inner{
+            margin: 0;
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+            .expansion_item {
+                border-right: 1px solid #B6C8D6;  
+                border-bottom: none;
+                padding: 20px;
+                .mat-button-toggle-group{
+                    border: none;
+                    flex-wrap: wrap;
+                    margin: 0 -10px;
+                    .mat-button-toggle{
+                        border-left: none;
+                        margin: 0 10px 10px;
+                        border: 1px solid rgba(11, 73, 119, 0.15);
+                        border-radius: 10px;
+                        .mat-button-toggle-label-content{
+                            padding: 10px 15px;
+                            font-weight: 600;
+                            font-size: $font_small;
+                            white-space: break-spaces;
+                            color: #214469;        
+                            line-height: 22px;
+                            white-space: break-spaces;
+                        }
+                        &:hover{
+                            background-color: $bodycolor;
+                            border-color: $bodycolor;
+                            .mat-button-toggle-label-content{
+                                color: $white_color;
+                            }
+                        }
+                        &.mat-button-toggle-checked{
+                            background-color: $bodycolor;
+                            border-color: $bodycolor;
+                            .mat-button-toggle-label-content{
+                                color: $white_color;
+                            }
+                        }
+                    }
+                }
+                &:last-child{
+                    border: none;
+                }
+                &.calender{
+                    padding: 0;
+                }
+            }
+        }
+    }
+}
+
+
+
+@media screen and (max-width:1425px) {
+    .doctor_appointment .top_bar{
+        justify-content: flex-start;
+    }
+    .doctor_appointment .bottom_bar {
+        margin-top: 0;
+    }
+    .doctor_appointment .bottom_bar .appointment_tab .mat-tab-header{
+        width: auto;
+    }
+}
+@media screen and (max-width:$large_phone) {
+    .choose_date .resshedule_appointment {
+        flex-wrap: wrap;
+    }
+    .choose_date .resshedule_appointment .image_block{
+        margin: 0 0 15px;
+    }
+    .choose_date .resshedule_appointment .content_block ul li{
+        margin: 0 0 15px;
+    }
+    .choose_date .resshedule_appointment .content_block {
+        margin-left: 0;
+    }
+
+    .select_datetime .resshedule_appointment {
+        flex-wrap: wrap;
+    }
+    .select_datetime .resshedule_appointment .image_block{
+        margin: 0 0 15px;
+    }
+    .select_datetime .resshedule_appointment .content_block ul li{
+        margin: 0 0 15px;
+    }
+    .select_datetime .resshedule_appointment .content_block {
+        margin-left: 0;
+    }
+    .select_datetime .consultation_datetime .consultation_datetime_inner .expansion_item.calender{
+        padding: 0;
+        border-right: none;
+        border-bottom: 1px solid #B6C8D6;
+    }
+    .select_datetime .consultation_datetime .consultation_datetime_inner .expansion_item:first-child{
+        border-right:none;
+        border-bottom: 1px solid #B6C8D6;
+    }
+}
+@media screen and (max-width:$medium_phone) {
+    .doctor_appointment .top_bar .content_wrap .top_item {
+        margin: 0 0 15px;
+        width: 100%;
+    } 
+    .doctor_appointment .top_bar .content_wrap .primary_btn .btn {
+        width: 100%;
+    } 
+    .choose_date .custome_modal .primary_btn .btn{
+        width: 100%;
+        margin: 15px 0 0;
+    }
+    .select_datetime .custome_modal .primary_btn .btn{
+        width: 100%;
+        margin: 15px 0 0;
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .select_datetime .custome_modal .modal-body{
+        padding: 25px 10px;
+    }
+    .select_datetime .consultation_datetime .consultation_datetime_inner .expansion_item:first-child{
+        padding: 0;
+    }
+    .select_datetime .calendar-wrapper .igx-calendar__body .igx-calendar__date .igx-calendar__date-content {
+        width: 1.8em;
+        min-width: 1.8em;
+        height: 1.8em;
+    }
+}
+
+.disabled {
+    opacity: 0.5; /* Adjust the opacity value as needed */
+    pointer-events: none;
+    
+}
+.mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+}

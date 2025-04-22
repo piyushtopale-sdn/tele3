@@ -1,0 +1,114 @@
+@import '../../../../../assets/css/variable/variable';
+.material-icons{
+    cursor: pointer;
+}
+
+.current_plan {
+    .top_bar{
+        margin: 0 0 40px;
+    }
+    .bottom_bar{
+        .plan_card_wrap{
+            margin: 0 0 25px;
+            .plan_card{
+                background: #F6F8FC;
+                border: 1px solid #B6C8D6;
+                border-radius: 15px;
+                .card_top{
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 35px;
+                    border-bottom: 1px solid #B6C8D6;
+                    .left{
+                        display: flex;
+                        align-items: center;
+                        .card_icon{
+                            width: 55px;
+                            height: 55px;
+                            line-height: 55px;
+                            background-color: #3DA7C8;
+                            border-radius: 50%;
+                            text-align: center;
+                        }
+                        .card_title{
+                            font-weight: 500;
+                            font-size: 26px;
+                            line-height: 24px;
+                            color: $table_color;
+                            margin-left: 20px;
+                        }
+                    }
+                    .right{
+                        margin: 20px 0 0 10px;
+                        .card_price{
+                            font-weight: 600;
+                            font-size: 26px;
+                            line-height: 28px;
+                            color: $table_color;
+                            margin: 0 0 5px;
+                        }
+                        .card_duration{
+                            font-size: 18px;
+                            line-height: 24px;
+                            color: $table_color;
+                        }
+                    }
+                }
+                .card_bottom{
+                    padding: 25px 35px;
+                    ol{
+                        padding-left: 15px;
+                        li{
+                            margin: 0 0 12px;
+                            font-weight: 500;
+                            font-size: 16px;
+                        }
+                    }
+                }
+            }  
+        }
+
+    }
+}
+
+.plan_history .bottom_bar {
+    table{
+         border-radius: 15px 15px 0px 0px !important;
+    }
+}
+@media screen and (min-width:$desktop_large_up) {
+    .current_plan .bottom_bar .plan_card_wrap{
+        width: 55%;
+    }
+}
+@media screen and (max-width:$small_phone) {
+
+}
+
+
+.bottom_bar{
+    table{
+        //  border-radius: 15px;
+        tr{
+            td{
+                .status {
+                    font-size: $font_extra_small;
+                    background-color: #FBF3EA;
+                    color: #FF7354;
+                    border-radius: 18.5px;
+                    padding: 7px 21px;
+                    &.active{
+                        background-color: #EBFBEE;
+                        color: #72D284;
+                    }
+                    &.exprired{
+                        background-color: #d81e1e;
+                        color: #141212;
+                    }
+                }
+            }
+        }
+    }
+}

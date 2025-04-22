@@ -1,0 +1,3353 @@
+<div class="profile_creation dashboard_main_content login_time">
+  <div class="step_counter">
+    <mat-stepper #mainStepper [orientation]="(stepperOrientation | async)!" [selectedIndex]="selectedIndex">
+      <mat-step>
+        <div class="image-upload">
+          <label for="file-input">
+            <img class="img-fluid mb-4" src="{{
+                profileImage ? profileImage : 'assets/img/create_profile.png'
+              }}" />
+          </label>
+
+          <input id="file-input" type="file" accept="image/*" (change)="onProfilePicChange($event)" />
+        </div>
+        <ng-template matStepLabel>{{
+          "personal_details" | translate
+          }}</ng-template>
+        <div class="step_counter_inner">
+          <!---------------------------Personal Details----------------------------->
+          <form [formGroup]="personalDetails">
+            <div class="personal_details">
+              <div class="form_title">{{ "personal_details" | translate }}</div>
+              <div class="row">
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "first_name" | translate
+                      }}<span style="color: red"> *</span></label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="first_name" [maxLength]="35" />
+                    </mat-form-field>
+                    <span class="text-danger" *ngIf="isSubmitted && f['first_name'].errors?.['required']">{{
+                      "enter_first_name" | translate }}*</span>
+                  </div>
+                </div>
+                <!-- <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "middle_name" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="middle_name" [maxLength]="20"/>
+                    </mat-form-field>
+                  </div>
+                  <span class="text-danger" *ngIf="isSubmitted && f['middle_name'].errors?.['required']">{{
+                    "enter_middle_name" | translate }}*</span>
+                </div> -->
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "last_name" | translate
+                      }}<span style="color: red"> *</span></label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="last_name" [maxLength]="35" />
+                    </mat-form-field>
+                    <span class="text-danger" *ngIf="isSubmitted && f['last_name'].errors?.['required']">{{
+                      "enter_last_name" | translate }}*</span>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "first_name_arabic" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="first_name_arabic" [maxLength]="20" />
+                    </mat-form-field>
+                  </div>
+                  <span class="text-danger" *ngIf="isSubmitted && f['first_name_arabic'].errors?.['required']">{{
+                    "enter_first_name" | translate }}*</span>
+                </div>
+
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "last_name_arabic" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="last_name_arabic" [maxLength]="20" />
+                    </mat-form-field>
+                  </div>
+                  <span class="text-danger" *ngIf="isSubmitted && f['last_name_arabic'].errors?.['required']">{{
+                    "enter_last_name" | translate }}*</span>
+                </div>
+
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "gender" | translate
+                      }}<span style="color: red"> *</span></label>
+                    <mat-form-field appearance="fill">
+                      <!-- <mat-label>Sub-admin</mat-label> -->
+                      <mat-select disableRipple formControlName="gender"
+                        placeholder="{{ 'select_gender' | translate }}">
+                        <mat-option *ngFor="let gender of genderList" [value]="gender.value">{{ gender.label
+                          }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <span class="text-danger" *ngIf="isSubmitted && f['gender'].errors?.['required']">{{ "select_gender" |
+                    translate }}*</span>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3 col-xl-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "date_of_birth" | translate
+                      }}<span style="color: red"> *</span></label>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <input matInput [matDatepicker]="picker13" formControlName="dob" [max]="maxDOB" (dateChange)="
+                          handleDOBChange($event, 'personalDetails')
+                        " />
+                      <mat-datepicker-toggle matSuffix [for]="picker13"></mat-datepicker-toggle>
+                      <mat-datepicker #picker13></mat-datepicker>
+                    </mat-form-field>
+                    <span class="text-danger" *ngIf="isSubmitted && f['dob'].errors?.['required']">{{ "enter_dob" |
+                      translate }}*</span>
+                  </div>
+
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3 col-xl-1">
+                  <div class="form_field_wrapper">
+                    <label>{{ "age" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="age" readonly />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <!-- <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>Spoken Language</label>
+                    <mat-form-field appearance="fill">
+                      <mat-select
+                        disableRipple
+                        formControlName="spokenLanguage"
+                        placeholder="{{ 'select_status' | translate}}"
+                      >
+                        <mat-option
+                          *ngFor="let language of spokenLanguageList"
+                          [value]="language.value"
+                          >{{ language.label }}</mat-option
+                        >
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div> -->
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "email" | translate
+                      }}<span style="color: red"> *</span></label>
+                    <mat-form-field appearance="fill">
+                      <input type="email" matInput formControlName="email" />
+                    </mat-form-field>
+                    <span class="text-danger" *ngIf="isSubmitted && f['email'].errors?.['required']">{{
+                      "enter_email_address" | translate }}*</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "mobile_number" | translate
+                      }}<span style="color: red"> *</span></label>
+                    <mat-form-field appearance="fill">
+                      <input (keypress)="numberFunc($event)" (paste)="numberFunc($event)" matInput #mobile
+                        (focus)="onFocus()" ng2TelInput formControlName="mobile" />
+                    </mat-form-field>
+                    <span class="text-danger" *ngIf="isSubmitted && f['mobile'].errors?.['required']">{{ "enter_mobile"
+                      |
+                      translate }}*</span>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "blood_group" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <!-- <mat-label>Sub-admin</mat-label> -->
+                      <mat-select disableRipple formControlName="blood_group"
+                        placeholder="{{ 'select_blood_group' | translate }}">
+                        <mat-option *ngFor="let blood of bloodGroupList" [value]="blood.value">{{ blood.label
+                          }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <!-- <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && f['blood_group'].errors?.['required']"
+                    >{{ 'select_blood_group' | translate}}*</span
+                  > -->
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "marital_status" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <!-- <mat-label>Sub-admin</mat-label> -->
+                      <mat-select disableRipple formControlName="marital_status"
+                        placeholder="{{ 'select_status' | translate }}">
+                        <mat-option *ngFor="let status of martialStatusList" [value]="status.value">{{ status.label
+                          }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <!-- <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && f['marital_status'].errors?.['required']"
+                    >Select {{ 'marital_status' | translate}}*</span
+                  > -->
+                </div>
+                <!-- <div class="col-sm-6 col-md-8">
+                  <div class="form_field_wrapper">
+                    <label>Address</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="address" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>Neighborhood</label>
+                    <mat-form-field appearance="fill">
+                      <input
+                        type="text"
+                        matInput
+                        formControlName="neighborhood"
+                      />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>Country</label>
+                    <mat-form-field appearance="fill">
+                      
+                      <mat-select
+                        disableRipple
+                        formControlName="country"
+                        placeholder="Select Country"
+                      >
+                        <mat-option value="India">India</mat-option>
+                        <mat-option value="Australia">Australia</mat-option>
+                        <mat-option value="HongKong">HongKong</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>Region</label>
+                    <mat-form-field appearance="fill">
+                      
+                      <mat-select
+                        disableRipple
+                        formControlName="region"
+                        placeholder="Select Region"
+                      >
+                        <mat-option value="Region1">Region1</mat-option>
+                        <mat-option value="Region2">Region2</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>Province</label>
+                    <mat-form-field appearance="fill">
+                      
+                      <mat-select
+                        disableRipple
+                        formControlName="province"
+                        placeholder="Select Province"
+                      >
+                        <mat-option value="Maharashtra">Maharashtra</mat-option>
+                        <mat-option value="Gujarat">Gujarat</mat-option>
+                        <mat-option value="Panjab">Panjab</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>Department</label>
+                    <mat-form-field appearance="fill">
+                      
+                      <mat-select
+                        disableRipple
+                        formControlName="department"
+                        placeholder="Select Department"
+                      >
+                        <mat-option value="Department1">Department1</mat-option>
+                        <mat-option value="Department2">Department1</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>City</label>
+                    <mat-form-field appearance="fill">
+                      
+                      <mat-select
+                        disableRipple
+                        formControlName="city"
+                        placeholder="Select City"
+                      >
+                        <mat-option value="Nagpur">Nagpur</mat-option>
+                        <mat-option value="Ramtek">Ramtek</mat-option>
+                        <mat-option value="Wardha">Wardha</mat-option>
+                        <mat-option value="Amravati">Amravati</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>Village</label>
+                    <mat-form-field appearance="fill">
+                      
+                      <mat-select
+                        disableRipple
+                        formControlName="village"
+                        placeholder="Select Village"
+                      >
+                        <mat-option value="Village1">Village1</mat-option>
+                        <mat-option value="Village2">Village2</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>Pincode</label>
+                    <mat-form-field appearance="fill">
+                      <input type="number" matInput formControlName="pincode" />
+                    </mat-form-field>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+
+            <div class="emergency_contact mt-3" formGroupName="emergency_contact">
+              <div class="form_title">
+                {{ "add_emergency_contact" | translate }}
+              </div>
+              <div class="row">
+                <!-- <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "name" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="name" />
+                    </mat-form-field>
+                  </div>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && f['emergency_contact'].get('name').errors?.['required']"
+                    >Enter Name*</span
+                  >
+                </div> -->
+                <!-- <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "Relationship" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <mat-select disableRipple formControlName="relationship"
+                        placeholder="{{ 'select_relation' | translate }}">
+                        <mat-option *ngFor="let relation of relationshipList" [value]="relation.value">{{ relation.label
+                          }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && f['emergency_contact'].get('relationship').errors?.['required']"
+                    >{{ 'select_relation' | translate}}*</span
+                  >
+                </div> -->
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "phone_number" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="mobile" matInput formControlName="phone_number" (keypress)="numberFunc($event)"
+                        (paste)="numberFunc($event)" />
+                    </mat-form-field>
+                    <span class="text-danger"
+                      *ngIf="isSubmitted && f['emergency_contact'].get('phone_number').errors?.['required']">{{
+                      'enter_mobile' | translate}}*</span>
+                    <span class="text-danger"
+                      *ngIf="isSubmitted &&  f['emergency_contact'].get('phone_number').errors?.['pattern']">Enter 10
+                      Digit Number*</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- <div class="mobile_paydetails custome_modal divider">
+              <h2>{{ "mobile_pay_details" | translate }}</h2>
+              <div class="modal-body">
+                <ng-container formArrayName="mobilePayDetails">
+                  <ng-container *ngFor="let _ of mobilePayDetails.controls; let i = index">
+                    <ng-container [formGroupName]="i">
+                      <div class="paydetail_content modal_content">
+                        <div class="row modal_content_inner">
+                          <div class="item col-sm-6 col-lg-6">
+                            <div class="form_field_wrapper">
+                              <label>{{ "name_of_mobile_pay_provider" | translate }}
+                              </label>
+                              <mat-form-field appearance="fill">
+                                <input type="text" matInput formControlName="provider" />
+                              </mat-form-field>
+                            </div>
+                            <span class="text-danger"
+                              *ngIf="isSubmitted && mobilePayValidation(i).controls['provider'].errors?.['required'] ">{{
+                              "enter_provider_name" | translate }}*</span>
+                          </div>
+                          <div class="item col-sm-6 col-lg-6">
+                            <div class="form_field_wrapper">
+                              <label>{{
+                                "mobile_pay_number" | translate
+                                }}</label>
+                              <div class="field-wrap-block d-flex">
+                                <mat-select disableRipple placeholder="{{
+                                    'select_country_code' | translate
+                                  }}" formControlName="mobile_country_code" class="country-code-select">
+                                  <mat-option *ngFor="let code of countryCodes" [value]="code">{{ code }}</mat-option>
+                                </mat-select>
+                                <mat-form-field appearance="fill">
+                                  <input type="mobile" matInput formControlName="pay_number" />
+                                </mat-form-field>
+                              </div>
+                              <span class="text-danger"
+                              *ngIf="isSubmitted && mobilePayValidation(i).controls['pay_number'].errors?.['required'] ">{{
+                              "enter_mobile_pay_number" | translate
+                              }}*</span>
+
+                            <span class="text-danger"
+                              *ngIf="mobilePayValidation(i).controls['pay_number'].errors?.['pattern'] && mobilePayValidation(i).controls['pay_number'].invalid">{{
+                              "only_numbers_are_allowed" | translate }}*
+                            </span>
+                            </div>
+                          </div>
+                        </div>
+                        <ng-container *ngIf="i === mobilePayDetails.length - 1; else remove">
+                          <div class="row_generate row_minus">
+                            <mat-icon class="minus" *ngIf="mobilePayDetails.length > 1"
+                              (click)="removeMobPay(i)">remove</mat-icon>
+                          </div>
+                          <div class="row_generate row_add">
+                            <mat-icon class="plus" (click)="addMobPay()">add</mat-icon>
+                          </div>
+                        </ng-container>
+                        <ng-template #remove>
+                          <div class="row_generate row_minus">
+                            <mat-icon class="minus" (click)="removeMobPay(i)">remove</mat-icon>
+                          </div>
+                        </ng-template>
+                      </div>
+                      <br />
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div> -->
+
+            <div class="primary_btn">
+              <button mat-button matStepperPrevious type="button" class="btn btn-secondary"
+                [routerLink]="['/patient/dashboard']">
+                {{ "cancel" | translate }}
+              </button>
+              <button mat-button type="button" class="btn btn-primary" (click)="handlePersonalDetails()">
+                {{ "save_and_next" | translate }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-step>
+
+      <!----------------------------------Insurance Details------------------------>
+      <!-- <mat-step>
+        <ng-template matStepLabel>{{
+          "insurance_details" | translate
+          }}</ng-template>
+        <div class="step_counter_inner">
+          <form [formGroup]="insuranceDetails"> -->
+      <!-- <div class="primary_insu_details">
+              <div class="row">
+                <label style="color: red">{{
+                  "insurance_detail_desc" | translate
+                  }}</label>
+
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "select_insurance" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <mat-select disableRipple placeholder="{{ 'select_insurance' | translate }}"
+                        formControlName="insurance_id" (selectionChange)="handleSelectInsurance($event)">
+                        <mat-option *ngFor="let insurance of insuranceCompanyList"
+                          [value]="insurance.for_portal_user?._id">{{ insurance.company_name }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <select2  [placeholder]="'Select Insurance'" [data]="insuranceCompanyList"   [overlay]="overlay" formControlName="insurance_id"
+                     [limitSelection]="0" [minCountForSearch]="0" [value]="selectedInsurance">  </select2>
+                    
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 mb-3" *ngIf="showOtherSearchFields">
+                  <div class="form_field_wrapper">
+                    <label>{{ "first_name" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="firstName" />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 mb-3" *ngIf="showOtherSearchFields">
+                  <div class="form_field_wrapper">
+                    <label>{{ "last_name" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="lastName" />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-md-4 mb-3" *ngIf="showOtherSearchFields">
+                  <div class="form_field_wrapper">
+                    <label>{{ "mobile_number" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="mobile" matInput formControlName="mobile" (keypress)="numberFunc($event)"
+                        (paste)="numberFunc($event)" />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="item col-sm-6 col-md-4 mb-3" *ngIf="showOtherSearchFields">
+                  <div class="form_field_wrapper">
+                    <label>{{ "date_of_birth" | translate }}</label>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                      <input matInput [matDatepicker]="picker36" formControlName="dob" />
+                      <mat-datepicker-toggle matSuffix [for]="picker36"></mat-datepicker-toggle>
+                      <mat-datepicker #picker36></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="primary_btn search_btn">
+              <button mat-button type="button" class="btn btn-primary" (click)="getInsuranceDetails()">
+                {{ "search_1" | translate }}
+              </button>
+            </div> -->
+
+      <!-- <div class="primary_insu_details">
+              <div class="form_title">Primary Insured Details</div>
+
+              <div formGroupName="primary_insured">
+                <div class="row">
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'first_name' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="first_name"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('first_name').errors?.['required']"
+                      >{{ 'enter_first_name' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'middle_name' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="middle_name"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('middle_name').errors?.['required']"
+                      >{{ 'enter_middle_name' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'last_name' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="last_name"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('last_name').errors?.['required']"
+                      >{{ 'enter_last_name' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'gender' | translate}} </label>
+                      <mat-form-field appearance="fill">
+                        <mat-select
+                          disableRipple
+                          formControlName="gender"
+                          placeholder="{{ 'select_gender' | translate}}"
+                        >
+                          <mat-option
+                            *ngFor="let gender of genderList"
+                            [value]="gender.value"
+                            >{{ gender.label }}</mat-option
+                          >
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('gender').errors?.['required']"
+                      >{{ 'select_gender' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3 col-xl-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'date_of_birth' | translate}} </label>
+                      <mat-form-field
+                        class="example-full-width"
+                        appearance="fill"
+                      >
+                        <input
+                          matInput
+                          [matDatepicker]="picker"
+                          formControlName="dob"
+                          (dateChange)="
+                            handleDOBChange($event, 'primary_insured')
+                          "
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="picker"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('dob').errors?.['required']"
+                      >{{ 'enter_dob' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3 col-xl-1">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'age' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="age"
+                          readonly
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'insurance_id' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="insurance_id"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('insurance_id').errors?.['required']"
+                      >Enter {{ 'insurance_id' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'policy_ID' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="policy_id"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('policy_id').errors?.['required']"
+                      >Enter {{ 'policy_ID' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'employee_id' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="employee_id"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('employee_id').errors?.['required']"
+                      >Enter {{ 'employee_id' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-xl-4">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'card_ID' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="card_id"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('card_id').errors?.['required']"
+                      >Enter {{ 'card_ID' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-12 col-md-6 col-xl-4">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'insurance_holder' | translate}} Name</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="insurance_holder_name"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('insurance_holder_name').errors?.['required']"
+                      >Enter {{ 'insurance_holder' | translate}} Name*</span
+                    >
+                  </div>
+                  <div
+                    class="col-sm-6 col-md-6 col-xl-4 insurance_validity_wrap"
+                  >
+                    <div class="form_field_wrapper">
+                      <label>{{ 'insurance_validity' | translate}} </label>
+                      <div class="insurance_validity">
+                        <label class="date_lable">{{ 'from' | translate}}</label>
+                        <mat-form-field
+                          class="example-full-width"
+                          appearance="fill"
+                        >
+                          <input
+                            matInput
+                            [matDatepickerFilter]="myFilter"
+                            [matDatepicker]="picker1"
+                            formControlName="insurance_validity_from"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker1"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && f2['primary_insured'].get('insurance_validity_from').errors?.['required']"
+                        >Enter {{ 'insurance_validity' | translate}}*</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="col-sm-6 col-md-6 col-xl-4 insurance_validity_wrap"
+                  >
+                    <div class="form_field_wrapper">
+                      <label class="invisible">{{ 'insurance_validity' | translate}} </label>
+                      <div class="insurance_validity">
+                        <label class="date_lable">To</label>
+                        <mat-form-field
+                          class="example-full-width"
+                          appearance="fill"
+                        >
+                          <input
+                            matInput
+                            [matDatepickerFilter]="myFilter"
+                            [matDatepicker]="picker2"
+                            formControlName="insurance_validity_to"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker2"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && f2['primary_insured'].get('insurance_validity_to').errors?.['required']"
+                        >Enter {{ 'insurance_validity' | translate}}*</span
+                      >
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'reimbursement' | translate}} Rate</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="{{ 'reimbursement' | translate}}_rate"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('{{ 'reimbursement' | translate}}_rate').errors?.['required']"
+                      >Enter {{ 'reimbursement' | translate}} Rate*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3 upload_item">
+                    <div class="form_field_wrapper">
+                      <label>Insurance card & ID</label>
+                      <div class="upload_input">
+                        <div class="upload_input_content">
+                          <label>{{ 'upload_image' | translate}}</label>
+                        </div>
+                        <input
+                          class="ng-hide user_upload_input"
+                          id="input-file-id"
+                          multiple
+                          type="file"
+                          (change)="onFileChange($event, 'primary_insured')"
+                        />
+                      </div>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['primary_insured'].get('insurance_card_and_id_image').errors?.['required']"
+                      >{{ 'required' | translate}}*</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+      <!-- <div class="secondary_insu_details">
+              <div class="form_title">Secondary Insured Details</div>
+              <div class="radiobtn_title">
+                Is the priamry insured is the secondary insured
+              </div>
+              <mat-radio-group
+                aria-label="Select an option"
+                formControlName="is_primary_is_secondary"
+              >
+                <mat-radio-button [value]="true">{{ 'yes' | translate}}</mat-radio-button>
+                <mat-radio-button [value]="false" [checked]="true"
+                  >{{ 'no' | translate}}</mat-radio-button
+                >
+              </mat-radio-group>
+
+              <div formGroupName="secondary_insured">
+                <div class="row">
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'Relationship' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="relationship"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('relationship').errors?.['required']"
+                      >Enter {{ 'Relationship' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'first_name' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="first_name"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('first_name').errors?.['required']"
+                      >{{ 'enter_first_name' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'middle_name' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="middle_name"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('middle_name').errors?.['required']"
+                      >{{ 'enter_middle_name' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'last_name' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="last_name"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('last_name').errors?.['required']"
+                      >{{ 'enter_last_name' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'gender' | translate}} </label>
+                      <mat-form-field appearance="fill">
+                        <mat-select
+                          disableRipple
+                          formControlName="gender"
+                          placeholder="{{ 'select_gender' | translate}}"
+                        >
+                          <mat-option
+                            *ngFor="let gender of genderList"
+                            [value]="gender.value"
+                            >{{ gender.label }}</mat-option
+                          >
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('gender').errors?.['required']"
+                      >{{ 'select_gender' | translate}}</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3 col-xl-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'date_of_birth' | translate}} </label>
+                      <mat-form-field
+                        class="example-full-width"
+                        appearance="fill"
+                      >
+                        <input
+                          matInput
+                          [matDatepicker]="picker4"
+                          formControlName="dob"
+                          (dateChange)="
+                            handleDOBChange($event, 'secondary_insured')
+                          "
+                        />
+                        <mat-datepicker-toggle
+                          matSuffix
+                          [for]="picker4"
+                        ></mat-datepicker-toggle>
+                        <mat-datepicker #picker4></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('dob').errors?.['required']"
+                      >{{ 'enter_dob' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3 col-xl-1">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'age' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="age"
+                          readonly
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'insurance_id' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="insurance_id"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('insurance_id').errors?.['required']"
+                      >Enter {{ 'insurance_id' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'policy_ID' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="policy_id"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('policy_id').errors?.['required']"
+                      >Enter {{ 'policy_ID' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'employee_id' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="employee_id"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('employee_id').errors?.['required']"
+                      >Enter {{ 'employee_id' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'card_ID' | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="card_id"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('card_id').errors?.['required']"
+                      >Enter {{ 'card_ID' | translate}}*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'insurance_holder' | translate}} Name</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="insurance_holder_name"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('insurance_holder_name').errors?.['required']"
+                      >Enter {{ 'insurance_holder' | translate}} Name*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ 'reimbursement' | translate}} Rate</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="{{ 'reimbursement' | translate}}_rate"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f2['secondary_insured'].get('{{ 'reimbursement' | translate}}_rate').errors?.['required']"
+                      >Enter {{ 'reimbursement' | translate}} Rate*</span
+                    >
+                  </div>
+                  <div class="col-sm-6 col-md-4 mb-3 upload_item">
+                    <div class="form_field_wrapper">
+                      <label>Insurance card & ID</label>
+                      <div class="upload_input">
+                        <div class="upload_input_content">
+                          <label>{{ 'upload_image' | translate}}</label>
+                        </div>
+                        <input
+                          class="ng-hide user_upload_input"
+                          id="input-file-id"
+                          multiple
+                          type="file"
+                          (change)="onFileChange($event, 'secondary_insured')"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="col-sm-6 col-md-6 col-xl-4 insurance_validity_wrap"
+                  >
+                    <div class="form_field_wrapper">
+                      <label>{{ 'insurance_validity' | translate}} </label>
+                      <div class="insurance_validity">
+                        <label class="date_lable">{{ 'from' | translate}}</label>
+                        <mat-form-field
+                          class="example-full-width"
+                          appearance="fill"
+                        >
+                          <input
+                            matInput
+                            [matDatepickerFilter]="myFilter"
+                            [matDatepicker]="picker5"
+                            formControlName="insurance_validity_from"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker5"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker5></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && f2['secondary_insured'].get('insurance_validity_from').errors?.['required']"
+                        >{{ 'required' | translate}}*</span
+                      >
+                    </div>
+                  </div>
+                  <div
+                    class="col-sm-6 col-md-6 col-xl-4 insurance_validity_wrap"
+                  >
+                    <div class="form_field_wrapper">
+                      <label class="invisible">{{ 'insurance_validity' | translate}} </label>
+                      <div class="insurance_validity">
+                        <label class="date_lable">To</label>
+                        <mat-form-field
+                          class="example-full-width"
+                          appearance="fill"
+                        >
+                          <input
+                            matInput
+                            [matDatepickerFilter]="myFilter"
+                            [matDatepicker]="picker6"
+                            formControlName="insurance_validity_to"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker6"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker6></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && f2['secondary_insured'].get('insurance_validity_to').errors?.['required']"
+                        >{{ 'required' | translate}}*</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+      <!-- </form> -->
+
+      <!--Primary insurance-->
+      <!-- <div class="insure_details card" *ngIf="primaryInsurance">
+            <div class="expansion_panel">
+              <div class="expansion_panel_inner">
+                <div class="panel_title">
+                  <h1>{{ "primary_insurance_details" | translate }}</h1>
+                </div>
+                <div class="expansion_other_panel first_child">
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "first_name" | translate }}</p>
+                          <p>
+                            {{ primaryInsurance?.subscriber_first_name }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "middle_name" | translate }}</p>
+                          <p>
+                            {{ primaryInsurance?.subscriber_middle_name }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block last_child">
+                        <div class="detail_section">
+                          <p>{{ "last_name" | translate }}</p>
+                          <p>
+                            {{ primaryInsurance?.subscriber_last_name }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-5">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "insurance_id" | translate }}</p>
+                          <p>
+                            {{ primaryInsurance?.insurance_id }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-7">
+                      <div class="outer_detail_block last_child">
+                        <div class="detail_section">
+                          <p>{{ "insurance_validity" | translate }}</p>
+                          <p>
+                            {{ "from" | translate }}
+                            {{ primaryInsurance?.insurance_validity_from }}
+                            {{ "to" | translate }}
+                            {{ primaryInsurance?.insurance_validity_to }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="expansion_other_panel">
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "policy_ID" | translate }}</p>
+                          <p>
+                            {{ primaryInsurance?.policy_id }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "card_ID" | translate }}</p>
+                          <p>
+                            {{ primaryInsurance?.card_id }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block last_child">
+                        <div class="detail_section">
+                          <p>{{ "employee_id" | translate }}</p>
+                          <p>
+                            {{ primaryInsurance?.employee_id }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="expansion_other_panel">
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "insurance_holder" | translate }}</p>
+                          <p>
+                            {{ primaryInsurance?.insurance_holder_name }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "reimbursement" | translate }}</p>
+                          <p>
+                            {{ primaryInsurance?.reimbersement_rate + " %" }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block last_child">
+                        <div class="detail_section">
+                          <p>Registration Number:</p>
+                          <p>541287636201320</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="expansion_other_panel">
+                  <div class="expansion_other_panel_inner">
+                    <div class="panel_item_title">Insurance card</div>
+                    <div class="row">
+                      <div class="col-md-4 mb-3">
+                        <div class="panel_img">
+                          <img src="../../../../assets/img/insurance.png" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+      <!--Secondary insurance-->
+      <!-- <div class="insure_details card" *ngIf="
+              secondaryInsurance.length !== 0 &&
+              secondaryInsurance[0] !== undefined
+            ">
+            <div class="expansion_panel">
+              <div class="expansion_panel_inner" *ngFor="let secondary of secondaryInsurance">
+                <div class="panel_title">
+                  <h1>
+                    {{ "secondary_insurance_details" | translate }}
+                  </h1>
+                </div>
+                <div class="expansion_other_panel first_child">
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "first_name" | translate }}</p>
+                          <p>
+                            {{ secondary?.subscriber_first_name }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "middle_name" | translate }}</p>
+                          <p>
+                            {{ secondary?.subscriber_middle_name }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block last_child">
+                        <div class="detail_section">
+                          <p>{{ "last_name" | translate }}</p>
+                          <p>
+                            {{ secondary?.subscriber_last_name }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-5">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "insurance_id" | translate }}</p>
+                          <p>
+                            {{ secondary?.insurance_id }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-7">
+                      <div class="outer_detail_block last_child">
+                        <div class="detail_section">
+                          <p>{{ "insurance_validity" | translate }}</p>
+                          <p>
+                            {{ "from" | translate }}
+                            {{ secondary?.insurance_validity_from }}
+                            {{ "to" | translate }}
+                            {{ secondary?.insurance_validity_to }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="expansion_other_panel">
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "policy_ID" | translate }}</p>
+                          <p>
+                            {{ secondary?.policy_id }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "card_ID" | translate }}</p>
+                          <p>
+                            {{ secondary?.card_id }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block last_child">
+                        <div class="detail_section">
+                          <p>{{ "employee_id" | translate }}</p>
+                          <p>
+                            {{ secondary?.employee_id }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="expansion_other_panel">
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "insurance_holder" | translate }}</p>
+                          <p>
+                            {{ secondary?.subscriber_full_name }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block">
+                        <div class="detail_section">
+                          <p>{{ "reimbursement" | translate }}</p>
+                          <p>
+                            {{ secondary?.reimbersement_rate + " %" }}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block last_child">
+                        <div class="detail_section">
+                          <p>Registration Number:</p>
+                          <p>541287636201320</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                      <div class="outer_detail_block last_child">
+                        <div class="detail_section">
+                          <p>{{ "Relationship" | translate }}</p>
+                          <p>{{ secondary?.relationship_with_insure }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="expansion_other_panel">
+                <div class="expansion_other_panel_inner">
+                  <div class="panel_item_title">Insurance card</div>
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <div class="panel_img">
+                        <img src="../../../../assets/img/insurance.png" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div> -->
+
+      <!-- <div class="primary_btn">
+            <button mat-button matStepperPrevious type="button" class="btn btn-secondary">
+              {{ "back" | translate }}
+            </button>
+            <button [disabled]="!primaryInsurance && secondaryInsurance.length === 0" mat-button type="button"
+              class="btn btn-primary" (click)="saveInsuranceDetails()">
+              {{ "save_and_next" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-primary" (click)="skipTab()">
+              {{ "skip" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-danger" style="margin-left: 10px"
+              [routerLink]="['/patient/myaccount']">
+              {{ "exit" | translate }}
+            </button>
+          </div> -->
+      <!-- </div>
+      </mat-step> -->
+
+      <!---------------------------family members--------------------------->
+      <mat-step>
+        <ng-template matStepLabel>{{
+          "family_members" | translate
+          }}</ng-template>
+        <div class="step_counter_inner">
+          <div class="common_stepper dependent_family">
+            <form [formGroup]="familyMembersForm">
+              <div class="form_title">
+                {{ "add_family_members" | translate }}
+              </div>
+              <div class="button-container">
+                <button class="add-button" aria-label="Add Family Member"
+                  (click)="openAddFamilyMemberPopup(addFamilyMember,'')">
+                  <span class="material-icons">person_add</span>
+                  {{ "add_family_members" | translate }}
+                </button>
+              </div>
+              <div class="container_box">
+
+                <div class="row_box">
+                  <div class="box" *ngFor="let member of familyMemberList">
+                    <div class="circle">
+                      <img src="{{
+                        member.signedUrl ? member.signedUrl : 'assets/img/create_profile.png'
+                      }}" alt="Profile Image">
+                    </div>
+                    <div class="details">
+                      <div class="info">
+                        <p class="name">{{member.first_name}} {{member.last_name}}</p>
+                        <p class="age">Age: {{calculateAge(member.dob)}}</p>
+                      </div>
+                      <div class="actions">
+                        <button class="action-btn edit" aria-label="Edit"
+                          (click)="openAddFamilyMemberPopup(addFamilyMember,member?.familyMemberId)">
+                          <span class="material-icons">edit</span>
+                        </button>
+                        <button class="action-btn delete" aria-label="Delete"
+                          (click)="openDeletefamilyMemberPopup(modalDeletePopup, member?.familyMemberId)">
+                          <span class="material-icons">delete</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- <ng-container formArrayName="family_members">
+                <ng-container *ngFor="let _ of family_members.controls; let i = index">
+                  <ng-container [formGroupName]="i">
+                    <div class="increse_content first">
+                      <div class="row increse_content_inner">
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "first_name" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="first_name" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,1).controls['first_name'].errors?.['required']">{{
+                            "enter_first_name" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "last_name" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="last_name" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,1).controls['last_name'].errors?.['required']">{{
+                            "enter_last_name" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "ssn_numner" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="number" matInput formControlName="ssn_number" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,1).controls['ssn_number'].errors?.['required']">{{
+                            "enter_ssn" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "gender" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <mat-select disableRipple formControlName="gender"
+                                placeholder="{{ 'select_gender' | translate }}">
+                                <mat-option *ngFor="let gender of genderList" [value]="gender.value">{{ gender.label
+                                  }}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,1).controls['gender'].errors?.['required']">{{
+                            "select_gender" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "Relationship" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <mat-select disableRipple formControlName="relationship" placeholder="{{
+                                  'select_relation' | translate
+                                }}">
+                                <mat-option *ngFor="let relation of relationshipList" [value]="relation.value">{{
+                                  relation.label }}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,1).controls['relationship'].errors?.['required']">{{
+                            "select_relation" | translate }}ship*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "date_of_birth" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepicker]="picker36" formControlName="dob" />
+                              <mat-datepicker-toggle matSuffix [for]="picker36"></mat-datepicker-toggle>
+                              <mat-datepicker #picker36></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,1).controls['dob'].errors?.['required']">{{
+                            "enter_dob" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "mobile_number" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="mobile" matInput formControlName="mobile_number"
+                                (keypress)="numberFunc($event)" (paste)="numberFunc($event)" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,1).controls['mobile_number'].errors?.['required']">{{
+                            "enter_mobile" | translate }}*</span>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="i === family_members.length - 1; else remove">
+                        <div class="row_generate row_minus" *ngIf="family_members.length > 1">
+                          <mat-icon class="plus" (click)="deleteFamilyMember(i)">remove</mat-icon>
+                        </div>
+                        <div class="row_generate row_add">
+                          <mat-icon class="plus" (click)="addNewFamilyMember()">add</mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-template #remove>
+                        <div class="row_generate row_minus">
+                          <mat-icon class="plus" (click)="deleteFamilyMember(i)">remove</mat-icon>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container> -->
+
+              <!-- <div class="form_title">{{ "history" | translate }}</div>
+              <div class="form_sub_title">
+                {{ "medical_history" | translate }}
+              </div> -->
+
+              <!------------Medical hoistory form array---------------->
+              <!-- <ng-container formArrayName="medical_history">
+                <ng-container *ngFor="let _ of medical_history.controls; let i = index">
+                  <ng-container [formGroupName]="i">
+                    <div class="increse_content">
+                      <div class="row increse_content_inner">
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "allergy_type" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="allergy_type" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,2).controls['allergy_type'].errors?.['required']">{{
+                            "select_allergy_type" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "allergen" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="allergen" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,2).controls['allergen'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "note" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="note" />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "reaction" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="reaction" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,2).controls['reaction'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "status" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <mat-select disableRipple formControlName="status"
+                                placeholder="{{ 'select_status' | translate }}">
+                                <mat-option value="Open">{{
+                                  "open" | translate
+                                  }}</mat-option>
+                                <mat-option value="Closed">{{
+                                  "closed" | translate
+                                  }}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,2).controls['status'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "created_date" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker39"
+                                formControlName="created_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker39"></mat-datepicker-toggle>
+                              <mat-datepicker #picker39></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,2).controls['created_date'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="i === medical_history.length - 1; else remove">
+                        <div class="row_generate row_minus" *ngIf="medical_history.length > 1">
+                          <mat-icon class="plus" (click)="deleteMedicalHistory(i)">remove</mat-icon>
+                        </div>
+                        <div class="row_generate row_add">
+                          <mat-icon class="plus" (click)="addNewMedicalHistory()">add</mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-template #remove>
+                        <div class="row_generate row_minus">
+                          <mat-icon class="plus" (click)="deleteMedicalHistory(i)">remove</mat-icon>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container> -->
+
+              <!-- <div class="form_sub_title">
+                {{ "social_history" | translate }}
+              </div> -->
+
+              <!---------------Social History form array--------------------->
+
+              <!-- <ng-container formArrayName="social_history">
+                <ng-container *ngFor="let _ of social_history.controls; let i = index">
+                  <ng-container [formGroupName]="i">
+                    <div class="increse_content">
+                      <div class="row increse_content_inner">
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "alcohol" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <mat-select disableRipple formControlName="alcohol"
+                                placeholder="{{ 'select_1' | translate }}">
+                                <mat-option [value]="true">{{
+                                  "yes" | translate
+                                  }}</mat-option>
+                                <mat-option [value]="false">{{
+                                  "no" | translate
+                                  }}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,3).controls['alcohol'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "tobacco" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <mat-select disableRipple formControlName="tobacco"
+                                placeholder="{{ 'select_1' | translate }}">
+                                <mat-option [value]="true">{{
+                                  "yes" | translate
+                                  }}</mat-option>
+                                <mat-option [value]="false">{{
+                                  "no" | translate
+                                  }}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,3).controls['tobacco'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "drugs" | translate }}</label>
+                            <mat-form-field appearance="fill">
+
+                              <mat-select disableRipple formControlName="drugs"
+                                placeholder="{{ 'select_1' | translate }}">
+                                <mat-option [value]="true">{{
+                                  "yes" | translate
+                                  }}</mat-option>
+                                <mat-option [value]="false">{{
+                                  "no" | translate
+                                  }}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,3).controls['drugs'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "occupation" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="occupation" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,3).controls['occupation'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "travel" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="travel" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,3).controls['travel'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "start_date" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker38"
+                                formControlName="start_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker38"></mat-datepicker-toggle>
+                              <mat-datepicker #picker38></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && familyValidations(i,3).controls['start_date'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="i === social_history.length - 1; else remove">
+                        <div class="row_generate row_minus" *ngIf="social_history.length > 1">
+                          <mat-icon class="plus" (click)="deleteSocialHistory(i)">remove</mat-icon>
+                        </div>
+                        <div class="row_generate row_add">
+                          <mat-icon class="plus" (click)="addNewSocialHistory()">add</mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-template #remove>
+                        <div class="row_generate row_minus">
+                          <mat-icon class="plus" (click)="deleteSocialHistory(i)">remove</mat-icon>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container> -->
+            </form>
+
+            <div class="container_box">
+              <div class="form_title">
+                <h3><b>{{ "deleted_family_members" | translate }}</b></h3>
+              </div>
+              <div class="row_box">
+                <div class="box" *ngFor="let member of deletedFamilyMemberList">
+                  <div class="circle">
+                    <img src="{{
+                      member.signedUrl ? member.signedUrl : 'assets/img/create_profile.png'
+                    }}" alt="Profile Image">
+                  </div>
+                  <div class="details">
+                    <div class="info">
+                      <p class="name">{{member.first_name}} {{member.last_name}}</p>
+                      <p class="age">Age: {{calculateAge(member.dob)}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="primary_btn">
+            <button mat-button matStepperPrevious type="button" class="btn btn-secondary">
+              {{ "back" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-primary" (click)="handleFamilyDetails()">
+              {{ "save" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-primary" [routerLink]="['/patient/myaccount']">
+              {{ "cancel" | translate }}
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!------------------------------Medical Information----------------------------------->
+      <mat-step>
+        <ng-template matStepLabel>{{ "medical_information" | translate }}</ng-template>
+        <div class="step_counter_inner">
+          <div class="current_medicine common_stepper">
+            <form [formGroup]="medicine">
+
+              <!---------------------Diagnosis------------------>
+
+              <ng-container class="madical-information">
+                <div class="form_title">
+                  {{ "diagnosis" | translate }}
+                </div>
+
+                <div class="table-wrap">
+                  <div class="table-inner">
+                    <table mat-table [dataSource]="diagnosisData" class="mat-elevation-z8 withoutpagination">
+                      <!-- Date Column -->
+                      <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "name" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.doctorDetails?.doctorName}}
+                        </td>
+                      </ng-container>
+
+                      <!-- Height Column -->
+                      <ng-container matColumnDef="appointment date">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "appointment_date" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.createdAt | date : "dd/MM/YYYY" }}
+                        </td>
+                      </ng-container>
+
+                      <!--Weight (LB) Column -->
+                      <ng-container matColumnDef="appointment id">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "appointment_id" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.appointment_id }}
+                        </td>
+                      </ng-container>
+
+                      <!--Action column -->
+
+                      <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "action" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          <div class="icon_group">
+
+                            <ng-container>
+                              <a class="svgicon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9"
+                                  fill="none">
+                                  <path
+                                    d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                                </svg>
+                              </a>
+                            </ng-container>
+                          </div>
+                        </td>
+                      </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsDocsDiagnosis"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsDocsDiagnosis"></tr>
+                    </table>
+                  </div>
+                  <mat-paginator class="pagination" [length]="totalLengthDagnosis"
+                    (page)="handlePageEventForDiagnosis($event)" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]"
+                    showFirstLastButtons aria-label="Select page of periodic elements">
+                  </mat-paginator>
+                </div>
+              </ng-container><br>
+
+              <!-- <ng-container formArrayName="current_medicines">
+                <ng-container *ngFor="let _ of current_medicines.controls; let i = index">
+                  <ng-container [formGroupName]="i">
+                    <div class="increse_content">
+                      <div class="row increse_content_inner">
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "medicine" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="medicine" />
+                            </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && currentMedicineValidation(i).controls['medicine']
+                            .errors?.['required']">{{ "enter_medicine_name" | translate }}*</span>
+                          </div>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "dose(mg)" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="dose" />
+                            </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && currentMedicineValidation(i).controls['dose']
+                            .errors?.['required']">{{ "enter_dose" | translate }}*</span>
+                          </div>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "frequency" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="frequency" />
+                            </mat-form-field>
+
+                            <span class="text-danger" *ngIf="isSubmitted && currentMedicineValidation(i).controls['frequency']
+                            .errors?.['required']">{{ "select_frequency" | translate }}*</span>
+                          </div>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "duration" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="strength" />
+                            </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && currentMedicineValidation(i).controls['strength']
+                            .errors?.['required']">{{ "enter_duration" | translate }}*</span>
+                          </div>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "start_date" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker16"
+                                formControlName="start_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker16"></mat-datepicker-toggle>
+                              <mat-datepicker #picker16></mat-datepicker>
+                            </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && currentMedicineValidation(i).controls['start_date']
+                            .errors?.['required']">{{ "select_start_date" | translate }}*</span>
+                          </div>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "end_date" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker17"
+                                formControlName="end_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker17"></mat-datepicker-toggle>
+                              <mat-datepicker #picker17></mat-datepicker>
+                            </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && currentMedicineValidation(i).controls['end_date']
+                            .errors?.['required']">{{ "select_end_date" | translate }}*</span>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="i === current_medicines.length - 1; else remove">
+                        <div class="row_generate row_minus" *ngIf="current_medicines.length > 1">
+                          <mat-icon class="plus" (click)="deleteCurrentMedicine(i)">remove</mat-icon>
+                        </div>
+                        <div class="row_generate row_add">
+                          <mat-icon class="plus" (click)="addNewCurrentMedicine()">add</mat-icon>
+                        </div>
+                      </ng-container>
+
+                      <ng-template #remove>
+                        <div class="row_generate row_minus">
+                          <mat-icon class="plus" (click)="deleteCurrentMedicine(i)">remove</mat-icon>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container> -->
+
+              <!---------------------Medical------------------>
+
+              <ng-container>
+                <div class="form-row">
+                  <div class="form_title">
+                    {{ "medical" | translate }}
+                  </div>
+                  <button class="btn btn-primary add-history-btn"
+                    (click)="openAddMedicalHistoryPopup(addMedicalHistory,'')">
+                    <span class="material-icons">add</span>
+                    {{ "add_medical_history" | translate }}
+                  </button>
+                </div>
+                <div class="table-wrap">
+                  <div class="table-inner">
+                    <table mat-table [dataSource]="medicalData" class="mat-elevation-z8 withoutpagination">
+                      <!-- Date Column -->
+                      <ng-container matColumnDef="allergen">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "allergen" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.allergen }}
+                        </td>
+                      </ng-container>
+
+                      <!-- Height Column -->
+                      <ng-container matColumnDef="allergy type">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "allergyType" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.allergyType }}
+                        </td>
+                      </ng-container>
+
+                      <!--Weight (LB) Column -->
+                      <ng-container matColumnDef="reaction">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "reaction" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.reaction }}
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "status" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.status }}
+                        </td>
+                      </ng-container>
+
+                      <!--Action column -->
+
+                      <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "action" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          <div class="icon_group">
+
+                            <ng-container>
+                              <a class="svgicon" (click)="openAddMedicalHistoryPopup(addMedicalHistory, element._id)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                  fill="none">
+                                  <path
+                                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                                    fill="currentColor" />
+                                </svg>
+                              </a>
+                            </ng-container>
+
+                          </div>
+                        </td>
+                      </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsDocsMedical"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsDocsMedical"></tr>
+                    </table>
+                  </div>
+                  <mat-paginator class="pagination" [length]="totalLengthMedical"
+                    (page)="handlePageEventForMedicalHistory($event)" [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+                  </mat-paginator>
+                </div>
+              </ng-container><br>
+
+              <!-- <ng-container formArrayName="past_medicines">
+                <ng-container *ngFor="let _ of past_medicines.controls; let j = index">
+                  <ng-container [formGroupName]="j">
+                    <div class="increse_content">
+                      <div class="row increse_content_inner">
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "medicine" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="medicine" />
+                            </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && pastMedicineValidation(j).controls['medicine']
+                            .errors?.['required']">{{ "enter_medicine_name" | translate }}*</span>
+                          </div>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "dose(mg)" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="dose" />
+                            </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && pastMedicineValidation(j).controls['dose']
+                            .errors?.['required']">{{ "enter_dose" | translate }}*</span>
+                          </div>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "frequency" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="frequency" />
+                            </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && pastMedicineValidation(j).controls['frequency']
+                            .errors?.['required']">{{ "select_frequency" | translate }}*</span>
+                          </div>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "duration" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="strength" />
+                            </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && pastMedicineValidation(j).controls['strength']
+                            .errors?.['required']">{{ "enter_duration" | translate }}*</span>
+                          </div>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "start_date" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker16"
+                                formControlName="start_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker16"></mat-datepicker-toggle>
+                              <mat-datepicker #picker16></mat-datepicker>
+                            </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && pastMedicineValidation(j).controls['start_date']
+                            .errors?.['required']">{{ "select_start_date" | translate }}*</span>
+                          </div>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "end_date" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker17"
+                                formControlName="end_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker17"></mat-datepicker-toggle>
+                              <mat-datepicker #picker17></mat-datepicker>
+                            </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && pastMedicineValidation(j).controls['end_date']
+                            .errors?.['required']">{{ "select_end_date" | translate }}*</span>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="j === past_medicines.length - 1; else remove">
+                        <div class="row_generate row_minus" *ngIf="past_medicines.length > 1">
+                          <mat-icon class="plus" (click)="deletePastMedicine(j)">remove</mat-icon>
+                        </div>
+                        <div class="row_generate row_add">
+                          <mat-icon class="plus" (click)="addNewPastMedicine()">add</mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-template #remove>
+                        <div class="row_generate row_minus">
+                          <mat-icon class="plus" (click)="deletePastMedicine(j)">remove</mat-icon>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container> -->
+
+              <!---------------------Social------------------>
+              <ng-container>
+
+                <div class="form-row">
+                  <div class="form_title">
+                    {{ "social" | translate }}
+                  </div>
+                  <button class="btn btn-primary add-history-btn"
+                    (click)="openAddSocialHistoryPopup(addSocialHistory,'')">
+                    <span class="material-icons">add</span>
+                    {{ "add_social_history" | translate }}
+                  </button>
+                </div>
+
+                <div class="table-wrap">
+                  <div class="table-inner">
+                    <table mat-table [dataSource]="socialData" class="mat-elevation-z8 withoutpagination">
+                      <!-- Date Column -->
+                      <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "name" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.patientFullName }}
+                        </td>
+                      </ng-container>
+
+                      <!-- Height Column -->
+                      <ng-container matColumnDef="alcohol">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "alcohol" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.alcohol === true?"Yes":"No" }}
+                        </td>
+                      </ng-container>
+
+                      <!--Weight (LB) Column -->
+                      <ng-container matColumnDef="drugs">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "drugs" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.drugs === true?"Yes":"No" }}
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="tobacco">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "tobacco" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.tobacco === true? "Yes":"No" }}
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="updatedAt">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "updatedAt" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          {{ element?.createdAt | date : "dd/MM/YYYY" }}
+                        </td>
+                      </ng-container>
+
+                      <!--Action column -->
+
+                      <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>
+                          {{ "action" | translate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                          <div class="icon_group">
+
+                            <ng-container>
+                              <a class="svgicon" (click)="openAddSocialHistoryPopup(addSocialHistory,element._id)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                  fill="none">
+                                  <path
+                                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                                    fill="currentColor" />
+                                </svg>
+                              </a>
+                            </ng-container>
+
+                          </div>
+                        </td>
+                      </ng-container>
+                      <tr mat-header-row *matHeaderRowDef="displayedColumnsDocsSocial"></tr>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsDocsSocial"></tr>
+                    </table>
+                  </div>
+                  <mat-paginator class="pagination" [length]="totalLengthSpcial"
+                    (page)="handlePageEventForMedicalHistory($event)" [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+                  </mat-paginator>
+                </div>
+              </ng-container>
+            </form>
+          </div>
+          <div class="primary_btn">
+            <button mat-button matStepperPrevious type="button" class="btn btn-secondary">
+              {{ "back" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-primary" (click)="handleMedicines()">
+              {{ "save_and_next" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-primary" (click)="skipTab()">
+              {{ "skip" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-danger" style="margin-left: 10px"
+              [routerLink]="['/patient/myaccount']">
+              {{ "exit" | translate }}
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!---------------------------------Medical Documnets--------------------------------->
+      <mat-step>
+        <ng-template matStepLabel>{{
+          "medical_document" | translate
+          }}</ng-template>
+        <div class="step_counter_inner">
+          <!-----------------Docs Table---------------->
+
+          <div class="table-wrap">
+            <div class="table-inner">
+              <table mat-table [dataSource]="documentsData" class="mat-elevation-z8 withoutpagination">
+                <!-- Date Column -->
+                <ng-container matColumnDef="Document">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "document" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.name }}
+                  </td>
+                </ng-container>
+
+                <!-- Height Column -->
+                <ng-container matColumnDef="issue date">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "issue_date" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.issue_date | date : "dd/MM/YYYY" }}
+                  </td>
+                </ng-container>
+
+                <!--Weight (LB) Column -->
+                <ng-container matColumnDef="expiry date">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "expiry_date" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.expiration_date | date : "dd/MM/YYYY" }}
+                  </td>
+                </ng-container>
+
+                <!--Action column -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "action" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <div class="icon_group">
+                      <ng-container *ngIf="element?.image.endsWith('.pdf')">
+                        <mat-icon (click)="downloadpdf(element?.image_signed_url)">get_app</mat-icon>
+                      </ng-container>
+                      <ng-container *ngIf="element?.image.endsWith('.png')">
+                        <a class="svgicon" (click)="
+                          openVerticallyCenteredquickview(
+                            quick_view,
+                            element?.image_signed_url
+                          )
+                        ">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+                            <path
+                              d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z">
+                            </path>
+                          </svg></a>
+                      </ng-container>
+
+                    </div>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsDocs"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsDocs"></tr>
+              </table>
+            </div>
+          </div>
+          <br /><br />
+
+          <!-------------------------------------------->
+          <div class="common_stepper medical_document">
+            <form [formGroup]="medicalDocumentForm">
+              <div class="form_title">{{ "medical_document" | translate }}</div>
+
+              <!----------------Medical document form array------------>
+              <ng-container formArrayName="medical_document">
+                <ng-container *ngFor="let doc of medical_document.controls; let i = index">
+                  <ng-container [formGroupName]="i">
+                    <div class="increse_content">
+                      <div class="row increse_content_inner">
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "document_name" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="name" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && medDocValidation(i).controls['name'].errors?.['required']">{{
+                            "enter_doc_name" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "issue_date" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepicker]="picker30" formControlName="issue_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker30"></mat-datepicker-toggle>
+                              <mat-datepicker #picker30></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && medDocValidation(i).controls['issue_date'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{
+                              "expiration_date_optional" | translate
+                              }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepicker]="picker31" formControlName="expiration_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker31"></mat-datepicker-toggle>
+                              <mat-datepicker #picker31></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="item upload_item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label class="invisible">{{
+                              "upload_image" | translate
+                              }}</label>
+                            <div class="upload_input">
+                              <div class="upload_input_content">
+                                <label *ngIf="
+                                    medicalDocumentForm.value.medical_document[
+                                      i
+                                    ].image
+                                  ">{{ "file_added" | translate }}</label>
+                                <label *ngIf="
+                                    !medicalDocumentForm.value.medical_document[
+                                      i
+                                    ].image
+                                  ">{{ "upload_image" | translate }}</label>
+                              </div>
+                              <!-- <div class="upload_input_content">
+                                <label>{{ 'file_added' | translate}}</label>
+                              </div> -->
+                              <input class="ng-hide user_upload_input" id="input-file-id" multiple type="file"
+                                (change)="onMedicalDocChange($event, i)" />
+                            </div>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && medDocValidation(i).controls['image'].errors?.['required']">{{
+                            "select_file" | translate }}*</span>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="i === medical_document.length - 1; else remove">
+                        <div class="row_generate row_minus" *ngIf="medical_document.length > 1">
+                          <mat-icon class="plus" (click)="deleteMedicalDoc(i)">remove</mat-icon>
+                        </div>
+                        <div class="row_generate row_add">
+                          <mat-icon class="plus" (click)="addNewMedicalDocument()">add</mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-template #remove>
+                        <div class="row_generate row_minus">
+                          <mat-icon class="plus" (click)="deleteMedicalDoc(i)">remove</mat-icon>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </form>
+          </div>
+          <div class="primary_btn">
+            <button mat-button matStepperPrevious type="button" class="btn btn-secondary">
+              {{ "back" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-primary" (click)="handleMedicalDocuments()">
+              {{ "save_and_next" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-primary" (click)="skipTab()">
+              {{ "skip" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-danger" style="margin-left: 10px"
+              [routerLink]="['/patient/myaccount']">
+              {{ "exit" | translate }}
+            </button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!---------------------------------------Add Vitals------------------------------------>
+      <mat-step>
+        <ng-template matStepLabel>{{ "my_plans" | translate }}</ng-template>
+        <div class="step_counter_inner">
+          <form [formGroup]="addVitals">
+            <div class="personal_details">
+              <div class="form_title">{{ "my_plans" | translate }}</div>
+
+              <div class="row">
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "height" | translate }}(m)</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="height" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "weight" | translate }}(kg)</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="weight" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "h_rate" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="h_rate" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "bmi" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="bmi" [readonly]="true" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "BP(H/L)" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="bp" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "pulse" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="pulse" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "resp" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="resp" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "temp(c)" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="temp" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "blood_group" | translate }} </label>
+                    <mat-form-field appearance="fill">
+                      <!-- <mat-label>Sub-admin</mat-label> -->
+                      <mat-select disableRipple formControlName="blood_group"
+                        placeholder="{{ 'select_blood_group' | translate }}">
+                        <mat-option *ngFor="let blood of bloodGroupList" [value]="blood.value">{{ blood.label
+                          }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "clearance" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="clearance" />
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-4 mb-3">
+                  <div class="form_field_wrapper">
+                    <label>{{ "hepatics_summary" | translate }}</label>
+                    <mat-form-field appearance="fill">
+                      <input type="text" matInput formControlName="hepatics_summary" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="primary_btn">
+              <button mat-button matStepperPrevious type="button" class="btn btn-secondary">
+                {{ "back" | translate }}
+              </button>
+              <button mat-button type="submit" class="btn btn-primary" (click)="handleAddVitals()">
+                {{ "save_and_next" | translate }}
+              </button>
+              <button mat-button type="button" class="btn btn-primary" (click)="skipTab()">
+                {{ "skip" | translate }}
+              </button>
+              <button mat-button type="button" class="btn btn-danger" style="margin-left: 10px"
+                [routerLink]="['/patient/myaccount']">
+                {{ "exit" | translate }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-step>
+
+      <!---------------------------------History ------------------------------->
+      <!-- <mat-step>
+        <ng-template matStepLabel>{{ "history" | translate }}</ng-template>
+        <div class="step_counter_inner">
+          <div class="common_stepper history">
+            <form [formGroup]="historyForm">
+              <div class="form_title">{{ "patient_history" | translate }}</div>
+
+              <ng-container formArrayName="patient_history">
+                <ng-container *ngFor="let _ of patient_history.controls; let i = index">
+                  <ng-container [formGroupName]="i">
+                    <div class="increse_content">
+                      <div class="row increse_content_inner">
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{
+                              "patient_history_type" | translate
+                              }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="type" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,1).controls['type'].errors?.['required']">{{
+                            "select_type" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "history_name" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="name" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,1).controls['name'].errors?.['required']">{{
+                            "enter_history_name" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "start_date" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker26"
+                                formControlName="start_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker26"></mat-datepicker-toggle>
+                              <mat-datepicker #picker26></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,1).controls['start_date'].errors?.['required']">{{
+                            "enter_start_date" | translate }}*</span>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="i === patient_history.length - 1; else remove">
+                        <div class="row_generate row_minus" *ngIf="patient_history.length > 1">
+                          <mat-icon class="plus" (click)="deletePatient_History(i)">remove</mat-icon>
+                        </div>
+                        <div class="row_generate row_add">
+                          <mat-icon class="plus" (click)="addNewPatient_History()">add</mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-template #remove>
+                        <div class="row_generate row_minus">
+                          <mat-icon class="plus" (click)="deletePatient_History(i)">remove</mat-icon>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+
+              <div class="form_title">{{ "add_allergies" | translate }}</div>
+
+              <ng-container formArrayName="allergies">
+                <ng-container *ngFor="let _ of allergies.controls; let i = index">
+                  <ng-container [formGroupName]="i">
+                    <div class="increse_content">
+                      <div class="row increse_content_inner">
+                        <div class="item col-sm-8 col-md-8">
+                          <div class="form_field_wrapper">
+                            <label>{{ "allergies_type" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="type" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,2).controls['type'].errors?.['required']">{{
+                            "select_type" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-4 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "start_date" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker25"
+                                formControlName="start_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker25"></mat-datepicker-toggle>
+                              <mat-datepicker #picker25></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,2).controls['start_date'].errors?.['required']">{{
+                            "select_start_date" | translate }}*</span>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="i === allergies.length - 1; else remove">
+                        <div class="row_generate row_minus" *ngIf="allergies.length > 1">
+                          <mat-icon class="plus" (click)="deleteAllergies(i)">remove</mat-icon>
+                        </div>
+                        <div class="row_generate row_add">
+                          <mat-icon class="plus" (click)="addNewAllergies()">add</mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-template #remove>
+                        <div class="row_generate row_minus">
+                          <mat-icon class="plus" (click)="deleteAllergies(i)">remove</mat-icon>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+
+              <div class="form_title">{{ "lifestyle" | translate }}</div>
+
+              <ng-container formArrayName="lifestyle">
+                <ng-container *ngFor="let _ of lifestyle.controls; let i = index">
+                  <ng-container [formGroupName]="i">
+                    <div class="increse_content">
+                      <div class="row increse_content_inner">
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "lifestyle_type" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="type" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,3).controls['type'].errors?.['required']">{{
+                            "select_type" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{
+                              "lifestyle_type_name" | translate
+                              }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="type_name" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,3).controls['type_name'].errors?.['required']">{{
+                            "required" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-4 mb-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "start_date" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker24"
+                                formControlName="start_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker24"></mat-datepicker-toggle>
+                              <mat-datepicker #picker24></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,3).controls['start_date'].errors?.['required']">{{
+                            "enter_date" | translate }}*</span>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="i === lifestyle.length - 1; else remove">
+                        <div class="row_generate row_minus" *ngIf="lifestyle.length > 1">
+                          <mat-icon class="plus" (click)="deleteLifestyle(i)">remove</mat-icon>
+                        </div>
+                        <div class="row_generate row_add">
+                          <mat-icon class="plus" (click)="addNewLifestyle()">add</mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-template #remove>
+                        <div class="row_generate row_minus">
+                          <mat-icon class="plus" (click)="deleteLifestyle(i)">remove</mat-icon>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+
+              <div class="form_title">{{ "family_history" | translate }}</div>
+
+              <ng-container formArrayName="familial_history">
+                <ng-container *ngFor="let _ of familial_history.controls; let i = index">
+                  <ng-container [formGroupName]="i">
+                    <div class="increse_content">
+                      <div class="row increse_content_inner">
+                        <div class="item col-sm-6 col-md-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "Relationship" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <mat-select disableRipple formControlName="relationship" placeholder="{{
+                                  'select_relation' | translate
+                                }}">
+                                <mat-option *ngFor="let relation of relationshipList" [value]="relation.value">{{
+                                  relation.label }}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,4).controls['relationship'].errors?.['required']">{{
+                            "select_relation" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-3">
+                          <div class="form_field_wrapper">
+                            <label>{{
+                              "family_history_type" | translate
+                              }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="family_history_type" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,4).controls['family_history_type'].errors?.['required']">{{
+                            "family_history_type" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "history_name" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input type="text" matInput formControlName="history_name" />
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,4).controls['history_name'].errors?.['required']">{{
+                            "enter_history_name" | translate }}*</span>
+                        </div>
+                        <div class="item col-sm-6 col-md-3">
+                          <div class="form_field_wrapper">
+                            <label>{{ "start_date" | translate }}</label>
+                            <mat-form-field class="example-full-width" appearance="fill">
+                              <input matInput [matDatepickerFilter]="myFilter" [matDatepicker]="picker23"
+                                formControlName="start_date" />
+                              <mat-datepicker-toggle matSuffix [for]="picker23"></mat-datepicker-toggle>
+                              <mat-datepicker #picker23></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <span class="text-danger"
+                            *ngIf="isSubmitted && patientHistoryValidation(i,4).controls['start_date'].errors?.['required']">{{
+                            "start_date" | translate }}*</span>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="i === familial_history.length - 1; else remove">
+                        <div class="row_generate row_minus" *ngIf="familial_history.length > 1">
+                          <mat-icon class="plus" (click)="deleteFamilialHistory(i)">remove</mat-icon>
+                        </div>
+                        <div class="row_generate row_add">
+                          <mat-icon class="plus" (click)="addNewFamilial_history()">add</mat-icon>
+                        </div>
+                      </ng-container>
+                      <ng-template #remove>
+                        <div class="row_generate row_minus">
+                          <mat-icon class="plus" (click)="deleteFamilialHistory(i)">remove</mat-icon>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </form>
+          </div>
+          <div class="primary_btn">
+            <button mat-button matStepperPrevious type="button" class="btn btn-secondary">
+              {{ "back" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-primary" (click)="handlePatientHistory()">
+              {{ "save_and_next" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-primary" (click)="skipTab()">
+              {{ "skip" | translate }}
+            </button>
+            <button mat-button type="button" class="btn btn-danger" style="margin-left: 10px"
+              [routerLink]="['/patient/myaccount']">
+              {{ "exit" | translate }}
+            </button>
+          </div>
+        </div>
+      </mat-step> -->
+
+    </mat-stepper>
+  </div>
+</div>
+
+<!-- Add Family Member Modal -->
+
+<div class="add_family_member">
+  <ng-template #addFamilyMember let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "add_family_member" | translate }}
+        </h4>
+        <button mat-icon-button (click)="modal.dismiss('Cross click')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="familyMemberForm" (ngSubmit)="onSubmitFamilyAdd()">
+          <!-- Profile Picture -->
+          <div class="profile-picture">
+            <label for="profileImage">
+              <img [src]="familyMemberProfileImage || 'assets/img/create_profile.png'" alt="Profile Image"
+                class="profile-img" id="profilePreview" />
+              <input type="file" id="profileImage" accept="image/*" (change)="onImageChange($event)" hidden />
+            </label>
+            <p>{{ "Upload Profile Picture" | translate }}</p>
+          </div>
+
+          <!-- First Name -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ "First Name" | translate }}</mat-label>
+            <input formControlName="firstName" matInput type="text"
+              placeholder="{{ 'Enter First Name' | translate }}" />
+          </mat-form-field>
+
+          <!-- Last Name -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ "Last Name" | translate }}</mat-label>
+            <input formControlName="lastName" matInput type="text" placeholder="{{ 'Enter Last Name' | translate }}" />
+          </mat-form-field>
+
+          <!-- Relation -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ "Relation" | translate }}</mat-label>
+            <mat-select formControlName="relationship">
+              <mat-option value="parent">{{ "Parent" | translate }}</mat-option>
+              <mat-option value="brother">{{ "brother" | translate }}</mat-option>
+              <mat-option value="child">{{ "Child" | translate }}</mat-option>
+              <mat-option value="sibling">{{ "Sibling" | translate }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Gender -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ "Gender" | translate }}</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option value="male">{{ "Male" | translate }}</mat-option>
+              <mat-option value="female">{{ "Female" | translate }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Date of Birth -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ "Date of Birth" | translate }}</mat-label>
+            <input matInput formControlName="dob" type="date" />
+          </mat-form-field>
+
+          <!-- Mobile Number -->
+          <div class="mobile-group">
+            <label>{{ "mobile" | translate }}<span class="danger">*</span></label>
+            <mat-form-field appearance="fill">
+              <input type="text" #phone (focus)="onFocus()" formControlName="mobileNumber" ng2TelInput
+                placeholder='{{ "enter_mobile" | translate }}' matInput />
+            </mat-form-field>
+          </div>
+
+          <div class="action-buttons">
+            <button mat-raised-button color="primary" (click)="closePopup()">
+              {{ "cancel" | translate }}
+            </button>
+            <button *ngIf="!editFamilyMemberFormOpen" mat-raised-button color="primary" type="submit">
+              {{ "save" | translate }}
+            </button>
+            <button *ngIf="editFamilyMemberFormOpen" mat-raised-button color="primary" type="submit">
+              {{ "edit" | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Add Medical History Modal -->
+<ng-template #addMedicalHistory let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-header">
+      <h2 class="modal-title" *ngIf="!isMedicalEditModalOpen"><b>{{"add_medical_history" | translate}}</b></h2>
+      <h2 class="modal-title" *ngIf="isMedicalEditModalOpen"><b>{{"edit_medical_history" | translate}}</b></h2>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <form [formGroup]="medicalHistoryForm" (ngSubmit)="onSubmitMedicalHistory()">
+        <div class="form-group">
+          <!-- Radio Buttons -->
+
+          <div class="form-radio">
+            <mat-radio-group class="radio-group" formControlName="patientId" (change)="onRadioSelectionChange($event)">
+              <mat-radio-button value="me">Me</mat-radio-button>
+              <mat-radio-button value="familyMember">
+                {{"family_member" | translate}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <!-- Family Member Dropdown -->
+          <mat-form-field appearance="outline" class="full-width" *ngIf="showFamilyDropdown">
+            <mat-label>Select Family Member</mat-label>
+            <mat-select formControlName="familyMember">
+              <mat-option *ngFor="let member of familyMemberList" [value]="member.familyMemberId">
+                {{ member?.first_name }} {{ member?.last_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Allergen Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Allergen</mat-label>
+            <input matInput formControlName="allergen" placeholder="Allergen" />
+          </mat-form-field>
+
+          <!-- Allergy Type and Reaction Fields -->
+          <div class="dual-input">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Allergy Type</mat-label>
+              <mat-select formControlName="allergyType">
+                <mat-option value="no allergy">No Allergy</mat-option>
+                <mat-option value="food">Food</mat-option>
+                <mat-option value="environmental">Environmental</mat-option>
+                <mat-option value="drug">Drug</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Reaction</mat-label>
+              <mat-select formControlName="reaction">
+                <mat-option value="no reaction">No Reaction</mat-option>
+                <mat-option value="anaphylaxis">Anaphylaxis</mat-option>
+                <mat-option value="sneezing">Sneezing</mat-option>
+                <mat-option value="rash,itching">Rash,Itching</mat-option>
+                <mat-option value="swelling,hives">Swelling,Hives</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- Status Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option value="Active">Active</mat-option>
+              <mat-option value="Inactive">Inactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Notes Field -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notes</mat-label>
+            <textarea matInput formControlName="note" placeholder="Start typing here..." rows="3"></textarea>
+          </mat-form-field>
+        </div>
+
+        <!-- Footer with Save Button -->
+        <div class="modal-footer">
+          <button mat-raised-button color="primary" class="save-btn" [disabled]="medicalHistoryForm.invalid">
+            <mat-icon>favorite</mat-icon> Save medical history
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</ng-template>
+
+<!-- Add Social History Modal -->
+<ng-template #addSocialHistory let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-header">
+      <h2 class="modal-title">
+        <b *ngIf="!isSocialEditModalOpen">{{ "add_social_history" | translate }}</b>
+        <b *ngIf="isSocialEditModalOpen">{{ "edit_social_history" | translate }}</b>
+      </h2>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form [formGroup]="socialHistoryForm" (ngSubmit)="onSubmitSocialHistory()">
+        <!-- Radio Buttons for Patient Selection -->
+        <div class="form-group">
+          <div class="form-radio">
+            <mat-radio-group class="radio-group" formControlName="patientId" (change)="onRadioSelectionChange($event)">
+              <mat-radio-button value="me">Me</mat-radio-button>
+              <mat-radio-button value="familyMember">
+                {{"family_member" | translate}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <!-- Family Member Dropdown -->
+          <mat-form-field appearance="outline" class="full-width" *ngIf="showFamilyDropdown">
+            <mat-label>Select Family Member</mat-label>
+            <mat-select formControlName="familyMember">
+              <mat-option *ngFor="let member of familyMemberList" [value]="member.familyMemberId">
+                {{ member?.first_name }} {{ member?.last_name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Checkboxes for Social History -->
+        <div class="form-group">
+          <label class="form-label">Social History</label>
+          <div class="checkbox-group">
+            <mat-checkbox formControlName="alcohol">Alcohol</mat-checkbox>
+            <mat-checkbox formControlName="drugs">Drugs</mat-checkbox>
+            <mat-checkbox formControlName="tobacco">Tobacco</mat-checkbox>
+          </div>
+        </div>
+
+        <!-- Save Button -->
+        <div class="modal-footer">
+          <button *ngIf="!isSocialEditModalOpen" mat-raised-button color="primary" type="submit">
+            {{ "save" | translate }}
+          </button>
+          <button *ngIf="isSocialEditModalOpen" mat-raised-button color="primary" type="submit">
+            {{ "edit" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- Reject Appointment modal -->
+<ng-template #rejectappointment let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-header">
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete" (click)="modal.dismiss('Cross click')">
+          <img class="img-fluid" src="../../../../assets/img/cancel.svg" alt="" />
+        </div>
+        <span class="single_text text-danger">
+          {{ "insurance_not_found" | translate }}<br />
+          {{ "please_check_insurance_data" | translate }}.</span>
+        <div class="primary_btn mt-30">
+          <!-- <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ 'no' | translate}}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="
+              openVerticallyCenteredcancelappointment(cancelappintmentcontent)
+            "
+          >
+            {{ 'yes' | translate}}
+          </button> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Quickview Modal -->
+
+<ng-template #quick_view let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="docview_img">
+        <img src="{{ setDocToView }}" width="600px" height="500px" />
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+
+<!-- Reject Appointment modal -->
+<ng-template #matchedresult let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-header">
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete" (click)="modal.dismiss('Cross click')">
+          <img class="img-fluid" src="../../../../assets/img/approve.svg" alt="" />
+        </div>
+        <span class="single_text text-success">
+          {{ "matched" | translate }}<br />
+          {{ "insurance_found" | translate }}</span>
+        <div class="primary_btn mt-30"></div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Delete Role Popup -->
+<ng-template #modalDeletePopup let-modal>
+  <div class="custome_modall">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "delete_role" | translate }}
+      </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="handleClose()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="row">
+          <p>{{ "are_you_sure?_you_want_to_delete_this_role" | translate }}</p>
+        </div>
+        <div class="primary_btn">
+          <button (click)="handleClose()" type="button" class="btn btn-secondary">
+            {{ "no" | translate }}
+          </button>
+          <button type="submit" (click)="submitAction()" class="btn btn-primary">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>

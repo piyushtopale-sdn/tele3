@@ -1,0 +1,118 @@
+<div class="payment">
+  <div class="payment_inner">
+    <div class="row">
+      <div class="left_part part col-md-6">
+        <div class="leftpart_inner">
+          <div class="section_wrap">
+            <div class="top_section">
+              <div class="project_title_wrap">
+                <mat-icon>west</mat-icon>
+                <div class="project_logo">
+                  <img src="../../../../../assets/img/login_img.svg" />
+                </div>
+                <div class="project_title">
+                  {{ "test_project" | translate }}
+                </div>
+              </div>
+              <div class="plan_info">
+                <label>{{ "test_order_payment" | translate }}</label>
+                <div>
+                  <label>{{ "for_order" | translate }}: {{ orderNo }}</label>
+                </div>
+                <div class="price">
+                  {{ "cfa" | translate }} {{ totalAmount }}
+                </div>
+              </div>
+            </div>
+            <div class="bottom_bar">
+              <ul class="list_wrapper">
+                <li>
+                  {{ "powered_by" | translate }}
+                  <b>{{ "strip" | translate }}</b>
+                </li>
+                <li>{{ "terms" | translate }}</li>
+                <li>{{ "privacy" | translate }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right_part part col-md-6">
+        <div class="rightpart_inner">
+          <div class="payment_form">
+            <div class="payment_form_inner">
+              <form [formGroup]="stripeTest">
+                <div class="payment_title">
+                  {{ "pay_with_card" | translate }}
+                </div>
+
+                <div class="form_field_wrapper">
+                  <label>{{ "name_on_card" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      formControlName="name"
+                      placeholder="{{ 'enter_your_name' | translate }}"
+                      matInput
+                    />
+                  </mat-form-field>
+                </div>
+
+                <div class="form_field_wrapper">
+                  <label>{{ "email" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      formControlName="email"
+                      placeholder="{{ 'enter_your_email' | translate }}"
+                      matInput
+                    />
+                  </mat-form-field>
+                </div>
+
+                <ng-container
+                  *ngIf="elementsOptions?.clientSecret as clientSecret"
+                >
+                  <ngx-stripe-payment [clientSecret]="clientSecret">
+                  </ngx-stripe-payment>
+                </ng-container>
+
+                <div class="form-btn primary_btn">
+                  <button (click)="pay()" class="btn btn-primary">
+                    {{ "pay" | translate }}
+                  </button>
+                </div>
+
+                <div class="payment_desc">
+                  <p>
+                    {{ "payment_desc1" | translate }}
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ---------------------------------------Payment Successfull modal---------------------------------------- -->
+<div class="payment_succesfull">
+  <ng-template #paymentcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-body">
+        <div class="successfull_icon">
+          <img src="/assets/img/successfull.png" />
+        </div>
+        <div class="successfull_title">
+          {{ "payment" | translate }} <br />
+          {{ "successfull" | translate }}
+        </div>
+        <a class="backtodashboard" (click)="gotoOrderList()">{{
+          "go_to_order_list" | translate
+        }}</a>
+      </div>
+    </div>
+  </ng-template>
+</div>

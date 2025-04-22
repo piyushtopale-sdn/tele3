@@ -1,0 +1,271 @@
+@import '../../../../../../assets/css/variable/variable';
+
+
+.table-inner {
+    border: 1px solid grey;
+    border-radius: 10px;
+    // overflow: hidden;
+    // overflow-x: scroll !important;
+    // overflow-y: hidden !important;
+    white-space: nowrap !important;
+    border: 1px solid #B6C8D6 !important;
+    cursor: pointer !important;
+}
+
+.right_part_doctor {
+    display: flex;
+    gap: 9px;
+
+    .main_title {
+        font-size: 16px;
+        
+    }
+
+    .datefilters {
+        gap: 25px;
+        .form_field_wrapper {
+            .mat-form-field {
+                .mat-form-field-wrapper {
+                    padding: 0;
+                    width: 145;
+        
+                    .mat-form-field-flex {
+                        background-color: #EBF0F4;
+                        border: 1px solid #EBF0F4;
+                        border-radius: 15px;
+        
+                        .mat-form-field-infix {
+                            .mat-select {
+                                .mat-select-arrow-wrapper {
+                                    transform: translateY(0);
+                                }
+        
+                                .mat-select-value {
+                                    color: $formfiled_color;
+                                    font-weight: 500;
+                                }
+                            }
+        
+                            width: 100px;
+                        }
+                    }
+        
+                    .mat-form-field-underline {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+
+    //   .comparevitals{
+    //     gap:25px;
+    //     button.btn.btn-primary{
+    //       padding: 9px 20px;
+    //     }
+    //   }
+}
+
+.choosedate {
+    max-width: 149px;
+
+    .mat-form-field-wrapper {
+        padding-bottom: 0 !important;
+    }
+
+    .mat-form-field-flex {
+        background-color: rgb(128 128 128 / 6%) !important;
+        border: none !important;
+        border-radius: 15px !important;
+
+        .mat-input-element {
+            color: #222222 !important;
+            opacity: 0.5 !important;
+        }
+    }
+
+    .custome_modal .modal-body .modal_content1 {
+        border: 1px solid rgba(228, 228, 228, 0.9) !important;
+        border-radius: 5px 0px 0px 5px;
+        /* display: flex; */
+        align-items: stretch;
+        justify-content: space-between;
+        margin: 0 0 15px;
+
+        .input-box {
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            padding: 5px;
+            background-color: #f8f9fa;
+        }
+
+        /* Center the text in input fields */
+        .center-text {
+            text-align: center !important;
+        }
+    }
+
+
+
+}
+
+.infopopup-modal {
+    width: 500px !important;
+    background: #f8faff !important;
+    border-radius: 12px !important;
+    padding: 16px !important;
+    font-family: Arial, sans-serif !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+
+    .infopopup-header {
+        display: flex;
+        justify-content: space-between;
+        // align-items: center;
+        // border-bottom: 1px solid #e0e0e0;
+        // padding-bottom: 8px;
+
+        .modal-title {
+            font-size: 18px;
+            display: inline-flex;
+            /* Ensures label and unit are side by side */
+            gap: 5px;
+            /* Adds spacing between the label and the unit */
+            align-items: center;
+            /* Aligns text vertically if needed */
+            font-weight: 600;
+        }
+
+        .modal-date {
+            font-size: 14px;
+            color: #8a8a8a;
+        }
+
+        .close-btn {
+            border: none;
+            background: none;
+            cursor: pointer;
+
+            mat-icon {
+                font-size: 18px;
+                color: #616161;
+            }
+        }
+    }
+
+    .modal-body {
+        margin-top: 16px;
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+            .row {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 8px;
+
+                .col {
+                    flex: 1;
+
+                    p {
+                        margin: 0;
+                        font-size: 14px;
+                        color: #424242;
+                    }
+                }
+            }
+
+            h3 {
+                font-size: 16px;
+                margin-bottom: 8px;
+                color: #2a2a2a;
+            }
+        }
+    }
+}
+
+
+.unit {
+    font-weight: normal;
+    /* Optional: Makes the unit less bold */
+    font-size: 0.9em;
+    /* Optional: Adjusts font size for unit */
+}
+
+.vitals_tab_title {
+    gap: 5px;
+    display: flex;
+}
+
+.selected-button {
+    color:  #F6F8FC  !important;    
+    background: rgba(12, 47, 73, 0.75) !important;
+
+  }
+
+  .pagination-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    gap: 5px;
+  }
+  
+  .pagination-controls button {
+    padding: 5px 10px;
+    margin: 0 2px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .pagination-controls button:hover:not([disabled]) {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .pagination-controls button.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+  }
+  
+  .pagination-controls button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  .total-records {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #333;
+  }
+
+
+
+.result-high {
+    color: purple !important;
+    font-weight: bold;
+}
+.result-low{
+    color:blue !important;
+    font-weight: bold;
+}
+.result-criticalHigh{
+    color:red !important;
+    font-weight: bold;
+}
+.result-criticalLow{
+    color:red !important;
+    font-weight: bold;
+}
+.result-normal{
+    color:black !important;
+    font-weight: bold;
+}

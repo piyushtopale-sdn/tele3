@@ -1,0 +1,1096 @@
+<div class="home_wrapper">
+  <app-header></app-header>
+
+  <div class="breadcum_wrapper" aria-label="breadcrumb">
+    <div class="container">
+      <div class="breadcrumb_title">{{ "doctor_details" | translate }}</div>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/patient/homepage']">{{ "home" | translate }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ "appointment_details" | translate }}
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="container">
+    <div
+      class="back_button justify-content-start mt-4"
+      [routerLink]="['/patient/homepage/retaildoctor']"
+    >
+      <button class="btn btn-primary">{{ "back" | translate }}</button>
+    </div>
+  </div>
+
+  <div class="main_section retail_doctor_detail">
+    <div class="main_section_inner">
+      <div class="container">
+        <div class="row">
+          <div id="main_content" class="content_area col-lg-12">
+            <div class="bottom_section">
+              <div class="order_medicine">
+                <div class="bottom_bar">
+                  <div class="row">
+                    <div class="left_part col-lg-7 col-xl-6">
+                      <div class="medicine_details">
+                        <div class="image">
+                          <img
+                            src="{{
+                              doctordetailsData?.profile_picture
+                                ? doctordetailsData?.profile_picture
+                                : '../../../../../assets/img/homepage/medicine.png'
+                            }}"
+                          />
+                        </div>
+                        <div class="medicine_info">
+                          <h2 class="title">
+                            {{ doctordetailsData?.full_name }}
+                          </h2>
+                          <div class="desc">
+                            {{ doctordetailsData?.speciality }}
+                          </div>
+
+                          <ul class="content_list row">
+                            <li class="content_item">
+                              <div class="title">
+                                {{ "experience" | translate }}
+                              </div>
+                              <span class="content_desc">
+                                {{ doctordetailsData?.years_of_experience }}
+                              </span>
+                            </li>
+                            <li class="content_item">
+                              <div class="title">
+                                {{ "rating_and_review" | translate }}
+                              </div>
+                              <span class="content_desc">
+                                <div class="rating">
+                                  <i class="fa-solid fa-star"></i
+                                  ><span>{{
+                                    doctor_rating?.average_rating
+                                  }}</span>
+                                  ({{ doctor_rating?.total_review }})
+                                </div>
+                              </span>
+                            </li>
+                            <li class="content_item">
+                              <div class="title">
+                                {{ "next_appointment_available" | translate }}
+                              </div>
+                              <span class="content_desc">
+                                {{
+                                  doctordetailsData?.nextAppointmentAvailable
+                                    | date : "dd/MM/yyyy"
+                                }}
+                              </span>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="right_part col-lg-5 col-xl-6">
+                      <div class="open_today">
+                        <div class="green_circle">
+                          <div class="circle">
+                            <div class="inner_green"></div>
+                          </div>
+                          <p>
+                            <b>{{ "on_duty_today" | translate }}</b>
+                          </p>
+                        </div>
+                      </div>
+                      <ng-template #off>
+                        <div class="close_today">
+                          <div class="red_circle">
+                            <div class="circle">
+                              <div class="inner_green"></div>
+                            </div>
+                            <p>
+                              <b>{{ "closed" | translate }}</b>
+                            </p>
+                          </div>
+                        </div>
+                      </ng-template>
+
+                      <div class="primary_btn">
+                        <button
+                          class="btn btn-tranprent"
+                          (click)="
+                            createOppintment({
+                              appointment_type: 'HOME_VISIT',
+                              doctor_id: doctor_portal_id
+                            })
+                          "
+                        >
+                          {{ "book_home_visit" | translate }}
+                          <span
+                            >{{ "fee" | translate }}:
+                            {{
+                              doctordetailsData?.fee_management?.home_visit
+                                ?.basic_fee +
+                                doctordetailsData?.fee_management?.home_visit
+                                  ?.travel_fee
+                            }}
+                            {{ "cfa" | translate }}</span
+                          >
+                        </button>
+                        <button
+                          class="btn btn-tranprent"
+                          (click)="
+                            createOppintment({
+                              appointment_type: 'FACE_TO_FACE',
+                              doctor_id: doctor_portal_id
+                            })
+                          "
+                        >
+                          {{ "book_hospital_visit" | translate }}
+                          <span
+                            >{{ "fee" | translate }}:
+                            {{
+                              doctordetailsData?.fee_management?.f2f?.basic_fee
+                            }}
+                            {{ "cfa" | translate }}</span
+                          >
+                        </button>
+                        <button
+                          class="btn btn-tranprent"
+                          (click)="
+                            createOppintment({
+                              appointment_type: 'ONLINE',
+                              doctor_id: doctor_portal_id
+                            })
+                          "
+                        >
+                          {{ "book_online_consultation" | translate }}
+                          <span
+                            >{{ "fee" | translate }}:
+                            {{
+                              doctordetailsData?.fee_management?.online
+                                ?.basic_fee
+                            }}
+                            {{ "cfa" | translate }}</span
+                          >
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="order_medicine">
+                <div class="tabing_section">
+                  <mat-tab-group [selectedIndex]="selectedIndex">
+                    <mat-tab label="Background">
+                      <div class="main_outer">
+                        <div class="about_section">
+                          <div class="header_section">
+                            <p>{{ "about" | translate }}</p>
+                          </div>
+                          <div class="content">
+                            <p>
+                              {{ doctordetailsData?.about }}
+                            </p>
+                          </div>
+                        </div>
+                        <hr />
+                        <!-- <div class="association_grp">
+                          <div class="header_section">
+                            <p>Association group</p>
+                          </div>
+                          <div class="list_group_section">
+                            <ul>
+                              <li>
+                                <p>0.1. Lorem ipsum dolor sit </p>
+                              </li>
+                              <li>
+                                <p>02. Lorem ipsum dolor sit </p>
+                              </li>
+                            </ul>
+                          </div>
+                        </div> -->
+                        <hr />
+                        <div class="contact_info">
+                          <div class="header_section">
+                            <p>{{ "contact_information" | translate }}</p>
+                          </div>
+                          <div class="list_group_section">
+                            <ul>
+                              <li>
+                                <p class="small_text">
+                                  {{ "phone" | translate }}
+                                </p>
+                                <h2>
+                                  ({{
+                                    doctordetailsData?.portal_user_data
+                                      ?.country_code
+                                  }})
+                                  {{
+                                    doctordetailsData?.portal_user_data?.mobile
+                                  }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">
+                                  {{ "email" | translate }}
+                                </p>
+                                <h2>
+                                  {{
+                                    doctordetailsData?.portal_user_data?.email
+                                  }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">
+                                  {{ "location" | translate }}
+                                </p>
+                                <h2>
+                                  {{ doctordetailsData?.hospital_location[0]?.hospital_name }}
+                                  <a (click)="getDirection(doctordetailsData?.hospital_location[0]?.loc?.coordinates)">
+                                    {{ "get_directions" | translate }}</a
+                                  >
+                                  </h2>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <hr />
+
+                        <div class="education_section">
+                          <div class="header_section">
+                            <p>{{ "education" | translate }}</p>
+                          </div>
+                          <div
+                            class="content"
+                            *ngFor="
+                              let education of doctordetailsData?.education_details
+                            "
+                          >
+                            <p>
+                              {{
+                                education?.degree +
+                                  "-" +
+                                  education?.university +
+                                  "," +
+                                  education?.city +
+                                  "," +
+                                  education?.country
+                              }}
+                            </p>
+                          </div>
+                        </div>
+                        <hr />
+
+                        <div class="specialization">
+                          <div class="header_section">
+                            <p>{{ "specialization" | translate }}</p>
+                          </div>
+                          <div class="list_group_section">
+                            <ul>
+                              <li>
+                                <p>{{ doctordetailsData?.speciality }}</p>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <hr />
+
+                        <div
+                          class="services"
+                          *ngIf="doctordetailsData?.services"
+                        >
+                          <div class="header_section">
+                            <p>{{ "services" | translate }}</p>
+                          </div>
+                          <div class="list_group_section">
+                            <ul>
+                              <li>
+                                <p>{{ doctordetailsData?.services }}</p>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <hr />
+
+                        <div class="fees">
+                          <div class="header_section">
+                            <p>{{ "fees" | translate }}</p>
+                          </div>
+                          <div class="list_group_section">
+                            <ul>
+                              <li>
+                                <p class="small_text">
+                                  {{ "online_consultation" | translate }}
+                                </p>
+                                <h2>
+                                  {{
+                                    doctordetailsData?.fee_management?.online
+                                      ?.basic_fee
+                                  }}
+                                  {{ "cfa" | translate }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">
+                                  {{ 'face_to_face_consultation' | translate}}
+                                </p>
+                                <h2>
+                                  {{
+                                    doctordetailsData?.fee_management?.f2f
+                                      ?.basic_fee
+                                  }}
+                                  {{ "cfa" | translate }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">
+                                  {{ 'home_visit_consultation' | translate}}
+                                </p>
+                                <h2>
+                                  {{
+                                    doctordetailsData?.fee_management
+                                      ?.home_visit?.basic_fee
+                                  }}
+                                  {{ 'cfa' | translate}} ({{ 'travelling_fee' | translate}} :
+                                  {{
+                                    doctordetailsData?.fee_management
+                                      ?.home_visit?.travel_fee
+                                      ? doctordetailsData?.fee_management
+                                          ?.home_visit?.travel_fee + " CFA"
+                                      : "-"
+                                  }})
+                                </h2>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+
+                    <mat-tab label="Availability">
+                      <div class="expansion_panel_inner">
+                        <div class="main_outer">
+                          <div class="row location_appointment">
+                            <div class="expansion_item location col-md-6">
+                              <h2>{{ 'select_location' | translate}}</h2>
+                              <mat-button-toggle-group
+                                name="fontStyle"
+                                #group="matButtonToggleGroup"
+                                *ngFor="let location of hospital_location"
+                                [value]="location_id"
+                                aria-label="Font Style"
+                              >
+                                <mat-button-toggle
+                                  [value]="location.hospital_id"
+                                  (change)="
+                                    onSelection({ locationid: $event.value })
+                                  "
+                                  >{{
+                                    location?.hospital_name
+                                  }}</mat-button-toggle
+                                >
+                              </mat-button-toggle-group>
+                            </div>
+
+                            <div class="expansion_item appointment col-md-6">
+                              <h2>{{ 'appointment_type' | translate}}</h2>
+                              <mat-radio-group
+                                aria-label="Appointment Type"
+                                [(ngModel)]="appointment_type"
+                              >
+                                <!-- <mat-radio-button [value]="type.appointment_type"
+                                  *ngFor="let type of doctor_availability" (change)="onSelection({type:$event.value})">{{type?.appointment_type}}</mat-radio-button> -->
+                                <mat-radio-button
+                                  value="ONLINE"
+                                  (change)="onSelection({ type: $event.value })"
+                                  >{{ 'online' | translate}}</mat-radio-button
+                                >
+                                <mat-radio-button
+                                  value="HOME_VISIT"
+                                  (change)="onSelection({ type: $event.value })"
+                                  >{{ 'home_visit' | translate}}</mat-radio-button
+                                >
+                                <mat-radio-button
+                                  value="FACE_TO_FACE"
+                                  (change)="onSelection({ type: $event.value })"
+                                  >{{ 'hospital_visit' | translate}}</mat-radio-button
+                                >
+                              </mat-radio-group>
+                            </div>
+                          </div>
+
+                          <div class="consultation_datetime">
+                            <h2>{{ 'choose_consultation_date_time' | translate}}</h2>
+                            <div class="consultation_datetime_inner row">
+                              <div class="expansion_item col-md-7">
+                                <article class="calendar-wrapper">
+                                  <igx-calendar
+                                    (selected)="onSelection({ date: $event })"
+                                  ></igx-calendar>
+                                </article>
+                              </div>
+                              <div class="expansion_item col-md-5">
+                                <h2>{{ 'choose_time' | translate}}</h2>
+                                <div class="mat-button-toggle-group-wrapper">
+                                  <mat-button-toggle-group
+                                    name="fontStyle"
+                                    [value]="notAvalible"
+                                    *ngFor="let slot of doctorAvailableTimeSlot"
+                                    aria-label="Font Style"
+                                  >
+                                    <mat-button-toggle [value]="slot.status">{{
+                                      slot.slot
+                                    }}</mat-button-toggle>
+                                  </mat-button-toggle-group>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+
+                    <mat-tab label="Location">
+                      <div class="main_outer">
+                        <div class="location">
+                          <div class="header_section">
+                            <p>{{ "location " | translate }}</p>
+                          </div>
+                          <mat-button-toggle-group
+                            name="fontStyle"
+                            #group="matButtonToggleGroup"
+                            [(ngModel)]="location_id"
+                            [value]="location_id"
+                            *ngFor="let location of hospital_location"
+                            (change)="
+                              weekdaybyloaction(
+                                location.hospital_id,
+                                appointment_type
+                              )
+                            "
+                            aria-label="Font Style"
+                          >
+                            <mat-button-toggle
+                              [value]="location?.hospital_id"
+                              >{{ location?.hospital_name }}</mat-button-toggle
+                            >
+                          </mat-button-toggle-group>
+
+                          <div class="contact_information">
+                            <div class="header_section">
+                              <p>{{ "contact_information" | translate }}</p>
+                            </div>
+                            <div class="list_group_section">
+                              <ul>
+                                <li>
+                                  <p class="small_text">
+                                    {{ "phone" | translate }}
+                                  </p>
+                                  <h2>
+                                    ({{
+                                      doctordetailsData?.portal_user_data
+                                        ?.country_code
+                                    }})
+                                    {{
+                                      doctordetailsData?.portal_user_data
+                                        ?.mobile
+                                    }}
+                                  </h2>
+                                </li>
+                                <li>
+                                  <p class="small_text">
+                                    {{ "email" | translate }}
+                                  </p>
+                                  <h2>
+                                    {{
+                                      doctordetailsData?.portal_user_data?.email
+                                    }}
+                                  </h2>
+                                </li>
+                               
+                              </ul>
+                            </div>
+                          </div>
+
+                          <div class="open_hours">
+                            <div class="header_section">
+                              <p>{{ 'open_hours' | translate}}</p>
+                            </div>
+
+                            <mat-radio-group
+                              aria-label="Appointment Type"
+                              [(ngModel)]="appointment_type"
+                            >
+                              <!-- <mat-radio-button [value]="type.appointment_type"
+                                *ngFor="let type of doctor_availability"
+                                (change)="typeSelect($event.value)">{{type.appointment_type}}</mat-radio-button> -->
+                              <mat-radio-button
+                                value="ONLINE"
+                                (change)="typeSelect({ type: $event.value })"
+                                >{{ 'online' | translate}}</mat-radio-button
+                              >
+                              <mat-radio-button
+                                value="HOME_VISIT"
+                                (change)="typeSelect({ type: $event.value })"
+                                >{{ 'home_visit' | translate}}</mat-radio-button
+                              >
+                              <mat-radio-button
+                                value="FACE_TO_FACE"
+                                (change)="typeSelect({ type: $event.value })"
+                                >{{ 'hospital_visit' | translate}}</mat-radio-button
+                              >
+                            </mat-radio-group>
+
+                            <div class="list_group_section">
+                              <ul>
+                                <li>
+                                  <p class="small_text">{{ 'monday' | translate}}:</p>
+                                  <h2>
+                                    {{
+                                      weekDaySlot?.mon_start_time
+                                        ? formatTime(
+                                            weekDaySlot?.mon_start_time
+                                          ) +
+                                          " - " +
+                                          formatTime(weekDaySlot?.mon_end_time)
+                                        : "close"
+                                    }}
+                                  </h2>
+                                </li>
+                                <li>
+                                  <p class="small_text">{{ 'tuesday' | translate}}:</p>
+                                  <h2>
+                                    {{
+                                      weekDaySlot?.tue_start_time
+                                        ? formatTime(
+                                            weekDaySlot?.tue_start_time
+                                          ) +
+                                          " - " +
+                                          formatTime(weekDaySlot?.tue_end_time)
+                                        : "close"
+                                    }}
+                                  </h2>
+                                </li>
+                                <li>
+                                  <p class="small_text">{{ 'wednesday' | translate}}:</p>
+                                  <h2>
+                                    {{
+                                      weekDaySlot?.wed_start_time
+                                        ? formatTime(
+                                            weekDaySlot?.wed_start_time
+                                          ) +
+                                          " - " +
+                                          formatTime(weekDaySlot?.wed_end_time)
+                                        : "close"
+                                    }}
+                                  </h2>
+                                </li>
+                                <li>
+                                  <p class="small_text">{{ 'thursday' | translate}}:</p>
+                                  <h2>
+                                    {{
+                                      weekDaySlot?.thu_start_time
+                                        ? formatTime(
+                                            weekDaySlot?.thu_start_time
+                                          ) +
+                                          " - " +
+                                          formatTime(weekDaySlot?.thu_end_time)
+                                        : "close"
+                                    }}
+                                  </h2>
+                                </li>
+                                <li>
+                                  <p class="small_text">{{ 'friday' | translate}}:</p>
+                                  <h2>
+                                    {{
+                                      weekDaySlot?.fri_start_time
+                                        ? formatTime(
+                                            weekDaySlot?.fri_start_time
+                                          ) +
+                                          " - " +
+                                          formatTime(weekDaySlot?.fri_end_time)
+                                        : "close"
+                                    }}
+                                  </h2>
+                                </li>
+                                <li>
+                                  <p class="small_text">{{ 'saturday' | translate}}:</p>
+                                  <h2>
+                                    {{
+                                      weekDaySlot?.sat_start_time
+                                        ? formatTime(
+                                            weekDaySlot?.sat_start_time
+                                          ) +
+                                          " - " +
+                                          formatTime(weekDaySlot?.sat_end_time)
+                                        : "close"
+                                    }}
+                                  </h2>
+                                </li>
+                                <li>
+                                  <p class="small_text">{{ 'sunday' | translate}}:</p>
+                                  <h2>
+                                    {{
+                                      weekDaySlot?.sun_start_time
+                                        ? formatTime(
+                                            weekDaySlot?.sun_start_time
+                                          ) +
+                                          " - " +
+                                          formatTime(weekDaySlot?.sun_end_time)
+                                        : "close"
+                                    }}
+                                  </h2>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+
+                    <mat-tab label="Accepted Insurance Companies">
+                      <div class="main_outer">
+                        <div class="accept_insurance">
+                          <div class="list_group_section d-flex flex-wrap gap-3">
+                            <ul *ngIf="accepted_insurance_company.length == 0">
+                              <div class="text-center">
+                                <h4>
+                                  <b
+                                    >{{ 'no_accepted_insurance_companies_availabile' | translate}}
+                                  </b>
+                                </h4>
+                              </div>
+                            </ul>
+                            <ul *ngFor="let c of accepted_insurance_company">
+                              <li>
+                                <div class="companies">
+                                  {{ c.company_name }}
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+
+                    <mat-tab label="Test Performed">
+                      <div class="main_outer_new">
+                        <div
+                          class="our_team"
+                          *ngIf="updatedPathologyTests.length > 0"
+                        >
+                          <div
+                            class="cat_list_item"
+                            *ngFor="let test of updatedPathologyTests"
+                          >
+                            <h2 class="cat_title">{{ test.typeOfTest }}</h2>
+                            <div class="item_wrapper row">
+                              <div
+                                class="item col-sm-6 col-lg-4"
+                                *ngFor="let testName of test.nameOfTests"
+                              >
+                                <div class="item_inner">
+                                  <div class="desc">
+                                    <h3 class="title">{{ testName }}</h3>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="our_team"
+                          *ngIf="updatedPathologyTests.length === 0"
+                        >
+                          <div class="text-center">
+                            <span><b>{{ 'no_test_performed_available' | translate}}!</b></span>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+
+                    <mat-tab label="Reviews">
+                      <div class="reviews_outer">
+                        <div class="header_review">
+                          <div class="header_section">
+                            <p>{{ 'reviews' | translate}}</p>
+                          </div>
+                          <div class="primary_btn">
+                            <button
+                              class="btn btn-primary"
+                              (click)="
+                                openVerticallyCenteredreview(reviewcontent)
+                              "
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="21"
+                                height="21"
+                                viewBox="0 0 21 21"
+                                fill="none"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M18.7681 1.81524C19.0274 2.07447 19.2331 2.38225 19.3735 2.72099C19.5138 3.05973 19.586 3.42281 19.586 3.78947C19.586 4.15613 19.5138 4.51921 19.3735 4.85795C19.2331 5.19669 19.0274 5.50447 18.7681 5.7637L6.26462 18.2672L1 19.5833L2.31616 14.3924L14.8249 1.8205C15.3179 1.32506 15.9792 1.03313 16.6775 1.00265C17.3758 0.972174 18.06 1.20538 18.5944 1.65598L18.7681 1.81524Z"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M8.89844 19.584H19.4277"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                />
+                                <path
+                                  d="M16.793 5.10559L18.1091 6.42175"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                /></svg
+                              >&nbsp;&nbsp; {{ 'write_a_review' | translate}}
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="average_rating">
+                          <div class="star_rating">
+                            <p>{{ 'average_rating' | translate}}</p>
+                            <span class="ratings-star">
+                              <div class="rating">
+                                {{ getAverage }}
+                                <i
+                                  class="fa-solid fa-star"
+                                  *ngFor="
+                                    let f of [].constructor(
+                                      getAverage?.average_rating
+                                    )
+                                  "
+                                ></i
+                                >&nbsp;
+                              </div>
+                            </span>
+                          </div>
+                          <div class="progress_rating">
+                            <div class="progress_rating_block">
+                              <i class="fa-solid fa-star"></i>
+                              <p>5</p>
+                              <mat-progress-bar
+                                mode="determinate"
+                                [value]="ratingCount.fiveStart"
+                              ></mat-progress-bar>
+                              <!-- <p>2.0K</p> -->
+                              <p>{{ ratingCount?.fiveStart }}</p>
+                            </div>
+                            <div class="progress_rating_block">
+                              <i class="fa-solid fa-star"></i>
+                              <p>4</p>
+                              <mat-progress-bar
+                                mode="determinate"
+                                [value]="ratingCount.fourStart"
+                              ></mat-progress-bar>
+                              <!-- <p>2.0K</p> -->
+                              <p>{{ ratingCount?.fourStart }}</p>
+                            </div>
+                            <div class="progress_rating_block">
+                              <i class="fa-solid fa-star"></i>
+                              <p>3</p>
+                              <mat-progress-bar
+                                mode="determinate"
+                                [value]="ratingCount.threeStart"
+                              ></mat-progress-bar>
+                              <!-- <p>2.0K</p> -->
+                              <p>{{ ratingCount?.threeStart }}</p>
+                            </div>
+                            <div class="progress_rating_block">
+                              <i class="fa-solid fa-star"></i>
+                              <p>2</p>
+                              <mat-progress-bar
+                                mode="determinate"
+                                [value]="ratingCount.oneStart"
+                              ></mat-progress-bar>
+                              <!-- <p>2.0K</p> -->
+                              <p>{{ ratingCount?.twoStart }}</p>
+                            </div>
+                            <div class="progress_rating_block">
+                              <i class="fa-solid fa-star"></i>
+                              <p>1</p>
+                              <mat-progress-bar
+                                mode="determinate"
+                                [value]="ratingCount.oneStart"
+                              ></mat-progress-bar>
+                              <!-- <p>2.0K</p> -->
+                              <p>{{ ratingCount?.oneStart }}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div
+                          class="feedback"
+                          *ngFor="let feedback of doctorRating_Reviwe"
+                        >
+                          <div class="feedback_inner">
+                            <div class="part_wrapper">
+                              <div class="left_part part">
+                                <div class="icon">
+                                  {{ feedback?.firsttlatterofname }}
+                                </div>
+                                <div class="desc">
+                                  <h2>
+                                    {{ feedback?.patientName?.full_name }}
+                                  </h2>
+                                  <span class="ratings-star">
+                                    <!-- <div class="rating">
+                                      <i class="fa-solid fa-star"
+                                        *ngFor="let f of [].constructor(feedback?.rating)"></i>&nbsp;
+                                    </div> -->
+                                    <div class="rating">
+                                      <i
+                                        class="fa-solid fa-star"
+                                        *ngFor="
+                                          let f of [].constructor(
+                                            adjustRatingStar(feedback?.rating)
+                                          )
+                                        "
+                                      ></i>
+                                      <i
+                                        class="fa-solid fa-star-half-alt"
+                                        *ngIf="feedback?.rating % 1 !== 0"
+                                      ></i>
+                                    </div>
+                                  </span>
+                                </div>
+                              </div>
+                              <div class="right_part">
+                                <span class="date">
+                                  {{
+                                    feedback?.date | date : "dd/MM/YYYY"
+                                  }}</span
+                                >
+                              </div>
+                            </div>
+                            <p>{{ feedback?.comment }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+                  </mat-tab-group>
+                </div>
+              </div>
+
+              <div class="dermatologists">
+                <div class="main_title">
+                  {{ 'more' | translate}} {{ doctordetailsData?.speciality }} {{ 'doctors' | translate}}
+                </div>
+                <ul class="row">
+                  <li
+                    class="item col-md-6 col-lg-4"
+                    *ngFor="let reletedDoctor of reletedDoctorList"
+                  >
+                    <div class="item_inner">
+                      <div class="dermatologists_details">
+                        <div class="image">
+                          <img
+                            src="{{
+                              reletedDoctor?.profile_picture
+                                ? reletedDoctor?.profile_picture
+                                : '../../../../../../assets/img/default_user.png'
+                            }}"
+                          />
+                        </div>
+                        <div class="dermatologists_info">
+                          <h2 class="title">
+                            {{ reletedDoctor?.full_name }}
+                            <span class="icon">
+                              <img
+                                src="../../../../../assets/img/title_icon.svg"
+                              />
+                            </span>
+                          </h2>
+                          <div class="desc">
+                            {{ reletedDoctor?.specialties?.specilization }}
+                          </div>
+
+                          <ul class="content_list row">
+                            <li class="content_item col-md-4">
+                              <div class="title">
+                                {{ "experience" | translate }}
+                              </div>
+                              <span class="content_desc">
+                                {{ reletedDoctor?.years_of_experience }} {{ 'years' | translate}}
+                              </span>
+                            </li>
+                            <li class="content_item col-md-4">
+                              <div class="title">
+                                {{ "rating_and_review" | translate }}
+                              </div>
+                              <span class="content_desc">
+                                <div class="rating">
+                                  <i class="fa-solid fa-star"></i
+                                  ><span>{{
+                                    reletedDoctor?.doctor_rating?.average_rating
+                                  }}</span>
+                                  ({{
+                                    reletedDoctor?.doctor_rating?.total_review
+                                  }}
+                                  {{ 'reviews' | translate}})
+                                </div>
+                              </span>
+                            </li>
+                            <li class="content_item col-md-4">
+                              <div class="title">{{ "fees" | translate }}</div>
+                              <span class="content_desc"
+                                >{{
+                                  reletedDoctor?.fee_management?.online
+                                    ?.basic_fee
+                                }}
+                                {{ 'cfa' | translate}}</span
+                              >
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="primary_btn">
+                        <button
+                          class="btn btn-secondary"
+                          (click)="
+                            redirectRetaildoctordetail(
+                              reletedDoctor?.for_portal_user
+                            )
+                          "
+                        >
+                          {{ 'view_profile' | translate}}
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>
+
+<!-- Review modal -->
+
+<div class="review">
+  <ng-template #reviewcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'write_a_review' | translate}}</h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form_field_wrapper">
+            <label>{{ 'rate_the_doctor' | translate}}</label>
+            <div class="ratings-star">
+              <ngb-rating [(rate)]="currentRate" [max]="5"></ngb-rating>
+            </div>
+          </div>
+
+          <div class="form_field_wrapper">
+            <label>{{ 'tell_us_about_your_experience_with_the_doctor' | translate}}</label>
+            <mat-form-field appearance="fill">
+              <textarea
+                matInput
+                (change)="handelReviweRating({ comment: $event })"
+                (keyup)="handelReviweRating({ comment: $event })"
+              ></textarea>
+            </mat-form-field>
+          </div>
+        </form>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closePopup()"
+          >
+            {{ 'cancel' | translate}}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="postRatingAndReviwe()"
+          >
+            {{ 'submit' | translate}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Login required warning modal -->
+<div class="order_medicine">
+  <ng-template #loginRequiredWarningModal let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <div class="modal_title" style="font-weight: 900; font-size: large">
+          {{ 'login_required' | translate}}
+        </div>
+
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal_title">
+          {{ 'to_book_consultation_you_need_to_login_first' | translate}}.
+        </div>
+        <div class="primary_btn">
+          <a (click)="handleBtnClick()">
+            <button type="button" class="btn btn-primary">{{ 'login' | translate}}</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Login required warning modal -->
+<div class="order_medicine">
+  <ng-template #loginRequiredWarningModalRating let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'login_required' | translate}}</h4>
+
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal_title">{{ 'to_add_review_you_need_to_login_first' | translate}}</div>
+        <div class="primary_btn">
+          <a (click)="handleBtnClick()">
+            <button type="button" class="btn btn-primary">{{ 'login' | translate}}</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

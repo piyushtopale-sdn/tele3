@@ -1,0 +1,465 @@
+<div class="step_counter_inner">
+  <div class="availability">
+    <div class="tab_content">
+      <form [formGroup]="availabilityFormOnline">
+        <div class="online_consultation">
+          <div class="week_days content_item">
+            <p style="color: #2839FF; font-size: 18px;font-weight: 600;"
+              >{{
+                "note" | translate
+              }} : {{
+                "the_start_time_must_be_greater_than_the_end_time" | translate
+              }}</p
+            >
+            <div class="mat_tab_title mt-3">{{ "week_days" | translate }}</div>
+            <ng-container formArrayName="weekDays">
+              <ng-container
+                *ngFor="let _ of weekDaysOnline.controls; let i = index"
+              >
+                <ng-container [formGroupName]="i">
+                  <div class="row part_wrapper">
+                    <div class="left part">
+                      <div class="row">
+                        <div class="item">
+                          <div class="form_field_wrapper">
+                            <label>{{ "sun" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'start_time' | translate }}"
+                                formControlName="sun_start_time"
+                              />
+                              <!-- <ngx-material-timepicker #sun_start_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'end_time' | translate }}"
+                                formControlName="sun_end_time"
+                              />
+                              <!-- <ngx-material-timepicker #sun_end_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                            <span
+                              class="text-danger"
+                              *ngIf="isSubmitted && (weekDaysValidation(i,'OnlineForm').controls['sun_start_time']
+                            .errors?.['required'] || weekDaysValidation(i,'OnlineForm').controls['sun_end_time']
+                            .errors?.['required'] )"
+                              >{{ "select_time" | translate }}*</span
+                            >
+                          </div>
+                        </div>
+
+                        <div class="item">
+                          <div class="form_field_wrapper">
+                            <label>{{ "mon" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'start_time' | translate }}"
+                                formControlName="mon_start_time"
+                              />
+                              <!-- <ngx-material-timepicker #mon_start_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'end_time' | translate }}"
+                                formControlName="mon_end_time"
+                              />
+                              <!-- <ngx-material-timepicker #mon_end_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                          </div>
+                          <span
+                            class="text-danger"
+                            *ngIf="isSubmitted && (weekDaysValidation(i,'OnlineForm').controls['mon_start_time']
+                            .errors?.['required'] || weekDaysValidation(i,'OnlineForm').controls['mon_end_time']
+                            .errors?.['required'] )"
+                            >{{ "select_time" | translate }}*</span
+                          >
+                        </div>
+                        <div class="item">
+                          <div class="form_field_wrapper">
+                            <label>{{ "tue" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'start_time' | translate }}"
+                                formControlName="tue_start_time"
+                              />
+                              <!-- <ngx-material-timepicker #tue_start_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'end_time' | translate }}"
+                                formControlName="tue_end_time"
+                              />
+                              <!-- <ngx-material-timepicker #tue_end_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                          </div>
+                          <span
+                            class="text-danger"
+                            *ngIf="isSubmitted && (weekDaysValidation(i,'OnlineForm').controls['tue_start_time']
+                            .errors?.['required'] || weekDaysValidation(i,'OnlineForm').controls['tue_end_time']
+                            .errors?.['required'] )"
+                            >{{ "select_time" | translate }}*</span
+                          >
+                        </div>
+                        <div class="item">
+                          <div class="form_field_wrapper">
+                            <label>{{ "wed" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'start_time' | translate }}"
+                                formControlName="wed_start_time"
+                              />
+                              <!-- <ngx-material-timepicker #wed_start_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'end_time' | translate }}"
+                                formControlName="wed_end_time"
+                              />
+                              <!-- <ngx-material-timepicker #wed_end_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                          </div>
+                          <span
+                            class="text-danger"
+                            *ngIf="isSubmitted && (weekDaysValidation(i,'OnlineForm').controls['wed_start_time']
+                            .errors?.['required'] || weekDaysValidation(i,'OnlineForm').controls['wed_end_time']
+                            .errors?.['required'] )"
+                            >{{ "select_time" | translate }}*</span
+                          >
+                        </div>
+                        <div class="item">
+                          <div class="form_field_wrapper">
+                            <label>{{ "thu" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'start_time' | translate }}"
+                                formControlName="thu_start_time"
+                              />
+                              <!-- <ngx-material-timepicker #thu_start_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'end_time' | translate }}"
+                                formControlName="thu_end_time"
+                              />
+                              <!-- <ngx-material-timepicker #thu_end_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                          </div>
+                          <span
+                            class="text-danger"
+                            *ngIf="isSubmitted && (weekDaysValidation(i,'OnlineForm').controls['thu_start_time']
+                            .errors?.['required'] || weekDaysValidation(i,'OnlineForm').controls['thu_end_time']
+                            .errors?.['required'] )"
+                            >{{ "select_time" | translate }}*</span
+                          >
+                        </div>
+                        <div class="item">
+                          <div class="form_field_wrapper">
+                            <label>{{ "fri" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'start_time' | translate }}"
+                                formControlName="fri_start_time"
+                              />
+                              <!-- <ngx-material-timepicker #fri_start_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'end_time' | translate }}"
+                                formControlName="fri_end_time"
+                              />
+                              <!-- <ngx-material-timepicker #fri_end_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                          </div>
+                          <span
+                            class="text-danger"
+                            *ngIf="isSubmitted && (weekDaysValidation(i,'OnlineForm').controls['fri_start_time']
+                            .errors?.['required'] || weekDaysValidation(i,'OnlineForm').controls['fri_end_time']
+                            .errors?.['required'] )"
+                            >{{ "select_time" | translate }}*</span
+                          >
+                        </div>
+                        <div class="item">
+                          <div class="form_field_wrapper">
+                            <label>{{ "sat" | translate }}</label>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'start_time' | translate }}"
+                                formControlName="sat_start_time"
+                              />
+                              <!-- <ngx-material-timepicker #sat_start_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                            <mat-form-field appearance="fill">
+                              <input
+                                matInput
+                                aria-label="default time"
+                                type="time"
+                                placeholder="{{ 'end_time' | translate }}"
+                                formControlName="sat_end_time"
+                              />
+                              <!-- <ngx-material-timepicker #sat_end_time>
+                              </ngx-material-timepicker> -->
+                            </mat-form-field>
+                          </div>
+                          <span
+                            class="text-danger"
+                            *ngIf="isSubmitted && (weekDaysValidation(i,'OnlineForm').controls['sat_start_time']
+                            .errors?.['required'] || weekDaysValidation(i,'OnlineForm').controls['sat_end_time']
+                            .errors?.['required'] )"
+                            >{{ "select_time" | translate }}*</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <div class="right part">
+                    <ng-container
+                      *ngIf="i === weekDaysOnline.length - 1; else remove"
+                    >
+                     
+                      <div class="row_generate row_add">
+                        <mat-icon class="plus" (click)="addNewWeek('online')"
+                          >add</mat-icon
+                        >
+                      </div>
+                    </ng-container>
+                    <ng-template #remove>
+                      <div class="row_generate row_minus">
+                        <mat-icon
+                          class="minus"
+                          (click)="removeWeek(i, 'online')"
+                          >remove</mat-icon
+                        >
+                      </div>
+                    </ng-template>
+
+                    </div> -->
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+          <div class="unavailable_datetime content_item">
+            <div class="mat_tab_title">
+              {{ "unavailability_date_and_time" | translate }}
+            </div>
+            <ng-container formArrayName="unAvailability">
+              <ng-container
+                *ngFor="let _ of unAvailabilityOnline.controls; let i = index"
+              >
+                <ng-container [formGroupName]="i">
+                  <div class="increse_content">
+                    <div class="row increse_content_inner">
+                      <div class="col-sm-4 col-md-4">
+                        <div class="form_field_wrapper">
+                          <label>{{ "date" | translate }}</label>
+                          <mat-form-field
+                            class="example-full-width"
+                            appearance="fill"
+                          >
+                            <input
+                              matInput
+                              [matDatepicker]="picker55"
+                              formControlName="date"
+                              (input)="formatunavailableDate($event)" 
+                            />
+                            <mat-datepicker-toggle
+                              matSuffix
+                              [for]="picker55"
+                            ></mat-datepicker-toggle>
+                            <mat-datepicker #picker55></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <span
+                          class="text-danger"
+                          *ngIf="isSubmitted && unavailabilityValidation(i,'OnlineForm').controls['date']
+                            .errors?.['required']"
+                          >{{ "select_date" | translate }}*</span
+                        >
+                      </div>
+                      <div class="col-sm-4 col-md-4">
+                        <div class="form_field_wrapper">
+                          <label>{{ "start_time" | translate }}</label>
+                          <mat-form-field appearance="fill">
+                            <!-- <input
+                                  matTimepicker
+                                  formControlName="start_time"
+                                /> -->
+                            <input
+                              matInput
+                              aria-label="default time"
+                              type="time"
+                              placeholder="{{ 'start_time' | translate }}"
+                              formControlName="start_time"
+                            />
+                            <!-- <ngx-material-timepicker #unAvailStartTime>
+                            </ngx-material-timepicker> -->
+                          </mat-form-field>
+                        </div>
+                        <span
+                          class="text-danger"
+                          *ngIf="isSubmitted && unavailabilityValidation(i,'OnlineForm').controls['start_time']
+                          .errors?.['required']"
+                          >{{ "enter_start_time" | translate }}*</span
+                        >
+                      </div>
+                      <div class="col-sm-4 col-md-4">
+                        <div class="form_field_wrapper">
+                          <label>{{ "end_time" | translate }}</label>
+                          <mat-form-field appearance="fill">
+                            <!-- <input
+                                  matTimepicker
+                                  formControlName="end_time"
+                                /> -->
+                            <input
+                              matInput
+                              aria-label="default time"
+                              type="time"
+                              placeholder="{{ 'end_time' | translate }}"
+                              formControlName="end_time"
+                            />
+                            <!-- <ngx-material-timepicker #unAvailEndTime>
+                            </ngx-material-timepicker> -->
+                          </mat-form-field>
+                        </div>
+                        <span
+                          class="text-danger"
+                          *ngIf="isSubmitted && unavailabilityValidation(i,'OnlineForm').controls['end_time']
+                          .errors?.['required']"
+                          >{{ "enter_end_time" | translate }}*</span
+                        >
+                      </div>
+                    </div>
+                    <div class="row_generate" *ngIf="i === 0">
+                      <mat-icon
+                        *ngIf="unAvailabilityOnline.length > 1"
+                        class="minus"
+                        (click)="removeUnAvailability(i, 'online')"
+                        >remove</mat-icon
+                      >&nbsp;
+                      <mat-icon
+                        class="plus"
+                        (click)="addNewUnAvailabilty('online')"
+                        >add</mat-icon
+                      >
+                    </div>
+                    <div class="row_generate" *ngIf="i !== 0">
+                      <mat-icon
+                        class="minus"
+                        (click)="removeUnAvailability(i, 'online')"
+                        >remove</mat-icon
+                      >
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+          <div class="unavailable_datetime content_item">
+            <div class="mat_tab_title">
+              {{ "booking_slot_time_interval" | translate }}
+            </div>
+            <div class="row">
+              <div class="col-sm-6 col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "time_interval" | translate }}<span class="danger">*</span></label>
+                  <div class="form_field_wrapper">
+                    <mat-form-field appearance="fill">
+                      <mat-select
+                        formControlName="bookingSlot"
+                        placeholder="{{ 'select_slot' | translate }}"
+                      >
+                        <mat-option
+                          *ngFor="let time of timeInterval"
+                          [value]="time.value"
+                          >{{ time.label }}</mat-option
+                        >
+
+                        <!-- <mat-option value="30 min">30 min</mat-option>
+                            <mat-option value="60 min">60 min</mat-option>
+                            <mat-option value="90 min">90 min</mat-option> -->
+                      </mat-select>
+                    </mat-form-field>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && f['bookingSlot'].errors?.['required']"
+                    >
+                      {{ "select_slot" | translate }}*
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="primary_btn btn_wrap">
+    <button type="button" class="btn btn-secondary" (click)="previousPage()">
+      {{ "back" | translate }}
+    </button>
+    <button type="button" class="btn btn-primary" (click)="saveAvailability()">
+      {{ "save_and_next" | translate }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-danger"
+      style="margin-left: 10px"
+      [routerLink]="['/super-admin/doctor']"
+    >
+      {{ "exit" | translate }}
+    </button>
+  </div>
+</div>

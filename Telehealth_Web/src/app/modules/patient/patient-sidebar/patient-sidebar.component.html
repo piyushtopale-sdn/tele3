@@ -1,0 +1,391 @@
+<div class="sidebar_main">
+  <div
+    class="offcanvas offcanvas-start"
+    tabindex="-1"
+    id="offcanvasExample"
+    aria-labelledby="offcanvasExampleLabel"
+  >
+    <div class="offcanvas-header">
+      <button
+        type="button"
+        class="close text-reset d-lg-none d-md-block"
+        data-bs-dismiss="offcanvas"
+        aria-label="Close"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="inner_sidebar">
+        <div class="header_logo" [routerLink]="['/patient']" style="cursor: pointer">
+          <img
+            class="img-flui"
+            src="../../../../assets/img/logo2.svg"
+            alt="logo"
+          />
+        </div>
+        <div class="menu_list" id="sidebar">
+          <ul class="menu_list_main">            
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                [ngClass]="Url == 'dashboard' ? 'active' : ''"
+                (click)="setHeader('Dashboard')"
+                (click)="handleRouting('/patient/dashboard')"
+              >
+                <div class="menu_list_block">
+                  <div class="sidebar_icon">
+                    <img
+                      class="icon"
+                      src="../../../../assets/img/sidebaricon/dashboard.svg"
+                      alt=""
+                    />
+                    <img
+                      class="icon_hover"
+                      src="../../../../assets/img/sidebaricon/dashboard_hover.svg"
+                      alt=""
+                    />
+                  </div>
+                  <span>{{ "dashboard" | translate }}</span>
+                </div>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                [ngClass]="{ active: Url == 'myappointment' }"
+                (click)="setHeader('My Appointment')"
+                (click)="handleRouting('/patient/myappointment')"
+              >
+                <div class="menu_list_block">
+                  <div class="sidebar_icon">
+                    <img
+                      class="icon"
+                      src="../../../../assets/img/sidebaricon/calender.svg"
+                      alt=""
+                    />
+                    <img
+                      class="icon_hover"
+                      src="../../../../assets/img/sidebaricon/calender_hover.svg"
+                      alt=""
+                    />
+                  </div>
+                  <span>{{ "my_appointment" | translate }}</span>
+                </div>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                [ngClass]="{ active: Url == 'waitingroom' }"
+                (click)="setHeader('Waiting Room')"
+                (click)="handleRouting('/patient/waitingroom')"
+              >
+                <div class="menu_list_block">
+                  <div class="sidebar_icon">
+                    <img
+                      class="icon"
+                      src="../../../../assets/img/sidebaricon/waitingroom.svg"
+                      alt=""
+                    />
+                    <img
+                      class="icon_hover"
+                      src="../../../../assets/img/sidebaricon/waitingroom_hover.svg"
+                      alt=""
+                    />
+                  </div>
+                  <span>{{ "waiting_room" | translate }}</span>
+                </div>
+              </a>
+            </li>
+            <li #itemEl class="sidebar-dropdown nav-item dropmenu">
+              <a class="nav-link" (click)="showSubmenu(itemEl)">
+                <div class="menu_list_block">
+                  <div class="sidebar_icon">
+                    <img
+                      class="icon"
+                      src="../../../../assets/img/sidebaricon/hospitalization.svg"
+                      alt=""
+                    />
+                    <img
+                      class="icon_hover"
+                      src="../../../../assets/img/sidebaricon/hospitalization_hover.svg"
+                      alt=""
+                    />
+                  </div>
+                  <span>{{ "order_for" | translate }}</span>
+                </div>
+              </a>
+              <div class="sidebar-submenu">
+                <ul>
+                  <li
+                    #itemEl1
+                    class="sidebar-dropdown nav-item dropmenu mainsub-dropdownmenu"
+                  >
+                    <a (click)="showSubmenu1(itemEl1)">{{
+                      "medicine" | translate
+                    }}</a>
+                    <div class="sidebar-submenu sub-dropdownmenu">
+                      <ul>
+                        <li>
+                          <a
+                            [ngClass]="{ active: Url == 'presciptionorder' }"
+                            (click)="setHeader('Presciption Order')"
+                            (click)="handleRouting('/patient/presciptionorder')"
+                          >
+                            {{ "order_request" | translate }}</a
+                          >
+                        </li>                       
+                      </ul>
+                    </div>
+                  </li>
+                  <li
+                    #itemEl2
+                    class="sidebar-dropdown nav-item dropmenu mainsub-dropdownmenu"
+                  >
+                    <a (click)="showSubmenu2(itemEl2)">{{
+                      "paramedical_professions" | translate
+                    }}</a>
+                    <div class="sidebar-submenu sub-dropdownmenu">
+                      <ul>
+                        <li>
+                          <a
+                            [ngClass]="{
+                              active:
+                                Url == 'paramedical-profession-order-request'
+                            }"
+                            (click)="setHeader('Lab Order Request')"
+                            (click)="
+                              handleRouting(
+                                '/patient/paramedical-profession-order-request'
+                              )
+                            "
+                            >{{ "order_request" | translate }}</a
+                          >
+                        </li>                        
+                      </ul>
+                    </div>
+                  </li>
+                  <li
+                    #itemEl3
+                    class="sidebar-dropdown nav-item dropmenu mainsub-dropdownmenu"
+                  >
+                    <a (click)="showSubmenu3(itemEl3)">{{
+                      "laboratory_imaging" | translate
+                    }}</a>
+                    <div class="sidebar-submenu sub-dropdownmenu">
+                      <ul>
+                        <li>
+                          <a
+                            [ngClass]="{
+                              active: Url == 'imaging-order-request'
+                            }"
+                            (click)="setHeader('Imaging Order Request')"
+                            (click)="
+                              handleRouting('/patient/imaging-order-request')
+                            "
+                            >{{ "order_request" | translate }}</a
+                          >
+                        </li>                     
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </li>                      
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                (click)="setHeader('Subscription Plan')"
+                [ngClass]="{ active: Url == 'subscriptionplan' }"
+                (click)="handleRouting('/patient/subscriptionplan')"
+              >
+                <div class="menu_list_block">
+                  <div class="sidebar_icon">
+                    <img
+                      class="icon"
+                      src="../../../../assets/img/sidebaricon/subscriptionplan.svg"
+                      alt=""
+                    />
+                    <img
+                      class="icon_hover"
+                      src="../../../../assets/img/sidebaricon/subscriptionplan_hover.svg"
+                      alt=""
+                    />
+                  </div>
+                  <span>{{ "Subscription Plan" | translate }}</span>
+                </div>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                (click)="setHeader('Payment History')"
+                [ngClass]="{ active: Url == 'paymenthistory' }"
+                (click)="handleRouting('/patient/paymenthistory')"
+              >
+                <div class="menu_list_block">
+                  <div class="sidebar_icon">
+                    <img
+                      class="icon"
+                      src="../../../../assets/img/sidebaricon/paymenthistory.svg"
+                      alt=""
+                    />
+                    <img
+                      class="icon_hover"
+                      src="../../../../assets/img/sidebaricon/paymenthistory_hover.svg"
+                      alt=""
+                    />
+                  </div>
+                  <span>{{ "Payment History" | translate }}</span>
+                </div>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                (click)="setHeader('Rating & Reviews')"
+                [ngClass]="{ active: Url == 'ratingandreview' }"
+                (click)="handleRouting('/patient/ratingandreview')"
+              >
+                <div class="menu_list_block">
+                  <div class="sidebar_icon">
+                    <img
+                      class="icon"
+                      src="../../../../assets/img/sidebaricon/star.svg"
+                      alt=""
+                    />
+                    <img
+                      class="icon_hover"
+                      src="../../../../assets/img/sidebaricon/star_hover.svg"
+                      alt=""
+                    />
+                  </div>
+                  <span>{{ "rating_and_reviews" | translate }}</span>
+                </div>
+              </a>
+            </li>
+           
+             <li class="nav-item">
+              <a
+                class="nav-link"
+                (click)="setHeader('Profile Creation')"
+                [ngClass]="{ active: Url == 'profilecreation' }"
+                (click)="handleRouting('/patient/profilecreation')"
+              >
+                <div class="menu_list_block">
+                  <div class="sidebar_icon">
+                    <img
+                      class="icon"
+                      src="../../../../assets/img/sidebaricon/profile.svg"
+                      alt=""
+                    />
+                    <img
+                      class="icon_hover"
+                      src="../../../../assets/img/sidebaricon/profile_hover.svg"
+                      alt=""
+                    />
+                  </div>
+                  <span>{{ "profile_creation" | translate }}</span>
+                </div>
+              </a>
+            </li>
+            
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                (click)="setHeader('Notifications')"
+                [ngClass]="{ active: Url == 'notification' }"
+                (click)="handleRouting('/patient/notification')"
+              >
+                <div class="menu_list_block">
+                  <div class="sidebar_icon">
+                    <img
+                      class="icon"
+                      src="../../../../assets/img/sidebaricon/notification.svg"
+                      alt=""
+                    />
+                    <img
+                      class="icon_hover"
+                      src="../../../../assets/img/sidebaricon/notification_hover.svg"
+                      alt=""
+                    />
+                  </div>
+                  <span>{{ "notification" | translate }}</span>
+                </div>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                (click)="setHeader('My Account')"
+                [ngClass]="{ active: Url == 'myaccount' }"
+                (click)="handleRouting('/patient/myaccount')"
+              >
+                <div class="menu_list_block">
+                  <div class="sidebar_icon">
+                    <img
+                      class="icon"
+                      src="../../../../assets/img/sidebaricon/profile.svg"
+                      alt=""
+                    />
+                    <img
+                      class="icon_hover"
+                      src="../../../../assets/img/sidebaricon/profile_hover.svg"
+                      alt=""
+                    />
+                  </div>
+                  <span>{{ "my_account" | translate }}</span>
+                </div>
+              </a>
+            </li>
+
+            </ul>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #confirmationModel let-modal>
+      <div class="custome_modal approver">
+        <div class="modal-header">
+          <!-- <h4 class="modal-title" id="modal-basic-title">Requested Amount</h4> -->
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="image_block">
+            <img
+              class="img-fluid"
+              src="../../../../../assets/img/insurance-medicines/apprv.svg"
+              alt="approve"
+            />
+          </div>
+          <p class="mt-4">{{ "no_plan_purchased" | translate }}</p>
+
+          <div class="primary_btn mt-4">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="handleClose()"
+            >
+              {{ "cancel" | translate }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="purchasePlan()"
+            >
+              {{ "purchase_plan" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

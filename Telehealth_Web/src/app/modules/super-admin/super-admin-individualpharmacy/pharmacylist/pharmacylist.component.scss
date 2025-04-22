@@ -1,0 +1,174 @@
+@import '../../../../../assets/css/variable/variable'; 
+.material-icons{
+    cursor: pointer;
+}
+ 
+.pharmacy_list{
+    .top_bar{
+        margin: 0 0 40px;
+        padding: 0 0 40px;
+        position: relative;
+        &::after{
+            content: "";
+            display: block;
+            background-color: #B6C8D6;
+            height: 1px;
+            position: absolute;
+            left: -30px;
+            right: -30px;
+            bottom: 0;
+            top: auto;
+        }
+        .left_part{
+            display: flex;
+            .search_bar{
+                .input-group{
+                    background: #F6F8FC;
+                    border-radius: 6px;
+                    flex-wrap: nowrap;
+                    .form-control{
+                        border: none;
+                        background-color: transparent;
+                        padding: 12px 12px 12px 0;
+                        width: 200px;
+                        &::placeholder{
+                            font-weight: 400;
+                            font-size: $font_small;
+                            line-height: 24px;
+                        }
+                        &:focus{
+                            box-shadow: none;
+                        }
+                    }
+                    .btn{
+                        padding: 0;
+                        border: none;
+                        .mat-icon{
+                            line-height: 50px;
+                            height: 50px;
+                            width: 50px;
+                            color: #9B9B9B;
+                            font-size: 24px;
+                        }
+                    }
+                }
+            }
+            .content_wrap{
+                flex-wrap: wrap;
+                .policy{
+                    margin: 0 0 0 20px;
+                    .mat-form-field{
+                        .mat-form-field-wrapper{
+                            padding: 0;
+                            .mat-form-field-flex{
+                                background-color: #EBF0F4;
+                                border: 1px solid #EBF0F4;
+                                .mat-form-field-infix{
+                                    width: 150px;
+                                    .mat-select{
+                                        .mat-select-value{
+                                            color: $formfiled_color;
+                                            font-weight: 500;
+                                        }
+                                    }
+                                }
+                            }
+                            .mat-form-field-underline{
+                                display: none;
+                            }
+                        }
+                    }
+                }
+               
+            }
+            .primary_btn{
+                .btn {
+                    min-width: 100px;
+                }
+            }
+        }
+    }
+    .bottom_bar{
+        .mat-tab-header{
+            margin: 0 0 28px;
+            border-bottom: none;
+            .mat-tab-list{
+                .mat-tab-labels{
+                    display: inline-flex;
+                    .mat-tab-label {
+                        font-family: $font_family_body,$font_sans_sarif;
+                        height: 55px;
+                        padding: 0 10px;
+                        min-width: 200px;
+                        font-size: $font_medium;
+                        font-weight: 500;
+                        color: $bodycolor;
+                        background-color: $white_color;
+                        border: 1px solid rgba(11, 73, 119, 0.15);
+                        border-radius: 10px;
+                        justify-content: flex-start;
+                        opacity: 1;
+                        margin-left: 20px;
+                        &:first-child{
+                            margin-left: 0;
+                        }
+                        .mat-tab-label-content{
+                            .btn_svg {
+                                height: 35px;
+                                width: 35px;
+                                line-height: 35px;
+                                margin-right: 10px;
+                                background-color: #0B4977;
+                                border-radius: 9px;
+                                svg{
+                                    fill: #ffffff;
+                                    width: 20px;
+                                    height: 20px;
+                                }
+                            }
+                        }
+                    }
+                    .mat-tab-label.mat-tab-label-active{
+                        color: $white_color;
+                        background-color: $bodycolor;
+                        .mat-tab-label-content{
+                            .btn_svg {
+                                background-color: #EBF0F4;
+                                svg{
+                                    fill: #0B4977;
+                                }
+                            }
+                        }
+                    }
+                }
+                .mat-ink-bar{
+                    display: none;
+                }
+                .mat-ink-bar{
+                    background-color: $bodycolor;
+                }
+            }
+        }
+        .mat-tab-body-content{
+            overflow: hidden;
+        }
+    }
+}
+
+@media screen and (max-width:$desktop) {
+    .pharmacy_list .top_bar .left_part .content_wrap .policy .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+        width: 100px;
+    }
+    .pharmacy_list .top_bar .left_part .search_bar .input-group .form-control {
+        width: 135px;
+    }
+}
+@media screen and (max-width:$large_phone) {
+    .pharmacy_list .top_bar .left_part {
+        flex-direction: column;
+    }
+    .pharmacy_list .top_bar .left_part .content_wrap .policy{
+        width: 100%;
+        margin: 0 0 20px;
+    }
+}

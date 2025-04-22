@@ -1,0 +1,102 @@
+<div class="sidebar_main">
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <button type="button" class="close text-reset d-lg-none d-md-block" data-bs-dismiss="offcanvas"
+        aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="inner_sidebar">
+          <div class="header_logo">
+              <img class="img-flui" src="../../../../assets/img/logo2.svg" alt="logo">
+          </div>
+          <div class="menu_list" id="sidebar">
+            <ul class="menu_list_main">
+              <ng-container *ngFor="let menu of userMenu | keyvalue">
+                <li class="nav-item" *ngIf="menu.value['children'].length === 0" (click)="handleNavigationClick(menu.value['route_path'])">
+                  <!-- <a  class="nav-link {{menu.value['route_path'] == activeMenu ? 'active' : ''}}" [routerLink]="[menu.value['route_path']]"> -->
+                  <a  class="nav-link {{menu.value['route_path'] == activeMenu ? 'active' : ''}}"  (click)="handleRouting(menu.value['route_path'])">
+                    <div class="menu_list_block">
+                      <div class="sidebar_icon">
+                        <img class="icon" src="../../../../assets/img/sidebaricon/{{menu.value['icon']}}" alt=""> 
+                        <img class="icon_hover" src="../../../../assets/img/sidebaricon/{{menu.value['icon_hover']}}" alt=""> 
+                      </div>
+                      <span>{{menu.value['name']|translate}}</span>
+                    </div>
+                    <!-- <span class="counter">45</span> -->
+                  </a>
+                </li>
+                <li #itemEl class="nav-item sidebar-dropdown dropmenu" *ngIf="menu.value['children'].length > 0">
+                  <a (click)="showSubmenu(itemEl)" class="nav-link">
+                    <div class="menu_list_block">
+                      <div class="sidebar_icon">
+                        <img class="icon" src="../../../../assets/img/sidebaricon/{{menu.value['icon']}}" alt=""> 
+                        <img class="icon_hover" src="../../../../assets/img/sidebaricon/{{menu.value['icon_hover']}}" alt=""> 
+                      </div>
+                      <span>{{menu.value['name']|translate}}</span>
+                    </div>
+                    <!-- <span class="counter">45</span> -->
+                  </a>
+                  <div class="sidebar-submenu">
+                    <ul>
+                      <li *ngFor="let childMenu of menu.value['children']">
+                        <!-- <a class="{{childMenu.route_path == activeMenu ? 'active' : ''}}" [routerLink]="[childMenu.route_path]" (click)="handleNavigationClick(childMenu.route_path)">{{childMenu.name}}</a> -->
+                        <a class="{{childMenu.route_path == activeMenu ? 'active' : ''}}" (click)="handleRouting(childMenu.route_path)" (click)="handleNavigationClick(childMenu.route_path)">{{childMenu.name}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ng-container>
+            </ul>
+          </div>
+            </div>
+          </div>
+
+
+
+
+    <!-- Delete Role Popup -->
+    <ng-template #confirmationModel let-modal>
+      <div class="custome_modal approver">
+        <div class="modal-header">
+          <!-- <h4 class="modal-title" id="modal-basic-title">Requested Amount</h4> -->
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="image_block">
+            <img
+              class="img-fluid"
+              src="../../../../../assets/img/insurance-medicines/apprv.svg"
+              alt="approve"
+            />
+          </div>
+          <p class="mt-4">{{"no_plan_purchased" | translate}}</p>
+
+          <div class="primary_btn mt-4">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="handleClose()"
+            >
+              {{"cancel" | translate}}
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="purchasePlan()"
+            >
+             {{"purchase_plan" | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+          

@@ -1,0 +1,212 @@
+<div class="tab_content">
+  <div class="tab_content_item">
+    <div class="top_bar">
+      <div class="left_part_vital">
+        <div class="comparevitals d-flex align-items-center" *ngIf="userRole !== 'INDIVIDUAL_DOCTOR_ADMIN'">
+          <div class="primary_btn">
+            <button type="button" class="btn btn-primary gap-1" (click)="routeTo()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+              </svg> {{ "add_laboratory_test" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="right_part_lab"></div>
+    </div>
+    <div class="bottom_bar">
+      <div class="table-wrap">
+        <div class="table-inner d-flex flex-column mt-2" *ngFor="let item of res_details">
+          <div class="main_title d-flex justify-content-between" >
+            <div>
+              {{ "prescribed_by" | translate }} : {{ item?.doctorName }}
+                <h3
+                  class="status {{
+                    item?.status === 'Pending'
+                      ? 'new'
+                      : item?.status === 'Approved'
+                      ? 'upcoming'
+                      : item?.status === 'Cancelled'
+                      ? 'rejected'
+                      : item?.status === 'Completed'
+                      ? 'past'
+                      : item?.status === 'Missed'
+                      ? 'rejected'
+                      : ''
+                  }}"
+                >
+                  {{ item?.status | titlecase }}
+                </h3>              
+            </div>
+            <div class="d-flex show-history">
+              <button type="button" mat-stroked-button class="btn btn-primary" mat-button
+              (click)="openHistoryPopup(viewhistory, item._id)" >
+                {{'show_history' | translate}}
+              </button>
+            </div>
+          </div>
+
+          <table mat-table [dataSource]="item?.labTest" class="mat-elevation-z8 medtableinfo">
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "date_and_time" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ item?.createdAt | date: "dd/MM/yyyy | HH:mm" }}
+
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="testname">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "testname" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.labtestName ? element?.labtestName : "-" }}
+              </td>
+            </ng-container>
+
+            <!--Strength Column -->
+            <ng-container matColumnDef="centrename">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "labCenterName" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.labCenterName ? element?.labCenterName : "-" }}
+              </td>
+            </ng-container>
+
+            <!--Start Date Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "status" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.status ? element?.status : "-" }}
+              </td>
+            </ng-container>
+
+            <!--Start Date Column -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "view_result" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="icon_group">
+                  <a class="svgicon" *ngIf="element?.resultType === 'manual'" (click)="routeToViewResult(element?.testResultId, item?.appointmentId, element?.labtestName)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+                      <title>{{"view_result" | translate}}</title>
+                      <path
+                        d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                    </svg>
+                  </a>
+                  <a class="svgicon" *ngIf="element?.resultType === 'upload'"
+                  (click)="downloadTestResult(element?.testResultId)"
+                  >
+                    <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-download"
+                    viewBox="0 0 16 16"
+                  >
+                    <title>{{ "download_result" | translate }}</title>
+                    <path
+                      d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"
+                    />
+                    <path
+                      d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"
+                    />
+                  </svg>
+                  </a>
+                  <a class="external-result" *ngIf="element?.externalResults?.link" style="cursor: pointer;" 
+                  (click)="downloadTestResult_forExternalLabs(element?.externalResults?.link, element?.externalResults?.serviceName)"
+                  >
+                  {{"external_lab_result" | translate}} <mat-icon>open_in_new</mat-icon>
+                  </a>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+        <mat-paginator class="pagination" *ngIf="res_details?.length > 0" [length]="totalLength"
+          (page)="handlePageEvent($event)" [pageSize]="pageSize" [pageSizeOptions]="[2, 5, 20, 50, 100]"
+          showFirstLastButtons aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="res_details?.length === 0" class="text-center">
+
+  <div class="text-center">
+    <b>{{ "test_not_added" | translate }}</b>
+  </div>
+
+</div>
+
+
+<!-- --------------------------------Show-History-------------------------------- -->
+<ng-template #viewhistory let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body p-0">
+      <div *ngIf="orderHistory?.length === 0 && _testHistoryData?.length === 0" class="text-center mt-2">
+        <b>{{ "no_record_found" | translate }}</b>
+      </div>
+      <div class="show-history-popup">
+        <div class="modal-header mb-4 p-0" *ngIf="orderHistory.length > 0">
+          <h4 class="modal-title test-history-heading" id="modal-basic-title">
+            {{ "order_history" | translate }}
+          </h4>
+        </div>
+        <div class="timeline mb-4">
+          <div class="timeline-item" *ngFor="let order of orderHistory">
+            <div class="timeline-content">
+              <p class="text-name-f m-0">{{ order.name }}</p>
+              <p class="statusss m-0" [ngClass]="order.status | lowercase">{{ removeUnderscores(order.status) }}</p>
+
+
+              <p class="time m-0">{{ order.updatedAt | date: 'dd-MM-yyyy, HH:mm a' }}</p>
+            </div>
+            <div class="line" *ngIf="!isLastItem(order, orderHistory)"></div>
+            <div class="circle ordered" *ngIf="!isLastItem(order, orderHistory)"></div>
+          </div>
+        </div>
+
+        <div class="modal-header mb-4 p-0" *ngIf="_testHistoryData.length > 0">
+          <h4 class="modal-title test-history-heading" id="modal-basic-title">
+            {{ "test_history" | translate }}
+          </h4>
+        </div>
+        <div class="timeline" *ngFor="let test of _testHistoryData">
+          <div class="test-header">
+            <h4 class="text-name-f m-0">{{ test.labtestName
+            }}</h4> 
+          </div>         
+          <div class="timeline-item" *ngFor="let historyItem of test.testHistory">
+            <div class="timeline-content">
+              <p class="text-name-f statusss m-0">{{ historyItem.name }}</p>
+              <p class="statusss m-0" [ngClass]="historyItem.status.toLowerCase()">
+                {{ historyItem.status }}
+              </p>
+              <p class="time">{{ historyItem.updatedAt | date: 'dd/MM/yyyy, HH:mm'  }}</p>
+            </div>
+
+            <div class="line" *ngIf="!isLastItem(historyItem, test.testHistory)"></div>
+            <div class="circle ordered" *ngIf="!isLastItem(historyItem, test.testHistory)"></div>
+          </div>
+        </div>
+
+      </div>     
+    </div>
+  </div>
+</ng-template>

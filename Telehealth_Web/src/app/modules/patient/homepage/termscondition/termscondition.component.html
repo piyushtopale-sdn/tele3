@@ -1,0 +1,111 @@
+<div class="home_wrapper" [attr.dir]="'dir' | translate">
+  <app-header></app-header>
+
+  <div class="breadcum_wrapper" aria-label="breadcrumb">
+    <div class="container">
+      <div class="breadcrumb_title">{{ "terms_and_conditions" | translate }}</div>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/test/homepage']">{{ "home" | translate }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ "terms_and_conditions" | translate }}
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="main_section">
+    <div class="main_section_inner">
+      <div class="container">
+        <!-- <div class="row" [innerHTML]="showText"></div> -->
+      <section id="terms-and-conditions" [attr.dir]="'dir' | translate">
+        <section id="terms-and-conditions">
+          <h1>{{ 'terms_and_conditions_title' | translate }}</h1>
+          <p><strong>{{ 'effective_date' | translate }}</strong> 01/11/2024</p>
+        
+          <ol>
+            <!-- Acceptance of Terms Section -->
+            <li>
+              <strong>{{ 'terms_and_conditions_acceptance_title' | translate }}</strong>: 
+              {{ 'terms_and_conditions_acceptance_content' | translate }}
+            </li>
+        
+            <!-- Services Provided Section -->
+            <li>
+              <strong>{{ 'services_provided' | translate }}</strong>: 
+              {{ 'terms_and_conditions_services_content' | translate }}
+            </li>
+        
+            <!-- User Responsibilities Section -->
+            <li>
+              <strong>{{ 'user_responsibility' | translate }}</strong>:
+              <ul>
+                <li>{{ 'terms_and_conditions_user_responsibilities_1' | translate }}</li>
+                <li>{{ 'terms_and_conditions_user_responsibilities_2' | translate }}</li>
+                <li>{{ 'terms_and_conditions_user_responsibilities_3' | translate }}</li>
+              </ul>
+            </li>
+        
+            <!-- Payment Terms Section -->
+            <li>
+              <strong>{{ 'payment_terms' | translate }}</strong>:
+              <ul>
+                <li>{{ 'terms_and_conditions_payment_terms_1' | translate }}</li>
+                <li>{{ 'terms_and_conditions_payment_terms_2' | translate }}</li>
+                <li>{{ 'terms_and_conditions_payment_terms_3' | translate }}</li>
+              </ul>
+            </li>
+        
+            <!-- User Content Section -->
+            <li>
+              <strong>{{ 'user_content' | translate }}</strong>: 
+              {{ 'terms_and_conditions_user_content_content' | translate }}
+            </li>
+        
+            <!-- Intellectual Property Section -->
+            <li>
+              <strong>{{ 'terms_and_conditions_intellectual_property_title' | translate }}</strong>: 
+              {{ 'terms_and_conditions_intellectual_property_content' | translate }}
+            </li>
+        
+            <!-- Limitation of Liability Section -->
+            <li>
+              <strong>{{ 'terms_and_conditions_limitation_of_liability_title' | translate }}</strong>: 
+              {{ 'terms_and_conditions_limitation_of_liability_content' | translate }}
+            </li>
+        
+            <!-- Indemnification Section -->
+            <li>
+              <strong>{{ 'terms_and_conditions_indemnification_title' | translate }}</strong>: 
+              {{ 'terms_and_conditions_indemnification_content' | translate }}
+            </li>
+        
+            <!-- Governing Law Section -->
+            <li>
+              <strong>{{ 'terms_and_conditions_governing_law_title' | translate }}</strong>: 
+              {{ 'terms_and_conditions_governing_law_content' | translate }}
+            </li>
+        
+            <!-- Changes to Terms Section -->
+            <li>
+              <strong>{{ 'terms_and_conditions_changes_title' | translate }}</strong>: 
+              {{ 'terms_and_conditions_changes_content' | translate }}
+            </li>
+        
+            <!-- Contact Us Section -->
+            <li>
+              <strong>{{ 'contact_us' | translate }}</strong>: 
+              {{ 'terms_and_conditions_contact_us_content' | translate }} 
+              <br>{{ 'email' | translate }}: info@testapp.com
+            </li>
+          </ol>
+        </section>
+        
+      </section>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

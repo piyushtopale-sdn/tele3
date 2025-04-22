@@ -1,0 +1,228 @@
+<footer class="footer-block" [attr.dir]="'dir' | translate">
+
+  <div class="footer_top">
+    <div class="container">
+      <div class="footer_top_inner">
+        <!-- <div class="footer_logo">
+          <img src="../../../../../assets/img/logo.svg" />
+        </div> -->
+        <!-- <div class="top_link">
+          <ul>
+            <li class="item cursor-pointer">
+              <a class="nav-link">
+                {{ "about" | translate }}</a>
+            </li>
+            <li class="item cursor-pointer">
+              <a (click)="bloghandleRoute()" class="nav-link">
+                {{"blog" | translate }}
+              </a>
+            </li>
+            <li class="item cursor-pointer">
+              <a href="#" class="nav-link">
+                {{ "careers" | translate }}
+              </a>
+            </li>
+            <li class="item cursor-pointer">
+              <a href="#" class="nav-link">
+                {{ "press" | translate }}
+              </a>
+            </li>
+            <li class="item cursor-pointer">
+              <a class="nav-link">
+                {{ "contact_us" | translate }}</a>
+            </li>
+            <li class="item cursor-pointer">
+              <a class="nav-link">
+                {{ "faq" | translate }}
+              </a>
+            </li>
+          </ul>
+        </div> -->
+        <!-- <div class="app_section">
+          <div class="app_item">
+            <img src="../../../../../assets/img/homepage/app_1.png" />
+          </div>
+          <div class="app_item">
+            <img src="../../../../../assets/img/homepage/app_2.png" />
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+
+  <div class="footer_center">
+
+    <div class="container">
+      <div class="row">
+        <div class="left_part footer_main_item col-lg-2 col-sm-12">
+          <div class="footer-item footer_item1">
+            <h5 class="d-lg-none">
+              <a class="footer-title" data-bs-toggle="collapse" href="#collapse1" role="button" aria-expanded="false">
+                {{ "quick_links" | translate }}
+              </a>
+            </h5>
+
+            <h5 class="footer-title-desk">{{ "quick_links" | translate }}</h5>
+            <div id="collapse1" class="nav collapse footer-content">
+              <ul>
+                <li class="nav-item mb-3 cursor-pointer" [routerLink]="['/test/homepage/aboutus']">
+                  <a class="nav-link p-0">
+                    {{ "about_us" | translate }}
+                  </a>
+                </li>
+                <li class="nav-item mb-3 cursor-pointer" [routerLink]="['/test/homepage/services']">
+                  <a class="nav-link p-0">
+                    {{ "services" | translate }}
+                  </a>
+                </li>
+                <li class="nav-item mb-3 cursor-pointer" [routerLink]="['/test/homepage/privacy-policy']">
+                  <a class="nav-link p-0">
+                    {{ "privacy_policy" | translate }}
+                  </a>
+                </li>
+                <li class="nav-item mb-3 cursor-pointer" [routerLink]="['/test/homepage/terms-condition']">
+                  <a class="nav-link p-0">
+                    {{ "terms_and_conditions" | translate }}
+                  </a>
+                </li>
+                <li class="nav-item mb-3 cursor-pointer" [routerLink]="['/test/homepage/refund-policy']">
+                  <a class="nav-link p-0">
+                    {{ "exchange_refund_policy" | translate }}
+                  </a>
+                </li>
+                <li class="nav-item mb-3 cursor-pointer" [routerLink]="['/test/homepage/contactus']">
+                  <a class="nav-link p-0">
+                    {{ "contact_us" | translate }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="left_part footer_main_item col-lg-2 col-sm-12">
+          <div class="footer-item footer_item1">
+            <h5 class="d-lg-none">
+              <a class="footer-title" data-bs-toggle="collapse" href="#collapse1" role="button" aria-expanded="false">
+                {{ "for_patients" | translate }}
+              </a>
+            </h5>
+
+            <h5 class="footer-title-desk">{{ "for_patients" | translate }}</h5>
+            <div id="collapse1" class="nav collapse footer-content">
+              <ul>
+                <li class="nav-item mb-3">
+                  <a class="nav-link p-0">
+                    {{ "online_consultations" | translate }}
+                  </a>
+                </li>
+                <li class="nav-item mb-3">
+                  <a class="nav-link p-0">
+                    {{ "appointment_scheduling" | translate }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="left_part footer_main_item col-lg-2 col-sm-12">
+          <div class="footer-item footer_item5">
+            <h5 class="d-lg-none">
+              <a class="footer-title" data-bs-toggle="collapse" href="#collapse5" role="button" aria-expanded="false">
+                {{ "for_doctors" | translate }}
+              </a>
+            </h5>
+
+            <h5 class="footer-title-desk">{{ "for_doctors" | translate }}</h5>
+            <div id="collapse5" class="nav collapse footer-content">
+              <ul>
+                <li class="nav-item mb-3">
+                  <a class="nav-link p-0">
+                    {{ "ePrescription" | translate }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="left_part footer_main_item col-lg-3 col-sm-12">
+          <div class="footer-item footer_item2">
+            <h5 class="d-lg-none">
+              <a class="footer-title" data-bs-toggle="collapse" href="#collapse2" role="button" aria-expanded="false">
+                {{ "for_lab_radio" | translate }}
+              </a>
+            </h5>
+
+            <h5 class="footer-title-desk">{{ "for_lab_radio" | translate }}</h5>
+            <div id="collapse2" class="nav collapse footer-content">
+              <ul>
+                <li class="nav-item mb-3">
+                  <a class="nav-link p-0">
+                    {{ "receive_lab_radio_orders" | translate }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="left_part footer_main_item col-lg-3 col-sm-12">
+          <div class="footer-item footer_item3">
+            <h5 class="d-lg-none">
+              <a class="footer-title" data-bs-toggle="collapse" href="#collapse3" role="button" aria-expanded="false">
+                {{ "for_pharmacy" | translate }}
+              </a>
+            </h5>
+
+            <h5 class="footer-title-desk">
+              {{ "for_pharmacy" | translate }}
+            </h5>
+            <div id="collapse3" class="nav collapse footer-content">
+              <ul>
+                <li class="nav-item mb-3">
+                  <a class="nav-link p-0">
+                    {{ "receive_medicines_orders" | translate}}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="copyright">
+      <p>© 2024 {{"health_all_rights_reserved" | translate}}.</p>
+    </div>
+  </div>
+</footer>
+
+<ng-template #loginRequiredWarningModal let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <div class="modal_title" style="font-weight: 900;font-size:large;">
+        {{ 'login_required' | translate }}
+      </div>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="modal_title">
+        {{ 'you_need_to_login_first' | translate}}.
+      </div>
+      <div class="primary_btn">
+        <a (click)="handleBtnClick()">
+          <button type="button" class="btn btn-primary">
+            {{ 'login' | translate}}
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</ng-template>

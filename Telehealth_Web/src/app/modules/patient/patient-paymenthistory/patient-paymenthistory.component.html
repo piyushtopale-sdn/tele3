@@ -1,0 +1,223 @@
+<div class="Patient_payment dashboard_main_content">
+  <div class="bottom_bar_up">
+    <div class="top_bar">
+      <div class="content_wrap row">
+        <div class="policy col-sm-6 col-md-3">
+          <div class="form_field_wrapper">
+            <mat-form-field appearance="fill">
+              <input
+                matInput
+                placeholder="{{ 'search_1' | translate }}"
+                [ngModel]="searchText"
+                #text
+                (keyup)="handleSearchFilter(text.value)"
+                (search)="handleSearchFilter(text.value)"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="policy col-sm-6 col-md-3">
+          <div class="form_field_wrapper">
+            <mat-form-field appearance="fill">
+              <mat-select
+                placeholder="{{ 'payment_type' | translate }}"
+                (valueChange)="handleFilter($event)"
+                [(ngModel)]="paymentType"
+              >
+                <mat-option value="subscription">{{
+                  "subscription_plan" | translate
+                }}</mat-option>
+                <mat-option value="appointment">{{
+                  "appointment" | translate
+                }}</mat-option>
+                <mat-option value="medicine_order">{{
+                  "medicine_order" | translate
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="policy date col-sm-6 col-md-3">
+          <div class="form_field_wrapper">
+            <mat-form-field class="example-full-width" appearance="fill">
+              <input
+                matInput
+                [matDatepickerFilter]="myFilter"
+                [matDatepicker]="picker1"
+                [(ngModel)]="startDateFilter"
+                (dateChange)="handleSelectStartDateFilter($event)"
+                placeholder="{{ 'payment_date' | translate }}"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker1"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="policy date col-sm-6 col-md-3">
+          <div class="primary_btn">
+            <button type="button" (click)="clearAll()" class="btn btn-link">
+              {{ "clear_all" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom_bar">
+      <h2>
+        <span>{{ "total_amount" | translate }}:</span> {{ totalAmount }} CFA
+      </h2>
+      <div class="table-wrap">
+        <div class="table-inner">
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="paymentdate">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                (click)="onSortData('createdAt')"
+              >
+                {{ "payment_date" | translate }}
+                <span
+                  *ngIf="sortColumn === 'createdAt'"
+                  class="material-icons sorticon"
+                  >{{ sortIconClass }}</span
+                >
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.createdAt | date : "dd/MM/YYYY" }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="payment">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                (click)="onSortData('Amount')"
+              >
+                {{ "payment" | translate }}
+                <span
+                  *ngIf="sortColumn === 'Amount'"
+                  class="material-icons sorticon"
+                  >{{ sortIconClass }}</span
+                >
+              </th>
+              <td mat-cell *matCellDef="let element">{{ element.Amount }}</td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="doctorname">
+                        <th mat-header-cell *matHeaderCellDef>Doctor Name</th>
+                        <td mat-cell *matCellDef="let element">  {{element?.doctorName}} </td>
+                      </ng-container>
+            
+                      <ng-container matColumnDef="appointmentdatetime">
+                        <th mat-header-cell *matHeaderCellDef>Appointment Date & Time</th>
+                        <td mat-cell *matCellDef="let element"> {{element.consaltationdate}} 
+                        </td>
+                      </ng-container> -->
+            <ng-container matColumnDef="orderappointmentid">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                (click)="onSortData('order_id')"
+              >
+                {{ "order_appointment_id" | translate }}
+                <span
+                  *ngIf="sortColumn === 'order_id'"
+                  class="material-icons sorticon"
+                  >{{ sortIconClass }}</span
+                >
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.order_id ? element.order_id : "-" }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="paymentmode">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                (click)="onSortData('payment_mode')"
+              >
+                {{ "payment_mode" | translate }}
+                <span
+                  *ngIf="sortColumn === 'payment_mode'"
+                  class="material-icons sorticon"
+                  >{{ sortIconClass }}</span
+                >
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.payment_mode }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="transactionid">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                (click)="onSortData('transaction_id')"
+              >
+                {{ "transaction_Id" | translate }}
+                <span
+                  *ngIf="sortColumn === 'transaction_id'"
+                  class="material-icons sorticon"
+                  >{{ sortIconClass }}</span
+                >
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.transaction_id }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="paymentType">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                (click)="onSortData('paymentType')"
+              >
+                {{ "payment_type" | translate }}
+                <span
+                  *ngIf="sortColumn === 'paymentType'"
+                  class="material-icons sorticon"
+                  >{{ sortIconClass }}</span
+                >
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.paymentType.replace("_", " ") }}
+              </td>
+            </ng-container>
+
+            <!-- <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>Action</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="icon_group">
+                                <a  [routerLink]="['patient/paymenthistoryView']" class="svgicon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none"><path d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z"></path></svg></a>
+                            </div>
+                        </td>
+                      </ng-container> -->
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+          <div *ngIf="dataSource?.length === 0" class="text-center">
+            <b>{{ "no_record_found" | translate }}<</b>
+          </div>
+        </div>
+        <mat-paginator
+          class="pagination"
+          [length]="totalLength"
+          (page)="handlePageEvent($event)"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

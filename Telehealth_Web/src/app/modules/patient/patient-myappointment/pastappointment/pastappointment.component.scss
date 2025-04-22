@@ -1,0 +1,196 @@
+@import '../../../../../assets/css/variable/variable';
+
+.appointment_details{
+    .main_profile_title{
+        font-size: 24px;
+        font-weight: 500;
+        color: $table_color;
+        margin: 0 0 15px;
+    }
+    .main_title{
+        margin: 0 0 15px;
+        font-weight: 500;
+        color: $table_color;
+    }
+    .profile_data{
+        background: #ffffff;
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        background: #ffffff;
+        margin: 0 0 30px;
+        .profile_info{
+            padding: 25px 25px 25px;
+            position: relative; 
+            ul{
+                display: grid;
+                align-items: end;
+                grid-gap: 15px;
+                grid-template-columns: repeat(5, 1fr);
+                border-bottom: 1px solid #B6C8D6;
+                padding-bottom: 25px;
+                margin-bottom: 25px;
+                padding-left: 0;
+                padding-right: 0;
+                .col_item{
+                    display: flex;
+                    align-items: center;
+                    min-height: 60px;
+                    .profile_image{
+                        width: 95px;
+                        height: 95px;
+                        min-width: 95px;
+                        margin: 0 20px 0 0;
+                        border-radius: 50%;
+                        overflow: hidden;
+                    }
+                    .profile_contact{
+                        .profile_title{
+                            font-size: 20px;
+                            font-weight: 600;
+                            line-height: 24px;
+                            letter-spacing: 0em;
+                            color: $linkcolor;
+                            margin: 0 0 10px;
+                        }
+                        .lable{
+                            font-size: 14px;
+                            font-weight: 400;
+                            line-height: 16px;
+                            letter-spacing: 0.05em;
+                            color: $bodyopacitylightcolor;
+                            margin: 0 0 6px;
+                        }
+                        .user_value{
+                            font-weight: 600;
+                            font-size: 14px;
+                            line-height: 20px;
+                            color: $linkcolor;
+                            letter-spacing: 0.05em;
+                        }
+                    }
+                }
+                &.profile_info_with_img{
+                    grid-template-columns: 285px repeat(4, 1fr);
+                }
+                &:last-child{
+                    border-bottom: none;
+                    margin-bottom: 0;
+                    padding-bottom: 0;
+                }
+            }
+        }
+    }
+    .prescription{
+        .top_bar{
+            margin: 0 0 30px;
+            .primary_btn{
+                .btn-light {
+                    background-color: $white_color;
+                    color: $table_color;
+                    &:hover{
+                        background-color: $bodycolor;
+                        color: $white_color;
+                    }
+                    .btn_svg{
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Set remainder css start
+.common_plan{
+    .form_field_wrapper{
+        .fieldicon_wrap{
+            display: flex;
+            justify-content: space-between;
+            .mat-icon{
+                border-radius: 10px;
+                width: 50px;
+                height: 50px;
+                line-height: 50px;
+                min-width: 50px;
+                text-align: center;
+                margin-left: 15px;
+                &.minus{
+                    background: #FDE6E5;
+                    border: 1px solid #FDE6E5;
+                    border-radius: 10px;
+                    color: #F05A4F;
+                }
+                &.plus{
+                    background: #0B4977;
+                    color: #ffffff;  
+                }
+            }
+        }
+        .mat-form-field{
+            width: 100%;
+            .mat-form-field-wrapper{
+                padding-bottom: 20px;
+            }
+        } 
+    }
+    .vr{
+        width: 100%;
+        background-color: transparent;
+        text-align: center;
+        margin: 0 0 20px;
+        text-transform: uppercase;
+        font-size: 16px;
+    }
+    .primary_btn{
+        &.add_popup{
+            justify-content: end;
+            .btn.btn-primary{
+                &:first-child{
+                    margin-right: 15px;
+                }
+            }
+        }
+    }
+  
+}
+
+
+@media screen and (max-width:$desktop_medium) {
+    .appointment_details .profile_data .profile_info ul.profile_info_with_img{
+        grid-template-columns: 285px repeat(2, 1fr);
+    }
+    .appointment_details .profile_data .profile_info ul{
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width:$large_phone) {
+    .appointment_details .profile_data .profile_info ul .col_item .profile_image{
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+    }
+    .appointment_details .profile_data .profile_info ul.profile_info_with_img,
+    .appointment_details .profile_data .profile_info ul{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .appointment_details .profile_data .profile_info ul.profile_info_with_img,
+    .appointment_details .profile_data .profile_info ul{
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .appointment_details .profile_data .profile_info ul.profile_info_with_img .col_item{
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .appointment_details .profile_data .profile_info ul .col_item .profile_image{
+        margin-bottom: 15px;
+    }
+    .common_plan .form_field_wrapper .mat-form-field {
+        width: 74%;
+    }
+}
+

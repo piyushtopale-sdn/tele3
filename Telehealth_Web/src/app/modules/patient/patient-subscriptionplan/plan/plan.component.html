@@ -1,0 +1,322 @@
+<div class="plan dashboard_main_content">
+  <div class="bottom_bar">
+    <div class="row">
+      <!-- <div class="col-sm-6 col-lg-6 col-xl-4 plan_card_wrap">
+                <div class="plan_card">
+                    <div class="card_icon_wrap">
+                        <div class="card_icon">
+                            <img src="assets/img/cardicon1.svg">
+                        </div>
+                    </div>
+                    <div class="card_title">Plan A</div>
+                    <div class="card_desc">Manage 10 Staff <br> Manage 10 Subscriber</div>
+                    <div class="card_price">$149.00</div>
+                    <div class="card_duration">/Monthly</div>
+                    <div class="primary_btn">
+                        <button type="button" class="btn btn-light" [routerLink]="['/patient/subscriptionplan/payment']">Select</button>
+                    </div>
+                </div>
+            </div> -->
+
+      <ng-container *ngFor="let plan of planDetails; let i = index">
+        <!-- {{plan|json}} -->
+        <div class="col-sm-6 col-lg-6 col-xl-4 plan_card_wrap">
+          <div class="plan_card">
+            <div class="card_icon_wrap">
+              <div class="card_icon">
+                <img src="assets/img/cardicon1.svg" />
+              </div>
+            </div>
+            <div class="card_title">{{ plan?.plan_name }}</div>
+
+            <div class="card_desc">
+              <ng-container *ngFor="let ser of plan?.services">
+                <ng-container *ngIf="ser.is_unlimited">
+                  {{ "manage_unlimited" | translate }}
+                  {{ ser.name | uppercase }}
+                </ng-container>
+                <ng-container *ngIf="!ser.is_unlimited">
+                  {{ "manage" | translate }} {{ ser.max_number }}
+                  {{ ser.name | uppercase }}
+                </ng-container>
+
+                <!-- Manage  Staff <br> Manage 10 Subscriber -->
+              </ng-container>
+              <!-- Manage 10 Staff <br> Manage 10 Subscriber -->
+            </div>
+
+            <div class="card_price">
+              {{ plan?.plan_price | currency : "XOF" }}
+            </div>
+            <div class="card_duration">/{{ plan?.plan_duration?.name }}</div>
+            <div class="primary_btn">
+              <button
+                type="button"
+                (click)="
+                  openVerticallyCenteredpaymentdetails(
+                    paymentdetailscontent,
+                    plan
+                  )
+                "
+                class="btn btn-light"
+              >
+              {{ "Select" | translate }}
+              </button>
+              <!-- <button type="button" [routerLink]="['/insurance/subscriptionplan/payment/]"
+                                class="btn btn-light">Select</button> -->
+            </div>
+            <!-- [routerLink]="['/insurance/subscriptionplan/payment']" -->
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="planStatus">
+        <div class="col-sm-6 col-lg-6 col-xl-4 plan_card_wrap">
+          {{ planMessage }}
+        </div>
+      </ng-container>
+
+      <!-- <div class="col-sm-6 col-lg-6 col-xl-4 plan_card_wrap">
+                <div class="plan_card">
+                    <div class="card_icon_wrap">
+                        <div class="card_icon">
+                            <img src="assets/img/cardicon2.svg">
+                        </div>
+                    </div>
+                    <div class="card_title">Plan B</div>
+                    <div class="card_desc">Manage 20 Staff <br> Manage 20 Subscriber</div>
+                    <div class="card_price">$299.00</div>
+                    <div class="card_duration">/Monthly</div>
+                    <div class="primary_btn">
+                        <button type="button" class="btn btn-light">Select</button>
+                    </div>
+                </div>
+            </div> -->
+      <!-- <div class="col-sm-6 col-lg-6 col-xl-4 plan_card_wrap">
+                <div class="plan_card">
+                    <div class="card_icon_wrap">
+                        <div class="card_icon">
+                            <img src="assets/img/cardicon1.svg">
+                        </div>
+                        <div class="primary_btn recommended">
+                            <button type="button" class="btn btn-light">Recommended</button>
+                        </div>
+                    </div>
+                    <div class="card_title">Plan C</div>
+                    <div class="card_desc">Manage 10 Staff <br> Manage 10 Subscriber</div>
+                    <div class="card_price">$499.00</div>
+                    <div class="card_duration">/Monthly</div>
+                    <div class="primary_btn">
+                        <button type="button" class="btn btn-light">Select</button>
+                    </div>
+                </div>
+            </div> -->
+      <!-- <div class="col-sm-6 col-lg-6 col-xl-4 plan_card_wrap">
+                <div class="plan_card">
+                    <div class="card_icon_wrap">
+                        <div class="card_icon">
+                            <img src="assets/img/cardicon2.svg">
+                        </div>
+                    </div>
+                    <div class="card_title">Plan D</div>
+                    <div class="card_desc">Manage 20 Staff <br> Manage 20 Subscriber</div>
+                    <div class="card_price">$999.00</div>
+                    <div class="card_duration">/Monthly</div>
+                    <div class="primary_btn">
+                        <button type="button" class="btn btn-light">Select</button>
+                    </div>
+                </div>
+            </div> -->
+    </div>
+  </div>
+</div>
+
+<div class="payment_details">
+  <ng-template #paymentdetailscontent let-modal>
+    <div class="custome_modal notification_manage payment_block">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "payment_details" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <ng-container>
+              <div class="col-sm-12 payment_mode">
+                <div class="modal_title">
+                  {{ "select_payment_type" | translate }}
+                </div>
+                <mat-button-toggle-group
+                  name="fontStyle"
+                  [value]="PaymentMode"
+                  (change)="selectPaymetTypeAndMode({ mode: $event.value })"
+                  aria-label="Font Style"
+                >
+                  <mat-button-toggle value="stripe" class="title strip">
+                    stripe
+                  </mat-button-toggle>
+                  <mat-button-toggle class="mobile_money" value="mobile_money">
+                    <div class="title">
+                      <img src="../../../../../assets/img/mobile.svg" />
+                      {{ "mobile_money" | translate }}
+                    </div>
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+            </ng-container>
+          </div>
+        </form>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <!-- <button type="button" class="btn btn-primary" [routerLink]="['/patient/presciptionorder/payment']" [queryParams]="{orderId: 'order_id', pharmacyId: 'pharmacy_id'}">{{ 'continue' | translate }}</button> -->
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="findPlanDetails()"
+          >
+            {{ "continue" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<div class="payment_details">
+  <ng-template #mobilePaycontent let-modal>
+    <div class="custome_modal notification_manage payment_details_popup">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "payment_details" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="mobilePayForm">
+          <div class="row">
+            <ng-container>
+              <div class="col-sm-12 payment_mode">
+                <div class="modal_title">
+                  {{ "select_mobile_pay_provider" | translate }}
+                </div>
+                <mat-form-field class="inner_label" appearance="fill">
+                  <mat-select
+                    disableRipple
+                    placeholder="{{ 'select_mobile_pay_provider' | translate }}"
+                    formControlName="selectedProvider"
+                  >
+                    <mat-option
+                      *ngFor="let data of mobilePayDetails"
+                      [value]="data._id"
+                    >
+                      {{ data?.provider }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </ng-container>
+
+            <div class="col-sm-12">
+              <div class="modal_title">
+                {{ "mobile_pay_number" | translate }}
+              </div>
+              <div class="field-wrap-block d-flex align-items-start">
+                <mat-form-field appearance="fill">
+                  <div class="country-code-input-container">
+                    <mat-select
+                      disableRipple
+                      placeholder="{{ 'select_country_code' | translate }}"
+                      formControlName="countryCode"
+                      class="country-code-select"
+                    >
+                      <mat-option
+                        *ngFor="let code of countryCodes"
+                        [value]="code"
+                        >{{ code }}</mat-option
+                      >
+                    </mat-select>
+                  </div>
+                  <!-- <span class="text-danger" *ngIf="isSubmitted && f['countryCode'].errors?.['required']">{{ 'select_country_code' | translate }}*</span> -->
+                </mat-form-field>
+                <div class="input-field-block">
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="mobilepaynumber"
+                    placeholder="{{ 'enter_number' | translate }}"
+                    class="mobile-number-input"
+                    (keypress)="numberFunc($event)" (paste)="numberFunc($event)"
+                  />
+                  <span
+                    class="text-danger error-msg"
+                    *ngIf="isSubmitted && f['mobilepaynumber'].errors?.['required']"
+                    >{{ "enter_number" | translate }}*</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="row">
+            <ng-container>
+              <div class="col-sm-12 payment_mode">
+                <div class="modal_title">{{ 'select_mobile_pay_provider' | translate }}</div>
+                <mat-form-field class="inner_label" appearance="fill">
+                  <mat-select
+                    disableRipple
+                    placeholder="select number">
+                    <mat-option
+                      *ngFor="let data of mobilePayDetails"
+                      [value]="data._id"
+                      >{{ data?.provider }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </ng-container>
+
+            <label>{{ 'enter_number' | translate }}</label>
+            <mat-form-field appearance="fill">
+              <input type="text" matInput formControlName="mobilepaynumber" />
+            </mat-form-field>
+          </div> -->
+        </form>
+        <div class="primary_btn mt-5">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+          >
+            {{ "continue" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

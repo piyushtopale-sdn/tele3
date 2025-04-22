@@ -1,0 +1,186 @@
+<div class="pharmacy_details dashboard_main_content">
+    <div class="button-container mb-3">
+      <div class="back_button" (click)="route_back()" style="margin-right: 10px;">
+        <button class="btn btn-primary">{{ "back" | translate }}</button>
+      </div>    
+  </div>
+  
+    <div class="profile_data">
+      <div class="profile_info">
+        <ul class="profile_info_inner">
+          <li class="col_item profile_image_wrapper">
+            <div class="profile_image">
+              <img
+                [src]="
+                  centreProfile
+                    ? centreProfile
+                    : '../../../assets/img/hospital.png'
+                "
+              />          
+            </div>
+            <div class="profile_contact">
+              <div class="profile_title">{{ "centre_name" | translate }}</div>
+              <!-- <div class="lable">{{ "email" | translate }}</div>-->
+              <div class="user_value">{{ centreName }}</div> 
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "email" | translate }}</div>
+              <div class="user_value">{{ centreEmail }}</div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "phone_number" | translate }}</div>
+              <div class="user_value">
+                ({{ pharCountryCode }}) {{ centrePhone }}
+              </div>
+            </div>
+          </li>
+  
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "additional_phone_number" | translate }}</div>
+              <div class="user_value">
+                {{ profileDetails?.additional_phone_number ? profileDetails?.additional_phone_number: "-" }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "address" | translate }}</div>
+              <div class="user_value">{{ addressInfo?.address ? addressInfo?.address: "-" }}</div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "country" | translate }}</div>
+              <div class="user_value">
+                {{ addressInfo?.nationality ? addressInfo?.nationality : "-"}}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "neighbourhood" | translate }}</div>
+              <div class="user_value">
+                {{ addressInfo?.neighborhood ? addressInfo?.neighborhood : "-"}}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "region" | translate }}</div>
+              <div class="user_value">
+                {{ addressInfo?.region ? addressInfo?.region : "-"}}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "province" | translate }}</div>
+              <div class="user_value">
+                {{ addressInfo?.province ? addressInfo?.province : "-"}}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "department" | translate }}</div>
+              <div class="user_value">
+                {{ addressInfo?.department ? addressInfo?.department : "-"}}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "city" | translate }}</div>
+              <div class="user_value">
+                {{ addressInfo?.city ? addressInfo?.city : "-"}}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "village" | translate }}</div>
+              <div class="user_value">
+                {{ addressInfo?.village ? addressInfo?.village : "-"}}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "pincode" | translate }}</div>
+              <div class="user_value">
+                {{ addressInfo?.pincode ? addressInfo?.pincode : "-"}}
+              </div>
+            </div>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  
+    <h3>{{ "about" | translate }}</h3>
+    <div class="profile_data">
+      <div class="profile_info">
+        <p>{{ about ? about : "-"}}</p>
+      </div>
+    </div>
+  
+    <h3>{{ "picture" | translate }}</h3>
+    <div class="profile_data">
+      <div class="profile_info">
+        <div class="hospital_img">
+          <div class="row">
+            <div *ngIf="centrePictures.length > 0" class="d-flex">
+              <div
+                class="item col-sm-3 col-xl-2"
+                *ngFor="let pic of centrePictures"
+              >
+                <img src="{{ pic }}" width="170px" height="170px" />
+              </div>             
+            </div>
+            <div *ngIf="centrePictures.length === 0">
+              <span
+                ><b>{{ "no_pictures_available" | translate }}</b></span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <h3>{{ "license" | translate }}</h3>
+    <div class="profile_data">
+      <div class="profile_info">
+        <div class="row">
+          <div class="item_info">
+            <div class="user_img">
+              <img
+              class="license_img"
+              [src]="
+                  licencePicSign
+                    ? licencePicSign
+                    : '../../../assets/img/doc.png'
+                "
+              />
+              <!-- <img src="../../../../../assets/img/doc.png" /> -->
+            </div>
+          </div>
+          <div class="item_info">
+            <label>{{ "license_number" | translate }}</label>
+            <div class="value">{{ licenseDetails?.id_number }}</div>
+          </div>
+          <div class="item_info">
+            <label>{{ "expiry_date" | translate }}</label>
+            <div class="value">
+              {{ licenseDetails?.expiry_date | date : "dd/MM/YYYY" }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

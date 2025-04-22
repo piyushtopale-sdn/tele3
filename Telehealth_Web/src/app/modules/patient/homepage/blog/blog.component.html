@@ -1,0 +1,73 @@
+<div class="home_wrapper">
+  <app-header></app-header>
+
+  <div class="breadcum_wrapper" aria-label="breadcrumb">
+    <div class="container">
+      <div class="breadcrumb_title">{{ "blog" | translate }}</div>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/patient/homepage']">{{ "home" | translate }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ "blog" | translate }}
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="main_section blog-main-section">
+    <div class="main_section_inner">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 mb-4" *ngFor="let data of allBlogdata; let index = index">
+            <div class="blog-inside-wrap">
+              <div class="blog-img-block p-3 p-md-4" *ngIf="
+              data.attachments &&
+              data.attachments[0] &&
+              (data.attachments[0].type === 'png' ||
+                data.attachments[0].type === 'jpg' ||
+                data.attachments[0].type === 'jpeg' ||
+                data.attachments[0].type === 'pneg')
+            ">
+                <img
+                src="{{ data.attachments[0].signedurl }}"
+                width="320"
+                height="240"
+              />
+              </div>
+              <div class="blog-video-block p-3 p-md-4" *ngIf="
+              data.attachments &&
+              data.attachments[0] &&
+              data.attachments[0].type === 'mp4'
+            ">
+                <video controls>
+                  <source
+                    src="{{ data.attachments[0].signedurl }}"
+                    type="video/mp4"
+                  />
+                  {{ "your_browser_not_support_video_tag" | translate }}.
+                </video>
+              </div>
+              <div class="blog-details-block p-3 p-md-4">
+                <p [innerHTML]="data?.cleanText" class="m-0"
+                style="
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 3;
+                  -webkit-box-orient: vertical;
+                "
+                >
+              </p>
+                <a id="see-more-link" *ngIf = "data?.cleanText?.length > 100" (click)="routeToNextpage(data)"  class="mt-2">{{
+                  "see_more" | translate
+                }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

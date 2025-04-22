@@ -1,0 +1,758 @@
+<div class="individualdr_dashboard dashboard_main_content">
+  <div class="top_bar up_bar common_space">
+    <div class="content_wrap">
+      <div class="policy">
+        <form [formGroup]="dateRangeForm">
+          <div class="form_field_wrapper d-flex align-items-center gap-3" style="margin: 10px;">
+            <div class="main_title">{{ "from" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker1" formControlName="fromDate"
+                (dateChange)="onDateChange('from', $event.value)" (click)="picker1.open()" readonly />
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <div class="main_title">{{ "to" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker2" formControlName="toDate" (dateChange)="onDateChange('to', $event.value)" (click)="picker1.open()" readonly />
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="counter_section common_space">
+    <div class="row">
+
+      <ng-container>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+          <div class="cust_col light_violet">
+            <div class="cust_col_inner">
+              <!-- <mat-icon
+                class="more"
+                [routerLink]="['/individual-doctor/appointment']"
+                [queryParams]="{ type: 'ONLINE' }"
+                >more_horiz</mat-icon
+              > -->
+              <div class="left" >
+                <div class="counter">{{totalConfirmedAppointment ? totalConfirmedAppointment : 0}}</div>
+                <div class="counter_title">
+                  {{ "total_confirmed_appointments" | translate }}
+                </div>
+              </div>
+              <div class="right" (click)= "exportToExcelConfirmed()" ngbTooltip="Export confirmed appointment list">
+                <div class="counter_img">
+                  <img src="assets/img/dashboard/dashboard30.svg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+          <div class="cust_col light_green">
+            <div class="cust_col_inner">
+              <!-- <mat-icon
+                class="more"
+                [routerLink]="['/individual-doctor/appointment']"
+                [queryParams]="{ type: 'ONLINE' }"
+                >more_horiz</mat-icon
+              > -->
+              <div class="left">
+                <div class="counter">{{totalConsultationDone ? totalConsultationDone : 0}}</div>
+                <div class="counter_title">
+                  {{ "total_completed_appointment" | translate }}
+                </div>
+              </div>
+              <div class="right" (click)= "exportToExcelComplete()" ngbTooltip="Export completed appointment list">
+                <div class="counter_img">
+                  <img src="assets/img/dashboard/dashboard28.svg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+          <div class="cust_col light_skyblue">
+            <div class="cust_col_inner">
+              <!-- <mat-icon
+                class="more"
+                [routerLink]="['/individual-doctor/appointment']"
+                [queryParams]="{ type: 'ONLINE' }"
+                >more_horiz</mat-icon
+              > -->
+              <div class="left">
+                <div class="counter">{{totalPatient ? totalPatient : 0}}</div>
+                <div class="counter_title">
+                  {{ "total_patients_served" | translate }}
+                </div>
+              </div>
+              <div class="right" (click)= "exportToExcelPatientServed()" ngbTooltip="Export patients served">
+                <div class="counter_img">
+                  <img src="assets/img/dashboard/dashboard7.svg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      
+
+      <!-- <ng-container *ngIf="giveInnerPermission('total_patient')">
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
+          <div class="cust_col light_blue">
+            <div class="cust_col_inner">
+              <mat-icon
+                class="more"
+                [routerLink]="['/individual-doctor/patientmanagement']"
+                >more_horiz</mat-icon
+              >
+              <div class="left">
+                <div class="counter">{{ totalPatientLength }}</div>
+                <div class="counter_title">
+                  {{ "total_patients" | translate }}
+                </div>
+              </div>
+              <div class="right">
+                <div class="counter_img">
+                  <img src="assets/img/dashboard/dashboard51.svg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="giveInnerPermission('online_appoinment_count')">
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-3">
+          <div class="cust_col light_violet">
+            <div class="cust_col_inner">
+              <mat-icon
+                class="more"
+                [routerLink]="['/individual-doctor/appointment']"
+                [queryParams]="{ type: 'ONLINE' }"
+                >more_horiz</mat-icon
+              >
+              <div class="left">
+                <div class="counter">{{ onlineAppCount }}</div>
+                <div class="counter_title">
+                  {{ "online_appointment" | translate }}
+                </div>
+              </div>
+              <div class="right">
+                <div class="counter_img">
+                  <img src="assets/img/dashboard/dashboard52.svg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container> -->
+
+    </div>
+    <div class="row mt20">
+      <ng-container>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4"  (click)="showSection('lab')">
+          <div class="cust_col light_yellow">
+            <div class="cust_col_inner">
+              <!-- <mat-icon
+                class="more"
+                [routerLink]="['/individual-doctor/appointment']"
+                [queryParams]="{ type: 'ONLINE' }"
+                >more_horiz</mat-icon
+              > -->
+              <div class="left">
+                <div class="counter">{{totalPrescribedLabTest ? totalPrescribedLabTest : 0}}</div>
+                <div class="counter_title">
+                  {{ "total_prescribed_labtest" | translate }}
+                </div>
+              </div>
+              <div class="right">
+                <div class="counter_img">
+                  <img src="assets/img/dashboard/dashboard19.svg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4"  (click)="showSection('radio')">
+          <div class="cust_col light_orange">
+            <div class="cust_col_inner">
+              <!-- <mat-icon
+                class="more"
+                [routerLink]="['/individual-doctor/appointment']"
+                [queryParams]="{ type: 'ONLINE' }"
+                >more_horiz</mat-icon
+              > -->
+              <div class="left">
+                <div class="counter">{{totalPrescribedRadiologyTest ? totalPrescribedRadiologyTest :0}}</div>
+                <div class="counter_title">
+                  {{ "total_prescribed_radiologytest" | translate }}
+                </div>
+              </div>
+              <div class="right">
+                <div class="counter_img">
+                  <img src="assets/img/dashboard/dashboard20.svg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- <ng-container>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4"(click)="onNavigate('/individual-doctor/appointment')">
+          <div class="cust_col light_red">
+            <div class="cust_col_inner">
+              <div class="left">
+                <div class="counter">{{totalIncompleteOrders ? totalIncompleteOrders : 0}}</div>
+                <div class="counter_title">
+                  {{ "total_incomplete_orders" | translate }}
+                </div>
+              </div>
+              <div class="right">
+                <div class="counter_img">
+                  <img src="assets/img/dashboard/dashboard3.svg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container> -->
+
+
+      <ng-container>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+          <div class="cust_col light_violet">
+            <div class="cust_col_inner">
+              <!-- <mat-icon
+                class="more"
+                [routerLink]="['/individual-doctor/appointment']"
+                [queryParams]="{ type: 'ONLINE' }"
+                >more_horiz</mat-icon
+              > -->
+              <div class="left" >
+                <div class="counter">{{patientSubscriberCount ? patientSubscriberCount : 0}}</div>
+                <div class="counter_title">
+                  {{ "no_of_active_subscribed_patients" | translate }}
+                </div>
+              </div>
+              <div class="right">
+                <div class="counter_img">
+                  <mat-icon  (click)= "exportToExcelSubscribers()" ngbTooltip="Export number of active subscribed patient details">download</mat-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- by dilip -->
+     <div class="row mt20">
+      <ng-container>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+          <div class="cust_col light_green">
+            <div class="cust_col_inner">
+              <!-- <mat-icon
+                class="more"
+                [routerLink]="['/individual-doctor/appointment']"
+                [queryParams]="{ type: 'ONLINE' }"
+                >more_horiz</mat-icon
+              > -->
+              <div class="left">
+                <div class="counter">{{totalPendingPrescribedLabTestCount ? totalPendingPrescribedLabTestCount : 0}}</div>
+                <div class="counter_title">
+                  {{ "total_incomplete_labtest" | translate }}
+                </div>
+              </div>
+              <div class="right" (click)="exportToExcelPendingLabTest()" ngbTooltip="Export pending prescribed lab test list">
+                <div class="counter_img">
+                  <img src="assets/img/dashboard/dashboard43.svg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+          <div class="cust_col light_skyblue">
+            <div class="cust_col_inner">
+              <!-- <mat-icon
+                class="more"
+                [routerLink]="['/individual-doctor/appointment']"
+                [queryParams]="{ type: 'ONLINE' }"
+                >more_horiz</mat-icon
+              > -->
+              <div class="left">
+                <div class="counter">{{totalPendingPrescribedRadioTestCount ? totalPendingPrescribedRadioTestCount : 0}}</div>
+                <div class="counter_title">
+                  {{ "total_incomplete_radiology_test" | translate }}
+                </div>
+              </div>
+              <div class="right" (click)="exportToExcelPendingRadioTest()" ngbTooltip="Export pending radiology test list">
+                <div class="counter_img">
+                  <img src="assets/img/dashboard/dashboard43.svg" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+     </div>
+
+
+
+
+    </div>
+  </div>
+
+  <div class="appointment_section" *ngIf="showList === 'appointment'">
+    <div class="row">
+
+      <div class="col-md-12 today_appointment appointment">
+        <div class="today_appointment_inner common_space">
+          <div class="top_bar d-block">
+            <div class="left_part">
+              <div class="main_title">
+                {{'upcoming' | translate}} {{ "appointments" | translate }}
+              </div>
+            </div>
+            <div class="bottom_bar">
+              <div class="table-wrap">
+                <div class="table-inner without_pagination_block">
+                  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 withoutpagination">
+                    <ng-container matColumnDef="patientname">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "patient_name" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        <span class="user_image_wrapper">
+                          <img class="user_image" src="
+                            ../../../../../assets/img/default_user.png
+                          " />
+                        </span>
+                        <span class="name_user">
+                          {{ element?.patientName
+                          }}
+                        </span>
+                      </td>
+                    </ng-container>
+
+                    <!--Date & Time Column -->
+                    <ng-container matColumnDef="dateandtime">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "date_and_time" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.consultationDate | date : "dd/MM/YYYY" }}
+                        |
+                        {{ element?.consultationTime }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="appointmenID">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "appointmentId" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.appointmentId }}
+                      </td>
+                    </ng-container>
+
+                    <!--Action column -->
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "action" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        <div class="icon_group">
+                          <a class="svgicon" [routerLink]="[
+                            '/individual-doctor/appointment/appointmentdetails',
+                            element?._id
+                          ]">
+                            <mat-icon type="button" aria-expanded="false">
+                              visibility
+                            </mat-icon>
+                          </a>
+                        </div>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                  </table>
+                </div>
+                <div *ngIf="dataSource?.length === 0" class="text-center">
+                  <b>{{ "no_record_found" | translate }}</b>
+                </div>
+                <mat-paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)"
+                  [pageSize]="pageSize" [pageSizeOptions]="[5, 20, 50, 100]" showFirstLastButtons
+                  aria-label="Select page of periodic elements">
+                </mat-paginator>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="appointment_section" *ngIf="showList === 'lab'">
+    <div class="row">
+      <div class="col-md-12 today_appointment appointment">
+        <div class="today_appointment_inner common_space">
+          <div class="top_bar d-block">
+            <div class="left_part">
+              <div class="main_title">
+                {{'total_prescribed_labtest' | translate}}
+              </div>
+            </div>
+            <div class="bottom_bar">
+              <div class="table-wrap">
+                <div class="table-inner without_pagination_block">
+                  <!-- <table mat-table [dataSource]="prescribedlabtestdataSource" class="mat-elevation-z8 withoutpagination">
+                    <ng-container matColumnDef="appointmentId">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "appointmentId" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        <span class="user_image_wrapper">
+                          <img class="user_image" src="
+                            ../../../../../assets/img/default_user.png
+                          " />
+                        </span>
+                        <a class="name_user"  (click)="goTOApp(element?.appointment_id)">
+                          {{ element?.appointmentId
+                          }}
+                        </a>
+                      </td>
+                    </ng-container>
+
+                   Date & Time Column -->
+                     <!--<ng-container matColumnDef="dateandtime">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "appointment" | translate }} {{ "date_and_time" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.consultationDate | date : "dd/MM/YYYY" }}
+                        |
+                        {{ element?.consultationTime }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="patientName" >
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "patient_name" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        <a class="name_user" (click)="goTOEmr(element?.patientId)">{{ element?.patientName }} </a>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="labName">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "centre_name" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.labName }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="testName">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "test_name" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.testName }}
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="prescribedlabtestColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: prescribedlabtestColumns"></tr>
+                  </table> -->
+                  
+                  <table mat-table [dataSource]="prescribedlabtestdataSource" class="mat-elevation-z8 withoutpagination">
+                    <!-- Appointment ID Column -->
+                    <ng-container matColumnDef="appointmentId">
+                      <th mat-header-cell *matHeaderCellDef (click)="onSortDataLab('appointmentId')">
+                        {{ "appointmentId" | translate }}
+                        <span *ngIf="sortColumn === 'appointmentId'" class="material-icons sorticon">
+                          {{ sortIconClass }}
+                        </span>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        <span class="user_image_wrapper">
+                          <img class="user_image" src="../../../../../assets/img/default_user.png" />
+                        </span>
+                        <a class="name_user" (click)="goTOApp(element?.appointment_id)">
+                          {{ element?.appointmentId }}
+                        </a>
+                      </td>
+                    </ng-container>
+                  
+                    <!-- Date & Time Column -->
+                    <ng-container matColumnDef="dateandtime">
+                      <th mat-header-cell *matHeaderCellDef (click)="onSortDataLab('consultationDate')">
+                        {{ "appointment" | translate }} {{ "date_and_time" | translate }}
+                        <span *ngIf="sortColumn === 'consultationDate'" class="material-icons sorticon">
+                          {{ sortIconClass }}
+                        </span>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.consultationDate | date : "dd/MM/YYYY" }} |
+                        {{ element?.consultationTime }}
+                      </td>
+                    </ng-container>
+                  
+                    <!-- Patient Name Column -->
+                    <ng-container matColumnDef="patientName">
+                      <th mat-header-cell *matHeaderCellDef (click)="onSortDataLab('patientName')">
+                        {{ "patient_name" | translate }}
+                        <span *ngIf="sortColumn === 'patientName'" class="material-icons sorticon">
+                          {{ sortIconClass }}
+                        </span>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        <a class="name_user" (click)="goTOEmr(element?.patientId)">
+                          {{ element?.patientName }}
+                        </a>
+                      </td>
+                    </ng-container>
+                  
+                    <!-- Lab Name Column -->
+                    <ng-container matColumnDef="labName">
+                      <th mat-header-cell *matHeaderCellDef (click)="onSortDataLab('labName')">
+                        {{ "centre_name" | translate }}
+                        <span *ngIf="sortColumn === 'labName'" class="material-icons sorticon">
+                          {{ sortIconClass }}
+                        </span>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.labName }}
+                      </td>
+                    </ng-container>
+                  
+                    <!-- Test Name Column -->
+                    <ng-container matColumnDef="testName">
+                      <th mat-header-cell *matHeaderCellDef (click)="onSortDataLab('testName')">
+                        {{ "test_name" | translate }}
+                        <span *ngIf="sortColumn === 'testName'" class="material-icons sorticon">
+                          {{ sortIconClass }}
+                        </span>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.testName }}
+                      </td>
+                    </ng-container>
+                  
+                    <!-- Table Rows -->
+                    <tr mat-header-row *matHeaderRowDef="prescribedlabtestColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: prescribedlabtestColumns"></tr>
+                  </table>
+                  
+                
+                </div>
+                <div *ngIf="prescribedlabtestdataSource?.length === 0" class="text-center">
+                  <b>{{ "no_record_found" | translate }}</b>
+                </div>
+                <mat-paginator 
+                class="pagination" 
+                [length]="labTotalCount" 
+                (page)="handleLabPageEvent($event)"
+                [pageSize]="pageSize" 
+                [pageSizeOptions]="[5, 20, 50, 100]" 
+                showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="appointment_section" *ngIf="showList === 'radio'">
+    <div class="row">
+      <div class="col-md-12 today_appointment appointment">
+        <div class="today_appointment_inner common_space">
+          <div class="top_bar d-block">
+            <div class="left_part">
+              <div class="main_title">
+                {{'total_prescribed_radiologytest' | translate}}
+              </div>
+            </div>
+            <div class="bottom_bar">
+              <div class="table-wrap">
+                <div class="table-inner without_pagination_block">
+                  <!-- <table mat-table [dataSource]="prescribedRadiodataSource" class="mat-elevation-z8 withoutpagination">
+                    <ng-container matColumnDef="appointmentId">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "appointmentId" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        <span class="user_image_wrapper">
+                          <img class="user_image" src="
+                            ../../../../../assets/img/default_user.png
+                          " />
+                        </span>
+                        <a class="name_user"  (click)="goTOApp(element?.appointment_id)">
+                          {{ element?.appointmentId
+                          }}
+                        </a>
+                      </td>
+                    </ng-container>
+
+                 Date & Time Column -->  
+                  <!--<ng-container matColumnDef="dateandtime">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "appointment" | translate }} {{ "date_and_time" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.consultationDate | date : "dd/MM/YYYY" }}
+                        |
+                        {{ element?.consultationTime }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="patientName" >
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "patient_name" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        <a class="name_user" (click)="goTOEmr(element?.patientId)">{{ element?.patientName }} </a>
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="radioName">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "centre_name" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.radioName }}
+                      </td>
+                    </ng-container>
+                    <ng-container matColumnDef="testName">
+                      <th mat-header-cell *matHeaderCellDef>
+                        {{ "test_name" | translate }}
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.testName }}
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="prescribedRadiotestColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: prescribedRadiotestColumns"></tr>
+                  </table> -->
+                  <table mat-table [dataSource]="prescribedRadiodataSource" class="mat-elevation-z8 withoutpagination">
+                    <!-- Appointment ID Column -->
+                    <ng-container matColumnDef="appointmentId">
+                      <th mat-header-cell *matHeaderCellDef (click)="onSortData('appointmentId')">
+                        {{ "appointmentId" | translate }}
+                        <span *ngIf="sortColumn === 'appointmentId'" class="material-icons sorticon">
+                          {{ sortIconClass }}
+                        </span>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        <span class="user_image_wrapper">
+                          <img class="user_image" src="../../../../../assets/img/default_user.png" />
+                        </span>
+                        <a class="name_user" (click)="goTOApp(element?.appointment_id)">
+                          {{ element?.appointmentId }}
+                        </a>
+                      </td>
+                    </ng-container>
+                  
+                    <!-- Date & Time Column -->
+                    <ng-container matColumnDef="dateandtime">
+                      <th mat-header-cell *matHeaderCellDef (click)="onSortData('consultationDate')">
+                        {{ "appointment" | translate }} {{ "date_and_time" | translate }}
+                        <span *ngIf="sortColumn === 'consultationDate'" class="material-icons sorticon">
+                          {{ sortIconClass }}
+                        </span>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.consultationDate | date : "dd/MM/YYYY" }} |
+                        {{ element?.consultationTime }}
+                      </td>
+                    </ng-container>
+                  
+                    <!-- Patient Name Column -->
+                    <ng-container matColumnDef="patientName">
+                      <th mat-header-cell *matHeaderCellDef (click)="onSortData('patientName')">
+                        {{ "patient_name" | translate }}
+                        <span *ngIf="sortColumn === 'patientName'" class="material-icons sorticon">
+                          {{ sortIconClass }}
+                        </span>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        <a class="name_user" (click)="goTOEmr(element?.patientId)">{{ element?.patientName }}</a>
+                      </td>
+                    </ng-container>
+                  
+                    <!-- Centre Name Column -->
+                    <ng-container matColumnDef="radioName">
+                      <th mat-header-cell *matHeaderCellDef (click)="onSortData('radioName')">
+                        {{ "centre_name" | translate }}
+                        <span *ngIf="sortColumn === 'radioName'" class="material-icons sorticon">
+                          {{ sortIconClass }}
+                        </span>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.radioName }}
+                      </td>
+                    </ng-container>
+                  
+                    <!-- Test Name Column -->
+                    <ng-container matColumnDef="testName">
+                      <th mat-header-cell *matHeaderCellDef (click)="onSortData('testName')">
+                        {{ "test_name" | translate }}
+                        <span *ngIf="sortColumn === 'testName'" class="material-icons sorticon">
+                          {{ sortIconClass }}
+                        </span>
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                        {{ element?.testName }}
+                      </td>
+                    </ng-container>
+                  
+                    <tr mat-header-row *matHeaderRowDef="prescribedRadiotestColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: prescribedRadiotestColumns"></tr>
+                  </table>
+                  
+                </div>
+                <div *ngIf="prescribedRadiodataSource?.length === 0" class="text-center">
+                  <b>{{ "no_record_found" | translate }}</b>
+                </div>
+                <mat-paginator 
+                class="pagination" 
+                [length]="radioTotalCount" 
+                (page)="handleRadioPageEvent($event)"
+                [pageSize]="pageSize" 
+                [pageSizeOptions]="[5, 20, 50, 100]" 
+                showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+              
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+</div>

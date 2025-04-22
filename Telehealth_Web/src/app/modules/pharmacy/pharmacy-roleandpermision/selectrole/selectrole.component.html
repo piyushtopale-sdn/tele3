@@ -1,0 +1,244 @@
+<div class="rolepermission dashboard_main_content">
+  <div class="top_bar">
+    <div class="left_part">
+      <div class="content_wrap">
+        <div class="policy">
+          <div class="form_field_wrapper">
+            <label>{{ "select_staff" | translate }}</label>
+            <select2 placeholder="{{ 'select_staff' | translate }}" [limitSelection]="0" [minCountForSearch]="0"
+              [overlay]="overlay" [data]="staffList" (update)="handleStaffChange($event)">
+            </select2>
+            <mat-error *ngIf="staffError">{{
+              "please_select_staff" | translate
+              }}</mat-error>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="right_part">
+      <div class="primary_btn">
+        <button type="button" class="btn btn-primary" [routerLink]="['/pharmacy/roleandpermission/view']">
+          <a class="btn_svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="11" viewBox="0 0 20 11" fill="none">
+              <path
+                d="M10 0C3.439 0 0 4.74571 0 5.5C0 6.25232 3.439 11 10 11C16.56 11 20 6.25232 20 5.5C20 4.74571 16.56 0 10 0ZM10 9.73009C7.545 9.73009 5.555 7.83652 5.555 5.5C5.555 3.16348 7.545 1.26795 10 1.26795C12.455 1.26795 14.444 3.16348 14.444 5.5C14.444 7.83652 12.455 9.73009 10 9.73009ZM10 5.5C9.593 5.06098 10.663 3.38446 10 3.38446C8.772 3.38446 7.777 4.33223 7.777 5.5C7.777 6.66777 8.772 7.61554 10 7.61554C11.227 7.61554 12.223 6.66777 12.223 5.5C12.223 4.96277 10.346 5.87223 10 5.5Z" />
+            </svg></a>{{ "view_role" | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="openVerticallyCenteredaddrole(addrolecontent)">
+          <a class="btn_svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M10.9911 5.18461C10.9911 7.56399 9.04407 9.47078 6.61442 9.47078C4.18565 9.47078 2.2377 7.56399 2.2377 5.18461C2.2377 2.80522 4.18565 0.898438 6.61442 0.898438C9.04407 0.898438 10.9911 2.80522 10.9911 5.18461ZM0 14.3242C0 12.1216 3.04697 11.5706 6.6144 11.5706C10.2012 11.5706 13.2288 12.1406 13.2288 14.3449C13.2288 16.5475 10.1818 17.0986 6.6144 17.0986C3.0276 17.0986 0 16.5285 0 14.3242ZM12.7562 5.26229C12.7562 6.47398 12.3845 7.6046 11.7329 8.54376C11.6651 8.64035 11.725 8.77057 11.843 8.79127C12.0068 8.81801 12.175 8.83439 12.3467 8.83784C14.0551 8.88182 15.5883 7.80468 16.0119 6.18248C16.6397 3.7755 14.7975 1.61431 12.4506 1.61431C12.1961 1.61431 11.9522 1.64018 11.7144 1.68761C11.6818 1.69451 11.6466 1.71003 11.629 1.73763C11.6061 1.77299 11.6228 1.8187 11.6457 1.84888C12.3511 2.81737 12.7562 3.99628 12.7562 5.26229ZM15.5856 10.5304C16.734 10.7503 17.4887 11.1979 17.8013 11.8508C18.0663 12.3855 18.0663 13.0064 17.8013 13.5411C17.3231 14.5518 15.7802 14.877 15.1805 14.9606C15.0564 14.9779 14.9568 14.8744 14.9701 14.7519C15.2765 11.9508 12.8398 10.6227 12.2093 10.3174C12.1829 10.3027 12.1767 10.282 12.1793 10.2682C12.1811 10.2596 12.1926 10.2458 12.2128 10.2432C13.5769 10.2174 15.044 10.4011 15.5856 10.5304Z" />
+            </svg></a>{{ "add_role" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="bottom_bar">
+    <div class="row">
+      <div class="col-xl-3 role_item">
+        <div class="form_field_wrapper">
+          <mat-checkbox class="example-margin" (change)="makeJSONAll($event.checked)" checked="{{ selectall }}">{{
+            "select_all" | translate }}</mat-checkbox>
+        </div>
+      </div>
+      <div class="col-xl-3 role_item roleNameAdjust" *ngFor="let menu of allMenus">
+        <div class="form_field_wrapper">
+          <mat-checkbox class="example-margin" checked="{{ checkedmainMenuArray(menu.id) ? true : false }}"
+            (change)="makeJSON($event.checked, menu.id, menu.menu_order)">{{ menu.name | translate }}</mat-checkbox>
+          <mat-icon (click)="
+              openVerticallyCommonModal(commanModalForAll, menu.id, menu.name)
+            ">add</mat-icon>
+        </div>
+      </div>
+    </div>
+    <div class="primary_btn float-right">
+      <button type="button" (click)="handleClick()" class="btn btn-secondary">
+        {{ "cancel" | translate }}
+      </button>
+      <button type="button" (click)="assignSubmit()" class="btn btn-primary">
+        {{ "assign" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+<div class="permission_commit">
+  <ng-template #commanModalForAll let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ menuName }}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form_frame">
+          <div class="heading">
+            <div class="inner_heading">
+              <p>{{ "select_all" | translate }}</p>
+              <div class="icon_group">
+                <mat-checkbox class="example-margin" aria-label="Select All" checked="{{
+                    checkedmainMenuArray(activemainmenuselectedid)
+                      ? true
+                      : false
+                  }}" (change)="
+                    makeJSON($event.checked, activemainmenuselectedid, 0)
+                  "></mat-checkbox>
+              </div>
+            </div>
+          </div>
+          <mat-accordion>
+            <mat-expansion-panel *ngFor="
+                let submenues of objectKeys(menuWiseSubmenu);
+                let i = index
+              " [hideToggle]="!menuWiseSubmenu[submenues].inner_submenu?.length">
+              <mat-expansion-panel-header (click)="check(i, submenues)">
+                <mat-panel-title>
+                  {{ menuWiseSubmenu[submenues].name }}
+                </mat-panel-title>
+                <div class="icon_group">
+                  <mat-checkbox class="example-margin" checked="{{
+                      checkedsubMenuArray(activemainmenuselectedid, submenues)
+                        ? true
+                        : false
+                    }}" (change)="
+                      removesubmenu(activemainmenuselectedid, submenues, $event)
+                    " (click)="$event.stopPropagation()"></mat-checkbox>
+                </div>
+              </mat-expansion-panel-header>
+              <div class="checklist" *ngFor="let innerSubmenus of objectMenus[activeSubmenuId]">
+                <div class="icon_group_check">
+                  <label>{{ innerSubmenus.name }} </label>
+                  <mat-checkbox class="example-margin" checked="{{
+                      checkedinnnersubMenuArray(
+                        activemainmenuselectedid,
+                        activeSubmenuIdsubmenu,
+                        innerSubmenus.slug
+                      )
+                        ? true
+                        : false
+                    }}" (change)="
+                      removeinnersubmenu(
+                        activemainmenuselectedid,
+                        activeSubmenuIdsubmenu,
+                        innerSubmenus.slug,
+                        $event
+                      )
+                    " (click)="$event.stopPropagation()"></mat-checkbox>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+        <div class="primary_btn">
+          <button type="button" class="btn btn-primary" aria-label="Close" (click)="closePopup()">
+            {{ "done" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- ---------------------------------------Add role modal---------------------------------------- -->
+<div class="add_role">
+  <ng-template #addrolecontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "add_role" | translate }}
+        </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="roleForm" (ngSubmit)="addRole()">
+          <ng-container formArrayName="roles">
+            <ng-container *ngFor="let row of roles.controls; let i = index">
+              <ng-container [formGroupName]="i">
+                <div class="modal_content Speciality_service">
+                  <div class="row modal_content_inner">
+                    <div class="item mb-3">
+                      <div class="form_field_wrapper">
+                        <label>{{ 'role' | translate }} <span class="danger">*</span></label>
+                        <mat-form-field appearance="fill">
+                          <input type="text" formControlName="name" placeholder="add role" matInput />
+                        </mat-form-field>
+                        <span class="text-danger"
+                          *ngIf="isSubmitted && roles.controls[i].get('name')?.errors?.['required']">
+                          {{"field_is_required" | translate}}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="item mb-3">
+                      <div class="form_field_wrapper">
+                        <label>{{ 'status' | translate }}</label>
+                        <div class="toggel-slide">
+                          <mat-slide-toggle formControlName="status"></mat-slide-toggle>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="i === roles.length - 1; else remove">
+                    <div class="row_generate row_minus" (click)="removeRole(i)" *ngIf="roles.length>1">
+                      <mat-icon class="plus">remove</mat-icon>
+                    </div>
+                    <div class="row_generate row_add" (click)="addnewRole()">
+                      <mat-icon class="plus">add</mat-icon>
+                    </div>
+                  </ng-container>
+                  <ng-template #remove>
+                    <div class="row_generate row_minus" (click)="removeRole(i)">
+                      <mat-icon class="plus">remove</mat-icon>
+                    </div>
+                  </ng-template>
+                </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+
+          <div class="primary_btn">
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+              {{ "cancel" | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary">
+              {{ "add_role" | translate }}
+            </button>
+          </div>
+        </form>
+        <!-- <form [formGroup]="roleForm" (ngSubmit)="addRole()">
+          <div class="modal_content category_service">
+            <div class="row modal_content_inner">
+              <div class="item">
+                <div class="form_field_wrapper">
+                  <label>{{ "role_name" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input type="text" formControlName="name" matInput />
+                  </mat-form-field>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && roleFormControl['name'].errors?.['required']"
+                  >
+                    {{ "please_enter_role" | translate }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="primary_btn">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="modal.dismiss('Cross click')"
+            >
+              {{ "cancel" | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary">
+              {{ "add_role" | translate }}
+            </button>
+          </div>
+        </form> -->
+      </div>
+    </div>
+  </ng-template>
+</div>

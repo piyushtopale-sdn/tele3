@@ -1,0 +1,49 @@
+@import '../../../../assets/css/variable/variable';
+
+.login {
+    .login_inner {
+        .left_part {
+            background-image: url(../../../../assets/img/lab_radio.png)!important;
+        }
+
+        .right-block{
+            justify-content: center;
+        }
+    }
+}
+
+
+.custome_modal {
+    .modal-header{
+        justify-content: center;
+        font-weight: 600;
+        font-size: 22px;
+        line-height: 34px;
+        text-align: center;
+    }
+    .two_factore_button {
+        .primary_btn{
+            justify-content: center !important;
+            .btn {
+               margin-right: 25px;
+            }
+        }
+        p {
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 26px;
+            text-align: center;
+            color: #151522;
+            .mat-icon {
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
+.form_field_wrapper.consult_note {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}

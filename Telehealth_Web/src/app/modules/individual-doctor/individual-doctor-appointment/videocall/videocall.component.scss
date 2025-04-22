@@ -1,0 +1,85 @@
+@import '../../../../../assets/css/variable/variable';
+
+.video_call{
+    .top_bar{
+        justify-content: flex-end;
+        margin: 0 0 30px;
+        .primary_btn{
+            .btn{
+                margin: 0 0 0 15px;
+            }
+        }
+    }
+    .video_btn{
+        justify-content: center;
+        align-items: center;
+        margin-top: 35px;
+        flex-wrap: wrap;
+        .btn{
+            background: #FFFFFF;
+            border: 1.30968px solid rgba(61, 57, 137, 0.1);
+            box-shadow: 0px 5.23871px 13.0968px rgb(61 57 137 / 5%);
+            border-radius: 50%;
+            width: 66.11px;
+            height: 66.11px;
+            padding: 0;
+            margin: 0 8px 8px;
+            &.call_end{
+                background: #D92029;
+            }
+        }
+    }
+}
+
+// Assessment Modal css
+.assessment{
+    .assessment_item{
+        border: 1px solid #B6C8D6;
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin: 0 0 20px;
+        label{
+            font-weight: 500;
+            line-height: 20px;
+            margin: 0 0 5px;
+            font-size: $font_small;
+            color: $bodyopacitycolor;
+        }
+        .answer{
+            font-weight: 500;
+            font-size: $font_medium;
+            color: $table_color;
+        }
+    }
+}
+
+// Shop Notes Modal css
+.shop_notes{
+    .custome_modal{
+        form{
+            .form_field_wrapper{
+                .mat-form-field{
+                    textarea{
+                        min-height: 120px;
+                    }
+                }
+            }
+        }
+        .primary_btn{
+            .btn{
+                width: 100%;
+                font-size: $font_large;
+                padding: 10px 15px;
+            }
+        }
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .video_call .top_bar .primary_btn{
+        flex-direction: column;
+    }
+    .video_call .top_bar .primary_btn .btn{
+        width: 100%;
+        margin: 0 0 15px;
+    }
+}

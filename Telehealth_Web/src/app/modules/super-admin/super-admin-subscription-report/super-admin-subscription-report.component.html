@@ -1,0 +1,247 @@
+<div class="super_admin_dashboard dashboard_main_content">
+    <div class="top_bar up_bar common_space">
+        <div class="content_wrap">
+            <div class="policy">
+                <form [formGroup]="dateRangeForm">
+                    <div class="form_field_wrapper d-flex align-items-center gap-3" style="margin: 10px;">
+                        <div class="main_title">{{ "from" | translate }}:</div>
+                        <mat-form-field class="example-full-width choosedate" appearance="fill">
+                            <input matInput [matDatepickerFilter]="myFilter"
+                                placeholder="{{ 'select_date' | translate }}" [matDatepicker]="picker1"
+                                formControlName="fromDate" (dateChange)="onDateChange('from', $event.value)" />
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+
+                        <div class="main_title">{{ "to" | translate }}:</div>
+                        <mat-form-field class="example-full-width choosedate" appearance="fill">
+                            <input matInput [matDatepickerFilter]="myFilter"
+                                placeholder="{{ 'select_date' | translate }}" [matDatepicker]="picker2"
+                                formControlName="toDate" (dateChange)="onDateChange('to', $event.value)" />
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="counter_section common_space">
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+                <div class="cust_col light_blue">
+                    <div class="cust_col_inner header-card-inner">
+                        <div class="left">
+                            <div class="counter">{{totalRevenueWithCurrency ? totalRevenueWithCurrency : 0}}</div>
+                            <div class="counter_title">
+                                {{ "total_revenue" | translate }}
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="counter_img">
+                                <img src="../../../../assets/img/dashboard/total.svg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+                <div class="cust_col light_green">
+                    <div class="cust_col_inner header-card-inner">
+                        <div class="left">
+                            <div class="counter">{{totalActiveSubscription? totalActiveSubscription : 0}}</div>
+                            <div class="counter_title">
+                                {{ "total_active_subscription" | translate }}
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="counter_img">
+                                <img src="../../../../assets/img/dashboard/completed 1.svg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+                <div class="cust_col light_orange">
+                    <div class="cust_col_inner header-card-inner">
+                        <div class="left">
+                            <div class="counter">{{totalCancelSubscription ? totalCancelSubscription : 0 }}</div>
+                            <div class="counter_title">
+                                {{ "total_cancelled_subscription" | translate }}
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="counter_img">
+                                <img src="../../../../assets/img/dashboard/not-completed.svg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="graph_section common_space">
+        <div class="row">
+            <div class="right_part">
+                <div class="policy">
+                    <div class="form_field_wrapper">
+                        <label>{{ "select_patient" | translate }}</label>
+                        <select2 class="test select-dropdown-box" [overlay]="true" [limitSelection]="0"
+                            [minCountForSearch]="0" [data]="userList" (update)="onSelect2Change($event)"
+                            [value]="selecteduser" placeholder='{{"select_patient" | translate}}'>
+                        </select2>
+                        <a style="margin-right: 10px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"
+                                style="margin-left: 10px;cursor: pointer;" (click)="clearSelect2()">
+                                <title>{{'reset_patient' | translate}}</title>
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                <path
+                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                            </svg></a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="bottom_bar mt-4">
+                <ng-container *ngIf="activeSubcriptionData?.isPlanActive === true">
+                    <div class="main_title">{{ "active_subscription_details" | translate }}</div>
+                    <div class="profile_data">
+                      <div class="profile_info">
+                        <div class="emergency_contact">
+                          <ul class="profile_info_inner">
+                            <li class="col_item">
+                              <div class="profile_contact">
+                                <div class="lable">{{ "plan_name" | translate }}</div>
+                                <div class="user_value">
+                                  {{ activeSubcriptionData?.planName ? activeSubcriptionData?.planName : "-" }}
+                                </div>
+                              </div>
+                            </li>
+                            <li class="col_item">
+                              <div class="profile_contact">
+                                <div class="lable">{{ "duration" | translate }}</div>
+                                <div class="user_value">
+                                  {{ activeSubcriptionData?.subscriptionDuration }}
+                                </div>
+                              </div>
+                            </li>
+                            <li class="col_item">
+                              <div class="profile_contact">
+                                <div class="lable">{{ "start_date" | translate }}</div>
+                                <div class="user_value">
+                                  {{ activeSubcriptionData?.period?.start | date: "dd-MM-yyy" }}
+                                </div>
+                              </div>
+                            </li>
+                            <li class="col_item">
+                              <div class="profile_contact">
+                                <div class="lable">{{ "end_date" | translate }}</div>
+                                <div class="user_value">
+                                  {{ activeSubcriptionData?.period?.end | date: "dd-MM-yyy"}}
+                                </div>
+                              </div>
+                            </li>
+                            <li class="col_item">
+                              <div class="profile_contact">
+                                <div class="lable">
+                                  {{ "services" | translate }}
+                                </div>          
+                                <div class="user_value">
+                                  <div class="service_item">
+                                    <span>
+                                      {{ "no_of_consulation" | translate }}:
+                                    </span>
+                                    <span>
+                                      {{ activeSubcriptionData?.services?.consultation ? activeSubcriptionData?.services?.consultation : "-" }}
+                                    </span>
+                                  </div>
+                                  <div class="service_item">
+                                    <span>
+                                      {{ "no_of_labtest" | translate }}:
+                                    </span>
+                                    <span>
+                                      {{ activeSubcriptionData?.services?.labtest ? activeSubcriptionData?.services?.labtest : "-" }}
+                                    </span>
+                                  </div>
+                                  <div class="service_item">
+                                    <span>
+                                      {{ "no_of_radiotest" | translate }}:
+                                    </span>
+                                    <span>
+                                      {{ activeSubcriptionData?.services?.radiologytest ? activeSubcriptionData?.services?.radiologytest : "-" }}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </li>          
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container  *ngIf="activeSubcriptionData?.isPlanActive === false" >
+                    <div class="text-center">
+                        <b>{{ "no_active_plan" | translate }}</b>
+                      </div>
+                  </ng-container>
+                  <ng-container *ngIf="activeSubcriptionData?.isPlanActive === true && upcoimgPlanData">
+                    <div class="main_title">{{ "upcoming_plan_details" | translate }}</div>
+                    <div class="profile_data">
+                      <div class="profile_info">
+                        <div class="emergency_contact">
+                          <ul class="profile_info_inner">
+                            <li class="col_item">
+                              <div class="profile_contact">
+                                <div class="lable">{{ "plan_name" | translate }}</div>
+                                <div class="user_value">
+                                  {{ upcoimgPlanData?.plan_name ? upcoimgPlanData?.plan_name : "-" }}
+                                </div>
+                              </div>
+                            </li>
+                            <li class="col_item">
+                              <div class="profile_contact">
+                                <div class="lable">{{ "duration" | translate }}</div>
+                                <div class="user_value">
+                                  {{ upcoimgPlanData?.plan_duration[0].duration}}
+                                </div>
+                              </div>
+                            </li>       
+                            <li class="col_item">
+                              <div class="profile_contact">
+                                <div class="lable">{{ "start_date" | translate }}</div>
+                                <div class="user_value">
+                                  {{ activeSubcriptionData?.period?.end | date: "dd-MM-yyy"}}
+                                </div>
+                              </div>
+                            </li>
+                            <li class="col_item">
+                              <div class="profile_contact">
+                                <div class="lable">{{ "services" | translate }}</div>
+                                <div *ngFor="let item of upcoimgPlanData?.services">
+                                  <div class="user_value">
+                                    <span *ngIf="item.name === 'consultation'">
+                                      {{ "no_of_consulation" | translate }}: {{ item?.max_number }}
+                                    </span>
+                                    <span *ngIf="item.name === 'labtest'">
+                                      {{ "no_of_labtest" | translate }}: {{ item?.max_number }}
+                                    </span>
+                                    <span *ngIf="item.name === 'radiologytest'">
+                                      {{ "no_of_radiotest" | translate }}: {{ item?.max_number }}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,307 @@
+<div class="educational dashboard_main_content">
+  <div class="top_bar">
+    <div class="main_title">
+      {{ "manage_provider_educational_documents" | translate }}
+    </div>
+    <div class="primary_btn">
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="openVerticallyCentereduploaddocs(uploaddocs)"
+      >
+        <a class="btn_svg">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="21"
+            viewBox="0 0 20 21"
+            fill="none"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M6.46583 3.23624C6.24276 3.53752 6.26838 3.96727 6.5502 4.24C6.8502 4.54 7.3402 4.54 7.6402 4.24L9.2302 2.64V6.78H10.7702V2.64L12.3602 4.24L12.4464 4.31438C12.7477 4.53752 13.1775 4.51273 13.4502 4.24C13.6002 4.09 13.6802 3.89 13.6802 3.69C13.6802 3.5 13.6002 3.3 13.4502 3.15L10.5402 0.23L10.4495 0.14848C10.3202 0.0512 10.1602 0 10.0002 0C9.7902 0 9.6002 0.08 9.4502 0.23L6.5402 3.15L6.46583 3.23624ZM4.23116 6.78512C1.87791 6.89627 0 8.87584 0 11.2875V16.2526L0.00483802 16.4651C0.114098 18.8599 2.06029 20.7802 4.45 20.7802H15.56L15.7688 20.7753C18.1221 20.6641 20 18.6843 20 16.2628V11.3078L19.9951 11.0945C19.8853 8.69086 17.93 6.7802 15.55 6.7802H10.77V12.8849L10.7629 12.9922C10.7112 13.3776 10.385 13.6683 10 13.6683C9.57 13.6683 9.23 13.3224 9.23 12.8849V6.7802H4.44L4.23116 6.78512Z"
+            /></svg
+        ></a>
+        {{ "upload_document" | translate }}
+      </button>
+    </div>
+  </div>
+  <hr />
+  <div class="time_section">
+    <div class="content_wrap">
+      <div class="content_item">
+        <div class="form_field_wrapper">
+          <label>{{ "from_date" | translate }} :</label>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <input
+              matInput
+              [matDatepickerFilter]="myFilter"
+              [matDatepicker]="picker"
+              placeholder="{{ 'Select' | translate }}"
+              (dateChange)="onDateChange($event)"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="content_item">
+        <div class="form_field_wrapper">
+          <label>{{ "to_date" | translate }} :</label>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <input
+              matInput
+              [matDatepickerFilter]="myFilter"
+              [matDatepicker]="picker1"
+              placeholder="{{ 'Select' | translate }}"
+              (dateChange)="onDateChange2($event)"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker1"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- <div class="primary_btn">
+        <button class="btn btn-link" >{{ "clear_all" | translate }}</button>
+      </div> -->
+    </div>
+  </div>
+  <hr />
+  <div class="education_data">
+    <div class="row">
+      
+      <div class="item col-md-4" *ngFor="let data of providerData">
+        <div class="item_inner">
+          <div class="topbar part">
+            <div class="leftpart">
+              <h2>{{data?.title}}</h2>
+              <div class="date">
+                {{ "uploaded_date" | translate }}: {{data?.upload_date}}
+              </div>
+            </div>
+            <div class="rightpart">
+              <button class="btn btn-link">
+                <img src="../../../../../assets/img/download.svg" />
+              </button>
+            </div>
+          </div>
+          <div class="bottombar part">
+            <div class="leftpart">
+              <div class="toggel-slide">
+                <mat-slide-toggle (change)="toggleStatus1($event, data?._id)" [(ngModel)]="data.status"></mat-slide-toggle>
+              </div>
+            </div>
+            <div class="rightpart">
+              <div class="primary_btn">
+                <button type="button" class="btn btn-link" (click)="openVerticallyCenteredsecond1(data)" >
+                  <a class="btn_svg">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="17"
+                      viewBox="0 0 20 17"
+                      fill="none"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M13.1615 8.05262C13.1615 9.79862 11.7455 11.2136 9.9995 11.2136C8.2535 11.2136 6.8385 9.79862 6.8385 8.05262C6.8385 6.30562 8.2535 4.89062 9.9995 4.89062C11.7455 4.89062 13.1615 6.30562 13.1615 8.05262Z"
+                        stroke="#0C2F49"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M9.998 15.354C13.806 15.354 17.289 12.616 19.25 8.052C17.289 3.488 13.806 0.75 9.998 0.75H10.002C6.194 0.75 2.711 3.488 0.75 8.052C2.711 12.616 6.194 15.354 10.002 15.354H9.998Z"
+                        stroke="#0C2F49"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      /></svg
+                  ></a>
+                </button>
+                <button type="button" class="btn btn-link" (click)="openVerticallyCenteredsecond(deletePopup, data?._id)">
+                  <a class="btn_svg">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                    >
+                      <g id="Iconly/Light/Close Square">
+                        <g id="Close Square">
+                          <path
+                            id="Stroke 1"
+                            d="M11.9963 7.99219L8.00293 11.9855"
+                            stroke="#0C2F49"
+                            stroke-width="1.25"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            id="Stroke 2"
+                            d="M11.9976 11.9897L8.00098 7.99219"
+                            stroke="#0C2F49"
+                            stroke-width="1.25"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                          <path
+                            id="Stroke 3"
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M13.6121 2.28906H6.38795C3.87045 2.28906 2.29211 4.07156 2.29211 6.59406V13.4007C2.29211 15.9232 3.86295 17.7057 6.38795 17.7057H13.6113C16.1371 17.7057 17.7088 15.9232 17.7088 13.4007V6.59406C17.7088 4.07156 16.1371 2.28906 13.6121 2.28906Z"
+                            stroke="#0C2F49"
+                            stroke-width="1.25"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </g>
+                      </g></svg
+                  ></a>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+       
+      </div>
+    
+    </div>
+  </div>
+  <div *ngIf="providerData.length == 0">No Documents Found</div>
+</div>
+
+<!-- Upload document modal -->
+<ng-template #uploaddocs let-modal>
+  <div class="custome_modal common_plan">
+    <div class="modal-header">
+      <h4 class="modal-title text-center" id="modal-basic-title">
+        {{ "upload_document" | translate }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="closePopup()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="providerForm"> 
+        <div class="form_field_wrapper">
+          <label>Date of creation*</label>
+          <mat-form-field class="example-full-width" appearance="fill">
+            <input
+              matInput
+              [matDatepickerFilter]="myFilter"
+              [matDatepicker]="picker1"
+              placeholder="{{ 'Select' | translate }}"
+              formControlName="upload_date"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker1"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <mat-error
+          *ngIf="
+            isSubmitted &&
+            providerForm.get('upload_date').hasError('required')
+          "
+          >Date of creation is required</mat-error
+        >
+        </div>
+        <div class="form_field_wrapper">
+          <label>{{ "title" | translate }}*</label>
+          <mat-form-field appearance="fill">
+            <input type="text" formControlName="title" matInput />
+          </mat-form-field>
+          <mat-error
+                    *ngIf="
+                      isSubmitted &&
+                      providerForm.get('title').hasError('required')
+                    "
+                    >Title is required</mat-error
+                  >
+        </div>
+        
+        <div class="form_field_wrapper">
+          <label>{{ "upload_files" | translate }}</label>
+          <div class="upload_document">
+            <input
+            formControlName="upload_doc"
+              id="input-file-id"
+              multiple=""
+              type="file"
+              class="ng-hide user_upload_input"
+              (change)="onFileSelected($event)"
+            />
+            <div class="user_upload_block">
+              <img src="../../../../../assets/img/upload_icon.svg" />
+              <p>{{ uploadFile?.name }}</p> 
+            </div>
+          </div>
+          <mat-error
+            *ngIf="
+              isSubmitted &&
+              providerForm.get('upload_doc').hasError('required')
+            "
+            >Document is required</mat-error
+          >
+        </div>
+        <div class="form-btn primary_btn">
+          <button class="btn btn-primary" (click)="onSubmit()">{{ "save" | translate }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #deletePopup let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>You want to remove this.</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="deleteProviderDoc()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

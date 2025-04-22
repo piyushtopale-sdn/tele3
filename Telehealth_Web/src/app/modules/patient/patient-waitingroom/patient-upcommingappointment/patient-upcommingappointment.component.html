@@ -1,0 +1,173 @@
+<div class="appoinment_commision dashboard_main_content">
+  <div class="header_block">
+    <h3>{{ "select_any_upcoming_appointments" | translate }}</h3>
+  </div>
+  <div class="bottom_bar">
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!-- Patient Name Column -->
+          <ng-container matColumnDef="patientname">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('patientDetails.patientFullName')"
+            >
+              {{ "patient_name" | translate }}
+              <span
+                *ngIf="sortColumn === 'patientDetails.patientFullName'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.patient_name }}
+            </td>
+          </ng-container>
+
+          <!-- Order ID Column -->
+          <ng-container matColumnDef="orderid">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('order_id')"
+            >
+              {{ "order_id" | translate }}
+              <span
+                *ngIf="sortColumn === 'order_id'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.order_id }}
+            </td>
+          </ng-container>
+
+          <!--Doctor Name Column -->
+          <ng-container matColumnDef="doctorname">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('doctorId')"
+            >
+              {{ "doctor_name" | translate }}
+              <span
+                *ngIf="sortColumn === 'doctorId'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.doctor_name }}(
+              {{ element?.portal_type ? element?.portal_type : "Doctor" }})
+            </td>
+          </ng-container>
+
+          <!--Appointments Type Column -->
+          <ng-container matColumnDef="appointmentstype">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('appointmentType')"
+            >
+              {{ "appointments_type" | translate }}
+              <span
+                *ngIf="sortColumn === 'appointmentType'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.consultation_type }}
+            </td>
+          </ng-container>
+
+          <!--Date time Type Column -->
+          <ng-container matColumnDef="datetime">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('consultationDate')"
+            >
+              {{ "date_time" | translate }}
+              <span
+                *ngIf="sortColumn === 'consultationDate'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.consultation_date | date : "dd/MM/YYYY" }} |
+              {{ element?.consultation_time }}
+            </td>
+          </ng-container>
+
+          <!--Reason for Appointment Column -->
+          <ng-container matColumnDef="reasonforappointment">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('reasonForAppointment')"
+            >
+              {{ "reason_for_appointment" | translate }}
+              <span
+                *ngIf="sortColumn === 'reasonForAppointment'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.reason_for_appointment }}
+            </td>
+          </ng-container>
+
+          <!--Action column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "action" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="icon_group">
+                <a
+                  class="svgicon"
+                  (click)="
+                    routeToCalendar(element.appointment_id, element.portal_type)
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="9"
+                    viewBox="0 0 16 9"
+                    fill="none"
+                  >
+                    <path
+                      d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z"
+                    ></path>
+                  </svg>
+                </a>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <div *ngIf="dataSource?.length === 0" class="text-center">
+        <b>{{ "no_record_found" | translate }}</b>
+      </div>
+      <mat-paginator
+        class="pagination"
+        [length]="totalLength"
+        (page)="handlePageEvent($event)"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>

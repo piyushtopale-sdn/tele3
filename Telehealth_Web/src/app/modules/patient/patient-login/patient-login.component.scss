@@ -1,0 +1,65 @@
+@import '../../../../assets/css/variable/variable';
+.login {
+    .login_inner {
+        .left_part {
+            background-image: url('../../../../assets/img/patient.png');
+        }
+    }
+}
+.custome_modal {
+    .modal-header{
+        justify-content: center;
+        font-weight: 600;
+        font-size: 22px;
+        line-height: 34px;
+        text-align: center;
+    }
+    .two_factore_button {
+        .primary_btn{
+            justify-content: center;
+            .btn {
+               margin-right: 25px;
+            }
+        }
+        p {
+            text-align: center;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 26px;
+            text-align: center;
+            color: #151522;
+            .mat-icon {
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
+
+@media screen and (max-width:$medium_phone) {
+    .custome_modal .two_factore_button .primary_btn .btn {
+        margin-right: 8px;
+        line-height: 20px !important;
+        width: 80%;
+        margin: 10px auto;
+    }
+    .custome_modal .two_factore_button .primary_btn{
+       width: 100%;
+       display: block;
+    }
+}
+.keepmesign_content {
+    display: flex; /* Enables Flexbox */
+    align-items: center; /* Aligns items vertically */
+    justify-content: space-between; /* Distributes space evenly */
+    flex-wrap: nowrap; /* Prevents wrapping to the next line */
+}
+
+.forgot_pass {
+    margin-right: 10px; /* Adds some spacing if needed */
+}
+.right-section {
+    margin-left: auto; /* Pushes this section to the right */
+    text-align: right; /* Aligns text to the right within this section */
+}
+

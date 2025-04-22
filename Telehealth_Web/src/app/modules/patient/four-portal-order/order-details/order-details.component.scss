@@ -1,0 +1,323 @@
+@import '../../../../../assets/css/variable/variable';
+.status {
+    text-align: right;
+    padding-right: 20px;
+  }
+.details_patient {
+    .main_title{
+        margin: 0 0 15px;
+    }
+    .profile_data{
+        background: #ffffff;
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        background: #ffffff;
+        margin: 0 0 30px;
+        .profile_info{
+            padding: 25px 25px 25px;
+            position: relative;
+            display: flex;
+            ul{
+                display: grid;
+                align-items: baseline;
+                grid-gap: 15px;
+                grid-template-columns: repeat(4, 1fr);
+                border-bottom: 1px solid #C4CDEA;
+                padding-bottom: 25px;
+                margin-bottom: 25px;
+                padding-left: 0;
+                padding-right: 0;
+                flex: 4;
+                .col_item{
+                    display: flex;
+                    align-items:center;
+                    .profile_contact{
+                        .profile_title{
+                            font-size: 20px;
+                            font-weight: 600;
+                            line-height: 24px;
+                            letter-spacing: 0em;
+                            color: $linkcolor;
+                            margin: 0 0 15px;
+                        }
+                        .lable{
+                            font-size: 14px;
+                            font-weight: 400;
+                            line-height: 16px;
+                            letter-spacing: 0.05em;
+                            color: $bodyopacitylightcolor;
+                            margin: 0 0 6px;
+                        }
+                        .user_value{
+                            font-weight: 500;
+                            font-size: 14px;
+                            line-height: 20px;
+                            color: $linkcolor;
+                            letter-spacing: 0.05em;
+                        }
+                    }
+                }
+                &.profile_info_with_img{
+                    grid-template-columns: 285px repeat(5, 1fr);
+                }
+                &:last-child{
+                    border-bottom: none;
+                    margin-bottom: 0;
+                    padding-bottom: 0;
+                }
+            }
+            .profile_title {
+                font-size: 14px;
+                margin: 5px 0 0;
+                color: #000;
+            }
+            .profile_image{
+                width: 95px;
+                height: 95px;
+                min-width: 95px;
+                margin: 0 20px 0 0;
+                border-radius: 10px;
+                overflow: hidden;
+                img {
+                    display: block;
+                    width: 100%;
+                    object-fit: cover;
+                    height: 100%;
+                }
+            }
+        }
+        &.pharmacy-profile-data {
+            .profile_info {
+                @media screen and (max-width: 600px) {
+                    flex-direction: column;
+                }
+                ul {
+                    &.profile_info_with_img {
+                        grid-template-columns: 50% repeat(1, 1fr);
+                        @media screen and (max-width: 600px) {
+                            margin: 10px 0 0;
+                            grid-template-columns: repeat(1, 1fr);
+                        }
+                    }
+                }
+            }
+        }
+        &.patient-profile-data {
+            .profile_info {
+                @media screen and (max-width: 768px) {
+                    flex-direction: column;
+                }
+                ul {
+                    &.profile_info_with_img {
+                        grid-template-columns: 25% repeat(3, 1fr);
+                        @media screen and (max-width: 768px) {
+                            margin: 10px 0 0;
+                            grid-template-columns: repeat(2, 1fr);
+                        }
+                        @media screen and (max-width: 600px) {
+                            grid-template-columns: repeat(1, 1fr);
+                        }
+                    }
+                }
+            }
+        }
+        &.insurance-profile-data {
+            .profile_info {
+                @media screen and (max-width: 600px) {
+                    flex-direction: column;
+                }
+            }
+            ul {
+                border: none;
+                margin: 0;
+                padding: 0;
+                &.profile_info_with_img {
+                    grid-template-columns: repeat(4, 1fr) !important;
+                    @media screen and (max-width: 1200px) {
+                        grid-template-columns: repeat(2, 1fr) !important;
+                    }
+                    @media screen and (max-width: 600px) {
+                        margin: 10px 0 0;
+                        grid-template-columns: repeat(1, 1fr) !important;
+                    }
+                }
+            }
+        }
+    }
+    .insurance_details{
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        margin: 0 0 30px;
+        .mat-accordion{
+            .mat-expansion-panel{
+                .mat-expansion-panel-header{
+                    .mat-expansion-panel-header-title{
+                        color: $table_color;    
+                        font-size: 20px;
+                    }
+                }
+            }
+        }
+        .expansion_panel_inner{
+            padding: 0;
+                .profile_data{
+                    border: none;
+                    margin: 0;
+                    .profile_info{
+                        padding: 25px;
+                        .profile_info_inner{
+                            grid-template-columns: repeat(5, 1fr);
+                            .col_item{
+                                align-items: baseline;   
+                                .profile_image{
+                                    width: 140px;
+                                    height: 85px;
+                                    border-radius: 7px;
+                                }
+                                .profile_contact{
+                                    .profile_title{
+                                        font-size: 20px;
+                                        font-weight: 600;
+                                        line-height: 24px;
+                                        letter-spacing: 0em;
+                                        color: $linkcolor;
+                                        margin: 0 0 15px;
+                                    }
+                                    .lable{
+                                        font-size: 14px;
+                                        font-weight: 400;
+                                        line-height: 16px;
+                                        letter-spacing: 0.05em;
+                                        color: $bodyopacitylightcolor;
+                                        margin: 0 0 6px;
+                                    }
+                                    .user_value{
+                                        font-weight: 600;
+                                        font-size: 14px;
+                                        line-height: 20px;
+                                        color: $table_color;
+                                        letter-spacing: 0.05em;
+                                    }
+                                }
+                            }
+                            &.profile_info_with_img{
+                                grid-template-columns: 285px repeat(4, 1fr);
+                            }
+                            &.insurance_expired{
+                                li.expired{
+                                    .profile_contact{
+                                        .user_value{
+                                            background: #FBF3EA;
+                                            color: #FF7354;
+                                            font-weight: 500;
+                                            font-size: 12px;
+                                            line-height: 16px;
+                                            border-radius: 500px;
+                                            display: inline-block;
+                                            padding: 10px 20px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .secondary_insured{
+                            .profileinfo_title{
+                                font-weight: 600;
+                                font-size: 16px;
+                                line-height: 19px;
+                                color: $table_color;
+                            }
+                            ul{
+                                border: none;
+                                grid-template-columns: repeat(6, 1fr);
+                            }
+                        }
+                        
+                    }
+                }
+        }
+    
+    }
+
+}
+
+.header-block-status {
+    .back-btn {
+        display: flex;
+        cursor: pointer;
+        font-size: 18px;
+    }
+    .status-block {
+        max-width: 220px;
+        margin-left: auto;
+        width: 100%;
+        margin-right: inherit !important;
+        border-radius: 5px;
+        padding: 12px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: rgba(130, 183, 213, 0.5);
+        span {
+            font-size: 20px;
+            color: #000;
+        }
+    }
+}
+
+
+@media screen and (max-width:$desktop_large) {
+    .details_patient .profile_data .profile_info ul.profile_info_with_img,
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .profile_info_inner.profile_info_with_img {
+        grid-template-columns: 285px repeat(3, 1fr);
+    }
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .secondary_insured ul,
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .profile_info_inner{
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media screen and (max-width:$desktop) {
+    .details_patient .profile_data .profile_info ul.profile_info_with_img,
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .profile_info_inner.profile_info_with_img{
+        grid-template-columns: 285px repeat(2, 1fr);
+    }
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .secondary_insured ul,
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .profile_info_inner{
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media screen and (max-width:$large_phone) {
+    .details_patient .profile_data .profile_info ul.profile_info_with_img,
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .profile_info_inner.profile_info_with_img{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .secondary_insured ul,
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .profile_info_inner{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .details_patient .profile_data .profile_info ul.profile_info_with_img,
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .profile_info_inner.profile_info_with_img{
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .secondary_insured ul,
+    .details_patient .insurance_details .expansion_panel_inner .profile_data .profile_info .profile_info_inner{
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .profile_data .profile_info ul .profile_image_wrapper{
+        flex-direction: column;
+    }
+    .details_patient .profile_data .profile_info ul .col_item{
+        align-items: flex-start;
+    }
+    .details_patient .profile_data .profile_info ul .col_item .profile_image{
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+        margin: 0 0 15px;
+    }
+}

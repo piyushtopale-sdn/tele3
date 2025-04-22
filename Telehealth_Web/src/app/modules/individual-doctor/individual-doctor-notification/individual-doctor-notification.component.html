@@ -1,0 +1,273 @@
+<div class="dashboard_main_content notification notification_block ">
+  <div class="notification_section">
+    <div class="notification_section_inner">
+      <ul>
+        <ng-container *ngFor="let data of notificationlist">
+          <li>
+            <div class="notification_list">
+              <div
+                class="row"
+                (click)="markReadById(data)"
+                style="cursor: pointer"
+              >
+                <div class="col-md-8 col-xl-7">
+                  <div class="detail_list">
+                    <div class="images_block">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
+                            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
+                          </svg>
+                      <ng-container *ngIf="data?.isView === false">
+                        <span class="reddot"></span>
+                      </ng-container>
+                    </div>
+                    <div class="name_detail">
+                      <h4>{{ data?.notitype ? data?.notitype : "" }}</h4>
+                      <p [innerHTML]=" data?.content"></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-xl-5 notify_time">
+                  <div class="time_slot">
+                    <!-- <p>From : Pacific Medical Center </p> -->
+                    <p>
+                      {{ data?.createdAt | date : "dd/MM/yyy" }} |
+                      {{ data?.createdAt | date : "hh:mm " }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ng-container>
+
+        <div *ngIf="notificationlist?.length === 0" class="text-center">
+          <b>{{ "no_record_found" | translate }}</b>
+        </div>
+        <mat-paginator
+          class="pagination"
+          [length]="totalLength"
+          (page)="handlePageEvent($event)"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+        <!-- <li>
+                    <div class="notification_list">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-7">
+                                <div class="detail_list">
+                                    <div class="images_block">
+                                        <img src="../../../assets/img/list2.png" alt="images">
+                                        <span class="reddot"></span>
+                                    </div>
+                                    <div class="name_detail">
+                                        <h4>Upcoming Appointments</h4>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-5 notify_time">
+                                <div class="time_slot">
+                                    <p>19 Aug 2022 | 3.12 pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="notification_list">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-7">
+                                <div class="detail_list">
+                                    <div class="images_block">
+                                        <img src="../../../assets/img/list3.png" alt="images">
+                                        <span class="reddot"></span>
+                                    </div>
+                                    <div class="name_detail">
+                                        <h4>Appointment Reschedule </h4>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-5 notify_time">
+                                <div class="time_slot">
+                                    <p>19 Aug 2022 | 3.12 pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="notification_list">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-7">
+                                <div class="detail_list">
+                                    <div class="images_block">
+                                        <img src="../../../assets/img/list4.png" alt="images">
+                                        <span class="reddot"></span>
+                                    </div>
+                                    <div class="name_detail">
+                                        <h4>Appointment Cancel</h4>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-5 notify_time">
+                                <div class="time_slot">
+                                    <p>19 Aug 2022 | 3.12 pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="notification_list">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-7">
+                                <div class="detail_list">
+                                    <div class="images_block">
+                                        <img src="../../../assets/img/list5.png" alt="images">
+                                    </div>
+                                    <div class="name_detail">
+                                        <h4>Claim Approved</h4>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-5 notify_time">
+                                <div class="time_slot">
+                                    <p>19 Aug 2022 | 3.12 pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="notification_list">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-7">
+                                <div class="detail_list">
+                                    <div class="images_block">
+                                        <img src="../../../assets/img/list6.png" alt="images">
+                                    </div>
+                                    <div class="name_detail">
+                                        <h4>Claim Rejected</h4>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-5 notify_time">
+                                <div class="time_slot">
+                                    <p>19 Aug 2022 | 3.12 pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="notification_list">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-7">
+                                <div class="detail_list">
+                                    <div class="images_block">
+                                        <img src="../../../assets/img/list7.png" alt="images">
+                                       
+                                    </div>
+                                    <div class="name_detail">
+                                        <h4>Consultation Payments</h4>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-5 notify_time">
+                                <div class="time_slot">
+                                    <p>19 Aug 2022 | 3.12 pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="notification_list">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-7">
+                                <div class="detail_list">
+                                    <div class="images_block">
+                                        <img src="../../../assets/img/list4.png" alt="images">
+                                       
+                                    </div>
+                                    <div class="name_detail">
+                                        <h4>Appointment Cancel</h4>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-5 notify_time">
+                                <div class="time_slot">
+                                    <p>19 Aug 2022 | 3.12 pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="notification_list">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-7">
+                                <div class="detail_list">
+                                    <div class="images_block">
+                                        <img src="../../../assets/img/list5.png" alt="images">
+                                       
+                                    </div>
+                                    <div class="name_detail">
+                                        <h4>Payment Successfully</h4>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-5 notify_time">
+                                <div class="time_slot">
+                                    <p>19 Aug 2022 | 3.12 pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="notification_list">
+                        <div class="row">
+                            <div class="col-md-12 col-xl-7">
+                                <div class="detail_list">
+                                    <div class="images_block">
+                                        <img src="../../../assets/img/list2.png" alt="images">
+                                       
+                                    </div>
+                                    <div class="name_detail">
+                                        <h4>New Message</h4>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                                            Lorem Ipsum has been the industry's standard dummy</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-xl-5 notify_time">
+                                <div class="time_slot">
+                                    <p>19 Aug 2022 | 3.12 pm</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li> -->
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,1466 @@
+<div class="appointment_list dashboard_main_content">
+  <div class="top_bar">
+    <div class="left_part">
+      <div class="primary_btn">
+        <button type="button" class="btn btn-secondary" [routerLink]="['/patient/myappointment/list']">
+          <a class="btn_svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="19" viewBox="0 0 25 19" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M0.288748 0.364133C0.0923893 0.628986 0.0189067 1.13494 0.0189067 2.22236C0.0189067 4.20655 0.0792183 4.25863 2.38093 4.25863C3.49391 4.25863 4.18299 4.18869 4.31695 4.06208C4.453 3.9335 4.52492 3.25524 4.52492 2.1023C4.52492 -0.0296249 4.55751 2.17077e-05 2.20641 2.17077e-05C0.700009 2.17077e-05 0.535365 0.031306 0.288748 0.364133ZM6.70116 0.364133C6.50792 0.624727 6.43132 1.12626 6.43132 2.12933C6.43132 3.13239 6.50792 3.63393 6.70116 3.89452L6.97083 4.25863H15.6863C23.9095 4.25863 24.4178 4.24176 24.6885 3.95906C25.0869 3.54302 25.0994 0.895476 24.7055 0.364133L24.4358 2.17077e-05H15.7033H6.97083L6.70116 0.364133ZM0.305732 7.67027C-0.0927038 8.08631 -0.105182 10.7339 0.288748 11.2652C0.535365 11.598 0.700009 11.6293 2.20641 11.6293C4.56132 11.6293 4.52492 11.6627 4.52492 9.5C4.52492 7.33876 4.55941 7.37069 2.22356 7.37069C0.863612 7.37069 0.544898 7.42049 0.305732 7.67027ZM6.70116 7.73481C6.50792 7.9954 6.43132 8.49693 6.43132 9.5C6.43132 10.5031 6.50792 11.0046 6.70116 11.2652L6.97083 11.6293H15.7033H24.4358L24.7055 11.2652C24.8987 11.0046 24.9753 10.5031 24.9753 9.5C24.9753 8.49693 24.8987 7.9954 24.7055 7.73481L24.4358 7.37069H15.7033H6.97083L6.70116 7.73481ZM0.305732 15.0409C-0.0927038 15.457 -0.105182 18.1045 0.288748 18.6359C0.535365 18.9687 0.700009 19 2.20641 19C4.55751 19 4.52492 19.0296 4.52492 16.8977C4.52492 15.7448 4.453 15.0665 4.31695 14.9379C4.18247 14.8108 3.48715 14.7414 2.35077 14.7414C0.867598 14.7414 0.547671 14.7882 0.305732 15.0409ZM6.70116 15.1055C6.50792 15.3661 6.43132 15.8676 6.43132 16.8707C6.43132 17.8737 6.50792 18.3753 6.70116 18.6359L6.97083 19H15.7033H24.4358L24.7055 18.6359C25.1226 18.0732 25.0874 15.3795 24.6583 15.0124C24.3724 14.7677 23.4947 14.7414 15.6562 14.7414H6.97083L6.70116 15.1055Z" />
+            </svg></a>
+        </button>
+        <button type="button" class="btn btn-secondary" [routerLink]="['/patient/myappointment/']">
+          <a class="btn_svg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="31" viewBox="0 0 29 31" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M21.3001 1.26827L21.3016 2.42394C25.5484 2.75677 28.3537 5.65057 28.3582 10.0883L28.375 23.0781C28.3811 27.9165 25.3414 30.8935 20.469 30.9012L8.56749 30.9166C3.7256 30.9228 0.647849 27.8749 0.64176 23.0226L0.625017 10.1854C0.618928 5.71837 3.32528 2.83228 7.57202 2.44243L7.5705 1.28676C7.56898 0.608764 8.07128 0.0987277 8.74102 0.0987277C9.41076 0.0971868 9.91306 0.605682 9.91458 1.28368L9.9161 2.3623L18.9576 2.34997L18.956 1.27135C18.9545 0.593355 19.4568 0.0848596 20.1266 0.0833187C20.7811 0.0817778 21.2986 0.590273 21.3001 1.26827ZM2.97065 10.6604L26.0157 10.6295V10.0902C25.9503 6.77731 24.2881 5.03918 21.3047 4.78031L21.3062 5.9668C21.3062 6.62938 20.7902 7.15483 20.1357 7.15483C19.466 7.15637 18.9622 6.63246 18.9622 5.96988L18.9606 4.72176L9.91917 4.73408L9.9207 5.98067C9.9207 6.64479 9.41991 7.1687 8.75018 7.1687C8.08044 7.17024 7.57661 6.64787 7.57661 5.98375L7.57509 4.79726C4.60694 5.09465 2.96456 6.83894 2.96913 10.1811L2.97065 10.6604ZM19.4945 17.6632V17.6802C19.5097 18.389 20.0881 18.9268 20.7898 18.9114C21.4748 18.8944 22.0212 18.3073 22.006 17.5985C21.9741 16.9205 21.4246 16.3673 20.7411 16.3689C20.0409 16.3843 19.493 16.9544 19.4945 17.6632ZM20.7522 24.5819C20.052 24.5665 19.4873 23.9825 19.4858 23.2737C19.4705 22.5649 20.0322 21.9778 20.7324 21.9609H20.7476C21.463 21.9609 22.0429 22.5449 22.0429 23.2691C22.0445 23.9933 21.4661 24.5804 20.7522 24.5819ZM13.2241 17.6885C13.2545 18.3973 13.8344 18.9505 14.5346 18.9197C15.2196 18.8873 15.766 18.3018 15.7356 17.593C15.7188 16.8996 15.1556 16.3603 14.4707 16.3618C13.7705 16.3926 13.2225 16.9797 13.2241 17.6885ZM14.5407 24.5136C13.8406 24.5444 13.2622 23.9912 13.2302 23.2824C13.2302 22.5736 13.7766 21.9881 14.4768 21.9557C15.1618 21.9542 15.7265 22.4935 15.7417 23.1853C15.7737 23.8957 15.2257 24.4812 14.5407 24.5136ZM6.95276 17.7419C6.9832 18.4508 7.56314 19.0055 8.26332 18.9731C8.94827 18.9423 9.49472 18.3552 9.46276 17.6464C9.44753 16.953 8.88435 16.4137 8.19786 16.4152C7.49768 16.4461 6.95124 17.0331 6.95276 17.7419ZM8.26934 24.5219C7.56916 24.5542 6.99075 23.9995 6.95878 23.2907C6.95726 22.5819 7.50523 21.9948 8.20541 21.964C8.89037 21.9625 9.45508 22.5018 9.4703 23.1952C9.50226 23.904 8.95582 24.4911 8.26934 24.5219Z" />
+            </svg></a>
+        </button>
+      </div>
+    </div>
+    <div class="right_part">
+      <div class="content_wrap">
+        <div class="policy">
+          <label>{{ "consultation_type" | translate }} :</label>
+          <div class="form_field_wrapper">
+            <mat-form-field appearance="fill">
+              <mat-select [(ngModel)]="consulation_filter" (selectionChange)="handleConsulationType($event.value)">
+                <mat-option value="">{{ "all" | translate }}</mat-option>
+                <mat-option value="ONLINE">{{
+                  "online" | translate
+                  }}</mat-option>
+                <mat-option value="HOME_VISIT">{{
+                  "home_visit" | translate
+                  }}</mat-option>
+                <mat-option value="FACE_TO_FACE">{{
+                  "face_to_face" | translate
+                  }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="policy">
+          <label>{{ "status" | translate }}:</label>
+          <div class="form_field_wrapper">
+            <mat-form-field appearance="fill">
+              <mat-select [(ngModel)]="appointment_filter" (selectionChange)="handleAppointmentType($event.value)">
+                <mat-option value="ALL">{{ "all" | translate }}</mat-option>
+                <mat-option value="NEW">{{ "new" | translate }}</mat-option>
+                <mat-option value="TODAY">{{ "today" | translate }}</mat-option>
+                <mat-option value="UPCOMING">{{
+                  "upcoming" | translate
+                  }}</mat-option>
+                <mat-option value="PAST">{{ "past" | translate }}</mat-option>
+                <mat-option value="REJECTED">{{
+                  "cancelled" | translate
+                  }}</mat-option>
+                <mat-option value="MISSED">{{
+                  "missed" | translate
+                  }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="policy date">
+          <label>{{ "date" | translate }} :</label>
+          <div class="form_field_wrapper">
+            <mat-form-field class="example-full-width" appearance="fill">
+              <input matInput [(ngModel)]="startDate" [matDatepicker]="picker" (dateChange)="onDateChange($event)"
+                placeholder="{{ 'date' | translate }}" />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="primary_btn">
+            <button type="button" class="btn btn-link" (click)="clearDateFilter()">
+              {{ "clear_date" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom_bar">
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="dateofcreation">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('createdAt')">
+              {{ "date_of_creation" | translate }}
+              <span *ngIf="sortColumn === 'createdAt'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.createdAt | date : "dd-MM-YY HH:mm" }}
+            </td>
+          </ng-container>
+          <!-- Patient Name -->
+          <ng-container matColumnDef="patientname">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('patient_name')">
+              {{ "patient_name" | translate }}
+              <span *ngIf="sortColumn === 'patient_name'" class="material-icons sorticon">{{
+                sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.patient_name }}
+            </td>
+          </ng-container>
+
+          <!-- Doctor Name Column -->
+          <ng-container matColumnDef="doctorname">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('doctor_name')">
+              {{ "appointment_for" | translate }}
+              <span *ngIf="sortColumn === 'doctor_name'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.doctor_name }} ({{
+              element.portal_type ? element.portal_type : "Doctor"
+              }})
+            </td>
+          </ng-container>
+
+          <!-- Order ID Against -->
+          <!-- <ng-container matColumnDef="orderid">
+                    <th mat-header-cell *matHeaderCellDef> Order ID </th>
+                    <td mat-cell *matCellDef="let element"> {{element.orderid}} </td>
+                    </ng-container> -->
+
+          <!-- Hospital Name -->
+          <ng-container matColumnDef="hospitalname">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('hospital_name')">
+              {{ "hospital_clinic_name" | translate }}
+              <span *ngIf="sortColumn === 'hospital_name'" class="material-icons sorticon">{{
+                sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.hospital_name }}
+            </td>
+          </ng-container>
+
+          <!-- Made by -->
+          <ng-container matColumnDef="madeby">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('madeBy')">
+              {{ "made_by" | translate }}
+              <span *ngIf="sortColumn === 'madeBy'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.made_by }}</td>
+          </ng-container>
+
+          <!-- Date & Time -->
+          <ng-container matColumnDef="dateandtime">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('consultation_date')">
+              {{ "appointment_date_time" | translate }}
+              <span *ngIf="sortColumn === 'consultation_date'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.consultation_date | date : "dd/MM/YYYY" }} -
+              {{ element.consultation_time }}
+            </td>
+          </ng-container>
+
+          <!-- Appointments Type : -->
+          <ng-container matColumnDef="location">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('hospital_details.hospital_name')">
+              {{ "location" | translate }}
+              <span *ngIf="sortColumn === 'hospital_details.hospital_name'" class="material-icons sorticon">{{
+                sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.hospital_details?.hospital_name }}
+            </td>
+          </ng-container>
+
+          <!-- Appointments Type -->
+          <ng-container matColumnDef="appointmentstype">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('consultation_type')">
+              {{ "consultation_type" | translate }}
+              <span *ngIf="sortColumn === 'consultation_type'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.consultation_type }}
+            </td>
+          </ng-container>
+
+          <!-- Fee  -->
+          <ng-container matColumnDef="fee">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('fee')">
+              {{ "fee" | translate }}
+              <span *ngIf="sortColumn === 'fee'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.fee }}</td>
+          </ng-container>
+
+          <!-- Status  -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('status')">
+              {{ "status" | translate }}
+              <span *ngIf="sortColumn === 'status'" class="material-icons sorticon">{{ sortIconClass }}</span>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="status {{
+                  element.status === 'New'
+                    ? 'new'
+                    : element.status === 'Upcoming'
+                    ? 'upcoming'
+                    : element.status === 'Rejected'
+                    ? 'rejected'
+                    : element.status === 'Past'
+                    ? 'past'
+                    : element.status === 'Missed'
+                    ? 'rejected'
+                    : ''
+                }}">
+                {{ element.status }}
+              </div>
+            </td>
+          </ng-container>
+
+          <!--Action column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "action" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <!-- <div class="icon_group">
+                                <mat-icon [routerLink]="['/patient/myappointment/newappointment']">visibility</mat-icon>
+                            </div> -->
+
+              <div class="icon_group">
+                <button type="button" class="btn btn-primary"
+                *ngIf="
+                  element.paymentType === 'pre-payment' &&
+                  element.patieintDetailpatientId1 != null && element.status == 'Past' && element.appointment_complete == 'false'" (click)="
+                  submitclaimAppointment(
+                    element.appointment_id,
+                    element.portalId,
+                    element.in_fee_management.type
+
+                  )
+                ">
+                {{ "submit_claim" | translate }}
+              </button>
+                <!-- {{element | json}} -->
+                <mat-icon (click)="
+                    openCancelPopup(element.appointment_id, element.doctor_id)
+                  " type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  visibility
+                </mat-icon>
+                <ul class="profile dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                  <li class="pointer" (click)="
+                      routeRoDetails_page(
+                        element.appointment_id,
+                        element.portal_type
+                      )
+                    ">
+                    {{ "view_appointments" | translate }}
+                  </li>
+
+                  <ng-container *ngIf="
+                      element.status === 'APPROVED' ||
+                      element.status === 'Upcoming' ||
+                      element.status === 'Today'
+                        ? true
+                        : false
+                    ">
+                    <li class="pointer" (click)="
+                        openVerticallyCenteredrechedule(
+                          choosedate,
+                          element,
+                          !checkForCancelation(element)
+                        )
+                      ">
+                      {{ "reschedule" | translate }}
+                    </li>
+                  </ng-container>
+                  <li class="pointer" *ngIf="
+                      element.status === 'APPROVED' ||
+                      element.status === 'New' ||
+                      element.status === 'Upcoming' ||
+                      element.status === 'Today'
+                        ? true
+                        : false
+                    " (click)="
+                      openVerticallyCenteredcancelappointmentcontent(
+                        cancelappointmentcontent,
+                        element.portal_type
+                      )
+                    ">
+                    {{ "cancel_appointment" | translate }}
+                  </li>
+                  <li class="pointer" *ngIf="
+                      element.status === 'APPROVED' ||
+                      element.status === 'Upcoming'
+                        ? true
+                        : false
+                    " (click)="
+                      openVerticallyCenteredremainder(remaindermodal, element)
+                    ">
+                    {{ "set_reminder" | translate }}
+                  </li>
+                </ul>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+
+      <div *ngIf="dataSource?.length === 0" class="text-center">
+        <b>{{ "no_record_found" | translate }}</b>
+      </div>
+
+      <mat-paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)" [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+
+<!-- <ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger1"
+  [cdkConnectedOverlayOpen]="isOpen"
+>
+  <ul class="example-list">
+    
+
+  </ul>
+</ng-template> -->
+
+<!-- Cancel Appointment modal -->
+<div class="create_notification">
+  <ng-template #cancelappointmentcontent let-modal>
+    <div class="custome_modal notification_manage">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "cancel_appointment" | translate }}
+        </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-start">
+          <div class="row" *ngFor="let loc of locationList">
+            <div class="item flex-row">
+              <div class="form_field_wrapper">
+                <!-- <div class="primary_btn">
+                  <button
+                    type="button"
+                    class="btn btn-secondary 
+                    {{
+                      selectedLocationId === loc?.hospital_id ? 'active' : ''
+                    }}"
+                    (click)="handleLocationChange(loc)"
+                  >
+                    {{ loc?.hospital_name }}</button
+                  >&nbsp; &nbsp;
+                </div> -->
+              </div>
+              <br />
+            </div>
+          </div>
+        </div>
+        <form>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form_field_wrapper">
+                <label>{{ "cancellation_reason" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <textarea type="text" [(ngModel)]="text" [ngModelOptions]="{ standalone: true }" matInput></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="primary_btn">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "back" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="openVerticallyCentereddetale(addsecondsubsriber)">
+            {{ "cancel_appointment" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #addsecondsubsriber let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img class="img-fluid" src="../../../../assets/img/delete.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "want_to_cancel_this_appointment" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="cancelAppointment()">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #remaindermodal let-modal>
+  <div class="custome_modal common_plan">
+    <div class="modal-header">
+      <h4 class="modal-title text-center" id="modal-basic-title">
+        {{ "set_remainders" | translate }}
+      </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form_detail">
+        <form [formGroup]="remainderForm">
+          <div class="row">
+            <ng-container formArrayName="remainderrr">
+              <ng-container *ngFor="let row of remainderrr1.controls; let i = index">
+                <ng-container [formGroupName]="i">
+                  <div class="form_field_wrapper">
+                    <div class="fieldicon_wrap">
+                      <mat-form-field class="inner_label" appearance="fill">
+                        <mat-label>{{
+                          "choose_before_hour" | translate
+                          }}</mat-label>
+                        <mat-select placeholder="{{ 'select_type' | translate }}" formControlName="hours">
+                          <mat-option *ngFor="let time of timeHourValue" [value]="time.value">{{ time.name
+                            }}</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger"
+                          *ngIf="isSubmitted && remainderrr1['hours']?.errors?.['required']">
+                          {{ "field_is_required" | translate }}*
+                        </mat-error>
+                      </mat-form-field>
+                      <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>{{
+                          "choose_before_minutes" | translate
+                          }}</mat-label>
+                        <mat-select placeholder="{{ 'select_type' | translate }}" formControlName="minutes">
+                          <mat-option *ngFor="let time of timeMinuteValue" [value]="time.value">{{ time.name
+                            }}</mat-option>
+                        </mat-select>
+                        <mat-error class="text-danger"
+                          *ngIf="isSubmitted && remainderrr1['hours']?.errors?.['required']">
+                          {{ "field_is_required" | translate }}*
+                        </mat-error>
+                      </mat-form-field>
+
+                      <ng-container *ngIf="i === remainderrr1.length - 1; else remove">
+                        <mat-icon class="minus" (click)="removeRemainder(i)"
+                          *ngIf="remainderrr1.length > 1">remove</mat-icon>
+                        <mat-icon class="plus" (click)="addnewRemainder()">add</mat-icon>
+                      </ng-container>
+                      <ng-template #remove>
+                        <mat-icon class="minus" (click)="removeRemainder(i)">remove</mat-icon>
+                      </ng-template>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+
+            <div class="vr">{{ "or" | translate }}</div>
+
+            <ng-container formArrayName="remainderDT">
+              <ng-container *ngFor="let row of remainderDT.controls; let i = index">
+                <ng-container [formGroupName]="i">
+                  <div class="form_field_wrapper">
+                    <div class="fieldicon_wrap">
+                      <mat-form-field>
+                        <mat-label>{{ "choose_a_date" | translate }}*</mat-label>
+                        <input matInput formControlName="dateTime" [ngxMatDatetimePicker]="picker"
+                          [formControl]="dateControl" [min]="minDate" [max]="maxDate" [disabled]="disabled" />
+                        <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>
+                        <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                          [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+                          [color]="color">
+                        </ngx-mat-datetime-picker>
+                      </mat-form-field>
+                      <mat-error class="text-danger"
+                        *ngIf="isSubmitted && remainderDT['dateTime']?.errors?.['required']">
+                        {{ "field_is_required" | translate }}*
+                      </mat-error>
+
+                      <ng-container *ngIf="i === remainderDT.length - 1; else remove">
+                        <mat-icon class="minus" (click)="removeRemainderDT(i)"
+                          *ngIf="remainderDT.length > 1">remove</mat-icon>
+                        <mat-icon class="plus" (click)="addnewRemainderDT()">add</mat-icon>
+                      </ng-container>
+                      <ng-template #remove>
+                        <mat-icon class="minus" (click)="removeRemainderDT(i)">remove</mat-icon>
+                      </ng-template>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <div class="form-btn primary_btn add_popup">
+            <button class="login_btn btn btn-primary" (click)="closePopup()">
+              {{ "cancel" | translate }}
+            </button>
+            <button class="login_btn btn btn-secondary" (click)="setReminderSave()">
+              {{ "save" | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<div class="edit_staff">
+  <ng-template #choosedate let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "reschedule_appointment" | translate }}
+        </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="reschedule_portal_type === undefined">
+        <div class="resshedule_appointment">
+          <div class="image_block">
+            <img class="img-fluid" src="{{
+                doctordetailsData?.profile_picture
+                  ? doctordetailsData?.profile_picture
+                  : '../../../assets/img/profile_img.png'
+              }}" alt="doc" />
+          </div>
+          <div class="content_block">
+            <h3>
+              {{ doctordetailsData?.full_name
+              }}<span class="status-icon"><img class="img-fluid" src="../../../../../assets/img/greenelip.svg" /></span>
+            </h3>
+            <p>{{ doctordetailsData?.speciality }}</p>
+            <ul>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "experience" | translate }}</p>
+                  <h4>
+                    {{ doctordetailsData?.years_of_experience }}
+                    {{ "years" | translate }}
+                  </h4>
+                </div>
+              </li>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "rating_and_review" | translate }}</p>
+                  <h4>
+                    <i class="fa-solid fa-star"></i>
+                    {{ doctor_rating?.average_rating }} ({{
+                    doctor_rating?.total_review
+                    }}
+                    Reviews)
+                  </h4>
+                </div>
+              </li>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "next_appointment_available" | translate }}</p>
+                  <h4>{{ nextAvailable_slot?.date | date : "dd/MM/YYYY" }}</h4>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="choose_slot">
+          <div class="heading">
+            <h4>1. {{ "choose_slot" | translate }}</h4>
+          </div>
+          <div class="choose_detail">
+            <div class="nearest_slot">
+              <p>{{ "nearest_available_slot" | translate }}:</p>
+              <h3>
+                {{ nextAvailable_slot?.date | date : "dd/MM/YYYY" }} ({{
+                nextAvailable_slot?.slot
+                ? nextAvailable_slot?.slot
+                : "No Slot Available"
+                }})
+              </h3>
+            </div>
+            <button type="button" class="btn btn-primary" [disabled]="!nextAvailable_slot" (click)="reshedule('yes')">
+              {{ "book_now" | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="primary_btn mt-4">
+          <button type="button" class="btn btn-secondary mr-3" (click)="closePopup()">
+            {{ "cancel" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="openVerticallyCenteredChooseDateTime(chooseCalender)">
+            {{ "view_other_available_slots" | translate }}
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-body" *ngIf="reschedule_portal_type !== undefined">
+        <div class="resshedule_appointment">
+          <div class="image_block">
+            <img class="img-fluid" src="{{
+                doctordetailsData?.profile_picture?.url
+                  ? doctordetailsData?.profile_picture?.url
+                  : '../../../assets/img/default_user.png'
+              }}" alt="doc" />
+          </div>
+          <div class="content_block">
+            <h3>
+              {{ doctordetailsData?.full_name
+              }}<span class="status-icon"><img class="img-fluid" src="../../../../../assets/img/greenelip.svg" /></span>
+            </h3>
+            <p>{{ speciality }}</p>
+            <ul>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "experience" | translate }}</p>
+                  <h4>
+                    {{ doctordetailsData?.years_of_experience }}
+                    {{ "years" | translate }}
+                  </h4>
+                </div>
+              </li>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "rating_and_review" | translate }}</p>
+                  <h4>
+                    <i class="fa-solid fa-star"></i>
+                    {{ portal_Rating?.average_rating }} ({{
+                    portal_Rating?.total_review
+                    }}
+                    Reviews)
+                  </h4>
+                </div>
+              </li>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "next_appointment_available" | translate }}</p>
+                  <h4>
+                    {{ portal_nearestAvailableDate | date : "dd/MM/YYYY" }}
+                  </h4>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="choose_slot">
+          <div class="heading">
+            <h4>1. {{ "choose_slot" | translate }}</h4>
+          </div>
+          <div class="choose_detail">
+            <div class="nearest_slot">
+              <p>{{ "nearest_available_slot" | translate }}:</p>
+              <h3>
+                {{ portal_nearestAvailableDate | date : "dd/MM/YYYY" }} ({{
+                portal_nearestAvailableSlot
+                ? portal_nearestAvailableSlot
+                : "No Slot Available"
+                }})
+              </h3>
+            </div>
+            <button type="button" class="btn btn-primary" [disabled]="!portal_nearestAvailableSlot"
+              (click)="reshedule('yes')">
+              {{ "book_now" | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="primary_btn mt-4">
+          <button type="button" class="btn btn-secondary mr-3" (click)="closePopup()">
+            {{ "cancel" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="openVerticallyCenteredChooseDateTime(chooseCalender)">
+            {{ "view_other_available_slots" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<div class="edit_staff">
+  <ng-template #chooseCalender let-modal>
+    <form [formGroup]="scheduleForm" (ngSubmit)="scheduleFormSubmit()">
+      <div class="custome_modal">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">
+            {{ "reschedule_appointment" | translate }}
+          </h4>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="modal-body" *ngIf="reschedule_portal_type === undefined">
+          <div class="resshedule_appointment">
+            <div class="image_block">
+              <img class="img-fluid" src="{{
+                  doctordetailsData?.profile_picture
+                    ? doctordetailsData?.profile_picture
+                    : '../../../assets/img/profile_img.png'
+                }}" alt="doc" />
+            </div>
+            <div class="content_block">
+              <h3>
+                {{ doctordetailsData?.full_name
+                }}<span class="status-icon"><img class="img-fluid"
+                    src="../../../../../assets/img/greenelip.svg" /></span>
+              </h3>
+              <p>{{ doctordetailsData?.speciality }}</p>
+              <ul>
+                <li>
+                  <div class="doctore_detail">
+                    <p>{{ "experience" | translate }}</p>
+                    <h4>{{ doctordetailsData?.years_of_experience }} Years</h4>
+                  </div>
+                </li>
+                <li>
+                  <div class="doctore_detail">
+                    <p>{{ "rating_and_review" | translate }}</p>
+                    <h4>
+                      <i class="fa-solid fa-star"></i>
+                      {{ doctor_rating?.average_rating }}({{
+                      doctor_rating?.total_review
+                      }}
+                      Reviews)
+                    </h4>
+                  </div>
+                </li>
+                <li>
+                  <div class="doctore_detail">
+                    <p>{{ "next_appointment_available" | translate }}</p>
+                    <h4>
+                      {{ nextAvailable_slot?.date | date : "dd/MM/YYYY" }}
+                    </h4>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="choose_slot">
+            <div class="heading">
+              <h4>2. {{ "select_date_time" | translate }}</h4>
+            </div>
+            <div class="choose_detail">
+              <div class="expansion_panel_inner">
+                <div class="main_outer">
+                  <div class="row location_appointment">
+                    <div class="expansion_item location col-md-6">
+                      <h2>{{ "select_location" | translate }}</h2>
+                      <mat-button-toggle-group name="fontStyle" [value]="location_id" #group="matButtonToggleGroup"
+                        aria-label="Font Style">
+                        <!-- {{hospital_location|json}} -->
+                        <ng-container *ngFor="let location of hospital_location">
+                          <mat-button-toggle [value]="location.hospital_id"
+                            (change)="onSelection({ locationid: $event.value })" [disabled]="true">{{
+                            location?.hospital_name }}</mat-button-toggle>
+                        </ng-container>
+                      </mat-button-toggle-group>
+                    </div>
+
+                    <div class="expansion_item appointment col-md-6">
+                      <h2>{{ "appointment_type" | translate }}</h2>
+                      <mat-radio-group aria-label="Appointment Type">
+                        <!-- <mat-radio-button   [checked]="appointment_type===type?.appointment_type?true:false" [value]="type?.appointment_type"
+                          *ngFor="let type of doctor_availability" (change)="onSelection({type:$event?.value})">
+                          {{type?.appointment_type}}
+                        </mat-radio-button> -->
+                        <mat-radio-button value="Online" (change)="onSelection({ type: $event.value })"
+                          [checked]="appointment_type === 'Online'" [disabled]="true">
+                          {{ "online" | translate }}
+                        </mat-radio-button>
+
+                        <mat-radio-button value="Home Visit" (change)="onSelection({ type: $event.value })"
+                          [checked]="appointment_type === 'Home Visit'" [disabled]="true">
+                          {{ "home_visit" | translate }}
+                        </mat-radio-button>
+
+                        <mat-radio-button value="Face to Face" (change)="onSelection({ type: $event.value })"
+                          [checked]="appointment_type === 'Face to Face'" [disabled]="true">
+                          {{ "hospital_visit" | translate }}
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+
+                  <div class="consultation_datetime">
+                    <h2>{{ "choose_consultation_date_time" | translate }}</h2>
+                    <div class="consultation_datetime_inner row">
+                      <div class="expansion_item col-md-7">
+                        <article class="calendar-wrapper">
+                          <igx-calendar #calendar [value]="value"
+                            (selected)="onSelection({ date: $event })"></igx-calendar>
+                        </article>
+                      </div>
+                      <div class="expansion_item col-md-5">
+                        <h2>{{ "choose_time" | translate }}</h2>
+
+                        <div *ngIf="doctorAvailableTimeSlot?.length > 0">
+                          <div class="primary_btn">
+                            <button class="btn btn-tranprent" [ngClass]="{
+                                disable: slot.status == 1,
+                                active: choose_slot == slot.slot
+                              }" (click)="chooseSlot(slot.slot)" [value]="slot.slot"
+                              *ngFor="let slot of doctorAvailableTimeSlot">
+                              {{ slot.slot }}
+                            </button>
+                          </div>
+                        </div>
+                        <div *ngIf="doctorAvailableTimeSlot?.length === 0">
+                          <H1>{{ "no_time_slot_available" | translate }}</H1>
+                        </div>
+
+                        <!-- <mat-button-toggle-group
+                          name="fontStyle"
+                          [value]="choose_slot"
+                          aria-label="Font Style"
+                        >
+                          <ng-container
+                            *ngFor="let slot of doctorAvailableTimeSlot"
+                          >
+                            <ng-container>
+                              <mat-button-toggle
+                                [ngClass]="{
+                                disable: slot.status == 1,
+                                active: chooseSlot == slot.slot
+                              }"
+                                (click)="chooseSlot(slot.slot)"
+                                [value]="slot.slot"
+                                >{{ slot.slot }}</mat-button-toggle
+                              >
+                            </ng-container>
+                          </ng-container>
+                        </mat-button-toggle-group> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="primary_btn mt-4">
+            <button type="button" class="btn btn-secondary mr-3" (click)="closePopup()">
+              {{ "cancel" | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary" (click)="reshedule('no')" [disabled]="!choose_slot">
+              {{ "book" | translate }}
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-body" *ngIf="reschedule_portal_type !== undefined">
+          <div class="resshedule_appointment">
+            <div class="image_block">
+              <img class="img-fluid" src="{{
+                  doctordetailsData?.profile_picture?.url
+                    ? doctordetailsData?.profile_picture?.url
+                    : '../../../assets/img/profile_img.png'
+                }}" alt="doc" />
+            </div>
+            <div class="content_block">
+              <h3>
+                {{ doctordetailsData?.full_name
+                }}<span class="status-icon"><img class="img-fluid"
+                    src="../../../../../assets/img/greenelip.svg" /></span>
+              </h3>
+              <p>{{ speciality ? speciality : "-" }}</p>
+              <ul>
+                <li>
+                  <div class="doctore_detail">
+                    <p>{{ "experience" | translate }}</p>
+                    <h4>{{ doctordetailsData?.years_of_experience }} Years</h4>
+                  </div>
+                </li>
+                <li>
+                  <div class="doctore_detail">
+                    <p>{{ "rating_and_review" | translate }}</p>
+                    <h4>
+                      <i class="fa-solid fa-star"></i>
+                      {{ doctor_rating?.average_rating }}({{
+                      doctor_rating?.total_review
+                      }}
+                      Reviews)
+                    </h4>
+                  </div>
+                </li>
+                <li>
+                  <div class="doctore_detail">
+                    <p>{{ "next_appointment_available" | translate }}</p>
+                    <h4>
+                      {{ portal_nearestAvailableDate | date : "dd/MM/YYYY" }}
+                    </h4>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="choose_slot">
+            <div class="heading">
+              <h4>2. {{ "select_date_time" | translate }}</h4>
+            </div>
+            <div class="choose_detail">
+              <div class="expansion_panel_inner">
+                <div class="main_outer">
+                  <div class="row location_appointment">
+                    <div class="expansion_item location col-md-6">
+                      <h2>{{ "select_location" | translate }}</h2>
+                      <mat-button-toggle-group name="fontStyle" [value]="location_id" #group="matButtonToggleGroup"
+                        aria-label="Font Style">
+                        <!-- {{hospital_location|json}} -->
+                        <ng-container *ngFor="let location of portal_hospital_location">
+                          <mat-button-toggle [value]="location.hospital_id"
+                            (change)="onSelection({ locationid: $event.value })" [disabled]="true">{{
+                            location?.hospital_name }}</mat-button-toggle>
+                        </ng-container>
+                      </mat-button-toggle-group>
+                    </div>
+
+                    <div class="expansion_item appointment col-md-6">
+                      <h2>{{ "appointment_type" | translate }}</h2>
+                      <mat-radio-group aria-label="Appointment Type">
+                        <!-- <mat-radio-button   [checked]="appointment_type===type?.appointment_type?true:false" [value]="type?.appointment_type"
+                          *ngFor="let type of doctor_availability" (change)="onSelection({type:$event?.value})">
+                          {{type?.appointment_type}}
+                        </mat-radio-button> -->
+                        <mat-radio-button value="Online" (change)="onSelection({ type: $event.value })"
+                          [checked]="appointment_type === 'Online'" [disabled]="true">
+                          {{ "online" | translate }}
+                        </mat-radio-button>
+
+                        <mat-radio-button value="Home Visit" (change)="onSelection({ type: $event.value })"
+                          [checked]="appointment_type === 'Home Visit'" [disabled]="true">
+                          {{ "home_visit" | translate }}
+                        </mat-radio-button>
+
+                        <mat-radio-button value="Face to Face" (change)="onSelection({ type: $event.value })"
+                          [checked]="appointment_type === 'Face to Face'" [disabled]="true">
+                          {{ "hospital_visit" | translate }}
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+
+                  <div class="consultation_datetime">
+                    <h2>{{ "choose_consultation_date_time" | translate }}</h2>
+                    <div class="consultation_datetime_inner row">
+                      <div class="expansion_item col-md-7">
+                        <article class="calendar-wrapper">
+                          <igx-calendar #calendar [value]="value"
+                            (selected)="onSelection2({ date: $event })"></igx-calendar>
+                        </article>
+                      </div>
+                      <div class="expansion_item col-md-5">
+                        <h2>{{ "choose_time" | translate }}</h2>
+
+                        <div *ngIf="portal_AvailableTimeSlot?.length > 0">
+                          <div class="primary_btn">
+                            <button class="btn btn-tranprent" [ngClass]="{
+                                disable: slot.status == 1,
+                                active: portal_choose_slot == slot.slot
+                              }" (click)="portal_choose_Slot(slot.slot)" [value]="slot.slot"
+                              *ngFor="let slot of portal_AvailableTimeSlot">
+                              {{ slot.slot }}
+                            </button>
+                          </div>
+                        </div>
+                        <div *ngIf="portal_AvailableTimeSlot?.length === 0">
+                          <H1>{{ "no_time_slot_available" | translate }}</H1>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="primary_btn mt-4">
+            <button type="button" class="btn btn-secondary mr-3" (click)="closePopup()">
+              {{ "cancel" | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary" (click)="reshedule('no')" [disabled]="!choose_slot">
+              {{ "book" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+</div>
+
+<!-- Reschedule appointment1 modal -->
+<ng-template #choosedate let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "reschedule_appointment" | translate }}
+      </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="resshedule_appointment">
+        <div class="image_block">
+          <img class="img-fluid" src="../../../../../assets/img/doctore1.svg" alt="doc" />
+        </div>
+        <div class="content_block">
+          <h3>
+            {{ "professor" | translate }} Dr. Imtiaz Aslam
+            <span><img class="img-fluid" src="../../../../../assets/img/greenelip.svg" /></span>
+          </h3>
+          <p>Dermatologist</p>
+          <ul>
+            <li>
+              <div class="doctore_detail">
+                <p>{{ "experience" | translate }}</p>
+                <h4>10 Years</h4>
+              </div>
+            </li>
+            <li>
+              <div class="doctore_detail">
+                <p>{{ "rating_and_review" | translate }}</p>
+                <h4>
+                  <i class="fa-solid fa-star"></i>
+                  {{ doctor_rating?.average_rating }} ({{
+                  doctor_rating?.total_review
+                  }}
+                  Reviews)
+                </h4>
+              </div>
+            </li>
+            <li>
+              <div class="doctore_detail">
+                <p>{{ "next_appointment_available" | translate }}</p>
+                <h4>January 30, 2023</h4>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="choose_slot">
+        <div class="heading">
+          <h4>1. {{ "choose_slot" | translate }}</h4>
+        </div>
+        <div class="choose_detail">
+          <div class="nearest_slot">
+            <p>{{ "nearest_available_slot" | translate }}:</p>
+            <h3>28-10-2022(07:00 AM - 07:30 AM)</h3>
+          </div>
+          <button type="button" class="btn btn-primary">
+            {{ "book_now" | translate }}
+          </button>
+        </div>
+      </div>
+      <div class="primary_btn">
+        <button type="button" class="btn btn-secondary mr-3">Cancel</button>
+        <!-- <button type="button" class="btn btn-primary" (click)="openVerticallyCenteredselectdatetime(selectdatetime)">View Other Available Slots</button> -->
+        <button type="button" class="btn btn-primary">
+          {{ "view_other_available_slots" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Select date and time modal -->
+<ng-template #selectdatetime let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "reschedule_appointment" | translate }}
+      </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="resshedule_appointment">
+        <div class="image_block">
+          <img class="img-fluid" src="{{ doctordetailsData?.profile_picture }}" alt="doc" />
+        </div>
+        <div class="content_block">
+          <h3>
+            {{ doctordetailsData?.full_name
+            }}<span><img class="img-fluid" src="../../../../../assets/img/greenelip.svg" /></span>
+          </h3>
+          <p>{{ doctordetailsData?.speciality }}</p>
+          <ul>
+            <li>
+              <div class="doctore_detail">
+                <p>{{ "experience" | translate }}</p>
+                <h4>
+                  {{ doctordetailsData?.years_of_experience }}
+                  {{ "years" | translate }}
+                </h4>
+              </div>
+            </li>
+            <li>
+              <div class="doctore_detail">
+                <p>{{ "rating_and_review" | translate }}</p>
+                <h4>
+                  <i class="fa-solid fa-star"></i>{{ doctordetailsData?.average_rating }} ({{
+                  doctordetailsData?.total_review
+                  }}
+                  Reviews)
+                </h4>
+              </div>
+            </li>
+            <li>
+              <div class="doctore_detail">
+                <p>{{ "next_appointment_available" | translate }}</p>
+                <h4>January 30, 2023</h4>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="choose_slot">
+        <div class="heading">
+          <h4>2. {{ "select_date_time" | translate }}</h4>
+        </div>
+        <div class="consultation_datetime">
+          <h2>{{ "choose_consultation_date_time" | translate }}</h2>
+          <div class="consultation_datetime_inner row">
+            <div class="expansion_item calender col-md-7">
+              <article class="calendar-wrapper">
+                <igx-calendar></igx-calendar>
+              </article>
+            </div>
+            <div class="expansion_item col-md-5">
+              <h2>{{ "choose_time" | translate }}</h2>
+              <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+                <mat-button-toggle>10:00 AM</mat-button-toggle>
+                <mat-button-toggle>10:30 AM</mat-button-toggle>
+                <mat-button-toggle>11:00 AM</mat-button-toggle>
+                <mat-button-toggle>11:30 AM</mat-button-toggle>
+                <mat-button-toggle>12:00 PM</mat-button-toggle>
+                <mat-button-toggle>12:30 PM</mat-button-toggle>
+                <mat-button-toggle>01:00 PM</mat-button-toggle>
+                <mat-button-toggle>01:30 PM</mat-button-toggle>
+                <mat-button-toggle>02:00 PM</mat-button-toggle>
+                <mat-button-toggle>02:30 PM</mat-button-toggle>
+                <mat-button-toggle>03:00 PM</mat-button-toggle>
+                <mat-button-toggle>03:30 PM</mat-button-toggle>
+                <mat-button-toggle>04:00 PM</mat-button-toggle>
+                <mat-button-toggle>04:30 PM</mat-button-toggle>
+                <mat-button-toggle>05:00 PM</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="primary_btn mt-3">
+        <!-- <button type="button" class="btn btn-primary" (click)="openVerticallyCenteredsuccessmessage(successmessage)">Next</button> -->
+        <button type="button" class="btn btn-primary">
+          {{ "next" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Success modal  -->
+<div class="edit_staff">
+  <ng-template #successmessage let-modal>
+    <div class="custome_modal success">
+      <div class="modal-body text-center">
+        <div class="success_modal">
+          <img class="img-fluid" src="../../../../../assets/img/righticon.svg" />
+        </div>
+        <p>{{ "your_appointment_has_been_rescheduled" | translate }}</p>
+        <div class="primary_btn mt-4">
+          <button type="button" class="btn btn-primary">
+            {{ "ok" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+<!-- <ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger1"
+  [cdkConnectedOverlayOpen]="isOpen"
+>
+  <ul class="example-list">
+    
+
+  </ul>
+</ng-template> -->
+
+<!-- Cancel Appointment modal -->
+<div class="create_notification">
+  <ng-template #cancelappointmentcontent let-modal>
+    <div class="custome_modal notification_manage">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "cancel_appointment" | translate }}
+        </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-start">
+          <div class="row" *ngFor="let loc of locationList">
+            <div class="item flex-row">
+              <div class="form_field_wrapper">
+                <div class="primary_btn">
+                  <button type="button" class="btn btn-secondary 
+                    {{
+                      selectedLocationId === loc?.hospital_id ? 'active' : ''
+                    }}" (click)="handleLocationChange(loc)">
+                    {{ loc?.hospital_name }}</button>&nbsp; &nbsp;
+                </div>
+              </div>
+              <br />
+            </div>
+          </div>
+        </div>
+        <form>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form_field_wrapper">
+                <label>{{ "cancellation_reason" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <textarea type="text" [(ngModel)]="text" [ngModelOptions]="{ standalone: true }" matInput></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="primary_btn">
+          <button type="button" class="btn btn-secondary">
+            {{ "back" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="openVerticallyCentereddetale(addsecondsubsriber)">
+            {{ "cancel_appointment" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #addsecondsubsriber let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img class="img-fluid" src="../../../../assets/img/delete.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "want_to_cancel_this_appointment" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="cancelAppointment()">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- <ng-template #remaindermodal let-modal>
+  <div class="custome_modal common_plan">    
+    <div class="modal-header">
+      <h4 class="modal-title text-center" id="modal-basic-title">
+        Set Remainder
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form_detail">
+        <form [formGroup]="remainderForm">
+          <div class="row">
+            <ng-container formArrayName="remainderrr">
+              <ng-container
+                *ngFor="let row of remainderrr1.controls; let i = index"
+              >
+                <ng-container [formGroupName]="i">
+                  <div class="form_field_wrapper">
+                    <div class="fieldicon_wrap">
+                      <mat-form-field class="inner_label" appearance="fill">
+                        <mat-label>Choose Before (Hour)</mat-label>
+                    
+                        <mat-select placeholder="Select type" formControlName="hours">
+                          <mat-option
+                            *ngFor="let time of timeHourValue"
+                            [value]="time.value"
+                            >{{ time.name }}</mat-option
+                          >
+                        </mat-select>
+                      </mat-form-field>
+                        <mat-form-field class="example-full-width" appearance="fill">
+                        <mat-label>Choose Before (Hour)</mat-label>
+                        <mat-select placeholder="Select type" formControlName="mintues">
+                          <mat-option
+                            *ngFor="let time of timeMinuteValue"
+                            [value]="time.value"
+                            >{{ time.name }}</mat-option
+                          >
+                        </mat-select>
+                      </mat-form-field>
+
+                      <ng-container *ngIf="i == 0">
+                        <mat-icon class="plus" (click)="addnewRemainder()"
+                          >add</mat-icon
+                        >
+                      </ng-container>
+                      <ng-container *ngIf="i > 0">
+                        <mat-icon class="minus" (click)="removeRemainder(i)"
+                          >remove</mat-icon
+                        >
+                      </ng-container>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+
+            <div class="vr">Or</div>
+
+            <ng-container formArrayName="remainderDT">
+              <ng-container
+                *ngFor="let row of remainderDT.controls; let i = index"
+              >
+                <ng-container [formGroupName]="i">
+                  <div class="form_field_wrapper">
+                    <div class="fieldicon_wrap">
+                      <mat-form-field>
+                        <mat-label>Choose a date</mat-label>
+                          <input matInput [ngxMatDatetimePicker]="picker"
+                            [formControl]="dateControl" [min]="minDate" [max]="maxDate" [disabled]="disabled">
+                            <mat-datepicker-toggle matSuffix [for]="$any(picker)"></mat-datepicker-toggle>                        
+                          <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                            [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+                            [color]="color">
+                          </ngx-mat-datetime-picker>
+                        </mat-form-field>
+
+                      <ng-container *ngIf="i > 0">
+                        <mat-icon class="minus" (click)="removeRemainderDT(i)"
+                          >remove</mat-icon
+                        >
+                      </ng-container>
+                      <ng-container *ngIf="i == 0">
+                        <mat-icon class="plus" (click)="addnewRemainderDT()"
+                          >add</mat-icon
+                        >
+                      </ng-container>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <div class="form-btn primary_btn add_popup">
+            <button class="login_btn btn btn-primary" (click)="closePopup()">
+              Cancel
+            </button>
+            <button
+              class="login_btn btn btn-secondary"
+              (click)="setReminderSave()"
+            >
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template> -->
+
+<div class="edit_staff">
+  <ng-template #choosedate let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "reschedule_appointment" | translate }}
+        </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="resshedule_appointment">
+          <div class="image_block">
+            <img class="img-fluid" src="../../../../../assets/img/doctore1.svg" alt="doc" />
+          </div>
+          <div class="content_block">
+            <h3>
+              {{ doctorinfo.full_name
+              }}<span><img class="img-fluid" src="../../../../../assets/img/greenelip.svg" /></span>
+            </h3>
+            <p>{{ doctorinfo.speciality }}</p>
+            <ul>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "experience" | translate }}</p>
+                  <h4>
+                    {{ doctorinfo.years_of_experience }}
+                    {{ "years" | translate }}
+                  </h4>
+                </div>
+              </li>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "rating_and_review" | translate }}</p>
+                  <h4><i class="fa-solid fa-star"></i> 4.5 (85 Reviews)</h4>
+                </div>
+              </li>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "next_appointment_available" | translate }}</p>
+                  <h4>January 30, 2023</h4>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="choose_slot">
+          <div class="heading">
+            <h4>1. {{ "choose_slot" | translate }}</h4>
+          </div>
+          <div class="choose_detail">
+            <div class="nearest_slot">
+              <p>{{ "nearest_available_slot" | translate }}:</p>
+              <h3>28-10-2022(07:00 AM - 07:30 AM)</h3>
+            </div>
+            <button type="button" class="btn btn-primary">
+              {{ "book_now" | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="primary_btn mt-4">
+          <button type="button" class="btn btn-secondary mr-3">
+            {{ "cancel" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary">
+            {{ "view_other_available_slots" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

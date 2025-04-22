@@ -1,0 +1,264 @@
+@import '../../../../../assets/css/variable/variable';
+
+// .main_block{
+//     .sidebar_section{
+//         display: none;
+//     }
+//     .main_section{
+//         margin-left: 0 !important;
+//         .header{
+//             display: none;
+//         }
+//     }
+// }
+
+
+.payment{
+    .payment_inner{
+        overflow: hidden;
+        .left_part {
+            .leftpart_inner{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .section_wrap{
+                    display: flex;
+                    justify-content: space-between;
+                    flex-direction: column;
+                    min-height: 100vh;
+                    padding: 50px 0 100px;
+                    .top_section{
+                        .back_button {
+                            display: flex;
+                            justify-content: flex-end;
+                          }
+                        margin: 0 0 20px;
+                       
+                        .project_title_wrap{
+                            display: flex;
+                            align-items: center;
+                            margin: 0 0 50px;
+                            .project_logo{
+                                width: 46px;
+                                height: 46px;
+                                line-height: 46px;
+                                border-radius: 50%;
+                                margin: 0 10px;
+                                text-align: center;
+                                background: #FFFFFF;
+                                box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.08);
+                                img{
+                                    max-width: 50%;
+                                }
+                            }
+                            .project_title{
+                                font-weight: 400;
+                                font-size: 20px;
+                                line-height: 22px;
+                                color: #3A3737;
+                            }
+                        }
+                        .plan_info{
+                            label{
+                                font-weight: 500;
+                                font-size: 20px;
+                                line-height: 24px;
+                                color: $bodycolor;     
+                                margin: 0 0 7px;
+                            }
+                            .price{
+                                font-weight: 600;
+                                font-size: 42.5455px;
+                                line-height: 51px;
+                                color: $bodycolor;
+                                display: flex;
+                                align-items: center;
+                                .duration{
+                                    font-size: 16px;
+                                    font-weight: 400;
+                                    line-height: 16px;
+                                    color: $bodycolor; 
+                                    margin: 0 0 0 10px;  
+                                }
+                            }
+                        }
+                    }
+                    .bottom_bar{
+                        ul{
+                            list-style: none;
+                            padding: 0;
+                            margin: 0;
+                            display: flex;
+                            align-items: center;
+                            li{
+                                    font-weight: 400;
+                                    font-size: 20px;
+                                    line-height: 22px;
+                                    color: rgba(58, 55, 55, 0.5);        
+                                    padding: 0 15px;
+                                    cursor: pointer;
+                                b{
+                                    color: rgba(58, 55, 55, 0.8);
+                                }
+                                &:first-child{
+                                    border-right: 1px solid #D9D9D9;
+                                    cursor: unset;
+                                    padding-left: 0;
+                                }
+                                &:hover:not(:first-child) {
+                                    color: $bodycolor;
+                                }
+                            }
+                        }
+                    }
+                }
+            
+            }
+        }
+        .right_part {
+            background: #FFFFFF;
+            box-shadow: 0px 0px 58px rgba(0, 0, 0, 0.05);
+            .rightpart_inner{
+                min-height: 100vh;
+                padding: 50px 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .payment_form{
+                    form{
+                        width: 482px;
+                        margin: 0 auto;
+                        .payment_title{
+                            font-weight: 600;
+                            font-size: 26px;
+                            line-height: 30px;
+                            color: $bodycolor;
+                            margin: 0 0 30px;
+                        }
+                        .form_field_wrapper {
+                            &.card_info{
+                                margin-bottom: 20px;
+                                .card_info_field{
+                                    border: 1px solid rgba(228, 228, 228, 0.9);
+                                    border-radius: 5px;
+                                    .mat-form-field{
+                                        &.card_no{
+                                            border-bottom: 1px solid rgba(228, 228, 228, 0.9);
+                                            .mat-form-field-infix {
+                                                position: relative;
+                                                padding-right: 150px;
+                                                .pay_strip {
+                                                    position: absolute;
+                                                    right: -10px;
+                                                    left: auto;
+                                                    width: 150px;
+                                                    top: 0;
+                                                    bottom: auto;
+                                                }
+                                            }
+                                        }
+                                        &.card_month_year{
+                                            border-right: 1px solid rgba(228, 228, 228, 0.9);
+                                        }
+                                        .mat-form-field-wrapper{
+                                            padding: 0;
+                                            .mat-form-field-flex {
+                                                border: none;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .btn {
+                            width: 100%;
+                            padding: 15px;
+                        }
+                        .payment_desc{
+                            text-align: center;
+                            margin-top: 20px;
+                            line-height: 22px;
+                            color: $bodycolor;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.payment_successfull {
+    .modal-dialog{
+        max-width: 400px;
+        .modal-body{
+            text-align: center;
+            .successfull_icon{
+                width: 65px;
+                height: 65px;
+                margin: 0 auto 15px;
+            }
+            .successfull_title{
+                font-weight: 600;
+                font-size: 32px;
+                line-height: 46px;
+                text-transform: uppercase;
+                color: #3EA710;
+                margin: 0 0 7px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:$desktop) {
+    .payment .payment_inner .right_part .rightpart_inner .payment_form form {
+        width: 400px;
+    }
+}
+@media screen and (max-width:$tablet) {
+    .payment .payment_inner .left_part .leftpart_inner .section_wrap{
+        padding: 50px 30px;
+    }
+    .payment .payment_inner .right_part .rightpart_inner .payment_form form {
+        width: 300px;
+    }  
+}
+@media screen and (max-width:$large_phone) {
+    .payment .payment_inner .left_part .leftpart_inner .section_wrap{
+        padding: 70px 30px;
+        min-height: 70vh;
+    }
+    .payment .payment_inner .right_part .rightpart_inner{
+        min-height: auto;
+        padding: 70px 30px;
+    }
+    .payment .payment_inner .left_part .leftpart_inner .section_wrap .top_section .plan_info .price{
+        font-size: 30px;
+        line-height: 36px;    
+    }
+    .payment .payment_inner .right_part .rightpart_inner .payment_form form {
+        width: 100%;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .payment .payment_inner .right_part .rightpart_inner .payment_form form .form_field_wrapper.card_info .card_info_field .mat-form-field.card_month_year,
+    .payment .payment_inner .right_part .rightpart_inner .payment_form form .form_field_wrapper.card_info .card_info_field .mat-form-field.card_cvc {
+        width: 50%;
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .payment .payment_inner .right_part .rightpart_inner .payment_form form .form_field_wrapper.card_info .card_info_field .mat-form-field.card_no .mat-form-field-infix .pay_strip{  
+        top: 7px;
+        bottom: auto;
+        width: 100px;
+    }
+    .payment .payment_inner .right_part .rightpart_inner .payment_form form .form_field_wrapper.card_info .card_info_field .mat-form-field.card_no .mat-form-field-infix {
+        padding-right: 100px;
+    }
+    .payment .payment_inner .left_part .leftpart_inner .section_wrap {
+        padding: 50px 30px;
+        min-height: 50vh;
+    }
+    .payment .payment_inner .right_part .rightpart_inner {
+        padding: 50px 20px;
+    }
+}

@@ -1,0 +1,218 @@
+<div class="step_counter_inner">
+  <div class="document_manage">
+    <div class="document_item">
+      <form [formGroup]="documentManagementForm">
+        <ng-container formArrayName="document">
+          <ng-container *ngFor="let _ of document.controls; let i = index">
+            <ng-container [formGroupName]="i">
+              <div class="row part_wrapper">
+                <div class="left part">
+                  <div class="row">
+                    <div class="item col-md-6 col-lg-6 col-xl-3">
+                      <div class="form_field_wrapper">
+                        <label>{{ "document_name" | translate }}</label>
+                        <mat-form-field appearance="fill">
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="doc_name"
+                          />
+                        </mat-form-field>
+                      </div>
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && documentValidation(i).controls['doc_name'].errors?.['required']"
+                        >{{ "field_is_required" | translate }}.
+                      </span>
+                    </div>
+                    <div class="item col-md-6 col-lg-6 col-xl-3">
+                      <div class="form_field_wrapper">
+                        <label>{{ "issue_date" | translate }}</label>
+                        <mat-form-field
+                          class="example-full-width"
+                          appearance="fill"
+                        >
+                          <input
+                            matInput
+                            [matDatepickerFilter]="myFilter"
+                            [matDatepicker]="picker58"
+                            formControlName="issue_date"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker58"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker58></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && documentValidation(i).controls['issue_date'].errors?.['required']"
+                        >{{ "field_is_required" | translate }}.
+                      </span>
+                    </div>
+                    <div class="item col-md-6 col-lg-6 col-xl-3">
+                      <div class="form_field_wrapper">
+                        <label>{{
+                          "expiration_date_optional" | translate
+                        }}</label>
+                        <mat-form-field
+                          class="example-full-width"
+                          appearance="fill"
+                        >
+                          <input
+                            matInput
+                            [matDatepickerFilter]="myFilter"
+                            [matDatepicker]="picker59"
+                            formControlName="expiration_date"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker59"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker59></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="item col-md-6 col-lg-6 col-xl-3 upload_item">
+                      <div class="form_field_wrapper">
+                        <label class="invisible">{{
+                          "upload_picture_1" | translate
+                        }}</label>
+                        <div class="upload_input">
+                          <div class="upload_input_content">
+                            <!-- <div class="doc_img" >
+                              <img src="{{ documentManagementForm.value.document[i].image_url }}" />
+                            </div> -->
+                            <!-- {{docDetails | json}}
+                            <img *ngIf=" documentManagementForm.value.document[i]
+                            .image_url" src="{{docDetails[i]?.signedimage_url}}"> -->
+                            <label
+                              *ngIf="
+                                documentManagementForm.value.document[i]
+                                  .image_url
+                              "
+                              >{{ "file_added" | translate }}</label
+                            >
+                            <label
+                              *ngIf="
+                                !documentManagementForm.value.document[i]
+                                  .image_url
+                              "
+                              >{{ "upload_cart_picture" | translate }}</label
+                            >
+                          </div>
+                          <input
+                            class="ng-hide user_upload_input"
+                            id="input-file-id"
+                            multiple
+                            type="file"
+                            (change)="onFileSelected($event, i,'image')"
+                          />
+                        </div>
+                      </div>
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && documentValidation(i).controls['image_url'].errors?.['required']"
+                        >{{ "select_file" | translate }}*.
+                      </span>
+                    </div>
+
+                    <!-- <div class="item col-md-6 col-lg-6 col-xl-3">
+                      <div class="form_field_wrapper">
+                        <label class="invisible">View</label>
+                        <div class="upload_input">
+                          <div class="upload_input_content">
+                            <ng-container *ngIf="attachmentType === 'image/jpeg'|| 'image/jpg'|| 'image/png'">
+                              <button class="btn btn-secondary" (click)="
+                              openVerticallyCenteredquickview(quick_view,documentManagementForm.value.document[i].image_url,i)">View Document</button>
+                            </ng-container>
+                          </div>
+                        </div>
+                      </div>
+                    </div> -->
+                  </div>
+                </div>
+                <!-- <div class="right part">
+                  <div class="row_generate row_add" *ngIf="i === 0">
+                    <mat-icon class="plus" (click)="addForm()">add</mat-icon>
+                  </div>
+                  <div class="row_generate row_minus" *ngIf="i !== 0">
+                    <mat-icon class="minus" (click)="deleteForm(i)"
+                      >remove</mat-icon
+                    >
+                  </div>
+                </div> -->
+                <div class="right part">
+                  <ng-container *ngIf="i === document.length - 1; else remove">
+                    <div
+                      class="row_generate row_minus"
+                      *ngIf="document.length > 1"
+                    >
+                      <mat-icon class="minus" (click)="deleteForm(i)"
+                        >remove</mat-icon
+                      >
+                    </div>
+                    <div class="row_generate row_add">
+                      <mat-icon class="plus" (click)="addForm()">add</mat-icon>
+                    </div>
+                  </ng-container>
+                  <ng-template #remove>
+                    <div class="row_generate row_minus">
+                      <mat-icon class="minus" (click)="deleteForm(i)"
+                        >remove</mat-icon
+                      >
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </form>
+    </div>
+  </div>
+  <div class="primary_btn">
+    <button class="btn btn-secondary" (click)="previousPage()">
+      {{ "back" | translate }}
+    </button>
+    <!-- <button class="btn btn-primary" (click)="savebuttonHandler()">
+      {{ "save" | translate }}
+    </button> -->
+    <button class="btn btn-primary" (click)="savebuttonHandler('yes')">
+      {{ "save_and_exit" | translate }}
+    </button>
+    <!-- <button
+      type="button"
+      style="margin-left: 10px"
+      class="btn btn-danger"
+      [routerLink]="['/individual-doctor/editprofile']"
+    >
+      {{ "exit" | translate }}
+    </button> -->
+  </div>
+</div>
+
+
+<!-- Quickview Modal -->
+
+<ng-template #quick_view let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="docview_img">
+        <img src="{{ showUrl }}" width="600px" height="500px" />
+      </div>
+    
+    </div>
+  </div>
+</ng-template>

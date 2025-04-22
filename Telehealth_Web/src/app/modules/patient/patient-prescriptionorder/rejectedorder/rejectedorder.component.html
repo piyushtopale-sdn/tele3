@@ -1,0 +1,525 @@
+<div class="details_patient dashboard_main_content">
+  <div class="main_title">{{ "pharmacy_details" | translate }}</div>
+  <div class="profile_data pharmacy-profile-data">
+    <div class="profile_info">
+      <div class="profile_image_block">
+        <div class="profile_image">
+          <img
+            *ngIf="pharmacyProfile?.pharmacyProfile"
+            src="{{ pharmacyProfile?.pharmacyProfile }}"
+          />
+          <img
+            *ngIf="!pharmacyProfile?.pharmacyProfile"
+            src="../../../assets/img/profile_img.png"
+          />
+        </div>
+        <div class="profile_contact">
+          <div class="profile_title">
+            {{ profileData?.pharmacy_name }}
+          </div>
+        </div>
+      </div>
+      <ul class="profile_info_inner profile_info_with_img">
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "phone_number" | translate }}</div>
+            <div class="user_value">{{ profileData?.mobile_phone_number }}</div>
+          </div>
+        </li>
+
+        <!-- <li class="col_item">
+                <div class="profile_contact">
+                    <div class="lable">Hospital</div>
+                    <div class="user_value">Venus Care Hospital</div>
+                </div>
+            </li> -->
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "address" | translate }}</div>
+            <div class="user_value">{{ profileData?.address }}</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="main_title">{{ "patient_details" | translate }}</div>
+  <div class="profile_data patient-profile-data">
+    <div class="profile_info">
+      <div class="profile_image_block">
+        <div class="profile_image">
+          <img
+            *ngIf="patient_details?.profile_pic"
+            src="{{ patient_details?.profile_pic }}"
+          />
+          <img
+            *ngIf="!patient_details?.profile_pic"
+            src="../../../assets/img/profile_img.png"
+          />
+        </div>
+        <div class="profile_contact">
+          <div class="profile_title">
+            {{ patient_details?.first_name }}
+            {{ patient_details?.middle_name }}
+            {{ patient_details?.last_name }}
+          </div>
+          <div class="lable">{{ "email" | translate }}</div>
+          <div class="user_value">
+            {{ patient_details?.for_portal_user?.email }}
+          </div>
+        </div>
+      </div>
+      <ul class="profile_info_inner profile_info_with_img">
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "phone_number" | translate }}</div>
+            <div class="user_value">
+              ({{ patient_details?.for_portal_user?.country_code }})
+              {{ patient_details?.for_portal_user?.mobile }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "date_of_birth" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.dob | date : "dd/MM/yyyy" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "gender" | translate }}</div>
+            <div class="user_value">{{ patient_details?.gender }}</div>
+          </div>
+        </li>
+        <!-- <li class="col_item">
+                <div class="profile_contact">
+                    <div class="lable">Hospital</div>
+                    <div class="user_value">Venus Care Hospital</div>
+                </div>
+            </li> -->
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "address" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.in_location?.address }}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="insurance_details" *ngIf="subscriber_id !== null">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ "insurance_details" | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="expansion_panel">
+          <div class="expansion_panel_inner">
+            <div class="profile_data insurance-profile-data">
+              <div class="profile_info">
+                <div class="profile_image_block">
+                  <div class="profile_image">
+                    <img
+                      *ngIf="subscriberdetails?.insurance_card_id_proof"
+                      src="{{ subscriberdetails?.insurance_card_id_proof }}"
+                    />
+                    <img
+                      *ngIf="!subscriberdetails?.insurance_card_id_proof"
+                      src="../../../assets/img/insurance.png"
+                    />
+                  </div>
+                  <div class="profile_contact">
+                    <div class="lable">{{ "policy_ID" | translate }}</div>
+                    <div class="user_value">
+                      {{ subscriberdetails?.policy_id }}
+                    </div>
+                  </div>
+                </div>
+                <ul class="profile_info_inner profile_info_with_img">
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "card_ID" | translate }}</div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.card_id }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "employee_ID" | translate }}</div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.employee_id }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">
+                        {{ "insurance_provider" | translate }}
+                      </div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.for_user?.company_name }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">
+                        {{ "reimbursement_rate" | translate }}
+                      </div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.reimbersement_rate }} %
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "plan_name" | translate }}</div>
+                      {{ subscriberdetails?.health_plan_for?.name }}
+
+                      <div class="user_value"></div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "insurance_id" | translate }}</div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.insurance_id }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">
+                        {{ "insurance_holder" | translate }}
+                      </div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.insurance_holder_name }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "expiry_date" | translate }}</div>
+                      <div class="user_value">
+                        {{ "from" | translate }}
+                        {{
+                          subscriberdetails?.insurance_validity_from
+                            | date : "dd/MM/yyyy"
+                        }}
+                        {{ "to" | translate }}
+                        {{
+                          subscriberdetails?.insurance_validity_to
+                            | date : "dd/MM/yyyy"
+                        }}
+                      </div>
+                    </div>
+                  </li>
+                  <!-- <li class="col_item expired">
+                      <div class="profile_contact">
+                        <div class="lable invisible">Insurance ID</div>
+                        <div class="user_value" *ngIf="!insuranceDetails?.subscription_valid">Subscription Expired</div>
+                      </div>
+                    </li> -->
+                </ul>
+                <!-- <div class="secondary_insured">
+                  <h3 class="profileinfo_title">Secondary Insured Details</h3>
+                  <ul class="profile_info_inner">
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">First Name</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.first_name
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">Middle Name</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.middle_name
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">Last Name</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.last_name
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">Date Of Birth</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.dob | date : "dd/MM/yyyy"
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">Gender</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.gender
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">Relationship</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.relationship
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                  <ul class="profile_info_inner">
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">{{ 'plan_name' | translate}}</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.plan_name || "Not in response"
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">{{ 'employee_ID' | translate}}</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.employee_id
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">Insurance ID</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.insurance_id
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">{{ 'policy_ID' | translate}}</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.policy_id
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">{{ 'card_ID' | translate}}</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.card_id
+                          }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">{{ 'reimbursement_rate' | translate}}</div>
+                        <div class="user_value">
+                          {{
+                            patient_details?.in_insurance?.secondary_insured
+                              ?.reimbursement_rate
+                          }}%
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="medicine_info">
+    <div class="main_title">{{ "prescription" | translate }}</div>
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          class="mat-elevation-z8 withoutpagination"
+        >
+          <!-- Purchase Date Column -->
+          <ng-container matColumnDef="medicinename">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "medicine_name" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.name }}
+            </td>
+          </ng-container>
+
+          <!--Pack or Unit Column -->
+          <ng-container matColumnDef="packorunit">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "pack_or_unit" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.prescribed }}
+            </td>
+          </ng-container>
+
+          <!--Frequency Column -->
+          <ng-container matColumnDef="frequency">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "frequency" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.frequency }}
+            </td>
+          </ng-container>
+
+          <!--Duration (Days)  Column -->
+          <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "duration_days" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.duration }}
+            </td>
+          </ng-container>
+
+          <!--Medicine Unit Cost  Column -->
+          <ng-container matColumnDef="medicineunitcost">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "medicine_unit_cost" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.priceperunit }}
+            </td>
+          </ng-container>
+
+          <!--Total Cost Column -->
+          <ng-container matColumnDef="totalcost">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "total_cost" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.totalcost }}
+            </td>
+          </ng-container>
+
+          <!--Available  Column -->
+          <ng-container matColumnDef="available">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "available" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.available ? "yes" : "no" }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
+    <div class="medicine_info_bottom">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form_field_wrapper">
+            <label>{{ "total_medicine_cost" | translate }}</label>
+            <mat-form-field appearance="fill">
+              <input
+                type="text"
+                matInput
+                disabled="disabled"
+                [(ngModel)]="orderMedicine.total_cost"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form_field_wrapper">
+            <label>{{ "co_pay" | translate }}</label>
+            <mat-form-field appearance="fill">
+              <input
+                type="text"
+                matInput
+                disabled="disabled"
+                [(ngModel)]="orderMedicine.copay"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form_field_wrapper">
+            <label>{{ "insurance_to_be_paid" | translate }}</label>
+            <mat-form-field appearance="fill">
+              <input
+                type="text"
+                matInput
+                disabled="disabled"
+                [(ngModel)]="orderMedicine.insurance_paid"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="primary_btn">
+            <button type="button" class="btn btn-primary">
+                <a class="btn_svg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="17" viewBox="0 0 18 17" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M7.32939 0.0586835C7.16616 0.146881 7.06231 0.255883 6.9914 0.41342C6.93024 0.549286 6.92644 0.70556 6.9257 3.10694L6.92493 5.65622L5.43897 5.66704C4.10941 5.6767 3.94129 5.68442 3.84186 5.7402C3.56257 5.89687 3.38932 6.29794 3.47774 6.58301C3.51319 6.69725 3.99598 7.211 6.05769 9.32849C7.45266 10.7612 8.64425 11.9579 8.70562 11.9878C8.84891 12.0575 9.1511 12.0575 9.29438 11.9878C9.35575 11.9579 10.5473 10.7612 11.9423 9.32849C14.004 7.211 14.4868 6.69725 14.5223 6.58301C14.6107 6.29794 14.4374 5.89687 14.1581 5.7402C14.0587 5.68442 13.8906 5.6767 12.561 5.66704L11.0751 5.65622V3.1148C11.0751 0.902472 11.068 0.556064 11.0206 0.439814C10.9513 0.269802 10.8458 0.154092 10.6808 0.0673734C10.5582 0.0029021 10.4562 -0.00117239 8.99262 0.000197806C7.64206 0.00145983 7.42087 0.00921224 7.32939 0.0586835ZM0.640096 11.4327C0.512743 11.4829 0.403608 11.5651 0.279842 11.7039C-0.013306 12.0328 -0.00753797 11.9794 0.00392769 14.2639C0.0136348 16.1923 0.0157802 16.2469 0.0882319 16.405C0.176546 16.5977 0.38145 16.8147 0.576613 16.9224L0.717296 17H9H17.2827L17.4234 16.9224C17.6186 16.8147 17.8235 16.5977 17.9118 16.405C17.9842 16.2469 17.9864 16.1923 17.9961 14.2639C18.0075 11.9795 18.0133 12.0328 17.7203 11.704C17.5911 11.5592 17.4903 11.4848 17.3499 11.4309C17.1617 11.3588 17.093 11.357 14.5466 11.357H11.9362L11.1627 12.1524C10.0524 13.2941 9.77003 13.4656 9 13.4656C8.22997 13.4656 7.94759 13.2941 6.83732 12.1524L6.06384 11.357L3.44334 11.3588C0.91084 11.3606 0.816653 11.3631 0.640096 11.4327ZM13.5527 14.3278C13.9923 14.6716 13.9215 15.3083 13.4176 15.543C13.1556 15.665 12.8568 15.5986 12.6512 15.3729C12.3623 15.0558 12.439 14.5273 12.8077 14.2957C12.936 14.2151 12.989 14.2037 13.1892 14.2137C13.3802 14.2233 13.4451 14.2436 13.5527 14.3278ZM16.2378 14.2738C16.3892 14.353 16.4588 14.4272 16.5449 14.6013C16.6218 14.7567 16.6255 15.0542 16.5523 15.1979C16.4337 15.4309 16.1559 15.6126 15.921 15.611C15.5313 15.6083 15.1781 15.1751 15.2433 14.7797C15.2733 14.5976 15.4371 14.3701 15.6027 14.2804C15.7769 14.1861 16.0645 14.1831 16.2378 14.2738Z"/>
+                    </svg>
+                </a>Download</button>
+                <button type="button" class="btn btn-primary">
+                    <a class="btn_svg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="18" viewBox="0 0 20 18" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.73691 0.0574469C4.24676 0.188544 3.8516 0.497374 3.64074 0.914217C3.475 1.24182 3.4375 1.47418 3.4375 2.17413C3.4375 2.85243 3.46637 2.97143 3.65125 3.05508C3.7293 3.09042 5.24125 3.10144 10.0038 3.10144C16.8002 3.10144 16.4127 3.11409 16.5158 2.88914C16.5763 2.75726 16.5783 1.62732 16.5186 1.34774C16.3821 0.709598 15.8457 0.176789 15.2032 0.0412682C15.0555 0.0101525 13.5538 -0.00164204 9.96879 0.000181452C5.77137 0.00231533 4.90766 0.0117432 4.73691 0.0574469ZM1.56879 4.4218C1.19957 4.51787 0.894492 4.69203 0.622969 4.96171C0.346797 5.23597 0.175625 5.53569 0.0775391 5.91648C0.00273438 6.20704 0 6.3542 0 10.085C0 13.8159 0.00273438 13.963 0.0775391 14.2536C0.175586 14.6343 0.343828 14.9271 0.625 15.2063C0.906172 15.4856 1.20098 15.6527 1.58426 15.7501C1.83656 15.8142 2.01727 15.8271 2.66004 15.8271H3.43262L3.44582 14.0133L3.45902 12.1995L3.56027 11.902C3.71902 11.4356 3.92344 11.1087 4.27391 10.7606C4.62359 10.4133 4.9516 10.2107 5.42316 10.0508L5.72266 9.94924H10H14.2773L14.5898 10.0549C15.043 10.2082 15.3682 10.4117 15.7228 10.7639C16.0782 11.1169 16.2832 11.4407 16.4355 11.8891L16.5408 12.1995L16.5541 14.0133L16.5674 15.8271H17.34C17.9827 15.8271 18.1634 15.8142 18.4157 15.7501C18.799 15.6527 19.0938 15.4856 19.375 15.2063C19.6562 14.9271 19.8244 14.6343 19.9225 14.2536C19.9973 13.963 20 13.8159 20 10.085C20 6.3542 19.9973 6.20704 19.9225 5.91648C19.8244 5.5358 19.6562 5.243 19.375 4.96373C19.0938 4.68446 18.799 4.51736 18.4157 4.41998C18.1179 4.34432 17.9683 4.343 9.98398 4.3451C2.09418 4.34719 1.84703 4.34944 1.56879 4.4218ZM4.03844 7.18358C4.25301 7.24655 4.5766 7.56795 4.64 7.78106C4.7482 8.14483 4.67191 8.43484 4.39586 8.70903C4.00066 9.10154 3.49934 9.10154 3.10414 8.70903C2.70895 8.31651 2.70895 7.81901 3.10414 7.42564C3.37816 7.15289 3.67332 7.07642 4.03844 7.18358ZM5.9375 11.8428C5.74578 11.9029 5.41879 12.2392 5.36 12.4368C5.29219 12.6648 5.29219 17.1271 5.36 17.3551C5.4234 17.5682 5.74699 17.8896 5.96156 17.9526C6.08309 17.9882 7.07125 17.9998 10.0073 17.9998C14.4136 17.9998 14.127 18.0199 14.4257 17.6898C14.5186 17.5872 14.6155 17.434 14.6411 17.3494C14.707 17.1307 14.707 12.6612 14.6411 12.4425C14.6155 12.3579 14.5186 12.2047 14.4257 12.102C14.1266 11.7716 14.4177 11.7916 9.98328 11.7961C7.25258 11.7988 6.03301 11.813 5.9375 11.8428Z"/>
+                        </svg>
+                    </a>Print</button>
+                    <button type="button" class="btn btn-primary">
+                        <a class="btn_svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 20 15" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.55832 0.0245429C1.61278 0.167759 0.789997 0.761315 0.35493 1.61406C0.224899 1.86895 0.0578266 2.32891 0.0880293 2.3488C0.698881 2.75148 9.96024 8.46225 10.0024 8.46225C10.0446 8.46225 19.306 2.75148 19.9169 2.3488C19.947 2.32891 19.7801 1.86903 19.6501 1.61406C19.2778 0.88364 18.6399 0.35641 17.8158 0.0978587L17.5238 0.00631331L10.1392 0.000554624C6.07765 -0.00262266 2.66624 0.00817995 2.55832 0.0245429ZM0 8.24691C0 11.7471 0.00789255 12.3005 0.0616557 12.5674C0.185866 13.1844 0.421978 13.634 0.859585 14.0869C1.33689 14.5809 1.91172 14.8713 2.5809 14.9566C3.03527 15.0145 16.9696 15.0145 17.424 14.9566C18.4787 14.8221 19.395 14.1047 19.7913 13.1031C20.0087 12.5532 20.0075 12.583 19.996 8.23587L19.9853 4.23369L15.2967 7.13963C12.7179 8.73788 10.5317 10.0802 10.4383 10.1226C10.2087 10.2269 9.79626 10.227 9.56655 10.1227C9.47321 10.0803 7.31593 8.75583 4.77257 7.17942C2.22922 5.60301 0.11495 4.29505 0.0741587 4.27285C0.00156288 4.23337 0 4.31673 0 8.24691Z"/>
+                            </svg>
+                        </a>Email</button>
+              
+        </div> -->
+    </div>
+  </div>
+</div>

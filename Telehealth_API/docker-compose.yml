@@ -1,0 +1,117 @@
+version: "3"
+services:
+  gateway:
+    build:
+      context: ./services/gateway
+      dockerfile: Dockerfile
+      args:
+        - PORT=${API_GATEWAY_PORT}
+    restart: always
+    hostname: gateway-service
+    env_file:
+      - .env
+    ports:
+      - ${API_GATEWAY_PORT}:${API_GATEWAY_PORT}
+      - ${API_GATEWAY_INSPECTOR_PORT}:${API_GATEWAY_INSPECTOR_PORT}
+    volumes:
+      - ./services/gateway:/var/www/gateway
+      - /var/www/gateway/node_modules
+    networks:
+      - backend
+      - frontend
+  pharmacy:
+    build:
+      context: ./services/pharmacy
+      dockerfile: Dockerfile
+      args:
+        - PORT=${PHARMACY_SERVICE_PORT}
+    restart: always
+    hostname: pharmacy-service
+    env_file:
+      - .env
+    ports:
+      - ${PHARMACY_SERVICE_PORT}:${PHARMACY_SERVICE_PORT}
+      - ${PHARMACY_INSPECTOR_PORT}:${PHARMACY_INSPECTOR_PORT}
+    volumes:
+      - ./services/pharmacy:/var/www/pharmacy
+      - /var/www/pharmacy/node_modules
+    networks:
+      - backend
+  labradio:
+    build:
+      context: ./services/labradio
+      dockerfile: Dockerfile
+      args:
+        - PORT=${LABRADIO_SERVICE_PORT}
+    restart: always
+    hostname: labradio-service
+    env_file:
+      - .env
+    ports:
+      - ${LABRADIO_SERVICE_PORT}:${LABRADIO_SERVICE_PORT}
+      - ${LABRADIO_INSPECTOR_PORT}:${LABRADIO_INSPECTOR_PORT}
+    volumes:
+      - ./services/labradio:/var/www/labradio
+      - /var/www/labradio/node_modules
+    networks:
+      - backend
+  superadmin:
+    build:
+      context: ./services/superadmin
+      dockerfile: Dockerfile
+      args:
+        - PORT=${SUPERADMIN_SERVICE_PORT}
+    restart: always
+    hostname: superadmin-service
+    env_file:
+      - .env
+    ports:
+      - ${SUPERADMIN_SERVICE_PORT}:${SUPERADMIN_SERVICE_PORT}
+      - ${SUPERADMIN_INSPECTOR_PORT}:${SUPERADMIN_INSPECTOR_PORT}
+    volumes:
+      - ./services/superadmin:/var/www/superadmin
+      - /var/www/superadmin/node_modules
+    networks:
+      - backend
+  patient:
+    build:
+      context: ./services/patient
+      dockerfile: Dockerfile
+      args:
+        - PORT=${PATIENT_SERVICE_PORT}
+    restart: always
+    hostname: patient-service
+    env_file:
+      - .env
+    ports:
+      - ${PATIENT_SERVICE_PORT}:${PATIENT_SERVICE_PORT}
+      - ${PATIENT_INSPECTOR_PORT}:${PATIENT_INSPECTOR_PORT}
+    volumes:
+      - ./services/patient:/var/www/patient
+      - /var/www/patient/node_modules
+    networks:
+      - backend
+  doctor:
+    build:
+      context: ./services/doctor
+      dockerfile: Dockerfile
+      args:
+        - PORT=${DOCTOR_SERVICE_PORT}
+    restart: always
+    hostname: doctor-service
+    env_file:
+      - .env
+    ports:
+      - ${DOCTOR_SERVICE_PORT}:${DOCTOR_SERVICE_PORT}
+      - ${DOCTOR_INSPECTOR_PORT}:${DOCTOR_INSPECTOR_PORT}
+    volumes:
+      - ./services/doctor:/var/www/doctor
+      - /var/www/doctor/node_modules
+    networks:
+      - backend
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    external:
+      name: 'test'

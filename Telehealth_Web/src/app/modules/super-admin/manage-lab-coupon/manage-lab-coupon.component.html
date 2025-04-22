@@ -1,0 +1,274 @@
+<div class="staff_management dashboard_main_content">
+  <div class="top_bar">
+    <div class="left_part">
+      <div class="search_bar common_content" style="width:260px"> 
+        <div class="input-group">
+          <button class="btn search-btn">
+            <mat-icon>search</mat-icon>
+          </button>
+          <input type="search" class="form-control" placeholder="Search coupon" aria-label="Search"
+            [ngModel]="search_with_coupon" (keyup)="handleSearchFilter($event)" />
+        </div>
+      </div>
+      <div class="content_wrap">
+        <div class="policy d-flex align-items-center">
+          <!-- Radio Buttons -->
+          <div class="me-3 align-items-center">
+            <input type="radio" id="lab" name="type" value="Laboratory" [checked]="selectedType" 
+              (change)="onTypeChange('Laboratory')" style="cursor:pointer;">
+            <label for="lab" class="ms-1 me-2">{{"lab" | translate}}</label>
+      
+            <input type="radio" id="radio" name="type" value="Radiology"  
+              (change)="onTypeChange('Radiology')" style="cursor:pointer;">
+            <label for="radio" class="ms-1">{{"radio" | translate}}</label>
+          </div>
+      
+          <!-- Select2 Dropdown -->
+          <div class="form_field_wrapper" style="width: 240px">
+            <select2 [placeholder]="'select_centre' | translate" [limitSelection]="0" [minCountForSearch]="1"
+              [data]="labListId" [(ngModel)]="selectedLabList" (ngModelChange)="onLabChangeFilter($event)">
+            </select2>
+          </div>
+        </div>
+      </div>
+      
+      <div class="primary_btn">
+        <button type="button" (click)="clearAll()" class="btn btn-link">
+          {{ "clear_all" | translate }}
+        </button>
+      </div>
+    </div>
+    <div class="right_part">
+      <div class="primary_btn">
+        <ng-container>
+          <button type="button" class="btn btn-primary" (click)="openVerticallyCenteredadd(addmodal)">
+            {{ "add_coupon" | translate }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <!---------- Listing section ------------->
+  <div class="bottom_bar">
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!-- Define column definitions -->
+          <ng-container matColumnDef="couponCode">
+            <th mat-header-cell *matHeaderCellDef>{{ "coupon_code" | translate }}</th>
+            <td mat-cell *matCellDef="let element">{{ element.couponCode }}</td>
+          </ng-container>
+          <ng-container matColumnDef="percentOff">
+            <th mat-header-cell *matHeaderCellDef>{{ "percentage_off" | translate }}(%)</th>
+            <td mat-cell *matCellDef="let element">{{ element.percentOff ? element.percentOff : "" }} %</td>
+          </ng-container>
+          <ng-container matColumnDef="redeemBefore">
+            <th mat-header-cell *matHeaderCellDef>{{ "coupon_expire" | translate }}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.redeemBefore | date : "dd/MM/YYYY" }}
+            </td>
+          </ng-container>
+          <!-- Action column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "action" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="icon_group">
+                <ng-container *ngIf="giveInnerPermission('delete_subscription_plan')">
+                  <a class="svgicon" (click)="openVerticallyCenteredsecond(deleteModal, element._id)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+                      <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z" />
+                    </svg>
+                  </a>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+          <!-- Define row definitions -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <mat-paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)" [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+
+</div>
+
+<!---------- Delete modal ------------->
+<ng-template #deleteModal let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img class="img-fluid" src="../../../../assets/img/delete.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "you_want_to_delete_this_plan" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="handleDeletePlan()">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-------------- Add Plan ------------------->
+<ng-template #addmodal let-modal>
+  <div class="custome_modal common_plan add-plan-modal">
+    <div class="modal-header">
+      <h4 class="modal-title text-center" id="modal-basic-title">
+        {{ "add_coupon" | translate }}
+      </h4>
+      <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-header">
+    </div>
+    <div class="modal-body">
+      <div class="form_detail">
+        <form [formGroup]="addPlan" (ngSubmit)="addDiscountPlan()">
+          <div class="row">
+            <div class="form_field_wrapper mb-3">
+              <label>{{ "coupon_code" | translate }}<span class="danger">*</span></label>
+              <div class="d-flex align-items-center justify-content-between gap-2">
+                <div class="flex-grow-1">
+                  <mat-form-field appearance="fill">
+                    <input type="text" placeholder="{{ 'please_enter_coupon_code' | translate }}" matInput
+                      formControlName="couponCode" (keyup)="convertToUppercase($event)" pattern="[a-zA-Z0-9]*" />
+                  </mat-form-field>
+                  <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['couponCode'].errors?.['required']">
+                    {{"field_is_required" | translate}}
+                  </span>
+                  <span class="text-danger"
+                    *ngIf="addPlan.controls['couponCode'].hasError('pattern') && addPlan.controls['couponCode'].dirty">
+                    {{"Please enter only alphanumeric characters" | translate }}
+                  </span>
+                </div>
+                <button type="button" class="btn btn-primary" (click)="getCouponCode()" style="margin-bottom: 18px;">{{
+                  "generate_coupon" | translate }}</button>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form_field_wrapper mb-3">
+              <label>{{ "description" | translate }}</label>
+              <mat-form-field appearance="fill">
+                <input type="text" placeholder="{{ 'please_enter_description' | translate }}" matInput
+                  formControlName="description" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form_field_wrapper mb-3">
+              <label>{{ "type" | translate }}<span class="danger">*</span></label>
+              <mat-form-field appearance="fill">
+                <input type="text" matInput formControlName="type" readonly />
+              </mat-form-field>
+              <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['type'].errors?.['required']">
+                {{"field_is_required" | translate}}
+              </span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form_field_wrapper mb-3">
+              <label>{{ "percentage_off" | translate }} (%)<span class="danger">*</span></label>
+              <mat-form-field appearance="fill">
+                <input type="number" placeholder="{{ 'please_enter_amount' | translate }}" matInput
+                  formControlName="percentOff" min="0" max="100" />
+              </mat-form-field>
+              <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['percentOff'].errors?.['max']">
+                {{"percent_off_cannot_be_more_than_100" | translate}}
+              </span>
+              <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['percentOff'].errors?.['min']">
+                {{"percent_off_cannot_be_less_than_0" | translate}}
+              </span>
+              <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['percentOff'].errors?.['required']">
+                {{"field_is_required" | translate}}
+              </span>
+            </div>
+          </div>
+          <!-- <div class="row">
+            <div class="form_field_wrapper mb-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <label>{{ "select_centre" | translate }} <span class="danger">*</span></label>
+                <a href="javascript:void(0);" class="text-primary fw-bold text-end"
+                  (click)="onSelectAllLabCoupons()">
+                  Select All
+                </a>
+              </div>
+              <div class="lab-copupon" style="max-height: auto; overflow-y: auto;">
+                <select2 class="test" [overlay]="true" multiple="multiple" [limitSelection]="0" [minCountForSearch]="0"
+                  [data]="labListId" [(ngModel)]="selectedLabListAll" formControlName="lab"
+                  (update)="onLabChange($event)">
+                </select2>
+                <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['lab'].errors?.['required']">
+                  {{"field_is_required" | translate}}
+                </span>
+              </div>
+            </div>
+          </div> -->
+          <div class="row">
+            <div class="form_field_wrapper mb-3">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <div class="d-flex align-items-center">
+                  <label>{{ "select_centre" | translate }} <span class="danger">*</span></label>                  
+                  <div class="ms-3">
+                    <input type="radio" id="lab" name="type" value="Laboratory" [checked]="selectedType" (change)="onTypeChange('Laboratory')" style="cursor:pointer;">
+                    <label for="lab" class="ms-1">{{"lab" | translate}}</label>
+                    
+                    <input type="radio" id="radio" name="type" value="Radiology"   (change)="onTypeChange('Radiology')" style="margin-left: 10px; cursor: pointer;">
+                    <label for="radio" class="ms-1">{{"radio" | translate}}</label>
+                  </div>
+                </div>
+                
+                <a href="javascript:void(0);" class="text-primary fw-bold text-end" (click)="onSelectAllLabCoupons()">
+                 {{"select_all" | translate}}
+                </a>
+              </div>
+              
+              <div class="lab-copupon" style="max-height: auto; overflow-y: auto;">
+                <select2 class="centertest" [overlay]="true" multiple="multiple" [limitSelection]="0" [minCountForSearch]="0"
+                  [data]="labListId" [(ngModel)]="selectedLabListAll" formControlName="lab" (update)="onLabChange($event)">
+                </select2>
+                
+                <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['lab'].errors?.['required']">
+                  {{"field_is_required" | translate}}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="form_field_wrapper mb-3">
+              <label>{{ "coupon_expire" | translate }} <span class="danger">*</span></label>
+              <mat-form-field appearance="fill">
+                <input type="date" placeholder="{{ 'please_enter_date' | translate }}" matInput
+                  formControlName="redeemBefore" />
+              </mat-form-field>
+              <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['redeemBefore'].errors?.['required']">
+                {{"field_is_required" | translate}}
+              </span>
+            </div>
+          </div>
+          <div class="form-btn primary_btn add_popup">
+            <button type="button" class="login_btn btn btn-primary" (click)="closePopup()">
+              {{ "cancel" | translate}}
+            </button>
+            <button type="submit" class="login_btn btn btn-secondary">{{ "add" | translate }}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

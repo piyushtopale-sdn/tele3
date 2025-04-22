@@ -1,0 +1,114 @@
+<div class="main_block">
+    <div class="main_section">
+      <div class="create_profile login_time">
+        <form [formGroup]="contentForm" (ngSubmit)="submitForm()">
+          <div class="container">
+            <div class="create_profile_inner">
+              <div class="form">
+                <div class="row">
+                  <div class="col-sm-12 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "title" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <input type="text" matInput formControlName="title" />
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && contentForm.get('title').invalid && contentForm.get('title').touched">
+                        {{ "field_is_required" | translate }}
+                      </mat-error>
+                    </div>
+                  </div>
+  
+                  <div class="col-sm-12 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "type" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <mat-select disableRipple formControlName="type">
+                          <mat-option value="label">{{ "label" | translate }}</mat-option>
+                          <mat-option value="message">{{ "message" | translate }}</mat-option>
+                          <mat-option value="text">{{ "text" | translate }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && contentForm.get('type').invalid">
+                        {{ "field_is_required" | translate }}
+                      </mat-error>
+                    </div>
+                  </div>
+  
+                  <div class="col-sm-12 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "slug" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <input type="text" matInput formControlName="slug" />
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && contentForm.get('slug').invalid && contentForm.get('slug').touched">
+                        {{ "field_is_required" | translate }}
+                      </mat-error>
+                    </div>
+                  </div>
+  
+                  <div class="col-sm-12 mb-3" *ngIf="contentForm.get('type').value === 'message' || contentForm.get('type').value === 'label'">
+                    <div class="form_field_wrapper">
+                      <label>{{ "content" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <textarea matInput formControlName="message"></textarea>
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && contentForm.get('message').invalid && contentForm.get('message').touched">
+                        {{ "field_is_required" | translate }}
+                      </mat-error>
+                    </div>
+                  </div>
+  
+                  <!-- <div class="col-sm-12 mb-3" *ngIf="contentForm.get('type').value === 'message' || contentForm.get('type').value === 'label'">
+                    <div class="form_field_wrapper">
+                      <label>{{ "content_arabic" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <textarea matInput formControlName="message_arabic"></textarea>
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && contentForm.get('message_arabic').invalid && contentForm.get('message_arabic').touched">
+                        {{ "field_is_required" | translate }}
+                      </mat-error>
+                    </div>
+                  </div> -->
+  
+                  <div class="col-sm-12 mb-3" *ngIf="contentForm.get('type').value === 'text'">
+                    <div class="form_field_wrapper">
+                      <label>{{ "content" | translate }}<span class="danger">*</span></label>
+                      <div class="editor_inner">
+                        <ngx-editor-menu [editor]="abouteditor" [toolbar]="toolbar"></ngx-editor-menu>
+                        <ngx-editor [editor]="abouteditor" formControlName="text"></ngx-editor>
+                      </div>
+                      <mat-error *ngIf="isSubmitted && contentForm.get('text').invalid && contentForm.get('text').touched ">
+                        {{ "field_is_required" | translate }}
+                      </mat-error>
+                    </div>
+                  </div>
+  
+                  <!-- <div class="col-sm-12 mb-3" *ngIf="contentForm.get('type').value === 'text'">
+                    <div class="form_field_wrapper">
+                      <label>{{ "title_arabic" | translate }}<span class="danger">*</span></label>
+                      <div class="editor_inner">
+                        <ngx-editor-menu [editor]="abouteditor_arabic" [toolbar]="toolbar"></ngx-editor-menu>
+                        <ngx-editor [editor]="abouteditor_arabic" formControlName="text_arabic"></ngx-editor>
+                      </div>
+                      <mat-error *ngIf="isSubmitted && contentForm.get('text_arabic').invalid && contentForm.get('text_arabic').touched">
+                        {{ "field_is_required" | translate }}
+                      </mat-error>
+                    </div>
+                  </div> -->
+  
+                  <div class="add_form_action primary_btn btn_wrap mt-4">
+                    <button type="button" class="btn btn-secondary" [routerLink]="['/super-admin/content-management']">
+                      {{ "cancel" | translate }}
+                    </button>
+                    <button type="submit" mat-stroked-button class="btn btn-primary">
+                      {{ "save" | translate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

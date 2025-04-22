@@ -1,0 +1,1510 @@
+<div class="home_wrapper">
+  <app-header></app-header>
+
+  <div class="breadcum_wrapper" aria-label="breadcrumb">
+    <div class="container">
+      <div class="breadcrumb_title">
+        {{ pharmacyDetails?.backGround?.pharmacy_name }}
+        {{ "details" | translate }}
+      </div>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/patient/homepage']">{{ "home" | translate }}</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/patient/homepage/retailpharmacy']">{{
+            "retail_pharmacy_list" | translate
+          }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ 'retail_pharmacy_details' | translate}}
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="main_section retail_pharmacy_detail">
+    <div class="main_section_inner">
+      <div class="container">
+        <div class="row">
+          <div id="main_content" class="content_area col-lg-12">
+            <!-- <div class="top_section">
+                            <div class="primary_btn">
+                                <button class="btn btn-primary">{{ 'order_medicine' | translate}}</button>
+                                <button class="btn btn-secondary">Availability Medicine Request</button>
+                                <button class="btn btn-secondary">Request Medicine Price</button>
+                            </div>
+                            <mat-checkbox class="select_pharmacy"> Select All Pharmacies</mat-checkbox>
+                        </div> -->
+
+            <div class="bottom_section">
+              <div class="order_medicine">
+                <div class="bottom_bar">
+                  <div class="row">
+                    <div class="left_part col-lg-5">
+                      <div class="medicine_details">
+                        <div class="image">
+                          <img
+                            src="{{
+                              pharmacyProfile
+                                ? pharmacyProfile
+                                : '../../../../../assets/img/homepage/medicine.png'
+                            }}"
+                          />
+                        </div>
+                        <div class="medicine_info">
+                          <h2 class="title">
+                            {{ pharmacyDetails?.backGround?.pharmacy_name }}
+                          </h2>
+                          <div class="desc_content">
+                            {{ pharmacyDetails?.backGround?.slogan }}
+                          </div>
+                          <div class="rating">
+                            <span class="ratings-star">
+                              <div class="rating">
+                                {{ getAverage }}&nbsp;
+                                <i
+                                  class="fa-solid fa-star"
+                                  *ngFor="let f of [].constructor(getAverage)"
+                                ></i
+                                >&nbsp; &nbsp; ({{
+                                  pharmacyRating_Reviwe.length
+                                }}
+                                {{ "reviews" | translate }})
+                              </div>
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="right_part col-lg-7">
+                      <div
+                        class="open_today"
+                        *ngIf="
+                          pharmacyDetails?.backGround?.onDutyStatus;
+                          else off
+                        "
+                      >
+                        <div class="green_circle">
+                          <div class="circle">
+                            <div class="inner_green"></div>
+                          </div>
+                          <p><b>{{ 'open_today' | translate}}</b></p>
+                        </div>
+                      </div>
+                      <ng-template #off>
+                        <div class="close_today">
+                          <div class="red_circle">
+                            <div class="circle">
+                              <div class="inner_green"></div>
+                            </div>
+                            <p><b>{{ 'closed' | translate}}</b></p>
+                          </div>
+                        </div>
+                      </ng-template>
+
+                      <!-- <div class="title" *ngIf="pharmacyDetails?.onDutyStatus; else off">
+                        <span class="dot"></span>On Duty Today
+                      </div>
+                      <ng-template #off>
+                        <div class="off"><span class="off_dot"></span>Closed</div>
+                      </ng-template> -->
+                      <div
+                        class="primary_btn"
+                        *ngIf="pharmacyDetails?.backGround?.createdBy == 'self'"
+                      >
+                        <button
+                          class="btn btn-tranprent"
+                          *ngIf="
+                            pharmacyDetails?.backGround?.medicine_request
+                              ?.request_medicine_available
+                          "
+                          (click)="
+                            requestType = 'medicine_availability_request';
+                            openVerticallyCenteredordermedicine(
+                              ordermedicinecontent,
+                              pharmacyId
+                            )
+                          "
+                        >
+                          {{ 'availability_redicine_request' | translate}}
+                        </button>
+                        <button
+                          class="btn btn-tranprent"
+                          *ngIf="
+                            pharmacyDetails?.backGround?.medicine_request
+                              ?.medicine_price_request
+                          "
+                          (click)="
+                            requestType = 'medicine_price_request';
+                            openVerticallyCenteredordermedicine(
+                              ordermedicinecontent,
+                              pharmacyId
+                            )
+                          "
+                        >
+                          {{ 'request_medicine_price' | translate}}
+                        </button>
+                        <button
+                          class="btn btn-primary"
+                          *ngIf="
+                            pharmacyDetails?.backGround?.medicine_request
+                              ?.prescription_order
+                          "
+                          (click)="
+                            requestType = 'order_request';
+                            openVerticallyCenteredordermedicine(
+                              ordermedicinecontent,
+                              pharmacyId
+                            )
+                          "
+                        >
+                          {{ "order_medicine" | translate }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="order_medicine">
+                <div class="tabing_section">
+                  <mat-tab-group>
+                    <mat-tab label="Background">
+                      <div class="main_outer">
+                        <div class="about_section">
+                          <div class="header_section">
+                            <p>{{ 'about' | translate}}</p>
+                          </div>
+                          <div class="content">
+                            <p>
+                              {{ pharmacyDetails?.backGround?.about_pharmacy }}
+                            </p>
+                          </div>
+                        </div>
+                        <hr />
+                        <div
+                          class="association_grp"
+                          *ngIf="pharmacyDetails?.backGround?.show_to_patient === true && pharmacyDetails?.backGround
+                          ?.associationGroup?.enabled"
+                        >
+                          <div class="header_section">
+                            <p>{{ 'Association Group' | translate}}</p>
+                          </div>
+                          <div class="list_group_section">
+                           <ul>
+                            <li>
+                            <p> {{ associationGroupname }}</p>
+                            </li>
+                           </ul>
+                            <!-- <ul>
+                              <li
+                                *ngFor="
+                                  let name of pharmacyDetails?.backGround
+                                    ?.associationGroup?.name;
+                                  let index = index
+                                "
+                              >
+                                <p>0.{{ index + 1 }}. {{ name }}</p>
+                              </li>
+                            </ul> -->
+                          </div>
+                        </div>
+                        <hr />
+                        <div class="contact_info">
+                          <div class="header_section">
+                            <p>{{ 'contact_information' | translate}}</p>
+                          </div>
+                          <div class="list_group_section">
+                            <ul>
+                              <li>
+                                <p class="small_text">{{ 'phone' | translate}}</p>
+                                <h2>
+                                  {{
+                                    pharmacyDetails?.backGround?.contactInfo
+                                      ?.phone
+                                  }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">{{ 'email' | translate}}</p>
+                                <h2>
+                                  {{
+                                    pharmacyDetails?.backGround?.contactInfo
+                                      ?.email
+                                  }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">{{ 'location' | translate}}</p>
+                                <h2>
+                                  {{ pharmacyDetails?.backGround?.pharmacyLocation?.address }}
+                                  <a (click)="getDirection( pharmacyDetails?.backGround?.pharmacyLocation?.loc?.coordinates)">
+                                    {{ "get_directions" | translate }}</a
+                                  >
+                                </h2>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                        <hr />
+                        <div class="contact_info">
+                          <div class="header_section">
+                            <p>{{ 'open_hours' | translate}}</p>
+                          </div>
+                          <div class="list_group_section">
+                            <ul>
+                              <li>
+                                <p class="small_text">{{ 'monday' | translate}}:</p>
+                                <!-- <h2>09:00 {{ 'AM' | translate}} - 10:00 {{ 'PM' | translate}}</h2> -->
+                                <h2
+                                  *ngFor="
+                                    let day of pharmacyDetails?.backGround
+                                      ?.openingHours?.Monday
+                                  "
+                                >
+                                  {{ day?.start_time }}
+                                  {{ "AM" | translate }} -
+                                  {{ day?.end_time }}
+                                  {{ "PM" | translate }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">{{ 'tuesday' | translate}}:</p>
+                                <h2
+                                  *ngFor="
+                                    let day of pharmacyDetails?.backGround
+                                      ?.openingHours?.Tuesday
+                                  "
+                                >
+                                  {{ day?.start_time }}
+                                  {{ "AM" | translate }} -
+                                  {{ day?.end_time }}
+                                  {{ "PM" | translate }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">{{ 'wednesday' | translate}}:</p>
+                                <h2
+                                  *ngFor="
+                                    let day of pharmacyDetails?.backGround
+                                      ?.openingHours?.Wednesday
+                                  "
+                                >
+                                  {{ day?.start_time }}
+                                  {{ "AM" | translate }} -
+                                  {{ day?.end_time }}
+                                  {{ "PM" | translate }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">{{ 'thursday' | translate}}:</p>
+                                <h2
+                                  *ngFor="
+                                    let day of pharmacyDetails?.backGround
+                                      ?.openingHours?.Thursday
+                                  "
+                                >
+                                  {{ day?.start_time }}
+                                  {{ "AM" | translate }} -
+                                  {{ day?.end_time }}
+                                  {{ "PM" | translate }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">{{ 'friday' | translate}}:</p>
+                                <h2
+                                  *ngFor="
+                                    let day of pharmacyDetails?.backGround
+                                      ?.openingHours?.Friday
+                                  "
+                                >
+                                  {{ day?.start_time }}
+                                  {{ "AM" | translate }} -
+                                  {{ day?.end_time }}
+                                  {{ "PM" | translate }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">
+                                  {{ "saturday" | translate }}:
+                                </p>
+                                <h2
+                                  *ngFor="
+                                    let day of pharmacyDetails?.backGround
+                                      ?.openingHours?.Saturday
+                                  "
+                                >
+                                  {{ day?.start_time }}
+                                  {{ "AM" | translate }} -
+                                  {{ day?.end_time }}
+                                  {{ "PM" | translate }}
+                                </h2>
+                              </li>
+                              <li>
+                                <p class="small_text">
+                                  {{ "sunday" | translate }}:
+                                </p>
+                                <h2
+                                  *ngFor="
+                                    let day of pharmacyDetails?.backGround
+                                      ?.openingHours?.Sunday
+                                  "
+                                >
+                                  {{ day?.start_time }}
+                                  {{ "AM" | translate }} -
+                                  {{ day?.end_time }}
+                                  {{ "PM" | translate }}
+                                </h2>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Accepted Insurance Companies">
+                      <div class="main_outer">
+                        <div class="accept_insurance">
+                          <div
+                            class="list_group_section"
+                            *ngIf="
+                              pharmacyDetails?.acceptedInsuranceCompanies
+                                .length > 0
+                            "
+                          >
+                            <ul>
+                              <li
+                                *ngFor="
+                                  let company of pharmacyDetails?.acceptedInsuranceCompanies
+                                "
+                              >
+                                <div class="companies">
+                                  <p>{{ company.company_name }}</p>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                          <div
+                            class="list_group_section"
+                            *ngIf="
+                              pharmacyDetails?.acceptedInsuranceCompanies
+                                .length == 0
+                            "
+                          >
+                            <p>{{ "no_insurance_accepted" | translate }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Reviews">
+                      <div class="reviews_outer">
+                        <div class="header_review">
+                          <div class="header_section">
+                            <p>{{ "reviews" | translate }}</p>
+                          </div>
+                          <div class="primary_btn">
+                            <button
+                              class="btn btn-primary"
+                              (click)="
+                                openVerticallyCenteredreview(reviewcontent)
+                              "
+                            >
+                              <img
+                                class="img-fluid"
+                                src="../../../../../assets/img/write.svg"
+                              />&nbsp;&nbsp;{{ "write_a_review" | translate }}
+                            </button>
+                          </div>
+                        </div>
+                        <div class="average_rating">
+                          <div class="star_rating">
+                            <p>{{ "average_rating" | translate }}</p>
+                            <span class="ratings-star">
+                              <div class="rating">
+                                {{ getAverage }}&nbsp;
+                                <i
+                                  class="fa-solid fa-star"
+                                  *ngFor="let f of [].constructor(getAverage)"
+                                ></i
+                                >&nbsp;
+                              </div>
+                            </span>
+                          </div>
+                          <div class="progress_rating">
+                            <div class="progress_rating_block">
+                              <i class="fa-solid fa-star"></i>
+                              <p>5</p>
+                              <mat-progress-bar
+                                mode="determinate"
+                                [value]="ratingCount.fiveStart"
+                              ></mat-progress-bar>
+                              <!-- <p>2.0K</p> -->
+                              <p>{{ ratingCount?.fiveStart }}</p>
+                            </div>
+                            <div class="progress_rating_block">
+                              <i class="fa-solid fa-star"></i>
+                              <p>4</p>
+                              <mat-progress-bar
+                                mode="determinate"
+                                [value]="ratingCount.fourStart"
+                              ></mat-progress-bar>
+                              <!-- <p>2.0K</p> -->
+                              <p>{{ ratingCount?.fourStart }}</p>
+                            </div>
+                            <div class="progress_rating_block">
+                              <i class="fa-solid fa-star"></i>
+                              <p>3</p>
+                              <mat-progress-bar
+                                mode="determinate"
+                                [value]="ratingCount.threeStart"
+                              ></mat-progress-bar>
+                              <!-- <p>2.0K</p> -->
+                              <p>{{ ratingCount?.threeStart }}</p>
+                            </div>
+                            <div class="progress_rating_block">
+                              <i class="fa-solid fa-star"></i>
+                              <p>2</p>
+                              <mat-progress-bar
+                                mode="determinate"
+                                [value]="ratingCount.twoStart"
+                              ></mat-progress-bar>
+                              <!-- <p>2.0K</p> -->
+                              <p>{{ ratingCount?.twoStart }}</p>
+                            </div>
+                            <div class="progress_rating_block">
+                              <i class="fa-solid fa-star"></i>
+                              <p>1</p>
+                              <mat-progress-bar
+                                mode="determinate"
+                                [value]="ratingCount.oneStart"
+                              ></mat-progress-bar>
+                              <!-- <p>2.0K</p> -->
+                              <p>{{ ratingCount?.oneStart }}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="user_list"
+                          *ngFor="let feedback of pharmacyRating_Reviwe"
+                        >
+                          <div class="user_list_heading">
+                            <div class="left_side_detail">
+                              <div class="heading_top">
+                                <div class="detail_name">
+                                  <div class="icon">
+                                    <img
+                                      class="patientimg"
+                                      *ngIf="feedback?.firsttlatterofname"
+                                      src="{{ feedback?.firsttlatterofname }}"
+                                    />
+                                    <img
+                                      class="patientimg"
+                                      *ngIf="!feedback?.firsttlatterofname"
+                                      src="../../../../../assets/img/homepage/medicine.png"
+                                    />
+                                    <!-- {{feedback?.firsttlatterofname}} -->
+                                  </div>
+                                  <!-- <div class="name_list" *ngIf="commentorsProfile[i];else initial">
+                                    <img src="{{commentorsProfile[i]}}">
+                                  </div>
+                                  <ng-template #initial>
+                                    <div class="name_list">
+                                      {{returnInitial(comment?.userName) }}
+                                    </div>
+                                  </ng-template> -->
+                                </div>
+                                <div class="name_detail">
+                                  <p>{{ feedback?.patientName }}</p>
+                                  <div class="rating_star">
+                                    <i
+                                      class="fa-solid fa-star"
+                                      *ngFor="
+                                        let f of [].constructor(
+                                          feedback?.rating
+                                        )
+                                      "
+                                    ></i
+                                    >&nbsp;
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="date_line">
+                                <p>
+                                  {{ feedback?.date | date : "dd/MM/YYYY" }}
+                                </p>
+                              </div>
+                            </div>
+                            <div class="content_block">
+                              <!-- <p>
+                                Lorem Ipsum is simply dummy text of the printing
+                                and typesetting industry. Lorem Ipsum has been
+                                the industry's standard dummy text ever since
+                                the 1500s, when an unknown printer took a galley
+                                of type and scrambled it to make a type specimen
+                                book. It has survived not only five centuries,
+                                but also the leap into electronic typesetting,
+                                remaining essentially unchanged.
+                              </p> -->
+                              <p>{{ feedback?.comment }}</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- <div class="user_list">
+                          <div class="user_list_heading">
+                            <div class="left_side_detail">
+                              <div class="heading_top">
+                                <div class="detail_name">
+                                  <div class="name_list">J</div>
+                                </div>
+                                <div class="name_detail">
+                                  <p>John Doe</p>
+                                  <div class="rating_star">
+                                    <i class="fa-solid fa-star"></i>&nbsp;<i
+                                      class="fa-solid fa-star"
+                                    ></i
+                                    >&nbsp;<i class="fa-solid fa-star"></i
+                                    >&nbsp;<i class="fa-solid fa-star"></i
+                                    >&nbsp;<i class="fa-solid fa-star"></i
+                                    >&nbsp;
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="date_line">
+                                <p>09/24/2022</p>
+                              </div>
+                            </div>
+                            <div class="content_block">
+                              <p>
+                                Lorem Ipsum is simply dummy text of the printing
+                                and typesetting industry. Lorem Ipsum has been
+                                the industry's standard dummy text ever since
+                                the 1500s, when an unknown printer took a galley
+                                of type and scrambled it to make a type specimen
+                                book. It has survived not only five centuries,
+                                but also the leap into electronic typesetting,
+                                remaining essentially unchanged.
+                              </p>
+                            </div>
+                          </div>
+                        </div> -->
+                        <!-- 
+                        <div class="user_list">
+                          <div class="user_list_heading">
+                            <div class="left_side_detail">
+                              <div class="heading_top">
+                                <div class="detail_name">
+                                  <div class="name_list">J</div>
+                                </div>
+                                <div class="name_detail">
+                                  <p>John Doe</p>
+                                  <div class="rating_star">
+                                    <i class="fa-solid fa-star"></i>&nbsp;<i
+                                      class="fa-solid fa-star"
+                                    ></i
+                                    >&nbsp;<i class="fa-solid fa-star"></i
+                                    >&nbsp;<i class="fa-solid fa-star"></i
+                                    >&nbsp;<i class="fa-solid fa-star"></i
+                                    >&nbsp;
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="date_line">
+                                <p>09/24/2022</p>
+                              </div>
+                            </div>
+                            <div class="content_block">
+                              <p>
+                                Lorem Ipsum is simply dummy text of the printing
+                                and typesetting industry. Lorem Ipsum has been
+                                the industry's standard dummy text ever since
+                                the 1500s, when an unknown printer took a galley
+                                of type and scrambled it to make a type specimen
+                                book. It has survived not only five centuries,
+                                but also the leap into electronic typesetting,
+                                remaining essentially unchanged.
+                              </p>
+                            </div>
+                          </div>
+                        </div> -->
+                      </div>
+                    </mat-tab>
+                  </mat-tab-group>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>
+
+<!-- Review modal -->
+
+<div class="review">
+  <ng-template #reviewcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "write_a_review" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form_field_wrapper">
+            <label>{{ "rate_the_pharmacy" | translate }}</label>
+            <div class="ratings-star" style="color: #ebc934">
+              <ngb-rating [(rate)]="currentRate" [max]="5"></ngb-rating>
+            </div>
+          </div>
+
+          <div class="form_field_wrapper">
+            <label
+              >{{
+                "tell_us_about_your_experience_with_the_pharmacy" | translate
+              }}.</label
+            >
+            <mat-form-field appearance="fill">
+              <textarea
+                matInput
+                (change)="handelReviweRating({ comment: $event })"
+                (keyup)="handelReviweRating({ comment: $event })"
+              ></textarea>
+            </mat-form-field>
+          </div>
+        </form>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closePopup()"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="postRatingAndReviwe()"
+          >
+            {{ "submit" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Login required warning modal -->
+<div class="order_medicine">
+  <ng-template #loginRequiredWarningModal let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <div class="modal-title" style="font-weight: 900; font-size: large">
+          {{ "login_required" | translate }}
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal_title">
+          {{ "to_make_an_order_you_need_to_login_first" | translate }}
+        </div>
+        <div class="primary_btn">
+          <a (click)="handleBtnClick()">
+            <button type="button" class="btn btn-primary">
+              {{ "login" | translate }}
+            </button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Order medicine modal -->
+<div class="order_medicine">
+  <ng-template #ordermedicinecontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4
+          class="modal-title"
+          id="modal-basic-title"
+          *ngIf="requestType == 'order_request'"
+        >
+          {{ "order_medicine" | translate }}
+        </h4>
+        <h4
+          class="modal-title"
+          id="modal-basic-title"
+          *ngIf="requestType == 'medicine_price_request'"
+        >
+          {{ "drug_price_request" | translate }}
+        </h4>
+        <h4
+          class="modal-title"
+          id="modal-basic-title"
+          *ngIf="requestType == 'medicine_availability_request'"
+        >
+          {{ "request_medicine_availability" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal_title" *ngIf="requestType == 'order_request'">
+          {{ "order_medicine_by" | translate }}
+        </div>
+        <div class="modal_title" *ngIf="requestType !== 'order_request'">
+          {{ "type_of_prescription" | translate }}
+        </div>
+        <form
+          [formGroup]="orderMedicine"
+          (ngSubmit)="getSubscriberDetails(loginRequiredWarningModal)"
+        >
+          <div class="order_medicine_tab">
+            <mat-tab-group
+              animationDuration="0ms"
+              (selectedTabChange)="tabChangedOrderMedicine($event)"
+              [selectedIndex]="selectedTabOrder"
+              #orderMedicineTab
+            >
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  {{ "upload_prescription_file" | translate }}</ng-template
+                >
+                <div class="tab_content">
+                  <div class="upload_docs" *ngIf="!(prescription_url.length || selectedPdfUrl.length)">
+                    <div
+                      class="upload_input"
+                      (click)="prescriptionUpload.click()"
+                    >
+                      <div class="upload_input_content">
+                        <img src="assets/img/add_box_1.svg" />
+                        <label>{{
+                          "drag_drop_to_upload_prescription" | translate
+                        }}</label>
+                      </div>
+                      <input
+                        class="ng-hide user_upload_input"
+                        hidden
+                        accept=".pdf,image/*"
+                        type="file"
+                        multiple
+                        (change)="onFileSelected($event, 'prescription')"
+                        #prescriptionUpload
+                      />
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-12">
+                    <div class="form_field_wrapper">
+                      <label
+                        >{{ "order_for" | translate }}
+
+                        <mat-icon
+                          style="font-size: 17px"
+                          ngbTooltip="if you have insurance heathplan then choose your health plan member in this list otherwise leave blank"
+                          >info</mat-icon
+                        ></label
+                      >
+                      <div class="form_field_wrapper">
+                        <mat-form-field appearance="fill">
+                          <mat-select
+                            placeholder="{{ 'subscribe' | translate }} "
+                            formControlName="subscriber_id"
+                          >
+                            <mat-option value=""
+                              >{{ "choose_order_for" | translate }}
+                            </mat-option>
+                            <mat-option
+                              [value]="list.subscriber_id"
+                              *ngFor="let list of SubscribersPatientList"
+                              >{{ list?.name }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <!-- <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="insurance_no"
+                          name="insurance_no"
+                        />
+                      </mat-form-field> -->
+                    </div>
+                  </div>
+                  <div class="upload_doc_img" *ngIf="prescription_url.length">
+                    <div
+                      class="upload_img"
+                      *ngFor="let image of prescription_url; let index = index"
+                    >
+                      <img [src]="image" alt="prescription_url" />
+                      <button
+                        type="button"
+                        class="btn-close"
+                        aria-label="Close"
+                        (click)="removeImageFromPrescriptionArray(index)"
+                      ></button>
+                      <h3>{{ "prescription" | translate }}</h3>
+                    </div>
+                  </div>
+                  <div  class="upload_doc_img" *ngIf="selectedPdfUrl.length">
+                    <div  class="upload_img"  *ngFor="let pdfUrl of selectedPdfUrl; let i = index" >
+
+                      <iframe [src]="pdfUrl" width="100%" height="100%"></iframe>
+                      <button
+                      type="button"
+                      class="btn-close"
+                      aria-label="Close"
+                      (click)="clearPdfUrl(i)"
+                    ></button> 
+                    <h3>{{"prescription" | translate}}</h3>
+                    </div>
+                </div>
+                </div>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  {{ "enter_e_prescription_no" | translate }}</ng-template
+                >
+                <div class="tab_content">
+                  <div class="col-sm-12 col-md-12">
+                    <div class="form_field_wrapper">
+                      <label>{{ "e_prescription_no" | translate }}*</label>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="number"
+                          matInput
+                          formControlName="eprescription_no"
+                          name="eprescription_no"
+                        />
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-12">
+                    <div class="form_field_wrapper">
+                      <label
+                        >{{ "order_for" | translate }}
+
+                        <mat-icon
+                          style="font-size: 17px"
+                          ngbTooltip="if you have insurance heathplan then choose your health plan member in this list otherwise leave blank"
+                          >info</mat-icon
+                        ></label
+                      >
+                      <div class="form_field_wrapper">
+                        <mat-form-field appearance="fill">
+                          <mat-select
+                            placeholder="{{ 'subscribe' | translate }} "
+                            formControlName="subscriber_id"
+                          >
+                            <mat-option value=""
+                              >{{ "choose_order_for" | translate }}
+                            </mat-option>
+                            <mat-option
+                              [value]="list.subscriber_id"
+                              *ngFor="let list of SubscribersPatientList"
+                              >{{ list?.name }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <!-- <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="insurance_no"
+                          name="insurance_no"
+                        />
+                      </mat-form-field> -->
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label>{{
+                  "enter_medicine_manually" | translate
+                }}</ng-template>
+                <div class="tab_content">
+                  <div class="col-sm-12 col-md-12">
+                    <div class="form_field_wrapper">
+                      <label
+                        >{{ "order_for" | translate }}
+
+                        <mat-icon
+                          style="font-size: 17px"
+                          ngbTooltip="if you have insurance heathplan then choose your health plan member in this list otherwise leave blank"
+                          >info</mat-icon
+                        ></label
+                      >
+                      <div class="form_field_wrapper">
+                        <mat-form-field appearance="fill">
+                          <mat-select
+                            placeholder="{{ 'subscribe' | translate }} "
+                            formControlName="subscriber_id"
+                          >
+                            <mat-option value=""
+                              >{{ "choose_order_for" | translate }}
+                            </mat-option>
+                            <mat-option
+                              [value]="list.subscriber_id"
+                              *ngFor="let list of SubscribersPatientList"
+                              >{{ list?.name }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <!-- <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          matInput
+                          formControlName="insurance_no"
+                          name="insurance_no"
+                        />
+                      </mat-form-field> -->
+                    </div>
+                  </div>
+
+                  <div class="table-wrap">
+                    <div class="table-inner">
+                      <ng-container formArrayName="medicine_details">
+                        <mat-table
+                          [dataSource]="dataSource"
+                          class="mat-elevation-z8 withoutpagination"
+                        >
+                          <!-- Medicine Name Column -->
+                          <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>
+                              {{ "medicine_name" | translate }}
+                            </th>
+                            <td class="search_medicine_block"
+                              mat-cell
+                              *matCellDef="let element; let i = index"
+                              [formGroup]="element"
+                            >
+                              <div
+                                class="example-form form_field_wrapper search_medicine_form"
+                              >
+                                <!-- <button type="button" class="btn btn-link">
+                                  <img
+                                    src="../../../../../assets/img/search_medicine.svg"
+                                  />
+                                </button> -->
+                                <mat-form-field
+                                  class="example-full-width"
+                                  appearance="fill"
+                                >
+                                  <mat-label>{{
+                                    "search_medicine" | translate
+                                  }}</mat-label>
+                                  <!-- <input
+                                    type="text"
+                                    placeholder="Pick one"
+                                    aria-label="Text"
+                                    matInput
+                                    formControlName="name"
+                                    [matAutocomplete]="auto"
+                                  /> -->
+                                  <!-- <mat-select formControlName="name">
+                                    <mat-option>select medicine</mat-option>
+                                    <mat-option
+                                      *ngFor="let option of filteredOptions"
+                                      value="{{ option._id }}"
+                                      >{{ option.medicine_name }}</mat-option
+                                    >
+                                  </mat-select> -->
+
+                                  <mat-form-field
+                                    class="searchmat"
+                                    appearance="fill"
+                                  >
+                                    <input
+                                      type="text"
+                                      class="matinput"
+                                      placeholder="{{ 'search' | translate }}"
+                                      (keypress)="
+                                        handleMedicineChange($event.target, i)
+                                      "
+                                      aria-label="Search......"
+                                      matInput
+                                      style="width: 93%"
+                                      [formControl]="myControl"
+                                      [matAutocomplete]="auto"
+                                    />
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                      <ng-container
+                                        *ngFor="
+                                          let option of filteredOptions | async
+                                        "
+                                      >
+                                        <mat-option (onSelectionChange)="
+                                        updateMySelection(option, i)"
+                                          *ngIf="option != 'No data'"
+                                          [value]="option.medicine_name"
+                                        >
+                                          <!-- (click)="changeMedicine(option)" -->
+                                          <span
+                                            (onSelectionChange)="
+                                              updateMySelection(option, i)
+                                            "
+                                          >
+                                            {{ option.medicine_name }}
+                                          </span>
+
+                                          <span
+                                            placement="top"
+                                            (click)="
+                                              openCommentPopup(
+                                                medicinecontent,
+                                                option?._id
+                                              )
+                                            "
+                                            style="
+                                              position: absolute;
+
+                                              font-size: 17px;
+
+                                              margin-top: 16px;
+
+                                              margin-left: 5px;
+                                            "
+                                            class="material-icons"
+                                            >{{ "info" | translate }}</span
+                                          >
+                                        </mat-option>
+
+                                        <mat-option
+                                          *ngIf="option == 'No data'"
+                                          style="height: auto"
+                                        >
+                                          <span>
+                                            <div class="border_bottom">
+                                              <b>{{
+                                                "no_medicine_found" | translate
+                                              }}</b
+                                              >&nbsp;
+                                              <span
+                                                ><button
+                                                  class="btn btn-primary"
+                                                  (click)="
+                                                    handleAddNewMedicine()
+                                                  "
+                                                >
+                                                  {{
+                                                    "add_new_medicine"
+                                                      | translate
+                                                  }}
+                                                </button></span
+                                              >
+                                            </div>
+                                          </span>
+                                        </mat-option>
+                                      </ng-container>
+                                    </mat-autocomplete>
+                                    <!-- <input type="text" class="matinput" placeholder="Search..." aria-label="Search......" matInput
+                                        [formControl]="myControl" [matAutocomplete]="auto" (click)="clearText()" (keyup)="handleMedicineChange($event.target, i)">
+                                    <mat-autocomplete #auto="matAutocomplete">
+                                        <mat-option (onSelectionChange)="updateMySelection(option, i)" *ngFor="let option of filteredOptions | async" [value]="option.medicine_name">
+                                          <span *ngIf="option=='No data'">
+                                            <button (click)="handleAddMedicineClick(i)">Add Medicine</button> No medicine found! Add above as a new medicine 
+                                          </span>
+                                          <span *ngIf="option!='No data'"> {{option.medicine_name}}</span>
+                                        </mat-option>
+                                    </mat-autocomplete> -->
+                                  </mat-form-field>
+
+                                  <!-- <mat-autocomplete
+                                    autoActiveFirstOption
+                                    #auto="matAutocomplete"
+                                  >
+                                  <ng-container *ngFor="let option of filteredOptions">
+                                    <mat-option value="option._id">
+                                    {{ option.medicine_name }}
+                                  </mat-option>
+                                  </ng-container>
+                                    
+                                  </mat-autocomplete> -->
+                                  <!-- <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                                    <mat-option *ngFor="let option of filteredOptions" [value]="option">
+                                      {{option.name}}
+                                    </mat-option>
+                                  </mat-autocomplete> -->
+                                </mat-form-field>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <!-- Quantity Prescribed Column -->
+                          <ng-container matColumnDef="prescribed">
+                            <th mat-header-cell *matHeaderCellDef>
+                              {{ "quantity_prescribed" | translate }}
+                            </th>
+                            <td
+                              mat-cell
+                              *matCellDef="let element"
+                              [formGroup]="element"
+                            >
+                              <div class="form_field_wrapper">
+                                <mat-form-field appearance="fill">
+                                  <input
+                                    type="text"
+                                    matInput
+                                    formControlName="prescribed"
+                                  />
+                                </mat-form-field>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <!--Frequency Column -->
+                          <ng-container matColumnDef="frequency">
+                            <th mat-header-cell *matHeaderCellDef>
+                              {{ "frequency" | translate }}
+                            </th>
+                            <td
+                              mat-cell
+                              *matCellDef="let element"
+                              [formGroup]="element"
+                            >
+                              <div class="form_field_wrapper">
+                                <mat-form-field appearance="fill">
+                                  <input
+                                    type="text"
+                                    matInput
+                                    formControlName="frequency"
+                                  />
+                                </mat-form-field>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <!--Duration (Days)  Column -->
+                          <ng-container matColumnDef="duration">
+                            <th mat-header-cell *matHeaderCellDef>
+                              {{ "duration_days" | translate }}
+                            </th>
+                            <td
+                              mat-cell
+                              *matCellDef="let element"
+                              [formGroup]="element"
+                            >
+                              <div class="form_field_wrapper">
+                                <mat-form-field appearance="fill">
+                                  <input
+                                    type="text"
+                                    matInput
+                                    formControlName="duration"
+                                  />
+                                </mat-form-field>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <!--Action column -->
+                          <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>
+                              {{ "action" | translate }}
+                            </th>
+                            <td
+                              mat-cell
+                              *matCellDef="let element; let i = index"
+                            >
+                            <div class="action-block">
+                              <mat-icon
+                                class="minus mat-icon-table"
+                                (click)="removemedicine(i)"
+                                *ngIf="
+                                  medicineData.controls.length >= 2 &&
+                                  i == medicineData.controls.length - 1
+                                "
+                                >clear</mat-icon
+                              >
+                              <div
+                                class="icon_group"
+                                (click)="addNewMedicine()"
+                                *ngIf="i == medicineData.controls.length - 1"
+                              >
+                                <a class="svgicon">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="49"
+                                    height="50"
+                                    viewBox="0 0 39 40"
+                                    fill="none"
+                                  >
+                                    <rect
+                                      width="39"
+                                      height="39"
+                                      rx="10"
+                                      transform="matrix(1 0 0 -1 0 39.1445)"
+                                      fill="#0B4977"
+                                    />
+                                    <path
+                                      d="M26.5838 18.1445V20.1445H12V18.1445H26.5838Z"
+                                      fill="white"
+                                    />
+                                    <path
+                                      d="M18.293 11.8537L20.293 11.8537L20.293 26.4375L18.293 26.4375L18.293 11.8537Z"
+                                      fill="white"
+                                    />
+                                  </svg>
+                                </a>
+                              </div>
+                              <mat-icon
+                                class="minus mat-icon-table"
+                                (click)="removemedicine(i)"
+                                *ngIf="i != medicineData.controls.length - 1"
+                                >clear</mat-icon
+                              >
+                            </div>
+                            </td>
+                          </ng-container>
+
+                          <tr
+                            mat-header-row
+                            *matHeaderRowDef="displayedColumns"
+                          ></tr>
+                          <tr
+                            mat-row
+                            *matRowDef="let row; columns: displayedColumns"
+                          ></tr>
+                        </mat-table>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </form>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "back" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="getSubscriberDetails(loginRequiredWarningModal)"
+          >
+            {{ "continue" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Approved modal -->
+<ng-template #approved let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image approved">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/approved.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading">
+          {{ "your_order_has_been_placed_successfully" | translate }}
+        </p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="closeAllModal()"
+          >
+            {{ "okay" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- ---------------------------------------Medicine modal---------------------------------------- -->
+<ng-template #medicinecontent let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "medicine" | translate }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body medicine">
+      <div class="medicine_content">
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6 medicine_item">
+            <div class="item">
+              <div class="label">{{ "medicine_name" | translate }}</div>
+              <div class="value">{{ selectedmedicineinfo?.medicine_name }}</div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6 medicine_item">
+            <div class="item">
+              <div class="label">{{ "INN" | translate }}</div>
+              <div class="value">{{ selectedmedicineinfo?.inn }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-4 medicine_item">
+            <div class="item">
+              <div class="label">{{ "dosage" | translate }}</div>
+              <div class="value">{{ selectedmedicineinfo?.dosage }}</div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-4 medicine_item">
+            <div class="item">
+              <div class="label">
+                {{ "pharmaceutical_formulation" | translate }}
+              </div>
+              <div class="value">
+                {{ selectedmedicineinfo?.pharmaceutical_formulation }}
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-4 medicine_item">
+            <div class="item">
+              <div class="label">{{ "adminstration_route" | translate }}</div>
+              <div class="value">
+                {{ selectedmedicineinfo?.administration_route }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6 medicine_item">
+            <div class="item">
+              <div class="label">{{ "therapeutic_class" | translate }}</div>
+              <div class="value">
+                {{ selectedmedicineinfo?.therapeutic_class }}
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6 medicine_item">
+            <div class="item">
+              <div class="label">{{ "manufacturer" | translate }}</div>
+              <div class="value">{{ selectedmedicineinfo?.manufacturer }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6 medicine_item">
+            <div class="item">
+              <div class="label">
+                {{ "condition_of_prescription_and_delivery" | translate }}
+              </div>
+              <div class="value">
+                {{ selectedmedicineinfo?.condition_of_prescription }}
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6 medicine_item">
+            <div class="item">
+              <div class="label">{{ "other" | translate }}</div>
+              <div class="value">{{ selectedmedicineinfo?.other }}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6 medicine_item">
+            <div class="item">
+              <div class="label">{{ "link" | translate }}</div>
+              <div class="value">
+                <a href="#">{{ selectedmedicineinfo?.link }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Medicine payment modal -->
+<div class="medicine_payment">
+  <ng-template #medicinepaymentcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title invisible" id="modal-basic-title">
+          {{ "medicine_payment" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="payment_img">
+            <img src="../../../../../assets/img/isolation_mode.png" />
+          </div>
+          <div class="payment_title">
+            {{ "you_need_to_pay_100_amount" | translate }}
+          </div>
+          <div class="payment_desc">
+            {{ "for_medicine_for_this_pharmacy" | translate }}.
+          </div>
+        </form>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="uploadFilePrescription(loginRequiredWarningModal)"
+          >
+            {{ "make_order" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

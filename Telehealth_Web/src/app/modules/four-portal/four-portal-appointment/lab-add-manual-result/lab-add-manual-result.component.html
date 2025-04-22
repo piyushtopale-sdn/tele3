@@ -1,0 +1,280 @@
+<div class="main_block">
+  <div class="back_button" (click)="routeToBack()">
+    <button class="btn btn-primary">{{ "back" | translate }}</button>
+  </div>
+  <div class="profile_data mb-4">
+    <div class="profile_info" style="background: var(--color-table, #0b63f61a)">
+      <ul class="profile_info_inner profile_info_with_img">
+        <div class="profile_image">
+          <img [src]="
+              patient_details?.profile_pic_signed_url
+                ? patient_details?.profile_pic_signed_url
+                : '../../../../../assets/img/default_user.png'
+            " />
+        </div>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="profile_title">
+              {{ patient_details?.full_name }}
+            </div>
+
+            <div class="user_value">{{ patient_details?.email ? patient_details?.email :"-" }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "phone_number" | translate }}</div>
+            <div class="user_value">
+              ({{ patient_details?.country_code }})
+              {{ patient_details?.mobile ? patient_details?.mobile : "-" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "mrn_number" | translate }}</div>
+            <div class="user_value">{{ patient_details?.mrn_number ? patient_details?.mrn_number : "-" }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "age" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.dob ? calculateAge(patient_details.dob) : "-" }}  {{"years" | translate}}
+
+            </div>
+          </div>
+        </li>             
+      </ul>
+      <ul  class="profile_info_inner profile_info_with_img">
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "gender" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.gender ? (patient_details.gender | titlecase) : "-" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item" *ngIf="patient_details?.iqama_number">
+          <div class="profile_contact">
+            <div class="lable">{{ "iqama_number" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.iqama_number }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item" *ngIf="patient_details?.passport">
+          <div class="profile_contact">
+            <div class="lable">{{ "passport" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.passport }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item" *ngIf="patient_details?.saudi_id">
+          <div class="profile_contact">
+            <div class="lable">{{ "saudi_id" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.saudi_id }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "address" | translate }}</div>
+            <div class="user_value truncate-text">
+              {{ patient_details?.address ? patient_details?.address : "-" }}
+            </div>
+          </div>
+        </li>
+      </ul>
+      
+    </div>
+  </div>
+
+  <div class="main_section">
+    <div class="main_title">{{ "test_name" | translate }} : {{ testName }}</div>
+    <div class="status-indicators justify-content-end mt-2">
+      <div class="indicator">
+        <span class="square criticalHigh"></span>
+        {{ "critical_high" | translate }}
+      </div>
+      <div class="indicator">
+        <span class="square criticalLow"></span>
+        {{ "critical_low" | translate }}
+      </div>
+      <div class="indicator">
+        <span class="square high"></span> {{ "high" | translate }}
+      </div>
+      <div class="indicator">
+        <span class="square low"></span> {{ "low" | translate }}
+      </div>
+      <div class="indicator">
+        <span class="square normal"></span> {{ "normal" | translate }}
+      </div>
+    </div>
+    <div class="create_profile login_time mt-2">
+      <form [formGroup]="labForm">
+        <ng-container formArrayName="tests">
+          <div class="form">
+            <div class="table-wrap">
+              <div class="table-inner">
+                <table>
+                  <tr>
+                    <th *ngIf="appointmentStatus !== 'COMPLETED' && test_status !== 'COMPLETED'">
+                      <input
+                        class="boxcheck"
+                        type="checkbox"
+                        [checked]="selectAll"
+                        (change)="selectAllTests($event)"
+                      />{{ "select" | translate }}
+                    </th>
+                    <th>{{ "procedure" | translate }}</th>
+                    <th>{{ "results" | translate }}</th>
+                    <th>{{ "flags" | translate }}</th>
+                    <th>{{ "status" | translate }}</th>
+                    <th>{{ "reference_ranges" | translate }}</th>
+                  </tr>
+                  <ng-container
+                    *ngFor="let test of tests.controls; let i = index"
+                  >
+                    <ng-container [formGroupName]="i">
+                      <tr>
+                        <td *ngIf="appointmentStatus !== 'COMPLETED' && test_status !== 'COMPLETED'">
+                          <input
+                            class="boxcheck"
+                            type="checkbox"
+                            formControlName="select"
+                            (change)="updateSelectAll()"
+                          />
+                        </td>
+                        <td>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              formControlName="procedure"
+                              readonly
+                            />
+                          </mat-form-field>
+                        </td>
+                        <td>
+                          <mat-form-field appearance="fill">
+                            <mat-select
+                              *ngIf="
+                                test.get('testConfiguration').value ===
+                                'ALPHA_RESULT'
+                              "
+                              disableRipple
+                              formControlName="result"
+                              [disabled]="appointmentStatus === 'COMPLETED' || test_status === 'COMPLETED'"
+                            >
+                              <mat-option
+                                *ngFor="let item of alphaResultList"
+                                value="{{ item.alphaResultName }}"
+                                >{{ item.alphaResultName }}</mat-option
+                              >
+                            </mat-select>
+
+                            <input
+                              *ngIf="
+                                test.get('testConfiguration').value ===
+                                'NUMERIC_RESULT'
+                              "
+                              matInput
+                              type="number"
+                              formControlName="result"
+                              [readonly]="appointmentStatus === 'COMPLETED' || test_status === 'COMPLETED'"
+                              [ngStyle]="{
+                                color: getResultColor(
+                                  test.get('result')?.value,
+                                  test.get('referencerange')?.value,
+                                  test.get('criticalHigh')?.value,
+                                  test.get('criticalLow')?.value,
+                                  test.get('testConfiguration')?.value
+                                )
+                              }"
+                            />
+                          </mat-form-field>
+                        </td>
+                        <td>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              [readonly]="true"
+                              formControlName="flag"
+                              [ngStyle]="{
+                                color: getResultColor(
+                                  test.get('result')?.value,
+                                  test.get('referencerange')?.value,
+                                  test.get('criticalHigh')?.value,
+                                  test.get('criticalLow')?.value,
+                                  test.get('testConfiguration')?.value
+                                )
+                              }"
+                            />
+                          </mat-form-field>
+                        </td>
+                        <td>
+                          <mat-form-field appearance="fill">                              
+                              <mat-select disableRipple formControlName="status" [disabled]="appointmentStatus === 'COMPLETED' || test_status === 'COMPLETED'">
+                              <mat-option value="PENDING">{{
+                                "pending" | translate
+                              }}</mat-option>
+                              <mat-option value="PERFORMED">{{
+                                "performed" | translate
+                              }}</mat-option>
+                              <mat-option value="VERIFIED">{{
+                                "verified" | translate
+                              }}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </td>
+                        <td>
+                          <mat-form-field appearance="fill">
+                            <input
+                              matInput
+                              formControlName="referencerange"
+                              readonly
+                            />
+                          </mat-form-field>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </table>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div class="add_form_action primary_btn btn_wrap mt-5" *ngIf="appointmentStatus !== 'COMPLETED' && test_status !== 'COMPLETED'">
+          <div class="left_buttons">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="onPerformedClick()"
+            >
+              {{ "performed" | translate }}
+            </button>
+            <button
+              type="button"
+              mat-stroked-button
+              class="btn btn-secondary"
+              (click)="onVerifyClick()"
+            >
+              {{ "verified" | translate }}
+            </button>
+          </div>
+
+          <div class="right_buttons">
+            <button  class="btn btn-primary" [disabled]="selectedTests.length === 0" (click)="onSubmit('temp')">
+              {{ "save_as_draft" | translate }}
+            </button>
+            <button  class="btn btn-success" [disabled]="selectedTests.length === 0 || isAnyPending === true"  (click)="onSubmit()">
+              {{ "save_completed" | translate }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

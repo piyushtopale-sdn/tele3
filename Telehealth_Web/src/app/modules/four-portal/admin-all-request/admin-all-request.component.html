@@ -1,0 +1,274 @@
+<div class="doctor_appointment dashboard_main_content">
+    <div class="top_bar d-block">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="left_part" style="display: block;">
+            <div class="row">
+              <div class="col-6 d-flex">
+                <div class="form_field_wrapper" style="width: 100%;">
+                  <label>{{ "select" | translate }}</label>
+                  <select2
+                    class="test select-dropdown-box"
+                    [overlay]="true"
+                    [limitSelection]="0"
+                    [minCountForSearch]="0"
+                    [data]="userList"
+                    (update)="onSelect2Change($event)"
+                    [value]="selecteduser"
+                    placeholder="{{ 'select' | translate }}"
+                  >
+                  </select2>
+                </div>
+                <a>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-x-circle"
+                    viewBox="0 0 16 16"
+                    style="margin-left: 10px; cursor: pointer;"
+                    (click)="clearSelect2()"
+                  >
+                    <title>{{ 'reset' | translate }}</title>
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                    <path
+                      d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"
+                    />
+                  </svg>
+                </a>
+              </div>
+              <div class="col-6">
+                <div class="form_field_wrapper">
+                  <label>{{ "status" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <mat-select [(ngModel)]="selectedStatus" placeholder="Appointments Status"
+                      (selectionChange)="handleSelectFliterList($event)">
+                      <mat-option value="ALL">{{ "all" | translate }}</mat-option>
+                      <mat-option value="PENDING">{{
+                        "new_order" | translate
+                        }}</mat-option>
+                      <mat-option value="APPROVED">{{
+                        "approved" | translate
+                        }}</mat-option>
+                      <mat-option value="CANCELLED">{{
+                        "cancelled" | translate
+                        }}</mat-option>
+                      <mat-option value="UNDER_PROCESSED">{{
+                        "under_process" | translate
+                        }}</mat-option>
+                      <mat-option value="COMPLETED">{{
+                        "completed" | translate
+                        }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="right_part">        
+            <div class="top_item date">
+              <div class="search_bar common_content d-flex gap-2">    
+                <div class="input-group">
+                  <button class="btn search-btn">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                  <input type="search" class="form-control" placeholder="{{ 'search_by_order_id' | translate }}" aria-label="Search"
+                  [ngModel]="searchText" #text (keyup)="handleSearchFilter(text.value)"
+                  (search)="handleSearchFilter(text.value)"/>
+                </div>
+                <div class="primary_btn">
+                  <ng-container *ngIf="giveInnerPermission('export')">
+                    <button type="button" class="btn btn-primary" (click)="exportManageTest()">
+                      <mat-icon>download</mat-icon>{{ "export" | translate }}
+                    </button>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="content_wrap">
+                <div class="policy w-100">
+                  <form [formGroup]="dateRangeForm">
+                    <div class="form_field_wrapper " style="margin: 10px 0px;">
+                      <div class="row">
+                        <div class="col-6 d-flex">
+                          <div class="main_title">{{ "from" | translate }}:</div>
+                      <mat-form-field class="example-full-width choosedate w-100" appearance="fill">
+                        <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                          [matDatepicker]="picker1" formControlName="fromDate"
+                          (dateChange)="onDateChange('from', $event.value)" />
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                      </mat-form-field>
+                        </div>
+                        <div class="col-6 d-flex">
+                          <div class="main_title">{{ "to" | translate }}:</div>
+                      <mat-form-field class="example-full-width choosedate w-100" appearance="fill">
+                        <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                          [matDatepicker]="picker2" formControlName="toDate" (dateChange)="onDateChange('to', $event.value)" />
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                      </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="bottom_bar">
+      <div class="appointment_tab">
+        <div class="tab_content">
+          <div class="table-wrap">
+            <div class="table-inner">
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  
+                <ng-container matColumnDef="patientname">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "patient_name" | translate }}
+  
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <span class="user_image_wrapper">
+                      <img class="user_image" [src]="
+                          element?.patientProfile
+                            ? element?.patientProfile
+                            : '../../../../../assets/img/default_user.png'
+                        " />
+                    </span>
+                    <span class="name_user">{{ element?.patientName }} </span>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="patientmrn">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "mrn_number" | translate }}
+
+
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span class="name_user">{{
+                    element?.patientMRN
+                    }}</span>
+                </td>
+              </ng-container>
+  
+                <ng-container matColumnDef="prescribeBy">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "prescribed_by" | translate }}
+  
+  
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <span class="name_user">{{
+                      element?.doctorName
+                      }}</span>
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="tests">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "tests" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <span class="name_user">
+                      {{
+                        serviceType === 'lab' 
+                          ? element?.labTestName 
+                          : serviceType === 'radiology' 
+                            ? element?.radiologyTestName 
+                            : ''
+                      }}
+                    </span>
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="appointmenId">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "order_id" | translate }}
+  
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.appointmentId }}
+                  </td>
+                </ng-container>
+  
+  
+                <!--Date & Time Column -->
+                <ng-container matColumnDef="dateandtime">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "order_date_time" | translate }}
+  
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.consultationDate  }} |
+                    {{ element?.consultationTime }}
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="status">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "status" | translate }}
+  
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <div class="status {{
+                        element.status === 'Pending'
+                          ? 'new'
+                          : element.status === 'Approved'
+                          ? 'upcoming'
+                          : element.status === 'Cancelled'
+                          ? 'rejected'
+                          : element.status === 'Completed'
+                          ? 'past'
+                          : element.status === 'Missed'
+                          ? 'rejected'
+                          : element.status === 'Under Process'
+                          ? 'under_process'
+                          : ''
+                      }}">
+                      {{
+                      element.status === 'Pending'
+                      ? 'New Order': element.status
+                      }}
+                    </div>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "action" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <div class="icon_group">
+                      <ng-container *ngIf="giveInnerPermission('view')">
+                        <a class="svgicon">
+                          <mat-icon type="button" aria-expanded="false" (click)="goTo_details(element?._id)">
+                            visibility
+                          </mat-icon>
+                        </a>
+                      </ng-container>
+                    </div>
+                  </td>
+                </ng-container>
+  
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table>
+            </div>
+            <div *ngIf="dataSource?.length === 0" class="text-center">
+              <b>{{ "no_record_found" | translate }}</b>
+            </div>
+            <mat-paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)"
+              [pageSize]="pageSize" [pageSizeOptions]="[5, 20, 50, 100]" showFirstLastButtons
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

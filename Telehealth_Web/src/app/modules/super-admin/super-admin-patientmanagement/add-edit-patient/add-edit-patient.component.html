@@ -1,0 +1,319 @@
+<div class="main_block">
+    <div class="main_section">
+      <div class="create_profile login_time">
+        <form [formGroup]="patientForm"> 
+          <div class="container">
+            <div class="create_profile_inner">
+              <div class="user_image_upload">
+                <input id="file-input" class="upload_input" type="file" accept="image/*"
+                  (change)="onFileSelected($event, 'profile')" />
+                <div class="user_upload_block">
+                  <span class="user_upload_wrapper">
+                    <span class="user_upload_icon">
+                      <img class="img-fluid" src="{{
+                          profileImage ? profileImage : 'assets/img/create_profile.png'
+                        }}" />
+                      <span class="quick_view" *ngIf="profileImage ? true : false">
+                        <mat-icon class="closeicon" (click)="removeSelectpic('profileImage')">close</mat-icon>
+                      </span>
+                    </span>
+                  </span>
+                  <span class="edit_upload_wrapper">
+                    <span class="edit_upload_icon"><img src="../../../assets/img/edit_profile.svg" /></span>
+                  </span>
+                </div>
+              </div>
+              <div class="image-upload d-none">
+                <label for="file-input">
+                  <img class="img-fluid mb-4" src="{{
+                      profileImage ? profileImage : 'assets/img/create_profile.png'
+                    }}" />
+        
+                  <i class="fa fa-camera" *ngIf="!profileImage"></i>
+                </label>
+                <span class="quick_view" *ngIf="profileImage ? true : false">
+                  <mat-icon class="closeicon" (click)="removeSelectpic('profileImage')">close</mat-icon>
+                </span>
+                <input id="file-input" type="file" accept="image/*" (change)="onFileSelected($event, 'profile')" />
+              </div>
+  
+              <div class="form">
+                <div class="row">
+                  <div class="col-sm-12 col-md-4  mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "first_name" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <input type="text" matInput formControlName="first_name" />
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('first_name').hasError('required')">
+                        {{ "first_name_is_required" | translate }}.</mat-error>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-4  mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "first_name_arabic" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <input type="text" matInput formControlName="first_name_arabic" />
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('first_name_arabic').hasError('required')">
+                        {{ "first_name_is_required" | translate }}.</mat-error>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-12 col-md-4  mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "last_name" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <input type="text" matInput formControlName="last_name" />
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('last_name').hasError('required')">
+                        {{ "last_name_is_required" | translate }}.</mat-error>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-4  mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "last_name_arabic" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <input type="text" matInput formControlName="last_name_arabic" />
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('last_name_arabic').hasError('required')">
+                        {{ "last_name_is_required" | translate }}.</mat-error>
+                    </div>
+                  </div>
+  
+                  <div class="col-sm-12 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "mobile" | translate }}
+                        <span class="danger">*</span>
+                      </label>
+                      <mat-form-field appearance="fill">
+                        <input type="mobile" matInput formControlName="mobile" #mobile (focus)="onFocus()"
+                          ng2TelInput maxlength="10" name="mobile"/>
+                      </mat-form-field>
+                      <mat-error *ngIf="
+                          isSubmitted &&
+                          patientForm
+                            .get('mobile')
+                            .hasError('required')
+                        ">{{ "mobile_is_required" | translate }}
+                      </mat-error>                      
+                    </div>
+                  </div>
+                  
+                  <div class="col-sm-12 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "email" | translate }}</label>
+                      <mat-form-field appearance="fill">
+                        <input type="email" matInput formControlName="email" name="email" />
+                      </mat-form-field>
+                      <mat-error *ngIf="
+                          isSubmitted &&
+                          patientForm.get('email').hasError('required')
+                        ">{{ "email_is_required" | translate }}</mat-error>
+                      <mat-error *ngIf="patientForm.get('email')?.hasError('pattern')">
+                        {{ "please_enter_valid_email" | translate }}
+                      </mat-error>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-4  mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "date_of_birth" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field class="example-full-width" appearance="fill">
+                        <input matInput [matDatepicker]="picker" formControlName="dob" [max]="maxDate"(focus)="picker.open()" 
+                        readonly (input)="formatDate($event)" placeholder="DD/MM/YYYY"/>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf=" isSubmitted && patientForm.get('dob')?.hasError('required')">
+                        {{ "enter_date_of_birth" | translate }}
+                      </mat-error>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-4  mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "gender" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <!-- <mat-label>Sub-admin</mat-label> -->
+                        <mat-select disableRipple formControlName="gender">
+                          <mat-option value="male">{{
+                            "male" | translate
+                            }}</mat-option>
+                          <mat-option value="female">{{
+                            "female" | translate
+                            }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('gender').hasError('required')">
+                        {{ "field_is_required" | translate }}.</mat-error>
+                    </div>
+                  </div>  
+                  <div class="col-sm-12 col-md-4  mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "blood_group" | translate }}</label>
+                      <mat-form-field appearance="fill">
+                        <!-- <mat-label>Sub-admin</mat-label> -->
+                        <mat-select disableRipple formControlName="blood_group">
+                          <mat-option value="A+"> A + </mat-option>
+                          <mat-option value="A-">A -</mat-option>
+                          <mat-option value="B+"> B + </mat-option>
+                          <mat-option value="B-">B -</mat-option>
+                          <mat-option value="AB+"> AB + </mat-option>
+                          <mat-option value="O+">O +</mat-option>
+                          <mat-option value="O-">O -</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('blood_group').hasError('required')">
+                        {{ "field_is_required" | translate }}.</mat-error>
+                    </div>
+                  </div>   
+                  <div class="col-sm-12 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "nationality" | translate }}<span class="danger">*</span></label>
+                      <select2 [overlay]="overlay" [limitSelection]="0"
+                        [minCountForSearch]="1" [data]="nationalityList" formControlName="nationality" (update)="onSelectionChange($event)">                       
+                      </select2>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('nationality').hasError('required')">
+                        {{ "field_is_required" | translate }}.
+                      </mat-error>
+                    </div>
+                  </div> 
+                  <div class="col-sm-12 col-md-4  mb-3" *ngIf="patientId !== null && viewMrn_no !== undefined">
+                    <div class="form_field_wrapper">
+                      <label>{{ "mrn_number" | translate }}</label>
+                      <mat-form-field appearance="fill">
+                        <input type="text" matInput formControlName="mrn_number" maxlength="10" readonly = true/>
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('mrn_number').hasError('required')">
+                        {{ "field_is_required" | translate }}.</mat-error>
+                    </div>
+                  </div>
+                  <!-- <div class="col-sm-12 col-md-4  mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "select_national_id" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <mat-select disableRipple formControlName="selected_type">
+                          <mat-option value="iqama_number">{{
+                            "iqama_number" | translate
+                            }}</mat-option>
+                          <mat-option value="passport">{{
+                            "passport" | translate
+                            }}</mat-option>
+                            <mat-option value="saudi_id">{{
+                              "saudi_id" | translate
+                              }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('selected_type').hasError('required')">
+                        {{ "field_is_required" | translate }}.</mat-error>
+                    </div>
+                  </div> -->
+                  <!-- <div class="col-sm-12 col-md-4  mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "iqama_number" | translate }}</label>
+                      <mat-form-field appearance="fill">
+                        <input type="text" matInput formControlName="iqama_number" maxlength="10" >
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('iqama_number').hasError('required')">
+                        {{ "field_is_required" | translate }}.</mat-error>
+                    </div>
+                  </div> -->
+                
+                  <div class="col-sm-12 col-md-4  mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "saudi_id" | translate }} / {{ "iqama_number" | translate}}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <input type="text" matInput formControlName="saudi_id" maxlength="10"/>
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('saudi_id').hasError('required')">
+                        {{ "field_is_required" | translate }}.
+                      </mat-error>                    
+                      <mat-error *ngIf="isSubmitted && patientForm.get('saudi_id').hasError('pattern')">
+                        {{ "enter_10_digit_number" | translate }}.
+                      </mat-error>
+                    </div>                    
+                  </div>
+                  <div class="col-sm-12 col-md-4  mb-3"  *ngIf="passportFieldVisible">
+                    <div class="form_field_wrapper">
+                      <label>{{ "passport" | translate }}<span class="danger">*</span></label>
+                      <mat-form-field appearance="fill">
+                        <input type="text" matInput formControlName="passport" />
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('passport').hasError('required')">
+                        {{ "field_is_required" | translate }}.</mat-error>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-4  mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "marital_status" | translate }}</label>
+                      <mat-form-field appearance="fill">
+                        <mat-select disableRipple formControlName="marital_status">
+                          <mat-option value="Married">{{
+                            "Married" | translate
+                            }}</mat-option>
+                          <mat-option value="Unmarried">{{
+                            "Unmarried" | translate
+                            }}</mat-option>
+                            <mat-option value="Divorce">{{
+                              "Divorce" | translate
+                              }}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <mat-error *ngIf="isSubmitted && patientForm.get('marital_status').hasError('required')">
+                        {{ "field_is_required" | translate }}.</mat-error>
+                    </div>
+                  </div>              
+                  
+                  <div class="col-sm-12 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{"address" | translate}}</label>
+                      <mat-form-field appearance="fill">
+                        <input type="text" matInput placeholder="{{ 'enter_address' | translate }}" formControlName="address"
+                          #address />
+                      </mat-form-field>
+                      <mat-error *ngIf="
+                        isSubmitted &&
+                        patientForm.get('address').hasError('required')
+                      ">
+                        {{ "address_is_required" | translate }}
+                      </mat-error>
+                    </div>
+                  </div>
+                  <div class="col-sm-12 col-md-4 mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "emergency_contact" | translate }}</label>
+                      <div class="fieldicon_wrap">
+                        <mat-form-field appearance="fill">
+                          <input
+                            type="mobile"
+                            matInput
+                            formControlName="emergency_contact"
+                            #emergencyContact
+                            (focus)="onFocusEmergencyContact()"                            
+                            ng2TelInput
+                            maxlength="10"
+                            
+                          />
+                        </mat-form-field>
+                      </div>
+                    </div>                   
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="primary_btn btn_wrap mt-5">
+                <button type="button" class="btn btn-secondary" [routerLink]="['/super-admin/patient']">
+                  {{ "cancel" | translate }}
+                </button>
+                <button type="button" mat-stroked-button class="btn btn-primary" *ngIf="patientId === null" (click) =" onSubmit()">
+                  {{ "save" | translate }}
+                </button>
+                <button type="button" mat-stroked-button class="btn btn-primary" *ngIf="patientId !== null" (click) = "onSubmit('edit')">
+                  {{ "save" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

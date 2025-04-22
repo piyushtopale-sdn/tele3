@@ -1,0 +1,133 @@
+<div class="doctor_list dashboard_main_content">
+    <div class="top_bar">
+      <div class="left_part">
+        <div class="search_bar common_content">
+          <div class="input-group">
+            <button class="btn search-btn">
+              <mat-icon>search</mat-icon>
+            </button>
+            <input type="search" class="form-control" placeholder="{{ 'search' | translate }}" aria-label="Search"
+              [ngModel]="searchText" #text (keyup)="handleSearchFilter(text.value)"
+              (search)="handleSearchFilter(text.value)" />
+          </div>
+        </div>      
+      </div>
+    </div>
+  
+    <div class="bottom_bar">
+      <div class="table-wrap">
+        <div class="table-inner">
+          <table mat-table [dataSource]="pendingdataSource" class="mat-elevation-z8">
+            <!-- Doctor Name Column -->
+            <ng-container matColumnDef="doctorname">
+              <th mat-header-cell *matHeaderCellDef (click)="onSortData('full_name')">
+                {{ "doctor_name" | translate }}
+                <span *ngIf="sortColumn === 'full_name'" class="material-icons sorticon">{{ sortIconClass }}</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.full_name }}
+              </td>
+            </ng-container>
+          
+  
+            <!-- Updated Date -->
+            <ng-container matColumnDef="updatedAt">
+              <th mat-header-cell *matHeaderCellDef (click)="onSortData('updatedAt')">
+                {{ "approval_date_time" | translate }}
+                <span *ngIf="sortColumn === 'updatedAt'" class="material-icons sorticon">{{ sortIconClass }}</span>
+              </th>
+  
+              <td mat-cell *matCellDef="let element">
+                {{ element?.updatedAt | date : "dd/MM/yyy" }} |
+                <span>{{ element?.updatedAt | date : "HH:mm " }} </span>
+              </td>
+            </ng-container>
+  
+            <!-- Rejected Date -->
+            <ng-container matColumnDef="rejectedAt">
+              <th mat-header-cell *matHeaderCellDef (click)="onSortData('updatedAt')">
+                {{ "rejected_date_time" | translate }}
+                <span *ngIf="sortColumn === 'updatedAt'" class="material-icons sorticon">{{ sortIconClass }}</span>
+              </th>
+  
+              <td mat-cell *matCellDef="let element">
+                {{ element?.updatedAt | date : "dd/MM/yyy" }} |
+                <span>{{ element?.updatedAt | date : "HH:mm " }} </span>
+              </td>
+            </ng-container>
+            >
+  
+            <!--Email Column -->
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef (click)="onSortData('for_portal_user.email')">
+                {{ "email" | translate }}
+                <span *ngIf="sortColumn === 'for_portal_user.email'" class="material-icons sorticon">{{ sortIconClass
+                  }}</span>
+              </th>
+              <td mat-cell *matCellDef="let element" style="text-transform: lowercase">
+                {{ element?.for_portal_user?.email }}
+              </td>
+            </ng-container>
+  
+            <!--Phone Number Column -->
+            <ng-container matColumnDef="phonenumber">
+              <th mat-header-cell *matHeaderCellDef (click)="onSortData('for_portal_user.phone_number')">
+                {{ "phone_number" | translate }}
+                <span *ngIf="sortColumn === 'for_portal_user.phone_number'" class="material-icons sorticon">{{
+                  sortIconClass }}</span>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.for_portal_user?.phone_number }}
+              </td>
+            </ng-container>         
+  
+            <!-- Status -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "status" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngIf="giveInnerPermission('status')">
+                  <div class="toggel-slide">
+                    <mat-slide-toggle [checked]="element?.for_portal_user?.isActive" (change)="
+                        onChangestatus($event, element?.for_portal_user?._id)">
+                    </mat-slide-toggle>
+                  </div>
+                </ng-container>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "action" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="icon_group">
+                  <ng-container *ngIf="giveInnerPermission('view_individual_doctor_profile')">
+                    <a class="svgicon" [routerLink]="[
+                        '/individual-doctor/all-doctors/doctor-details',
+                        element?.for_portal_user?._id
+                      ]">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+                        <path
+                          d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                      </svg>
+                    </a>
+                  </ng-container>
+                </div>
+              </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+          <div *ngIf="pendingdataSource.data.length === 0" class="text-center">
+            <b>{{ "no_record_found" | translate }}</b>
+          </div>
+        </div>
+        <mat-paginator #paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)"
+          [pageSize]="pageSize" [pageSizeOptions]="[10, 30, 50, 100]" showFirstLastButtons>
+        </mat-paginator>
+      </div>
+    </div>
+</div>

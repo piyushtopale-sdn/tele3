@@ -1,0 +1,261 @@
+<div class="header">
+  <button
+    class="d-md-block d-lg-none menu"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#offcanvasExample"
+    aria-controls="offcanvasExample"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <div class="header_logo d-lg-none">
+    <img class="img-flui" src="../../../../assets/img/logo2.svg" alt="logo" />
+  </div>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="navbar-inner container-fluid">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="header-left-content">
+          <div class="header-left-content" *ngIf="isLoggedIn">
+            <h2>{{ menuSelected | translate }}</h2>
+          </div>
+        </div>
+        <div class="header-right-content">
+
+          <!-- <div class="mail common_content">
+            <mat-icon>mail</mat-icon>
+          </div> -->
+
+          <div
+            class="notification common_content"
+            (click)="changeIsViewStatus()"
+          >
+            <div
+              class="user_inner"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+            <span
+            *ngIf="notiCount > 0"
+            style="
+              position: absolute;
+              background: red;
+              width: 28px;
+              height: 28px;
+              border-radius: 70%;
+              color: white;
+              font-weight: bold;
+              font-size: 12px;
+              z-index: 1;
+              margin-left: 54%;
+              margin-top: 5px;
+              top: -9px;
+            "
+          >
+            <span style="margin-top: 2px;position: absolute;width: inherit;height: inherit;text-align: center;">
+              {{ notiCount }}
+            </span>
+              </span>
+              <mat-icon>notifications</mat-icon>
+            </div>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li class="head text-light">
+                <div class="row">
+                  <div class="col-lg-12 col-sm-12 col-12 head_inner">
+                    <span
+                      >{{ "notifications" | translate }} ({{
+                        isViewcount
+                      }})</span
+                    >
+                    <a (click)="markAllRead()"  style="cursor: pointer;">
+                      {{ "mark_all_as_read" | translate }}
+                    </a>
+                  </div>
+                </div>
+              </li>
+              <div
+                style="max-height: 300px; overflow-y: auto; overflow-x: hidden"
+              >
+              <ng-container *ngIf="notificationlist && notificationlist.length > 0; else noNotifications">
+                <ng-container *ngFor="let notification of notificationlist">
+                  <li class="notification-box" [ngClass]="notification?.isView ? '' : 'activenoti'">
+                    <div class="row" (click)="markReadById(notification)" style="cursor: pointer">
+                      <span *ngIf="notification?.created_by == loginId; else Notification">
+                        <!-- No record found -->
+                      </span>
+                      <ng-template #Notification>
+                        <div class="col-lg-3 col-sm-3 col-3 text-center">
+                          <img
+                            src="{{ notification.picture ? notification.picture : '../../../../../../assets/img/default_user.png' }}"
+                            class="w-75 rounded-circle"
+                            style="height: 90px;"
+                          />
+                        </div>
+                        <div class="col-lg-8 col-sm-8 col-8">
+                          <strong class="notify_title">{{ notification?.notitype ? notification?.notitype.split('_').join(' ') : '' }}</strong>
+                          <ng-container *ngIf="notification?.content; else chatMessage">
+                            <div class="notify_desc">{{ notification?.content.split('_').join(' ') }}</div>
+                          </ng-container>
+                          <ng-template #chatMessage>
+                            <ng-container *ngIf="notification?.content != '' && notification?.notitype == 'chat'; else noChat">
+                              <div class="notify_desc">{{ notification?.content }}</div>
+                            </ng-container>
+                            <ng-template #noChat>
+                              <div class="notify_desc">
+                                <i class="fa fa-image"></i>
+                              </div>
+                            </ng-template>
+                          </ng-template>
+                          <small class="notify_time">
+                            {{ notification?.createdAt | date: "dd/MM/yyyy" }} |
+                            <span>{{ notification?.createdAt | date: "HH:mm" }}</span>
+                          </small>
+                        </div>
+                      </ng-template>
+                    </div>
+                  </li>
+                </ng-container>
+              </ng-container>
+              <ng-template #noNotifications>
+                <li class="text-center text-light">No notifications</li>
+              </ng-template>
+              
+              </div>
+              <li class="footer text-center">
+                <a
+                  href=""
+                  class="text-light"
+                  [routerLink]="['/portals/notification', userType]"
+                  >{{ "view_all" | translate }}</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="user common_content">
+            <div
+              class="user_inner"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <div class="profile_img">
+                <img
+                  src="{{
+                    userProfile
+                      ? userProfile
+                      : '../../../../../../assets/img/default_user.png'
+                  }}"
+                />
+                <!-- <img src="../../../../assets/img/vector.png"> -->
+              </div>
+              <div class="user_wrapper dropdown-toggle">
+                <div class="user_name_wrapper">
+                  <div class="user_name">{{ userName }}</div>
+                  <div class="user_name">
+                    <span>{{ userType }}</span>
+                    <!-- <span>{{ userRole }}</span> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ul
+              class="profile dropdown-menu"
+              aria-labelledby="dropdownMenuButton1"
+            >
+              <li style="cursor: pointer">
+                <a class="dropdown-item" (click)="routeToProfile()">
+                  <mat-icon>person</mat-icon
+                  ><span class="item_text">{{ "profile" | translate }}</span>
+                </a>
+              </li>
+              <li style="cursor: pointer">
+                <a class="dropdown-item">
+                  <mat-icon>g_translate</mat-icon
+                  ><span class="item_text">{{ "languages" | translate }}</span>
+                  <div class="dropdown_language dropdown-menu show">
+                    <app-language></app-language>
+                  </div>
+                </a>
+              </li>
+              <li style="cursor: pointer">
+                <a class="dropdown-item" (click)="logout()">
+                  <mat-icon>logout</mat-icon
+                  ><span class="item_text">{{ "logout" | translate }}</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- ----------------------- Info--------------------------- -->
+<ng-template #info_popup let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="info_screen text-center">
+        <p class="heading">{{ "help" | translate }}</p>
+        <h2 class="left_text">{{userType}} {{ "requirement" | translate }}</h2>
+
+        <p class="left_text">
+          {{ "step_1_in_profile_basic_info_tab" | translate }} :-
+          <label style="color: red">{{
+            "required_field_address_country_speciality_and_team" | translate
+          }}</label>
+        </p>
+
+        <p class="left_text">
+          {{ "step_2_in_profile_location_tab" | translate }}:-
+          <label style="color: red">{{
+            "must_clinic_or_hospital_if_you_select_any_particular_hospital_check_that_hospital_approved_you_or_not"
+              | translate
+          }}</label>
+        </p>
+        <p class="left_text">
+          {{ "step_3_in_profile_availability_tab" | translate }} :-
+          <label style="color: red">{{
+            "must_fill_all_required_fields" | translate
+          }}</label>
+        </p>
+        <p class="left_text">
+          {{ "step_4_in_profile_fee_management_tab" | translate }} :-
+          <label style="color: red">{{
+            "must_fill_all_required_fields_and_payment_accepted_fields"
+              | translate
+          }}</label>
+        </p>
+
+        <p class="left_text">
+          {{ "step_5_in_master_tab_appointment_reasons" | translate }} :-
+          <label style="color: red"
+            >{{ "add_appointment_reasons" | translate }}.</label
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+</ng-template>

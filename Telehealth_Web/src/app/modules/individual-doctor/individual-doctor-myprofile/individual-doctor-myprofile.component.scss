@@ -1,0 +1,783 @@
+@import '../../../../assets/css/variable/variable';
+
+.step_counter{
+    mat-stepper {
+        background-color: transparent;
+        .mat-horizontal-stepper-header-container {
+            padding: 15px 0;
+            margin: 0 0 15px;
+            .mat-step-header {
+                flex-direction: column;
+                padding: 0 10px;
+                width: 120px;
+                &:hover,
+                &:focus {
+                    background: transparent;
+                }
+                .mat-step-icon {
+                    height: 30px;
+                    width: 30px;
+                    margin: 0 0 13px;
+                    background-color: #ffffff;
+                    border: 2px solid #A5B0B9;
+                    .mat-step-icon-content {
+                        font-size: 0;
+                        background-color: #ffffff;
+                    }
+                    &.mat-step-icon-selected {
+                        background-color: #ffffff;
+                        border-color: #2839FF;
+                        border-width: 4px;
+                    }
+                }
+                .mat-step-label {
+                    font-weight: 700;
+                    font-size: 12px;
+                    line-height: 14px;
+                    color: $bodyopacitylightcolor;
+                    white-space: normal;
+                    text-align: center;
+                    &.mat-step-label-selected{
+                        color: $table_color;
+                    }
+                }
+            }
+            .mat-stepper-horizontal-line {
+                border-color: #2839FF;
+                border-top-width: 1px;
+                margin: -40px -55px 0;
+            }
+        }
+        .mat-horizontal-content-container {
+            padding: 0;
+            .btn-wrapper {
+                margin-bottom: 15px;
+                text-align: right;
+                .add_more {
+                    font-size: $font_small;
+                    font-weight: 400;
+                    line-height: 22px;
+                    border-radius: 10px;
+                    padding: 12px 22px;
+                }
+            }
+            .form-btn {
+                .stepbtn {
+                    font-size: 18px;
+                    padding: 12px 20px;
+                    border-radius: 15px;
+                }
+            }
+            .mat-horizontal-stepper-content {
+                .medication_first {
+                    padding: 0;
+                    .medication_first_inner {
+                        padding: 0 15px;
+                    }
+                }
+            }
+            .white-card {
+                table {
+                    tr {
+                        height: 48px;
+                    }
+                }
+                .add_more {
+                    font-size: 14px;
+                    min-width: 200px;
+                    padding: 15px 22px;
+                    margin: 25px 0 0;
+                }
+            }
+        }
+    }
+
+    .mat-stepper-vertical{
+        .mat-step{
+            .mat-step-header{
+                padding-left: 10px;
+                padding-right: 10px;
+                &:hover,
+                &:focus {
+                        background: transparent;
+                        &:not([aria-disabled]){
+                            background-color: transparent;  
+                        }
+                    }
+                    .mat-step-icon {
+                        height: 30px;
+                        width: 30px;
+                        background-color: #ffffff;
+                        border: 2px solid rgba(55, 103, 177, 0.5);
+                        .mat-step-icon-content {
+                            font-size: 0;
+                            background-color: #ffffff;
+                        }
+                        &.mat-step-icon-selected {
+                            background-color: #ffffff;
+                            border-color: #3DA7C8;
+                            border-width: 4px;
+                        }
+                    }
+                    .mat-step-label {
+                        font-weight: 700;
+                        font-size: 12px;
+                        line-height: 14px;
+                        color: #0C2F49;
+                        white-space: normal;
+                        text-align: center;
+                    }
+            }
+            .mat-vertical-content-container{
+                margin-left: 25px;
+                .mat-vertical-content{
+                    padding: 0 0 20px 20px;
+                    .btn-wrapper {
+                        margin-bottom: 15px;
+                        text-align: right;
+                        .add_more {
+                            font-size: $font_small;
+                            font-weight: 400;
+                            line-height: 22px;
+                            border-radius: 10px;
+                            padding: 12px 22px;
+                        }
+                    }
+                    .form-btn {
+                        .stepbtn{
+                            font-size: 18px;
+                            padding: 12px 20px;
+                            border-radius: 15px;
+                        }
+                    }
+                    .white-card {
+                        table {
+                            tr {
+                                height: 48px;
+                            }
+                        }
+                        .add_more {
+                            font-size: 14px;
+                            min-width: 200px;
+                            padding: 15px 22px;
+                            margin: 25px 0 0;
+                        }
+                    }
+                }
+            }
+            .mat-stepper-vertical-line{
+                &::before{
+                    border-color: #3DA7C8;
+                    border-width: 1px;
+                    top: -22px;
+                    bottom: -22px;
+                    left: 0;
+                }
+            }
+        }
+      
+    }
+}
+
+.step_counter_inner {
+    .create_profile{
+        overflow: hidden;
+        .create_profile_inner{
+            border:1px solid rgba(228, 228, 228, 0.9);
+            border-radius: 5px;
+            padding: 30px;
+            .profile_img{
+                background: #E7E7E7;
+                border-radius: 10px;
+                padding: 15px;
+                display: inline-block;
+                margin: 0 0 30px;
+            }
+            .association {
+                .association_inner{
+                    margin: 0 -30px 15px;
+                    .item{
+                        width: auto;
+                        padding: 0 30px;
+                        .mat-radio-group{
+                            .mat-radio-button{
+                                margin: 0 20px 0 0;
+                            }
+                        }
+                    }
+                }
+            }
+            .form_field_wrapper{
+                label{
+                    color: rgba(12, 47, 73, 1);
+                    .mat-checkbox-label{
+                        white-space: normal;
+                        line-height: 20px;
+                    }
+                }
+                .fieldicon_wrap{
+                    display: flex;
+                    .mat-form-field{
+                        width: 100%;
+                        .mat-form-field-flex{
+                            .mat-form-field-infix{
+                                width: 100%;
+                            }
+                        }
+                    }
+                    .mat-icon{
+                        border-radius: 5px;
+                        width: 50px;
+                        height: 50px;
+                        min-width: 50px;
+                        line-height: 50px;
+                        text-align: center;
+                        margin-left: 15px;
+    
+                        &.minus{
+                            background: #FDE6E5;
+                            color: #F05A4F;
+                        }
+                        &.plus{
+                            background: #0B4977;
+                            color: #ffffff;  
+                        }
+                    }
+                }
+                .mat-form-field{
+                    width: 100%;
+                    .mat-form-field-wrapper{
+                        // padding-bottom: 20px;
+                        .mat-form-field-flex{
+                            .mat-form-field-infix{
+                                .mat-input-element {
+                                    color: $bodyopacitycolor;
+                                }
+                            }
+                        }
+                    }
+                } 
+                // .upload_input{
+                //     padding: 9px 15px;
+                //     background-color: #ffffff;
+                //     border: 1px solid rgba(228, 228, 228, 0.9);
+                //     font-size: $font_small;
+                //     border-radius: 5px;
+                //     width: 100%;
+                //     position: relative;
+                //     .user_upload_input{
+                //         opacity: 0;
+                //         z-index: 0;        
+                //         width: 100%;
+                //     }
+                //     .upload_input_content{
+                //         display: flex;
+                //         align-items: center;
+                //         justify-content: center;
+                //         position: absolute;
+                //         top: 15px;
+                //         bottom: auto;
+                //         left: 0;
+                //         right: 0;
+                //         label{
+                //             color: #3DA7C8;
+                //             margin: 0;
+                //             display: inline-block;
+                //         }
+                //     }
+                // }
+                &.checkbox_urgecare{
+                    .mat-checkbox-layout {
+                        min-height: 50px;
+                        align-items: center;
+                        .mat-checkbox-inner-container{
+                            width: 25px;
+                            height: 25px;
+                            .mat-checkbox-frame{
+                                background: rgba(182, 200, 214, 0.5);
+                                border-color: rgba(182, 200, 214, 0.5);
+                                border-radius: 5px;
+                            }
+                        }
+                    }
+                }
+            }
+            .divider{
+                padding: 20px 0 20px 0;
+                margin-top: -1px;
+                position: relative;
+                .form_field_wrapper{
+                    .checkbox-group {
+                        display: flex;
+                        gap: 20px;
+                        flex-wrap: wrap;
+                    }
+                    .license_date{
+                        display: flex;
+                            .mat-form-field{
+                                &:first-child{
+                                    margin-right: 15px;
+                                }
+                                .mat-form-field-infix{
+                                    width: 90px;
+                                }
+                            }
+                    }
+                }
+    
+                &::before{
+                  content: "";
+                  height: 1px;
+                  background: rgba(228, 228, 228, 0.9);  
+                  position: absolute;
+                  left:-30px;
+                  right: -30px;
+                  top: 0;
+                  bottom: auto;
+                }
+                &::after{
+                    content: "";
+                    height: 1px;
+                    background: rgba(228, 228, 228, 0.9);  
+                    position: absolute;
+                    left:-30px;
+                    right: -30px;
+                    top: auto;
+                    bottom: 0;
+                }
+                h2{
+                    font-size: $font_large;
+                }
+                &.mobile_paydetails {
+                    .modal-body{
+                        padding: 0;
+                        .paydetail_content {
+                            width: 75%;
+                            margin-bottom: 0;
+                            .modal_content_inner{
+                                width: 100%;
+                            }
+                        }
+                    }
+                    &::after{
+                        display: none;
+                    }
+                }  
+            }
+        }
+    }
+    .educational{
+        .increse_content{
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+            margin: 0 0 30px;
+            .increse_content_inner{
+                border: 1px solid #B6C8D6;
+                border-radius: 5px;
+                margin: 0;
+                padding: 20px 10px 10px;
+                width: 100%;
+                .item {
+                    .form_field_wrapper{
+                        label{
+                            font-weight: 400;
+                            line-height: 18px;
+                            color: rgba(12, 47, 73, 0.5);
+                        }
+                        .mat-form-field{
+                            .mat-form-field-wrapper{
+                                .mat-form-field-flex{
+                                    .mat-form-field-infix{
+                                        width: 100%;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .row_generate{
+                margin: 0 0 0 20px;
+                border-radius: 5px;
+                &.row_add{
+                    background: $bodycolor;
+                    .mat-icon{
+                        color: #ffffff;
+                        border-radius: 5px;
+                        justify-content: center;
+                        min-width: 50px;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+                &.row_minus{
+                    background: #FDE6E5;
+                    .mat-icon{
+                        color: #F05A4F;
+                        border-radius: 5px;
+                        justify-content: center;
+                        min-width: 50px;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                    }
+                }
+            }
+        }
+    }
+    .availability{
+        .primary_btn{
+            margin: 0 0 30px;
+        }
+        .mat-tab-header {
+            margin: 0 0 40px;
+            border-bottom: none;
+            .mat-tab-list {
+                .mat-tab-labels {
+                    background: #ffffff;
+                    border: 1px solid #B6C8D6;
+                    border-radius: 10px;
+                    padding: 7px 12px;
+                    display: inline-flex;
+                    .mat-tab-label {
+                        font-family: $font_family_body,$font_sans_sarif;
+                        height: 40px;
+                        padding: 0 30px;
+                        min-width: 120px;
+                        font-size: 14px;
+                        font-weight: 500;
+                        color: $bodyopacitylightcolor;
+                        opacity: 1;
+                    }
+                    .mat-tab-label.mat-tab-label-active {
+                        font-weight: 700;
+                        color: $table_color;
+                    }
+                }
+                .mat-ink-bar {
+                    background-color: $bodycolor;
+                }
+            }
+        }
+        .tab_content {
+            .mat_tab_title{
+                font-weight: 500;
+                font-size: 18px;
+                line-height: 22px;
+                color: $table_color;
+                margin: 0 0 20px;
+            }
+            .online_consultation{
+                border: 1px solid #B6C8D6;
+                border-radius: 5px;
+                .content_item{
+                    padding: 25px;
+                    border-bottom: 1px solid #B6C8D6;
+                    .increse_content{
+                        display: flex;
+                        align-items: center;
+                        .row_generate{
+                            margin: 15px 0 0 30px;
+                            .mat-icon{
+                                width: 50px;
+                                height: 50px;
+                                min-width: 50px;
+                                line-height: 50px;
+                                text-align: center;
+                                border: 1px solid #B6C8D6;
+                                border-radius: 5px;
+                            }
+                        }
+                    }
+                    &.week_days{
+                        overflow: hidden;
+                        .part_wrapper{
+                            justify-content: space-between;
+                            margin-bottom: 20px;
+                            .part{
+                                width: auto;
+                                &.left{
+                                    .row{
+                                        display: flex;
+                                        margin: 0 -15px;    
+                                        .item{
+                                            padding: 0 15px;          
+                                            width: auto;
+                                            .form_field_wrapper{
+                                                label{
+                                                    color: $table_color;
+                                                }
+                                                .mat-form-field{
+                                                    .mat-form-field-wrapper{
+                                                        .mat-form-field-flex{
+                                                            .mat-form-field-infix{
+                                                                width: 75px;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                &.right{
+                                    .row_generate {
+                                     height: 70%;
+                                     margin: 32px 0 0;
+                                       .mat-icon{
+                                         border: 1px solid rgba(228, 228, 228, 0.9);
+                                         border-radius: 5px;
+                                         justify-content: center;
+                                         min-width: 50px;
+                                         height: 100%;
+                                         display: flex;
+                                         align-items: center;
+                                       }
+                                    } 
+                                 }
+                            }
+                            &:last-child{
+                                margin-bottom: 0;
+                            }
+                        }
+                    }
+                    &:last-child{
+                      border-bottom: none;
+                    }
+                }
+          
+     
+            }
+        }
+    }
+    .fee_management{
+        background: #FFFFFF;
+        border: 1px solid #B6C8D6;
+        border-radius: 20px;
+        .consultant_item{
+            padding: 20px;
+            border-bottom: 1px solid #B6C8D6;
+            .icon{
+                .form_field_wrapper{
+                    .mat-form-field{
+                        .mat-form-field-wrapper{
+                            .mat-form-field-flex{
+                                padding: 0;
+                                .mat-form-field-infix{
+                                    border-top-width: 7px;
+                                    padding: 7px 0 14px;
+                                    padding-left: 65px;
+                                    .icon{                  
+                                        position: absolute;
+                                        left: 0;
+                                        right: auto;
+                                        top: -7px;
+                                        bottom: auto;
+                                        height: 50px;
+                                        line-height: 50px;
+                                        width: 50px;
+                                        text-align: center;
+                                        border-right: 1px solid rgba(228, 228, 228, 0.9);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            &:last-child{
+                border-bottom: none;
+            }
+        }
+    }
+    .document_manage{
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        padding: 20px;
+        .document_item{
+            .part_wrapper{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: nowrap;
+                .part{
+                    flex-shrink: unset;
+                    &.left{
+                        width: 100%;
+                        .item {
+                            .form_field_wrapper{
+                                .mat-form-field{
+                                    .mat-form-field-wrapper{
+                                        .mat-form-field-flex{
+                                            .mat-form-field-infix{
+                                                width: 100%;
+                                            }
+                                        }
+                                    }
+                                }
+                                .upload_input{
+                                        min-height: 50px;
+                                        margin-bottom: 30px;
+                                        background-color: #ffffff;
+                                        border: 1px solid rgba(228, 228, 228, 0.9);
+                                        font-size: 14px;
+                                        border-radius: 5px;
+                                        width: 100%;
+                                        position: relative;
+                                    .upload_input_content{
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        position: absolute;
+                                        top: 0;
+                                        bottom: 0;
+                                        left: 0;
+                                        right: 0;
+                                        height: 100%;
+                                        label{
+                                            color: #3DA7C8;
+                                            margin: 0;
+                                            padding: 0 15px;
+                                        }
+                                    }
+                                    .user_upload_input{
+                                        opacity: 0;
+                                        z-index: 0;
+                                        min-height: 50px;
+                                        width: 100%;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    &.right{
+                        width: auto;
+                       .row_generate{
+                            .mat-icon{
+                                width: 50px;
+                                height: 50px;
+                                min-width: 50px;
+                                line-height: 50px;
+                                text-align: center;
+                                border: 1px solid #B6C8D6;
+                                border-radius: 5px;
+                            }
+                       } 
+                    }
+                }
+            }
+        }
+    }
+    .primary_btn{
+        margin-top: 30px;
+        justify-content: flex-end;
+    }
+    .btn_wrap{
+        justify-content: end;
+        margin: 30px 0 0;
+       .btn-secondary{
+            margin-left: 15px;
+        }
+    }
+}
+
+@media screen and (max-width:$desktop_large) {
+    .step_counter_inner .availability .tab_content .online_consultation .week_days .part_wrapper .left.part{
+        width: 90%;
+    }
+    .step_counter_inner .availability .tab_content .online_consultation .content_item.week_days .part_wrapper .part.right .row_generate{
+        height: 100%;
+        margin: 0;
+    }
+}
+@media screen and (max-width:$desktop) {
+    .step_counter_inner .create_profile .create_profile_inner .form_field_wrapper .upload_input{
+        margin: 0 0 20px;
+    }
+    .step_counter_inner .availability .tab_content .online_consultation .week_days .part_wrapper .left.part {
+        width: 87%;
+    }
+    .step_counter_inner .document_manage .document_item .part_wrapper .part.right .row_generate .mat-icon{
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .step_counter_inner .document_manage .document_item .part_wrapper .part.right .row_generate{
+        height: 100%;
+    }
+    .step_counter_inner .document_manage .document_item .part_wrapper{
+        align-items: stretch;
+    }
+}
+@media screen and (max-width:$tablet) {
+    .step_counter_inner .create_profile .create_profile_inner .divider.mobile_paydetails .modal-body .paydetail_content{
+        width: 100%;
+    }
+    .step_counter_inner .create_profile .create_profile_inner .upload_item .form_field_wrapper label{
+        display: none;
+    }
+}
+@media screen and (max-width:$large_phone) {
+    .step_counter_inner .create_profile .checkbox_urgecare{
+        margin: 0 0 15px;
+    }
+    .step_counter_inner .create_profile .create_profile_inner .divider.mobile_paydetails .modal-body .paydetail_content{
+        width: 100%;
+    }
+    .step_counter_inner .create_profile .create_profile_inner .form_field_wrapper.checkbox_urgecare .invisible{
+        display: none;
+    }  
+    .step_counter_inner .availability .tab_content .online_consultation .week_days .part_wrapper .left.part{
+        width: 82%;
+    } 
+}
+@media screen and (max-width:$medium_iphone) {
+    .step_counter_inner .create_profile .create_profile_inner .incre_decre .form_field_wrapper .invisible{
+        display: none;
+    }
+    .step_counter_inner .availability .tab_content .online_consultation .week_days .part_wrapper .left.part{
+        width: 78%;
+    }
+    .step_counter_inner .availability .tab_content .online_consultation .content_item.week_days .part_wrapper .part.left .row .item{
+        width: 50%;
+    }
+    .step_counter_inner .availability .tab_content .online_consultation .content_item .increse_content{
+        align-items: stretch;
+        justify-content: space-between;
+    }
+    .step_counter_inner .availability .tab_content .online_consultation .content_item .increse_content .row_generate {
+        margin: 0 0 0 20px;
+    }
+    .step_counter_inner .availability .tab_content .online_consultation .content_item .increse_content .row_generate .mat-icon{
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .step_counter_inner .availability .tab_content .online_consultation .content_item .increse_content .form_field_wrapper .mat-form-field .mat-form-field-infix {
+        width: 60px;
+    }
+}
+@media screen and (max-width:$medium_phone) {
+    .add_doctor.dashboard_main_content {
+        padding: 15px;
+    }
+    .step_counter_inner .create_profile .create_profile_inner .divider .form_field_wrapper .license_date .mat-form-field:first-child {
+        margin-right: 0;
+    }
+    .step_counter_inner .create_profile .create_profile_inner .divider .form_field_wrapper .license_date{
+        flex-wrap: wrap;
+    }
+    .step_counter_inner .availability .tab_content .online_consultation .week_days .part_wrapper .left.part{
+        width: 65%;
+    } 
+    .step_counter_inner .availability .tab_content .online_consultation .content_item.week_days .part_wrapper .part.left .row .item {
+        width: 100%;
+    }
+    .step_counter_inner .availability .tab_content .online_consultation .content_item.week_days .part_wrapper .part.left .row .item .form_field_wrapper .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix{
+        width: 100%;
+    }
+}

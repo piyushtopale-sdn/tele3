@@ -1,0 +1,67 @@
+@import '../../../../../assets/css/variable/variable';
+
+.add_staff {
+    .main_title {
+        margin: 0 0 15px;
+    }
+
+    .primary_btn {
+        justify-content: flex-end;
+    }
+
+    .create_profile_inner {
+        border-radius: 15px;
+
+        .profile_img {
+            background: #E7E7E7;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 0 0 30px;
+        }
+    }
+
+    // .user_image_upload {
+    //     .user_upload_block {
+    //         .user_upload_wrapper {
+    //             background: unset;
+
+    //             .user_upload_icon img {
+    //                 width: unset;
+    //                 height: unset;
+    //                 line-height: 100px;
+    //                 border-radius: unset;
+    //             }
+    //         }
+    //     }
+    // }
+
+}
+
+.image-upload {
+    input {
+        display: none;
+    }
+
+    img {
+        width: 80px;
+        cursor: pointer;
+    }
+}
+
+// .speciality-select-block {
+//     .select2-label ~ .select2-container > div > .select2-selection--multiple {
+//         ul {
+//             // width: 400px !important;
+//             overflow: auto !important;
+//             position: relative;
+//             z-index: 10;
+//             height: 50px;
+//             li {
+//                 height: 35px;
+//                 display: flex;
+//                 align-items: center;
+//                 justify-content: center;
+//             }
+//         }
+//     }
+// }

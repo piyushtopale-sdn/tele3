@@ -1,0 +1,1413 @@
+<div
+  class="profile_manage dashboard_main_content"
+  *ngIf="doctorRole !== 'INDIVIDUAL_DOCTOR_STAFF'"
+>
+  <div class="profile_tab">
+    <mat-tab-group animationDuration="0ms">
+      <mat-tab  *ngIf="doctorRole !== 'INDIVIDUAL_DOCTOR_ADMIN'">
+        <ng-template mat-tab-label>
+          {{ "profile_setting" | translate }}
+        </ng-template>
+        <div class="edit_profile dashboard_main_content">
+          <div class="profile_setting">
+            <div class="profile_top">
+              <div class="left part">
+                <div class="user_image_upload">
+                  <input
+                    class="ng-hide user_upload_input"
+                    id="input-file-id"
+                    multiple
+                  />
+                  <div class="user_upload_block">
+                    <span class="user_upload_wrapper">
+                      <span class="user_upload_icon"
+                        ><img
+                          src="{{
+                            profileImage
+                              ? profileImage
+                              : 'assets/img/create_profile.png'
+                          }}"
+                      /></span>
+                    </span>
+                  </div>
+                </div>
+                <div class="user_info">
+                  <div class="user_title">{{ profileDetails?.full_name }}</div>
+                  <div class="user_email">
+                    {{ profileDetails?.for_portal_user?.email }}
+                  </div>
+                </div>
+              </div>
+              <div class="right part">
+                <!-- <div class="open_twentyfourhour">
+                  <div class="toggel-slide">
+                    <mat-slide-toggle
+                      [checked]="profileDetails?.for_portal_user?.notification"
+                      (change)="
+                        handleToggleChangeForActive(
+                          profileDetails,
+                          $event.checked
+                        )
+                      "
+                    >
+                      {{ "notification_status" | translate }}</mat-slide-toggle
+                    >
+                  </div>
+                </div> -->
+                <div class="primary_btn" *ngIf="doctorRole !== 'INDIVIDUAL_DOCTOR_ADMIN'">
+                  <button
+                    class="btn btn-secondary"
+                    (click)="handleEditProfile()"
+                  >
+                    {{ "edit_profile" | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="profile_contact">
+              <ul class="profile_contact_inner row">
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "phone_number" | translate }}</label>
+                  <div class="value">
+                    ({{ profileDetails?.for_portal_user?.country_code }})
+                    {{ profileDetails?.for_portal_user?.mobile }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "date_of_birth" | translate }}</label>
+                  <div class="value">
+                    {{ profileDetails?.dob | date : "dd/MM/YYYY" }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "gender" | translate }}</label>
+                  <div class="value">{{ profileDetails?.gender }}</div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "date_of_joined" | translate }}*</label>
+                  <div class="value">
+                    {{ profileDetails?.createdAt | date : "dd/MM/YYYY" }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "address" | translate }}</label>
+                  <div class="value">
+                    {{ profileDetails?.in_location?.address }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "neighbourhood" | translate }}</label>
+                  <div class="value">
+                    {{ profileDetails?.in_location?.neighborhood }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "country" | translate }}</label>
+                  <div class="value">{{ profileDetails?.in_location?.country }}</div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "region" | translate }}</label>
+                  <div class="value">{{ profileDetails?.in_location?.region }}</div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "province" | translate }}</label>
+                  <div class="value">{{ profileDetails?.in_location?.province }}</div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "department" | translate }}</label>
+                  <div class="value">{{ profileDetails?.in_location?.department }}</div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "city" | translate }}</label>
+                  <div class="value">{{ profileDetails?.in_location?.city }}</div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "village" | translate }}</label>
+                  <div class="value">{{ profileDetails?.in_location?.village }}</div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "pincode" | translate }}</label>
+                  <div class="value">
+                    {{ profileDetails?.in_location?.pincode }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "designation" | translate }}</label>
+                  <div class="value">{{ designation }}</div>
+                </li>
+                <!-- <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "title" | translate }}</label>
+                  <div class="value">{{ title }}</div>
+                </li> -->
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "years_of_experience" | translate }}*</label>
+                  <div class="value">
+                    {{ profileDetails?.years_of_experience }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "language" | translate }}</label>
+                  <div class="value">{{ profileDetails?.spoken_language }}</div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "specialty" | translate }}</label>
+                  <div class="value">
+                    {{ specialityValue && specialityValue.length > 0 ? specialityValue.join(', ') : "-" }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "category" | translate }}</label>                
+                  <div class="value" *ngFor="let data of categoryValues">
+                    {{ data?.categoryName ? data?.categoryName : "-" }}
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="about_us_section">
+              <div class="about_us_section_inner">
+                <label  style="color: #222222;">{{ "about_doctor" | translate }}</label>
+                <div class="value">{{ profileDetails?.about }}</div>
+              </div>
+            </div>
+
+           
+          </div>
+          <div class="subscribe_detail_inner availability mt-30">
+            <mat-accordion>
+              <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                  <mat-panel-title >
+                    {{ "availability" | translate }} 
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="expansion_panel">
+                  <div class="expansion_panel_inner">
+                    <div class="row">
+                      <label style="color: #222222;">
+                        {{ "week_days" | translate }} </label>                                            
+                      <div class="item">
+                        <div class="day">
+                          <div class="top_section section">
+                            <div class="title">{{ "sunday" | translate }}</div>
+                          </div>
+                          <div
+                            class="bottom_section section"
+                            *ngFor="let sun of availability?.Sun"
+                          >
+                            <div class="time">
+                              {{ "start_time" | translate }} :
+                              {{ returnWithAmPm(sun?.start_time) }}
+                            </div>
+                            <div class="time">
+                              {{ "end_time" | translate }} :
+                              {{ returnWithAmPm(sun?.end_time) }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="day">
+                          <div class="top_section section">
+                            <div class="title">{{ "monday" | translate }}</div>
+                          </div>
+                          <div
+                            class="bottom_section section"
+                            *ngFor="let mon of availability?.Mon"
+                          >
+                            <div class="time">
+                              {{ "start_time" | translate }} :
+                              {{ returnWithAmPm(mon?.start_time) }}
+                            </div>
+                            <div class="time">
+                              {{ "end_time" | translate }} :
+                              {{ returnWithAmPm(mon?.end_time) }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="day">
+                          <div class="top_section section">
+                            <div class="title">{{ "tuesday" | translate }}</div>
+                          </div>
+                          <div
+                            class="bottom_section section"
+                            *ngFor="let Tue of availability?.Tue"
+                          >
+                            <div class="time">
+                              {{ "start_time" | translate }} :
+                              {{ returnWithAmPm(Tue?.start_time) }}
+                            </div>
+                            <div class="time">
+                              {{ "end_time" | translate }} :
+                              {{ returnWithAmPm(Tue?.end_time) }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="day">
+                          <div class="top_section section">
+                            <div class="title">
+                              {{ "wednesday" | translate }}
+                            </div>
+                          </div>
+                          <div
+                            class="bottom_section section"
+                            *ngFor="let Wed of availability?.Wed"
+                          >
+                            <div class="time">
+                              {{ "start_time" | translate }} :
+                              {{ returnWithAmPm(Wed?.start_time) }}
+                            </div>
+                            <div class="time">
+                              {{ "end_time" | translate }} :
+                              {{ returnWithAmPm(Wed?.end_time) }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="day">
+                          <div class="top_section section">
+                            <div class="title">
+                              {{ "thursday" | translate }}
+                            </div>
+                          </div>
+                          <div
+                            class="bottom_section section"
+                            *ngFor="let thu of availability?.Thu"
+                          >
+                            <div class="time">
+                              {{ "start_time" | translate }} :
+                              {{ returnWithAmPm(thu?.start_time) }}
+                            </div>
+                            <div class="time">
+                              {{ "end_time" | translate }} :
+                              {{ returnWithAmPm(thu?.end_time) }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="day">
+                          <div class="top_section section">
+                            <div class="title">{{ "friday" | translate }}</div>
+                          </div>
+                          <div
+                            class="bottom_section section"
+                            *ngFor="let fri of availability?.Fri"
+                          >
+                            <div class="time">
+                              {{ "start_time" | translate }} :
+                              {{ returnWithAmPm(fri?.start_time) }}
+                            </div>
+                            <div class="time">
+                              {{ "end_time" | translate }} :
+                              {{ returnWithAmPm(fri?.end_time) }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="day">
+                          <div class="top_section section">
+                            <div class="title">
+                              {{ "saturday" | translate }}
+                            </div>
+                          </div>
+                          <div
+                            class="bottom_section section"
+                            *ngFor="let sat of availability?.Sat"
+                          >
+                            <div class="time">
+                              {{ "start_time" | translate }} :
+                              {{ returnWithAmPm(sat?.start_time) }}
+                            </div>
+                            <div class="time">
+                              {{ "end_time" | translate }} :
+                              {{ returnWithAmPm(sat?.end_time) }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                    <div class="row">
+                      <div class="filter-field" style="display: flex; align-items: center; gap: 15px;">
+                        <label style="font-size: 18px; white-space: nowrap;">
+                          {{ "total_available_slots" | translate }}: {{ doctorAvailableTimeSlot.length }},
+                            {{ "slot_time_interval" | translate }}: {{ slot_interval_time }} {{"min" | translate}}
+                        </label>
+                        
+                        <div class="form_field_wrapper" style="width: 157px;">
+                          <mat-form-field class="example-full-width" appearance="fill">
+                            <input
+                              matInput
+                              placeholder="{{ 'date' | translate }}"
+                              [(ngModel)]="dateFilter"
+                              [matDatepicker]="picker1"
+                              (dateChange)="handleSelectDateFilter($event)"
+                            />
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      
+                      <div class="consultation_datetime">                 
+                        <div class="consultation_datetime_inner row">                        
+                          <div class="expansion_item">                         
+                            <mat-button-toggle-group
+                              name="fontStyle"
+                              aria-label="Font Style" >
+                              <ng-container *ngFor="let slot of doctorAvailableTimeSlot">
+                                <ng-container *ngIf="slot?.status == 0">
+                                  <mat-button-toggle                                    
+                                    [value]="slot.slot"                                  
+                                    >{{ slot?.slot }}</mat-button-toggle
+                                  >
+                                </ng-container>                              
+                              </ng-container>
+                            </mat-button-toggle-group>                        
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+
+          <div class="subscribe_detail_inner availability mt-30">
+            <mat-accordion>
+              <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ "unavailability_date_and_time" | translate }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="expansion_panel">
+                  <div class="expansion_panel_inner">
+                    <div class="row" *ngFor="let slot of unavaliabledate_time">                      
+                      <div class="item" *ngIf="slot?.date !== ''" >
+                        <div class="day">
+                          <div class="top_section section">
+                            <div class="title">{{ slot?.date | date: "dd/MM/yyyy" }}</div>
+                          </div>
+                          <div
+                            class="bottom_section section"
+                           
+                          >
+                            <div class="time">
+                              {{ "start_time" | translate }} :
+                              {{ returnWithAmPm(slot?.start_time) }}
+                            </div>
+                            <div class="time">
+                              {{ "end_time" | translate }} :
+                              {{ returnWithAmPm(slot?.end_time) }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="text-center" *ngFor="let slot of unavaliabledate_time" >
+                        <div *ngIf="slot?.date === ''">
+                          <span
+                            ><b>{{ "no_unavailability_present" | translate }}</b></span
+                          >
+                        </div>
+                      </div>                      
+                    </div>                 
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+
+          <!-- <div class="subscribe_detail_inner document mt-30">
+            <mat-accordion>
+              <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ "document" | translate }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="expansion_panel">
+                  <div class="expansion_panel_inner">
+                    <div
+                      class="row"
+                      *ngFor="
+                        let doc of profileDetails?.in_document_management
+                          ?.document_details
+                      "
+                    >
+                      <div class="item">
+                        <div class="outer_detail_block">
+                          <div class="detail_section">
+                            <div class="doc_img">
+                              <img
+                                src="{{ doc?.image_url }}"
+                                (click)="
+                                  openVerticallyCenteredquickview(
+                                    quick_view,
+                                    doc?.image_url
+                                  )
+                                "
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="outer_detail_block">
+                          <div class="detail_section">
+                            <p>{{ "document_name" | translate }}</p>
+                            <p>{{ doc?.doc_name }}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="outer_detail_block">
+                          <div class="detail_section">
+                            <p>{{ "issue_date" | translate }}</p>
+                            <p>{{ doc?.issue_date | date : "dd/MM/YYYY" }}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="outer_detail_block last_child">
+                          <div class="detail_section">
+                            <p>{{ "expiration_date" | translate }}</p>
+                            <p>
+                              {{ doc?.expiration_date | date : "dd/MM/YYYY" }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div> -->
+
+          <div class="subscribe_detail_inner document mt-30">
+            <mat-accordion>
+              <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{ "license" | translate }}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="expansion_panel">
+                  <div class="expansion_panel_inner">
+                    <div class="row">
+                      <div class="item">
+                        <div class="outer_detail_block">
+                          <div class="detail_section">
+                            <div class="doc_img">
+                              <img
+                                src="{{
+                                  profileDetails?.license_details?.license_image_signed_url
+                                    ? profileDetails?.license_details?.license_image_signed_url
+                                    : 'License Imaging Here'
+                                }}"
+                              />
+                              <!-- <p>License Imaging Here</p> -->
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="outer_detail_block">
+                          <div class="detail_section">
+                            <p>{{ "license_number" | translate }}</p>
+                            <p>
+                              {{
+                                profileDetails?.license_details?.license_number
+                              }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="item">
+                        <div class="outer_detail_block">
+                          <div class="detail_section">
+                            <p>{{ "expiry_date" | translate }}</p>
+                            <p>
+                              {{
+                                profileDetails?.license_details
+                                  ?.license_expiry_date | date : "dd/MM/YYYY"
+                              }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          {{ "change_password" | translate }}
+        </ng-template>
+
+        <div class="tab_content">
+          <div class="change_pass">
+            <div class="changepass_inner">
+              <form
+                [formGroup]="changePasswordForm"
+                (ngSubmit)="handleChangePassword()"
+              >
+                <div class="form_field_wrapper">
+                  <label>{{ "current_password" | translate }}</label>
+                  <mat-form-field appearance="fill" class="password-input-block">
+                    <input
+                      type="password"
+                      matInput
+                      formControlName="old_password"
+                      placeholder="{{ 'current_password' | translate }}"
+                      [type]="hide1 ? 'password' : 'text'" />
+                      <a class="password-view" (click)="hide1 = !hide1">
+                        <mat-icon>{{
+                          hide1 ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </a>
+                  </mat-form-field>
+                </div>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['old_password'].errors?.['required']"
+                >
+                  {{ "enter_current_password" | translate }}*
+                </span>
+                <div class="form_field_wrapper">
+                  <label>{{ "new_password" | translate }}</label>
+                  <mat-form-field appearance="fill" class="password-input-block">
+                    <input
+                      type="password"
+                      matInput
+                      formControlName="new_password"
+                      placeholder="{{ 'new_password' | translate }}"
+                      [type]="hide2 ? 'password' : 'text'" />
+                      <a class="password-view" (click)="hide2 = !hide2">
+                        <mat-icon>{{
+                          hide2 ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </a>
+                  </mat-form-field>
+                </div>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['new_password'].errors?.['required']"
+                >
+                  {{ "enter_password" | translate }}*
+                </span>
+                <div
+                  class="text-danger"
+                  *ngIf=" f['new_password'].errors?.['minlength']"
+                >
+                  {{ "must_be_atleast_8_char" | translate }}
+                </div>
+                <div
+                  class="text-danger"
+                  *ngIf="f['new_password'].errors?.['hasNumber']"
+                >
+                  {{ "must_contain_atleast_1_number" | translate }}
+                </div>
+                <div
+                  class="text-danger"
+                  *ngIf="f['new_password'].errors?.['hasCapitalCase']"
+                >
+                  {{ "must_contain_atleast_1_capcase" | translate }}
+                </div>
+                <div
+                  class="text-danger"
+                  *ngIf="f['new_password'].errors?.['hasSmallCase']"
+                >
+                  {{ "must_contain_atleast_1_smallcase" | translate }}
+                </div>
+                <div
+                  class="text-danger"
+                  *ngIf="f['new_password'].errors?.['hasSpecialCharacters']"
+                >
+                  {{ "must_contain_atleast_1_number" | translate }}
+                </div>
+                <div class="form_field_wrapper">
+                  <label>{{ "confirm_password" | translate }}</label>
+                  <mat-form-field appearance="fill" class="password-input-block">
+                    <input
+                      type="password"
+                      matInput
+                      formControlName="confirm_password"
+                      placeholder="{{ 'confirm_password' | translate }}"
+                      [type]="hide3 ? 'password' : 'text'" />
+                      <a class="password-view" (click)="hide3 = !hide3">
+                        <mat-icon>{{
+                          hide3 ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </a>
+                  </mat-form-field>
+                </div>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['confirm_password'].errors?.['required']"
+                >
+                  {{ "enter_confirm_password" | translate }}*
+                </span>
+                <span
+                  class="text-danger"
+                  *ngIf="f['confirm_password'].errors?.['matching']"
+                >
+                  {{ "confim_password_does_not_match" | translate }}
+                </span>
+
+                <div class="form-btn primary_btn">
+                  <button type="submit" class="login_btn btn btn-primary">
+                    {{ "reset_password" | translate }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+
+<!-- --------------------------------------View Details for INDIVIDUAL_DOCTOR_STAFF/Hospital_DOCTOR_STAFF/Hospital_STAFF---------------------------------------- -->
+<div
+  class="profile_manage dashboard_main_content"
+  *ngIf="doctorRole === 'INDIVIDUAL_DOCTOR_STAFF'"
+>
+  <div class="profile_tab">
+    <mat-tab-group animationDuration="0ms">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          {{ "profile_setting" | translate }}
+        </ng-template>
+        <div class="edit_profile dashboard_main_content">
+          <div class="profile_setting">
+            <div class="profile_top">
+              <div class="left part">
+                <div class="user_image_upload">
+                  <input
+                    class="ng-hide user_upload_input"
+                    id="input-file-id"
+                    multiple
+                    type="file"
+                  />
+                  <div class="user_upload_block">
+                    <span class="user_upload_wrapper">
+                      <span class="user_upload_icon"
+                        ><img
+                          src="{{
+                            staff_details?.in_profile?.profile_picture
+                              ? staff_details?.in_profile?.profile_picture
+                              : 'assets/img/create_profile.png'
+                          }}"
+                      /></span>
+                    </span>
+                  </div>
+                </div>
+                <div class="user_info">
+                  <div class="user_title">
+                    {{ staff_details?.in_profile?.name }}
+                  </div>
+                  <div class="user_email">
+                    {{
+                      staff_details?.in_profile?.in_location?.for_portal_user
+                        ?.email
+                    }}
+                  </div>
+                </div>
+              </div>
+              <div class="right part">
+                <!-- <div class="open_twentyfourhour">
+                        <div class="toggel-slide">
+                            <mat-slide-toggle>Open 24 Hrs</mat-slide-toggle>
+                        </div>
+                    </div> -->
+                <div class="primary_btn">
+                  <button
+                    class="btn btn-secondary"
+                    (click)="handleEditProfile()"
+                  >
+                    {{ "edit_profile" | translate }}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="profile_contact">
+              <ul class="profile_contact_inner row">
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "phone_number" | translate }}</label>
+                  <div class="value">
+                    {{
+                      staff_details?.in_profile?.in_location?.for_portal_user
+                        ?.mobile
+                    }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "date_of_birth" | translate }}</label>
+                  <div class="value">
+                    {{ staff_details?.in_profile?.dob | date : "dd/MM/YYYY" }}
+                  </div>
+                </li>
+                <!-- <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>Gender</label>
+                  <div class="value">{{ staff_details?.gender }}</div>
+                </li> -->
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "date_of_joined" | translate }}*</label>
+                  <div class="value">
+                    {{
+                      staff_details?.in_profile?.createdAt | date : "dd/MM/YYYY"
+                    }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "address" | translate }}</label>
+                  <div class="value">
+                    {{ staff_details?.in_profile?.in_location?.address }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "neighbourhood" | translate }}</label>
+                  <div class="value">
+                    {{ staff_details?.in_profile?.in_location?.neighborhood }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "country" | translate }}</label>
+                  <div class="value">
+                    {{ staff_details?.in_profile?.in_location?.country }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "region" | translate }}</label>
+                  <div class="value">
+                    {{ staff_details?.in_profile?.in_location?.region }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "province" | translate }}</label>
+                  <div class="value">
+                    {{ staff_details?.in_profile?.in_location?.province }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "department" | translate }}</label>
+                  <div class="value">
+                    {{ staff_details?.in_profile?.in_location?.department }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "city" | translate }}</label>
+                  <div class="value">
+                    {{ staff_details?.in_profile?.in_location?.city }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "village" | translate }}</label>
+                  <div class="value">
+                    {{ staff_details?.in_profile?.in_location?.village }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "pincode" | translate }}</label>
+                  <div class="value">
+                    {{ staff_details?.in_profile?.in_location?.pincode }}
+                  </div>
+                </li>
+                <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
+                  <label>{{ "language" | translate }}</label>
+                  <div class="value">
+                    {{ staff_details?.in_profile?.language }}
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="about_us_section">
+              <div class="about_us_section_inner">
+                <label style="color: #222222;opacity: 0.7;">{{ "about_us" | translate }}</label>
+                <div class="value">
+                  {{ staff_details?.in_profile?.about }}
+                </div>
+              </div>
+            </div>
+            <div class="about_us_section">
+              <div class="about_us_section_inner">
+                <label style="color: #222222;opacity: 0.7;">{{ "role" | translate }}</label>
+                <div class="value">
+                  {{ staff_details?.role?.name }}
+                </div>
+              </div>
+            </div>
+            <div class="about_us_section">
+              <div class="about_us_section_inner">
+                <label style="color: #222222;opacity: 0.7;">{{ "speciality" | translate }}</label>
+                <div class="value">
+                  {{ staff_details?.specialty?.specilization }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab>
+        <ng-template mat-tab-label>
+          {{ "change_password" | translate }}
+        </ng-template>
+
+        <div class="tab_content">
+          <div class="change_pass">
+            <div class="changepass_inner">
+              <form
+                [formGroup]="changePasswordForm"
+                (ngSubmit)="handleChangePassword()"
+              >
+                <div class="form_field_wrapper">
+                  <label>{{ "current_password" | translate }}</label>
+                  <mat-form-field appearance="fill" class="password-input-block">
+                    <input
+                      type="password"
+                      matInput
+                      formControlName="old_password"
+                      placeholder="{{ 'current_password' | translate }}"
+                      [type]="hide4 ? 'password' : 'text'" />
+                      <a class="password-view" (click)="hide4 = !hide4">
+                        <mat-icon>{{
+                          hide4 ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </a>
+                  </mat-form-field>
+                </div>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['old_password'].errors?.['required']"
+                >
+                  {{ "enter_current_password" | translate }}*
+                </span>
+                <div class="form_field_wrapper">
+                  <label>{{ "new_password" | translate }}</label>
+                  <mat-form-field appearance="fill" class="password-input-block">
+                    <input
+                      type="password"
+                      matInput
+                      formControlName="new_password"
+                      placeholder="{{ 'new_password' | translate }}"
+                      [type]="hide5 ? 'password' : 'text'" />
+                      <a class="password-view" (click)="hide5 = !hide5">
+                        <mat-icon>{{
+                          hide5 ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </a>
+                  </mat-form-field>
+                </div>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['new_password'].errors?.['required']"
+                >
+                  {{ "enter_password" | translate }}*
+                </span>
+                <div
+                  class="text-danger"
+                  *ngIf=" f['new_password'].errors?.['minlength']"
+                >
+                  {{ "must_be_atleast_8_char" | translate }}
+                </div>
+                <div
+                  class="text-danger"
+                  *ngIf="f['new_password'].errors?.['hasNumber']"
+                >
+                  {{ "must_contain_atleast_1_number" | translate }}
+                </div>
+                <div
+                  class="text-danger"
+                  *ngIf="f['new_password'].errors?.['hasCapitalCase']"
+                >
+                  {{ "must_contain_atleast_1_capcase" | translate }}
+                </div>
+                <div
+                  class="text-danger"
+                  *ngIf="f['new_password'].errors?.['hasSmallCase']"
+                >
+                  {{ "must_contain_atleast_1_smallcase" | translate }}
+                </div>
+                <div
+                  class="text-danger"
+                  *ngIf="f['new_password'].errors?.['hasSpecialCharacters']"
+                >
+                  {{ "must_contain_atleast_1_number" | translate }}
+                </div>
+                <div class="form_field_wrapper">
+                  <label>{{ "confirm_password" | translate }}</label>
+                  <mat-form-field appearance="fill" class="password-input-block">
+                    <input
+                      type="password"
+                      matInput
+                      formControlName="confirm_password"
+                      placeholder="{{ 'confirm_password' | translate }}"
+                      [type]="hide6 ? 'password' : 'text'" />
+                      <a class="password-view" (click)="hide6 = !hide6">
+                        <mat-icon>{{
+                          hide6 ? "visibility_off" : "visibility"
+                        }}</mat-icon>
+                      </a>
+                  </mat-form-field>
+                </div>
+                <span
+                  class="text-danger"
+                  *ngIf="isSubmitted && f['confirm_password'].errors?.['required']"
+                >
+                  {{ "enter_confirm_password" | translate }}*
+                </span>
+                <span
+                  class="text-danger"
+                  *ngIf="f['confirm_password'].errors?.['matching']"
+                >
+                  {{ "confim_password_does_not_match" | translate }}
+                </span>
+
+                <div class="form-btn primary_btn">
+                  <button type="submit" class="login_btn btn btn-primary">
+                    {{ "reset_password" | translate }}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+
+<!-- ---------------------------------------Edit Staff modal---------------------------------------- -->
+<div class="edit_staff">
+  <ng-template #editstaffcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "edit_profile" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="handleClose()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editStaff">
+          <div class="profile_img">
+            <img
+              src="{{
+                staff_profile ? staff_profile : '/assets/img/create_profile.png'
+              }}"
+              width="100px"
+              height="100px"
+            />
+            <mat-icon
+              class="closeicon"
+              *ngIf="staff_profile"
+              (click)="removeSelectpic()"
+              >close</mat-icon
+            >
+            <input
+              class="ng-hide user_upload_input"
+              (change)="onGroupIconChange($event)"
+              accept="image/*"
+              id="input-file-id"
+              type="file"
+            />
+          </div>
+          <div class="row">
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "First Name" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="{{ 'enter_first_name' | translate }}"
+                    formControlName="first_name"
+                  />
+                </mat-form-field>
+                <mat-error
+                  *ngIf="editStaff.get('first_name').hasError('required')"
+                  >{{ "first_name_is_required" | translate }}.</mat-error
+                >
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "first_name_arabic" | translate
+                  }}<span class="danger">*</span></label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput 
+                    formControlName="first_name_arabic" />
+                </mat-form-field>
+                <span class="text-danger" *ngIf="isSubmitted && editStaff.get('first_name_arabic').hasError('required')">
+                  {{ "field_is_required" | translate }}*
+                </span>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "middle_name" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="{{ 'enter_middle_name' | translate }}"
+                    formControlName="middle_name"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "middle_name_arabic" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput
+                    formControlName="middle_name_arabic" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "last_name" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="{{ 'enter_last_name' | translate }}"
+                    formControlName="last_name"
+                  />
+                </mat-form-field>
+                <mat-error
+                  *ngIf="editStaff.get('last_name').hasError('required')"
+                  >{{ "last_name_is_required" | translate }}.</mat-error
+                >
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3 mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "last_name_arabic" | translate
+                  }}<span class="danger">*</span></label>
+                <mat-form-field appearance="fill">
+                  <input type="text" matInput 
+                    formControlName="last_name_arabic" />
+                </mat-form-field>
+                <span class="text-danger" *ngIf="isSubmitted && editStaff.get('last_name_arabic').hasError('required')">
+                  {{ "field_is_required" | translate }}*
+                </span>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "date_of_birth" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <input
+                    matInput
+                    [matDatepickerFilter]="myFilter"
+                    [matDatepicker]="picker"
+                    placeholder="{{ 'date_of_birth' | translate }}"
+                    formControlName="dob"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <mat-error *ngIf="editStaff.get('dob').hasError('required')"
+                  >{{ "dob_is_required" | translate }}.</mat-error
+                >
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper speciality-select-block">
+                <label
+                  >{{ "spoken_Language" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <select2
+                  class="test"
+                  [overlay]="overlay"
+                  multiple="multiple"
+                  [limitSelection]="0"
+                  [minCountForSearch]="0"
+                  [data]="spokenLanguages"
+                  [(ngModel)]="selectedLanguages"
+                  formControlName="language"
+                  (update)="onSelectionChange($event)"
+                >
+                </select2>
+                <mat-error
+                  *ngIf="editStaff.get('language').hasError('required')"
+                  >{{ "language_is_required" | translate }}.</mat-error
+                >
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "address" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    id="address"
+                    name="address"
+                    placeholder="{{ 'enter_address' | translate }}"
+                    formControlName="address"
+                  />
+                </mat-form-field>
+                <mat-error *ngIf="editStaff.get('address').hasError('required')"
+                  >{{ "address_is_required" | translate }}.</mat-error
+                >
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "neighbourhood" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    matInput
+                    placeholder="Enter neighbourhood"
+                    formControlName="neighbourhood"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "country" | translate
+                  }}<span class="danger">*</span></label
+                >
+                
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_country' | translate)" matInput formControlName="country" />
+                </mat-form-field> 
+                <mat-error *ngIf="editStaff.get('country').hasError('required')"
+                  >{{ "country_is_required" | translate }}.</mat-error
+                >
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "region" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_region' | translate)" matInput formControlName="region" />
+                </mat-form-field> 
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "province" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_province' | translate)" matInput formControlName="province" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "department" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_department' | translate)" matInput formControlName="department" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "city" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_city' | translate)" matInput formControlName="city" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "village" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input type="text" [placeholder]="('select_village' | translate)" matInput formControlName="village" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label>{{ "pincode" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    placeholder="Enter pincode"
+                    matInput
+                    formControlName="pincode"
+                    minlength="5"
+                    maxlength="6"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "phone_number" | translate
+                  }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input
+                    matInput
+                    #countryPhone
+                    placeholder="{{ 'enter_phone_number' | translate }}"
+                    id="mobile"
+                    (focus)="onFocus()"
+                    formControlName="mobile"
+                    ng2TelInput
+                  />
+                </mat-form-field>
+                <mat-error *ngIf="editStaff.get('mobile').hasError('required')"
+                  >{{ "phone_number_is_required" | translate }}.</mat-error
+                >
+              </div>
+            </div>
+            <div class="item col-sm-6 col-md-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "email" | translate }}<span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill">
+                  <input
+                    type="text"
+                    readonly="'"
+                    matInput
+                    placeholder="Enter email"
+                    formControlName="email"
+                  />
+                </mat-form-field>
+                <mat-error
+                  *ngIf="editStaff.get('email').hasError('required')"
+                  >{{ "email_is_required" | translate }}</mat-error
+                >
+              </div>
+            </div>
+            <div class="item col-md-12">
+              <div class="form_field_wrapper">
+                <label>{{ "about_staff" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <textarea
+                    matInput
+                    placeholder="{{ 'describe_about_staff' | translate }}*"
+                    formControlName="about_staff"
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="primary_btn mt-2">
+          <button
+            type="button"
+            (click)="handleClose()"
+            class="btn btn-secondary"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button
+            type="button"
+            (click)="editStaffDetails()"
+            class="btn btn-primary"
+          >
+            {{ "save" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Actiate DeActivate modal -->
+<ng-template #activateDeactivate let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/reject.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>You {{ notificationStatus }} to receive further Notification</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="updateNotificationStatus()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Quickview Modal -->
+
+<ng-template #quick_view let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="docview_img">
+        <img src="{{ setDocToView }}" width="600px" height="500px" />
+      </div>
+    </div>
+  </div>
+</ng-template>

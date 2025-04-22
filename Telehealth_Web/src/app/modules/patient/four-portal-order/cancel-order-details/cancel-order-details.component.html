@@ -1,0 +1,326 @@
+<div class="details_patient dashboard_main_content">
+  <div
+    class="header-block-status d-flex justify-content-between align-items-center mb-4"
+  >
+    <div class="back-btn">
+      <mat-icon (click)="gotoOrderList()"> arrow_back_ios </mat-icon>
+      {{ "back" | translate }}
+    </div>
+    <div class="status-block">
+      <span>{{ "status" | translate }} :-</span
+      ><span>{{ "cancelled" | translate }}</span>
+    </div>
+  </div>
+
+  <div class="main_title">
+    {{ "patient_details" | translate }} (<span class="error">{{
+      "order_cancelled" | translate
+    }}</span
+    >)
+  </div>
+  <div class="profile_data patient-profile-data">
+    <div class="profile_info">
+      <div class="profile_image_block">
+        <div class="profile_image">
+          <img *ngIf="portal_Profile" src="{{ portal_Profile }}" />
+          <img
+            *ngIf="!portal_Profile"
+            src="../../../assets/img/default_user.png"
+          />
+        </div>
+        <div class="profile_contact">
+          <div class="profile_title">
+            {{ patient_details?.first_name }}
+            {{ patient_details?.middle_name }}
+            {{ patient_details?.last_name }}
+          </div>
+          <div class="lable">{{ "email" | translate }}</div>
+          <div class="user_value">
+            {{ patient_details?.for_portal_user?.email }}
+          </div>
+        </div>
+      </div>
+      <ul class="profile_info_inner profile_info_with_img">
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "phone_number" | translate }}</div>
+            <div class="user_value">
+              ({{ patient_details?.for_portal_user?.country_code }})
+              {{ patient_details?.for_portal_user?.mobile }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "date_of_birth" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.dob | date : "dd/MM/yyyy" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "gender" | translate }}</div>
+            <div class="user_value">{{ patient_details?.gender }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "address" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.in_location?.address }}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="insurance_details" *ngIf="subscriber_id !== null">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ "insurance_details" | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="expansion_panel">
+          <div class="expansion_panel_inner">
+            <div class="profile_data insurance-profile-data">
+              <div class="profile_info">
+                <div class="profile_image_block">
+                  <div class="profile_image">
+                    <img
+                      *ngIf="subscriberdetails?.insurance_card_id_proof"
+                      src="{{ subscriberdetails?.insurance_card_id_proof }}"
+                    />
+                    <img
+                      *ngIf="!subscriberdetails?.insurance_card_id_proof"
+                      src="../../../assets/img/insurance.png"
+                    />
+                  </div>
+                  <div class="profile_contact">
+                    <div class="lable">{{ "policy_ID" | translate }}</div>
+                    <div class="user_value">
+                      {{ subscriberdetails?.policy_id }}
+                    </div>
+                  </div>
+                </div>
+                <ul class="profile_info_inner profile_info_with_img">
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "card_ID" | translate }}</div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.card_id }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "employee_ID" | translate }}</div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.employee_id }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">
+                        {{ "insurance_provider" | translate }}
+                      </div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.for_user?.company_name }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">
+                        {{ "reimbursement_rate" | translate }}
+                      </div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.reimbersement_rate }} %
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "plan_name" | translate }}</div>
+                      {{ subscriberdetails?.health_plan_for?.name }}
+
+                      <div class="user_value"></div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "insurance_ID" | translate }}</div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.insurance_id }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">
+                        {{ "insurance_holder" | translate }}
+                      </div>
+                      <div class="user_value">
+                        {{ subscriberdetails?.insurance_holder_name }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "expiry_date" | translate }}</div>
+                      <div class="user_value">
+                        {{ "from" | translate }}
+                        {{
+                          subscriberdetails?.insurance_validity_from
+                            | date : "dd/MM/yyyy"
+                        }}
+                        {{ "to" | translate }}
+                        {{
+                          subscriberdetails?.insurance_validity_to
+                            | date : "dd/MM/yyyy"
+                        }}
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+
+  <div class="medicine_info">
+    <div class="main_title">{{ portal_type }} {{ "test" | translate }}</div>
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          class="mat-elevation-z8 withoutpagination"
+        >
+          <!-- Purchase Date Column -->
+          <ng-container matColumnDef="medicinename">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "test_name" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.name }}
+            </td>
+          </ng-container>
+
+          <!--Pack or Unit Column -->
+          <ng-container matColumnDef="packorunit">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "pack_or_unit" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.prescribed }}
+            </td>
+          </ng-container>
+
+          <!--Frequency Column -->
+          <ng-container matColumnDef="frequency">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "frequency" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.frequency }}
+            </td>
+          </ng-container>
+
+          <!--Duration (Days)  Column -->
+          <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "duration" | translate }} ({{ "days" | translate }})
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.duration }}
+            </td>
+          </ng-container>
+
+          <!--Medicine Unit Cost  Column -->
+          <ng-container matColumnDef="medicineunitcost">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "test_unit_cost" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.priceperunit }}
+            </td>
+          </ng-container>
+
+          <!--Total Cost Column -->
+          <ng-container matColumnDef="totalcost">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "total_cost" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.totalcost }}
+            </td>
+          </ng-container>
+
+          <!--Available  Column -->
+          <ng-container matColumnDef="available">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "available" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.available ? "yes" : "no" }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
+    <div class="medicine_info_bottom">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form_field_wrapper">
+            <label>{{ "total_test_cost" | translate }}</label>
+            <mat-form-field appearance="fill">
+              <input
+                type="text"
+                matInput
+                disabled="disabled"
+                [(ngModel)]="orderTest.total_cost"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form_field_wrapper">
+            <label>{{ "co_pay" | translate }}</label>
+            <mat-form-field appearance="fill">
+              <input
+                type="text"
+                matInput
+                disabled="disabled"
+                [(ngModel)]="orderTest.copay"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form_field_wrapper">
+            <label>{{ "insurance_to_be_paid" | translate }}</label>
+            <mat-form-field appearance="fill">
+              <input
+                type="text"
+                matInput
+                disabled="disabled"
+                [(ngModel)]="orderTest.insurance_paid"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

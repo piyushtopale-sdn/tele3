@@ -1,0 +1,564 @@
+@import '../../../../../assets/css/variable/variable';
+
+.material-icons{
+    cursor: pointer;
+}
+.text-start{
+    display:flex;
+    }
+
+    .text-start{
+        .item{
+           
+                .btn{
+                    &.active{
+                        background-color: $bodycolor;
+                        color: $white_color;    
+                    }
+                }
+           
+        }
+    }
+.appointment_list{
+    .top_bar{
+        margin: 0 0 35px;
+        .left_part{
+            .primary_btn{
+                .btn {
+                    background: #FFFFFF;
+                    color: $bodycolor;
+                    border: 1px solid $bodycolor;
+                    border-radius: 10px;
+                    padding: 0;
+                    margin: 0 15px 0 0;
+                    .btn_svg{
+                        height: 50px;
+                        width: 50px;
+                        line-height: 50px;
+                        border-radius: 9px;
+                        svg{
+                            fill: $bodycolor;
+                            width: 20px;
+                            height: 20px;
+                        }
+                    }
+                    &:hover{
+                        .btn_svg{
+                            background-color: $bodycolor;
+                            svg{
+                                fill: $white_color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .right_part{
+            .content_wrap{
+                flex-wrap: wrap;
+                .policy{
+                    margin: 0 0 0 20px;
+                    display: flex;
+                    align-items: baseline;
+                    label{
+                        margin-right: 12px;
+                        min-width: 110px;
+                        line-height: 20px;
+                    }
+                    .form_field_wrapper{
+       
+                        .fieldicon_wrap{
+                            display: flex;
+                            justify-content: space-between;
+                            .mat-icon{
+                                border-radius: 10px;
+                                width: 50px;
+                                height: 50px;
+                                line-height: 50px;
+                                min-width: 50px;
+                                text-align: center;
+                                margin-left: 15px;
+                                &.minus{
+                                    background: #FDE6E5;
+                                    border: 1px solid #FDE6E5;
+                                    border-radius: 10px;
+                                    color: #F05A4F;
+                                }
+                                &.plus{
+                                    background: #0B4977;
+                                    color: #ffffff;  
+                                }
+                            }
+                        }
+                        .mat-form-field{
+                            width: 100%;
+                            padding-right: 1rem;
+                            .mat-form-field-wrapper{
+                                padding-bottom: 20px;
+                            }
+                        } 
+                    }
+                }
+               
+            }
+        }
+    }
+
+}
+
+
+// Reschedule appointment modal css 
+.choose_date {
+    .resshedule_appointment{
+        display: flex;
+        background: #FFFFFF;
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        align-items: center;
+        padding: 15px;
+        .content_block{
+            margin-left: 25px;
+            h3{
+                font-weight: 500;
+                font-size: 22px;
+                line-height: 28px;
+                color: #0C2F49;    
+                margin-bottom: 10px;        
+            }
+            p{
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 19px;
+                color: #0C2F49;
+                margin-bottom: 15px; 
+            }
+            ul{
+                margin: 0;
+                padding: 0;
+                li{
+                    list-style: none;
+                    display: inline-block;
+                    padding-right: 15px;
+                    .doctore_detail{
+                        p{
+                            margin-bottom: 5px;
+                            font-weight: 400;
+                            font-size: 12px;
+                            line-height: 15px;
+                            color: #0C2F49;
+                        }
+                        h4{
+                            font-weight: 600;
+                            font-size: 16px;
+                            line-height: 19px;
+                            color: #0C2F49;
+                            margin-bottom: 0;
+                            i{
+                                color: $star_color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .choose_slot{
+        padding: 30px 0 15px;
+        .heading{
+            h4{
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 24px;
+                letter-spacing: 0.2px;
+                color: #25282B;
+            }
+        }
+        .choose_detail{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            .nearest_slot{
+                margin: 0 0 10px;
+                p{
+                    font-weight: 400;
+                    font-size: 16px;
+                    line-height: 19px;
+                    color: $bodyopacitylightcolor;
+                }
+                h3{
+                    font-weight: 400;
+                    font-size: 18px;
+                    line-height: 22px;
+                    color: #0C2F49;
+                    margin-bottom: 0;
+                }
+            }
+            .btn{
+                margin: 0 0 10px;
+            }
+        }
+    }
+    .primary_btn{
+        flex-wrap: wrap;
+        .btn { 
+            margin-top: 15px;
+        }
+    }
+}
+// Reschedule Appointment1
+.select_datetime{
+    .resshedule_appointment{
+        display: flex;
+        background: #FFFFFF;
+        border: 1px solid #B6C8D6;
+        border-radius: 15px;
+        align-items: center;
+        padding: 15px;
+        .content_block{
+            margin-left: 25px;
+            h3{
+                font-weight: 500;
+                font-size: 22px;
+                line-height: 28px;
+                color: #0C2F49;    
+                margin-bottom: 10px;        
+            }
+            p{
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 19px;
+                color: #0C2F49;
+                margin-bottom: 15px; 
+            }
+            ul{
+                margin: 0;
+                padding: 0;
+                li{
+                    list-style: none;
+                    display: inline-block;
+                    padding-right: 15px;
+                    .doctore_detail{
+                        p{
+                            margin-bottom: 5px;
+                            font-weight: 400;
+                            font-size: 12px;
+                            line-height: 15px;
+                            color: #0C2F49;
+                        }
+                        h4{
+                            font-weight: 600;
+                            font-size: 16px;
+                            line-height: 19px;
+                            color: #0C2F49;
+                            margin-bottom: 0;
+                            i{
+                                color: $star_color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .choose_slot{
+        padding: 30px 0 15px;
+        .heading{
+            h4{
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 24px;
+                letter-spacing: 0.2px;
+                color: #25282B;
+            }
+        }
+        .choose_detail{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            .nearest_slot{
+                margin: 0 0 10px;
+                p{
+                    font-weight: 400;
+                    font-size: 16px;
+                    line-height: 19px;
+                    color: $bodyopacitylightcolor;
+                }
+                h3{
+                    font-weight: 400;
+                    font-size: 18px;
+                    line-height: 22px;
+                    color: #0C2F49;
+                    margin-bottom: 0;
+                }
+            }
+            .btn{
+                margin: 0 0 10px;
+            }
+        }
+    }
+    .primary_btn{
+        flex-wrap: wrap;
+        .btn { 
+            margin-top: 15px;
+        }
+    }
+    .consultation_datetime{
+        .consultation_datetime_inner{
+            margin: 0;
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+            .expansion_item {
+                border-right: 1px solid #B6C8D6;  
+                border-bottom: none;
+                padding: 20px;
+                .primary_btn{
+                    flex-wrap: wrap;
+                    margin: 0 -10px;
+                    .btn{
+                        font-size: $font_small;
+                        font-weight: 600;
+                        min-width: 120px;
+                        margin: 0 2px 15px;
+                        &.active {
+                            background-color: $bodycolor;
+                            border-color: $bodycolor;
+                            color: $white_color;
+                        }
+                        &.disable {
+                            opacity: 0.6;
+                            cursor: not-allowed;
+                            &:hover{
+                                background-color: $white_color;
+                                border-color: #B6C8D6;
+                                color: #212529;
+                            }
+                        }
+                        
+                    }
+                }
+                .mat-button-toggle-group{
+                    border: none;
+                    flex-wrap: wrap;
+                    margin: 0 -10px;
+                    .mat-button-toggle{
+                        border-left: none;
+                        margin: 0 10px 10px;
+                        border: 1px solid rgba(11, 73, 119, 0.15);
+                        border-radius: 10px;
+                        .mat-button-toggle-label-content{
+                            padding: 10px 15px;
+                            font-weight: 600;
+                            font-size: $font_small;
+                            white-space: break-spaces;
+                            color: #214469;        
+                            line-height: 22px;
+                            white-space: break-spaces;
+                        }
+                        &:hover{
+                            background-color: $bodycolor;
+                            border-color: $bodycolor;
+                            .mat-button-toggle-label-content{
+                                color: $white_color;
+                            }
+                        }
+                        &.disable {
+                            opacity: 0.6;
+                            cursor: not-allowed;
+                            &:hover{
+                                background-color: $white_color;
+                                border-color: #B6C8D6;
+                                color: #212529;
+                            }
+                        }
+                        &.mat-button-toggle-checked{
+                            background-color: $bodycolor;
+                            border-color: $bodycolor;
+                            .mat-button-toggle-label-content{
+                                color: $white_color;
+                            }
+                        }
+                    }
+                }
+                &:last-child{
+                    border: none;
+                }
+                &.calender{
+                    padding: 0;
+                }
+            }
+        }
+    }
+}
+// success modal css
+.success {
+    .modal-body{
+        .primary_btn {
+            justify-content: center;
+        }
+        p{
+            font-weight: 600;
+            font-size: 20px;
+            line-height: 28px;
+            text-align: center;
+            color: #25282B;
+            
+        }
+    }
+}
+
+
+
+@media screen and (min-width:$desktop_large_up) {
+    .appointment_list .top_bar .right_part .content_wrap .policy{
+        margin: 0 0 0 10px;
+    }
+    .appointment_list .top_bar .right_part .content_wrap .policy label {
+        margin-right: 7px;
+        min-width: auto;
+    }
+}
+@media screen and (min-width:1500px) {
+    .appointment_list .top_bar .right_part .content_wrap .policy .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+        width: 100px;
+    }
+}
+@media screen and (max-width:$desktop_large) {
+    .appointment_list .top_bar .right_part .content_wrap .policy .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+        width: 113px;
+    }
+    .appointment_list .top_bar .right_part .content_wrap .policy{
+        width: 46%;
+    }
+    .appointment_list .top_bar .right_part .content_wrap .policy .form_field_wrapper{
+        width: 100%;
+    }
+
+
+}
+@media screen and (max-width:$desktop_medium) {
+    .appointment_list .top_bar{
+        flex-direction: column;
+    }
+    .appointment_list .top_bar .right_part{
+        margin-top: 25px;
+    }
+}
+@media screen and (max-width:$large_phone) {
+    .appointment_list .top_bar .right_part .content_wrap .policy,
+    .appointment_list .top_bar .right_part .content_wrap .policy.date,
+    .appointment_list .top_bar .right_part .content_wrap .policy:first-child {
+        width: 100%;
+        margin: 0 0 10px;
+        flex-direction: column;
+    }
+    .appointment_list .top_bar .right_part .content_wrap .policy:last-child {
+        margin-bottom: 0;
+    }
+    .appointment_list .top_bar .content_wrap{
+        margin: 0;
+    }
+
+
+    .choose_date .resshedule_appointment {
+        flex-wrap: wrap;
+    }
+    .choose_date .resshedule_appointment .image_block{
+        margin: 0 0 15px;
+    }
+    .choose_date .resshedule_appointment .content_block ul li{
+        margin: 0 0 15px;
+    }
+    .choose_date .resshedule_appointment .content_block {
+        margin-left: 0;
+    }
+
+    .select_datetime .resshedule_appointment {
+        flex-wrap: wrap;
+    }
+    .select_datetime .resshedule_appointment .image_block{
+        margin: 0 0 15px;
+    }
+    .select_datetime .resshedule_appointment .content_block ul li{
+        margin: 0 0 15px;
+    }
+    .select_datetime .resshedule_appointment .content_block {
+        margin-left: 0;
+    }
+    .select_datetime .consultation_datetime .consultation_datetime_inner .expansion_item.calender{
+        border-right: none;
+        border-bottom: 1px solid #B6C8D6;
+    }
+}
+@media screen and (max-width:$medium_phone) {
+.choose_date .custome_modal .primary_btn .btn{
+    width: 100%;
+    margin: 15px 0 0;
+}
+.select_datetime .custome_modal .primary_btn .btn{
+    width: 100%;
+}
+}
+
+.disabled {
+    color: gray;
+    cursor: not-allowed;
+  }
+
+  // Set remainder css start
+.common_plan{
+   
+    .form_field_wrapper{
+       
+        .fieldicon_wrap{
+            display: flex;
+            justify-content: space-between;
+            .mat-icon{
+                border-radius: 10px;
+                width: 50px;
+                height: 50px;
+                line-height: 50px;
+                min-width: 50px;
+                text-align: center;
+                margin-left: 15px;
+                &.minus{
+                    background: #FDE6E5;
+                    border: 1px solid #FDE6E5;
+                    border-radius: 10px;
+                    color: #F05A4F;
+                }
+                &.plus{
+                    background: #0B4977;
+                    color: #ffffff;  
+                }
+            }
+        }
+        .mat-form-field{
+            width: 100%;
+            padding-right: 1rem;
+            .mat-form-field-wrapper{
+                padding-bottom: 20px;
+            }
+        } 
+    }
+    .vr{
+        width: 200%;
+        background-color: transparent;
+        text-align: center;
+        margin: 0 0 20px;
+        text-transform: uppercase;
+        font-size: 16px;
+    }
+    .primary_btn{
+        &.add_popup{
+            justify-content: end;
+            .btn.btn-primary{
+                &:first-child{
+                    margin-right: 15px;
+                }
+            }
+        }
+    }
+  
+}

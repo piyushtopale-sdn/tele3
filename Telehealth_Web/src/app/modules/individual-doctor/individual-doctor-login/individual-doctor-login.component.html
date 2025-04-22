@@ -1,0 +1,167 @@
+<div class="login login_time insurance_signup_block">
+  <div class="login_inner">
+    <div class="row">
+      <div class="left_part part col-md-6">
+        <div class="leftpart_inner">
+          <div class="logo" (click)="goToHomePage()" style="cursor: pointer">
+            <img src="../../../../assets/img/logo.svg" style=" height: 100px;">
+        </div>
+        </div>
+      </div>
+      <div class="right_part part col-md-6 justify-content-center">
+        <div class="lang d-flex justify-content-end me-3">
+          <app-language></app-language>
+      </div>
+        <div class="rightpart_inner">
+          <div class="login_form">
+            <div class="login_form_inner">
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <div class="login_img" (click)="goToHomePage()">
+                  <img src="../../../../assets/img/login_img.svg" />
+                </div>
+                <div class="login_title">{{ "hello_again" | translate }}</div>
+                <div class="title_wrapper">
+                  <h4 class="form_title">{{ "sign_in" | translate }}</h4>
+                  <div class="form_desc">
+                    {{ "enter_your_email_and_password_for_signing_in_thanks" | translate }}
+                  </div>
+                </div>
+                <div class="form_field_wrapper consult_note mt-3">
+                  <label>{{ "email_address" | translate }}<span class="danger">*</span></label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="email"
+                      placeholder='{{ "enter_email_address" | translate }}'
+                      formControlName="email"
+                      matInput
+                    />
+                    <mat-error
+                    class="text-danger"
+                      *ngIf="isSubmitted && loginForm.get('email').hasError('required')"
+                      >{{ "email_is_required" | translate }}.</mat-error
+                    >
+                    <mat-error class="text-danger" *ngIf="loginForm.get('email').hasError('email')"
+                      >{{ "invalid_email" | translate }} Id.</mat-error
+                    >
+                  </mat-form-field>
+                </div>
+
+                <div class="form_field_wrapper consult_note mt-3">
+                  <label>{{ "password" | translate }}<span class="danger">*</span></label>
+                  <mat-form-field appearance="fill" class="password-input-block">
+                    <input [type]="password" formControlName="password" placeholder='{{ "enter_password" | translate }}' matInput>
+                    <a class="password-view" (click)="passwordClick()">
+                        <mat-icon *ngIf="!passwordShow">visibility</mat-icon>
+                        <mat-icon *ngIf="passwordShow">visibility_off</mat-icon>
+                    </a>
+                </mat-form-field> 
+                    <mat-error class="text-danger"
+                      *ngIf="isSubmitted && loginForm.get('password').hasError('required')"
+                      >{{ "password_is_required" | translate }}.</mat-error
+                    >
+                  
+                </div>
+
+                <div class="keepmesign_content mt-3">                  
+                  <div class="forgot_pass">
+                    <div
+                      class="forgotpass_btn"
+                      [routerLink]="['/individual-doctor/reset']"
+                    >
+                      {{ "forgot_password" | translate }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-btn primary_btn">
+                  <!-- <ng-container *ngIf="!isLoading"> -->
+                    <button
+                      type="submit"
+                      class="login_btn btn btn-primary"
+                      [disabled]="!loginForm.valid"
+                    >
+                      {{ "sign_in" | translate }}
+                    </button>
+                  <!-- </ng-container>
+                  <ng-container *ngIf="isLoading"> {{ "loading" | translate }} </ng-container>-->
+                </div> 
+
+                <!-- <div class="signup_section">
+                  <div class="signup">
+                    {{ "don_t_have_an_account_yet" | translate }}
+                    <a
+                      class="signup_link"
+                      [routerLink]="['/individual-doctor/signup']"
+                      >{{ "sign_up" | translate }}</a
+                    >
+                  </div>
+                </div> -->
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #addsecondsubsriber let-modal>
+  <div class="custome_modal">
+    <div class="modal-header" style="display: block">
+      <h4 class="modal-title text-center" id="modal-basic-title">
+        {{ "Two_factor_authentication" | translate }}
+      </h4>
+      <!-- <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                      <mat-icon>close</mat-icon>
+                  </button> -->
+    </div>
+    <div class="modal-body">
+      <div class="two_factore_button">
+        <p>{{ "2fa_note" | translate }}</p>
+        <div class="form-btn primary_btn mt-30">
+          <button
+            class="btn btn-tranprent"
+            (click)="sendVerificationCode('mobile')"
+            [disabled]="isDisabled1"
+          >
+            <a class="svgicon">
+              <svg
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M9.61097 10.5599C13.635 14.5828 14.5479 9.92871 17.1101 12.4891C19.5802 14.9585 20.9999 15.4532 17.8703 18.582C17.4783 18.897 14.9876 22.6872 6.23447 13.9365C-2.51974 5.18474 1.26827 2.6915 1.58339 2.2996C4.72057 -0.837787 5.20679 0.590167 7.6769 3.05959C10.2391 5.62103 5.58689 6.53691 9.61097 10.5599Z"
+                />
+              </svg>
+            </a>
+            {{ "mobile_number" | translate }}
+          </button>
+
+          <button
+            class="btn btn-tranprent"
+            (click)="sendVerificationCode('email')"
+            [disabled]="isDisabled2"
+          >
+            <a class="svgicon">
+              <svg
+                viewBox="0 0 18 15"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M13.2822 0C14.3997 0 15.4747 0.441667 16.2655 1.23417C17.0572 2.025 17.4997 3.09167 17.4997 4.20833V10.7917C17.4997 13.1167 15.608 15 13.2822 15H5.04967C2.72384 15 0.833008 13.1167 0.833008 10.7917V4.20833C0.833008 1.88333 2.71551 0 5.04967 0H13.2822ZM14.6079 5.44987L14.6746 5.3832C14.8738 5.14153 14.8738 4.79153 14.6654 4.54987C14.5496 4.4257 14.3904 4.34987 14.2246 4.3332C14.0496 4.32403 13.8829 4.3832 13.7571 4.49987L9.99962 7.49987C9.51628 7.9007 8.82378 7.9007 8.33295 7.49987L4.58295 4.49987C4.32378 4.3082 3.96545 4.3332 3.74962 4.5582C3.52462 4.7832 3.49962 5.14153 3.69045 5.39153L3.79962 5.49987L7.59128 8.4582C8.05795 8.82487 8.62378 9.02487 9.21628 9.02487C9.80712 9.02487 10.3829 8.82487 10.8488 8.4582L14.6079 5.44987Z"
+                />
+              </svg>
+            </a>
+            {{ "email_address" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

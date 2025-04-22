@@ -1,0 +1,94 @@
+<div class="login">
+    <div class="login_inner">
+        <div class="row">
+        <div class="left_part part col-md-6">
+           <div class="leftpart_inner"> 
+                <div class="logo"  (click)="goToHomePage()" style="cursor: pointer">
+                    <img [src]="login_logo" alt="logo" style=" height: 100px;">
+                </div>
+            </div>
+        </div>
+        <div class="right_part part col-md-6">
+            <div class="rightpart_inner">
+                <div class="login_form">
+                    <div class="login_form_inner">
+                        <form [formGroup]="resetForm" (ngSubmit)="setNewPassword()">
+                            <div class="login_img">
+                                <img src="../../../../assets/img/key.svg">
+                            </div>
+                            <div class="title_wrapper">
+                                <h4 class="form_title">Set New Password</h4>
+                                <div class="form_desc">Your new password must be different to previously used passwords.</div>
+                            </div>
+                            <div class="form_field_wrapper">
+                                <label>Password</label>
+                                <mat-form-field appearance="fill">
+                                    <input type="password" placeholder="Enter Password" formControlName="newPassword"  matInput>
+                                
+                            </mat-form-field>
+                            <mat-error
+                            *ngIf="
+                              resetForm.get('newPassword').hasError('required')
+                            "
+                            >Password is required.</mat-error
+                          >
+                          <mat-error
+                            *ngIf="
+                              resetForm.get('newPassword').hasError('pattern')
+                            "
+                            >{{"password_need" | translate}}</mat-error
+                          >
+                            </div>
+                            <div class="form_field_wrapper">
+                                <label>Confirm Password</label>
+                                <mat-form-field appearance="fill">
+                                    <input type="password" placeholder="Enter Confirm Password" formControlName="confirmPassword" matInput>
+                                    
+                                </mat-form-field>
+                                <mat-error
+                                *ngIf="
+                                resetForm
+                                    .get('confirmPassword')
+                                    .hasError('required')
+                                "
+                                >Password is required.</mat-error
+                              >
+                                <span
+                                  class="custom-validation-msg"
+                                  *ngIf="
+                                    customValidatorError(
+                                      'confirmPassword',
+                                      'confirmPassword_not_matched'
+                                    )
+                                  "
+                                  >Passwords do not match.</span
+                                >
+                            </div>
+
+                            <div class="form-btn primary_btn">
+                                <button type="submit"
+                                mat-stroked-button
+                                class="login_btn btn btn-primary"
+                                [disabled]="!resetForm.valid">Reset password</button>
+                            </div>
+
+                            <div class="signup_section">
+                                <div class="signup backlogin" [routerLink]="['/patient/login']"><mat-icon>west</mat-icon>Back to log in</div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+

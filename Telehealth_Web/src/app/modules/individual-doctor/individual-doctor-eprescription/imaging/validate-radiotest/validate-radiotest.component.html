@@ -1,0 +1,594 @@
+<div class="validate_prescription dashboard_main_content">
+    <div class="validate_content" id="previewdiv" #previewdiv>
+      <div class="validate_content_inner">
+        <div class="bottom_part part">
+          <div class="part_wrapper row">
+            <div class="leftPart">
+              <div class="profile_data">
+                <div class="profile_info">
+                  <ul class="profile_info_inner profile_info_with_img">
+                    <div class="profile_image">
+                      <img [src]="
+                          patientDetails?.profile_pic_signed_url
+                            ? patientDetails?.profile_pic_signed_url
+                            : '../../../../../assets/img/default_user.png'
+                        " />
+                    </div>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="profile_title">
+                          {{ patientDetails?.full_name }}
+                        </div>
+            
+                        <div class="user_value">{{ patientDetails?.email ? patientDetails?.email :"-" }}</div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">{{ "phone_number" | translate }}</div>
+                        <div class="user_value">
+                          ({{ patientDetails?.country_code }})
+                          {{ patientDetails?.mobile ? patientDetails?.mobile : "-" }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">{{ "mrn_number" | translate }}</div>
+                        <div class="user_value truncate-text">
+                          {{ patientDetails?.mrn_number ? patientDetails?.mrn_number : "-" }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">{{ "age" | translate }}</div>
+                        <div class="user_value">
+                          {{ patientDetails?.dob ? calculateAge(patientDetails.dob) : "-" }}  {{"years" | translate}}
+            
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                  <ul  class="profile_info_inner profile_info_with_img">
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">{{ "gender" | translate }}</div>
+                        <div class="user_value">{{ patientDetails?.gender ? patientDetails?.gender : "-" }}</div>
+                      </div>
+                    </li>       
+                    <li class="col_item" *ngIf="patientDetails?.iqama_number">
+                      <div class="profile_contact">
+                        <div class="lable">{{ "iqama_number" | translate }}</div>
+                        <div class="user_value">
+                          {{ patientDetails?.iqama_number }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item" *ngIf="patientDetails?.passport">
+                      <div class="profile_contact">
+                        <div class="lable">{{ "passport" | translate }}</div>
+                        <div class="user_value">
+                          {{ patientDetails?.passport }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item" *ngIf="patientDetails?.saudi_id">
+                      <div class="profile_contact">
+                        <div class="lable">{{ "saudi_id" | translate }}</div>
+                        <div class="user_value">
+                          {{ patientDetails?.saudi_id }}
+                        </div>
+                      </div>
+                    </li>
+                    <li class="col_item">
+                      <div class="profile_contact">
+                        <div class="lable">{{ "address" | translate }}</div>
+                        <div class="user_value truncate-text">
+                          {{ patientDetails?.address ? patientDetails?.address : "-" }}
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="right_part">
+              <div class="date">{{ date }}</div>
+            </div>
+          </div>
+  
+          <div class="validate_info">
+            <div class="row">
+              <div class="col-md-8">
+                <ol class="prescrib_list" *ngIf="listMedicineDosages.length != 0">
+                  <li
+                    *ngFor="let dose of listMedicineDosages"
+                    style="margin-top: 10px"
+                  >
+                    <div class="prescrib_text">
+                      {{ dose?.testName }}
+                    </div>
+                    
+                  </li>
+                </ol>
+  
+                <ol
+                  class="prescrib_list"
+                  style="margin-top: 30px"
+                  *ngIf="labs.length != 0"
+                >
+                  <b>{{ "lab_test" | translate }}</b>
+  
+                  <li *ngFor="let lab of labs" style="margin-top: 5px">
+                    <div class="prescrib_text">{{ lab?.lab_name }}</div>
+                    <div class="prescrib_unit prescrib_text">
+                      {{ lab?.reason_for_lab }}
+                    </div>
+                  </li>
+                </ol>
+                <ol
+                  class="prescrib_list"
+                  style="margin-top: 30px"
+                  *ngIf="imaging.length != 0"
+                >
+                  <b>{{ "imaging_tests" | translate }}</b>
+  
+                  <li *ngFor="let img of imaging" style="margin-top: 5px">
+                    <div class="prescrib_text">{{ img?.imaging_name }}</div>
+                    <div class="prescrib_unit prescrib_text">
+                      {{ img?.reason_for_imaging }}
+                    </div>
+                  </li>
+                </ol>
+                <ol
+                  class="prescrib_list"
+                  style="margin-top: 30px"
+                  *ngIf="vaccination.length != 0"
+                >
+                  <b>{{ "vaccination_tests" | translate }}</b>
+  
+                  <li *ngFor="let vac of vaccination" style="margin-top: 10px">
+                    <div class="prescrib_text">{{ vac?.vaccination_name }}</div>
+                    <div class="prescrib_unit prescrib_text">
+                      {{ vac?.dosage }}
+                    </div>
+                  </li>
+                </ol>
+                <ol
+                  class="prescrib_list"
+                  style="margin-top: 30px"
+                  *ngIf="eyeglasses.length != 0"
+                >
+                  <b>{{ "eyeglass_tests" | translate }}</b>
+  
+                  <li
+                    *ngFor="let eyeglass of eyeglasses"
+                    style="margin-top: 10px"
+                  >
+                    <div class="prescrib_content">
+                      <div class="prescrib_text">
+                        {{ eyeglass?.eyeglass_name }}
+                      </div>
+                      <div class="prescription_title">
+                        {{ "bifocal_eye_glasses" | translate }}
+                      </div>
+                      <div class="item">
+                        <div class="item_inner">
+                          <div class="bifocal_eye">
+                            <span>{{ "left_eye" | translate }} : </span>
+                            {{ eyeglass?.left_eye?.sphere }} ({{
+                              eyeglass?.left_eye?.cylinder
+                            }}) {{ eyeglass?.left_eye?.axis }}° Add
+                            {{ eyeglass?.left_eye?.addition }}
+                          </div>
+                          <div class="bifocal_eye">
+                            <span>{{ "right_eye" | translate }} : </span
+                            >{{ eyeglass?.right_eye?.sphere }} ({{
+                              eyeglass?.right_eye?.cylinder
+                            }}) {{ eyeglass?.right_eye?.axis }}° Add
+                            {{ eyeglass?.right_eye?.addition }}
+                          </div>
+                        </div>
+                      </div>
+                      <h3 *ngFor="let treatment of eyeglass.treatments">
+                        {{ treatment }}
+                      </h3>
+                    </div>
+                  </li>
+                </ol>
+                <ol
+                  class="prescrib_list"
+                  style="margin-top: 30px"
+                  *ngIf="others.length != 0"
+                >
+                  <b>{{ "other_tests" | translate }}</b>
+  
+                  <li *ngFor="let other of others" style="margin-top: 5px">
+                    <div class="prescrib_text">{{ other?.other_name }}</div>
+                    <div class="prescrib_unit prescrib_text">
+                      {{ other?.reason_for_other }}
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </div>
+  
+          <div class="validate_secondary_info">
+            <div class="signature">
+              <div
+                class="signature"
+                *ngIf="seletedtSignatureFile || eprescriptionDetails?.isValidate"
+              >
+                <h3>{{ doctorDetails?.full_name }}</h3>
+                <div class="sign_img">
+                  <img
+                    src="{{ signatureImg ? signatureImg : seletedtSignature }}"
+                    width="175px"
+                    height="53px"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="primary_btn ">
+            <!-- <button
+              (click)="clearSignature()"
+              class="btn btn-danger clearbtn"
+              *ngIf="!eprescriptionDetails?.isValidate"
+            >
+              {{ "clear_signature" | translate }}
+            </button>
+            <button
+              [disabled]="seletedtSignatureFile === undefined"
+              (click)="handleSavePdf()"
+              *ngIf="!eprescriptionDetails?.isValidate"
+              class="btn btn-primary"
+            >
+              {{ "save_as_pdf" | translate }}
+            </button> -->
+            <!-- <ng-container *ngIf="giveInnerPermission('downloadpdf')">
+              <button type="button" class="btn btn-primary" disabled="true">
+                <a class="btn_svg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="15"
+                    height="18"
+                    viewBox="0 0 15 18"
+                    fill="none"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M3.30524 0.0827418C2.45473 0.279185 1.74256 0.710972 1.1383 1.39669C0.617787 1.98733 0.294089 2.62138 0.0925399 3.44513L0.000194303 3.82243V8.97532C0.000194303 14.6951 -0.0167024 14.3029 0.264637 15.1118C0.767629 16.5578 2.00379 17.6649 3.41158 17.9299C3.9046 18.0228 11.0724 18.0236 11.5627 17.9309C13.0347 17.6525 14.2649 16.5174 14.7627 14.9782C14.9946 14.2613 14.9997 14.1647 14.9998 10.5064L15 7.18025L12.7412 7.17962C10.2094 7.17894 10.2091 7.1789 9.68232 6.88299C8.9551 6.47439 8.48379 5.75649 8.35241 4.85723C8.32863 4.69462 8.31216 3.64858 8.312 2.29135L8.31169 0L5.97469 0.00295656C3.87026 0.00565972 3.60461 0.0136002 3.30524 0.0827418ZM9.99355 2.59997V4.67168L10.0971 4.89605C10.225 5.17325 10.458 5.34747 10.7505 5.38468C10.8612 5.39875 11.7483 5.40462 12.7218 5.39773L14.4918 5.38519L12.2427 2.9567L9.99355 0.528255V2.59997ZM7.87179 7.30206C8.05663 7.40445 8.17393 7.53956 8.25114 7.73913C8.29996 7.86525 8.31169 8.08767 8.31169 8.88675V9.87796L9.26018 9.89126C10.1436 9.9036 10.2194 9.91078 10.3651 9.99546C10.4512 10.0455 10.5603 10.1313 10.6077 10.1861C10.8993 10.5237 10.8745 11.1318 10.5558 11.4545C10.3318 11.6814 10.2333 11.6996 9.2321 11.6996H8.31169L8.31083 12.7027C8.31009 13.5889 8.30152 13.7255 8.23753 13.8748C7.94039 14.5679 7.0713 14.575 6.74358 13.887C6.67622 13.7456 6.66895 13.6312 6.66895 12.715V11.6996H5.74854C5.00493 11.6996 4.80021 11.687 4.68271 11.634C4.37118 11.4935 4.16572 11.1672 4.16572 10.813C4.16572 10.4402 4.31404 10.1707 4.61552 9.99546C4.76121 9.91078 4.83705 9.9036 5.72046 9.89126L6.66895 9.87796V8.88675C6.66895 8.08767 6.68068 7.86525 6.72949 7.73913C6.91466 7.2605 7.43634 7.06094 7.87179 7.30206Z"
+                    />
+                  </svg> </a
+                >{{ "download_pdf" | translate }}
+              </button>
+            </ng-container>
+        
+            <ng-container *ngIf="giveInnerPermission('print')">
+              <button type="button" class="btn btn-primary" disabled="true">
+                <a class="btn_svg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="18"
+                    viewBox="0 0 20 18"
+                    fill="none"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M4.73691 0.0574469C4.24676 0.188544 3.8516 0.497374 3.64074 0.914217C3.475 1.24182 3.4375 1.47418 3.4375 2.17413C3.4375 2.85243 3.46637 2.97143 3.65125 3.05508C3.7293 3.09042 5.24125 3.10144 10.0038 3.10144C16.8002 3.10144 16.4127 3.11409 16.5158 2.88914C16.5763 2.75726 16.5783 1.62732 16.5186 1.34774C16.3821 0.709598 15.8457 0.176789 15.2032 0.0412682C15.0555 0.0101525 13.5538 -0.00164204 9.96879 0.000181452C5.77137 0.00231533 4.90766 0.0117432 4.73691 0.0574469ZM1.56879 4.4218C1.19957 4.51787 0.894492 4.69203 0.622969 4.96171C0.346797 5.23597 0.175625 5.53569 0.0775391 5.91648C0.00273438 6.20704 0 6.3542 0 10.085C0 13.8159 0.00273438 13.963 0.0775391 14.2536C0.175586 14.6343 0.343828 14.9271 0.625 15.2063C0.906172 15.4856 1.20098 15.6527 1.58426 15.7501C1.83656 15.8142 2.01727 15.8271 2.66004 15.8271H3.43262L3.44582 14.0133L3.45902 12.1995L3.56027 11.902C3.71902 11.4356 3.92344 11.1087 4.27391 10.7606C4.62359 10.4133 4.9516 10.2107 5.42316 10.0508L5.72266 9.94924H10H14.2773L14.5898 10.0549C15.043 10.2082 15.3682 10.4117 15.7228 10.7639C16.0782 11.1169 16.2832 11.4407 16.4355 11.8891L16.5408 12.1995L16.5541 14.0133L16.5674 15.8271H17.34C17.9827 15.8271 18.1634 15.8142 18.4157 15.7501C18.799 15.6527 19.0938 15.4856 19.375 15.2063C19.6562 14.9271 19.8244 14.6343 19.9225 14.2536C19.9973 13.963 20 13.8159 20 10.085C20 6.3542 19.9973 6.20704 19.9225 5.91648C19.8244 5.5358 19.6562 5.243 19.375 4.96373C19.0938 4.68446 18.799 4.51736 18.4157 4.41998C18.1179 4.34432 17.9683 4.343 9.98398 4.3451C2.09418 4.34719 1.84703 4.34944 1.56879 4.4218ZM4.03844 7.18358C4.25301 7.24655 4.5766 7.56795 4.64 7.78106C4.7482 8.14483 4.67191 8.43484 4.39586 8.70903C4.00066 9.10154 3.49934 9.10154 3.10414 8.70903C2.70895 8.31651 2.70895 7.81901 3.10414 7.42564C3.37816 7.15289 3.67332 7.07642 4.03844 7.18358ZM5.9375 11.8428C5.74578 11.9029 5.41879 12.2392 5.36 12.4368C5.29219 12.6648 5.29219 17.1271 5.36 17.3551C5.4234 17.5682 5.74699 17.8896 5.96156 17.9526C6.08309 17.9882 7.07125 17.9998 10.0073 17.9998C14.4136 17.9998 14.127 18.0199 14.4257 17.6898C14.5186 17.5872 14.6155 17.434 14.6411 17.3494C14.707 17.1307 14.707 12.6612 14.6411 12.4425C14.6155 12.3579 14.5186 12.2047 14.4257 12.102C14.1266 11.7716 14.4177 11.7916 9.98328 11.7961C7.25258 11.7988 6.03301 11.813 5.9375 11.8428Z"
+                    />
+                  </svg> </a
+                >{{ "print" | translate }}
+              </button>
+            </ng-container>
+        
+            <ng-container *ngIf="giveInnerPermission('email')">
+              <button type="button" class="btn btn-primary" disabled="true">
+                <a class="btn_svg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="15"
+                    viewBox="0 0 20 15"
+                    fill="none"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M2.55832 0.0245429C1.61278 0.167759 0.789997 0.761315 0.35493 1.61406C0.224899 1.86895 0.0578266 2.32891 0.0880293 2.3488C0.698881 2.75148 9.96024 8.46225 10.0024 8.46225C10.0446 8.46225 19.306 2.75148 19.9169 2.3488C19.947 2.32891 19.7801 1.86903 19.6501 1.61406C19.2778 0.88364 18.6399 0.35641 17.8158 0.0978587L17.5238 0.00631331L10.1392 0.000554624C6.07765 -0.00262266 2.66624 0.00817995 2.55832 0.0245429ZM0 8.24691C0 11.7471 0.00789255 12.3005 0.0616557 12.5674C0.185866 13.1844 0.421978 13.634 0.859585 14.0869C1.33689 14.5809 1.91172 14.8713 2.5809 14.9566C3.03527 15.0145 16.9696 15.0145 17.424 14.9566C18.4787 14.8221 19.395 14.1047 19.7913 13.1031C20.0087 12.5532 20.0075 12.583 19.996 8.23587L19.9853 4.23369L15.2967 7.13963C12.7179 8.73788 10.5317 10.0802 10.4383 10.1226C10.2087 10.2269 9.79626 10.227 9.56655 10.1227C9.47321 10.0803 7.31593 8.75583 4.77257 7.17942C2.22922 5.60301 0.11495 4.29505 0.0741587 4.27285C0.00156288 4.23337 0 4.31673 0 8.24691Z"
+                    />
+                  </svg> </a
+                >{{ "email" | translate }}
+              </button>
+            </ng-container>
+         -->
+            <!-- <ng-container *ngIf="giveInnerPermission('send_to_pharmacy')">
+        
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)=openVerticallypopup(sendPharmacy)
+            >
+              <a class="btn_svg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 17 17"
+                  fill="none"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M15.3525 0.0335249C14.8552 0.16504 0.723329 4.77465 0.61404 4.84097C0.423595 4.95665 0.209671 5.20407 0.105141 5.42972C-0.0184961 5.69654 -0.0357355 6.16264 0.0674896 6.44865C0.166061 6.72173 0.341981 6.95766 0.552062 7.09845C0.669601 7.17727 1.74694 7.57129 4.0534 8.37913C5.88575 9.0209 7.40278 9.5646 7.42457 9.58733C7.44636 9.61009 8.00697 11.1037 8.67043 12.9064C9.33388 14.7092 9.9147 16.253 9.96113 16.337C10.0634 16.5223 10.3167 16.7614 10.5192 16.8638C11.1735 17.1947 11.9965 16.9 12.2984 16.2267C12.3543 16.102 13.435 12.7435 14.7 8.76321L17 1.52641L16.981 1.26861C16.95 0.848872 16.7751 0.513622 16.4621 0.273536C16.1606 0.0423637 15.6977 -0.057773 15.3525 0.0335249Z"
+                  />
+                </svg> </a
+              >{{ "send_to_pharmacy" | translate }}
+            </button>
+            </ng-container> -->
+            <ng-container *ngIf="!showAddButtton">
+              <button
+                type="button"
+                class="btn btn-secondary exit-btn"
+                (click)="routeBack()"
+              >
+                <span class="btn-svg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 12h14M12 5l7 7-7 7"
+                    />
+                  </svg>
+                </span>
+                {{"exit" | translate }}
+              </button>
+            </ng-container>
+            <ng-container *ngIf="showAddButtton">
+              <button
+                type="button"
+                class="btn btn-secondary exit-btn"
+                (click)="routeToProfile()"
+              >
+                <span class="btn-svg">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 12h14M12 5l7 7-7 7"
+                    />
+                  </svg>
+                </span>
+                {{"exit" | translate }}
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>   
+    <!-- <h3 *ngIf="!eprescriptionDetails?.isValidate">
+      {{ "E-signature" | translate }}
+    </h3>
+    <div
+      class="signature-container"
+      *ngIf="!eprescriptionDetails?.isValidate"
+      style="border: 5px solid; width: 70%"
+    >
+      <signature-pad
+        [options]="signaturePadOptions"
+        (onBeginEvent)="drawStart()"
+        (onEndEvent)="drawComplete()"
+      ></signature-pad>
+    </div> -->
+
+    
+  </div>
+  
+  <!-- Add signature modal  -->
+  
+  <ng-template #addsignature let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "add_signature" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="signature_content">
+          <ul class="row">
+            <li>
+              <label>{{ "first_name" | translate }}:</label>
+              <div class="value">{{ doctorDetails?.first_name }}</div>
+            </li>
+            <li>
+              <label>{{ "last_name" | translate }}:</label>
+              <div class="value">{{ doctorDetails?.last_name }}</div>
+            </li>
+            <li>
+              <label>{{ "date" | translate }}:</label>
+              <div class="value">{{ setDate }}</div>
+            </li>
+            <li>
+              <label>{{ "time" | translate }}</label>
+              <div class="value">{{ setTime }}</div>
+            </li>
+          </ul>
+        </div>
+        <div class="form_field_wrapper signature_part">
+          <label>{{ "signature" | translate }}</label>
+          <div class="signature">
+            <div class="uploaded_img">
+              <img
+                src="{{
+                  seletedtSignature
+                    ? seletedtSignature
+                    : '../../../../../../assets/img/upload_signature1.png'
+                }}"
+                width="175px"
+                height="53px"
+              />
+            </div>
+            <div class="upload_input">
+              <div class="upload_input_content">
+                <img src="../../../../../assets/img/upload_signature.png" />
+              </div>
+              <input
+                class="ng-hide user_upload_input"
+                id="input-file-id"
+                multiple
+                type="file"
+                (change)="handleSelectSignature($event)"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="primary_btn">
+          <button
+            [disabled]="!seletedtSignature"
+            class="btn btn-primary"
+            (click)="closePopup()"
+          >
+            {{ "add" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  
+  <ng-template #sendPharmacy let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "send_to_pharmacy" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="sendtoPharmacy_form" (ngSubmit)="createNewOrder()">
+          <ng-container>
+            <ng-container>
+              <div class="modal_content category_service">
+                <div class="row modal_content_inner">
+                  <div class="item mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "select_pharmacy" | translate }}</label
+                      ><span class="danger">*</span>
+  
+                      <select2
+                        [placeholder]="'select_pharmacy' | translate"
+                        [limitSelection]="0"
+                        [minCountForSearch]="0"
+                        [overlay]="overlay"
+                        [data]="commonList"
+                        #data
+                        (update)="handleSelctionChange($event)"
+                        formControlName="pharmacyID"
+                      >
+                      </select2>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && form['pharmacyID'].errors?.['required']"
+                    >
+                      {{ "field_is_required" | translate }}*
+                    </span>
+                  </div>
+                  <div class="item mb-3">
+                    <div class="form_field_wrapper">
+                      <label>{{ "e_prescription_no" | translate }}</label
+                      ><span class="danger">*</span>
+                      <mat-form-field appearance="fill">
+                        <input
+                          type="text"
+                          placeholder="E-Prescription No."
+                          matInput
+                          formControlName="ePrescriptionNo"
+                        />
+                      </mat-form-field>
+                    </div>
+                    <span
+                      class="text-danger"
+                      *ngIf="isSubmitted && form['ePrescriptionNo'].errors?.['required']"
+                    >
+                      {{ "field_is_required" | translate }}*
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+  
+          <div class="primary_btn">
+            <button class="btn btn-primary" (click)="closePopup()">
+              {{ "cancel" | translate }}
+            </button>
+            <button class="btn btn-primary">
+              {{ "send" | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+  
+  <ng-template #approved let-modal>
+    <div class="custome_modal action_modals">
+      <div class="modal-body">
+        <div class="delete_screen text-center">
+          <div class="image approved">
+            <img
+              class="img-fluid"
+              src="../../../../assets/img/approved.svg"
+              alt=""
+            />
+          </div>
+          <p class="heading">
+            {{ "your_order_has_been_placed_successfully" | translate }}
+          </p>
+          <div class="primary_btn mt-30">
+            <button type="button" class="btn btn-primary" (click)="closePopup()">
+              {{ "okay" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  

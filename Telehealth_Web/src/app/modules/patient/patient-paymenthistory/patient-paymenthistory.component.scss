@@ -1,0 +1,116 @@
+@import '../../../../assets/css/variable/variable'; 
+.material-icons{
+    cursor: pointer;
+}
+.Patient_payment{
+        .mat-tab-header{
+            margin: 0 0 28px;
+            border-bottom: none;
+            .mat-tab-list{
+                .mat-tab-labels{
+                    display: inline-flex;
+                    .mat-tab-label {
+                        font-family: $font_family_body,$font_sans_sarif;
+                        height: 55px;
+                        padding: 0 10px;
+                        min-width: 200px;
+                        font-size: $font_medium;
+                        font-weight: 500;
+                        color: $bodycolor;
+                        background-color: $white_color;
+                        border: 1px solid rgba(11, 73, 119, 0.15);
+                        border-radius: 10px;
+                        justify-content: flex-start;
+                        opacity: 1;
+                        margin-left: 20px;
+                        &:first-child{
+                            margin-left: 0;
+                        }
+                        .mat-tab-label-content{
+                            .btn_svg {
+                                height: 35px;
+                                width: 35px;
+                                line-height: 35px;
+                                margin-right: 10px;
+                                background-color: #0B4977;
+                                border-radius: 9px;
+                                svg{
+                                    fill: #ffffff;
+                                    width: 20px;
+                                    height: 20px;
+                                }
+                            }
+                        }
+                    }
+                    .mat-tab-label.mat-tab-label-active{
+                        color: $white_color;
+                        background-color: $bodycolor;
+                        .mat-tab-label-content{
+                            .btn_svg {
+                                background-color: #EBF0F4;
+                                svg{
+                                    fill: #0B4977;
+                                }
+                            }
+                        }
+                    }
+                }
+                .mat-ink-bar{
+                    display: none;
+                }
+                .mat-ink-bar{
+                    background-color: $bodycolor;
+                }
+            }
+        }
+        .mat-tab-body-content{
+            overflow: hidden;
+        }
+    
+        .bottom_bar_up{
+            .top_bar{
+                margin: 0 0 35px;
+                align-items: flex-end;
+                    .content_wrap{
+                        .policy{
+                            margin: 20px 0 0;
+                            label{
+                                margin-right: 12px;
+                            }
+                            .mat-form-field{
+                                .mat-form-field-wrapper{
+                                    padding: 0;
+                                    .mat-form-field-flex{
+                                        background-color: #EBF0F4;
+                                        border: 1px solid #EBF0F4;
+                                        .mat-form-field-infix{
+                                            &::placeholder{
+                                                color: rgba(15, 18, 63, 0.5);
+                                            }
+                                        }
+                                    }
+                                    .mat-form-field-underline{
+                                        display: none;
+                                    }
+                                }
+                            }
+                        }
+                       
+                    }
+                    .primary_btn{
+                        .btn {
+                            min-width: 120px;
+                        }
+                    }
+            }
+            .bottom_bar{
+                h2{
+                    font-weight: 600;
+                    color: #26323C;
+                    span{
+                        font-weight: 400;
+                    }
+                }
+            }
+        }
+}

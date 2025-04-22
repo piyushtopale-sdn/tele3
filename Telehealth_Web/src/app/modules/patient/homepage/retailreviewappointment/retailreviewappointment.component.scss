@@ -1,0 +1,480 @@
+@import '../../../../../assets/css/variable/variable';
+
+
+// mat radiobtn common css
+.home_wrapper .mat-radio-button.mat-accent.mat-radio-checked{
+    .mat-radio-label{
+        color: $homepage_hovercolor;
+    }
+    .mat-radio-outer-circle{
+        border-color: $homepage_hovercolor;
+    }
+    .mat-radio-inner-circle{
+        background-color: $homepage_hovercolor;
+    }
+    .mat-radio-persistent-ripple{
+        background-color: $homepage_hovercolor;
+    }
+}
+.home_wrapper .mat-radio-button .mat-radio-ripple{
+    display: none;
+}
+.home_wrapper .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+.home_wrapper .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
+.home_wrapper .mat-radio-button.mat-accent:active .mat-radio-persistent-ripple{
+    background-color: $homepage_hovercolor;
+}
+// mat Checkbox common css
+.home_wrapper .mat-checkbox .mat-checkbox-ripple{
+    display: none;
+}
+.home_wrapper .mat-checkbox-checked:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element, 
+.home_wrapper .mat-checkbox:active:not(.mat-checkbox-disabled).mat-accent .mat-ripple-element{
+    background: $homepage_hovercolor;
+}
+.home_wrapper .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, 
+.home_wrapper .mat-checkbox-checked.mat-accent .mat-checkbox-background{
+    background: $homepage_hovercolor;
+}
+
+
+.main_section{
+    margin-top: 40px;
+    .main_section_inner{
+        .content_area {
+            position: relative;
+            .bottom_section{
+                .appointment_doctor_details{
+                    margin: 0 0 30px;
+                    .main_title{
+                        font-weight: 600;
+                        font-size: $font_ex_large;
+                        line-height: 24px;
+                        color: #25282B;
+                        letter-spacing: 0.2px;
+                    }
+                    .appointment_review{
+                        border-style: solid;
+                        border-color: #B6C8D6;
+                        border-width: 1px;
+                        border-radius: 15px;
+                        .commom_space{
+                            padding: 25px;
+                            border-bottom: 1px solid #B6C8D6;
+                            &.medicine_details{
+                                display: flex;
+                                .image{
+                                    margin: 0 25px 0 0;
+                                    cursor: pointer;
+                                    img{
+                                        border-radius: 10px;
+                                        width: 133px;
+                                        min-width: 133px;
+                                        height: 133px;
+                                    }
+                                }
+                                .medicine_info{
+                                    width: 100%;
+                                    h2{
+                                        font-weight: 500;
+                                        font-size: 22px;
+                                        line-height: 26px;
+                                        color: $table_color;
+                                        margin: 0 0 8px;
+                                        cursor: pointer;
+                                    }
+                                    .desc_wrapper{
+                                        display: flex;
+                                        justify-content: space-between;
+                                        margin-bottom: 22px;
+                                        .desc{
+                                            font-size: $font_medium;
+                                            line-height: 20px;
+                                            font-weight: 600;
+                                        }
+                                        .rating_section{
+                                            text-align: right;
+                                            .ratings-star{
+                                                font-weight: 400;
+                                                font-size: 16px;
+                                                line-height: 19px;
+                                                color: $table_color;
+                                                i{
+                                                    color: $star_color;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .content_list{
+                                        list-style: none;
+                                        padding: 0;
+                                        margin: 0 -20px 0;
+                                        align-items: center;
+                                        .content_item{
+                                            width: auto;
+                                            margin: 0 0 7px;
+                                            padding: 0 20px;
+                                            .title{
+                                                font-size: $font_small;
+                                                color: $table_color;
+                                            }
+                                            .content_desc{
+                                                font-weight: 600;
+                                                font-size: $font_small;
+                                                line-height: 19px;
+                                                color: $table_color;
+                                                a{
+                                                    color: #3DA7C8;
+                                                    text-decoration: none;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            &.appointment_info {
+                                padding: 0;
+                                .row{
+                                    margin: 0 -1px -1px 0;
+                                    .item{
+                                        border-style:solid;
+                                        border-color: #B6C8D6;
+                                        border-width: 0 1px 1px 0; 
+                                        padding: 20px;
+                                        label{
+                                            color: $table_color;
+                                            font-weight: 400;
+                                        }
+                                        .value{
+                                            font-weight: 600;
+                                            color: $table_color;
+                                        }
+                                    }
+                                }
+                               
+                            }
+                            &.medical_doc{
+                                border-bottom: none;
+                                .title{
+                                    color: $table_color;
+                                    margin: 0 0 20px;
+                                }
+                                .row{
+                                    margin: 0 -20px;
+                                    .item {
+                                        margin-bottom: 30px;
+                                        padding: 0 20px;
+                                        text-align: center;
+                                        width: auto;
+                                        .item_inner{
+                                            display: inline-block;
+                                            vertical-align: top;
+                                            text-align: left;
+                                            .doc_img{
+                                                position: relative;
+                                                img{
+                                                    border-radius: 10px;
+                                                    overflow: hidden;
+                                                    width: 207px;
+                                                    height: 176px;
+                                                }
+                                                .quick_view{
+                                                    display: inline-block;
+                                                    vertical-align: top;
+                                                    width: 30px;
+                                                    height: 30px;
+                                                    line-height: 25px;
+                                                    background-color: #FEEAEA;
+                                                    border: 0.8px solid #D93636;
+                                                    border-radius: 50%;                         
+                                                    text-align: center;
+                                                    position: absolute;
+                                                    left: auto;
+                                                    right: -15px;
+                                                    top: -15px;
+                                                    bottom: auto;
+                                                    cursor: pointer;
+                                                    z-index: 9;
+                                                    img{
+                                                        width: auto;
+                                                        height: auto;
+                                                    }
+                                                }
+                                             
+                                            }
+                                            .doc_desc{
+                                                margin-top: 15px;
+                                                .name{
+                                                    font-weight: 700;
+                                                    font-size: 16px;
+                                                    line-height: 19px;
+                                                    color: $table_color;
+                                                    margin: 0 0 5px;
+                                                }
+                                                .date{
+                                                    font-weight: 500;
+                                                    font-size: 12px;
+                                                    line-height: 18px;
+                                                    color: $bodyopacitycolor;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                         
+               
+                    }
+                }
+                .bottom_bar{
+                    .continue_btn{              
+                        margin: 0 0 40px;
+                        justify-content: flex-end;
+                        flex-wrap: wrap;
+                        padding-right: 25px;
+                        .btn{
+                            margin: 15px 0 0 15px;
+                        }
+                    }
+                }
+             
+            }
+ 
+        }
+    }
+}
+
+// Cancel appointments modal css
+.cancel_appointments{
+    form{
+        .image{
+            text-align: center;
+            margin: 0 0 40px;        
+        }
+        p{
+            font-weight: 600;
+            font-size: $font_ex_large;
+            line-height: 28px;
+            letter-spacing: 0.2px;
+            color: #25282B; 
+        }
+    }
+    .primary_btn{  
+        margin: 35px 0 0;
+    }
+}
+
+// Payment details modal  css
+.payment_details {
+    .modal-body{
+        .modal_title{
+            font-size: $font_medium;
+            font-weight: 600;
+            color: #25282B;
+            margin: 0 0 15px;
+            text-align: left;
+        }
+        .payment_type{
+            margin: 0 0 15px ;
+            .mat-radio-group{
+                .mat-radio-button{
+                    margin: 0 35px 0 0;
+                    .mat-radio-label-content{
+                        padding-left: 12px;
+                    }
+                }
+            }
+        }
+        .payment_mode{
+                .strip{
+                    .title{
+                        color: #635BFF;
+                        font-weight: 700;
+                    }
+                }
+                .mobile_money{
+                    .title{
+                        color: #0C2F49;
+                        font-weight: 700;
+                        img{
+                            margin: 0 15px 0 0;
+                        }
+                    }
+                }
+                .mat-button-toggle-group{
+                    flex-direction: column;
+                    width: 100%;
+                    border: none;
+                    .mat-button-toggle{
+                        border: 1px solid #B6C8D6;
+                        border-radius: 10px;
+                        font-size: 20px;
+                        margin: 0 0 15px;
+                        button{
+                            .mat-button-toggle-label-content{
+                                display: block;
+                                padding: 0;
+                                line-height: 60px;
+                            }
+                        }
+                        &.strip{
+                            color: #635BFF;
+                            font-weight: 700;
+                        }
+                    }
+                }
+             
+        }
+        .primary_btn{
+            margin-top: 15px;
+        }
+    }
+}
+
+@media screen and (max-width:$large_phone) {
+    .main_section .main_section_inner .content_area .bottom_section .appointment_doctor_details .appointment_review .commom_space.medicine_details .medicine_info .desc_wrapper .rating_section{
+        text-align: left;
+        margin: 15px 0 0;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .main_section .main_section_inner .content_area .bottom_section .appointment_doctor_details .appointment_review .commom_space.medical_doc .row .item{
+        width: 100%;
+    }
+}
+@media screen and (max-width:$medium_phone) {
+    .main_section .main_section_inner .content_area .bottom_section .appointment_doctor_details .appointment_review .commom_space.medicine_details{
+        flex-direction: column;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .appointment_doctor_details .appointment_review .commom_space.medicine_details .image{
+        margin: 0 0 15px;
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .main_section .main_section_inner .content_area .bottom_section .appointment_doctor_details .appointment_review .commom_space.appointment_info .row .item{
+        width: 100%;
+        border-width: 0 0 1px;
+    }
+    .main_section .main_section_inner .content_area .bottom_section .bottom_bar .continue_btn .btn {
+        margin: 0 0 15px;
+        width: 100%;
+    }
+}
+
+.payment_details {
+    .modal-body{
+        .modal_title{
+            font-size: $font_medium;
+            font-weight: 600;
+            color: #25282B;
+            margin: 0 0 15px;
+            text-align: left;
+        }
+        .payment_type{
+            margin: 0 0 15px ;
+            .mat-radio-group{
+                .mat-radio-button{
+                    margin: 0 35px 0 0;
+                    .mat-radio-label-content{
+                        padding-left: 12px;
+                    }
+                }
+            }
+        }
+        .payment_mode{
+                .strip{
+                    .title{
+                        color: #635BFF;
+                        font-weight: 700;
+                    }
+                }
+                .mobile_money{
+                    .title{
+                        color: #0C2F49;
+                        font-weight: 700;
+                        img{
+                            margin: 0 15px 0 0;
+                        }
+                    }
+                }
+                .mat-button-toggle-group{
+                    flex-direction: column;
+                    width: 100%;
+                    border: none;
+                    .mat-button-toggle{
+                        border: 1px solid #B6C8D6;
+                        border-radius: 10px;
+                        font-size: 20px;
+                        margin: 0 0 15px;
+                        button{
+                            .mat-button-toggle-label-content{
+                                display: block;
+                                padding: 0;
+                                line-height: 60px;
+                            }
+                        }
+                        &.strip{
+                            color: #635BFF;
+                            font-weight: 700;
+                        }
+                    }
+                }
+             
+        }
+        .primary_btn{
+            margin-top: 15px;
+        }
+    }
+    .payment_details_popup {
+        .mat-form-field {
+            width: 100%;
+        }
+        .field-wrap-block {
+            border: 1px solid $formfiledbordercolor;
+            border-radius: 5px;
+            .mat-form-field-wrapper {
+                padding-bottom: 0;
+                .mat-select-value {
+                    position: relative;
+                    top: -5px;
+                }
+            }
+            .mat-form-field-underline {
+                display: none;
+            }
+            .mat-form-field {
+                width: 100px;
+            }
+        }
+        .input-field-block {
+            width: calc(100%  - 100px);
+            height: 50px;
+            input {
+                height: 100%;
+                padding: 0 15px;
+                color: $black_color;
+            }
+            .error-msg {
+                display: block;
+                margin: 10px 0 0 15px;
+            }
+        }
+        .payment_mode {
+            .mat-form-field-flex {
+                border: 1px solid rgba(228, 228, 228, 0.9);
+                border-radius: 5px;
+            }
+            .mat-form-field-underline {
+                display: none;
+            }
+            .mat-select-value {
+                overflow: visible;
+            }
+            .mat-select-value {
+                position: relative;
+                top: -5px;
+            }
+        }
+    }
+}

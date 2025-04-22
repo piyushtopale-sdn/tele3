@@ -1,0 +1,52 @@
+<div class="login entercode">
+    <div class="login_inner">
+        <div class="row">
+            <div class="left_part part col-md-6">
+                <div class="leftpart_inner">
+                    <div class="logo"  (click)="goToHomePage()" style="cursor: pointer">
+                        <img [src]="login_logo" alt="logo" style=" height: 100px;">
+                    </div>
+                </div>
+            </div>
+            <div class="right_part part col-md-6">
+                <div class="lang d-flex justify-content-end me-3">
+                    <app-language></app-language>
+                </div>
+                <div class="rightpart_inner get_code_screen">
+                    <div class="login_form">
+                        <div class="login_form_inner">
+                            <form>
+                                <div class="login_img">
+                                    <img src="../../../../assets/img/key.svg">
+                                </div>
+                                <div class="login_title">Enter Code</div>
+                                <div class="title_wrapper">
+                                    <div class="form_desc">Verification Code Sent on {{otpContext}}</div>
+                                </div>
+                                <div class="form_field_wrapper otpview">
+                                    <ng-otp-input #ngOtpInput  (onInputChange)="onOtpChange($event)"  [config]="config"></ng-otp-input>
+                                   
+                                </div>
+                              
+
+                                <div class="form-btn primary_btn mt-3" >
+                                    <button type="submit" (click)="verifyOtp(ngOtpInput)" [disabled]="isDisabled" class="login_btn btn btn-primary">Verify</button>
+                                </div>
+                                 
+
+                                <div class="signup_section" style="cursor: pointer">
+                                    <div class="signup">Did not receive code? <a class="signup_link"
+                                          (click) = "resendOtpDetails()">Resend Code</a></div>
+                                </div>
+
+                                <div class="back_section">
+                                     <a [routerLink]="['/patient/login']"><mat-icon>keyboard_backspace</mat-icon>Back to log in</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

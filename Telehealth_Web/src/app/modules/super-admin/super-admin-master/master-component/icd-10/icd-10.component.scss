@@ -1,0 +1,41 @@
+.plus.addbtn{
+    color: #ffffff;
+background: #2839FF;
+border-radius: 7px;
+padding: 10px 70px;
+}
+
+.modal_content.Speciality_service{
+    display: block;
+} 
+
+.custome_modal .modal-body .row_generate.row_minus .mat-icon.btnminus {
+    color: #F05A4F;
+    background: #FDE6E5;
+    border-radius: 7px;
+    padding: 10px 70px;
+   
+}
+
+.form-block {
+    ::ng-deep .row_generate.row_add{
+        background-color: transparent;
+        display: flex;
+        justify-content: right;
+        padding-right: 25px;
+        padding-bottom: 15px;
+    } 
+
+    ::ng-deep .row_generate.row_minus{
+        background-color: transparent;
+        display: flex;
+        justify-content: right;
+        padding-right: 25px;
+        padding-bottom: 15px;
+    } 
+
+::ng-deep .modal_content_inner{
+    padding: 20px 20px 0px 20px;
+}
+}
+

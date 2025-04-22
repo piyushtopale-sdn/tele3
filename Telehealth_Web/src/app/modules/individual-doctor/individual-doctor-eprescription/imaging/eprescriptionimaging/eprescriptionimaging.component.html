@@ -1,0 +1,259 @@
+<div class="makeeprescription dashboard_main_content">
+  
+    <div class="profile_data">
+      <div class="profile_info">
+        <div class="profile_info_inner profile_info_with_img">
+          <div class="patient-details-block d-flex align-items-center">
+            <div class="profile_image">
+              <img
+                [src]="
+                  patientSubscriberphoto
+                    ? patientSubscriberphoto
+                    : '../../../../../assets/img/default_user.png'
+                "
+              />
+            </div>
+            <div class="profile__img-contents">
+              <div class="profile_title">
+                {{ profile?.full_name }}
+              </div>
+              <div class="profile_contact">
+                <div class="user_value">
+                  {{ profile?.email ? profile?.email : "-" }}
+                </div>
+              </div>
+              <div class="mobile-no-block d-flex align-items-center">
+                <div class="user_value mob_no">
+                  {{ profile?.country_code }} {{ profile?.mobile }}
+                </div>
+                <div class="vertical_line"></div>
+                <div class="user_value mob_no">
+                  {{ profile?.address ? profile?.address : "-" }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="emergency_contact">
+          <!-- <h3 class="profileinfo_title">{{ "emergency_contact" | translate }}</h3> -->
+          <ul class="profile_info_inner emergency">
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "gender" | translate }}</div>
+                <div class="user_value">
+                  {{
+                    profile?.gender
+                      ? profile?.gender
+                      : "-"
+                  }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "age" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.dob ? calculateAge(profile.dob) : "-" }}  {{"years" | translate}}
+                </div>
+              </div>
+            </li>
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "mrn_number" | translate }}</div>
+                <div class="user_value">
+                  {{
+                    profile?.mrn_number
+                      ? profile?.mrn_number
+                      : "-"
+                  }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item" *ngIf="profile?.iqama_number">
+              <div class="profile_contact">
+                <div class="lable">{{ "iqama_number" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.iqama_number }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item" *ngIf="profile?.passport">
+              <div class="profile_contact">
+                <div class="lable">{{ "passport" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.passport }}
+                </div>
+              </div>
+            </li>
+            <li class="col_item" *ngIf="profile?.saudi_id">
+              <div class="profile_contact">
+                <div class="lable">{{ "saudi_id" | translate }}</div>
+                <div class="user_value">
+                  {{ profile?.saudi_id }}
+                </div>
+              </div>
+            </li>
+            
+            <li class="col_item">
+              <div class="profile_contact">
+                <div class="lable">{{ "emergency_contact" | translate }}</div>
+                <div class="user_value">
+                  {{
+                    profile?.emergency_contact?.phone_number
+                      ? profile?.emergency_contact?.phone_number
+                      : "-"
+                  }}
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  <div class="row mt-4">
+    <div class="col">
+      <div class="main_title">{{ "radio_test" | translate }}</div>
+      <div class="top_bar">
+        <div class="search_bar common_content">
+          <div class="input-group">
+            <button class="btn search-btn">
+              <mat-icon>search</mat-icon>
+            </button>
+            <input
+              type="text"
+              class="matinput"
+              placeholder="Search Test Name"
+              (click)= "handleClick()"
+              (keypress)="handleMedicineChange()"
+              matInput
+              style="width: 93%"
+              [formControl]="myControl"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              <ng-container *ngFor="let option of filteredOptions | async">
+                <mat-option
+                  *ngIf="option != 'No data'"
+                  [value]="option.testName"
+                >
+                  <span (click)="addTest(option)">
+                    {{ option.testName }} - ({{ option.radiologyName }})
+                  </span>
+
+                  <span
+                    placement="top"
+                    (click)="openCommentPopup(test_content, option?._id)"
+                    style="
+                      position: absolute;
+
+                      font-size: 17px;
+
+                      margin-top: 16px;
+
+                      margin-left: 5px;
+                    "
+                    class="material-icons"
+                    >{{ "info" | translate }}</span
+                  >
+                </mat-option>
+              </ng-container>
+            </mat-autocomplete>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom_bar">
+        <div class="prescription">
+          <div class="item" *ngFor="let med of finalArray; let i = index">
+            <div class="left_part">
+              <h2>{{ med?.radiologyTestName}} - ({{med.radiologyCenterName}})</h2>           
+            </div>
+            <div class="right_part">
+              <div class="icon_group">
+                <a
+                  class="svgicon"
+                  (click)="openCommentPopup(test_content, med?.radiologyTestId)"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14">
+                    <path
+                      opacity="3"
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M6.11591 0.0388641C3.53288 0.391143 1.40424 2.05956 0.459047 4.47271C0.13993 5.28741 0 6.05754 0 6.999C0 8.17418 0.232255 9.15496 0.75255 10.177C1.82301 12.2799 3.89752 13.7151 6.2377 13.9719C6.57282 14.0087 7.42955 14.0095 7.75556 13.9733C11.0236 13.6107 13.6188 11.0178 13.9722 7.76207C14.0088 7.42575 14.0094 6.56879 13.9733 6.24386C13.7127 3.89373 12.2828 1.81976 10.189 0.754928C9.42286 0.365276 8.73007 0.151943 7.86087 0.0379579C7.47175 -0.013062 6.4929 -0.0125403 6.11591 0.0388641ZM7.31631 2.64283C7.65242 2.73279 7.99111 2.99824 8.13692 3.28605C8.39487 3.7952 8.31588 4.34835 7.92563 4.76562C7.42038 5.30586 6.58081 5.30586 6.07556 4.76562C5.90027 4.57818 5.81494 4.42367 5.75087 4.17763C5.54972 3.40516 6.17389 2.61213 6.98687 2.60727C7.09256 2.60664 7.24081 2.62265 7.31631 2.64283ZM7.39905 6.14789C7.62895 6.227 7.76391 6.31366 7.92887 6.48811C8.09066 6.65924 8.22057 6.91019 8.26287 7.1333C8.27978 7.22249 8.29074 7.86493 8.29049 8.75328C8.29005 10.35 8.28453 10.4206 8.13692 10.7119C8.0973 10.7902 7.99462 10.9244 7.90875 11.0103C7.49733 11.4218 6.92071 11.5069 6.38438 11.2352C6.20785 11.1458 5.95542 10.8918 5.86427 10.7119C5.71666 10.4206 5.71114 10.35 5.7107 8.75328C5.71045 7.86493 5.72141 7.22249 5.73832 7.1333C5.79888 6.81389 6.01384 6.48797 6.29049 6.29622C6.57559 6.0986 7.06539 6.03305 7.39905 6.14789Z"
+                    />
+                  </svg>
+                </a>
+                <a class="svgicon" (click)="removeDosage(i)">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="19"
+                    height="19"
+                    viewBox="0 0 19 19"
+                    fill="none"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M15.6025 4.45371C15.8943 4.45371 16.1372 4.69596 16.1372 5.0042V5.2892C16.1372 5.58995 15.8943 5.8397 15.6025 5.8397H3.1726C2.8801 5.8397 2.63721 5.58995 2.63721 5.2892V5.0042C2.63721 4.69596 2.8801 4.45371 3.1726 4.45371H5.35938C5.80359 4.45371 6.19018 4.13796 6.29011 3.69247L6.40463 3.18097C6.58261 2.48423 7.16833 2.02148 7.83866 2.02148H10.9358C11.5988 2.02148 12.1911 2.48423 12.3625 3.14422L12.485 3.69172C12.5842 4.13796 12.9708 4.45371 13.4158 4.45371H15.6025ZM14.4916 14.872C14.7199 12.7443 15.1196 7.68933 15.1196 7.63833C15.1342 7.48383 15.0839 7.33758 14.9839 7.21983C14.8767 7.10958 14.741 7.04433 14.5915 7.04433H4.1886C4.03834 7.04433 3.89537 7.10958 3.79617 7.21983C3.69551 7.33758 3.64591 7.48383 3.65321 7.63833C3.65455 7.6477 3.66889 7.82576 3.69287 8.12345C3.79939 9.44588 4.09608 13.1291 4.2878 14.872C4.42347 16.156 5.26594 16.963 6.48625 16.9922C7.42793 17.014 8.39805 17.0215 9.39005 17.0215C10.3244 17.0215 11.2734 17.014 12.2442 16.9922C13.5069 16.9705 14.3486 16.1777 14.4916 14.872Z"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="primary_btn">
+            <button class="btn btn-primary" (click)="createEprescription()">
+              {{ "submit" | translate }}
+            </button>
+            <button class="btn btn-primary" *ngIf="!showAddButtton" (click)="routeBack()">
+              {{ "back" | translate }}
+            </button>
+            <button class="btn btn-primary" *ngIf="showAddButtton" (click)="routeToProfile()">
+              {{ "back" | translate }}
+            </button> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ---------------------------------------Medicine modal---------------------------------------- -->
+<ng-template #test_content let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ selectedTestinfo?.testName }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body medicine">
+      <div class="medicine_content">
+        <div class="row">
+          <div class="medicine_item">
+            <div class="item">
+              <div class="label">{{ "radioCenterName" | translate }}</div>
+              <div class="value">
+                {{ selectedTestinfo?.radiologyId?.centre_name }}
+              </div>
+            </div>
+          </div>
+          <div class="medicine_item">
+            <div class="item">
+              <div class="label">{{ "notes" | translate }}</div>
+              <div class="value">{{ selectedTestinfo?.notes ? selectedTestinfo?.notes :"-" }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

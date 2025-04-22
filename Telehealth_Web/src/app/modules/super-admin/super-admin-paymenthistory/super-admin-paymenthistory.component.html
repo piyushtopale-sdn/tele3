@@ -1,0 +1,444 @@
+<div class="payment_superadmin dashboard_main_content"  [attr.dir]="'dir' | translate">
+  <div class="top_bar">
+    <div class="left_part">     
+      <div class="content_wrap">
+        <!-- <div class="search_bar">
+          <div class="input-group">
+            <button class="btn search_btn">
+              <img src="../../../../assets/img/search_pharmacy.svg" />
+            </button>
+            <input
+              type="search"
+              class="form-control"
+              placeholder="{{ 'search' | translate }}"
+              aria-label="Search"
+              [ngModel]="searchText"
+              #text
+              (keyup)="handleSearchFilter(text.value)"
+              (search)="handleSearchFilter(text.value)"
+            />
+          </div>
+        </div> -->
+       
+        <div class="policy">
+          <div class="form_field_wrapper">
+            <mat-form-field appearance="fill">
+              <mat-select
+                placeholder="{{'transaction_type' | translate}}"
+                (valueChange)="handleFilter($event)"
+                [(ngModel)]="paymentType"
+              >
+              <mat-option value="all">{{
+                "all" | translate
+              }}</mat-option>
+
+                <mat-option value="subscription">{{
+                  "subscription" | translate
+                }}</mat-option>
+  
+                <mat-option value="addon">{{
+                  "add_on" | translate
+                }}</mat-option>
+  
+                <mat-option value="labRadioTests">{{
+                  "lab_radio_tests" | translate
+                }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="policy">
+          <div class="form_field_wrapper">
+            <select2 class="select-dropdown-box" [overlay]="overlay" [limitSelection]="0" [minCountForSearch]="0"
+              [data]="userList" (update)="onSelect2ChangePatient($event)" [value]="selecteduser"
+              placeholder="{{ 'select_patient' | translate }}" style="width: 250px;">
+            </select2>
+            <a style="margin-right: 10px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"
+                style="margin-left: 10px; cursor: pointer" (click)="clearSelect2()">
+                <title>{{ "reset_patient" | translate }}</title>
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path
+                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+              </svg></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="right_part">
+      <div class="content_wrap">
+        <div class="policy">
+          <form [formGroup]="dateRangeForm">
+            <div class="form_field_wrapper d-flex align-items-center gap-3" style="margin: 10px;">
+              <div class="from_title_change">{{ "from" | translate }}:</div>
+              <mat-form-field class="example-full-width choosedate" appearance="fill">
+                <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                  [matDatepicker]="picker1" formControlName="fromDate"
+                  (dateChange)="onDateChange('from', $event.value)" (click)="picker1.open()" readonly/>
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+
+              <div class="from_title_change">{{ "to" | translate }}:</div>
+              <mat-form-field class="example-full-width choosedate" appearance="fill">
+                <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                  [matDatepicker]="picker2" formControlName="toDate" (dateChange)="onDateChange('to', $event.value)" (click)="picker1.open()" readonly/>
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom_bar">
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="transactiondatetime">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('createdAt')"
+            >
+              {{ "transaction_date_time" | translate }}
+              <span
+                *ngIf="sortColumn === 'createdAt'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{ element.createdAt | date : "dd/MM/yyy" }} |
+              <span>{{ element.createdAt | date : "hh:mm " }} </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('patientName')">
+              {{ "patient_name" | translate }}
+              <span
+                *ngIf="sortColumn === 'patientName'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">{{ element.patientName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="mrn_number">
+            <th mat-header-cell *matHeaderCellDef (click)="onSortData('patientMRN')">
+              {{ "mrn_number" | translate }}
+              <span
+                *ngIf="sortColumn === 'patientMRN'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">{{ element.patientMRN }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="paymenttype">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('transactionType')"
+            >
+              {{ "transaction_type" | translate }}
+              <span
+                *ngIf="sortColumn === 'transactionType'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              <span *ngIf="element?.transactionType === 'labRadioTests'; else showThis">
+                {{element?.paymentFor}}
+              </span>
+              <ng-template #showThis>   {{ element.transactionType }}</ng-template>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="amount">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              (click)="onSortData('amountPaid')"
+            >
+              {{ "amount_paid" | translate }} (SAR)
+              <span
+                *ngIf="sortColumn === 'amountPaid'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">{{ element.amountPaid  | number:'1.2-2'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="paymentmode">
+            <th mat-header-cell *matHeaderCellDef  (click)="onSortData('paymentMode')" >
+              {{ "payment_mode" | translate }}
+              <span
+                *ngIf="sortColumn === 'paymentMode'"
+                class="material-icons sorticon"
+                >{{ sortIconClass }}</span
+              >
+            </th>
+
+            <td mat-cell *matCellDef="let element">{{ element.paymentMode }}</td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef  >
+              {{ "payment_status" | translate }}
+            
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              <span [ngClass]="'payment_status ' + element.status">
+                {{ element.status }}
+              </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "action" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="icon_group">
+                <ng-container >
+                  <a class="svgicon" (click)="openVerticallyCenteredviewInvoice(viewInvoice,element?._id)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+                      <path
+                        d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                    </svg>
+                  </a>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+
+      <div *ngIf="dataSource?.length === 0" class="text-center">
+        <b>{{ "no_record_found" | translate }}</b>
+      </div>
+      <mat-paginator
+        class="pagination"
+        [length]="totalLength"
+        (page)="handlePageEvent($event)"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20, 50, 100]"
+        showFirstLastButtons
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #viewInvoice let-modal>
+  <div class="custome_modal"   [attr.dir]="'dir' | translate">
+    <div class="modal-header">
+      <div>
+        <mat-icon (click)="downloadPDF()" ngbTooltip="Download Invoice">download</mat-icon>
+        <mat-icon (click)="modal.dismiss('Cross click')">close</mat-icon>
+      </div>
+    </div>
+
+    <div class="modal-body viewInvoice">
+      <div class="inVoice container" id="invoiceContent">
+
+        <!-- Invoice Header -->
+        <div class="invoice-header">
+          <div class="invoice-date">
+            <p style="margin: 0;">
+              <strong>{{"invoice_date" | translate }}:</strong>
+              {{ purchaseDetails?.createdAt | date : "dd/MM/yyyy | hh:mm" }}
+            </p>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Service Info Section -->
+        <div class="service-section">
+          <div class="line-item">
+            <span class="label">{{"invoice_number" | translate}}</span>
+            <span class="value">
+              {{ purchaseDetails?.invoiceId ? purchaseDetails?.invoiceId : "-" }}
+            </span>
+          </div>
+          <div class="line-item">      
+            <span class="label">{{"service_type" | translate}}</span>
+            <span class="value" [ngSwitch]="purchaseDetails?.transactionType">
+
+              <ng-container *ngSwitchCase="'subscription'">Subscription</ng-container>
+              <ng-container *ngSwitchCase="'medicine'">Medicine</ng-container>
+              <ng-container *ngSwitchCase="'addon'">Addon Consultation</ng-container>
+
+              <ng-container *ngSwitchCase="'labRadioTests'">
+                <ng-container [ngSwitch]="purchaseDetails?.paymentFor">
+                  <ng-container *ngSwitchCase="'lab'">Lab Order</ng-container>
+                  <ng-container *ngSwitchCase="'radio'">Radiology Order</ng-container>
+                  <ng-container *ngSwitchDefault>Lab/Radio Test</ng-container>
+                </ng-container>
+              </ng-container>
+
+              <ng-container *ngSwitchDefault>
+                {{ purchaseDetails?.transactionType | titlecase }}
+              </ng-container>
+
+            </span>
+          </div>
+
+          <div class="line-item">
+            <span class="label">{{"claimed_by" | translate}}</span>
+            <span class="value">
+              {{ purchaseDetails?.patientData?.full_name }} ({{ purchaseDetails?.patientData?.mrn_number }})
+            </span>
+          </div>
+          
+          <!-- Subscription/Add-on Specific Info -->
+          <ng-container *ngIf="purchaseDetails?.transactionType === 'addon'">     
+            <table class="addon-table">
+              <thead>
+                <tr>
+                  <th>{{ "details" | translate }}</th>
+                  <th style="text-align: right;">{{ "value" | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ "addon_count" | translate }}</td>
+                  <td style="text-align: right;">{{ purchaseDetails?.addonCount || 0 }}</td>
+                </tr>
+                <tr>
+                  <td>{{ "addon_individual_price" | translate }} (SAR)</td>
+                  <td style="text-align: right;">{{ (purchaseDetails?.addonIndividualPrice || 0) | number:'1.2-2' }}</td>
+                </tr>
+                <tr>
+                  <td><strong>{{ "total_price" | translate }} (SAR)</strong></td>
+                  <td style="text-align: right;"><strong>{{ (totalAddonAmount || 0) | number:'1.2-2' }}</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </ng-container>
+          
+
+          <!-- Lab/Radio Test Info -->
+          <ng-container *ngIf="purchaseDetails?.transactionType === 'labRadioTests'">
+            <ng-container *ngIf="purchaseDetails?.testInfo?.length">
+              <ng-container *ngIf="purchaseDetails?.testInfo[0] as firstTest">
+
+                <div class="line-item" *ngIf="firstTest?.doctorDetails">
+                  <span class="label">{{"prescribed_by" | translate}}</span>
+                  <span class="value">{{ firstTest?.doctorDetails?.doctorName }}</span>
+                </div>
+
+                <ng-container *ngIf="firstTest?.centerDetails">
+                  <div class="line-item">
+                    <span class="label">{{"centre_name" | translate}}</span>
+                    <span class="value">{{ firstTest?.centerDetails?.centre_name }}</span>
+                  </div>
+
+                  <div class="line-item">
+                    <span class="label">{{"center_contact" | translate}}</span>
+                    <span class="value">
+                      ({{ firstTest?.centerDetails?.mobile }}) - ({{ firstTest?.centerDetails?.email }})
+                    </span>
+                  </div>
+                </ng-container>
+              </ng-container>
+
+              <!-- Test List Table -->
+              <table class="test-table">
+                <thead>
+                  <tr>
+                    <th>{{ "test_name" | translate }}</th>
+                    <th>{{ "test_price" | translate }} (SAR)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of purchaseDetails?.testInfo">
+                    <td>{{ item?.testName }} ({{ item?.loinc?.loincCode }})</td>
+                    <td style="text-align: right;">{{ item?.testPrice  | number:'1.2-2'}}</td>
+                  </tr>
+                </tbody>
+                <tfoot *ngIf="totalTestPrice">
+                  <tr>
+                    <td><strong>{{ "total_tests_price" | translate }}</strong></td>
+                    <td style="text-align: right;"><strong>{{ totalTestPrice | number:'1.2-2'}}</strong></td>
+                  </tr> 
+              </tfoot>
+              </table>
+              <div class="line-item">
+                <span class="label">{{"discount_amount" | translate}}</span>
+                <span class="value">SAR {{ (purchaseDetails?.discountedAmount || 0)| number:'1.2-2'}}</span>
+              </div>
+    
+              <div class="line-item" style="font-weight: bold;">
+                <span class="label">{{"total_amount" | translate}}</span>
+                <span class="value">SAR {{ (testPriceAfterDiscount || 0)| number:'1.2-2'}}</span>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <!-- subscription -->      
+          <ng-container *ngIf="purchaseDetails?.transactionType === 'subscription'">
+            <div class="line-item" >
+              <span class="label">{{"plan_price" | translate}}</span>
+              <span class="value">SAR {{ purchaseDetails?.planPrice  | number:'1.2-2' }}</span>
+            </div>
+            <div class="line-item" style="border-bottom: 1px solid #B6C8D6;">
+              <span class="label">{{"discount_amount" | translate}}</span>
+              <span class="value">SAR {{ (purchaseDetails?.discountedAmount || 0)| number:'1.2-2'}}</span>
+            </div>
+  
+            <div class="line-item" style="font-weight: bold;">
+              <span class="label">{{"total_amount" | translate}}</span>
+              <span class="value">SAR {{ (planPriceAfterDiscount || 0)| number:'1.2-2'}}</span>
+            </div>
+          </ng-container>
+          
+
+          <div class="line-item">
+            <span class="label">{{"vat_charges" | translate}} ({{purchaseDetails?.vatCharges}}%)</span>
+            <span class="value">SAR {{ (vatAmount || 0) | number:'1.2-2'}} </span>            
+          </div>
+
+          <div class="line-item" style="font-weight: bold;">
+            <span class="label">{{"amount_received" | translate}}</span>
+            <span class="value">SAR {{ (purchaseDetails?.amountPaid || 0) | number:'1.2-2'}}</span>
+          </div>
+
+          <div class="line-item" *ngIf="purchaseDetails?.status === 'failed'">
+            <span class="label transaction-failed">
+              {{"TRANSACTION" | translate}} {{ purchaseDetails?.status?.toUpperCase() }}
+            </span>
+          </div>
+
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Footer -->
+        <div class="footer">
+          <p>info@testapp.com</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+

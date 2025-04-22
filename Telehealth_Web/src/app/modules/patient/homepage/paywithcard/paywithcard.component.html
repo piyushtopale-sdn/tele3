@@ -1,0 +1,126 @@
+<div class="payment">
+  <div class="payment_inner">
+    <div class="row">
+      <div class="left_part part col-md-6">
+        <div class="leftpart_inner">
+          <div class="section_wrap">
+            <div class="top_section">
+              <div class="project_title_wrap">
+                <mat-icon (click)="routeBack()">west</mat-icon>
+
+                <div class="project_logo">
+                  <img src="../../../../../assets/img/login_img.svg" />
+                </div>
+                <div class="project_title">
+                  {{ "test_patient_portal" | translate }}
+                </div>
+              </div>
+
+              <div class="plan_info">
+                <label>{{ "consultation_fees" | translate }}</label>
+                <div class="price">US${{ plan_price }}</div>
+              </div>
+            </div>
+            <div class="bottom_bar">
+              <ul class="list_wrapper">
+                <li>
+                  {{ "powered_by" | translate }}
+                  <b>{{ "strip" | translate }}</b>
+                </li>
+                <!-- <li>Terms</li>
+                                <li>Privacy</li> -->
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right_part part col-md-6">
+        <div class="rightpart_inner">
+          <div class="payment_form">
+            <div class="back_button" (click)="routeBack()">
+              <button class="btn btn-primary">{{ "back" | translate }}</button>
+            </div>
+            <div class="payment_form_inner">
+              <form [formGroup]="cordDetails">
+                <div class="payment_title">
+                  {{ "pay_with_card" | translate }}
+                </div>
+                <div class="form_field_wrapper">
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      formControlName="email"
+                      matInput
+                    />
+                  </mat-form-field>
+                </div>
+
+                <div class="form_field_wrapper card_info">
+                  <label>{{ "card_information" | translate }}</label>
+                  <div class="card_info_field">
+                    <div class="row">
+                      <ng-container
+                        *ngIf="elementsOptions?.clientSecret as clientSecret"
+                      >
+                        <ngx-stripe-payment [clientSecret]="clientSecret">
+                        </ngx-stripe-payment>
+                      </ng-container>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form_field_wrapper">
+                  <label>{{ "name_on_card" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      placeholder="Enter your name"
+                      formControlName="name"
+                      matInput
+                    />
+                  </mat-form-field>
+                </div>
+
+                <div class="form-btn primary_btn">
+                  <!-- <button class="btn btn-primary"
+                                        (click)="openVerticallyCenteredpaymentcontent(paymentcontent)">Subscribe</button> -->
+
+                  <button class="btn btn-primary" (click)="Pay()">
+                    {{ "subscribe" | translate }}
+                  </button>
+                </div>
+
+                <div class="payment_desc">
+                  <p>{{ "payment_desc" | translate }}</p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ---------------------------------------Payment Successfull modal---------------------------------------- -->
+<div class="payment_succesfull">
+  <ng-template #paymentcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-body">
+        <div class="successfull_icon">
+          <img src="/assets/img/successfull.png" />
+        </div>
+        <div class="successfull_title">
+          {{ "payment_has_been_successfully_completed" | translate }}.<br />
+        </div>
+        <a
+          class="backtodashboard"
+          (click)="modal.dismiss('Cross click')"
+          [routerLink]="['/patient/myappointment/list']"
+          >{{ "continue" | translate }}</a
+        >
+      </div>
+    </div>
+  </ng-template>
+</div>

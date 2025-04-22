@@ -1,0 +1,143 @@
+@import '../../../../assets/css/variable/variable';
+
+.content_view{
+    .mat-tab-header {
+        margin: 0 0 35px;
+        border-bottom: none;
+        .mat-tab-list {
+            .mat-tab-labels {
+                padding: 7px 12px;
+                background: #F6F8FC;
+                border: 1px solid #B6C8D6;
+                border-radius: 15px;
+                .mat-tab-label {
+                    font-family: $font_family_body, $font_sans_sarif;
+                    height: 40px;
+                    padding: 0 30px;
+                    min-width: 120px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: $bodyopacitylightcolor;
+                    opacity: 1;
+                }
+                .mat-tab-label.mat-tab-label-active {
+                    font-weight: 700;
+                    color: #0C2F49;
+                }
+            }
+            .mat-ink-bar {
+                display: none;
+            }
+        }
+    }
+    .content_inner_tab{
+        .mat-tab-header{
+            margin: 0 0 30px;
+            .mat-tab-label-container{
+                .mat-tab-labels{
+                    display: inline-flex;
+                }
+            }
+        }
+        .faq_tab{
+            background: $white_color;
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+            padding: 25px;
+            .faq_content{
+                display: flex;
+                align-items: stretch;
+                justify-content: space-between;
+                margin: 0 0 15px;
+                .faq_content_inner{
+                    width: 100%;
+                    .item{
+                        .form_field_wrapper{
+                            label{
+                                color: $bodyopacitycolor;
+                            }
+                            .mat-form-field{
+                                .mat-form-field-flex{
+                                    .mat-form-field-infix{
+                                        width: 100%;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                &:last-child{
+                    margin-bottom: 0;
+                }
+            }
+            .row_generate{
+                border-radius: 5px;
+                margin: 30px 0 15px 20px;
+                .mat-icon{
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-width: 50px;
+                    height: 100%;
+                }
+                &.row_add{
+                    background: $bodycolor;
+                    .mat-icon{
+                        color: #ffffff;
+                    }
+                }
+                &.row_minus{
+                    background: #FDE6E5;
+                    .mat-icon{
+                        color: #F05A4F;
+                    }
+                }
+            }
+        }
+        .primary_btn{
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+    }
+    .editor{
+        .content_title{
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 16px;
+            letter-spacing: 0.05em;
+            color: $bodycolor;
+            margin: 0 0 20px;
+        }
+        .editor_inner {
+                background: #FFFFFF;
+                border: 1px solid rgba(38, 50, 60, 0.08);
+                box-shadow: 0px 5px 15px rgba(26, 91, 159, 0.05);
+                border-radius: 14.7314px;
+                overflow: hidden;
+                .NgxEditor__MenuBar {
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                    padding: 10px;
+                }
+                .NgxEditor {
+                    border: none;
+                    .NgxEditor__Content{
+                        padding: 10px 18px;
+                        min-height: 150px;
+                    }
+                }
+                .CodeMirror {
+                    border: 1px solid #eee;
+                    height: auto;
+                    margin-bottom: 0.7rem;
+                    pre {
+                        white-space: pre !important;
+                    }
+                }
+        }
+        .primary_btn{
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+    }
+   
+}

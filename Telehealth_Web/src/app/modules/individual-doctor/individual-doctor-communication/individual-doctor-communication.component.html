@@ -1,0 +1,508 @@
+<div class="chat_view dashboard_main_content">
+  <div class="chat_section">
+    <div class="row">
+      <div class="left_panel col-md-5">
+        <div class="left_panel_inner">
+          <div class="searchbar_wrap">
+            <div class="searchbar">
+              <div class="searchbox">
+                <div class="input-group">
+                  <input type="search" class="form-control" placeholder="{{ 'search' | translate }}" aria-label="Search"
+                  #text (keyup)="handleSearchFilterForChatUser(text.value)" (search)="handleSearchFilterForChatUser(text.value)" />
+                  <button class="btn search-btn">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="add_chat">
+              <mat-icon (click)="openVerticallyCenteredstartchat(startchatcontent)">add</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="filteredList.length > 0; else elsestatus">
+      <div class="left_panel col-md-5">
+        <div class="left_panel_inner">
+          <div class="chat">
+            <div class="title">{{ "chat" | translate }}</div>
+            <div class="chat_inner">
+              <ng-container *ngFor="let data of filteredList">
+                <div class="chat_item" [ngClass]="selectedreceiver == data._id ? 'active' : ''"
+                  (click)="handleroute(data, true)">
+                  <div class="chat_item_inner row">
+                    <div class="left_part col-sm-8 col-md-7 col-lg-8 col-xl-7">
+                      <span class="chat_img">
+                        <div *ngIf="data?.isGroupChat; else singleimage">
+                          <div>
+                            <img src="{{
+                                data?.profile_pic
+                                  ? data?.profile_pic
+                                  : '../../../../assets/img/GroupIcon.png'
+                              }}" />
+                          </div>
+                        </div>
+                        <ng-template #singleimage>
+                          <div>
+                            <img src="{{
+                                this.userID == data?.senderDetails?._id
+                                  ? data?.receiverDetails[0]?.profile_picture ||
+                                    '../../../../assets/img/default_user.png'
+                                  : data?.senderDetails?.profile_picture ||
+                                    '../../../../assets/img/default_user.png'
+                              }}" />
+                            <ng-container *ngIf="
+                                this.userID === data?.senderDetails?._id
+                                  ? data?.receiverDetails[0]?.isOnline
+                                  : data?.senderDetails?.isOnline
+                              ">
+                              <span class="online"></span>
+                            </ng-container>
+                          </div>
+                        </ng-template>
+                      </span>
+
+                      <ng-container *ngIf="!data.groupName; else groupNamee">
+                        <div class="chat_detail">
+                          <div class="chat_title" style="cursor: pointer;">
+                            <ng-container *ngIf="userID === data?.senderDetails?._id">
+                              {{ data?.receiverDetails?.[0]?.full_name }} 
+                              <span *ngIf="data?.receiverDetails?.[0]?.mrn_number">
+                                ({{ data?.receiverDetails?.[0]?.mrn_number }})
+                              </span>
+                            </ng-container>
+                            <ng-container *ngIf="userID !== data?.senderDetails?._id">
+                              {{ data?.senderDetails?.full_name }} 
+                              <span *ngIf="data?.senderDetails?.mrn_number">
+                                ({{ data?.senderDetails?.mrn_number }})
+                              </span>
+                            </ng-container>
+                          </div>
+                          <ng-container *ngIf="data?.latestMessage?.message && !data?.latestMessage?.isDeleted; else image">
+                            {{ truncateMessage(data?.latestMessage?.message, 10) }}
+                          </ng-container>
+                          <ng-template #image>
+                            <ng-container *ngIf="
+                              (!data?.latestMessage?.attachments && !data?.latestMessage?.isDeleted) || 
+                              (data?.latestMessage?.attachments?.length > 0 && !data?.latestMessage?.isDeleted);
+                              else noChat
+                            ">
+                              <i class="fa fa-image"></i>
+                            </ng-container>
+                            <ng-template #noChat>
+                             <span style="font-style: italic;">{{ "this_message_has_been_deleted" | translate }}</span>
+                            </ng-template>
+                          </ng-template>
+                          
+                        </div>
+                      </ng-container>
+                      <ng-template #groupNamee>
+                        <div class="chat_detail">
+                          <div class="chat_title">{{ data?.groupName }}</div>
+                          <ng-container *ngIf="data.latestMessage?.message && !data?.latestMessage?.isDeleted; else image">
+                            {{ data?.latestMessage?.message }}
+                          </ng-container>
+                          <ng-template #image>
+                            <ng-container *ngIf="
+                                data.latestMessage?.attachments[0];
+                                else noChat
+                              ">
+                              <i class="fa fa-image"></i>
+                            </ng-container>
+                            <ng-template #noChat>
+                              {{ "no_messages" | translate }}
+                            </ng-template>
+                          </ng-template>
+                        </div>
+                      </ng-template>
+                    </div>
+                    <div class="right_part col-sm-4 col-md-5 col-lg-4 col-xl-5">
+                      <div class="dateandtime">
+                        <!-- Pranali Mar 26 -->
+                        <div *ngIf="data?.unreadCount && data?.unreadCount > 0 " class="unread-badge">
+                          {{ data?.unreadCount }}
+                        </div>
+                        
+                        <span>
+                          {{
+                            data?.latestMessage?.updatedAt
+                            | date : "dd/MM/yyyy | HH:mm"
+                          }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right_panel col-md-7" *ngIf="showAllChatWindow">
+        <div class="right_panel_inner">
+          <div class="message" *ngIf="chatRoom">
+            <div class="message_inner">
+              <div class="profile_top">
+                <div class="left_part"  style="cursor: pointer;">
+                  <span class="chat_img"  (click)="goToEMR(selectedChatUserId)">
+                    <img src="{{ selectedrecieverimage }}" />                   
+                    <ng-container *ngIf="isOnline && checkGroup == false">
+                      <span class="online"></span>
+                    </ng-container>
+                  </span>
+                  <div class="chat_detail">         <!--click function to navigate Particular Users EMR Detail page -->
+                    <div class="chat_title" (click)="goToEMR(selectedChatUserId)">{{ chatHeaderName }}</div>
+                    <!-- <div class="aboutus_msg">{{ chatWithName }}</div> -->
+                  </div>
+                </div>
+                <!-- <div class="right_part">
+                  <div class="dropdown_content">
+                    <button
+                      class="btn more_vert"
+                      type="button"
+                      id="dropdownMenuButton2"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+
+                    <ul
+                      class="dropdown-menu"
+                      aria-labelledby="dropdownMenuButton2"
+                    >
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          (click)="
+                            openVerticallyCenteredsecondDelete(
+                              deleteAllMessages
+                            )
+                          "
+                          >{{ "clear_chat" | translate }}</a
+                        >
+                      </li>
+
+                    </ul>
+                  </div>
+                </div> -->
+              </div>
+              <div class="profile_bottom">
+                <div class="chat" #chatContainer>
+                  <ng-container *ngIf="messageData.length > 0; else nomessage">
+                    <div *ngFor="let data of messageData; let i = index">
+                      <div *ngIf="shouldShowDate(i)">
+                        <div class="chat-date-separator">
+                          {{ data.createdAt | date: 'MMM dd, yyyy' }}
+                        </div>
+                      </div>
+                      <div class="chat_wrapper">
+                        <div class="chat_message" *ngIf="data.senderID !== userID">
+                          <div *ngIf="checkGroup" class="own-title chat_img">
+                            <span *ngIf="data?.senderDetails?.isOnline" class="isOnline"></span>{{
+                            data?.senderDetails?.full_name }}
+                          </div>
+                          <div class="msg_block d-flex align-items-center">
+                            <span class="msg_txt" *ngIf="data.isDeleted === true; else showMessage" style="font-style: italic;">{{"this_message_has_been_deleted" | translate}}</span>
+                            <ng-template #showMessage>
+                            <ng-container *ngIf="data?.attachments!= null && data?.attachments.length > 0">
+                              <ng-container *ngIf="
+                                data?.attachments[0].type == 'png' ||
+                                data?.attachments[0].type == 'jpg' ||
+                                data?.attachments[0].type == 'jpeg' ||
+                                data?.attachments[0].type == 'pneg' ||
+                                data?.attachments[0].type == 'heif' 
+                              ">
+                               <img src="../../../../assets/img/image_.png"  (click)="
+                                  previewImage(data?.attachments[0].path)
+                                " class="cursor" style="width: 60px" />
+                                
+                              </ng-container>
+
+                              <ng-container *ngIf="data?.attachments[0].type == 'pdf'">
+                                <img src="../../../../assets/img/PDF_file_icon.svg.png" (click)="
+                                  previewImage(
+                                    data?.attachments[0].path
+                                  )
+                                " class="cursor" style="width: 60px" />
+                              </ng-container>
+                              <ng-container *ngIf="
+                                data?.attachments[0].type == 'xls' ||
+                                data?.attachments[0].type == 'xlsx'
+                              ">
+                                <img src="../../../../assets/img/xlsx_icon.svg.png" (click)="
+                                  previewImage(
+                                    data?.attachments[0].path
+                                  )
+                                " class="cursor" style="width: 60px" />
+                              </ng-container>
+
+                              <ng-container *ngIf="data?.attachments[0].type == 'mp3'">
+                                <audio style="width: 235px" controls>
+                                  <source src="{{ data?.attachments[0].path }}" type="audio/mpeg" />
+                                </audio>
+                              </ng-container>
+                            </ng-container>
+
+                            <div class="msg_txt" *ngIf="data.message && data.message.length > 0">
+                              {{ data.message }}
+                            </div>
+                            </ng-template>
+                            <!-- <button class="btn more_vert" type="button" id="dropdownMenuButton2"
+                              data-bs-toggle="dropdown" aria-expanded="false">
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                              <li>
+                                <a class="dropdown-item" style="cursor: pointer" (click)="
+                                    openVerticallyCenteredsecond(
+                                      deleteMessage,
+                                      data
+                                    )
+                                  ">{{ "delete_message" | translate }}</a>
+                              </li>
+                            </ul> -->
+                          </div>
+                          <div class="date_time">
+                            {{ data?.createdAt | date: "dd/MM/yyyy | HH:mm" }}
+                          </div>
+                        </div>
+
+                        <div class="chat_message chat_message-own" *ngIf="data.senderID === userID">
+                          <div class="msg_block d-flex align-items-center">
+                            <span class="msg_txt" *ngIf="data.isDeleted === true; else showMessage" style="font-style: italic;">{{"this_message_has_been_deleted" | translate}}</span>
+                            <ng-template #showMessage>
+                            <ng-container *ngIf="data?.attachments!= null && data?.attachments.length > 0">
+                              <ng-container *ngIf="
+                                  data?.attachments[0].type == 'png' ||
+                                  data?.attachments[0].type == 'jpg' ||
+                                  data?.attachments[0].type == 'jpeg' ||
+                                  data?.attachments[0].type == 'pneg'
+                                ">
+                                <img src="../../../../assets/img/image_.png"  (click)="
+                                    previewImage(data?.attachments[0].path)
+                                  " class="cursor" style="width: 60px;cursor: pointer;" />
+                              </ng-container>
+
+                              <ng-container *ngIf="data?.attachments[0].type == 'pdf'">
+                                <img src="../../../../assets/img/PDF_file_icon.svg.png" (click)="
+                                    previewImage(
+                                      data?.attachments[0].path
+                                    )
+                                  " class="cursor" style="width: 60px;cursor: pointer;" />
+                              </ng-container>
+
+                              <ng-container *ngIf="
+                                  data?.attachments[0].type == 'xls' ||
+                                  data?.attachments[0].type == 'xlsx'
+                                ">
+                                <img src="../../../../assets/img/xlsx_icon.svg.png" (click)="
+                                    previewImage(
+                                      data?.attachments[0].path
+                                      
+                                    )
+                                  " class="cursor" style="width: 60px;cursor: pointer;" />
+                              </ng-container>
+
+                              <ng-container *ngIf="data?.attachments[0].type == 'mp3'">
+                                <audio style="width: 235px" controls>
+                                  <source src="{{ data?.attachments[0].path }}" type="audio/mpeg" />
+                                </audio>
+                              </ng-container>
+                            </ng-container>
+                            <div class="msg_txt" *ngIf="data.message && data.message.length > 0">
+                              {{ data.message }}
+                            </div>
+                          </ng-template>
+                            <button *ngIf="!data?.isDeleted && isWithinTwoHours(data?.createdAt)"
+                            class="btn more_vert" type="button" id="dropdownMenuButton2"
+                              data-bs-toggle="dropdown" aria-expanded="false">
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                              <li>
+                                <a class="dropdown-item" style="cursor: pointer" (click)="
+                                    openVerticallyCenteredsecond(
+                                      deleteMessage,
+                                      data
+                                    )
+                                  ">{{ "delete_message" | translate }}</a>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="date_time">
+                            {{
+                            data?.createdAt | date: "dd/MM/yyyy | HH:mm"
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-template #nomessage>
+                    <p style="font-style: italic;">{{"this_message_has_been_deleted" | translate}}</p>
+                  </ng-template>
+                </div>
+                <div class="attachment-images" *ngIf="attachmentFile" style="margin-left: 28px;">
+                  <div class="Box" style="position: relative; display: inline-block; width: 60px;">
+                    <a class="cursor" (click)="removeAttachedImage()"
+                      style="position: absolute; top: -14px; right: -16px; z-index: 10; background: #2839FF; border-radius: 50%; padding: 0px 7px 0px 6px; cursor: pointer; color:#ffff">
+                      <i class="fa-solid fa-xmark"></i>
+                    </a>
+                    <div class="imgBox" *ngIf="attachmentType !== 'application/pdf'">
+                      <img [src]="attachmentFile" class="img-fluid" style="width: 60px; border-radius: 4px;" />
+                    </div>
+                    <div class="imgBox" *ngIf="attachmentType === 'application/pdf'">
+                      <img src="../../../../assets/img/PDF_file_icon.svg.png" class="img-fluid"
+                        style="width: 25px; border-radius: 4px;" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="chat_form">
+                  <form [formGroup]="typeMessageForm" id="chat_form">
+                    <div class="chat_form_inner">
+
+                      <div>
+                        <mat-icon class="add" (click)="openFileSelector()">add
+                          <input class="file-upload d-none" type="file" (change)="fileChange($event)" />
+                        </mat-icon>
+                      </div>
+                      <input id="text-message" type="text" formControlName="message" placeholder="Type something"
+                        [ngClass]="{ 'audio-recording': isAudioRecording }" [value]="audioRecordedTime" />
+
+                      <!-- <div *ngIf="isAudioRecording">{{audioRecordedTime}}</div> -->
+
+                      <!-- <mat-icon class="camera">photo_camera</mat-icon> -->
+                      <!-- <mat-icon
+                        class="mic"
+                        [ngClass]="{ voice_btn_active: isAudioRecording }"
+                        (click)="
+                          !isAudioRecording
+                            ? startAudioRecording()
+                            : stopAudioRecording()
+                        "
+                        >mic_none</mat-icon
+                      > -->
+                    </div>
+                    <div class="primary_btn">
+                      <button  type="submit" class="btn btn-primary" (click)="sendMessage()">
+                        {{ "send" | translate }}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #elsestatus>
+      <p style="text-align: center; margin-top: 43px">
+        {{ "no_chat_found" | translate }}
+      </p>
+    </ng-template>
+  </div>
+</div>
+
+
+<div class="start_chat">
+  <ng-template #startchatcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "Select" | translate }}
+        </h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="searchbar_wrap">
+            <div class="searchbar">
+              <div class="searchbox">
+                <div class="input-group">
+                  <input type="search" class="form-control" placeholder="{{ 'search' | translate }}" aria-label="Search"
+                    #text (keyup)="handleSearchFilter(text.value)" (search)="handleSearchFilter(text.value)" />
+                  <button class="btn search-btn">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="assign_item_wrapper">
+            <ng-container *ngIf="dataSource.length > 0; else elsestafflist">
+              <div *ngFor="let element of dataSource">
+                <div class="assign_item">
+                  <div class="assign_item_inner">
+                    <div class="left">
+                      <span class="chat_img">
+                        <div>
+                          <div *ngIf="element?.profile_pic">
+                            <img [src]="element?.profile_pic" />
+                            <span *ngIf="element?.isOnline" class="isOnline"></span>
+                          </div>
+                          <div *ngIf="!element?.profile_pic">
+                            <img src="../../../../assets/img/default_user.png" />
+                            <span *ngIf="element?.isOnline" class="isOnline"></span>
+                          </div>
+                        </div>
+                      </span>
+                      <div class="chat_name">
+                        {{ element?.fullName }}
+                      </div>
+                    </div>
+                    <div class="right">
+                      <div class="chat_detail">
+                        <div class="primary_btn">
+                          <button class="btn btn-secondary" (click)="createRoom(element)">
+                            {{ "start" | translate }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #elsestafflist>
+              <p>{{ "no_user_list_found" | translate }}</p>
+            </ng-template>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+
+<!-------- Delete modal for Single message -------->
+<ng-template #deleteMessage let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img class="img-fluid" src="../../../../assets/img/delete.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "you_want_to_delete_this_message" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="deleteSingleMessage()">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+

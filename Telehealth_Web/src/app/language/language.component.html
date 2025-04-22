@@ -1,0 +1,21 @@
+<div class="language">
+  <select *ngIf="noUserLogin !== null" #selectedLang (change)="switchLang(selectedLang.value)">
+    <option *ngFor="let localization of languages" [value]="localization.code"
+      [selected]="localization.code === translate.currentLang">
+      {{ localization.label }}
+    </option>
+  </select>
+
+  <div class="dropdown language-here" *ngIf="noUserLogin === null">
+    <button class="language-btn btn-blue dropdown-toggle " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      <img src="../../assets/img/landingpage-images/lang-icon.svg" alt="">
+    </button>
+    <ul class="dropdown-menu">
+      <li *ngFor="let localization of languages">
+        <a class="dropdown-item" (click)="switchLang(localization.code)">
+          {{ localization.label }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,571 @@
+<div class="patient_dashboard dashboard_main_content">
+  <div class="counter_section common_space">
+    <div class="row counter_item_wrap">
+      <div class="col-lg-12 col-xl-8 counter_item">
+        <div class="main_title">{{ "new_vitals" | translate }}</div>
+        <div class="row">
+          <div class="col-sm-6 col-md-3">
+            <div class="cust_col bright_blue">
+              <div class="cust_col_inner">
+                <div class="left">
+                  <div class="counter_img">
+                    <img src="assets/img/dashboard/dashboard15.svg" />
+                  </div>
+                  <div class="counter_title">
+                    {{ "height" | translate }} ({{ "cm" | translate }})
+                  </div>
+                </div>
+                <div class="right">
+                  <div class="counter">{{ height }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="cust_col light_green">
+              <div class="cust_col_inner">
+                <div class="left">
+                  <div class="counter_img">
+                    <img src="assets/img/dashboard/dashboard16.svg" />
+                  </div>
+                  <div class="counter_title">
+                    {{ "weight" | translate }} ({{ "lb" | translate }})
+                  </div>
+                </div>
+                <div class="right">
+                  <div class="counter">{{ weight }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="cust_col light_red">
+              <div class="cust_col_inner">
+                <div class="left">
+                  <div class="counter_img">
+                    <img src="assets/img/dashboard/dashboard17.svg" />
+                  </div>
+                  <div class="counter_title">{{ "h_rate" | translate }}</div>
+                </div>
+                <div class="right">
+                  <div class="counter">{{ h_rate }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="cust_col light_violet">
+              <div class="cust_col_inner">
+                <div class="left">
+                  <div class="counter_img">
+                    <img src="assets/img/dashboard/dashboard18.svg" />
+                  </div>
+                  <div class="counter_title">
+                    {{ "bmi" | translate }} (kg/m2)
+                  </div>
+                </div>
+                <div class="right">
+                  <div class="counter">{{ bmi }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-6 col-md-3">
+            <div class="cust_col light_orange">
+              <div class="cust_col_inner">
+                <div class="left">
+                  <div class="counter_img">
+                    <img src="assets/img/dashboard/dashboard19.svg" />
+                  </div>
+                  <div class="counter_title">{{ "BP(H/L)" | translate }}</div>
+                </div>
+                <div class="right">
+                  <div class="counter">{{ bp }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="cust_col light_skyblue">
+              <div class="cust_col_inner">
+                <div class="left">
+                  <div class="counter_img">
+                    <img src="assets/img/dashboard/dashboard20.svg" />
+                  </div>
+                  <div class="counter_title">{{ "pulse" | translate }}</div>
+                </div>
+                <div class="right">
+                  <div class="counter">{{ pulse }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="cust_col dark_blue">
+              <div class="cust_col_inner">
+                <div class="left">
+                  <div class="counter_img">
+                    <img src="assets/img/dashboard/dashboard21.svg" />
+                  </div>
+                  <div class="counter_title">
+                    {{ "respiration" | translate }}
+                  </div>
+                </div>
+                <div class="right">
+                  <div class="counter">{{ resp }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-3">
+            <div class="cust_col light_yellow">
+              <div class="cust_col_inner">
+                <div class="left">
+                  <div class="counter_img">
+                    <img src="assets/img/dashboard/dashboard22.svg" />
+                  </div>
+                  <div class="counter_title">{{ "temp(c)" | translate }}</div>
+                </div>
+                <div class="right">
+                  <div class="counter">{{ temp }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12 col-xl-4 counter_item claims_wrapper">
+        <div class="row">
+          <div class="col-sm-12 col-md-6 col-xl-12 claims">
+            <div class="cust_col light_green">
+              <div class="cust_col_inner">
+                <div class="left">
+                  <div class="claim_title">{{ "payments" | translate }}</div>
+                  <div class="counter_wrapper">
+                    <div class="counter">
+                      {{ totalMontlypayment }} {{ "cfa" | translate }}
+                    </div>
+                    <div class="counter_title">This Month</div>
+                  </div>
+                  <div class="counter_wrapper">
+                    <div class="counter">
+                      {{ allTotalPayment }} {{ "cfa" | translate }}
+                    </div>
+                    <div class="counter_title">{{ "total" | translate }}</div>
+                  </div>
+                </div>
+                <div class="right">
+                  <div class="counter_img">
+                    <img src="assets/img/dashboard/dashboard23.svg" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6 col-xl-12 claims">
+            <div class="cust_col light_skyblue">
+              <div class="cust_col_inner">
+                <div class="left">
+                  <div class="claim_title">
+                    {{ "appointments" | translate }}
+                  </div>
+                  <div class="counter_wrapper">
+                    <div class="counter">{{ countUpcomingAppointment }}</div>
+                    <div class="counter_title">
+                      {{ "upcoming" | translate }}
+                    </div>
+                  </div>
+                  <div class="counter_wrapper">
+                    <div class="counter">{{ todaysCountAppointment }}</div>
+                    <div class="counter_title">{{ "today" | translate }}</div>
+                  </div>
+                </div>
+                <div class="right">
+                  <div class="counter_img">
+                    <img src="assets/img/dashboard/dashboard24.svg" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="appointment_section common_space">
+    <div class="main_title">{{ "appointment_details" | translate }}</div>
+
+    <mat-tab-group animationDuration="0ms" (selectedTabChange)="handleAppointmentType($event)">
+
+      <mat-tab label="Upcoming Appointments">
+        <div class="tab_content">
+          <div class="table-wrap">
+            <div class="table-inner without_pagination_block_three">
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                <!-- Patient Name Column -->
+                <ng-container matColumnDef="patientname">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "patient_name" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.patient_name }}
+                  </td>
+                </ng-container>
+
+                <!-- Doctor Name Column -->
+                <ng-container matColumnDef="doctorname">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "doctor_name" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.doctor_name }}
+                  </td>
+                </ng-container>
+
+                <!--Appointments Type Column -->
+                <ng-container matColumnDef="appointmentstype">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "appointments_type" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.consultation_type }}
+                  </td>
+                </ng-container>
+
+                <!--Date Time Column -->
+                <ng-container matColumnDef="datetime">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "date_time" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.consultation_date | date : "dd/MM/YYYY" }} -
+                    {{ element.consultation_time }}
+                  </td>
+                </ng-container>
+
+                <!--Symptom/Ailment  Column -->
+                <ng-container matColumnDef="symptomorailment">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "symptom_ailment" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.reason_for_appointment }}
+                  </td>
+                </ng-container>
+
+                <!--Action column -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "action" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <div class="icon_group">
+                      <a class="svgicon" [routerLink]="['/patient/myappointment/newappointment']"
+                        [queryParams]="{ appointmentId:  element.appointment_id }">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+                          <path
+                            d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                        </svg>
+                      </a>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table>
+            </div>
+            <div *ngIf="allAppointmentList?.length === 0" class="text-center">
+              <b>{{ "no_record_found" | translate }}</b>
+            </div>
+            <!-- <mat-paginator class="pagination" [pageSizeOptions]="[5, 10, 20]"
+                      showFirstLastButtons 
+                      aria-label="Select page of periodic elements">
+                      </mat-paginator> -->
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Today’s Appointments">
+        <div class="tab_content">
+          <div class="table-wrap">
+            <div class="table-inner without_pagination_block_three">
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                <!-- Patient Name Column -->
+                <ng-container matColumnDef="patientname">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "patient_name" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.patient_name }}
+                  </td>
+                </ng-container>
+
+                <!-- Doctor Name Column -->
+                <ng-container matColumnDef="doctorname">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "doctor_name" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.doctor_name }}
+                  </td>
+                </ng-container>
+
+                <!--Appointments Type Column -->
+                <ng-container matColumnDef="appointmentstype">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "appointments_type" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.consultation_type }}
+                  </td>
+                </ng-container>
+
+                <!--Date Time Column -->
+                <ng-container matColumnDef="datetime">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "date_time" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.consultation_date | date : "dd/MM/YYYY" }} -
+                    {{ element.consultation_time }}
+                  </td>
+                </ng-container>
+
+                <!--Symptom/Ailment  Column -->
+                <ng-container matColumnDef="symptomorailment">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "symptom_ailment" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.reason_for_appointment }}
+                  </td>
+                </ng-container>
+
+                <!--Action column -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "action" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <div class="icon_group">
+                      <a class="svgicon" [routerLink]="['/patient/myappointment/newappointment']"
+                        [queryParams]="{ appointmentId:  element.appointment_id }">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+                          <path
+                            d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                        </svg>
+                      </a>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table>
+            </div>
+            <div *ngIf="allAppointmentList?.length === 0" class="text-center">
+              <b>{{ "no_record_found" | translate }}</b>
+            </div>
+            <!-- <mat-paginator class="pagination" [pageSizeOptions]="[5, 10, 20]"
+                        showFirstLastButtons 
+                        aria-label="Select page of periodic elements">
+                        </mat-paginator> -->
+          </div>
+        </div>
+      </mat-tab>
+
+
+
+      <mat-tab label="Past Appointments">
+        <div class="tab_content">
+          <div class="table-wrap">
+            <div class="table-inner without_pagination_block_three">
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                <!-- Patient Name Column -->
+                <ng-container matColumnDef="patientname">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "patient_name" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.patient_name }}
+                  </td>
+                </ng-container>
+
+                <!-- Doctor Name Column -->
+                <ng-container matColumnDef="doctorname">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "doctor_name" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.doctor_name }}
+                  </td>
+                </ng-container>
+
+                <!--Appointments Type Column -->
+                <ng-container matColumnDef="appointmentstype">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "appointments_type" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.consultation_type }}
+                  </td>
+                </ng-container>
+
+                <!--Date Time Column -->
+                <ng-container matColumnDef="datetime">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "date_time" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.consultation_date | date : "dd/MM/YYYY" }} -
+                    {{ element.consultation_time }}
+                  </td>
+                </ng-container>
+
+                <!--Symptom/Ailment  Column -->
+                <ng-container matColumnDef="symptomorailment">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "symptom_ailment" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.reason_for_appointment }}
+                  </td>
+                </ng-container>
+
+                <!--Action column -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "action" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <div class="icon_group">
+                      <a class="svgicon" [routerLink]="['/patient/myappointment/newappointment']"
+                        [queryParams]="{ appointmentId:  element.appointment_id }">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+                          <path
+                            d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                        </svg>
+                      </a>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table>
+            </div>
+            <div *ngIf="allAppointmentList?.length === 0" class="text-center">
+              <b>{{ "no_record_found" | translate }}</b>
+            </div>
+            <!-- <mat-paginator class="pagination" [pageSizeOptions]="[5, 10, 20]"
+                        showFirstLastButtons 
+                        aria-label="Select page of periodic elements">
+                        </mat-paginator> -->
+          </div>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Cancelled Appointments">
+        <div class="tab_content">
+          <div class="table-wrap">
+            <div class="table-inner without_pagination_block_three">
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                <!-- Patient Name Column -->
+                <ng-container matColumnDef="patientname">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "patient_name" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.patient_name }}
+                  </td>
+                </ng-container>
+
+                <!-- Doctor Name Column -->
+                <ng-container matColumnDef="doctorname">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "doctor_name" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.doctor_name }}
+                  </td>
+                </ng-container>
+
+                <!--Appointments Type Column -->
+                <ng-container matColumnDef="appointmentstype">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "appointments_type" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.consultation_type }}
+                  </td>
+                </ng-container>
+
+                <!--Date Time Column -->
+                <ng-container matColumnDef="datetime">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "date_time" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.consultation_date | date : "dd/MM/YYYY" }} -
+                    {{ element.consultation_time }}
+                  </td>
+                </ng-container>
+
+                <!--Symptom/Ailment  Column -->
+                <ng-container matColumnDef="symptomorailment">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "symptom_ailment" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.reason_for_appointment }}
+                  </td>
+                </ng-container>
+
+                <!--Action column -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "action" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <div class="icon_group">
+                      <a class="svgicon" [routerLink]="['/patient/myappointment/newappointment']"
+                        [queryParams]="{ appointmentId:  element.appointment_id }">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="9" viewBox="0 0 16 9" fill="none">
+                          <path
+                            d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
+                        </svg>
+                      </a>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              </table>
+            </div>
+            <div *ngIf="allAppointmentList?.length === 0" class="text-center">
+              <b>{{ "no_record_found" | translate }}</b>
+            </div>
+            <!-- <mat-paginator class="pagination" [pageSizeOptions]="[5, 10, 20]"
+                        showFirstLastButtons 
+                        aria-label="Select page of periodic elements">
+                        </mat-paginator> -->
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <div class="vitals_details common_space">
+    <div class="main_title">{{ "vitals_details" | translate }}</div>
+    <div class="chart-container">
+      <canvas baseChart height="100" [type]="'line'" [data]="lineChartData" [options]="lineChartOptions"
+        [legend]="lineChartLegend">
+      </canvas>
+    </div>
+  </div>
+</div>

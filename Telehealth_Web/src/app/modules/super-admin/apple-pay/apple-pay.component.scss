@@ -1,0 +1,29 @@
+@import '../../../../assets/css/variable/variable';
+
+.button-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Apple Pay button styles */
+.apple-pay-button {
+    --apple-pay-button-width: 140px;
+    --apple-pay-button-height: 30px;
+    --apple-pay-button-border-radius: 5px;
+    --apple-pay-button-padding: 5px 0px;
+
+    width: var(--apple-pay-button-width);
+    height: var(--apple-pay-button-height);
+    border-radius: var(--apple-pay-button-border-radius);
+    padding: var(--apple-pay-button-padding);
+    background-color: black;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}

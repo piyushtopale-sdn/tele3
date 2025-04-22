@@ -1,0 +1,101 @@
+@import '../../../../../assets/css/variable/variable';
+
+.material-icons{
+    cursor: pointer;
+}
+
+.questionnaire{
+    .top_bar{
+        margin: 0 0 30px;
+        .right_part{
+            .primary_btn{
+                .btn-tranprent{
+                    border-radius: 10px;
+                    color: $bodycolor;
+                    .btn_svg{
+                        border-radius: 9px;
+                    }
+                    &:hover{
+                        color: $white_color; 
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// Add question modal css
+.add_question{
+    .item {
+        .row{
+            align-items: center;
+            .mat-checkbox{
+                label{
+                    color: #25282B;
+                    margin: 15px 0 0;
+                    font-weight: 600;
+                    .mat-checkbox-inner-container{
+                        width: 25px;
+                        height: 25px;
+                        margin-right: 12px;
+                    }
+                }
+            }
+            &.increse_content {
+                flex-wrap: nowrap;
+                align-items: flex-start;
+                .increse_content_inner{
+                    .form_field_wrapper{
+                        .mat-form-field{
+                            .mat-form-field-flex{
+                                .mat-form-field-infix{
+                                    width: 100%;
+                                }
+                            }
+                        }
+                    }
+                }
+                .row_generate{
+                    width: auto;
+                    .mat-icon{
+                        width: 50px;
+                        height: 50px;
+                        min-width: 50px;
+                        line-height: 50px;
+                        text-align: center;
+                        border: 1px solid #B6C8D6;
+                        border-radius: 5px;
+                    }
+                
+                }
+            }
+         
+        
+        }
+       
+    }
+}
+
+@media screen and (max-width:$medium_iphone) {
+    .add_question .item .row .mat-checkbox label{
+        margin: 0 0 20px;
+    }
+    .add_question .item .row > *{
+        flex-shrink:unset;
+    }
+}
+.add_b_lock{
+    .mat-icon {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        line-height: 50px;
+        text-align: center;
+        border: 1px solid #B6C8D6;
+        border-radius: 5px;
+        color: white;
+        background: #0b4977;
+        margin-top: 20px;
+    }
+}

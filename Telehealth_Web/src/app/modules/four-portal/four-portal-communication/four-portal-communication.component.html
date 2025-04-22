@@ -1,0 +1,971 @@
+<div class="chat_view dashboard_main_content">
+  <div class="chat_section">
+    <div class="row">
+      <div class="left_panel col-md-5">
+        <div class="left_panel_inner">
+          <div class="searchbar_wrap">
+            <div class="searchbar">
+              <div class="searchbox">
+                <div class="input-group">
+                  <input
+                    type="search"
+                    class="form-control"
+                    placeholder="Search..."
+                    (keyup)="handleSearchFilterForRoom($event)"
+                    (search)="handleSearchFilterForRoom($event)"
+                    aria-label="Search"
+                  />
+                  <button class="btn search-btn">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="add_chat">
+              <mat-icon
+                (click)="openVerticallyCenteredstartchat(startchatcontent)"
+                >add</mat-icon
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right_panel col-md-7">
+        <div class="right_panel_inner">
+          <div class="primary_btn create_grp">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="
+                openVerticallyCenteredcreategroup(
+                  creategroupcontent,
+                  'createGroup'
+                )
+              "
+            >
+              <a class="btn_svg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="22"
+                  height="16"
+                  viewBox="0 0 22 16"
+                  fill="none"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M15.1583 4.23285C15.1583 6.58254 13.2851 8.4666 10.949 8.4666C8.61292 8.4666 6.73974 6.58254 6.73974 4.23285C6.73974 1.88227 8.61292 0 10.949 0C13.2851 0 15.1583 1.88227 15.1583 4.23285ZM10.9488 15.9994C7.51765 15.9994 4.58789 15.4555 4.58789 13.2796C4.58789 11.1028 7.49885 10.5391 10.9488 10.5391C14.38 10.5391 17.3098 11.083 17.3098 13.2598C17.3098 15.4357 14.3988 15.9994 10.9488 15.9994ZM16.9573 4.31036C16.9573 5.50817 16.6 6.62402 15.9732 7.55164C15.9088 7.64711 15.9661 7.77589 16.0798 7.79571C16.2365 7.82273 16.3985 7.83804 16.5633 7.84254C18.2064 7.88577 19.6811 6.82215 20.0885 5.22087C20.692 2.84237 18.92 0.707031 16.6636 0.707031C16.4182 0.707031 16.1836 0.733149 15.9553 0.77998C15.924 0.787185 15.8908 0.801595 15.8729 0.829514C15.8515 0.863737 15.8676 0.909668 15.8891 0.939388C16.5669 1.89493 16.9573 3.06032 16.9573 4.31036ZM19.6782 9.51257C20.7823 9.72962 21.5084 10.1727 21.8093 10.8166C22.0636 11.3453 22.0636 11.9586 21.8093 12.4864C21.349 13.4851 19.8654 13.8058 19.2887 13.8886C19.1696 13.9066 19.0738 13.8031 19.0864 13.6833C19.3809 10.9157 17.0377 9.60353 16.4315 9.30183C16.4055 9.28832 16.4002 9.2676 16.4028 9.255C16.4046 9.24599 16.4154 9.23158 16.4351 9.22888C17.7468 9.20456 19.1571 9.38468 19.6782 9.51257ZM5.43719 7.84254C5.60194 7.83804 5.76312 7.82363 5.92071 7.79571C6.03442 7.77589 6.09173 7.64711 6.02726 7.55164C5.40048 6.62402 5.04321 5.50817 5.04321 4.31036C5.04321 3.06032 5.43361 1.89493 6.11143 0.939388C6.13292 0.909668 6.14814 0.863737 6.12755 0.829514C6.10964 0.802496 6.07561 0.787185 6.04517 0.77998C5.81595 0.733149 5.58135 0.707031 5.33601 0.707031C3.07959 0.707031 1.30759 2.84237 1.91199 5.22087C2.3194 6.82215 3.79413 7.88577 5.43719 7.84254ZM5.59694 9.25401C5.59962 9.26752 5.59425 9.28733 5.56918 9.30174C4.9621 9.60344 2.61883 10.9156 2.91342 13.6823C2.92595 13.803 2.83104 13.9056 2.71195 13.8885C2.13531 13.8057 0.651629 13.4851 0.191392 12.4863C-0.0637974 11.9576 -0.0637974 11.3452 0.191392 10.8166C0.492248 10.1726 1.21752 9.72953 2.32156 9.51158C2.84358 9.38459 4.25294 9.20447 5.5656 9.22879C5.5853 9.23149 5.59515 9.2459 5.59694 9.25401Z"
+                  /></svg></a>
+              {{ "create_group" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="listData.length > 0; else elsestatus">
+      <div class="left_panel col-md-5">
+        <div class="left_panel_inner">
+          <div class="chat">
+            <div class="title">{{ "chat" | translate }}</div>
+            <div class="chat_inner">
+              <ng-container *ngFor="let data of listData">
+                <div
+                  class="chat_item"
+                  [ngClass]="selectedreceiver == data._id ? 'active' : ''"
+                  (click)="handleroute(data, true)"
+                >
+                  <div class="chat_item_inner row" style="cursor: pointer">
+                    <div class="left_part col-sm-8 col-md-7 col-lg-8 col-xl-7">
+                      <span class="chat_img">
+                        <!-- <img src="../../../../assets/img/chat.png"> -->
+                        <div *ngIf="data?.isGroupChat; else singleimage">
+                          <div>
+                            <img
+                              src="{{
+                                data?.profile_pic
+                                  ? data?.profile_pic
+                                  : '../../../../assets/img/GroupIcon.png'
+                              }}"
+                            />
+                            <!-- <img src="../../../../assets/img/GroupIcon.png"> -->
+                            <!-- <span class="online"></span> -->
+                          </div>
+                        </div>
+                        <ng-template #singleimage>
+                          <div>
+                            <img
+                              src="{{
+                                this.userID == data?.senderDetails?._id
+                                  ? data?.receiverDetails[0]?.profile_picture ||
+                                    '../../../../assets/img/default_user.png'
+                                  : data?.senderDetails?.profile_picture ||
+                                    '../../../../assets/img/default_user.png'
+                              }}"
+                            />
+                            <!-- <img src="{{
+                                                            (this.userID == data?.senderDetails?._id) 
+                                                                ? (data?.receiverDetails[0]?.profile_picture || '../../../../assets/img/default_user.png')
+                                                                : (data?.receiverDocumentImage[0]?.url || '../../../../assets/img/default_user.png')
+                                                        }}"> -->
+                            <!-- <img src="../../../../assets/img/GroupIcon.png"> -->
+                            <ng-container
+                              *ngIf="
+                                this.userID === data?.senderDetails?._id
+                                  ? data?.receiverDetails[0]?.isOnline
+                                  : data?.senderDetails?.isOnline
+                              "
+                            >
+                              <span class="online"></span>
+                            </ng-container>
+                          </div>
+                        </ng-template>
+                      </span>
+
+                      <ng-container *ngIf="!data.groupName; else groupNamee">
+                        <div class="chat_detail">
+                          <div class="chat_title">
+                            {{
+                              userID === data?.senderDetails?._id
+                                ? data?.receiverDetails[0]?.full_name
+                                : data?.senderDetails?.full_name
+                            }}({{
+                              userID === data?.senderDetails?._id
+                                ? data?.receiverDetails[0]?.role
+                                : data?.senderDetails?.role
+                            }})
+                          </div>
+                          <ng-container
+                            *ngIf="data.latestMessage?.message; else image"
+                          >
+                            {{ data?.latestMessage?.message }}
+                          </ng-container>
+                          <ng-template #image>
+                            <ng-container
+                              *ngIf="
+                                data.latestMessage?.attachments[0];
+                                else noChat
+                              "
+                            >
+                              <i class="fa fa-image"></i>
+                            </ng-container>
+                            <ng-template #noChat>
+                              {{ "no_messages" | translate }}
+                            </ng-template>
+                          </ng-template>
+                          <!-- <div class="chat_msg">{{data?.latestMessage?.message}}</div> -->
+                        </div>
+                      </ng-container>
+                      <ng-template #groupNamee>
+                        <div class="chat_detail">
+                          <div class="chat_title">{{ data?.groupName }}</div>
+                          <ng-container
+                            *ngIf="data.latestMessage?.message; else image"
+                          >
+                            {{ data?.latestMessage?.message }}
+                          </ng-container>
+                          <ng-template #image>
+                            <ng-container
+                              *ngIf="
+                                data.latestMessage?.attachments[0];
+                                else noChat
+                              "
+                            >
+                              <i class="fa fa-image"></i>
+                            </ng-container>
+                            <ng-template #noChat>
+                              {{ "no_messages" | translate }}
+                            </ng-template>
+                          </ng-template>
+                          <!-- <div class="chat_msg">{{data?.latestMessage?.message}}</div> -->
+                        </div>
+                      </ng-template>
+                    </div>
+                    <div class="right_part col-sm-4 col-md-5 col-lg-4 col-xl-5">
+                      <div class="dateandtime">
+                        {{
+                          data?.latestMessage?.updatedAt
+                            | date
+                              : "hh:mm
+                                                a"
+                        }}
+                      </div>
+                      <!-- <div class="last_seen">
+                                                <img src="../../../../assets/img/read.svg">
+                                            </div> -->
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="right_panel col-md-7">
+        <div class="right_panel_inner">
+          <div class="message" *ngIf="chatRoom">
+            <div class="message_inner">
+              <div class="profile_top">
+                <div class="left_part">
+                  <span class="chat_img">
+                    <img src="{{ selectedrecieverimage }}" />
+                    <ng-container *ngIf="isOnline && checkGroup == false">
+                      <span class="online"></span>
+                    </ng-container>
+                  </span>
+                  <div class="chat_detail">
+                    <div class="chat_title">{{ chatHeaderName }}</div>
+                    <div class="aboutus_msg">{{ chatWithName }}</div>
+                  </div>
+                </div>
+                <div class="right_part">
+                  <div class="dropdown_content">
+                    <button
+                      class="btn more_vert"
+                      type="button"
+                      id="dropdownMenuButton2"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+
+                    <ul
+                      class="dropdown-menu"
+                      aria-labelledby="dropdownMenuButton2"
+                    >
+                      <li>
+                        <a
+                          class="dropdown-item"
+                          style="cursor: pointer"
+                          (click)="
+                            openVerticallyCenteredsecondDelete(
+                              deleteAllMessages
+                            )
+                          "
+                          >{{ "clear_chat" | translate }}</a
+                        >
+                      </li>
+                      <ng-container *ngIf="checkGroup">
+                        <li>
+                          <a
+                            class="dropdown-item"
+                            (click)="
+                              openVerticallyCenteredcreategroup(
+                                creategroupcontent,
+                                'addMember'
+                              )
+                            "
+                            >{{ "add_member" | translate }}</a
+                          >
+                        </li>
+                      </ng-container>
+
+                      <!-- <li><a class="dropdown-item" href="#">Something else here</a></li> -->
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="profile_bottom">
+                <!-- #scrollMe [scrollTop]="scrollMe.scrollHeight" -->
+                <div class="chat" #scrollMe>
+                  <ng-container *ngIf="messageData.length > 0; else nomessage">
+                    <div *ngFor="let data of messageData">
+                      <div class="chat_wrapper">
+                        <div
+                          class="chat_message"
+                          *ngIf="data.senderID !== userID"
+                        >
+                          <div *ngIf="checkGroup" class="own-title chat_img">
+                            <span
+                              *ngIf="data?.senderDetails?.isOnline"
+                              class="isOnline"
+                            ></span
+                            >{{ data?.senderDetails?.full_name }}
+                          </div>
+                          <!-- <ng-container *ngIf="data?.attachments.length>0">
+                                                                <img src="{{data?.attachments[0].path}}"
+                                                                (click)="previewImage(data?.attachments[0].path)"
+                                                                class="cursor" style="width:60px" />
+                                                             </ng-container> -->
+                          <div class="msg_block d-flex align-items-center">
+                            <div class="msg-wrap-block d-flex">
+                              <ng-container
+                                *ngIf="data?.attachments!= null && data?.attachments.length > 0"
+                              >
+                                <ng-container
+                                  *ngIf="
+                                    data?.attachments[0].type == 'png' ||
+                                    data?.attachments[0].type == 'jpg' ||
+                                    data?.attachments[0].type == 'jpeg' ||
+                                    data?.attachments[0].type == 'pneg'
+                                  "
+                                >
+                                  <img
+                                    src="{{ data?.attachments[0].path }}"
+                                    (click)="
+                                      previewImage(data?.attachments[0].path, 1)
+                                    "
+                                    class="cursor"
+                                    style="width: 60px"
+                                  />
+                                </ng-container>
+
+                                <ng-container
+                                  *ngIf="data?.attachments[0].type == 'pdf'"
+                                >
+                                  <img
+                                    src="../../../../assets/img/PDF_file_icon.svg.png"
+                                    (click)="
+                                      downloadPDF(
+                                        data?.attachments[0].path,
+                                        'Sample'
+                                      )
+                                    "
+                                    class="cursor"
+                                    style="width: 60px"
+                                  />
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="
+                                    data?.attachments[0].type == 'xls' ||
+                                    data?.attachments[0].type == 'xlsx'
+                                  "
+                                >
+                                  <img
+                                    src="../../../../assets/img/xlsx_icon.svg.png"
+                                    (click)="
+                                      downloadPDF(
+                                        data?.attachments[0].path,
+                                        'Sample'
+                                      )
+                                    "
+                                    class="cursor"
+                                    style="width: 60px"
+                                  />
+                                </ng-container>
+
+                                <ng-container
+                                  *ngIf="data?.attachments[0].type == 'mp3'"
+                                >
+                                  <audio style="width: 235px" controls>
+                                    <source
+                                      src="{{ data?.attachments[0].path }}"
+                                      type="audio/mpeg"
+                                    />
+                                  </audio>
+                                </ng-container>
+                              </ng-container>
+                              <div
+                                class="msg_txt"
+                                *ngIf="data.message && data.message.length > 0"
+                              >
+                                {{ data.message }}
+                              </div>
+                            </div>
+                            <button
+                              class="btn more_vert"
+                              type="button"
+                              id="dropdownMenuButton2"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <ul
+                              class="dropdown-menu"
+                              aria-labelledby="dropdownMenuButton2"
+                            >
+                              <li>
+                                <a
+                                  class="dropdown-item"
+                                  style="cursor: pointer"
+                                  (click)="
+                                    openVerticallyCenteredsecond(
+                                      deleteMessage,
+                                      data
+                                    )
+                                  "
+                                  >{{ "delete_message" | translate }}</a
+                                >
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="date_time">
+                            {{
+                              data?.createdAt
+                                | date
+                                  : "hh:mm
+                                                                a"
+                            }}
+                          </div>
+                        </div>
+
+                        <div
+                          class="chat_message chat_message-own"
+                          *ngIf="data.senderID === userID"
+                        >
+                          <!-- <ng-container *ngIf="data?.attachments.length>0">
+                                                                <img src="{{data?.attachments[0].path}}"
+                                                                (click)="previewImage(data?.attachments[0].path)"
+                                                                class="cursor" style="width:60px" />
+                                                             </ng-container> -->
+                          <!-- {{data?.attachments}} -->
+                          <div class="msg_block d-flex align-items-center">
+                            <ng-container *ngIf="data?.attachments!= null && data?.attachments.length > 0">
+                              <ng-container
+                                *ngIf="
+                                  data?.attachments[0].type == 'png' ||
+                                  data?.attachments[0].type == 'jpg' ||
+                                  data?.attachments[0].type == 'jpeg' ||
+                                  data?.attachments[0].type == 'pneg'
+                                "
+                              >
+                                <img
+                                  src="{{ data?.attachments[0].path }}"
+                                  (click)="
+                                    previewImage(data?.attachments[0].path, 1)
+                                  "
+                                  class="cursor"
+                                  style="width: 60px"
+                                />
+                              </ng-container>
+
+                              <ng-container
+                                *ngIf="data?.attachments[0].type == 'pdf'"
+                              >
+                                <img
+                                  src="../../../../assets/img/PDF_file_icon.svg.png"
+                                  (click)="
+                                    downloadPDF(
+                                      data?.attachments[0].path,
+                                      'Sample'
+                                    )
+                                  "
+                                  class="cursor"
+                                  style="width: 60px"
+                                />
+                              </ng-container>
+
+                              <ng-container
+                                *ngIf="
+                                  data?.attachments[0].type == 'xls' ||
+                                  data?.attachments[0].type == 'xlsx'
+                                "
+                              >
+                                <img
+                                  src="../../../../assets/img/xlsx_icon.svg.png"
+                                  (click)="
+                                    downloadPDF(
+                                      data?.attachments[0].path,
+                                      'Sample'
+                                    )
+                                  "
+                                  class="cursor"
+                                  style="width: 60px"
+                                />
+                              </ng-container>
+
+                              <ng-container
+                                *ngIf="data?.attachments[0].type == 'mp3'"
+                              >
+                                <audio style="width: 235px" controls>
+                                  <source
+                                    src="{{ data?.attachments[0].path }}"
+                                    type="audio/mpeg"
+                                  />
+                                </audio>
+                              </ng-container>
+                            </ng-container>
+                            <div
+                              class="msg_txt"
+                              *ngIf="data.message && data.message.length > 0"
+                            >
+                              {{ data.message }}
+                            </div>
+                            <button
+                              class="btn more_vert"
+                              type="button"
+                              id="dropdownMenuButton2"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <ul
+                              class="dropdown-menu"
+                              aria-labelledby="dropdownMenuButton2"
+                            >
+                              <li>
+                                <a
+                                  class="dropdown-item"
+                                  style="cursor: pointer"
+                                  (click)="
+                                    openVerticallyCenteredsecond(
+                                      deleteMessage,
+                                      data
+                                    )
+                                  "
+                                  >{{ "delete_message" | translate }}</a
+                                >
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="date_time">
+                            {{
+                              data?.createdAt
+                                | date
+                                  : "hh:mm
+                                                        a"
+                            }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-template #nomessage>
+                    <p>{{ "no_message" | translate }}</p>
+                  </ng-template>
+                </div>
+                <div class="chat_form">
+                  <form [formGroup]="typeMessageForm" id="chat_form">
+                    <div class="chat_form_inner">
+                      <div class="attachment-images" *ngIf="attachmentFile">
+                        <div class="Box">
+                          <div class="imgBox">
+                            <img
+                              [src]="attachmentFile"
+                              (click)="previewImage(attachmentFile, 1)"
+                              class="img-fluid"
+                              style="width: 60px"
+                            />
+                            <a class="cursor" (click)="removeAttachedImage()"
+                              ><i class="fa-solid fa-xmark"></i
+                            ></a>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <mat-icon class="add" (click)="openFileSelector()"
+                          >add
+                          <input
+                            class="file-upload d-none"
+                            type="file"
+                            (change)="fileChange($event)"
+                          />
+                        </mat-icon>
+                      </div>
+
+                      <!-- <input id="text-message" type="text" formControlName="message"
+                                                placeholder="Type something"> -->
+                      <input
+                        id="text-message"
+                        type="text"
+                        formControlName="message"
+                        placeholder="Type something"
+                        [ngClass]="{ 'audio-recording': isAudioRecording }"
+                        [value]="audioRecordedTime"
+                      />
+
+                      <!-- <div *ngIf="isAudioRecording">{{audioRecordedTime}}</div> -->
+
+                      <!-- <mat-icon class="camera">photo_camera</mat-icon> -->
+                      <mat-icon
+                        class="mic"
+                        [ngClass]="{ voice_btn_active: isAudioRecording }"
+                        (click)="
+                          !isAudioRecording
+                            ? startAudioRecording()
+                            : stopAudioRecording()
+                        "
+                        >mic_none</mat-icon
+                      >
+                    </div>
+                    <div class="primary_btn">
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        (click)="sendMessage()"
+                      >
+                        {{ "send" | translate }}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #elsestatus>
+      <p style="text-align: center; margin-top: 43px">
+        {{ "no_chat_found" | translate }}
+      </p>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Start chat modal -->
+<div class="start_chat">
+  <ng-template #startchatcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "Select" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="searchbar_wrap">
+            <div class="searchbar">
+              <div class="searchbox">
+                <div class="input-group">
+                  <input
+                    type="search"
+                    class="form-control"
+                    (keyup)="handleSearchFilter($event)"
+                    (search)="handleSearchFilter($event)"
+                    placeholder="Search..."
+                    aria-label="Search"
+                  />
+                  <button class="btn search-btn">
+                    <mat-icon>search</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="add_chat">
+                            <mat-icon>add</mat-icon>
+                        </div> -->
+          </div>
+
+          <div class="assign_item_wrapper">
+            <ng-container *ngIf="dataSource.length > 0; else elsestafflist">
+              <div *ngFor="let element of dataSource">
+                <div class="assign_item">
+                  <div class="assign_item_inner">
+                    <div class="left">
+                      <span class="chat_img">
+                        <div>
+                          <div *ngIf="element?.staffImage">
+                            <img [src]="element?.staffImage" />
+                            <span
+                              *ngIf="element?.isOnline"
+                              class="isOnline"
+                            ></span>
+                          </div>
+                          <div *ngIf="!element?.staffImage">
+                            <img
+                              src="../../../../assets/img/default_user.png"
+                            />
+                            <span
+                              *ngIf="element?.isOnline"
+                              class="isOnline"
+                            ></span>
+                          </div>
+                        </div>
+                      </span>
+                      <div
+                        class="chat_name"
+                        *ngIf="element?.role === 'HOSPITAL_ADMIN'"
+                      >
+                        {{ "hosp" | translate }}.
+                      </div>
+                      <div class="chat_name">
+                        {{ element?.staffname }}
+                      </div>
+                    </div>
+                    <div class="right">
+                      <div class="chat_detail">
+                        <div class="primary_btn">
+                          <button
+                            class="btn btn-secondary"
+                            (click)="createRoom(element)"
+                          >
+                            {{ "start" | translate }}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #elsestafflist>
+              <p>{{ "no_user_list_found" | translate }}</p>
+            </ng-template>
+            <!-- <mat-paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)" [pageSize]="pageSize"
+                        [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+                      </mat-paginator> -->
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- create group modal -->
+<ng-template #creategroupcontent let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "create_group" | translate }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="closePopup()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="groupForm">
+        <div class="searchbar_wrap">
+          <div class="searchbar">
+            <div class="searchbox">
+              <div class="input-group">
+                <input
+                  type="search"
+                  class="form-control"
+                  (keyup)="handleSearchFilter($event)"
+                  (search)="handleSearchFilter($event)"
+                  placeholder="Search..."
+                  aria-label="Search"
+                />
+                <button class="btn search-btn">
+                  <mat-icon>search</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          *ngIf="buttonTypeToOpenModal == 'createGroup'"
+          class="searchbar_wrap group_search"
+        >
+          <div class="searchbar">
+            <div class="searchbox">
+              <label>{{ "group_name" | translate }}</label>
+              <div class="input-group">
+                <input
+                  type="search"
+                  class="form-control"
+                  aria-label="Search"
+                  formControlName="groupName"
+                />
+              </div>
+              <span
+                class="text-danger"
+                *ngIf="
+                  isSubmitted &&
+                  groupForm.controls['groupName'].errors?.required
+                "
+              >
+                {{ "group_name_is_required" | translate }}.
+              </span>
+              <div class="user_inner">
+                <div class="profile_img" (click)="openFileSelector1()">
+                  <img
+                    class="img-fluid mb-4"
+                    src="{{
+                      groupProfileImage
+                        ? groupProfileImage
+                        : 'assets/img/create_profile.png'
+                    }}"
+                  />
+
+                  <input
+                    class="file-upload1 d-none"
+                    type="file"
+                    (change)="onGroupImageChange($event)"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="assign_item_wrapper">
+          <ng-container *ngIf="dataSource.length > 0; else elsestafflist">
+            <div *ngFor="let element of dataSource">
+              /* [ngClass]="checkstaff(element) ? 'active' : '' || checkUser(element) ? 'active' : ''" */
+              <div
+                class="assign_item" >
+                <div class="assign_item_inner">
+                  <div class="left">
+                    <span class="chat_img">
+                      <div>
+                        <div *ngIf="element?.staffImage">
+                          <img [src]="element.staffImage" />
+                          <span
+                            *ngIf="element?.isOnline"
+                            class="isOnline"
+                          ></span>
+                        </div>
+                        <div *ngIf="!element?.staffImage">
+                          <img src="../../../../assets/img/default_user.png" />
+                          <span
+                            *ngIf="element?.isOnline"
+                            class="isOnline"
+                          ></span>
+                        </div>
+                      </div>
+                    </span>
+                    <div class="chat_name">{{ element?.staffname }}</div>
+                  </div>
+                  <div class="right">
+                    <div class="chat_detail">
+                      <div class="primary_btn">
+                        <span *ngIf="buttonTypeToOpenModal == 'createGroup'">
+                          <button
+                            class="btn btn-secondary"
+                            (click)="addGroupMember(element)"
+                          >
+                            {{ "add" | translate }}
+                          </button>
+                        </span>
+                        <span *ngIf="buttonTypeToOpenModal == 'addMember'">
+                          <button
+                            class="btn btn-secondary"
+                            (click)="addIndividualMemberForExistingGroup(element)">
+                            {{ "add" | translate }}
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #elsestafflist>
+            <p>{{ "no_user_list_found" | translate }}</p>
+          </ng-template>
+          <!-- <mat-paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)" [pageSize]="pageSize"
+                    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+                  </mat-paginator> -->
+        </div>
+
+        <div class="primary_btn create_btn">
+          <span *ngIf="buttonTypeToOpenModal == 'createGroup'">
+            <button
+              class="btn btn-primary"
+              (click)="createGroupRoom()"
+              [disabled]="
+                groupForm.invalid || groupForm.controls.members.length < 2
+              "
+            >
+              {{ "create" | translate }}
+            </button>
+          </span>
+          <span *ngIf="buttonTypeToOpenModal == 'addMember'">
+            <button
+              class="btn btn-primary"
+              (click)="addMemberToexistingGroup()"
+            >
+              {{ "add_new_member" | translate }}
+            </button>
+          </span>
+          <span
+            class="text-danger"
+            *ngIf="isSubmitted && groupForm.controls.members.length < 2"
+          >
+            {{
+              "at_least_2_members_are_required_to_create_a_group" | translate
+            }}.
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<!-------- Delete modal for Single message -------->
+<ng-template #deleteMessage let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "you_want_to_delete_this_message" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="deleteSingleMessage()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-------- Delete modal for all messages -------->
+<ng-template #deleteAllMessages let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "you_want_to_clear_all_messages" | translate }}?</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="deleteAllmessages()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- ng-image-fullscreen-view  -->
+<ng-image-fullscreen-view
+  [images]="imageObject"
+  [imageIndex]="currentIndex"
+  [show]="showFlag"
+  (close)="closeEventHandler()"
+></ng-image-fullscreen-view>

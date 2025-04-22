@@ -1,0 +1,15 @@
+.bold-label {
+    font-weight: bold; /* Make label text bold */
+    color:black ;
+  }
+  .message-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}

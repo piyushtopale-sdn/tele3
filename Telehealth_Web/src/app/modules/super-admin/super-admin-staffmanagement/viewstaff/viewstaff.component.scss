@@ -1,0 +1,234 @@
+@import '../../../../../assets/css/variable/variable';
+
+.material-icons {
+    cursor: pointer;
+}
+
+.staff_management {
+    .top_bar {
+        margin: 0 0 35px;
+
+        .left_part {
+            display: flex;
+
+            .search_bar {
+                .input-group {
+                    background: #F6F8FC;
+                    border-radius: 6px;
+
+                    .form-control {
+                        border: none;
+                        background-color: transparent;
+                        padding: 12px 12px 12px 0;
+                        width: 210px;
+
+                        &::placeholder {
+                            font-weight: 400;
+                            font-size: $font_small;
+                            line-height: 24px;
+                        }
+
+                        &:focus {
+                            box-shadow: none;
+                        }
+                    }
+
+                    .btn {
+                        padding: 0;
+                        border: none;
+
+                        .mat-icon {
+                            line-height: 50px;
+                            height: 50px;
+                            width: 50px;
+                            color: #9B9B9B;
+                            font-size: 24px;
+                        }
+                    }
+                }
+            }
+
+            .content_wrap {
+                .policy {
+                    margin: 0 0 0 20px;
+
+                    label {
+                        margin-right: 12px;
+                    }
+
+                    .mat-form-field {
+                        .mat-form-field-wrapper {
+                            padding: 0;
+
+                            .mat-form-field-flex {
+                                background-color: #EBF0F4;
+                                border: 1px solid #EBF0F4;
+
+                                .mat-form-field-infix {
+                                    width: 200px;
+
+                                    .mat-select {
+                                        .mat-select-value {
+                                            color: $formfiled_color;
+                                            font-weight: 500;
+                                        }
+                                    }
+                                }
+                            }
+
+                            .mat-form-field-underline {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.edit_staff {
+    .modal-dialog {
+        .modal-body {
+            .primary_btn {
+                margin-top: 10px;
+            }
+        }
+    }
+}
+
+.edit_staffnew {
+    z-index: 999;
+}
+
+.modal-backdrop {
+    /* Your custom styles here */
+    z-index: 999 !important;
+    /* Add any other styles you want to apply to the backdrop */
+}
+
+.user_image_upload {
+    margin: 0 0 30px;
+
+    .upload_input {
+        opacity: 0;
+        width: 100px;
+        height: 100px;
+        position: relative;
+        z-index: 9;
+        cursor: pointer;
+        width: 95px;
+        height: 95px;
+    }
+
+    .user_upload_block {
+        margin-left: -95px;
+        display: inline-block;
+        vertical-align: top;
+        position: relative;
+
+        .user_upload_wrapper {
+            width: 95px;
+            height: 95px;
+            line-height: 15px;
+            border-radius: 10px;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+
+            .user_upload_icon {
+                color: #3767B1;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+
+                img {
+                    width: 95px;
+                    height: 95px;
+                    line-height: 95px;
+                    border-radius: 10px;
+                }
+
+                .quick_view {
+                    position: absolute;
+                    top: 5px;
+                    right: -5px;
+                    z-index: 1;
+                    background: #0B4977;
+                    width: 25px;
+                    height: 25px;
+                    border-radius: 50%;
+                    margin-top: -12px;
+                    color: white;
+
+                    .material-icons {
+                        font-size: 18px;
+                        position: relative;
+                        top: 3.5px;
+                        left: 1.5px;
+                    }
+                }
+            }
+        }
+    }
+
+    .edit_upload_wrapper {
+        background: #0B4977 !important;
+        border: 3px solid #ffffff !important;
+        right: -10px !important;
+        bottom: -10px !important;
+        width: 40px !important;
+        height: 40px !important;
+        line-height: 40px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        position: absolute !important;
+
+        .edit_upload_icon {
+            color: #ffffff;
+            width: 24px;
+        }
+    }
+}
+
+@media screen and (max-width:$desktop) {
+    .staff_management .top_bar {
+        flex-direction: column;
+    }
+
+    .staff_management .top_bar .right_part {
+        margin-top: 20px;
+    }
+}
+
+@media screen and (max-width:$large_phone) {
+    .staff_management .top_bar .left_part {
+        flex-direction: column;
+    }
+
+    .staff_management .top_bar .left_part .content_wrap .policy {
+        margin: 0;
+        width: 100%;
+    }
+
+    .staff_management .top_bar .left_part .primary_btn {
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width:$medium_phone) {
+    .staff_management .top_bar .left_part .content_wrap .policy .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+        width: 100%;
+    }
+
+    .staff_management .top_bar .left_part .content_wrap .mat-form-field {
+        display: block;
+    }
+}

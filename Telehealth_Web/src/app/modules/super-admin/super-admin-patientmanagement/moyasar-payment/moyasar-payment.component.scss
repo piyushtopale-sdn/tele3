@@ -1,0 +1,80 @@
+@import '../../../../../assets/css/variable/variable';
+
+// Container Styles
+.my-payment {
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+// Input Field Styles
+.my-payment .input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    font-weight: 400;
+    color: #000000;
+    line-height: 23px;
+    letter-spacing: 0.02em;
+}
+
+// Button Styles
+.my-payment .button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+}
+
+// Label Styles
+.my-payment .label {
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+// Link Styles
+.my-payment a {
+    font-size: 12px;
+    color: #007bff;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+// Credit Card Field Group
+.my-payment .card-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.my-payment .card-group .input {
+    flex: 1;
+    box-sizing: border-box;
+}

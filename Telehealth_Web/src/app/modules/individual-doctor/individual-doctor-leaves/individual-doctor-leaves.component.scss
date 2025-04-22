@@ -1,0 +1,294 @@
+@import '../../../../assets/css/variable/variable';
+.material-icons{
+    cursor: pointer;
+}
+
+.leaves {
+    padding: 0;
+    .top_bar{
+        .left_part{
+            display: flex;
+            .search_bar{
+                .input-group{
+                    background: #F6F8FC;
+                    border-radius: 6px;
+                    .form-control{
+                        border: none;
+                        background-color: transparent;
+                        padding: 12px 12px 12px 0;
+                        width: 210px;
+                        &::placeholder{
+                            font-weight: 400;
+                            font-size: $font_medium;
+                            line-height: 24px;
+                        }
+                        &:focus{
+                            box-shadow: none;
+                        }
+                    }
+                    .btn{
+                        padding: 0;
+                        border: none;
+                        .mat-icon{
+                            line-height: 50px;
+                            height: 50px;
+                            width: 50px;
+                            color: #9B9B9B;
+                            font-size: 24px;
+                        }
+                    }
+                }
+            }
+            .content_wrap{
+                .policy{
+                    margin: 0 0 0 20px !important;
+                    label{
+                        margin-right: 12px;
+                    }
+                    .form_field_wrapper{
+                        display: inline-block;
+                        .mat-form-field{
+                            .mat-form-field-wrapper{
+                                padding: 0;
+                                .mat-form-field-flex{
+                                    background-color: #EBF0F4;
+                                    border: 1px solid #EBF0F4;
+                                    .mat-form-field-infix{
+                                        .mat-select{
+                                            .mat-select-arrow-wrapper{
+                                                transform: translateY(0);
+                                            }
+                                            .mat-select-value{
+                                                color: $formfiled_color;
+                                                font-weight: 500;
+                                            }
+                                        }
+                                        width: 200px;
+                                    }
+                                }
+                                .mat-form-field-underline{
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                   
+                }
+            }
+        }
+        .right_part{
+            .primary_btn {
+                .btn{
+                    &:hover{
+                        .btn_svg{
+                            svg{
+                                path{
+                                    &:last-child{
+                                        fill: #0b4977;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .bottom_bar{
+        border-bottom:none;
+        padding: 0px 30px 0px 30px;
+        .leaves_tab{
+            .mat-tab-header{
+                margin: 0 0 28px;
+                border-bottom: none;
+                .mat-tab-list{
+                    .mat-tab-labels{
+                        display: inline-flex;
+                        .mat-tab-label {
+                            font-family: $font_family_body,$font_sans_sarif;
+                            height: 55px;
+                            padding: 0 10px;
+                            min-width: 200px;
+                            font-size: $font_medium;
+                            font-weight: 500;
+                            color: $bodycolor;
+                            background-color: $white_color;
+                            border: 1px solid rgba(11, 73, 119, 0.15);
+                            border-radius: 10px;
+                            justify-content: flex-start;
+                            opacity: 1;
+                            margin-left: 20px;
+                            &:first-child{
+                                margin-left: 0;
+                            }
+                            .mat-tab-label-content{
+                                .btn_svg {
+                                    height: 35px;
+                                    width: 35px;
+                                    line-height: 35px;
+                                    margin-right: 10px;
+                                    background-color: #0B4977;
+                                    border-radius: 9px;
+                                    svg{
+                                        fill: #ffffff;
+                                        width: 20px;
+                                        height: 20px;
+                                        path{
+                                            &:last-child{
+                                                fill: #0B4977;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .mat-tab-label.mat-tab-label-active{
+                            color: $white_color;
+                            background-color: $bodycolor;
+                            .mat-tab-label-content{
+                                .btn_svg {
+                                    background-color: #EBF0F4;
+                                    svg{
+                                        fill: #0B4977;
+                                        path{
+                                            &:last-child{
+                                                fill: #ffffff;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .mat-ink-bar{
+                        display: none;
+                    }
+                    .mat-ink-bar{
+                        background-color: $bodycolor;
+                    }
+                }
+            }
+            .mat-tab-body-content{
+                overflow: hidden;
+            }
+        }
+        .tab_content {
+            .table-wrap{
+                table{
+                    tr{
+                        td{
+                            &:last-child{
+                                .svgicon{
+                                    &:first-child{
+                                        background: #EBFBEE;
+                                    }
+                                    &:last-child{
+                                        background: #FBF3EA;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.my-leave-btn {
+    margin-right: 20px;
+}
+.to-date-filter {
+    margin-left: 20px;
+}
+
+// Add leave modal css
+.add_leave {
+    .modal-dialog{
+        .modal-body{
+            .item {
+                .form_field_wrapper{
+                    .leave_date{
+                        display: flex;
+                        .mat-form-field{
+                            .mat-form-field-wrapper {
+                                .mat-form-field-flex {
+                                    .mat-form-field-infix{
+                                        width: auto;
+                                    }
+                                }
+                            }
+                            &:first-child{
+                                margin: 0 20px 0 0;
+                            }
+                        }
+                    }
+                }
+            }
+            .primary_btn{
+                margin-top: 10px;   
+            }
+        }
+    } 
+}
+
+.cancel_btn {
+    margin-left: 10px;
+}
+
+.form_field_wrapper{
+    .leave_date_edit{
+        display: flex;
+        .mat-form-field{
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    .mat-form-field-infix{
+                        width: auto;
+                    }
+                }
+            }
+            &:first-child{
+                margin: 0 20px 0 0;
+            }
+        }
+    }
+}
+
+@media screen and (max-width:$desktop) {
+    .leaves .top_bar{
+        flex-direction: column;
+    }
+    .leaves .top_bar .right_part{
+        margin-top: 20px;
+    }
+}   
+@media screen and (max-width:$large_phone) {
+    .leaves .top_bar .left_part{
+        flex-direction: column;
+    }
+    .leaves .top_bar .left_part .content_wrap .policy {
+        margin: 0;
+        width: 100%;
+    }
+}
+@media screen and (max-width:$medium_phone) {
+    .leaves .top_bar .left_part .content_wrap .policy .form_field_wrapper .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+        width: 100%;
+    }
+    .add_leave .modal-dialog .modal-body .item .form_field_wrapper .leave_date{
+        flex-direction: column;
+    }
+    .add_leave .modal-dialog .modal-body .item .form_field_wrapper .leave_date .mat-form-field:first-child{
+        margin: 0;
+    }
+
+}
+
+.common_space{
+    border-bottom : 0 !important;
+}
+
+.selected-button {
+    color: #2839FF !important;    
+    background: #F6F8FC !important;
+
+  }

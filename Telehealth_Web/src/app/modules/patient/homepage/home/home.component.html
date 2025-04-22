@@ -1,0 +1,108 @@
+<div class="home_wrapper">
+  <app-header></app-header>
+
+  <div class="home">
+    <div class="main_banner home_content_space">
+      <div
+        id="carouselExampleIndicators"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-indicators">
+          <!-- <button
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide-to="0"
+            class="active"
+            aria-current="true"
+            aria-label="Slide 1"
+          ></button> -->
+          <!-- <button
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide-to="1"
+            aria-label="Slide 2"
+          ></button> -->
+        </div>
+
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="carousel-item-inner">
+              <img src="../../../assets/img/homepage/landing_banner.jpeg" />
+              <div class="carousel-caption-wrapper">
+                <div class="carousel-caption">
+                  <!-- <div class="title">
+                    {{ "test_is_the1" | translate }}
+                    <span>{{ "largest_online_platform1" | translate }}</span>
+                    {{ "connecting_healthcare_stakeholders1" | translate }}
+                  </div>
+                  <div class="desc">
+                    {{ "to_book_appointments_order_medicines1" | translate }}
+                  </div> -->
+                  <!-- <div class="speciality_content">
+                    <div class="location common_content">
+                      <div class="input-group">
+                        <button class="btn search-btn">
+                          <mat-icon>location_on</mat-icon>
+                        </button>
+                        <input
+                          class="form-control"
+                          placeholder="{{ 'search_location' | translate }}"
+                          aria-label="Search"
+                          #nearby
+                          id="near_by"
+                          (input) = "clearSerachHelper('near_by')"
+                          (blur)="hidesearch('nearby',$event)"
+                        />
+                        <mat-icon *ngIf = "clearIcon" style = "margin-top: 20px !important;" (click) = "clearSearch('near_by')">clear</mat-icon>
+                        <span class="cursor-pointer mt-3" style="margin-right: 10px !important;" (click) = "getCurrentLocation('search_one' , 'near_by')" ngbTooltip="{{ 'around_me' | translate }}">
+                          <svg width="30" height="30" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" class="dl-icon searchbar-place-around-me-icon mr-24 dl-icon-small" data-icon-name="regular/location-arrow" data-design-system="oxygen" data-design-system-component="Icon"><path d="M3.852 8a.73.73 0 0 1-.727-.586.758.758 0 0 1 .445-.844l8.25-3.375a.758.758 0 0 1 .82.164c.212.211.282.54.165.82L9.43 12.43a.758.758 0 0 1-1.453-.304V8H3.852Zm5.273-1.125v3.352l2.297-5.649-5.649 2.297h3.352Z"></path></svg>
+                         </span>
+                      </div>
+                    </div>
+                    <div class="auto-search-wrap-block position-relative me-4">                    
+                      <mat-form-field class="searchmat" appearance="fill">
+                        <input
+                          type="text"
+                          class="matinput"
+                          placeholder='{{ "search_doctor_pharmacy" | translate}}'
+                          (keyup)="handleSearch($event)"
+                          aria-label="Search By User Name"
+                          matInput
+                          style="width: 93%"
+                          [formControl]="control"
+                          [matAutocomplete]="auto"
+                          id = "search_one"
+                        />
+                          <mat-autocomplete
+                            #auto="matAutocomplete"
+                            panelWidth="250px"
+                            class="medicine-autocomplete-list"
+                            classList="medicine-autocomplete-list"
+                          >
+                            <ng-container *ngFor=" let option of filteredOptions | async">
+                            <mat-option *ngIf="option != 'No data'"(click)=" routeTo(option.id,option.type)" >
+                            <p>{{ option.name }} <b>{{option.type}}</b></p>                                     
+                        </mat-option>
+                            <mat-option *ngIf="option == 'No data'" style="height: auto" >
+                              <span>
+                                <div class="border_bottom">
+                                  <b >{{"no_result_found" | translate }}.</b><br />                                              
+                                </div>
+                              </span>
+                            </mat-option>
+                            </ng-container>
+                          </mat-autocomplete>                                  
+                      </mat-form-field>
+                    </div>
+                  </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

@@ -1,0 +1,38 @@
+.image-upload {
+    input {
+        display: none;
+    }
+    img {
+        width: 95px;
+        height: 95px;
+        min-width: 95px;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+}
+
+// .speciality-select-block {
+//     ::ng-deep {
+//         .select2-label ~ .select2-container > div > .select2-selection--multiple {
+//             ul {
+//                 // width: 400px !important;
+//                 overflow: auto !important;
+//                 position: relative;
+//                 z-index: 10;
+//                 height: 50px;
+//                 li {
+//                     height: 35px;
+//                     display: flex;
+//                     align-items: center;
+//                     justify-content: center;
+//                 }
+//             }
+//         }
+//     }
+// }
+
+.readonly {
+    pointer-events: none; /* Prevent interaction with the element */
+    background-color: #f5f5f5; /* Optionally change background color to indicate readonly state */
+    color: #999; /* Optionally change text color to indicate readonly state */
+}

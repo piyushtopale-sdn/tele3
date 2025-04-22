@@ -1,0 +1,193 @@
+<div class="super_admin_dashboard dashboard_main_content">
+
+  <div class="counter_section common_space">
+    <div class="row">
+      <div class="dashboard-grid">
+        <div class="dashboard-section" style="background: #faffe4;">
+          <div class="filter-section">
+            <h2 for="centerDropdown">{{"select_centre" | translate}} :</h2>
+            <select2 class="test select-dropdown-box" [overlay]="true" [limitSelection]="0" [minCountForSearch]="0"
+              [data]="labRadioList" [value]="selectedCenter" placeholder="{{ 'select' | translate }}"
+              (update)="onCenterSelectionChange($event)">
+            </select2>
+          </div>
+  
+          <div class="center-info">
+            <div class="center-tab data-display">
+              <p>{{"total_revenue" | translate}} : SAR {{totalRevenueOfCenter}}</p>
+            </div>
+            <div class="center-tab data-display">
+              <p>{{"most_frequently_performed_test" | translate}}: {{mostTestPerformedByCenter}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="dashboard-section" style="background: #f2e5f6;">
+          <h2>{{"total_revenue_per_test" | translate}}</h2>
+          <select2 class="test select-dropdown-box" [overlay]="true" [limitSelection]="0" [minCountForSearch]="0"
+            [data]="labRadioTestsList" [value]="selectedCenter" placeholder="{{ 'select_test' | translate }}"
+            (update)="onTestSelectionChange($event)">
+          </select2>
+          <div class="data-display">
+            <p id="testRevenueData">{{"total_revenue" | translate}} : SAR {{totalRevenuePerTest}}</p>
+            <canvas id="testRevenueChart"></canvas>
+          </div>
+        </div>
+        <div class="dashboard-section" style="background: aliceblue;">
+          <h2>{{"most_frequently_performed_test_per_doctor" | translate}}</h2>
+          <select2 class="test select-dropdown-box" [overlay]="true" [limitSelection]="0" [minCountForSearch]="0"
+            [data]="doctorsList" [value]="selectedCenter" placeholder="{{ 'select_doctor' | translate }}"
+            (update)="onDoctorSelectionChange($event)">
+          </select2>
+          <div class="data-display">
+            <p id="testPerCenterData">{{"lab_test_name" | translate}} : {{testNameLab}}</p>
+            <p id="testPerCenterData">{{"performed_count" | translate}} : {{mostTestPerformedCountDoctorLab}}</p>
+            <p id="testPerCenterData">{{"radio_test_name" | translate}} : {{testNameRadio}}</p>
+            <p id="testPerCenterData">{{"performed_count" | translate}} : {{mostTestPerformedCountDoctorRadio}}</p>
+            <canvas id="testPerCenterChart"></canvas>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
+  <div class="counter_section common_space">
+    <div class="row">
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_blue">
+          <div class="cust_col_inner header-card-inner">
+
+            <div class="left">
+              <div class="counter_title">
+                {{"most_used_center_lab" | translate}}
+              </div>
+              <div class="counter">{{mostUsedCenterDetailLab?.mostUsedLabCenterDetails?.centre_name}}</div>
+              <div class="counter">{{mostUsedCenterDetailLab?.count}} Times</div>
+            </div>           
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_green">
+          <div class="cust_col_inner header-card-inner">
+
+            <div class="left">
+              <div class="counter_title">
+                {{"most_used_center_radio" | translate}}
+              </div>
+              <div class="counter">{{mostUsedCenterDetailRadio?.mostUsedRadioCenterDetails?.centre_name}}</div>
+              <div class="counter">{{mostUsedCenterDetailRadio?.count}} Times</div>
+            </div>           
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_orange" style="height: 155px;">
+          <div class="left">
+            <div class="counter_title">
+              {{"List of discount coupon codes for tests" | translate}}
+            </div>
+            <div class="counter">
+            <select2 class="test select-dropdown-box" [overlay]="true" [limitSelection]="0" [minCountForSearch]="0"
+            [data]="labRadioTestsList" placeholder="{{ 'select_test' | translate }}"
+            (update)="onTestSelectionChangeForCoupon($event)">
+          </select2>
+          <div class="data-display">
+            <p id="testRevenueData">{{"coupon_code" | translate}} : {{couponCodeDetails?.couponCode ? couponCodeDetails?.couponCode : "-"}}</p>          
+          </div>
+          </div> 
+          </div>   
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="counter_section common_space">
+    <div class="row">
+    <div class="table-container">
+      <div class="table-wrapper">
+        <h3><b>{{"total_number_of_each_test_prescribed_by_doctor" | translate}}</b></h3>
+
+        <select2 class="test select-dropdown-box" [overlay]="true" [limitSelection]="0" [minCountForSearch]="0"
+          [data]="doctorsList" [value]="selectedCenter" placeholder="{{ 'select_doctor' | translate }}"
+          (update)="onDoctorSelectionChangeTestPerformedCount($event)">
+        </select2>
+
+        <table mat-table [dataSource]="doctorTests" class="mat-elevation-z8 mt-4" >
+
+          <ng-container matColumnDef="testName">
+            <th mat-header-cell *matHeaderCellDef> {{"test_name" | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{ element.testName }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="testCount">
+            <th mat-header-cell *matHeaderCellDef> {{"test_count" | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{ element.count }} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="doctorTableColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: doctorTableColumns;"></tr>
+        </table>
+        <mat-paginator #doctorPaginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+      </div>
+
+      <div class="table-wrapper">
+        <h3><b>{{"total_number_of_each_test_performed_by_center" | translate}}</b></h3>
+        <select2 class="test select-dropdown-box" [overlay]="true" [limitSelection]="0" [minCountForSearch]="0"
+          [data]="labRadioList" [value]="selectedCenter" placeholder="{{ 'select_test' | translate }}"
+          (update)="onTestSelectionChangePeformedCountOfCenter($event)">
+        </select2>
+        <table mat-table [dataSource]="centerTests" class="mat-elevation-z8 mt-4">
+
+          <ng-container matColumnDef="testName">
+            <th mat-header-cell *matHeaderCellDef> {{"test_name" | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{ element?.testDetail?.testName }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="testCount">
+            <th mat-header-cell *matHeaderCellDef> {{"test_count" | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{ element.count }} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="centerTableColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: centerTableColumns;"></tr>
+        </table>
+        <mat-paginator #centerPaginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #selectCenterType let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-header">    
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"    
+        (click)="modal.dismiss('Cross click')"  
+      >        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="delete_screen text-center">  
+        <p class="heading delete" style="color: #222222;">{{ "please_select_center_type" | translate }}</p>       
+        <div class="primary_btn mt-30" style="justify-content: space-evenly;">
+          <button
+            type="button"
+            class="btn btn-secondary"    
+            (click)="onSelectCenter('lab')"        
+          >
+            {{ "Laboratory" | translate }}
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="onSelectCenter('radiology')">
+            {{ "Radiology" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

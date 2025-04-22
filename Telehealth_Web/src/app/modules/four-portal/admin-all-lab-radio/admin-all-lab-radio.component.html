@@ -1,0 +1,279 @@
+<div class="doctor_list dashboard_main_content">
+    <div class="top_bar">
+      <div class="left_part">
+        <div class="search_bar common_content">
+          <div class="input-group">
+            <button class="btn search-btn">
+              <mat-icon>search</mat-icon>
+            </button>
+            <input
+              type="search"
+              class="form-control"
+              placeholder="Search..."
+              aria-label="Search"
+              [ngModel]="searchText"
+              #text
+              (keyup)="handleSearchFilter(text.value)"
+              (search)="handleSearchFilter(text.value)"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="bottom_bar">
+      <div class="table-wrap"> 
+        <div class="table-inner">
+          <table
+            mat-table
+            [dataSource]="pendingdataSource"
+            class="mat-elevation-z8"
+          >
+            <!-- Laboratory Name Column -->
+            <ng-container matColumnDef="doctorname">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                (click)="onSortData('centre_name')"
+              >
+                {{ "laboratory_name" | translate }}
+                <span
+                  *ngIf="sortColumn === 'centre_name'"
+                  class="material-icons sorticon"
+                  >{{ sortIconClass }}</span
+                >
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.centre_name }}
+              </td>
+            </ng-container>
+  
+            <!-- Licence ID Column -->
+            <ng-container matColumnDef="licenceid">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                (click)="onSortData('licence_details.id_number')"
+              >
+                {{ "licence_id" | translate }}
+                <span
+                  *ngIf="sortColumn === 'licence_details.id_number '"
+                  class="material-icons sorticon"
+                  >{{ sortIconClass }}</span
+                >
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.licence_details?.id_number }}
+              </td>
+            </ng-container>
+  
+            <!--Phone Number Column -->
+            <ng-container matColumnDef="phonenumber">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                (click)="onSortData('for_portal_user.phone_number')"
+              >
+                {{ "phone_number" | translate }}
+                <span
+                  *ngIf="sortColumn === 'for_portal_user.phone_number'"
+                  class="material-icons sorticon"
+                  >{{ sortIconClass }}</span
+                >
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.for_portal_user?.phone_number }}
+              </td>
+            </ng-container>
+  
+            <!--Province Column -->
+            <ng-container matColumnDef="address">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                (click)="onSortData('in_location.address')"
+              >
+                {{ "address" | translate }}
+                <span
+                  *ngIf="sortColumn === 'in_location.address'"
+                  class="material-icons sorticon"
+                  >{{ sortIconClass }}</span
+                >
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{
+                  element?.in_location?.address
+                    ? element?.in_location?.address
+                    : "-"
+                }}
+              </td>
+            </ng-container>
+  
+  
+            <!--Action column -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "action" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="icon_group">
+
+                  <ng-container *ngIf="giveInnerPermission('view')">
+                  <a
+                    class="svgicon"
+                    [routerLink]="[
+                      '/portals/user-details',
+                      element?.for_portal_user?._id
+                    ]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="9"
+                      viewBox="0 0 16 9"
+                      fill="none"
+                    >
+                      <path
+                        d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z"
+                      />
+                    </svg>
+                  </a>
+                </ng-container>
+                </div>
+              </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+        <mat-paginator
+          #paginator
+          class="pagination"
+          [length]="totalLength"
+          (page)="handlePageEvent($event)"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[2, 5, 10, 20]"
+          showFirstLastButtons
+        >
+        </mat-paginator>
+      </div>  
+    </div>
+  </div>
+  
+  
+  
+  <!-- Delete modal -->
+  <ng-template #deletemodal let-modal>
+    <div class="custome_modal action_modals">
+      <div class="modal-body">
+        <div class="delete_screen text-center">
+          <div class="image delete">
+            <img
+              class="img-fluid"
+              src="../../../../assets/img/delete.svg"
+              alt=""
+            />
+          </div>
+          <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+          <p>{{ "you_want_to_delete_this_laboratory" | translate }}</p>
+          <div class="primary_btn mt-30">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="modal.dismiss('Cross click')"
+            >
+              {{ "no" | translate }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="activeLockDeleteLab('delete', true)"
+            >
+              {{ "yes" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  
+  <!-- Lock or Unlock modal -->
+  <ng-template #lockOrUnloackmodal let-modal>
+    <div class="custome_modal action_modals">
+      <div class="modal-body">
+        <div class="delete_screen text-center">
+          <div class="image delete">
+            <img
+              class="img-fluid"
+              src="../../../../assets/img/reject.svg"
+              alt=""
+            />
+          </div>
+          <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+          <p>
+            {{ "you_want_to" | translate }} {{ abc }}
+            {{ "this_account" | translate }}
+          </p>
+          <div class="primary_btn mt-30">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="closePopup()"
+            >
+              {{ "no" | translate }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="activeLockDeleteLab('lock', abc === 'Lock' ? true : false)"
+            >
+              {{ "yes" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  
+  <!-- Active or Inactive Status modal -->
+  <ng-template #activeOrInactivemodal let-modal>
+    <div class="custome_modal action_modals">
+      <div class="modal-body">
+        <div class="delete_screen text-center">
+          <div class="image delete">
+            <img
+              class="img-fluid"
+              src="../../../../assets/img/reject.svg"
+              alt=""
+            />
+          </div>
+          <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+          <p>
+            {{ "you_want_to" | translate }} {{ def }}
+            {{ "this_account" | translate }}
+          </p>
+          <div class="primary_btn mt-30">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="modal.dismiss('Cross click')"
+            >
+              {{ "no" | translate }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="
+                activeLockDeleteLab('active', def === 'Active' ? true : false)
+              "
+            >
+              {{ "yes" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  
+  

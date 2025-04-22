@@ -1,0 +1,62 @@
+@import '../../../../assets/css/variable/variable';
+
+.rolepermission{
+    .role_item{
+        margin-bottom: 25px;
+        .form_field_wrapper{
+            display: flex;
+            justify-content: space-between;
+            background: #FFFFFF;
+            border: 1px solid rgba(11, 73, 119, 0.15);
+            border-radius: 10px;
+            padding: 10px;
+            padding: 15px 10px;
+            .mat-checkbox{
+                width: 100%;
+                .mat-checkbox-layout{
+                    display: flex;
+                    .mat-checkbox-inner-container{
+                        order: 2;
+                    }
+                    .mat-checkbox-label{
+                        order: 1;
+                        color: $bodycolor;
+                        font-size: 15px;
+                        font-weight: 500;
+                        margin: 0 10px 0 0;
+                    }
+                }
+            }
+            .mat-icon{
+                color: #130F26;
+            }
+            &:hover{
+                background: $bodycolor;
+                border: 1px solid $bodycolor;
+                .mat-checkbox{
+                    .mat-checkbox-layout{
+                        .mat-checkbox-label{
+                            color: $white_color;
+                        }
+                    }
+                }
+                .mat-icon{
+                    color: $white_color;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width:$desktop_large) {
+    .rolepermission .role_item{
+        width: auto;
+        min-width: 265px;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .rolepermission .role_item{
+        width: 100%;
+        min-width: auto;
+    } 
+}

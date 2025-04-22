@@ -1,0 +1,466 @@
+<div class="details_patient dashboard_main_content">
+  <div class="top_bar">
+    <h2 class="m-0">
+      {{ "patient_details" | translate }}
+    </h2>
+    <div
+      class="back_button"
+      (click)="routeBack()"
+    >
+      <button class="btn btn-primary">{{ "back" | translate }}</button>
+    </div>
+  </div>
+
+  <div class="profile_data">
+    <div class="profile_info" style="background: var(--color-table, #0b63f61a)">
+      <ul class="profile_info_inner profile_info_with_img">
+        <div class="profile_image">
+          <img
+            [src]="
+              patient_details?.profile_pic_signed_url
+                ? patient_details?.profile_pic_signed_url
+                : '../../../../../assets/img/default_user.png'
+            "
+          />
+        </div>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="profile_title">
+              {{ patient_details?.full_name }}
+            </div>
+
+            <div class="user_value">{{ patient_details?.email ? patient_details?.email :"-" }}</div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "phone_number" | translate }}</div>
+            <div class="user_value">
+              ({{ patient_details?.country_code }})
+              {{ patient_details?.mobile ? patient_details?.mobile : "-" }}
+            </div>
+          </div>
+        </li>  
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "mrn_number" | translate }}</div>
+            <div class="user_value truncate-text">
+              {{ patient_details?.mrn_number ? patient_details?.mrn_number : "-" }}
+            </div>
+          </div>
+        </li>      
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "age" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.dob ? calculateAge(patient_details.dob) : "-" }}  {{"years" | translate}}
+
+            </div>
+          </div>
+        </li>  
+      </ul>
+      <ul class="profile_info_inner profile_info_with_img">
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "gender" | translate }}</div>
+            <div class="user_value">{{ patient_details?.gender ? patient_details?.gender : "-" }}</div>
+          </div>
+        </li>      
+        <li class="col_item" *ngIf="patient_details?.iqama_number">
+          <div class="profile_contact">
+            <div class="lable">{{ "iqama_number" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.iqama_number }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item" *ngIf="patient_details?.passport">
+          <div class="profile_contact">
+            <div class="lable">{{ "passport" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.passport }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item" *ngIf="patient_details?.saudi_id">
+          <div class="profile_contact">
+            <div class="lable">{{ "saudi_id" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.saudi_id }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "address" | translate }}</div>
+            <div class="user_value truncate-text">
+              {{ patient_details?.address ? patient_details?.address : "-" }}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="prescription">
+    <div class="medicine_info">
+      <div class="medicine_info_bottom mt-5">
+        <div class="profile_appoint_details">
+          <h3 class="main_title" style="color: #222222">
+            {{ "order_details" | translate }}
+          </h3>
+          <div class="profile_data">
+            <div class="profile_info">
+              <ul class="profile_info_inner">
+                <li class="col_item emergency-appt">
+                  <div class="profile_contact">
+                    <div class="lable">{{ "order_id" | translate }}</div>
+                    <div class="user_value">
+                      {{ orderDetails?.appointmentId ? orderDetails?.appointmentId : "-" }}
+                    </div>
+                  </div>
+                </li>
+                <li class="col_item emergency-appt">
+                  <div class="profile_contact">
+                    <div class="lable">{{ "prescribed_by" | translate }}</div>
+                    <div class="user_value">
+                      {{ doctorName ? doctorName : "-" }}
+                    </div>
+                  </div>
+                </li>
+                <li class="col_item emergency-appt">
+                  <div class="profile_contact">
+                    <div class="lable">{{ "date" | translate }}</div>
+                    <div class="user_value">
+                      {{ orderDetails?.consultationDate ? (orderDetails?.consultationDate | date : "dd/MM/yyyy") : "-" }}
+                    </div>
+                  </div>
+                </li>
+                <li class="col_item emergency-appt">
+                  <div class="profile_contact">
+                    <div class="lable">{{ "time" | translate }}</div>
+                    <div class="user_value">
+                      {{ orderDetails?.consultationTime ? orderDetails?.consultationTime : "-" }}
+                    </div>
+                  </div>
+                </li>
+                <li class="col_item emergency-appt">
+                  <div class="profile_contact">
+                    <div class="lable">
+                      {{ "result_order" | translate }}
+                      {{ "date_and_time" | translate }}
+                    </div>
+                    <div class="user_value">
+                      {{ orderDetails?.updatedAt | date:'dd/MM/yyyy | HH:mm' }}
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="top_bar">
+        <div class="main_title" style="color: #222222">
+          {{ "testDetails" | translate }}
+        </div>
+        
+        <div class="d-flex align-items-center" >
+          <div class="form_field_wrapper d-flex align-items-center me-3" *ngIf="(orderStatus === 'APPROVED' || orderStatus === 'UNDER_PROCESSED') && userRole !== 'ADMIN'">
+            <label>{{ "mark_as" | translate }}</label>
+            <mat-form-field appearance="fill" class="ms-2">
+              <mat-select [(ngModel)]="orderStatus" placeholder="{{'select_status' | translate}}" disableRipple (selectionChange)="onStatusChange($event.value, statusUpdate)">
+                <mat-option value="UNDER_PROCESSED">{{ "under_process" | translate }}</mat-option>
+                <mat-option *ngIf="allTestsCompleted"  value="COMPLETED">{{ "completed" | translate }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+      
+          <div class="primary_btn">
+            <button type="button" mat-stroked-button class="btn btn-primary ms-2" mat-button
+              (click)="openHistoryPopup(viewhistory, orderDetails?.appointment_id)">
+              {{'show_history' | translate}}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+
+      <div class="table-wrap mt-3">
+        <div class="table-inner">
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="testName">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "test_name" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.testId?.testName }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dateTime">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "date_and_time" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ orderDetails?.consultationDate | date : "dd/MM/YYYY" }} |
+                {{ orderDetails?.consultationTime }}
+              </td>
+            </ng-container>
+
+            <!--Date & Time Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "status" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{
+                  element.status === "INPROGRESS"
+                    ? "In Progress"
+                    : element.status === "COMPLETED"
+                    ? "Completed"
+                    : element.status
+                }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="viewResult">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "view_result" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="icon_group">
+                  <a
+                    class="svgicon"
+                    (click)="
+                      openVerticallyCentereduploadresult(
+                        uploadresult,
+                        element?.testId?._id
+                      )
+                    "
+                    *ngIf="(element.status === 'INPROGRESS') && userRole !== 'ADMIN'"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-upload"
+                      viewBox="0 0 16 16"
+                    >
+                      <title>{{ "upload_result" | translate }}</title>
+                      <path
+                        d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"
+                      />
+                      <path
+                        d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"
+                      />
+                    </svg>
+                  </a>
+                  <a class="svgicon" *ngIf="element.status === 'COMPLETED'"  (click)="downloadTestResult(element?.testResultId)">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-download"
+                      viewBox="0 0 16 16"
+                    >
+                      <title>{{ "download_result" | translate }}</title>
+                      <path
+                        d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"
+                      />
+                      <path
+                        d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"
+                      />
+                    </svg>
+                  </a>
+                </div>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #uploadresult let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "upload_result" | translate }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form  [formGroup]="resultForm" (ngSubmit)="onSubmit()">
+        <div class="modal_content">
+          <div class="row modal_content_inner">
+            <div class="item mb-3">
+              <div class="form_field_wrapper">
+                <label
+                  >{{ "result_status" | translate }}
+                  <span class="danger">*</span></label
+                >
+                <mat-form-field appearance="fill" >
+                  <mat-select disableRipple formControlName="resultStatus">
+                    <mat-option value="normal">{{
+                      "normal" | translate
+                    }}</mat-option>
+                    <mat-option value="abnormal">{{
+                      "abnormal" | translate
+                    }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-error
+                *ngIf="
+                  resultForm.get('resultStatus').invalid &&
+                  resultForm.get('resultStatus').touched
+                "
+              >
+                {{ "field_is_required" | translate }}
+              </mat-error>
+              </div>
+            </div>
+            <div class="item mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "comment" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <textarea type="text" matInput formControlName="comment"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="item mb-3">
+              <div class="form_field_wrapper">
+                <label>{{ "upload_result" | translate }}<span class="danger">*</span></label>
+                
+                <input
+                  class="user_upload_input"
+                  accept="application/pdf"
+                  id="input-file-id"
+                  (change)="onFileChange($event)"
+                  type="file"
+                />
+            
+                <!-- Display error message if file exceeds 50MB -->
+                <mat-error *ngIf="fileError">{{ fileError }}</mat-error>
+              </div>
+              <label>{{ "note_only_pdf_allowed" | translate }}</label>
+            </div>
+          </div>
+        </div>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button type="submit" class="btn btn-primary">
+            {{ "upload" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #statusUpdate let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">  
+        <span class="single_text">{{
+          "do_you_want_to_update_order_status" | translate
+        }} {{showStatus}}?</span>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closePopup()"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="updateOrderStatus()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- --------------------------------Show-History-------------------------------- -->
+<ng-template #viewhistory let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body p-0">
+      <div *ngIf="orderHistory?.length === 0 && _testHistoryData?.length === 0" class="text-center mt-2">
+        <b>{{ "no_record_found" | translate }}</b>
+      </div>
+      <div class="show-history-popup">
+        <div class="modal-header mb-4 p-0" *ngIf="orderHistory.length > 0">
+          <h4 class="modal-title test-history-heading" id="modal-basic-title">
+            {{ "order_history" | translate }}
+          </h4>
+        </div>
+        <div class="timeline mb-4">
+          <div class="timeline-item" *ngFor="let order of orderHistory">
+            <div class="timeline-content">
+              <p class="text-name-f m-0">{{ order.name }}</p>
+              <p class="details_status m-0" [ngClass]="order.status | lowercase">{{ removeUnderscores(order.status) }}</p>
+
+
+              <p class="time m-0">{{ order.updatedAt | date: 'dd-MM-yyyy, HH:mm a' }}</p>
+            </div>
+            <div class="line" *ngIf="!isLastItem(order, orderHistory)"></div>
+            <div class="circle ordered" *ngIf="!isLastItem(order, orderHistory)"></div>
+          </div>
+        </div>
+
+        <div class="modal-header mb-4 p-0" *ngIf="_testHistoryData.length > 0">
+          <h4 class="modal-title test-history-heading" id="modal-basic-title">
+            {{ "test_history" | translate }}
+          </h4>
+        </div>
+        <div class="timeline" *ngFor="let test of _testHistoryData">
+          <div class="test-header">
+            <h4 class="text-name-f m-0">{{ test.labtestName
+            }}</h4> 
+          </div>         
+          <div class="timeline-item" *ngFor="let historyItem of test.testHistory">
+            <div class="timeline-content">
+              <p class="text-name-f details_status m-0">{{ historyItem.name }}</p>
+              <p class="details_status m-0" [ngClass]="historyItem.status.toLowerCase()">
+                {{ historyItem.status }}
+              </p>
+              <p class="time">{{ historyItem.updatedAt | date: 'dd/MM/yyyy, HH:mm'  }}</p>
+            </div>
+
+            <div class="line" *ngIf="!isLastItem(historyItem, test.testHistory)"></div>
+            <div class="circle ordered" *ngIf="!isLastItem(historyItem, test.testHistory)"></div>
+          </div>
+        </div>
+
+      </div>     
+    </div>
+  </div>
+</ng-template>

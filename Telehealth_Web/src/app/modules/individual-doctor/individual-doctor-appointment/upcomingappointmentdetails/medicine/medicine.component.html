@@ -1,0 +1,138 @@
+<div class="tab_content">
+  <div class="tab_content_item">
+    <div class="top_bar">
+      <div class="left_part"  *ngIf="userRole !== 'INDIVIDUAL_DOCTOR_ADMIN'">
+        <div class="comparevitals d-flex align-items-center">
+          <div class="primary_btn">
+            <button type="button" class="btn btn-primary gap-1" (click)="routeTo()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0"/>
+              </svg> {{ "add_medications" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="right_part"></div>
+    </div>
+    <div class="bottom_bar">
+      <div class="table-wrap">
+        <div
+          class="table-inner d-flex flex-column mt-2"
+          *ngFor="let item of res_details"
+        >
+          <div class="main_title">
+            {{ "date" | translate }}:{{
+              item?.createdAt | date : "dd/MM/yyyy | HH:mm"
+            }}
+          </div>
+          <table
+            mat-table
+            [dataSource]="item?.dosageData"
+            class="mat-elevation-z8 medtableinfo"
+          >
+            <ng-container matColumnDef="medicinename">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "medicine_name" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.medicineName ? element?.medicineName : "-" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="dose">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "dose" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.dose ? element?.dose : "-" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="doseunit">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "dose_unit" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element?.doseUnit ? element?.doseUnit : "-" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="routeofadminst">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "route_Of_administration" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{
+                  element?.routeOfAdministration
+                    ? element?.routeOfAdministration
+                    : "-"
+                }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="quantity">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "quantity" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element; let index = index">
+                {{ element?.quantity ? element?.quantity : "0" }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="fequency">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "frequency" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ "morning" | translate }}
+                {{
+                  element?.frequency?.morning
+                    ? element?.frequency?.morning
+                    : "0"
+                }}, {{ "midday" | translate }}
+                {{
+                  element?.frequency?.midday ? element?.frequency?.midday : "0"
+                }}, {{ "evening" | translate }}
+                {{
+                  element?.frequency?.evening
+                    ? element?.frequency?.evening
+                    : "0"
+                }}, {{ "night" | translate }}
+                {{
+                  element?.frequency?.night ? element?.frequency?.night : "0"
+                }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="takefor">
+              <th mat-header-cell *matHeaderCellDef>
+                {{ "take_for" | translate }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{
+                  element?.takeFor?.quantity ? element?.takeFor?.quantity : "0"
+                }}
+                -
+                {{ element?.takeFor?.type ? element?.takeFor?.type : "-" }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+        </div>
+        <mat-paginator
+          class="pagination"
+          *ngIf="res_details?.length > 0"
+          [length]="totalLength"
+          (page)="handlePageEvent($event)"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[2, 5, 20, 50, 100]"
+          showFirstLastButtons
+          aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="res_details?.length === 0" class="text-center">
+  <div class="text-center">
+    <b>{{ "no_medication_available" | translate }}</b>
+  </div>
+</div>

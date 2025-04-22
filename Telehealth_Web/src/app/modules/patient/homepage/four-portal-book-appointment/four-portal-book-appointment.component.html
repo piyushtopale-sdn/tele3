@@ -1,0 +1,1065 @@
+<div class="home_wrapper">
+  <app-header></app-header>
+
+  <div class="breadcum_wrapper" aria-label="breadcrumb">
+    <div class="container">
+      <div class="breadcrumb_title">{{ "book_appointment" | translate }}</div>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/patient/homepage']">{{ "home" | translate }}</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a (click)="goBack()">{{ portal_type }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ "book_appointment" | translate }}
+        </li>
+      </ol>
+    </div>
+    <div class="back_button" (click)="goBack()">
+      <button class="btn btn-primary">{{ "back" | translate }}</button>
+    </div>
+  </div>
+  <div class="main_section retail_doctor_detail">
+    <div class="main_section_inner">
+      <div class="container">
+        <div class="row">
+          <div id="main_content" class="content_area col-lg-12">
+            <div class="bottom_section">
+              <div class="appointment_doctor_details">
+                <div class="top_bar">
+                  <div class="verify">
+                    <span class="icon"
+                      ><img src="../../../../../assets/img/verify.svg"
+                    /></span>
+                    {{ "verified" | translate }}
+                  </div>
+
+                  <div class="title">
+                    <span class="dot"></span>{{ "availabe_today" | translate }}
+                  </div>
+                </div>
+
+                <div class="bottom_bar">
+                  <div class="medicine_details">
+                    <div class="image">
+                      <img
+                        src="{{
+                          portaldetailsData?.profile_picture
+                            ? portaldetailsData?.profile_picture
+                            : '../../../assets/img/default_user.png'
+                        }}"
+                      />
+                    </div>
+                    <div class="medicine_info">
+                      <h2 class="title">
+                        {{ portaldetailsData?.full_name }}
+                      </h2>
+                      <div class="desc_wrapper row">
+                        <div class="desc col-md-7 col-lg-8">
+                          {{ portaldetailsData?.specialityName }}
+                        </div>
+                        <div class="rating_section col-md-5 col-lg-4">
+                          <span class="ratings-star">
+                            <div class="rating">
+                              <i
+                                class="fa-solid fa-star"
+                                *ngFor="
+                                  let f of [].constructor(
+                                    rating?.average_rating
+                                  )
+                                "
+                              ></i
+                              >{{
+                                rating?.average_rating
+                                  ? rating?.average_rating
+                                  : 0
+                              }}
+
+                              ({{
+                                rating?.total_review ? rating?.total_review : 0
+                              }}
+                              Reviews)
+                            </div>
+                          </span>
+                        </div>
+                      </div>
+
+                      <ul class="content_list row">
+                        <li class="content_item">
+                          <div class="title">{{ "phone" | translate }}</div>
+                          <span class="content_desc">
+                            {{
+                              "(" +
+                                portaldetailsData?.portal_user_data
+                                  ?.country_code +
+                                ") " +
+                                portaldetailsData?.portal_user_data?.mobile
+                            }}
+                          </span>
+                        </li>
+                        <li class="content_item">
+                          <div class="title">{{ "email" | translate }}</div>
+                          <span class="content_desc">
+                            {{ portaldetailsData?.portal_user_data?.email }}
+                          </span>
+                        </li>
+                        <li class="content_item">
+                          <div class="title">
+                            {{ "consultation_fee" | translate }}
+                          </div>
+                          <span class="content_desc">
+                            {{ consultationFee ? "CFA " + consultationFee : "-" }}
+                          </span>
+                        </li>
+                        <li class="content_item">
+                          <div class="title">{{"location" | translate}}</div>
+                          <span class="content_desc">
+                            {{ hospital_details?.hospital_name ?  hospital_details?.hospital_name : hospital_location[0]?.hospital_name}}
+                            <a (click)="getDirection(hospital_details?.hospital_loc?.coordinates ? hospital_details?.hospital_loc?.coordinates : hospital_location[0]?.loc?.coordinates)">
+                              {{ "get_directions" | translate }}</a
+                            >
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="subscribe_detail_inner mt-30">
+                <mat-accordion>
+                  <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        {{ "step_1_appointment_details" | translate }}
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="expansion_panel">
+                      <span
+                        class="text-danger"
+                        *ngIf="location_id === '' && isSubmitted"
+                        >{{
+                          "please_select_hospital_location" | translate
+                        }}.</span
+                      >
+                      <div class="expansion_panel_inner">
+                        <div class="expansion_item">
+                          <h2>{{ "select_location" | translate }}</h2>
+                          <mat-button-toggle-group
+                            name="fontStyle"
+                            #group="matButtonToggleGroup"
+                            [value]="location_id"
+                            aria-label="Font Style"
+                          >
+                            <mat-button-toggle
+                              [value]="location.hospital_id"
+                              *ngFor="let location of hospital_location"
+                              (change)="
+                                onSelection({ locationid: $event.value })
+                              "
+                              >{{ location?.hospital_name }}</mat-button-toggle
+                            >
+                          </mat-button-toggle-group>
+                        </div>
+
+                        <div
+                          class="row appointment_type"
+                          *ngIf="location_id != ''"
+                        >
+                          <div class="expansion_item col-md-5">
+                            <h2>{{ "appointment_type" | translate }}</h2>
+                            <mat-radio-group
+                              aria-label="Appointment Type"
+                              [(ngModel)]="appointment_type"
+                            >
+                              <mat-radio-button
+                                value="ONLINE"
+                                (change)="onSelection({ type: $event.value })"
+                                >{{ "online" | translate }}</mat-radio-button
+                              >
+                              <mat-radio-button
+                                value="HOME_VISIT"
+                                (change)="onSelection({ type: $event.value })"
+                                >{{
+                                  "home_visit" | translate
+                                }}</mat-radio-button
+                              >
+                              <mat-radio-button
+                                value="FACE_TO_FACE"
+                                (change)="onSelection({ type: $event.value })"
+                                >{{portal_type}} {{
+                                  "visit" | translate
+                                }}</mat-radio-button
+                              >
+                            </mat-radio-group>
+                          </div>
+
+                          <div class="expansion_item col-md-7">
+                            <h2>{{ "reason_for_appointment" | translate }} <i
+                              class="fa fa-info-circle"
+                              style="color: #e72539"
+                              ngbTooltip="First Select Location."
+                            ></i></h2>
+                            <div class="form_field_wrapper">
+                              <div [formGroup]="ReasonforAppointment">
+                                <select2
+                                  placeholder="{{
+                                    'select_reason' | translate
+                                  }}"
+                                  [overlay]="true"
+                                  [limitSelection]="0"
+                                  [minCountForSearch]="0"
+                                  formControlName="reson"
+                                  [data]="resonForAppoinmentList"
+                                  [(ngModel)]="reasonSelectedId"
+                                >
+                                </select2>
+
+                                <span
+                                  class="text-danger"
+                                  *ngIf="isSubmitted && reasonValidationFormControl['reson'].errors?.['required']"
+                                >
+                                  {{ "select_reason" | translate }}.
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          class="consultation_datetime"
+                          *ngIf="reasonSelectedId != ''"
+                        >
+                          <h2>
+                            {{ "choose_consultation_date_time" | translate }}
+                          </h2>
+                          <div class="consultation_datetime_inner row">
+                            <div class="expansion_item col-md-7">
+                              <article class="calendar-wrapper">
+                                <igx-calendar
+                                  #calender
+                                  [value]="value"
+                                  (selected)="onSelection({ date: $event })"
+                                ></igx-calendar>
+                              </article>
+                            </div>
+                            <div class="expansion_item col-md-5">
+                              <h2>{{ "choose_time" | translate }}</h2>
+                              <span
+                                class="text-danger"
+                                *ngIf="chooseSlot === '' && isSubmitted"
+                                >{{
+                                  "please_select_time_slot" | translate
+                                }}.</span
+                              >
+                              <!--  *ngIf="slot.status == 0" -->
+                              <div
+                                class="scrolling"
+                                *ngIf="doctorAvailableTimeSlot.length > 0"
+                              >
+                                <div class="primary_btn">
+                                  <ng-container
+                                    *ngFor="let slot of doctorAvailableTimeSlot"
+                                  >
+                                  <button
+                                  class="btn btn-tranprent"
+                                  *ngIf="slot.status == 0 || (slot.status == 1 && chooseSlot == slot.slot)"
+                                  [ngClass]="{
+                                    disable: slot.status == 1,
+                                    active: chooseSlot == slot.slot
+                                  }"
+                                  (click)="handelSlot(slot.slot)"
+                                  [value]="slot.slot"
+                                >
+                                  {{ slot.slot }}
+                                </button>
+                                  </ng-container>
+                                </div>
+                              </div>
+
+                              <div *ngIf="doctorAvailableTimeSlot.length == 0">
+                                <h1>
+                                  {{ "no_time_slot_available" | translate }}
+                                </h1>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+
+              <div
+                class="subscribe_detail_inner mt-30"
+                *ngIf="location_id != '' && chooseSlot != ''"
+              >
+                <mat-accordion>
+                  <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        {{ "step_2_patient_details" | translate }}
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="expansion_panel">
+                      <div class="expansion_panel_inner">
+                        <div class="consult_user">
+                          <div class="expansion_item">
+                            <h2>{{ "consultation_user" | translate }}</h2>
+                            <div class="row appointment_type">
+                              <div class="expansion_item col-md-5">
+                                <h2>
+                                  {{ "choose_appointment_for" | translate }}
+                                </h2>
+                                <mat-radio-group
+                                  aria-label="Appointment Type"
+                                  (change)="HandelAppointmentFor($event.value)"
+                                  [(ngModel)]="AppointmentFor"
+                                >
+                                  <mat-radio-button value="self">
+                                    {{
+                                      "self_family" | translate
+                                    }}</mat-radio-button
+                                  >
+                                  <mat-radio-button value="other">
+                                    {{ "other" | translate }}</mat-radio-button
+                                  >
+                                </mat-radio-group>
+                              </div>
+                            </div>
+                            <form
+                              [formGroup]="patient_details"
+                              (ngSubmit)="onSubmit()"
+                            >
+                              <div>
+                                <div
+                                  class="expansion_item col-md-4"
+                                  *ngIf="
+                                    SubscribersPatientList?.length != 0 &&
+                                    AppointmentFor === 'self'
+                                  "
+                                >
+                                  <h2>
+                                    {{
+                                      "choose_health_plan_card_member"
+                                        | translate
+                                    }}
+                                  </h2>
+                                  <div class="form_field_wrapper">
+                                    <select2
+                                      placeholder="{{
+                                        'choose_subscriber' | translate
+                                      }}."
+                                      [overlay]="overlay"
+                                      [limitSelection]="0"
+                                      [minCountForSearch]="0"
+                                      formControlName="subPatient_id"
+                                      [data]="SubscribersPatientList"
+                                      (update)="handelSubscribPatient($event)"
+                                    >
+                                    </select2>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div>
+                                <div
+                                  class="expansion_item col-md-4"
+                                  *ngIf="
+                                    SubscribersPatientList?.length === 0 &&
+                                    AppointmentFor === 'self'
+                                  "
+                                >
+                                  <h2>
+                                    {{ "choose_family_member" | translate }}
+                                  </h2>
+                                  <div class="form_field_wrapper">
+                                    <select2
+                                      placeholder="{{
+                                        'choose_family_member' | translate
+                                      }}"
+                                      [overlay]="overlay"
+                                      [limitSelection]="0"
+                                      [minCountForSearch]="0"
+                                      formControlName="familyMember"
+                                      [data]="familyMembersList"
+                                      (update)="handleFamilyMember($event)"
+                                      [(ngModel)]="selectedFamilyMember"
+                                    >
+                                    </select2>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-sm-6 col-md-4">
+                                  <div class="form_field_wrapper">
+                                    <label
+                                      >{{ "first_name" | translate
+                                      }}<span style="color: red">
+                                        *</span
+                                      ></label
+                                    >
+                                    <mat-form-field appearance="fill">
+                                      <input
+                                        type="text"
+                                        [readonly]="
+                                          AppointmentFor === 'other'
+                                            ? false
+                                            : true
+                                        "
+                                        formControlName="first_name"
+                                        matInput
+                                      />
+                                    </mat-form-field>
+                                    <span
+                                      class="text-danger"
+                                      *ngIf="isSubmitted && patientFormControl['first_name'].errors?.['required']"
+                                    >
+                                      {{ "enter_first_name" | translate }}.
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-4">
+                                  <div class="form_field_wrapper">
+                                    <label>{{
+                                      "middle_name" | translate
+                                    }}</label>
+                                    <mat-form-field appearance="fill">
+                                      <input
+                                        type="text"
+                                        [readonly]="
+                                          AppointmentFor === 'other'
+                                            ? false
+                                            : true
+                                        "
+                                        formControlName="middle_name"
+                                        matInput
+                                      />
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-4">
+                                  <div class="form_field_wrapper">
+                                    <label
+                                      >{{ "last_name" | translate
+                                      }}<span style="color: red">
+                                        *</span
+                                      ></label
+                                    >
+                                    <mat-form-field appearance="fill">
+                                      <input
+                                        type="text"
+                                        [readonly]="
+                                          AppointmentFor === 'other'
+                                            ? false
+                                            : true
+                                        "
+                                        formControlName="last_name"
+                                        matInput
+                                      />
+                                    </mat-form-field>
+                                    <span
+                                      class="text-danger"
+                                      *ngIf="isSubmitted && patientFormControl['last_name'].errors?.['required']"
+                                    >
+                                      {{ "enter_last_name" | translate }}.
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-4">
+                                  <div class="form_field_wrapper">
+                                    <label
+                                      >{{ "patients_mobile" | translate
+                                      }}<span style="color: red">
+                                        *</span
+                                      ></label
+                                    >
+                                    <mat-form-field appearance="fill">
+                                      <input
+                                        type="number"
+                                        [readonly]="
+                                          AppointmentFor === 'other'
+                                            ? false
+                                            : true
+                                        "
+                                        formControlName="mobile"
+                                        matInput
+                                      />
+                                    </mat-form-field>
+                                    <span
+                                      class="text-danger"
+                                      *ngIf="isSubmitted && patientFormControl['mobile'].errors?.['required']"
+                                    >
+                                      {{
+                                        "enter_patient_mobile_number"
+                                          | translate
+                                      }}.
+                                    </span>
+                                  </div>
+                                </div>
+                                <div class="col-sm-6 col-md-4">
+                                  <div class="form_field_wrapper">
+                                    <label>{{ "mobile" | translate }}</label>
+                                    <mat-form-field appearance="fill">
+                                      <input
+                                        type="number"
+                                        [readonly]="true"
+                                        formControlName="mobile2"
+                                        matInput
+                                      />
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                                <div class="col-sm-6 col-md-4">
+                                  <div class="form_field_wrapper">
+                                    <label
+                                      >{{ "patients_email" | translate
+                                      }}<span style="color: red">
+                                        *</span
+                                      ></label
+                                    >
+                                    <mat-form-field appearance="fill">
+                                      <input
+                                        type="email"
+                                        formControlName="email"
+                                        matInput
+                                      />
+                                    </mat-form-field>
+                                  </div>
+                                  <span
+                                    class="text-danger"
+                                    *ngIf="isSubmitted && patientFormControl['email'].errors?.['required']"
+                                  >
+                                    {{ "enter_patient_email" | translate }}.
+                                  </span>
+                                </div>
+                                <div class="col-sm-6 col-md-4">
+                                  <div class="form_field_wrapper">
+                                    <label
+                                      >{{ "insurance_number" | translate }}
+                                      <span
+                                        *ngIf="
+                                          SubscribersPatientList?.length != 0 &&
+                                          AppointmentFor != 'other'
+                                        "
+                                      >
+                                      </span
+                                    ></label>
+                                    <mat-form-field appearance="fill">
+                                      <input
+                                        type="number"
+                                        [readonly]="
+                                          AppointmentFor === 'other'
+                                            ? false
+                                            : true
+                                        "
+                                        formControlName="insurance_number"
+                                        matInput
+                                      />
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-4">
+                                  <div class="form_field_wrapper">
+                                    <label
+                                      >{{ "patients_dob" | translate
+                                      }}<span style="color: red">
+                                        *</span
+                                      ></label
+                                    >
+                                    <mat-form-field
+                                      class="example-full-width"
+                                      appearance="fill"
+                                    >
+                                      <input
+                                        [max]="currentDate"
+                                        matInput
+                                        [matDatepicker]="picker1"
+                                        placeholder="Select"
+                                        formControlName="patientDob"
+                                        [readonly]="
+                                          AppointmentFor === 'other'
+                                            ? false
+                                            : true
+                                        "
+                                      />
+
+                                      <mat-datepicker-toggle
+                                        matSuffix
+                                        [for]="picker1"
+                                      ></mat-datepicker-toggle>
+                                      <mat-datepicker
+                                        #picker1
+                                        [disabled]="
+                                          AppointmentFor === 'other'
+                                            ? false
+                                            : true
+                                        "
+                                      ></mat-datepicker>
+                                    </mat-form-field>
+                                    <span
+                                      class="text-danger"
+                                      *ngIf="isSubmitted && patientFormControl['patientDob'].errors?.['required']"
+                                    >
+                                      {{ "select_patient_dob" | translate }}.
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-4">
+                                  <div class="form_field_wrapper">
+                                    <label
+                                      >{{ "gender" | translate
+                                      }}<span style="color: red">
+                                        *</span
+                                      ></label
+                                    >
+                                    <mat-form-field appearance="fill">
+                                      <mat-select
+                                        formControlName="gender"
+                                        [disabled]="
+                                          AppointmentFor === 'other'
+                                            ? false
+                                            : true
+                                        "
+                                      >
+                                        <mat-option value="male">{{
+                                          "male" | translate
+                                        }}</mat-option>
+                                        <mat-option value="female">{{
+                                          "female" | translate
+                                        }}</mat-option>
+                                        <mat-option value="other">{{
+                                          "other" | translate
+                                        }}</mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                    <span
+                                      class="text-danger"
+                                      *ngIf="isSubmitted && patientFormControl['gender'].errors?.['required']"
+                                    >
+                                      {{ "select_gender" | translate }}.
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-4">
+                                  <div class="form_field_wrapper">
+                                    <label
+                                      >{{ "patients_address" | translate }}
+                                    </label>
+                                    <mat-form-field appearance="fill">
+                                      <input
+                                        type="text"
+                                        #address
+                                        formControlName="address"
+                                        placeholder='{{ "enter_address" | translate }}'
+                                        matInput
+                                      />
+                                    </mat-form-field>
+                                    <span
+                                      class="text-danger"
+                                      *ngIf="isSubmitted && patientFormControl['address'].errors?.['required']"
+                                    >
+                                      {{ "enter_patient_address" | translate }}.
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+
+                        <div class="expansion_item medical_doc">
+                          <div class="top_bar bar">
+                            <h2>{{ "add_medical_document" | translate }}</h2>
+                            <div class="primary_btn">
+                              <button
+                                class="btn btn-secondary"
+                                (click)="
+                                  openVerticallyCenteredaddmedicaldoc(
+                                    addmedicaldoc
+                                  )
+                                "
+                              >
+                                + {{ "add_new" | translate }}
+                              </button>
+                              <button
+                                class="btn btn-primary"
+                                (click)="
+                                  openVerticallyCenteredexistingdoc(existingdoc)
+                                "
+                              >
+                                {{ "existing_document" | translate }}
+                              </button>
+                            </div>
+                          </div>
+                          <div class="bottom_bar bar">
+                            <div class="row">
+                              <div class="item col-sm-4 col-md-3">
+                                <div
+                                  class="item_inner"
+                                  *ngIf="chooseDoc.length == 0"
+                                >
+                                  <h1>
+                                    {{ "no_document_selected" | translate }}
+                                  </h1>
+                                </div>
+                              </div>
+                              <div
+                                class="item col-sm-4 col-md-3"
+                                *ngFor="let doc of chooseDoc"
+                              >
+                                <div class="item_inner">
+                                  <div class="doc_img" *ngIf="!doc?.image?.endsWith('.pdf')" >
+                                    <img src="{{ doc.image_signed_url }}" />
+                                    <span
+                                      class="quick_view"
+                                      (click)="unSelectDoc(doc._id)"
+                                    >
+                                      <img
+                                        src="../../../../assets/img/close.svg"
+                                      />
+                                    </span>
+                                  </div>
+                                  <div class="doc_img" *ngIf="doc?.image?.endsWith('.pdf')" (click)="downloadpdf(doc.image_signed_url)" >
+                                      <mat-icon  style="font-size: 48px; width: 48px; height: 48px;">get_app</mat-icon>
+                                    <span
+                                      class="quick_view"
+                                      (click)="unSelectDoc(doc._id)"
+                                    >
+                                      <img
+                                        src="../../../../assets/img/close.svg"
+                                      />
+                                    </span>
+                                  </div>
+                                  <div class="doc_desc">
+                                    <div class="name">{{ doc.name }}</div>
+                                    <div class="date">
+                                      {{ "date" | translate }} -{{
+                                        doc.issue_date | date : "dd/MM/yyyy"
+                                      }}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+              <div class="primary_btn continue_btn">
+                <button class="btn btn-secondary" (click)="goBack()">
+                  {{ "cancel" | translate }}
+                </button>
+                <button class="btn btn-primary" (click)="book_Appointment()">
+                  {{ "continue" | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>
+
+<!-- Choose existing document modal -->
+<ng-template #existingdoc let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "choose_existing_document" | translate }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form *ngIf="medical_document.length > 0">
+        <div class="existing_doc_content">
+          <div class="row">
+            <div
+              class="item col-sm-6 col-md-4 col-lg-3"
+              *ngFor="let document of medical_document"
+            >
+              <div class="item_inner">
+                <div
+                class="doc_img"
+                [class.selected]="isSelectedDocument(document)"
+                (click)="handelDoc(document)"
+              *ngIf="!document?.image?.endsWith('.pdf')" 
+
+              >
+                <img src="{{ document?.image_signed_url }}" />
+              </div>
+
+              <div
+              class="doc_img"
+              [class.selected]="isSelectedDocument(document)"
+              (click)="handelDoc(document)"
+              *ngIf="document?.image?.endsWith('.pdf')" 
+
+            >
+             <div class="doc_img">
+                  <mat-icon style="font-size: 48px; width: 48px; height: 48px;">get_app</mat-icon>
+                </div>
+            </div>
+                <div class="doc_desc">
+                  <div class="name">{{ document.name }}</div>
+                  <div class="date">
+                    {{ "issue_date" | translate }} -
+                    {{ document.issue_date | date : "dd/MM/yyyy" }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div *ngIf="medical_document.length === 0">
+        <h2>{{ "no_medical_document_provided" | translate }}</h2>
+      </div>
+      <div class="primary_btn">
+        <button type="button" (click)="closePopup()" class="btn btn-primary">
+          {{"choose" | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Add Medical document modal -->
+<ng-template #addmedicaldoc let-modal>
+  <div class="custome_modal --">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">
+        {{ "add_medical_document" | translate }}
+      </h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="closeDocPopup()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="medicalDocForm" (ngSubmit)="createMedicalDoc()">
+        <ng-container formArrayName="medicalDocumnets">
+          <ng-container *ngFor="let row of departments.controls; let i = index">
+            <ng-container [formGroupName]="i">
+              <div class="add_medicaldoc_content">
+                <div class="increse_content">
+                  <div class="row increse_content_inner">
+                    <div class="item col-sm-12 col-md-6">
+                      <div class="form_field_wrapper">
+                        <label>{{ "document_name" | translate }}</label>
+                        <mat-form-field appearance="fill">
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="name"
+                            placeholder="{{ 'enter_doc_name' | translate }}"
+                          />
+                        </mat-form-field>
+                      </div>
+                      <mat-error
+                        *ngIf="isSubmittedDocs && medDocValidation(i).controls['name'].errors?.['required']"
+                        >{{ "enter_doc_name" | translate }}*</mat-error
+                      >
+                    </div>
+                    <div class="item col-sm-12 col-md-6">
+                      <div class="form_field_wrapper">
+                        <label>{{ "issue_date_optional" | translate }}</label>
+                        <mat-form-field
+                          class="example-full-width"
+                          appearance="fill"
+                        >
+                          <input
+                            matInput
+                            [max]="issueMaxDate"
+                            formControlName="issue_date"
+                            [matDatepicker]="picker14"
+                            placeholder="{{ 'issue_date' | translate }}"
+                            (dateChange)="
+                              handleExpiryDateChange($event.value, i)
+                            "
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker14"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker14></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <mat-error
+                        *ngIf="isSubmittedDocs && medDocValidation(i).controls['issue_date'].errors?.['required']"
+                        >{{ "enter_issue_date" | translate }}*</mat-error
+                      >
+                    </div>
+                    <div class="item col-sm-12 col-md-6">
+                      <div class="form_field_wrapper">
+                        <label>{{
+                          "expiration_date_optional" | translate
+                        }}</label>
+                        <mat-form-field
+                          class="example-full-width"
+                          appearance="fill"
+                        >
+                          <input
+                            matInput
+                            formControlName="expiration_date"
+                            [matDatepicker]="picker15"
+                            placeholder="{{ 'expiry_date' | translate }}"
+                            [min]="issueMinDates[i]"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker15"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker15></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <mat-error
+                        *ngIf="isSubmittedDocs && medDocValidation(i).controls['expiration_date'].errors?.['required']"
+                        >{{ "enter_expiry_date" | translate }}*</mat-error
+                      >
+                    </div>
+                    <div class="item col-sm-12 col-md-6">
+                      <div class="form_field_wrapper">
+                        <label class="invisible">{{
+                          "frequency" | translate
+                        }}</label>
+                        <div class="upload_input">
+                          <div class="upload_input_content">
+                            <label
+                              *ngIf="
+                                medicalDocForm.value.medicalDocumnets[i].image
+                              "
+                              >{{ "file_added" | translate }}</label
+                            >
+                            <label
+                              *ngIf="
+                                !medicalDocForm.value.medicalDocumnets[i].image
+                              "
+                              >{{ "upload_document" | translate }}</label
+                            >
+                          </div>
+
+                          <input
+                            class="ng-hide user_upload_input"
+                            (change)="onMedicalDocChange($event, i)"
+                            id="input-file-id"
+                            type="file"
+                          />
+                        </div>
+                      </div>
+                      <mat-error
+                        *ngIf="isSubmittedDocs && medDocValidation(i).controls['image'].errors?.['required']"
+                        >{{ "enter_expiry_date" | translate }}*</mat-error
+                      >
+                    </div>
+                    <label>{{'note' | translate}} : {{'pdf_size' | translate}}</label>
+
+                  </div>
+
+                  <ng-container
+                    *ngIf="i === departments.length - 1; else remove"
+                  >
+                    <div
+                      class="row_generate row_minus"
+                      (click)="removeMedicalDoc(i)"
+                      *ngIf="departments.length > 1"
+                    >
+                      <mat-icon class="plus">remove</mat-icon>
+                    </div>
+                    <div
+                      class="row_generate row_add"
+                      (click)="addnewMedicalDoc()"
+                    >
+                      <mat-icon class="plus">add</mat-icon>
+                    </div>
+                  </ng-container>
+                  <ng-template #remove>
+                    <div
+                      class="row_generate row_minus"
+                      (click)="removeMedicalDoc(i)"
+                    >
+                      <mat-icon class="plus">remove</mat-icon>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+
+        <div class="primary_btn">
+          <button
+            type="button"
+            (click)="closeDocPopup()"
+            class="btn btn-primary"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button type="submit" class="btn btn-primary">
+            {{ "add" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<!---Check For Plan Purchase------>
+<ng-template #confirmationModel let-modal>
+  <div class="custome_modal approver">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="image_block">
+        <img
+          class="img-fluid"
+          src="../../../../../assets/img/insurance-medicines/apprv.svg"
+          alt="approve"
+        />
+      </div>
+      <p class="mt-4">{{ "no_plan_purchased" | translate }}</p>
+
+      <div class="primary_btn mt-4">
+        <button type="button" class="btn btn-secondary" (click)="handleClose()">
+          {{ "cancel" | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="purchasePlan()">
+          {{ "purchase_plan" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

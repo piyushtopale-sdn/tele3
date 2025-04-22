@@ -1,0 +1,2043 @@
+<div class="patientcalender dashboard_main_content">
+  <mat-tab-group
+    animationDuration="0ms"
+    [(selectedIndex)]="selectedIndex"
+    (selectedTabChange)="tabChanged($event)"
+  >
+    <mat-tab label="Reschedule Appointment">
+      <!-- <a (click)="openVerticallyCenteredchoosedate(choosedate)" class="mb-3"
+        >Choose Date</a
+      ><br /> -->
+
+      <div class="bottom_bar">
+        <div class="calender_section">
+          <div class="app-calendar calender-correect">
+            <div class="calender_top">
+              <div class="left_part">
+                <div class="calender_date">
+                  <h2>
+                    {{ viewDate | calendarDate : view + "ViewTitle" : "en" }}
+                  </h2>
+                </div>
+              </div>
+              <div class="right_part">
+                <div class="btn-group calender_view">
+                  <div
+                    class="btn btn-primary"
+                    (click)="setView(CalendarView.Month)"
+                    [class.active]="view === CalendarView.Month"
+                  >
+                    {{ "month" | translate }}
+                  </div>
+                  <div
+                    class="btn btn-primary"
+                    (click)="setView(CalendarView.Week)"
+                    [class.active]="view === CalendarView.Week"
+                  >
+                    {{ "week" | translate }}
+                  </div>
+                  <div
+                    class="btn btn-primary"
+                    (click)="setView(CalendarView.Day)"
+                    [class.active]="view === CalendarView.Day"
+                  >
+                    {{ "day" | translate }}
+                  </div>
+                </div>
+
+                <div class="calender_nav">
+                  <div class="btn-group">
+                    <mat-icon
+                      mwlCalendarPreviousView
+                      [view]="view"
+                      [(viewDate)]="viewDate"
+                      (viewDateChange)="closeOpenMonthViewDay()"
+                      >arrow_back_ios</mat-icon
+                    >
+                    <mat-icon
+                      mwlCalendarNextView
+                      [view]="view"
+                      [(viewDate)]="viewDate"
+                      (viewDateChange)="closeOpenMonthViewDay()"
+                      >arrow_forward_ios</mat-icon
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="events | async; let events">
+              <div [ngSwitch]="view">
+                <context-menu #basicMenu>
+                  <ng-template
+                    [enabled]="appointId == 1 ? true : false"
+                    contextMenuItem
+                    let-item
+                    (execute)="addEvent($event, '2')"
+                  >
+                    {{ "view_appointment" | translate }}
+                  </ng-template>
+
+                  <ng-template
+                    contextMenuItem
+                    [enabled]="rescheduledId == 1 ? true : false"
+                    contextMenuItem
+                    let-item
+                    (execute)="addEvent($event, '3')"
+                  >
+                    <span> {{ "reschedule" | translate }}</span>
+                  </ng-template>
+
+                  <ng-template
+                    contextMenuItem
+                    [enabled]="cancelledId == 1 ? true : false"
+                    contextMenuItem
+                    let-item
+                    (execute)="addEvent($event, '4')"
+                  >
+                    {{ "cancel_appointment" | translate }}
+                  </ng-template>
+
+                  <ng-template
+                    contextMenuItem
+                    [enabled]="setRemainderId == 1 ? true : false"
+                    contextMenuItem
+                    let-item
+                    (execute)="addEvent($event, '6')"
+                  >
+                    {{ "set_remainders" | translate }}
+                  </ng-template>
+                </context-menu>
+
+                <mwl-calendar-month-view
+                  [cellTemplate]="monthViewTemplate"
+                  *ngSwitchCase="CalendarView.Month"
+                  [refresh]="refresh"
+                  [viewDate]="viewDate"
+                  [events]="events"
+                  [activeDayIsOpen]="activeDayIsOpen"
+                  (eventTimesChanged)="eventTimesChanged($event)"
+                  (eventClicked)="eventClicked($event.event)"
+                  (beforeViewRender)="beforeMonthViewRender($event)"
+                >
+                </mwl-calendar-month-view>
+                <mwl-calendar-week-view
+                  *ngSwitchCase="CalendarView.Week"
+                  [viewDate]="viewDate"
+                  [events]="events"
+                  [refresh]="refresh"
+                  (eventClicked)="handleEvent('Clicked', $event.event)"
+                  (eventTimesChanged)="eventTimesChanged($event)"
+                >
+                </mwl-calendar-week-view>
+                <mwl-calendar-day-view
+                  *ngSwitchCase="CalendarView.Day"
+                  [viewDate]="viewDate"
+                  [events]="events"
+                  [refresh]="refresh"
+                  (eventClicked)="handleEvent('Clicked', $event.event)"
+                  (eventTimesChanged)="eventTimesChanged($event)"
+                >
+                </mwl-calendar-day-view>
+              </div>
+            </div>
+
+            <ng-template #monthViewTemplate let-day="day">
+              <div
+                (click)="onContextMenu($event, null, day.date)"
+                [ngClass]="{
+                  'is-available-cell-re': isBoolingDateAvailable(day.date)
+                }"
+              >
+                <div
+                  class="custom-month-evnts-box"
+                  *ngIf="day.events && day.events.length > 0"
+                >
+                  <span class="month-day-num">{{
+                    toDateString(day.date)
+                  }}</span>
+                  <div *ngFor="let e of day.events; let i = index">
+                    <div (click)="onContextMenu($event, e)">
+                      <span
+                        [tooltip]="monthEvntsToolTip(e.title)"
+                        tooltip-class="month-title-tip-view"
+                        content-type="html"
+                        placement="top"
+                        class="cal-day-badge month-slots-custom"
+                        [ngClass]="getBgClass(i)"
+                      >
+                        <span *ngFor="let a of e.actions">
+                          <span
+                            (click)="monthViewActionCliked(a, e)"
+                            [innerHtml]="a.label"
+                          ></span>
+                        </span>
+
+                        <span class="month-event-txt-s crsr-ptr">
+                          {{ e.title }}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="custom-month-evnts-box"
+                  *ngIf="day.events && day.events.length == 0"
+                >
+                  <span class="month-day-num">{{
+                    toDateString(day.date)
+                  }}</span>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="bottom_bar">
+        <div class="calender_section">
+          <div class="app-calendar">
+            <div class="calender_top">
+              <div class="calender_date">
+                <h2>
+                  {{ viewDate | calendarDate : view + "ViewTitle" : "en" }}
+                </h2>
+              </div>
+              <div class="calender_nav">
+                <div class="btn-group">
+                  <mat-icon
+                    mwlCalendarPreviousView
+                    [view]="view"
+                    [(viewDate)]="viewDate"
+                    (viewDateChange)="closeOpenMonthViewDay()"
+                    >arrow_back_ios</mat-icon
+                  >
+                  <mat-icon
+                    mwlCalendarNextView
+                    [view]="view"
+                    [(viewDate)]="viewDate"
+                    (viewDateChange)="closeOpenMonthViewDay()"
+                    >arrow_forward_ios</mat-icon
+                  >
+                </div>
+              </div>
+            </div>
+            <div [ngSwitch]="view">
+              <mwl-calendar-month-view
+                *ngSwitchCase="CalendarView.Month"
+                [viewDate]="viewDate"
+                [events]="events"
+                [refresh]="refresh"
+                [activeDayIsOpen]="activeDayIsOpen"
+                (dayClicked)="dayClicked($event.day)"
+                (eventClicked)="handleEvent('Clicked', $event.event)"
+                (eventTimesChanged)="eventTimesChanged($event)"
+              >
+              </mwl-calendar-month-view>
+              <mwl-calendar-week-view
+                *ngSwitchCase="CalendarView.Week"
+                [viewDate]="viewDate"
+                [events]="events"
+                [refresh]="refresh"
+                (eventClicked)="handleEvent('Clicked', $event.event)"
+                (eventTimesChanged)="eventTimesChanged($event)"
+              >
+              </mwl-calendar-week-view>
+              <mwl-calendar-day-view
+                *ngSwitchCase="CalendarView.Day"
+                [viewDate]="viewDate"
+                [events]="events"
+                [refresh]="refresh"
+                (eventClicked)="handleEvent('Clicked', $event.event)"
+                (eventTimesChanged)="eventTimesChanged($event)"
+              >
+              </mwl-calendar-day-view>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </mat-tab>
+
+    <!-- <mat-tab label="Assessment">
+      <div class="assestment">
+        <div class="question_block" *ngFor="let t of textQuestionList">
+          <p>{{ t.question }}? *</p>
+          <label>Ans.</label
+          ><input
+            type="textarea"
+            [value]="t.answer"
+            style="border-block: 1px solid #cccc"
+            #myInput
+            matInput
+            
+            (input)="handeAssesment(myInput.value, t.question,t)"
+          />
+        </div>
+
+        <div class="question_block" *ngFor="let q of checkboxquestion">
+          <p>
+            {{ q.question }}
+          </p>
+          <mat-checkbox
+            class="example-margin"
+            *ngFor="let option of q?.options"
+            #checkbox
+            [value]="option?.option"
+            (change)="handeAssesment(checkbox.value, q.question,q)"
+          >
+          {{ option?.option }}
+          </mat-checkbox>
+        </div>
+
+        <div class="question_block" *ngFor="let q of radiobuttonquestion">
+          <p>
+            {{ q.question }}
+          </p>
+
+          <mat-radio-group
+            aria-label="Select an option"
+            (change)="handeAssesment($event.value, q.question,q)"
+          >
+            <mat-radio-button
+              *ngFor="let option of q?.options"
+              [value]="option?.option"
+              (change)="handeAssesment($event.value, q.question,q)"
+              >{{ option?.option }}</mat-radio-button
+            >
+          </mat-radio-group>
+        </div>
+
+        <div class="question_block" *ngFor="let q of selectlistquestion">
+          <p>
+            {{ q.question }}
+          </p>
+
+          <mat-form-field appearance="fill">
+            <mat-select >
+              <mat-option
+                *ngFor="let option of q?.options"
+                [value]="option?.option"
+                #select (mwlClick)="handeAssesment(select.value, q.question,q)"
+                >{{ option?.option }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="question_block" *ngFor="let t of textboxquestion">
+          <p>{{ t.question }}? *</p>
+          <label>Ans.</label
+          ><input
+            type="textarea"
+            style="border-block: 1px solid #cccc"
+            #myInput
+            matInput
+            (input)="handeAssesment(myInput.value, t.question,t)"
+          />
+        </div>
+
+        <div class="primary_btn mt-4">
+          <button type="button" class="btn btn-secondary mr-3">Back</button>
+          <button
+            type="button"
+            (click)="addAssesment()"
+            class="btn btn-primary"
+          >
+            Save & Next
+          </button>
+        </div>
+      </div>
+    </mat-tab> -->
+
+    <mat-tab label="Assessment">
+      <div class="assestment">
+        <div class="question_block" *ngFor="let question of questions">
+          <p>
+            {{ question.question }}?
+            <span *ngIf="question?.required" class="danger">*</span>
+          </p>
+          <ng-container *ngIf="question.type === 'textbox'">
+            <label>{{ "ans" | translate }}.</label>
+            <input
+              type="text"
+              style="border-block: 1px solid #cccc"
+              matInput
+              [value]="question.answer"
+              #myInput
+              (input)="handleAnswer(question, myInput.value)"
+            />
+
+            <mat-error
+              *ngIf="
+                question.required &&
+                isAssessmentSubmitted &&
+                question.answer.length === 0
+              "
+              >{{ "please_fill_this_question" | translate }}*.</mat-error
+            >
+          </ng-container>
+
+          <ng-container *ngIf="question.type === 'textarea'">
+            <label>{{ "ans" | translate }}.</label>
+            <input
+              type="textarea"
+              style="border-block: 1px solid #cccc"
+              matInput
+              [value]="question.answer"
+              #myInput
+              (input)="handleAnswer(question, myInput.value)"
+            />
+            <mat-error
+              *ngIf="
+                question.required &&
+                isAssessmentSubmitted &&
+                question.answer.length === 0
+              "
+              >{{ "please_fill_this_question" | translate }}*.</mat-error
+            >
+          </ng-container>
+
+          <ng-container *ngIf="question.type === 'checkbox'">
+            <mat-checkbox
+              class="example-margin"
+              *ngFor="let option of question?.options"
+              [value]="option?.option"
+              [checked]="question.answer.includes(option?.option)"
+              (change)="
+                handleAnswer(question, $event.source.checked, option?.option)
+              "
+            >
+              {{ option?.option }}
+            </mat-checkbox>
+            <mat-error
+              *ngIf="
+                question.required &&
+                isAssessmentSubmitted &&
+                question.answer.length === 0
+              "
+              >{{ "required" | translate }}*.</mat-error
+            >
+          </ng-container>
+          <ng-container *ngIf="question.type === 'radiobutton'">
+            <mat-radio-group
+              aria-label="Select an option"
+              (change)="handleAnswer(question, $event.value)"
+            >
+              <mat-radio-button
+                *ngFor="let option of question?.options"
+                [value]="option?.option"
+                [checked]="question.answer.includes(option?.option)"
+                >{{ option?.option }}</mat-radio-button
+              >
+            </mat-radio-group>
+
+            <mat-error
+              *ngIf="
+                question.required &&
+                isAssessmentSubmitted &&
+                question.answer.length === 0
+              "
+              >{{ "required" | translate }}*.</mat-error
+            >
+          </ng-container>
+
+          <ng-container *ngIf="question.type === 'selectlist'">
+            <mat-form-field appearance="fill">
+              <mat-select
+                [(ngModel)]="question.answer[0]"
+                (selectionChange)="handleAnswer(question, $event.value)"
+                placeholder="Select option"
+              >
+                <mat-option
+                  *ngFor="let option of question.options"
+                  [value]="option?.option"
+                  >{{ option?.option }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+            <mat-error
+              *ngIf="
+                question.required &&
+                isAssessmentSubmitted &&
+                question.answer.length === 0
+              "
+              >{{ "required" | translate }}*.</mat-error
+            >
+          </ng-container>
+        </div>
+        <div class="primary_btn mt-4">
+          <button type="button" class="btn btn-secondary mr-3">Back</button>
+          <button
+            type="button"
+            (click)="saveAssessment()"
+            class="btn btn-primary"
+          >
+            {{ "save_and_next" | translate }}
+          </button>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Documents">
+      <div class="step_counter_inner">
+        <div class="educational">
+          <div class="table-wrap">
+            <div class="table-inner without_pagination_block">
+              <table
+                mat-table
+                [dataSource]="documentsData"
+                class="mat-elevation-z8 withoutpagination"
+              >
+                <!-- Date Column -->
+                <ng-container matColumnDef="Document">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "document" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.doc_name ? element?.doc_name : element?.name }}
+                  </td>
+                </ng-container>
+
+                <!-- Height Column -->
+                <ng-container matColumnDef="issue date">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "issue_date" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.issue_date | date : "dd/MM/YYYY" }}
+                  </td>
+                </ng-container>
+
+                <!--Weight (LB) Column -->
+                <ng-container matColumnDef="expiry date">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "expiry_date" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element?.expiration_date | date : "dd/MM/YYYY" }}
+                  </td>
+                </ng-container>
+
+                <!--Action column -->
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef>
+                    {{ "action" | translate }}
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <div class="icon_group">
+                      <a
+                        class="svgicon"
+                        (click)="
+                          openVerticallyCenteredquickview(
+                            quick_view,
+                            element?.image_url
+                              ? element?.image_url
+                              : element?.image_signed_url
+                          )
+                        "
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="9"
+                          viewBox="0 0 16 9"
+                          fill="none"
+                        >
+                          <path
+                            d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z"
+                          ></path></svg
+                      ></a>
+                    </div>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsDocs"></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedColumnsDocs"
+                ></tr>
+              </table>
+            </div>
+            <div class="text-center" *ngIf="documentsData.length === 0">
+              <span
+                ><b>{{ "no_docs_found" | translate }}</b></span
+              >
+            </div>
+          </div>
+          <br /><br /><br />
+
+          <!-------------------------------------->
+          <form [formGroup]="documnetsForm">
+            <ng-container formArrayName="medical_document">
+              <ng-container
+                *ngFor="let doc of medical_document.controls; let i = index"
+              >
+                <ng-container [formGroupName]="i">
+                  <div class="increse_content">
+                    <div class="row increse_content_inner">
+                      <div class="item col-sm-6 col-md-4">
+                        <div class="form_field_wrapper">
+                          <label>{{ "document_name" | translate }}</label>
+                          <mat-form-field appearance="fill">
+                            <input
+                              type="text"
+                              matInput
+                              formControlName="name"
+                            />
+                          </mat-form-field>
+                        </div>
+                        <span
+                          class="text-danger"
+                          *ngIf="isSubmitted && medDocValidation(i).controls['name'].errors?.['required']"
+                          >{{ "enter_doc_name" | translate }}*</span
+                        >
+                      </div>
+
+                      <div class="item col-sm-6 col-md-4">
+                        <div class="form_field_wrapper">
+                          <label>{{ "issue_date" | translate }}</label>
+                          <mat-form-field
+                            class="example-full-width"
+                            appearance="fill"
+                          >
+                            <input
+                              matInput
+                              [matDatepicker]="picker30"
+                              formControlName="issue_date"
+                            />
+                            <mat-datepicker-toggle
+                              matSuffix
+                              [for]="picker30"
+                            ></mat-datepicker-toggle>
+                            <mat-datepicker #picker30></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <span
+                          class="text-danger"
+                          *ngIf="isSubmitted && medDocValidation(i).controls['issue_date'].errors?.['required']"
+                          >{{ "required" | translate }}*</span
+                        >
+                      </div>
+                      <div class="item col-sm-6 col-md-4">
+                        <div class="form_field_wrapper">
+                          <label
+                            >{{ "expiration_date" | translate }} ({{
+                              "optional" | translate
+                            }})</label
+                          >
+                          <mat-form-field
+                            class="example-full-width"
+                            appearance="fill"
+                          >
+                            <input
+                              matInput
+                              [matDatepicker]="picker31"
+                              formControlName="expiration_date"
+                            />
+                            <mat-datepicker-toggle
+                              matSuffix
+                              [for]="picker31"
+                            ></mat-datepicker-toggle>
+                            <mat-datepicker #picker31></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="item upload_item col-sm-6 col-md-4">
+                        <div class="form_field_wrapper">
+                          <label class="invisible">{{
+                            "upload_image" | translate
+                          }}</label>
+                          <div class="upload_input">
+                            <div class="upload_input_content">
+                              <label
+                                *ngIf="
+                                  documnetsForm.value.medical_document[i].image
+                                "
+                                >{{ "file_added" | translate }}</label
+                              >
+                              <label
+                                *ngIf="
+                                  !documnetsForm.value.medical_document[i].image
+                                "
+                                >{{ "upload_image" | translate }}</label
+                              >
+                            </div>
+                            <!-- <div class="upload_input_content">
+                                  <label>File Added</label>
+                                </div> -->
+                            <input
+                              class="ng-hide user_upload_input"
+                              id="input-file-id"
+                              multiple
+                              type="file"
+                              (change)="onMedicalDocChange($event, i)"
+                            />
+                          </div>
+                        </div>
+                        <span
+                          class="text-danger"
+                          *ngIf="isSubmitted && medDocValidation(i).controls['image'].errors?.['required']"
+                          >{{ "select_file" | translate }}*</span
+                        >
+                      </div>
+                    </div>
+                    <ng-container
+                      *ngIf="i === medical_document.length - 1; else remove"
+                    >
+                      <div
+                        class="row_generate row_minus"
+                        *ngIf="medical_document.length > 1"
+                      >
+                        <mat-icon class="plus" (click)="deleteMedicalDoc(i)"
+                          >remove</mat-icon
+                        >
+                      </div>
+                      <div class="row_generate row_add">
+                        <mat-icon class="plus" (click)="addNewMedicalDocument()"
+                          >add</mat-icon
+                        >
+                      </div>
+                    </ng-container>
+                    <ng-template #remove>
+                      <div class="row_generate row_minus">
+                        <mat-icon class="plus" (click)="deleteMedicalDoc(i)"
+                          >remove</mat-icon
+                        >
+                      </div>
+                    </ng-template>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </form>
+        </div>
+        <div class="primary_btn btn_wrap">
+          <button type="button" class="btn btn-secondary">
+            {{ "back" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="handleSaveDocuments()"
+          >
+            {{ "save_and_next" | translate }}
+          </button>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Vitals" *ngIf="vitalsPermission">
+      <div class="vitals_block">
+        <div class="primary_btn">
+          <!-- <button class="btn btn-tranprent">
+            <a class="svgicon">
+              <svg
+                width="22"
+                height="15"
+                viewBox="0 0 22 15"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M0.556911 0.117328C0.431691 0.181815 0.259513 0.331261 0.174276 0.449345L0.0193006 0.664034L0.00354469 3.09252C-0.00704531 4.72876 0.00602432 5.58197 0.0436834 5.70782C0.116832 5.9525 0.316905 6.1794 0.581139 6.31735C0.790666 6.42671 0.833439 6.42882 3.16334 6.44309C5.91586 6.46003 5.94107 6.45701 6.28884 6.07139C6.60659 5.71911 6.61537 5.63289 6.59651 3.05042C6.58035 0.839748 6.57709 0.776319 6.46871 0.579832C6.32913 0.326672 6.16708 0.177882 5.92222 0.0780502C5.75856 0.0112939 5.37314 0 3.25772 0H0.784621L0.556911 0.117328ZM4.38445 3.20168V4.28571H3.27379H2.16313V3.23531C2.16313 2.65755 2.17863 2.16973 2.19759 2.15128C2.21649 2.13277 2.71629 2.11765 3.30824 2.11765H4.38445V3.20168ZM9.591 2.17739C9.48557 2.20503 9.29417 2.31787 9.16575 2.42818C8.58645 2.92593 8.70702 3.81545 9.39951 4.15225L9.67392 4.28571L15.4108 4.28461C20.8846 4.28355 21.1571 4.27921 21.3543 4.19012C21.7522 4.01027 22 3.63106 22 3.20168C22 2.78259 21.796 2.45627 21.4059 2.25141L21.1993 2.14286L15.491 2.13504C11.8389 2.13 9.71369 2.14528 9.591 2.17739ZM0.819698 8.61852C0.426318 8.73529 0.140853 8.99244 0.0436834 9.3174C0.00602432 9.44324 -0.00704531 10.2953 0.00354469 11.9288L0.0193006 14.3533L0.160535 14.5506C0.238178 14.6591 0.387574 14.8046 0.492544 14.874L0.683268 15H3.27849H5.87366L6.09765 14.8465C6.22085 14.7621 6.37976 14.5919 6.45079 14.4684L6.57993 14.2437L6.59651 11.9748C6.61532 9.39323 6.60648 9.306 6.28946 8.95452C5.9465 8.57425 5.9185 8.57072 3.25147 8.57576C1.98522 8.57813 0.890883 8.59739 0.819698 8.61852ZM4.38445 11.8245V12.9096L3.2867 12.896L2.18896 12.8824L2.17501 11.8109L2.16106 10.7395H3.27275H4.38445V11.8245ZM9.40199 10.8717C8.93696 11.0979 8.71017 11.5749 8.83199 12.0705C8.92192 12.4363 9.27868 12.7748 9.65857 12.8548C9.86412 12.898 11.4227 12.9094 15.5685 12.8979L21.1993 12.8824L21.4295 12.7563C22.0476 12.4178 22.1893 11.6229 21.7238 11.1054C21.6347 11.0064 21.4686 10.8841 21.3547 10.8335C21.1584 10.7465 20.8481 10.7417 15.4108 10.7406L9.67392 10.7395L9.40199 10.8717Z"
+                />
+              </svg>
+            </a>
+            List View
+          </button>
+          <button type="button" class="btn btn-primary" tabindex="0">
+            <a class="btn_svg">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 22 22"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M0.733542 0.0564349C0.628442 0.0950113 0.452831 0.216288 0.343263 0.325954C-0.0326652 0.70217 0.000763922 -0.338704 0.000763922 10.9943C0.000763922 22.3277 -0.0327082 21.2864 0.343477 21.6628C0.718374 22.0381 -0.325493 22.006 11.088 21.9934C20.6714 21.9829 21.2129 21.9783 21.3446 21.9062C21.902 21.6013 22.1421 20.9948 21.9148 20.4658C21.8152 20.2342 21.531 19.9342 21.3233 19.8416C21.2322 19.8009 19.0647 19.7842 11.7311 19.7675L2.25659 19.746L2.23511 10.2632C2.21439 1.11989 2.21074 0.774979 2.13361 0.629834C2.02052 0.41704 1.81256 0.206999 1.61331 0.104301C1.38601 -0.0128907 0.982198 -0.0348668 0.733542 0.0564349ZM17.347 3.46453C15.1456 4.16205 15.112 4.17727 14.9128 4.56471C14.6411 5.09308 14.8986 5.86001 15.4437 6.14596C15.7187 6.29016 16.0324 6.26745 16.6709 6.05719C16.9655 5.96017 17.2106 5.88487 17.2156 5.88981C17.2205 5.8948 16.7217 6.80825 16.1071 7.91974C14.8997 10.1032 14.8029 10.2438 14.4056 10.3926C13.9587 10.56 13.693 10.4975 12.8768 10.033C12.2245 9.66187 11.8254 9.51466 11.2708 9.44078C10.2331 9.30247 9.10639 9.70015 8.37297 10.4636C8.10064 10.7471 4.38669 15.668 4.31223 15.8441C4.14878 16.2304 4.22006 16.6868 4.49398 17.007C4.73636 17.2905 4.94059 17.379 5.35364 17.3799C5.94811 17.3812 5.85018 17.4821 7.95467 14.6986C8.96167 13.3667 9.85893 12.1891 9.94861 12.0817C10.0504 11.9598 10.2 11.846 10.347 11.7787C10.5494 11.6859 10.6227 11.6743 10.8707 11.6951C11.2091 11.7235 11.582 11.8658 12.0062 12.1287C12.7418 12.5843 13.1685 12.718 13.9009 12.7221C14.9932 12.7284 16.0659 12.235 16.6896 11.4397C16.7932 11.3075 17.4166 10.2246 18.075 9.03325C18.7333 7.84181 19.2823 6.86674 19.2949 6.86635C19.3076 6.86601 19.4107 7.16086 19.5241 7.52155C19.723 8.15434 19.7381 8.185 19.9523 8.39332C20.2035 8.63768 20.4019 8.71496 20.778 8.71496C21.0916 8.71496 21.332 8.60366 21.5651 8.35057C21.7715 8.12643 21.8943 7.76419 21.8568 7.49028C21.8151 7.18541 20.6283 3.50006 20.5178 3.33194C20.3134 3.02114 19.9238 2.82056 19.5337 2.82525C19.4315 2.8265 18.5161 3.09412 17.347 3.46453Z"
+                />
+              </svg> </a
+            >Calender View
+          </button> -->
+        </div>
+        <div class="vital_btn primary_btn">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="openVerticallyCenteredaddvitals(addvitals)"
+          >
+            {{ "add_vital" | translate }}
+          </button>
+        </div>
+      </div>
+      <div class="bottom_bar mt-4">
+        <div class="table-wrap">
+          <div class="table-inner without_pagination_block">
+            <table
+              mat-table
+              [dataSource]="vitalsData"
+              class="mat-elevation-z8 withoutpagination"
+            >
+              <!-- Date Column -->
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Date</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.date }}
+                </td>
+              </ng-container>
+
+              <!-- Height Column -->
+              <ng-container matColumnDef="height">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "height" | translate }}
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/graphing.svg"
+                  />
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.height ? element?.height + " cm" : "" }}
+                </td>
+              </ng-container>
+
+              <!--Weight (LB) Column -->
+              <ng-container matColumnDef="weight">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "weight" | translate }} ({{ "lb" | translate }})
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/graphing.svg"
+                  />
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.weight ? element?.weight + " kgs" : "" }}
+                </td>
+              </ng-container>
+
+              <!--H-Rate Column -->
+              <ng-container matColumnDef="hrate">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "h_rate" | translate }}
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/graphing.svg"
+                  />
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.h_rate }}
+                </td>
+              </ng-container>
+
+              <!-- BP(H/L) Column -->
+              <ng-container matColumnDef="bp">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "BP(H/L)" | translate }}
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/graphing.svg"
+                  />
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.bp }}
+                </td>
+              </ng-container>
+
+              <!--BMI Type Column -->
+              <ng-container matColumnDef="bmi">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "bmi" | translate }}
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/graphing.svg"
+                  />
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.bmi ? element?.bmi + " kg/m2" : "" }}
+                </td>
+              </ng-container>
+
+              <!--Pulse Column -->
+              <ng-container matColumnDef="Pulse">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "pulse" | translate }}
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/graphing.svg"
+                  />
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.pulse }}
+                </td>
+              </ng-container>
+
+              <!--Resp Column -->
+              <ng-container matColumnDef="resp">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "resp" | translate }}
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/graphing.svg"
+                  />
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.resp }}
+                </td>
+              </ng-container>
+              <!--Temp(°F) Column -->
+              <ng-container matColumnDef="temp">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "temp(c)" | translate }}
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/graphing.svg"
+                  />
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.temp }}
+                </td>
+              </ng-container>
+
+              <!--Action column -->
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "action" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="icon_group">
+                    <a
+                      [routerLink]="[
+                        '/super-admin/associationgroup/details',
+                        element._id
+                      ]"
+                      class="svgicon"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="9"
+                        viewBox="0 0 16 9"
+                        fill="none"
+                      >
+                        <path
+                          d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z"
+                        ></path></svg
+                    ></a>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="primary_btn btn_wrap mt-4 justify-content-end">
+        <button type="button" class="btn btn-secondary">
+          {{ "back" | translate }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="nextStep()">
+          {{ "next" | translate }}
+        </button>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Pre-Existing Medications" *ngIf="medicinePermission">
+      <div class="pre_existing_medications">
+        <div class="inner_pre_existing">
+          <div class="vital_btn primary_btn justify-content-end">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="openVerticallyCenteredaddmedication(addmedication, '')"
+            >
+              {{ "add_medication" | translate }}
+            </button>
+          </div>
+          <div class="bottom_bar mt-5">
+            <div class="table-wrap">
+              <div class="table-inner without_pagination_block">
+                <table
+                  mat-table
+                  [dataSource]="medicinesData"
+                  class="mat-elevation-z8"
+                >
+                  <!-- Medicine Column -->
+                  <ng-container matColumnDef="medicine">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "medicine" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.medicine }}
+                    </td>
+                  </ng-container>
+
+                  <!-- Height Column -->
+                  <ng-container matColumnDef="dose">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "dose(mg)" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.dose }}
+                    </td>
+                  </ng-container>
+
+                  <!--Frequency (LB) Column -->
+                  <ng-container matColumnDef="frequency">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "frequency" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.frequency }}
+                    </td>
+                  </ng-container>
+
+                  <!--Treatement Duration Column -->
+                  <ng-container matColumnDef="treatementduration">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "strength" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.strength }}
+                    </td>
+                  </ng-container>
+
+                  <!--Start Date Column -->
+                  <ng-container matColumnDef="startdate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "start_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.start_date | date : "dd/MM/YYYY" }}
+                    </td>
+                  </ng-container>
+
+                  <!--End Date  Type Column -->
+                  <ng-container matColumnDef="enddate">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "end_date" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      {{ element?.end_date | date : "dd/MM/YYYY" }}
+                    </td>
+                  </ng-container>
+
+                  <!--Action column -->
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                      {{ "action" | translate }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div class="icon_group">
+                        <a
+                          class="svgicon"
+                          (click)="
+                            openVerticallyCenteredaddmedication(
+                              addmedication,
+                              element
+                            )
+                          "
+                        >
+                          <svg
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                            />
+                          </svg>
+                        </a>
+                        <!-- <a
+                          class="svgicon"
+                          (click)="
+                            openVerticallyCenteredsecond(
+                              deleteModal,
+                              element._id
+                            )
+                          "
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="16"
+                            viewBox="0 0 14 16"
+                            fill="none"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z"
+                            /></svg
+                        ></a> -->
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnss"></tr>
+                  <tr
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumnss"
+                  ></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="primary_btn btn_wrap justify-content-end mt-4">
+            <button type="button" class="btn btn-secondary">
+              {{ "back" | translate }}
+            </button>
+            <button type="button" class="btn btn-primary" (click)="nextStep()">
+              {{ "next" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Check In">
+      <div class="checkin">
+        <div class="timer_set">
+          <ul>
+            <li>
+              <div class="outer_line">
+                <p>{{ daysToDday }}</p>
+                <h4>{{ "days" | translate }}</h4>
+              </div>
+            </li>
+            <li>
+              <div class="outer_line">
+                <p>{{ hoursToDday }}</p>
+                <h4>{{ "hrs" | translate }}</h4>
+              </div>
+            </li>
+            <li>
+              <div class="outer_line">
+                <p>{{ minutesToDday }}</p>
+                <h4>{{ "min" | translate }}</h4>
+              </div>
+            </li>
+            <li>
+              <div class="outer_line">
+                <p>{{ secondsToDday }}</p>
+                <h4>{{ "sec" | translate }}</h4>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="primary_btn btn_wrap justify-content-center mt-4"
+          *ngIf="appointmentType === 'ONLINE'"
+        >
+          <button type="button" class="btn btn-tranprent">
+            {{ "test_audio_video" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-tranprent"
+            [disabled]="!enableCalling"
+          >
+            {{ "call" | translate }}
+          </button>
+        </div>
+      </div>
+
+      <!-- <div class="video_call mt-5" *ngIf="appointmentType === 'ONLINE'">
+        <div class="inner_video_call">
+          <div class="image_block">
+            <img
+              class="img-fluid"
+              src="../../../../../assets/img/smilycall.svg"
+            />
+          </div>
+          <div class="button_down">
+            <ul>
+              <li>
+                <div class="icon_block">
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/videocm.svg"
+                  />
+                </div>
+              </li>
+              <li>
+                <div class="icon_block">
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/Voice.svg"
+                  />
+                </div>
+              </li>
+              <li>
+                <div class="icon_block">
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/note.svg"
+                  />
+                </div>
+              </li>
+              <li>
+                <div class="icon_block">
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/Upload.svg"
+                  />
+                </div>
+              </li>
+              <li>
+                <div class="icon_block bg-danger">
+                  <img
+                    class="img-fluid"
+                    src="../../../../../assets/img/redphone.svg"
+                  />
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div> -->
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<!-- modal -->
+<!-- popup model ofr reshduling  -->
+
+<div class="edit_staff">
+  <ng-template #choosedate let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "reschedule_appointment" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="resshedule_appointment">
+          <div class="image_block">
+            <img
+              class="img-fluid"
+              src="{{ doctordetailsData?.profile_picture }}"
+              alt="doc"
+            />
+          </div>
+          <div class="content_block">
+            <h3>
+              {{ doctordetailsData?.full_name
+              }}<span
+                ><img
+                  class="img-fluid"
+                  src="../../../../../assets/img/greenelip.svg"
+              /></span>
+            </h3>
+            <p>{{ doctordetailsData?.speciality }}</p>
+            <ul>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "experience" | translate }}</p>
+                  <h4>
+                    {{ doctordetailsData?.years_of_experience }}
+                    {{ "years" | translate }}
+                  </h4>
+                </div>
+              </li>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "rating_and_review" | translate }}</p>
+                  <h4>
+                    <i class="fa-solid fa-star"></i>
+                    {{ doctor_rating?.average_rating }} (85 Reviews)
+                  </h4>
+                </div>
+              </li>
+              <li>
+                <div class="doctore_detail">
+                  <p>{{ "next_appointment_available" | translate }}</p>
+                  <h4>
+                    {{
+                      nextAvailable_slot?.date
+                        ? (nextAvailable_slot?.date | date : "dd/MM/YYYY")
+                        : "-"
+                    }}
+                  </h4>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="choose_slot">
+          <div class="heading">
+            <h4>1. {{ "choose_slot" | translate }}</h4>
+          </div>
+          <div class="choose_detail">
+            <div class="nearest_slot">
+              <p>{{ "nearest_available_slot" | translate }}:</p>
+              <h3>
+                {{ nextAvailable_slot?.date | date : "dd/MM/YYYY" }} ({{
+                  nextAvailable_slot?.slot
+                    ? nextAvailable_slot?.slot
+                    : "No Slot Available"
+                }})
+              </h3>
+            </div>
+            <button
+              type="button"
+              [disabled]="!nextAvailable_slot"
+              class="btn btn-primary"
+              (click)="reshedule('')"
+            >
+              {{ "book_now" | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="primary_btn mt-4">
+          <button
+            type="button"
+            class="btn btn-secondary mr-3"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="openVerticallyCenteredChooseDateTime(chooseCalender)"
+          >
+            {{ "view_other_available_slots" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- second for reshudeling  -->
+<div class="edit_staff">
+  <ng-template #chooseCalender let-modal>
+    <form>
+      <div class="custome_modal">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">
+            {{ "reschedule_appointment" | translate }}
+          </h4>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="resshedule_appointment">
+            <div class="image_block">
+              <img
+                class="img-fluid"
+                src="{{ doctordetailsData?.profile_picture }}"
+                alt="doc"
+              />
+            </div>
+            <div class="content_block">
+              <h3>
+                {{ doctordetailsData?.full_name
+                }}<span
+                  ><img
+                    class="img-fluid"
+                    src="../../../../../assets/img/greenelip.svg"
+                /></span>
+              </h3>
+              <p>{{ doctordetailsData?.speciality }}</p>
+              <ul>
+                <li>
+                  <div class="doctore_detail">
+                    <p>Experience</p>
+                    <h4>
+                      {{ doctordetailsData?.years_of_experience }}
+                      {{ "years" | translate }}
+                    </h4>
+                  </div>
+                </li>
+                <li>
+                  <div class="doctore_detail">
+                    <p>{{ "rating_and_review" | translate }}</p>
+                    <h4>
+                      <i class="fa-solid fa-star"></i>
+                      {{ doctor_rating?.average_rating }}(85
+                      {{ "reviews" | translate }})
+                    </h4>
+                  </div>
+                </li>
+                <li>
+                  <div class="doctore_detail">
+                    <p>{{ "next_appointment_available" | translate }}</p>
+                    <h4>January 30, 2023</h4>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="choose_slot">
+            <div class="heading">
+              <h4>2. {{ "select_date_time" | translate }}</h4>
+            </div>
+            <div class="choose_detail">
+              <div class="expansion_panel_inner">
+                <div class="main_outer">
+                  <div class="row location_appointment">
+                    <div class="expansion_item location col-md-6">
+                      <h2>{{ "select_location" | translate }}</h2>
+                      <mat-button-toggle-group
+                        name="fontStyle"
+                        [value]="location_id"
+                        #group="matButtonToggleGroup"
+                        aria-label="Font Style"
+                      >
+                        <!-- {{hospital_location|json}} -->
+                        <ng-container
+                          *ngFor="let location of hospital_location"
+                        >
+                          <mat-button-toggle
+                            [value]="location.hospital_id"
+                            (change)="onSelection({ locationid: $event.value })"
+                            >{{ location?.hospital_name }}</mat-button-toggle
+                          >
+                        </ng-container>
+                      </mat-button-toggle-group>
+                    </div>
+
+                    <div class="expansion_item appointment col-md-6">
+                      <h2>{{ "appointment_type" | translate }}</h2>
+                      <mat-radio-group aria-label="Appointment Type">
+                        <!-- <mat-radio-button   [checked]="appointment_type===type?.appointment_type?true:false" [value]="type?.appointment_type"
+                          *ngFor="let type of doctor_availability" (change)="onSelection({type:$event?.value})">
+                          {{type?.appointment_type}}
+                        </mat-radio-button> -->
+
+                        <mat-radio-button
+                          value="ONLINE"
+                          (change)="onSelection({ type: $event.value })"
+                          [checked]="appointmentType === 'ONLINE'"
+                        >
+                          {{ "online" | translate }}
+                        </mat-radio-button>
+
+                        <mat-radio-button
+                          value="HOME_VISIT"
+                          (change)="onSelection({ type: $event.value })"
+                          [checked]="appointmentType === 'HOME_VISIT'"
+                        >
+                          {{ "home_visit" | translate }}
+                        </mat-radio-button>
+
+                        <mat-radio-button
+                          value="FACE_TO_FACE"
+                          (change)="onSelection({ type: $event.value })"
+                          [checked]="appointmentType === 'FACE_TO_FACE'"
+                        >
+                          {{ "face_to_face" | translate }}
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+
+                  <div class="consultation_datetime">
+                    <h2>{{ "choose_consultation_date_time" | translate }}</h2>
+                    <div class="consultation_datetime_inner row">
+                      <div class="expansion_item col-md-7">
+                        <article class="calendar-wrapper">
+                          <igx-calendar
+                            #calendar
+                            (selected)="onSelection({ date: $event })"
+                          ></igx-calendar>
+                        </article>
+                      </div>
+                      <div class="expansion_item col-md-5">
+                        <h2>{{ "choose_time" | translate }}</h2>
+
+                        <mat-button-toggle-group
+                          name="fontStyle"
+                          [value]="choose_slot"
+                          aria-label="Font Style"
+                        >
+                          <ng-container
+                            *ngFor="let slot of doctorAvailableTimeSlot"
+                          >
+                            <ng-container>
+                              <mat-button-toggle
+                                [disabled]="slot.status == 1 ? true : false"
+                                (click)="chooseSlot(slot.slot)"
+                                [value]="slot.slot"
+                                >{{ slot.slot }}</mat-button-toggle
+                              >
+                            </ng-container>
+                          </ng-container>
+                        </mat-button-toggle-group>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="primary_btn mt-4">
+            <button
+              type="button"
+              class="btn btn-secondary mr-3"
+              (click)="modal.dismiss('Cross click')"
+            >
+              {{ "cancel" | translate }}
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              (click)="reshedule('')"
+              [disabled]="!choose_slot"
+            >
+              {{ "book" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+</div>
+
+<div class="edit_staff">
+  <ng-template #successmessage let-modal>
+    <div class="custome_modal success">
+      <div class="modal-body text-center">
+        <div class="success_modal">
+          <img
+            class="img-fluid"
+            src="../../../../../assets/img/righticon.svg"
+          />
+        </div>
+        <p>{{ "your_appointment_has_been_rescheduled" | translate }}</p>
+        <div class="primary_btn mt-4">
+          <button type="button" class="btn btn-primary" (click)="closePopup()">
+            {{ "ok" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<div class="edit_staff">
+  <ng-template #vitals let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "add_vital" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body"></div>
+    </div>
+  </ng-template>
+</div>
+
+<div class="add_vital">
+  <ng-template #addvitals let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "add_vital" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <form [formGroup]="addVitals">
+        <div class="modal-body">
+          <div class="addvital_inner">
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "date" | translate }} </label>
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <input
+                      matInput
+                      [matDatepickerFilter]="myFilter"
+                      [matDatepicker]="picker"
+                      placeholder=""
+                      formControlName="date"
+                    />
+                    <mat-datepicker-toggle
+                      matSuffix
+                      [for]="picker"
+                    ></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "height" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input type="text" matInput formControlName="height" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label
+                    >{{ "weight" | translate }} ({{ "lb" | translate }})</label
+                  >
+                  <mat-form-field appearance="fill">
+                    <input type="text" matInput formControlName="weight" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "h_rate" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input type="text" matInput formControlName="h_rate" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "bmi" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input type="text" matInput formControlName="bmi" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "BP(H/L)" | translate }} </label>
+                  <mat-form-field appearance="fill">
+                    <input type="text" matInput formControlName="bp" />
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "pulse" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input type="text" matInput formControlName="pulse" />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "resp" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input type="text" matInput formControlName="resp" />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "temp(c)" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input type="text" matInput formControlName="temp" />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "blood_group" | translate }} </label>
+                  <mat-form-field appearance="fill">
+                    <!-- <mat-label>Sub-admin</mat-label> -->
+                    <mat-select
+                      disableRipple
+                      formControlName="blood_group"
+                      placeholder="{{ 'select_blood_group' | translate }}"
+                    >
+                      <mat-option
+                        *ngFor="let blood of bloodGroupList"
+                        [value]="blood.value"
+                        >{{ blood.label }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "clearance" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input type="text" matInput formControlName="clearance" />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form_field_wrapper">
+                  <label>{{ "hepatics_summary" | translate }}</label>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      matInput
+                      formControlName="hepatics_summary"
+                    />
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="primary_btn mt-3">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="handleAddVitals()"
+            >
+              {{ "add" | translate }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>
+
+<div class="add_medication">
+  <ng-template #addmedication let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ isMedicineUpdating ? "Edit Medicine" : "Add Medicine" }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <form [formGroup]="medicineForm">
+        <div class="modal-body import_subscribes">
+          <div class="add_medication_inner">
+            <ng-container formArrayName="medicines">
+              <ng-container
+                *ngFor="let doc of medicines.controls; let i = index"
+              >
+                <ng-container [formGroupName]="i">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form_field_wrapper">
+                        <label>{{ "medicine" | translate }}</label>
+                        <mat-form-field appearance="fill">
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="medicine"
+                          />
+                        </mat-form-field>
+                      </div>
+
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && medicineValidation(i).controls['medicine'].errors?.['required']"
+                        >{{ "enter_medicine_name" | translate }}*</span
+                      >
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form_field_wrapper">
+                        <label>{{ "dose(mg)" | translate }}</label>
+                        <mat-form-field appearance="fill">
+                          <input type="text" matInput formControlName="dose" />
+                        </mat-form-field>
+                      </div>
+
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && medicineValidation(i).controls['dose'].errors?.['required']"
+                        >{{ "enter_dose" | translate }}*</span
+                      >
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form_field_wrapper">
+                        <label>{{ "frequency" | translate }}</label>
+                        <mat-form-field appearance="fill">
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="frequency"
+                          />
+                        </mat-form-field>
+                      </div>
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && medicineValidation(i).controls['frequency'].errors?.['required']"
+                        >{{ "enter_frequency" | translate }}*</span
+                      >
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form_field_wrapper">
+                        <label>{{ "strength" | translate }}</label>
+                        <mat-form-field appearance="fill">
+                          <input
+                            type="text"
+                            matInput
+                            formControlName="strength"
+                          />
+                        </mat-form-field>
+                      </div>
+
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && medicineValidation(i).controls['strength'].errors?.['required']"
+                        >{{ "enter_strength" | translate }}*</span
+                      >
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form_field_wrapper">
+                        <label>{{ "start_date" | translate }} </label>
+                        <mat-form-field
+                          class="example-full-width"
+                          appearance="fill"
+                        >
+                          <input
+                            matInput
+                            [matDatepickerFilter]="myFilter"
+                            [matDatepicker]="picker16"
+                            formControlName="start_date"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker16"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker16></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && medicineValidation(i).controls['start_date'].errors?.['required']"
+                        >{{ "required" | translate }}*</span
+                      >
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form_field_wrapper">
+                        <label>{{ "end_date" | translate }} </label>
+                        <mat-form-field
+                          class="example-full-width"
+                          appearance="fill"
+                        >
+                          <input
+                            matInput
+                            [matDatepickerFilter]="myFilter"
+                            [matDatepicker]="picker17"
+                            formControlName="end_date"
+                          />
+                          <mat-datepicker-toggle
+                            matSuffix
+                            [for]="picker17"
+                          ></mat-datepicker-toggle>
+                          <mat-datepicker #picker17></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <span
+                        class="text-danger"
+                        *ngIf="isSubmitted && medicineValidation(i).controls['end_date'].errors?.['required']"
+                        >{{ "required" | translate }}*</span
+                      >
+                      <div
+                        class="row_generate row_add"
+                        *ngIf="i === 0 && !isMedicineUpdating"
+                      >
+                        <mat-icon class="plus" (click)="addNewMedicine()"
+                          >add</mat-icon
+                        >
+                      </div>
+                      <div
+                        class="row_generate row_minus"
+                        *ngIf="i !== 0 && !isMedicineUpdating"
+                      >
+                        <mat-icon class="plus" (click)="deleteMedicines(i)"
+                          >remove</mat-icon
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+          <div class="primary_btn mt-4">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="handleAddMedication()"
+            >
+              {{ isMedicineUpdating ? "Save" : "Add" }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </ng-template>
+</div>
+
+<!-- Quickview Modal -->
+
+<ng-template #quick_view let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="docview_img">
+        <img src="{{ setDocToView }}" width="600px" height="500px" />
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-------------------------- Delete modal --------------------->
+<ng-template #deleteModal let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "youwanttodeletethisrole" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<div class="create_notification">
+  <ng-template #cancelappointmentcontent let-modal>
+    <div class="custome_modal notification_manage">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "cancel_appointment" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="form_field_wrapper">
+                <label>{{ "cancellation_reason" | translate }}</label>
+                <mat-form-field appearance="fill">
+                  <textarea
+                    type="text"
+                    [(ngModel)]="resonText"
+                    [ngModelOptions]="{ standalone: true }"
+                    matInput
+                  ></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "back" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="openVerticallyCentereddetale(addsecondsubsriber)"
+          >
+            {{ "cancel_appointment" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<ng-template #addsecondsubsriber let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "want_to_cancel_this_appointment" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="cancelAppointment()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

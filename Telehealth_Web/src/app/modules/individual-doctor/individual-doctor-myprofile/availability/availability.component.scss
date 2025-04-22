@@ -1,0 +1,17 @@
+@import '../../../../../assets/css/variable/variable';
+.text-start{
+    display:flex;
+    }
+
+    .availability{
+        .item{
+           
+                .btn{
+                    &.active{
+                        background-color: $bodycolor;
+                        color: $white_color;    
+                    }
+                }
+           
+        }
+    }

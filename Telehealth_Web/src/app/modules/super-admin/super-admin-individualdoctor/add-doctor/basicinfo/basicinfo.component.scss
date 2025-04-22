@@ -1,0 +1,54 @@
+.image-upload {
+    input {
+        display: none;
+    }
+    img {
+        width: 80px;
+        cursor: pointer;
+    }
+}
+.mobile_paydetails .modal-body .paydetail_content .field-wrap-block {
+    border: 1px solid rgba(228, 228, 228, 0.9);
+    border-radius: 5px;
+    .mat-select {
+        display: inline-flex;
+        align-items: center;
+        width: 100px;
+        padding: 0 10px;
+        background-color: rgba(0, 0, 0, 0.04);
+    }
+}
+
+// .testassign{
+//     .select2-container{
+//         .select2-selection--multiple{
+//             .select2-selection__rendered{
+//                 // display:block !important;
+//                 // width:auto !important;
+//                 width: 100% !important;
+//             }
+//         }
+    
+//     }
+// }
+// .speciality-select-block {
+//     ::ng-deep {
+//         .select2-label ~ .select2-container > div > .select2-selection--multiple {
+//             ul {
+//                 // max-width: 400px;
+//                 overflow: auto !important;
+//                 position: relative;
+//                 z-index: 10;
+//                 height: 50px;
+               
+//                 li {
+//                     // height: 35px;
+//                     height:27px;
+//                     display: flex;
+//                     align-items: center;
+//                     justify-content: center;
+//                 }
+//             }
+//         }
+//     }
+// }

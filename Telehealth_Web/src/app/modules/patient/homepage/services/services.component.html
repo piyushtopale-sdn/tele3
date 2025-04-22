@@ -1,0 +1,77 @@
+
+<div class="home_wrapper" [attr.dir]="'dir' | translate">
+    <app-header></app-header>
+  
+    <div class="breadcum_wrapper" aria-label="breadcrumb">
+      <div class="container">
+        <div class="breadcrumb_title">{{ "services" | translate }}</div>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['/test/homepage']">{{ "home" | translate }}</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            {{ "services" | translate }}
+          </li>
+        </ol>
+      </div>
+    </div>
+  
+    <div class="main_section">
+      <div class="main_section_inner">
+        <div class="container">
+        <section id="services" [attr.dir]="'dir' | translate">
+          <h1>{{ 'service_title' | translate }}</h1>
+          <p>{{ 'service_description' | translate }}</p>
+          <ol>
+              <li>
+                  <strong>{{ 'online_consultations' | translate }}:</strong>
+                  <ul>
+                      <li><strong>{{ 'video_consultations' | translate }}:</strong> {{ 'video_description' | translate }}</li>
+                      <li><strong>{{ 'chat_consultations' | translate }}:</strong> {{ 'chat_description' | translate }}</li>
+                  </ul>
+              </li>
+              <li>
+                  <strong>{{ 'prescription_services' | translate }}:</strong>
+                  <ul>
+                      <li><strong>{{ 'digital_prescriptions' | translate }}:</strong> {{ 'digital_description' | translate }}</li>
+                      <li><strong>{{ 'medication_management' | translate }}:</strong> {{ 'medication_description' | translate }}</li>
+                  </ul>
+              </li>
+              <li>
+                  <strong>{{ 'health_monitoring' | translate }}:</strong>
+                  <ul>
+                      <li><strong>{{ 'regular_checkins' | translate }}:</strong> {{ 'checkin_description' | translate }}</li>
+                      <li><strong>{{ 'health_reports' | translate }}:</strong> {{ 'report_description' | translate }}</li>
+                  </ul>
+              </li>
+              <li>
+                  <strong>{{ 'specialized_services' | translate }}:</strong>
+                  <ul>
+                      <li><strong>{{ 'mental_health_support' | translate }}:</strong> {{ 'mental_health_description' | translate }}</li>
+                      <li><strong>{{ 'chronic_disease_management' | translate }}:</strong> {{ 'chronic_disease_description' | translate }}</li>
+                  </ul>
+              </li>
+              <li>
+                  <strong>{{ 'additional_features' | translate }}:</strong>
+                  <ul>
+                      <li><strong>{{ 'appointment_scheduling' | translate }}:</strong> {{ 'scheduling_description' | translate }}</li>
+                      <li><strong>{{ 'health_records' | translate }}:</strong> {{ 'records_description' | translate }}</li>
+                  </ul>
+              </li>
+          </ol>
+          <p><strong>{{ 'subscription_details' | translate }}:</strong></p>
+          <ul>
+              <li><strong>{{ 'monthly_subscription_fee' | translate }}:</strong> SAR 400/month</li>
+              <li><strong>{{ 'benefits' | translate }}:</strong> {{ 'benefits_description' | translate }}</li>
+          </ul>
+          <p>{{ 'future_healthcare' | translate }}</p>
+      </section>      
+        </div>
+      </div>
+    </div>
+  
+    <app-footer></app-footer>
+  </div>
+  
+
+

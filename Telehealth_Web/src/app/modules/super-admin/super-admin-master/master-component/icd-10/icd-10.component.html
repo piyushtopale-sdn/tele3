@@ -1,0 +1,729 @@
+<div class="tab_content">
+  <div class="top_bar">
+    <div class="left_part">
+      <div class="search_bar common_content">
+        <div class="input-group">
+          <button class="btn search-btn">
+            <mat-icon style="position: absolute; top: 0">search</mat-icon>
+          </button>
+          <input
+            type="search"
+            class="form-control"
+            placeholder="{{ 'search' | translate }}"
+            aria-label="Search"
+            (search)="handleSearchCategory($event)"
+            (keyup)="handleSearchCategory($event)"
+            style="padding-left: 40px"
+          />
+        </div>
+      </div>
+      <div class="content_wrap">
+        <div class="policy">
+          <form [formGroup]="dateRangeForm">
+            <div class="form_field_wrapper d-flex align-items-center gap-3" style="margin: 10px;">
+              <div class="from_title_change">{{ "from" | translate }}:</div>
+              <mat-form-field class="example-full-width choosedate" appearance="fill">
+                <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                  [matDatepicker]="picker1" formControlName="fromDate"
+                  (dateChange)="onDateChange('from', $event.value)" (click)="picker1.open()" readonly/>
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+  
+              <div class="from_title_change">{{ "to" | translate }}:</div>
+              <mat-form-field class="example-full-width choosedate" appearance="fill">
+                <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                  [matDatepicker]="picker2" formControlName="toDate" (dateChange)="onDateChange('to', $event.value)" (click)="picker1.open()" readonly/>
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="right_part">
+      <div class="primary_btn">
+        <ng-container *ngIf="giveInnerPermission('export')">
+          <button
+            type="button"
+            [disabled]="dataSource?.length === 0"
+            class="btn btn-primary"
+            (click)="exportSpeciality()"
+          >
+            <mat-icon>download</mat-icon>{{ "export" | translate }}
+          </button>
+        </ng-container>
+        <ng-container *ngIf="giveInnerPermission('deletedAll')">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="openVerticallyCenteredsecond(deletePopupAll, '')"
+            [disabled]="dataSource?.length === 0"
+          >
+            <mat-icon>delete</mat-icon>{{ "delete_all_code" | translate }}
+          </button>
+        </ng-container>
+        <ng-container *ngIf="giveInnerPermission('selectedDelete')">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="openVerticallyCenteredsecond(deletePopupSelected, '')"
+            [disabled]="selectedCode?.length === 0"
+          >
+            <mat-icon>delete</mat-icon
+            >{{ "delete_selected_icdcode" | translate }}
+          </button>
+        </ng-container>
+        <ng-container *ngIf="giveInnerPermission('selectedDownload')">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="downLoadExcel()"
+          >
+            <mat-icon>cloud_download</mat-icon
+            >{{ "download_sample_excel_file" | translate }}
+          </button>
+        </ng-container>
+         <!-- <ng-container *ngIf="giveInnerPermission('export')">
+          <button
+            type="button"
+            [disabled]="dataSource?.length === 0"
+            class="btn btn-primary"
+            (click)="exportSpeciality()"
+          >
+            <mat-icon>share</mat-icon>{{ "export" | translate }}
+          </button>
+        </ng-container> -->
+        <ng-container *ngIf="giveInnerPermission('import')">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="openVerticallyCenteredimport(importMedicine)"
+          >
+            <a class="btn_svg"
+              ><svg
+                width="17"
+                height="15"
+                viewBox="0 0 19 17"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M2.70702 0.0104581C2.35458 0.068045 2.14937 0.132128 1.86268 0.274083C1.40132 0.502557 0.97754 0.942847 0.758933 1.42088C0.482758 2.0248 0.50022 1.57399 0.50022 8.09617C0.50022 12.9014 0.509776 14.035 0.55184 14.2135C0.717983 14.9191 1.21541 15.5686 1.8243 15.875C2.38912 16.1593 2.18433 16.1464 6.14194 16.1464H9.71119L9.88221 16.0467C9.97624 15.9919 10.1037 15.8725 10.1653 15.7812C10.2688 15.6282 10.2815 15.5697 10.329 15.0238C10.4356 13.8003 10.7776 12.9004 11.4602 12.0464C12.1823 11.1432 13.1294 10.555 14.2693 10.3017C14.6271 10.2222 14.8098 10.2123 16.3188 10.1915L17.9755 10.1685L18.1418 10.0472C18.2333 9.98044 18.3513 9.84594 18.4041 9.7483L18.5 9.57071L18.4998 7.11979L18.4997 4.66886L18.3953 4.35004C18.1169 3.49978 17.5074 2.88881 16.677 2.62765C16.49 2.56883 16.1025 2.55875 13.2776 2.53906L10.0893 2.51682L9.93295 2.40938C9.82035 2.33195 9.65551 2.11499 9.34318 1.63305C9.10481 1.26517 8.83965 0.884663 8.75398 0.787502C8.53058 0.53412 8.0822 0.243117 7.72051 0.116785L7.40845 0.00778804L5.10571 0.00129208C3.8392 -0.00229465 2.75979 0.00184999 2.70702 0.0104581ZM14.0838 11.9775C13.9867 12.0233 13.5948 12.3851 13.0476 12.9344C12.0537 13.9318 11.9386 14.0915 11.9652 14.4363C11.9738 14.5479 12.0142 14.7048 12.055 14.785C12.172 15.0153 13.9025 16.8423 14.0853 16.9286C14.3751 17.0652 14.7298 17.0019 14.9629 16.7719C15.1698 16.5679 15.1979 16.4686 15.2186 15.8674L15.2378 15.3095L16.6066 15.2895L17.9754 15.2696L18.1418 15.1483C18.5595 14.8436 18.6203 14.2555 18.2748 13.861C18.0801 13.6388 18.0697 13.6372 16.6002 13.6157L15.2378 13.5958L15.2186 13.0379C15.1979 12.4367 15.1698 12.3374 14.9629 12.1334C14.7293 11.9029 14.3751 11.8401 14.0838 11.9775Z"
+                /></svg></a
+            >{{ "import" | translate }}
+          </button>
+        </ng-container> 
+        <ng-container *ngIf="giveInnerPermission('add')">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="
+              openVerticallyCenteredAddspecialityservicecontent(addcontent)
+            "
+          >
+            <a class="btn_svg">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="18"
+                viewBox="0 0 15 18"
+                fill="none"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M3.30524 0.0827418C2.45473 0.279185 1.74256 0.710972 1.1383 1.39669C0.617787 1.98733 0.294089 2.62138 0.0925399 3.44513L0.000194303 3.82243V8.97532C0.000194303 14.6951 -0.0167024 14.3029 0.264637 15.1118C0.767629 16.5578 2.00379 17.6649 3.41158 17.9299C3.9046 18.0228 11.0724 18.0236 11.5627 17.9309C13.0347 17.6525 14.2649 16.5174 14.7627 14.9782C14.9946 14.2613 14.9997 14.1647 14.9998 10.5064L15 7.18025L12.7412 7.17962C10.2094 7.17894 10.2091 7.1789 9.68232 6.88299C8.9551 6.47439 8.48379 5.75649 8.35241 4.85723C8.32863 4.69462 8.31216 3.64858 8.312 2.29135L8.31169 0L5.97469 0.00295656C3.87026 0.00565972 3.60461 0.0136002 3.30524 0.0827418ZM9.99355 2.59997V4.67168L10.0971 4.89605C10.225 5.17325 10.458 5.34747 10.7505 5.38468C10.8612 5.39875 11.7483 5.40462 12.7218 5.39773L14.4918 5.38519L12.2427 2.9567L9.99355 0.528255V2.59997ZM7.87179 7.30206C8.05663 7.40445 8.17393 7.53956 8.25114 7.73913C8.29996 7.86525 8.31169 8.08767 8.31169 8.88675V9.87796L9.26018 9.89126C10.1436 9.9036 10.2194 9.91078 10.3651 9.99546C10.4512 10.0455 10.5603 10.1313 10.6077 10.1861C10.8993 10.5237 10.8745 11.1318 10.5558 11.4545C10.3318 11.6814 10.2333 11.6996 9.2321 11.6996H8.31169L8.31083 12.7027C8.31009 13.5889 8.30152 13.7255 8.23753 13.8748C7.94039 14.5679 7.0713 14.575 6.74358 13.887C6.67622 13.7456 6.66895 13.6312 6.66895 12.715V11.6996H5.74854C5.00493 11.6996 4.80021 11.687 4.68271 11.634C4.37118 11.4935 4.16572 11.1672 4.16572 10.813C4.16572 10.4402 4.31404 10.1707 4.61552 9.99546C4.76121 9.91078 4.83705 9.9036 5.72046 9.89126L6.66895 9.87796V8.88675C6.66895 8.08767 6.68068 7.86525 6.72949 7.73913C6.91466 7.2605 7.43634 7.06094 7.87179 7.30206Z"
+                /></svg></a
+            >{{ "add_icdcode" | translate }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div> 
+
+  <div class="bottom_bar">
+    <div class="table-wrap">
+      <div class="table-inner">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!-- Creation Date -->
+          <ng-container matColumnDef="createdAt">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+             
+            >
+              {{ "creation_date_time" | translate }}
+             
+            </th>
+
+            <td mat-cell *matCellDef="let element">
+              {{ element?.createdAt | date : "dd/MM/yyyy | HH:mm " }} 
+            </td>
+          </ng-container>
+
+          <!-- Specialization Column -->
+          <ng-container matColumnDef="icdcode">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+             
+            >
+              {{ "icdcode" | translate }}
+             
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.code }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="title">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+             
+            >
+              {{ "disease_title" | translate }}
+             
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.disease_title }}
+            </td>
+          </ng-container>
+
+          <!-- Status -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "status" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngIf="giveInnerPermission('status')">
+                <div class="toggel-slide">
+                  <mat-slide-toggle
+                    [checked]="element.active_status"
+                    (change)="handletoggleChange($event, element)"
+                  ></mat-slide-toggle>
+                </div>
+              </ng-container>
+            </td>
+          </ng-container>         
+
+          <!--Action column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "action" | translate }}
+              <ng-container *ngIf="giveInnerPermission('selectedDelete')">
+                <mat-checkbox
+                  (change)="makeSelectAll($event)"
+                  style="margin-left: 10px"
+                  [checked]="isAllSelected()"
+                ></mat-checkbox>
+              </ng-container>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="icon_group">
+                <ng-container *ngIf="giveInnerPermission('edit')">
+                  <a
+                    class="svgicon"
+                    (click)="
+                      openVerticallyCenterededitspecialityservice(
+                        editcontent,
+                        element
+                      )
+                    "
+                  >
+                    <svg viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M10.5142 0.0229199C10.3428 0.0573628 10.1536 0.141476 10.0166 0.244171C9.94218 0.300012 9.72307 0.505285 9.52976 0.700352L9.17827 1.05501L10.063 1.94044L10.9477 2.82587L11.3237 2.45061C11.7438 2.03136 11.8395 1.90759 11.9242 1.6743C12.0906 1.21545 11.979 0.720952 11.6302 0.371924C11.3334 0.0748893 10.9118 -0.0569464 10.5142 0.0229199ZM6.64187 3.59457C5.03559 5.20381 4.6412 5.61079 4.62404 5.67686C4.61229 5.72203 4.52518 6.14963 4.43044 6.62709C4.31571 7.20542 4.26371 7.51693 4.27468 7.56031C4.29571 7.64339 4.36459 7.71235 4.44763 7.7334C4.5351 7.75559 6.32498 7.39974 6.41623 7.34202C6.45238 7.31917 7.36806 6.41253 8.4511 5.32729L10.4203 3.35415L9.54134 2.47426C9.05794 1.99034 8.65701 1.59439 8.65039 1.59439C8.64378 1.59439 7.73994 2.49446 6.64187 3.59457ZM1.27858 2.01904C0.801035 2.08971 0.368127 2.40948 0.154276 2.84954C-0.00886787 3.18522 -0.00024066 2.95256 0.000204767 7.00711C0.000673638 11.0892 -0.00959462 10.8343 0.168764 11.1905C0.339315 11.5312 0.644737 11.7944 1.03519 11.9371L1.20715 12H4.99328H8.7794L8.96695 11.9363C9.45195 11.7716 9.813 11.3872 9.9558 10.8835C9.99568 10.7429 9.99847 10.5901 9.99847 8.54919V6.36534L9.92778 6.25089C9.82569 6.08565 9.65157 5.9963 9.46356 6.01273C9.29873 6.02711 9.17157 6.10357 9.07852 6.2443L9.01384 6.34207L9.00212 8.50235C8.9914 10.4772 8.98697 10.6689 8.95056 10.7354C8.8943 10.8382 8.76044 10.9493 8.65672 10.9794C8.59422 10.9975 7.50926 11.0029 4.94437 10.998L1.32036 10.9911L1.22857 10.927C1.1781 10.8917 1.11044 10.8238 1.07821 10.7762L1.0196 10.6896L1.01353 7.03304C1.0076 3.46853 1.00858 3.37432 1.0524 3.28904C1.07713 3.24094 1.12735 3.17309 1.16396 3.13829C1.31372 2.99606 1.21017 3.00214 3.48356 3.00214C5.06037 3.00214 5.58551 2.99517 5.6587 2.97328C5.79228 2.93335 5.9376 2.78251 5.9765 2.64347C6.03895 2.42022 5.94597 2.18618 5.7487 2.07014L5.63797 2.00498L3.52806 2.00168C2.3676 1.99987 1.35533 2.00766 1.27858 2.01904Z"
+                      />
+                    </svg>
+                  </a>
+                </ng-container>                                          
+                <ng-container *ngIf="giveInnerPermission('selectedDelete')">
+                  <mat-checkbox
+                    style="margin-left: 10px"
+                    [checked]="selectedCode.includes(element?._id)"
+                    (change)="handleCheckBoxChange($event, element?._id)"
+                  ></mat-checkbox>
+                </ng-container>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <div *ngIf="dataSource?.length === 0" class="text-center">
+          <b>{{ "no_record_found" | translate }}</b>
+        </div>        
+      </div>
+      <mat-paginator
+          class="pagination"
+          [length]="totalLength"
+          (page)="handlePageEvent($event)"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          aria-label="Select page of periodic elements"
+        >
+        </mat-paginator>
+    </div>
+  </div>
+</div>
+
+<!-- --------------------------------------- Add Modal---------------------------------------- -->
+<div class="add_code">
+  <ng-template #addcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "add_icdcode" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body add_speciality_service">
+        <form
+          [formGroup]="codeForm"
+          (ngSubmit)="addDesignationhandle()"
+          class="form-block"
+        >
+          <ng-container formArrayName="icdcodes">
+            <ng-container *ngFor="let row of icdcodes.controls; let i = index">
+              <ng-container [formGroupName]="i">
+                <div class="modal_content Speciality_service">
+                  <div class="row modal_content_inner">
+                    <div class="item mb-3">
+                      <div class="form_field_wrapper">
+                        <label
+                          >{{ "icdcode" | translate
+                          }}<span class="danger">*</span></label
+                        >
+                        <mat-form-field appearance="fill">
+                          <input
+                            type="text"
+                            formControlName="code"
+                            placeholder="{{ 'icdcode' | translate }}"
+                            matInput
+                          />
+                        </mat-form-field>
+                        <span
+                          class="text-danger"
+                          *ngIf="isSubmitted && icdcodes.controls[i].get('code')?.errors?.['required']"
+                        >
+                          {{ "field_is_required" | translate }}
+                        </span>
+                      </div>
+                      <div class="form_field_wrapper">
+                        <label
+                          >{{ "disease_title" | translate
+                          }}<span class="danger">*</span></label
+                        >
+                        <mat-form-field appearance="fill">
+                          <input
+                            type="text"
+                            formControlName="disease_title"
+                            placeholder="{{ 'disease_title' | translate }}"
+                            matInput
+                          />
+                        </mat-form-field>
+                        <span
+                          class="text-danger"
+                          *ngIf="isSubmitted && icdcodes.controls[i].get('disease_title')?.errors?.['required']"
+                        >
+                          {{ "field_is_required" | translate }}
+                        </span>
+                      </div>
+                      <div class="form_field_wrapper">
+                        <label
+                          >{{ "description" | translate
+                          }}<span class="danger">*</span></label
+                        >
+                        <mat-form-field appearance="fill">
+                          <textarea
+                            type="text"
+                            formControlName="description"
+                            placeholder="{{ 'description' | translate }}"
+                            matInput
+                          ></textarea>
+                        </mat-form-field>
+                        <span
+                          class="text-danger"
+                          *ngIf="isSubmitted && icdcodes.controls[i].get('description')?.errors?.['required']"
+                        >
+                          {{ "field_is_required" | translate }}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <div class="form_field_wrapper">
+                        <label>{{ "status" | translate }}</label>
+                        <div class="toggel-slide">
+                          <mat-slide-toggle
+                            formControlName="active_status"
+                          ></mat-slide-toggle>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="i === icdcodes.length - 1; else remove">
+                    <div class="common-form-btns d-flex justify-content-end">
+                      <div
+                        class="row_generate row_add"
+                        (click)="addnewFields()"
+                      >
+                        <mat-icon class="plus addbtn">add</mat-icon>
+                      </div>
+                      <div
+                        class="row_generate row_minus"
+                        (click)="removeFields(i)"
+                        *ngIf="icdcodes.length > 1"
+                      >
+                        <mat-icon class="plus btnminus">remove</mat-icon>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-template #remove>
+                    <div
+                      class="row_generate row_minus"
+                      (click)="removeFields(i)"
+                    >
+                      <mat-icon class="plus btnminus">remove</mat-icon>
+                    </div>
+                  </ng-template>
+                </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          <div class="primary_btn">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="closePopup()"
+            >
+              {{ "cancel" | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary">
+              {{ "save" | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!-- ---------------------------------------Edit Modal---------------------------------------- -->
+<div class="edit_code">
+  <ng-template #editcontent let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "edit_icdcode" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editCodeForm" (ngSubmit)="updateICDCode()">
+          <div class="modal_content Speciality_service">
+            <div class="row modal_content_inner">
+              <div class="item mb-3">
+                <div class="form_field_wrapper">
+                  <label>{{ "icdcode" | translate }}</label>
+                  <span class="danger">*</span>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      formControlName="code"
+                      placeholder="{{ 'icdcode' | translate }}"
+                      matInput
+                    />
+                  </mat-form-field>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && editCodeForm.get('code')?.errors?.['required']"
+                  >
+                    {{ "please_enter_designation_name" | translate }}
+                  </span>
+                </div>
+              </div>
+              <div class="item mb-3">
+                <div class="form_field_wrapper">
+                  <label>{{ "disease_title" | translate }}</label>
+                  <span class="danger">*</span>
+                  <mat-form-field appearance="fill">
+                    <input
+                      type="text"
+                      formControlName="disease_title"
+                      placeholder="{{ 'disease_title' | translate }}"
+                      matInput
+                    />
+                  </mat-form-field>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && editCodeForm.get('disease_title')?.errors?.['required']"
+                  >
+                    {{ "please_enter_designation_name" | translate }}
+                  </span>
+                </div>
+              </div>
+              <div class="item mb-3">
+                <div class="form_field_wrapper">
+                  <label>{{ "description" | translate }}</label>
+                  <span class="danger">*</span>
+                  <mat-form-field appearance="fill">
+                    <textarea
+                      type="text"
+                      formControlName="description"
+                      placeholder="{{ 'description' | translate }}"
+                      matInput
+                    ></textarea>
+                  </mat-form-field>
+                  <span
+                    class="text-danger"
+                    *ngIf="isSubmitted && editCodeForm.get('description')?.errors?.['required']"
+                  >
+                    {{ "please_enter_designation_name" | translate }}
+                  </span>
+                </div>
+              </div>
+              <div class="item">
+                <div class="form_field_wrapper">
+                  <label>{{ "status" | translate }}</label>
+                  <div class="toggel-slide">
+                    <mat-slide-toggle
+                      formControlName="active_status"
+                    ></mat-slide-toggle>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="primary_btn">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="closePopup()"
+            >
+              {{ "cancel" | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary">
+              {{ "save" | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+<!--------------------------Delete modal--------------------------->
+<ng-template #deletePopup let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "want_to_delete_this_designation" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="deleteHandle()"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!-- import popup-->
+<ng-template #importMedicine let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title"></h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="closePopup()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body import_services">
+      <form [formGroup]="teamExcelForm" (ngSubmit)="excleSubmit()">
+        <label>{{ "upload_excel_file" | translate }}</label>
+        <div class="row">
+          <div class="col-sm-6 upload_item">
+            <div class="form_field_wrapper">
+              <div class="upload_input">
+                <div class="upload_input_content">
+                  <label>
+                    <a class="btn_svg"
+                      ><svg
+                        width="19"
+                        height="17"
+                        viewBox="0 0 19 17"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M2.70702 0.0104581C2.35458 0.068045 2.14937 0.132128 1.86268 0.274083C1.40132 0.502557 0.97754 0.942847 0.758933 1.42088C0.482758 2.0248 0.50022 1.57399 0.50022 8.09617C0.50022 12.9014 0.509776 14.035 0.55184 14.2135C0.717983 14.9191 1.21541 15.5686 1.8243 15.875C2.38912 16.1593 2.18433 16.1464 6.14194 16.1464H9.71119L9.88221 16.0467C9.97624 15.9919 10.1037 15.8725 10.1653 15.7812C10.2688 15.6282 10.2815 15.5697 10.329 15.0238C10.4356 13.8003 10.7776 12.9004 11.4602 12.0464C12.1823 11.1432 13.1294 10.555 14.2693 10.3017C14.6271 10.2222 14.8098 10.2123 16.3188 10.1915L17.9755 10.1685L18.1418 10.0472C18.2333 9.98044 18.3513 9.84594 18.4041 9.7483L18.5 9.57071L18.4998 7.11979L18.4997 4.66886L18.3953 4.35004C18.1169 3.49978 17.5074 2.88881 16.677 2.62765C16.49 2.56883 16.1025 2.55875 13.2776 2.53906L10.0893 2.51682L9.93295 2.40938C9.82035 2.33195 9.65551 2.11499 9.34318 1.63305C9.10481 1.26517 8.83965 0.884663 8.75398 0.787502C8.53058 0.53412 8.0822 0.243117 7.72051 0.116785L7.40845 0.00778804L5.10571 0.00129208C3.8392 -0.00229465 2.75979 0.00184999 2.70702 0.0104581ZM14.0838 11.9775C13.9867 12.0233 13.5948 12.3851 13.0476 12.9344C12.0537 13.9318 11.9386 14.0915 11.9652 14.4363C11.9738 14.5479 12.0142 14.7048 12.055 14.785C12.172 15.0153 13.9025 16.8423 14.0853 16.9286C14.3751 17.0652 14.7298 17.0019 14.9629 16.7719C15.1698 16.5679 15.1979 16.4686 15.2186 15.8674L15.2378 15.3095L16.6066 15.2895L17.9754 15.2696L18.1418 15.1483C18.5595 14.8436 18.6203 14.2555 18.2748 13.861C18.0801 13.6388 18.0697 13.6372 16.6002 13.6157L15.2378 13.5958L15.2186 13.0379C15.1979 12.4367 15.1698 12.3374 14.9629 12.1334C14.7293 11.9029 14.3751 11.8401 14.0838 11.9775Z"
+                        /></svg></a
+                    >{{ "import_excel" | translate }}
+                  </label>
+                  {{ "selcted" | translate }} {{ selectedFiles?.name }}
+                  {{ "file" | translate }}
+                </div>
+                <input
+                  (change)="fileChange($event)"
+                  formControlName="specialization_csv"
+                  class="ng-hide user_upload_input"
+                  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                  id="input-file-id"
+                  type="file"
+                />
+                <mat-error
+                  *ngIf="
+                    isSubmitted &&
+                    teamExcelForm.get('specialization_csv').hasError('required')
+                  "
+                  >{{ "excel_required" | translate }}</mat-error
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="download_content col-sm-6">
+            <button
+              type="button"
+              placement="top"
+              ngbTooltip="Tooltip on top"
+              class="btn btn-secondary"
+              (click)="downLoadExcel()"
+            >
+              {{ "download_sample_excel_file" | translate }}
+            </button>
+          </div>
+        </div>
+        <div class="pt-20">
+          <i>{{ "note_only_excel_file_allowed" | translate }}</i>
+        </div>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closePopup()"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button type="submit" class="btn btn-primary">
+            {{ "import_file" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deletePopupAll let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "want_to_delete_all_Designations" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="deleteHandle('all')"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deletePopupSelected let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/delete.svg"
+            alt=""
+          />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "want_to_delete_selected_designations" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="deleteHandle('')"
+          >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,425 @@
+@import "../../../../assets/css/variable/variable";
+
+.myaccount {
+  .profile_data {
+    background: #ffffff;
+    border: 1px solid #b6c8d6;
+    border-radius: 15px;
+    background: #ffffff;
+    margin: 0 0 30px;
+    .profile_info {
+      padding: 25px 25px 25px;
+      position: relative;
+      .primary_btn {
+        justify-content: flex-end;
+      }
+      .button_container {
+        display: flex;
+      }
+
+      .primary_btn {
+        margin-right: 10px; /* Optional: Adds spacing between buttons */
+      }
+      .profile_info_inner {
+        margin-top: 20px; /* Adds space above the ul */
+      }
+      ul {
+        display: grid;
+        align-items: baseline;
+        grid-gap: 15px;
+        grid-template-columns: repeat(8, 1fr);
+        border-bottom: 1px solid #c4cdea;
+        padding-bottom: 25px;
+        margin-bottom: 25px;
+        padding-left: 0;
+        padding-right: 0;
+        .col_item {
+          display: flex;
+          align-items: center;
+          min-height: 60px;
+          .profile_image {
+            width: 95px;
+            height: 95px;
+            min-width: 95px;
+            margin: 0 20px 0 0;
+            border-radius: 50%;
+            overflow: hidden;
+         
+          }
+          .profile_contact {
+            .profile_title {
+              font-size: 20px;
+              font-weight: 600;
+              line-height: 24px;
+              letter-spacing: 0em;
+              color: $table_color;
+              margin: 0 0 15px;
+              white-space: nowrap;
+            }
+            .lable {
+              font-size: 14px;
+              font-weight: 400;
+              line-height: 16px;
+              letter-spacing: 0.05em;
+              color: $bodyopacitylightcolor;
+              margin: 0 0 6px;
+            }
+            .user_value {
+              font-weight: 500;
+              font-size: 14px;
+              line-height: 20px;
+              color: $linkcolor;
+              letter-spacing: 0.05em;
+            }
+          }
+        }
+        &.profile_info_with_img {
+          grid-template-columns: 285px repeat(4, 1fr);
+        }
+        &:last-child {
+          border-bottom: none;
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
+      }
+    }
+    .emergency_contact {
+      .profileinfo_title {
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 20px;
+        color: $table_color;
+      }
+    }
+    &.insurance {
+      .profile_info {
+        ul {
+          .col_item {
+            align-items: baseline;
+            .profile_image {
+              width: 140px;
+              height: 85px;
+              border-radius: 7px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .account_tab {
+    .mat-tab-header {
+      margin: 0 0 25px;
+      border-bottom: none;
+      .mat-tab-list {
+        .mat-tab-labels {
+          background: #f6f8fc;
+          border: 1px solid #b6c8d6;
+          border-radius: 15px;
+          padding: 7px 12px;
+          .mat-tab-label {
+            font-family: $font_family_body, $font_sans_sarif;
+            height: 40px;
+            padding: 0 30px;
+            min-width: 120px;
+            font-size: 14px;
+            font-weight: 500;
+            color: $bodyopacitylightcolor;
+            opacity: 1;
+          }
+          .mat-tab-label.mat-tab-label-active {
+            font-weight: 700;
+            color: $table_color;
+          }
+        }
+        .mat-ink-bar {
+          background-color: $bodycolor;
+        }
+      }
+    }
+  }
+  .tab_content {
+    .expansion_panel {
+      margin: 0 0 40px;
+      .acc_tab_title {
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 24px;
+        color: $table_color;
+        margin: 0 0 25px;
+      }
+      .expansion_panel_inner {
+        border: 1px solid #b6c8d6;
+        border-radius: 15px;
+        padding: 0;
+        .panel_title {
+          font-weight: 500;
+          font-size: 20px;
+          line-height: 24px;
+          color: $table_color;
+          padding: 20px 30px;
+          border-bottom: 1px solid #b6c8d6;
+        }
+        .expansion_other_panel {
+          margin: 0 30px;
+          .expansion_other_panel_inner {
+            padding: 20px 0;
+            .panel_item_title {
+              font-weight: 500;
+              font-size: 16px;
+              color: $table_color;
+              margin: 0 0 15px;
+            }
+          }
+          &.first_child {
+            border-top: none;
+          }
+        }
+      }
+    }
+    .top_bar {
+      .acc_tab_title {
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 24px;
+        color: $table_color;
+      }
+      margin-bottom: 20px;
+    }
+    .bottom_bar {
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+    &.medical_doc {
+      .bottom_bar {
+        margin: 50px 0 0;
+        .item {
+          margin-bottom: 30px;
+          text-align: center;
+          .item_inner {
+            display: inline-block;
+            vertical-align: top;
+            text-align: left;
+            .doc_img {
+              position: relative;
+              img {
+                border-radius: 10px;
+                overflow: hidden;
+              }
+              .quick_view {
+                display: inline-block;
+                vertical-align: top;
+                width: 30px;
+                height: 30px;
+                line-height: 30px;
+                background-color: #ffffff;
+                border-radius: 50%;
+                text-align: center;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                opacity: 0;
+                cursor: pointer;
+                z-index: 9;
+                transition-duration: 300ms;
+                -webkit-transition-duration: 300ms;
+                -moz-transition-duration: 300ms;
+                -ms-transition-duration: 300ms;
+                -o-transition-duration: 300ms;
+              }
+              &::after {
+                content: "";
+                display: block;
+                position: absolute;
+                background-color: rgba(11, 73, 119, 0.5);
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                border-radius: 10px;
+                opacity: 0;
+                transition-duration: 300ms;
+                -webkit-transition-duration: 300ms;
+                -moz-transition-duration: 300ms;
+                -ms-transition-duration: 300ms;
+                -o-transition-duration: 300ms;
+              }
+            }
+            .doc_desc {
+              margin-top: 15px;
+              .name {
+                font-weight: 700;
+                font-size: 16px;
+                line-height: 19px;
+                color: $table_color;
+                margin: 0 0 5px;
+              }
+              .date {
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 18px;
+                color: $bodyopacitycolor;
+              }
+            }
+            &:hover {
+              .doc_img {
+                &::after {
+                  opacity: 1;
+                  transition-duration: 300ms;
+                  -webkit-transition-duration: 300ms;
+                  -moz-transition-duration: 300ms;
+                  -ms-transition-duration: 300ms;
+                  -o-transition-duration: 300ms;
+                }
+                .quick_view {
+                  opacity: 1;
+                  transition-duration: 300ms;
+                  -webkit-transition-duration: 300ms;
+                  -moz-transition-duration: 300ms;
+                  -ms-transition-duration: 300ms;
+                  -o-transition-duration: 300ms;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.change_pass{
+    .changepass_inner{
+        padding: 30px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        form{
+            border: 1px solid #B6C8D6;
+            border-radius: 15px;
+            padding: 35px;
+            width: 550px;
+            margin: 0 auto;
+            .form-btn{
+                margin-top: 20px;
+                .btn{
+                    width: 100%;
+                    padding: 15px;
+                }
+            }
+        }
+    }
+}
+// Quickview modal css
+.quick_view {
+  .modal-content {
+    .modal-header {
+      padding: 0;
+      .btn-close {
+        margin: 0;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        background: #ffffff;
+        border-radius: 50%;
+        position: absolute;
+        right: -15px;
+        left: auto;
+        top: -15px;
+        bottom: auto;
+        .mat-icon {
+          line-height: 30px;
+        }
+      }
+    }
+    .modal-body {
+      .docview_img {
+        img {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+@media screen and (min-width: $desktop_large_up) {
+  .myaccount .tab_content.medical_doc .bottom_bar .item {
+    width: 235px;
+  }
+}
+@media screen and (max-width: $desktop_large) {
+  .myaccount .profile_data .profile_info ul.profile_info_with_img {
+    grid-template-columns: 285px repeat(2, 1fr);
+  }
+  .myaccount .profile_data .profile_info ul {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media screen and (max-width: $large_phone) {
+  .myaccount .profile_data .profile_info ul.profile_info_with_img {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .myaccount .profile_data .profile_info ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .myaccount .profile_data .profile_info ul .col_item .profile_image {
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    margin: 0 0 15px;
+  }
+  .myaccount .profile_data .profile_info ul .profile_image_wrapper {
+    flex-direction: column;
+  }
+  .myaccount .profile_data .profile_info ul .col_item {
+    align-items: flex-start;
+  }
+  .expansion_panel
+    .expansion_panel_inner
+    .expansion_other_panel
+    .outer_detail_block {
+    padding: 10px 10px 10px 0;
+  }
+  .myaccount .tab_content .top_bar .primary_btn {
+    margin-top: 15px;
+  }
+}
+@media screen and (max-width: $medium_iphone) {
+  .myaccount .profile_data .profile_info ul.profile_info_with_img {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .myaccount .profile_data .profile_info ul {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .myaccount .tab_content.medical_doc .bottom_bar .item {
+    width: 50%;
+  }
+}
+@media screen and (max-width: $small_phone) {
+  .expansion_panel .expansion_panel_inner .outer_detail_block .detail_section {
+    flex-direction: column;
+  }
+  .expansion_panel
+    .expansion_panel_inner
+    .expansion_other_panel
+    .outer_detail_block {
+    padding: 7px 10px 7px 0;
+    margin: 7px 0;
+  }
+  .expansion_panel
+    .expansion_panel_inner
+    .outer_detail_block
+    .detail_section
+    p:nth-child(2) {
+    text-align: left;
+  }
+  .myaccount .tab_content.medical_doc .bottom_bar .item {
+    width: 100%;
+  }
+}
+
+
+img {
+  max-width: 100%;
+}

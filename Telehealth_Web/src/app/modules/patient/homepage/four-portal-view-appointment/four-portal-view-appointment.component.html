@@ -1,0 +1,544 @@
+<div class="home_wrapper">
+  <app-header></app-header>
+
+  <div class="breadcum_wrapper" aria-label="breadcrumb">
+    <div class="container">
+      <div class="breadcrumb_title">{{ "doctor_details" | translate }}</div>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/patient/homepage']">{{ "home" | translate }}</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/patient/homepage']">{{ "doctor" | translate }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ "doctor_details" | translate }}
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="main_section retail_doctor_detail">
+    <div class="main_section_inner">
+      <div class="container">
+        <div class="row">
+          <div id="main_content" class="content_area col-lg-12">
+            <div class="bottom_section">
+              <div class="appointment_doctor_details">
+                <h1 class="main_title">
+                  {{ "review_appointment" | translate }}
+                </h1>
+                <div class="appointment_review">
+                  <div class="medicine_details commom_space">
+                    <div class="image">
+                      <img
+                        src="{{
+                          doctor_basic_info?.profile_picture?.url
+                            ? doctor_basic_info?.profile_picture?.url
+                            : '../../../../../../assets/img/default_user.png'
+                        }}"
+                      />
+                    </div>
+                    <div class="medicine_info">
+                      <h2 class="title">{{ doctor_basic_info?.full_name }}</h2>
+                      <div class="desc_wrapper row">
+                        <div class="desc col-md-7 col-lg-8">
+                          {{
+                            doctor_basic_info?.speciality
+                              ? doctor_basic_info?.speciality
+                              : "-"
+                          }}
+                        </div>
+                        <div class="rating_section col-md-5 col-lg-4">
+                          <span class="ratings-star">
+                            <div class="rating">
+                              <ng-container
+                                *ngFor="let i of counter(averagerate)"
+                              >
+                                <i class="fa-solid fa-star"></i>
+                              </ng-container>
+
+                              <i class="fa-solid fa-star"></i>
+
+                              {{
+                                rating?.average_rating
+                                  ? rating?.average_rating
+                                  : 0
+                              }}
+
+                              ({{
+                                rating?.total_review ? rating?.total_review : 0
+                              }}
+                              Reviews)
+                            </div>
+                          </span>
+                        </div>
+                      </div>
+
+                      <ul class="content_list row">
+                        <li class="content_item">
+                          <div class="title">{{ "phone" | translate }}</div>
+                          <span class="content_desc">
+                            {{
+                              "(" +
+                                appointmentDetails?.portalId?.country_code +
+                                ")" +
+                                appointmentDetails?.portalId?.mobile
+                            }}
+                          </span>
+                        </li>
+                        <li class="content_item">
+                          <div class="title">{{ "email" | translate }}</div>
+                          <span class="content_desc">
+                            {{ appointmentDetails?.portalId?.email }}
+                          </span>
+                        </li>
+                        <li class="content_item">
+                          <div class="title">
+                            {{ "consultation_fee" | translate }}
+                          </div>
+                          <span class="content_desc">
+                            ${{ appointmentDetails?.consultationFee }}
+                          </span>
+                        </li>
+                       
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="appointment_info commom_space">
+                    <div class="row">
+                      <div class="item col-sm-6 col-md-4 col-lg-3">
+                        <label>{{ "appointment_type" | translate }}</label>
+                        <div class="value">
+                          {{
+                            returnFormatedType(
+                              appointmentDetails?.appointmentType
+                            )
+                          }}
+                        </div>
+                      </div>
+                      <div class="item col-sm-6 col-md-4 col-lg-3">
+                        <label
+                          >{{ "reason_for_appointment" | translate }}
+                        </label>
+                        <div class="value">
+                          {{ appointmentDetails?.reasonForAppointment?.name }}
+                        </div>
+                      </div>
+                      <div class="item col-sm-6 col-md-4 col-lg-3">
+                        <label>{{ "date_and_time" | translate }}</label>
+                        <div class="value">
+                          {{
+                            (appointmentDetails?.consultationDate
+                              | date : "dd/MM/YYYY") +
+                              "|" +
+                              appointmentDetails?.consultationTime
+                          }}
+                        </div>
+                      </div>
+                      <div class="item col-sm-6 col-md-4 col-lg-3">
+                        <label>{{ "location" | translate }}</label>
+                        <div class="value">
+                          {{
+                            appointmentDetails?.hospital_details?.hospital_name
+                          }}
+                          <a (click)="getDirection(appointmentDetails?.hospital_details?.hospital_loc?.coordinates)"> Get Directions</a>
+                        </div>
+                      </div>
+
+                      <div class="item col-sm-6 col-md-4 col-lg-3">
+                        <label>{{ "patient_name" | translate }}</label>
+                        <div class="value">
+                          {{
+                            patientDetails?.patientFirstName +
+                              " " +
+                              patientDetails?.patientMiddleName +
+                              " " +
+                              patientDetails?.patientLastName
+                          }}
+                        </div>
+                      </div>
+                      <div class="item col-sm-6 col-md-4 col-lg-3">
+                        <label>{{ "patient_mobile" | translate }}</label>
+                        <div class="value">
+                          {{
+                            patientDetails?.patientMobile
+                              ? patientDetails?.patientMobile
+                              : "-"
+                          }}
+                        </div>
+                      </div>
+                      <div class="item col-sm-6 col-md-4 col-lg-3">
+                        <label>{{ "paient_email" | translate }}</label>
+                        <div class="value">
+                          {{
+                            patientDetails?.patientEmail
+                              ? patientDetails?.patientEmail
+                              : "-"
+                          }}
+                        </div>
+                      </div>
+                      <div class="item col-sm-6 col-md-4 col-lg-3">
+                        <label>{{ "mobile" | translate }}</label>
+                        <div class="value">
+                          {{
+                            patientDetails?.mobile
+                              ? patientDetails?.mobile
+                              : "-"
+                          }}
+                        </div>
+                      </div>
+                      <div class="item col-sm-6 col-md-4 col-lg-3">
+                        <label>{{ "insurance_number" | translate }}</label>
+                        <div class="value">
+                          {{
+                            patientDetails?.insuranceNumber
+                              ? patientDetails?.insuranceNumber
+                              : "-"
+                          }}
+                        </div>
+                      </div>
+                      <div class="item col-sm-6 col-md-4 col-lg-3">
+                        <label>{{ "address" | translate }}</label>
+                        <div class="value">
+                          {{
+                            patientDetails?.address
+                              ? patientDetails?.address
+                              : "-"
+                          }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="medical_doc commom_space">
+                    <h3 class="title">{{ "medical_document" | translate }}</h3>
+                    <div
+                      class="text-center"
+                      *ngIf="patient_document?.length === 0"
+                    >
+                      <b>{{ "no_medical_docs" | translate }}</b>
+                    </div>
+                    <div class="row">
+                      <div
+                        class="item col-sm-4 col-md-3"
+                        *ngFor="let doc of patient_document"
+                      >
+                        <div class="item_inner">
+                          <div class="doc_img"  *ngIf="!doc?.image?.endsWith('.pdf')" >
+                            <img src="{{ doc.image_url }}" />
+                          </div>
+                          <div class="doc_img"  *ngIf="doc?.image?.endsWith('.pdf')" (click)="downloadpdf(doc?.image_url)">
+                            <mat-icon  style="font-size: 48px; width: 48px; height: 48px;">get_app</mat-icon>
+                          </div>
+                          <div class="doc_desc">
+                            <div class="name">{{ doc.doc_name }}</div>
+                            <div class="date">
+                              {{ "date" | translate }} -{{
+                                doc.expiration_date | date : "dd/MM/yyyy"
+                              }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bottom_bar">
+                    <h3 *ngIf="cancelationNote() != ''">
+                      {{ "note" | translate }}: {{ cancelationNote() }}
+                    </h3>
+                    <div class="primary_btn continue_btn">
+                      <button
+                        class="btn btn-secondary"
+                        (click)="editAppointment()"
+                      >
+                        {{ "edit" | translate }}
+                      </button>
+                      <!-- <button
+                          class="btn btn-secondary"
+                          (click)="
+                            openVerticallyCenteredcancelappointment(
+                              cancel_appointment
+                            )
+                          "
+                          *ngIf="
+                            appointmentDetails?.appointmentType === 'ONLINE'
+                              ? false
+                              : true
+                          "
+                        >
+                          Post-payment
+                        </button> -->
+                      <button
+                        class="btn btn-primary"
+                        (click)="openVerticallyCenteredpayment(payment)"
+                      >
+                        {{ "proceed_to_pay" | translate }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <app-footer></app-footer>
+    </div>
+
+    <!-- Cancel Appointment modal -->
+
+    <ng-template #cancel_appointment let-modal>
+      <div class="custome_modal">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="image">
+              <img
+                src="../../../../../assets/img/cancel_appointmentframe.png"
+              />
+            </div>
+            <p>
+              01. {{ "note_if_you_need_to_cancel_appointment" | translate }}.
+            </p>
+            <p>02. {{ "this_doctor_accepts_mobile_payments" | translate }}</p>
+          </form>
+          <div class="primary_btn">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="modal.dismiss('Cross click')"
+            >
+              {{ "cancel" | translate }}
+            </button>
+            <button type="button" class="btn btn-primary">
+              {{ "continue" | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+
+    <!-- Payment details modal -->
+    <div class="payment_details">
+      <ng-template #payment let-modal>
+        <div class="custome_modal notification_manage">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">
+              {{ "payment_details" | translate }}
+            </h4>
+            <button
+              type="button"
+              class="btn-close"
+              aria-label="Close"
+              (click)="modal.dismiss('Cross click')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="row">
+                <div class="col-sm-12 payment_type">
+                  <div class="modal_title">
+                    {{ "select_payment_type" | translate }}
+                  </div>
+                  <mat-radio-group
+                    aria-label="Select an option"
+                    name="selectedPaymentMode"
+                    [(ngModel)]="paymentType" 
+                    (change)="selectPaymetTypeAndMode({ type: $event.value })"
+                  >
+                    <!-- <mat-radio-button checked value="pre-payment">Pre-Payment</mat-radio-button> -->
+                    <!-- <ng-container *ngIf="appointmentDetails?.appointmentType!=='ONLINE'">
+                                      <mat-radio-button value="post-payment">{{ 'post_payment' | translate}}</mat-radio-button>
+                                  </ng-container> -->
+
+                    <ng-container *ngIf="isPrePayment">
+                      <mat-radio-button checked value="pre-payment">{{
+                        "pre_payment" | translate
+                      }}</mat-radio-button>
+                    </ng-container>
+
+                    <ng-container *ngIf="isPostPayment">
+                      <mat-radio-button
+                        [checked]="!isPrePayment"
+                        value="post-payment"
+                        >{{ "post_payment" | translate }}</mat-radio-button
+                      >
+                    </ng-container>
+                  </mat-radio-group>
+                </div>
+                <ng-container>
+                  <div class="col-sm-12 payment_mode" *ngIf="paymentType === 'pre-payment' && isDisable">
+                    <div class="modal_title">
+                      {{ "select_payment_mode" | translate }}
+                    </div>
+
+                    <!-- <div class="strip">
+                                  <div class="title"  value="stripe"  formControlName="payment_mode"   >{{ 'stripe' | translate}}</div>
+                              </div>
+                              <div class="mobile_money">
+                                  <div  class="title"     formControlName="payment_mode"  >
+                                      <img src="../../../../../assets/img/mobile.svg">
+                                      {{ 'mobile_money' | translate}}
+                                   </div>
+                              </div> -->
+
+                    <mat-button-toggle-group
+                      name="fontStyle"
+                      [value]="PaymentMode"
+                      (change)="selectPaymetTypeAndMode({ mode: $event.value })"
+                      aria-label="Font Style"
+                    >
+                      <mat-button-toggle value="stripe" class="title strip">
+                        {{ "stripe" | translate }}
+                      </mat-button-toggle>
+                      <mat-button-toggle
+                        class="mobile_money"
+                        value="mobile_money"
+                      >
+                        <div class="title">
+                          <img src="../../../../../assets/img/mobile.svg" />
+                          {{ "mobile_money" | translate }}
+                        </div>
+                      </mat-button-toggle>
+                    </mat-button-toggle-group>
+                  </div>
+                </ng-container>
+              </div>
+            </form>
+            <div class="primary_btn">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="modal.dismiss('Cross click')"
+              >
+                {{ "cancel" | translate }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="createPayment()"
+              >
+                {{ "continue" | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<div class="payment_details">
+  <ng-template #mobilePaycontent let-modal>
+    <div class="custome_modal notification_manage payment_details_popup">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">
+          {{ "payment_details" | translate }}
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="mobilePayForm">
+          <div class="row">
+            <ng-container>
+              <div class="col-sm-12 payment_mode">
+                <div class="modal_title">
+                  {{ "select_mobile_pay_provider" | translate }}
+                </div>
+                <mat-form-field class="inner_label" appearance="fill">
+                  <mat-select
+                    disableRipple
+                    placeholder="{{ 'select_mobile_pay_provider' | translate }}"
+                    formControlName="selectedProvider"
+                  >
+                    <mat-option
+                      *ngFor="let data of mobilePayDetails"
+                      [value]="data._id"
+                    >
+                      {{ data?.provider }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </ng-container>
+
+            <div class="col-sm-12">
+              <div class="modal_title">
+                {{ "mobile_pay_number" | translate }}
+              </div>
+              <div class="field-wrap-block d-flex align-items-start">
+                <mat-form-field appearance="fill">
+                  <div class="country-code-input-container">
+                    <mat-select
+                      disableRipple
+                      placeholder="{{ 'select_country_code' | translate }}"
+                      formControlName="countryCode"
+                      class="country-code-select"
+                    >
+                      <mat-option
+                        *ngFor="let code of countryCodes"
+                        [value]="code"
+                        >{{ code }}</mat-option
+                      >
+                    </mat-select>
+                  </div>
+                  <!-- <span class="text-danger" *ngIf="isSubmitted && f['countryCode'].errors?.['required']">{{ 'select_country_code' | translate}}*</span> -->
+                </mat-form-field>
+                <div class="input-field-block">
+                  <input
+                    type="text"
+                    matInput
+                    formControlName="mobilepaynumber"
+                    placeholder="{{ 'enter_number' | translate }}"
+                    class="mobile-number-input"
+                  />
+                  <span
+                    class="text-danger error-msg"
+                    *ngIf="isSubmitted && f['mobilepaynumber'].errors?.['required']"
+                    >{{ "enter_number" | translate }}*</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="primary_btn mt-5">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="modal.dismiss('Cross click')"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+          >
+            {{ "continue" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

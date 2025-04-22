@@ -1,0 +1,303 @@
+<div class="details_patient dashboard_main_content">
+  <div class="top_bar">
+    <h2 class="m-0">
+      {{ "patient_details" | translate }}
+    </h2>
+    <div class="back_button" [routerLink]="['/pharmacy/presciptionorder']">
+      <button class="btn btn-primary">{{ "back" | translate }}</button>
+    </div>
+  </div>
+
+  <div class="profile_data">
+    <div class="profile_info" style="background: var(--color-table, #0b63f61a)">
+      <ul class="profile_info_inner profile_info_with_img">
+        <div class="profile_image">
+          <img
+            [src]="
+              patientProfile
+                ? patientProfile
+                : '../../../../../assets/img/default_user.png'
+            "
+          />
+        </div>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="profile_title">
+              {{ patient_details?.full_name }}
+            </div>
+
+            <div class="user_value">
+              {{ patient_details?.email ? patient_details?.email : "-" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "phone_number" | translate }}</div>
+            <div class="user_value">
+              ({{ patient_details?.country_code }})
+              {{ patient_details?.mobile ? patient_details?.mobile : "-" }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "mrn_number" | translate }}</div>
+            <div class="user_value">{{ patient_details?.mrn_number ? patient_details?.mrn_number : "-" }}</div>
+          </div>
+        </li>       
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "age" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.dob ? calculateAge(patient_details.dob) : "-" }}  {{"years" | translate}}
+
+            </div>
+          </div>
+        </li>  
+       </ul>
+       <ul class="profile_info_inner profile_info_with_img">
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "gender" | translate }}</div>
+            <div class="user_value">{{ patient_details?.gender ? patient_details?.gender : "-" }}</div>
+          </div>
+        </li>
+        <li class="col_item" *ngIf="patient_details?.iqama_number">
+          <div class="profile_contact">
+            <div class="label">{{ "iqama_number" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.iqama_number }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item" *ngIf="patient_details?.passport">
+          <div class="profile_contact">
+            <div class="label">{{ "passport" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.passport }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item" *ngIf="patient_details?.saudi_id">
+          <div class="profile_contact">
+            <div class="label">{{ "saudi_id" | translate }}</div>
+            <div class="user_value">
+              {{ patient_details?.saudi_id }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "address" | translate }}</div>
+            <div class="user_value truncate-text">
+              {{ patient_details?.address ? patient_details?.address : "-" }}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="medicine_info">
+    <div class="top_bar">
+      <div class="main_title" style="color: #222222">
+        {{ "prescription_details" | translate }}
+      </div>
+      <div class="form_field_wrapper" *ngIf="orderStatus !== 'completed'">
+        <label>{{ "deliveryPickupStatus" | translate }}</label>
+        <mat-form-field appearance="fill">
+          <mat-select
+            [(ngModel)]="deliveryStatus"
+            placeholder="{{ 'select_status' | translate }}"
+            disableRipple
+            (selectionChange)="onStatusChange($event.value, statusUpdate)"
+          >
+            <mat-option value="pending">{{ "pending" | translate }}</mat-option>
+            <mat-option value="under-process">{{
+              "under_process" | translate
+            }}</mat-option>
+            <mat-option value="completed">{{
+              "completed" | translate
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div>
+        <h3>{{ "prescribed_by" | translate }} : {{ doctorName }}</h3>
+      </div>
+      <div class="table-inner">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          class="mat-elevation-z8 withoutpagination"
+        >
+          <!--Medicine Name Column -->
+          <ng-container matColumnDef="medicinename">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "medicine_name" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              {{ element?.medicineName }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="frequency">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "frequency" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ "morning" | translate }}
+              {{
+                element?.frequency?.morning ? element?.frequency?.morning : "0"
+              }}, {{ "midday" | translate }}
+              {{
+                element?.frequency?.midday ? element?.frequency?.midday : "0"
+              }}, {{ "evening" | translate }}
+              {{
+                element?.frequency?.evening ? element?.frequency?.evening : "0"
+              }}, {{ "night" | translate }}
+              {{ element?.frequency?.night ? element?.frequency?.night : "0" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="dose">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "dose" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.dose }}({{ element?.doseUnit }})
+            </td>
+          </ng-container>
+
+          <!--Duration (Days)  Column -->
+          <ng-container matColumnDef="duration">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "take_for" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{
+                element?.takeFor?.quantity ? element?.takeFor?.quantity : "0"
+              }}
+              -
+              {{ element?.takeFor?.type ? element?.takeFor?.type : "-" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="route">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "route_Of_administration" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.routeOfAdministration }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="quantityprescribed">
+            <th mat-header-cell *matHeaderCellDef>
+              {{ "quantity_prescribed" | translate }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element?.quantity }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Approved modal -->
+<ng-template #approved let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image approved">
+          <img
+            class="img-fluid"
+            src="../../../../assets/img/approved.svg"
+            alt=""
+          />
+        </div>
+        <span class="single_text">{{
+          "medicine_amount_sent_success" | translate
+        }}</span>
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="gotoOrderList()"
+          >
+            {{ "okay" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- confirmation model -->
+<ng-template #Confirmmodel let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <!-- <h4 class="modal-title" id="modal-basic-title">Delete Role</h4> -->
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="handleClose()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="row">
+          <p>{{ "are_you_sure_want_send_amount" | translate }}</p>
+        </div>
+        <div class="primary_btn">
+          <button
+            (click)="handleClose()"
+            type="button"
+            class="btn btn-secondary"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button type="submit" class="btn btn-primary">
+            {{ "submit" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #statusUpdate let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <span class="single_text"
+          >{{ "do_you_want_to_update_order_status" | translate }}
+          {{ showStatus }}?</span
+        >
+        <div class="primary_btn mt-30">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="handleClose()"
+          >
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="updateOrderStatus()">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

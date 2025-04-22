@@ -1,0 +1,541 @@
+<div class="super_admin_dashboard dashboard_main_content">
+  <div class="counter_section common_space">
+    <div class="row">
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_blue">
+          <div class="cust_col_inner header-card-inner">
+            <div class="left">
+              <div class="counter">
+                {{ totalRevenueWithCurrency ? totalRevenueWithCurrency : 0 }}
+              </div>
+              <div class="counter_title">
+                {{ "total_revenue" | translate }}
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img" (click)="exportTotalrevenueMonthwise()" ngbTooltip="Export total Revenue Record ">
+                <img src="../../../../assets/img/dashboard/total.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_green">
+          <div class="cust_col_inner header-card-inner">
+            <div class="left">
+              <div class="counter">
+                {{ totalActiveSubscription ? totalActiveSubscription : 0 }}
+              </div>
+              <div class="counter_title">
+                {{ "total_active_subscription" | translate }}
+              </div>
+            </div>
+            <div class="right" (click)="exportActiveSubscription()" ngbTooltip="Export total active subcription list">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/completed 1.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_orange">
+          <div class="cust_col_inner header-card-inner">
+            <div class="left">
+              <div class="counter">
+                {{ totalCancelSubscription ? totalCancelSubscription : 0 }}
+              </div>
+              <div class="counter_title">
+                {{ "total_cancelled_subscription" | translate }}
+              </div>
+            </div>
+            <div class="right" (click)="exportcancelSubscription()" ngbTooltip="Export total cancelled subcription list">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/not-completed.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- plan-count -->
+  <div class="counter_section common_space pt-0">
+    <div class="row mt-4">
+      <div class="right_part mb-4">
+        <div class="policy  d-flex">
+          <div class="form_field_wrapper">
+            <form [formGroup]="dateRangeForm" class="d-flex align-items-center gap-3" style="margin: 10px;">
+              <!-- From Date -->
+              <div class="d-flex align-items-center gap-2">
+                <div class="main_title">{{ "from" | translate }}:</div>
+                <mat-form-field class="example-full-width choosedate" appearance="fill">
+                  <input 
+                    matInput 
+                    [matDatepickerFilter]="myFilter" 
+                    placeholder="{{ 'select_date' | translate }}"
+                    [matDatepicker]="picker1" 
+                    formControlName="fromDate"
+                    (dateChange)="onDateChange('from', $event.value)" 
+                    (click)="picker1.open()" readonly
+                  />
+                  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                  <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+              </div>
+            
+              <!-- To Date -->
+              <div class="d-flex align-items-center gap-2">
+                <div class="main_title">{{ "to" | translate }}:</div>
+                <mat-form-field class="example-full-width choosedate" appearance="fill">
+                  <input 
+                    matInput 
+                    [matDatepickerFilter]="myFilter" 
+                    placeholder="{{ 'select_date' | translate }}"
+                    [matDatepicker]="picker2" 
+                    formControlName="toDate" 
+                    (dateChange)="onDateChange('to', $event.value)" 
+                    (click)="picker1.open()" readonly
+                  />
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+              </div>
+            
+              <!-- Clear Button -->
+              <a class="d-flex align-items-center" style="cursor: pointer; margin-left: 10px;" (click)="clearDate()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" 
+                  class="bi bi-x-circle" viewBox="0 0 16 16">
+                  <title>{{ "reset_date" | translate }}</title>
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                </svg>
+              </a>
+            </form>
+            
+        </div>
+          <div class="form_field_wrapper">
+            <label>{{ "select_plan" | translate }}</label>
+            <select2 class="test select-dropdown-box" [overlay]="true" [limitSelection]="0" [minCountForSearch]="0"
+              [data]="planList" (update)="onSelect2Change($event)" [value]="selectedPlan"  placeholder="{{ 'select_plan' | translate }}">
+            </select2>
+            <a style="margin-right: 10px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"
+                style="margin-left: 10px; cursor: pointer" (click)="clearSelect2('plan')">
+                <title>{{ "reset_plan" | translate }}</title>
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path
+                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+              </svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <div class="cust_col light_skyblue">
+          <div class="cust_col_inner header-card-inner">
+
+            <div class="left">
+              <div class="counter">
+                {{ totalRevenue ? totalRevenue : 0 }}
+              </div>
+              <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="counter_title">
+                  {{ "total_active_subscription" | translate }} ({{"per_plan" | translate }})
+                </div>
+              </div>
+            </div>
+            <div class="right" (click)="exportToExcelSubscribers()" ngbTooltip="Export Active Subscribers List">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/dashboard32.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <div class="cust_col light_violet">
+          <div class="cust_col_inner header-card-inner">
+
+            <div class="left">
+              <div class="counter">{{ revenueFormatted ? revenueFormatted : 0  }}</div>
+              <div class="counter_title">
+                {{ "total_revenue" | translate }} ({{"per_plan" | translate }})
+              </div>
+            </div>
+            <div class="right">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/dashboard20.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mt-4">
+        <div class="graph_section common_space spaceclass graph-border">
+          <div class="total_claim revenue_claim">
+            <div class="total_claim_inner">
+              <div class="main_title">
+                {{ "active_vs_cancelled_subscription" | translate }}
+
+                <button 
+                class="btn btn-primary export-btn"
+                (click)="exportActiveCancelledSubscription()">
+                {{ "export" | translate }}
+              </button>
+              </div>
+              <div *ngIf="noDataAvailable">
+                <p>{{ "no_data_available" | translate }}</p>
+              </div>
+              <div class="bottom_bar" *ngIf="!noDataAvailable">
+                <div class="pieChart-container">
+                  <canvas 
+                baseChart 
+                [data]="pieChartData" 
+                [options]="pieChartOptions" 
+                [type]="'pie'" 
+                [legend]="true">
+              </canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mt-4">
+        <div class="graph_section common_space spaceclass graph-border">
+          <div class="total_claim revenue_claim">
+            <div class="total_claim_inner">
+              <div class="main_title">
+                {{ "total_subscriber" | translate }}
+                <button 
+                class="btn btn-primary export-btn"
+                (click)="exportSusbscriberList()">
+                {{ "export" | translate }}
+                </button>
+              </div>
+              <div *ngIf="noDataAvailable">
+                <p>{{ "no_data_available" | translate }}</p>
+              </div>
+
+              <div class="bottom_bar" *ngIf="!noDataAvailable">
+                <div class="chart-container">
+                  <canvas
+                    baseChart
+                    [data]="monthWiseData"
+                    [options]="monthWiseOptions"
+                    [type]="'bar'"
+                  ></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>  
+    </div>
+  </div>
+
+
+  <!-- plandetails -->
+  <div class="counter_section common_space patientdataclass">
+    <div class="main_title"> {{"active_plans_per_user" | translate}}</div>
+    <div class="row">
+      <div class="right_part">
+        <div class="policy">
+          <div class="form_field_wrapper">
+            <label>{{ "select_patient" | translate }}</label>
+            <select2 class="select-dropdown-box" [overlay]="overlay" [limitSelection]="0" [minCountForSearch]="0"
+              [data]="userList" (update)="onSelect2ChangePatient($event)" [value]="selecteduser"
+              placeholder="{{ 'select_patient' | translate }}">
+            </select2>
+            <a style="margin-right: 10px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"
+                style="margin-left: 10px; cursor: pointer" (click)="clearSelect2('patient')">
+                <title>{{ "reset_patient" | translate }}</title>
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path
+                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+              </svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="bottom_bar mt-4">
+        <ng-container *ngIf="activeSubcriptionData?.isPlanActive === true">
+          <div class="main_title">
+            {{ "active_subscription_details" | translate }}
+          </div>
+          <div class="profile_data">
+            <div class="profile_info">
+              <div class="emergency_contact">
+                <ul class="profile_info_inner">
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "plan_name" | translate }}</div>
+                      <div class="user_value">
+                        {{
+                        activeSubcriptionData?.planName
+                        ? activeSubcriptionData?.planName
+                        : "-"
+                        }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "duration" | translate }}</div>
+                      <div class="user_value">
+                        {{ activeSubcriptionData?.subscriptionDuration }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "start_date" | translate }}</div>
+                      <div class="user_value">
+                        {{
+                        activeSubcriptionData?.period?.start
+                        | date : "dd/MM/yyy"
+                        }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "end_date" | translate }}</div>
+                      <div class="user_value">
+                        {{
+                        activeSubcriptionData?.period?.end
+                        | date : "dd/MM/yyy"
+                        }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">
+                        {{ "services" | translate }}
+                      </div>
+                      <div class="user_value">
+                        <div class="service_item">
+                          <span> {{ "no_of_consulation" | translate }}: </span>
+                          <span>
+                            {{
+                            activeSubcriptionData?.services?.consultation
+                            ? activeSubcriptionData?.services?.consultation
+                            : "-"
+                            }}
+                          </span>
+                        </div>
+                        <!-- <div class="service_item">
+                          <span> {{ "no_of_labtest" | translate }}: </span>
+                          <span>
+                            {{
+                            activeSubcriptionData?.services?.labtest
+                            ? activeSubcriptionData?.services?.labtest
+                            : "-"
+                            }}
+                          </span>
+                        </div>
+                        <div class="service_item">
+                          <span> {{ "no_of_radiotest" | translate }}: </span>
+                          <span>
+                            {{
+                            activeSubcriptionData?.services?.radiologytest
+                            ? activeSubcriptionData?.services?.radiologytest
+                            : "-"
+                            }}
+                          </span>
+                        </div> -->
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="activeSubcriptionData?.isPlanActive === false">
+          <div class="text-center">
+            <b>{{ "no_active_plan" | translate }}</b>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="
+            activeSubcriptionData?.isPlanActive === true && upcoimgPlanData
+          ">
+          <div class="main_title">
+            {{ "upcoming_plan_details" | translate }}
+          </div>
+          <div class="profile_data">
+            <div class="profile_info">
+              <div class="emergency_contact">
+                <ul class="profile_info_inner">
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "plan_name" | translate }}</div>
+                      <div class="user_value">
+                        {{
+                        upcoimgPlanData?.plan_name
+                        ? upcoimgPlanData?.plan_name
+                        : "-"
+                        }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "duration" | translate }}</div>
+                      <div class="user_value">
+                        {{ upcoimgPlanData?.plan_duration[0].duration }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "start_date" | translate }}</div>
+                      <div class="user_value">
+                        {{
+                        activeSubcriptionData?.period?.end
+                        | date : "dd/MM/yyy"
+                        }}
+                      </div>
+                    </div>
+                  </li>
+                  <li class="col_item">
+                    <div class="profile_contact">
+                      <div class="lable">{{ "services" | translate }}</div>
+                      <div *ngFor="let item of upcoimgPlanData?.services">
+                        <div class="user_value">
+                          <span *ngIf="item.name === 'consultation'">
+                            {{ "no_of_consulation" | translate }}:
+                            {{ item?.max_number }}
+                          </span>
+                          <span *ngIf="item.name === 'labtest'">
+                            {{ "no_of_labtest" | translate }}:
+                            {{ item?.max_number }}
+                          </span>
+                          <span *ngIf="item.name === 'radiologytest'">
+                            {{ "no_of_radiotest" | translate }}:
+                            {{ item?.max_number }}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- coupon-user-data -->
+  <div class="counter_section common_space">
+    <div class="main_title"> {{"users_per_coupon" | translate}}</div>
+    <div class="row">
+      <div class="top_bar">
+        <div class="right_part">
+          <div class="policy">
+            <div class="form_field_wrapper">
+              <label>{{ "select_discount_code" | translate }}</label>
+              <select2 class="testDiscount select-dropdown-box" [overlay]="overlay" [limitSelection]="0" [minCountForSearch]="0"
+                  [value]="selectedcouponCode" [data]="couponList" (update)="onCouponChange($event)"
+                  placeholder="{{ 'select_discount_code' | translate }}">
+              </select2>
+
+              <a style="margin-right: 10px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"
+                  style="margin-left: 10px; cursor: pointer" (click)="clearSelect2('coupon-code')">
+                  <title>{{ "reset_patient" | translate }}</title>
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                  <path
+                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+              </svg></a>
+            </div>
+          </div>
+        </div>
+        <div class="primary_btn d-flex justify-content-end mb-3" style="height: 43px;">            
+          <button type="button" class="btn btn-primary" (click)="exportToExcel()"
+          [disabled]="discountCouponData.length === 0">
+             <mat-icon>download</mat-icon>{{ "export" | translate }}
+           </button>           
+       </div>
+        <!-- <div class="export-button d-flex justify-content-end mb-3">
+          <button class="btn btn-primary" (click)="exportToExcel()"
+          [disabled]="discountCouponData.length === 0"
+          > <mat-icon>download</mat-icon>{{ "export" | translate }}</button>
+  </div> -->
+      </div>
+      <div class="bottom_bar mt-4">
+        <div class="table-wrap">
+          <div class="table-inner">
+            <table *ngIf="discountCouponData && discountCouponData.length > 0; else noData" 
+                   mat-table [dataSource]="discountCouponData" 
+                   class="mat-elevation-z8">
+      
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "patient_name" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.full_name }}
+                </td>
+              </ng-container>
+      
+              <!-- Email Column -->
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "email" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.email }}
+                </td>
+              </ng-container>
+      
+              <!-- Mobile Column -->
+              <ng-container matColumnDef="mobile">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "phone_number" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.mobile ? element.country_code + "-" + element.mobile : "-" }}
+                </td>
+              </ng-container>
+      
+              <!-- Table Header and Rows -->
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let element; columns: displayedColumns"></tr>
+            </table>
+      
+            <!-- No Data Template -->
+            <ng-template #noData>
+              <div class="text-center mt-3">
+                <b>{{ "no_data_found" | translate }}</b>
+              </div>
+            </ng-template>
+          </div>
+      
+          <!-- Paginator -->
+          <mat-paginator
+            #paginator
+            class="pagination"
+            [length]="totalLength"
+            (page)="handlePageEvent($event)"
+            [pageSize]="paginationSize"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+</div>

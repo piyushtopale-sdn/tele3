@@ -1,0 +1,71 @@
+@import '../../../../../../assets/css/variable/variable';
+
+.right_part {
+  display: flex;
+  gap: 92px;
+
+  .main_title {
+    font-size: 16px;
+  }
+
+  .datefilters {
+    gap: 45px
+  }
+
+  .comparevitals {
+    gap: 25px;
+
+    button.btn.btn-primary {
+      padding: 9px 20px;
+    }
+  }
+}
+
+.choosedate {
+  max-width: 149px;
+
+  .mat-form-field-flex {
+    background-color: rgb(128 128 128 / 6%) !important;
+    border: none !important;
+    border-radius: 15px !important;
+
+    .mat-input-element {
+      color: #222222 !important;
+      opacity: 0.5 !important;
+    }
+  }
+}
+
+.noborder {
+  border: transparent !important;
+}
+
+.table-inner {
+  border: 1px solid grey;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+td {
+  padding: 0px 10px !important;
+}
+
+.doc-details {
+  margin-bottom: 24px;
+}
+
+.inner-blk tr:nth-child(2) {
+  font-weight: 500;
+}
+
+.main_title {
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  color: #222222;
+  margin: 12px;
+}
+
+.medtableinfo th {
+  background: #F6F8FC !important;
+  color: #222222 !important;
+}

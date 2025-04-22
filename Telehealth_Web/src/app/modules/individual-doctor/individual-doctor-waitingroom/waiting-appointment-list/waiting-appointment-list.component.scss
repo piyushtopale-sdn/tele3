@@ -1,0 +1,19 @@
+@import '../../../../../assets/css/variable/variable';
+
+.material-icons{
+    cursor: pointer;
+}
+.appoinment_commision {
+    .header_block {
+        margin-bottom: 20px;
+        h3 {
+            font-weight: 500;
+            font-size: 20px;
+            color: #0C2F49;
+        }
+    }
+}
+
+@media screen and (max-width:$desktop) {}
+
+@media screen and (max-width:$large_phone) {}

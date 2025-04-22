@@ -1,0 +1,216 @@
+<div class="patientcalender dashboard_main_content">
+  <div class="profileinfo_title mb-4">{{ "patient_details" | translate }}</div>
+  <div class="profile_data">
+    <div class="profile_info">
+      <div class="profile_info_inner profile_info_with_img">
+        <div class="patient-details-block d-flex align-items-center">
+          <div class="profile_image">
+            <img
+              [src]="
+                patientSubscriberphoto
+                  ? patientSubscriberphoto
+                  : '../../../../../assets/img/default_user.png'
+              "
+            />
+          </div>
+          <div class="profile__img-contents">
+            <div class="profile_title">
+              {{ patientDetails?.full_name }}
+            </div>
+            <div class="profile_contact">
+              <div class="user_value">
+                {{ patientDetails?.email ? patientDetails?.email : "-" }}
+              </div>
+            </div>
+            <div class="mobile-no-block d-flex align-items-center">
+              <div class="user_value mob_no">
+                {{ patientDetails?.country_code }} {{ patientDetails?.mobile }}
+              </div>
+              <div class="vertical_line"></div>
+              <div class="user_value mob_no">
+                {{ patientDetails?.address ? patientDetails?.address : "-" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ul class="profile_info_inner emergency">
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "gender" | translate }}</div>
+            <div class="user_value">
+              {{
+                patientDetails?.gender
+                  ? patientDetails?.gender
+                  : "-"
+              }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "age" | translate }}</div>
+            <div class="user_value">
+              {{ patientDetails?.dob ? calculateAge(patientDetails.dob) : "-" }}  {{"years" | translate}}
+            </div>
+          </div>
+        </li>
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "mrn_number" | translate }}</div>
+            <div class="user_value">
+              {{
+                patientDetails?.mrn_number
+                  ? patientDetails?.mrn_number
+                  : "-"
+              }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item" *ngIf="patientDetails?.iqama_number">
+          <div class="profile_contact">
+            <div class="lable">{{ "iqama_number" | translate }}</div>
+            <div class="user_value">
+              {{ patientDetails?.iqama_number }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item" *ngIf="patientDetails?.passport">
+          <div class="profile_contact">
+            <div class="lable">{{ "passport" | translate }}</div>
+            <div class="user_value">
+              {{ patientDetails?.passport }}
+            </div>
+          </div>
+        </li>
+        <li class="col_item" *ngIf="patientDetails?.saudi_id">
+          <div class="profile_contact">
+            <div class="lable">{{ "saudi_id" | translate }}</div>
+            <div class="user_value">
+              {{ patientDetails?.saudi_id }}
+            </div>
+          </div>
+        </li>
+        
+        <li class="col_item">
+          <div class="profile_contact">
+            <div class="lable">{{ "emergency_contact" | translate }}</div>
+            <div class="user_value">
+              {{
+                patientDetails?.emergency_contact?.phone_number
+                  ? patientDetails?.emergency_contact?.phone_number
+                  : "-"
+              }}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="profile_appoint_details">
+    <h3 class="profileinfo_title">{{ "appointment_details" | translate }}</h3>
+    <div class="profile_data">
+      <div class="profile_info">
+        <ul class="profile_info_inner">
+          <li class="col_item emergency-appt">
+            <div class="profile_contact">
+              <div class="lable">{{ "appointmentId" | translate }}</div>
+              <div class="user_value">
+                {{ appointmentDetails?.appointmentId }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item emergency-appt">
+            <div class="profile_contact">
+              <div class="lable">{{ "date" | translate }}</div>
+              <div class="user_value">
+                {{ appointmentDetails?.consultationDate | date : "dd/MM/yyyy" }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item emergency-appt">
+            <div class="profile_contact">
+              <div class="lable">{{ "time" | translate }}</div>
+              <div class="user_value">
+                {{ appointmentDetails?.consultationTime }}
+              </div>
+            </div>
+          </li>
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="lable">{{ "appointment_reasons" | translate }}</div>
+              <div class="user_value">
+                {{ appointmentDetails?.reasonForAppointment }}
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="checkin">
+    <div class="timer_set">
+      <div class="time-remaining-text">
+        <p>Time Remaining</p>
+      </div>
+      <ul class="justify-content-between">
+        <li>
+          <div class="outer_line">
+            <p>{{ daysToDday }}</p>
+            <h4>{{ "days" | translate }}</h4>
+          </div>
+        </li>
+        <li>
+          <div class="outer_line">
+            <p>{{ hoursToDday }}</p>
+            <h4>{{ "hrs" | translate }}</h4>
+          </div>
+        </li>
+        <li>
+          <div class="outer_line">
+            <p>{{ minutesToDday }}</p>
+            <h4>{{ "min" | translate }}</h4>
+          </div>
+        </li>
+        <li>
+          <div class="outer_line">
+            <p>{{ secondsToDday }}</p>
+            <h4>{{ "sec" | translate }}</h4>
+          </div>
+        </li>
+      </ul>
+      <div class="dr-names d-flex justify-content-between">
+        <div class="left-namedr">
+          {{ patientDetails?.full_name }}
+        </div>
+        <div class="left-namedr">
+          {{ appointmentDate | date : "dd/MM/YYYY" }}
+        </div>
+      </div>
+    </div>
+
+    <div class="primary_btn btn_wrap justify-content-center mt-4">
+      <button
+        type="button"
+        class="btn btn-tranprent"
+        [routerLink]="['/individual-doctor/waiting-room']"
+      >
+        {{ "back" | translate }}
+      </button>
+      <button
+      type="button"
+      class="btn btn-tranprent"
+      [disabled]="patientConfirmation !=='confirmed' || !disableCallButton || isCallInProgress"
+      (click)="callUser('video')"
+    >
+      {{ "call" | translate }}
+    </button>
+    
+      <!-- <button type="button" class="btn btn-tranprent" [disabled]="true">
+        {{ "send_confirmation" | translate }}
+      </button> -->
+    </div>
+  </div>
+</div>

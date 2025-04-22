@@ -1,0 +1,202 @@
+<div class="rolepermission dashboard_main_content">
+  <div class="top_bar">
+    <div class="left_part">
+      <div class="content_wrap">
+        <div class="policy">
+          <div class="form_field_wrapper">
+            <label>{{ "select_staff" | translate }}</label>
+            <select2
+              [limitSelection]="0"
+              [minCountForSearch]="0"
+              [overlay]="overlay"
+              [data]="staffList"
+              [placeholder]="('select_staff' | translate)"
+              (update)="handleStaffChange($event)"
+            >
+            </select2>
+            <!-- <mat-form-field class="inner_label" appearance="fill">
+                            <mat-label>Select Staff</mat-label>
+                            <mat-select (valueChange)="handleStaffChange($event)">
+                                <mat-option value="">Select Staff</mat-option>
+                                <mat-option [value]="roleData.superadmin_id._id" *ngFor="let roleData of staffList">{{roleData.superadmin_id.fullName}}</mat-option>
+                              
+                            </mat-select>
+                        </mat-form-field> -->
+            <mat-error *ngIf="staffError">{{
+              "please_select_staff" | translate
+            }}</mat-error>
+          </div>
+        </div>
+      </div>
+      <div class="primary_btn">
+        <!-- <button type="button" (click)="clearFilter()" class="btn btn-link">Clear All </button> -->
+      </div>
+    </div>
+
+    <div class="right_part">
+      <div class="primary_btn">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [routerLink]="['/super-admin/rolepermission/view']"
+        >
+          <a class="btn_svg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="11"
+              viewBox="0 0 20 11"
+              fill="none"
+            >
+              <path
+                d="M10 0C3.439 0 0 4.74571 0 5.5C0 6.25232 3.439 11 10 11C16.56 11 20 6.25232 20 5.5C20 4.74571 16.56 0 10 0ZM10 9.73009C7.545 9.73009 5.555 7.83652 5.555 5.5C5.555 3.16348 7.545 1.26795 10 1.26795C12.455 1.26795 14.444 3.16348 14.444 5.5C14.444 7.83652 12.455 9.73009 10 9.73009ZM10 5.5C9.593 5.06098 10.663 3.38446 10 3.38446C8.772 3.38446 7.777 4.33223 7.777 5.5C7.777 6.66777 8.772 7.61554 10 7.61554C11.227 7.61554 12.223 6.66777 12.223 5.5C12.223 4.96277 10.346 5.87223 10 5.5Z"
+              /></svg></a
+          >{{ "view_role" | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="bottom_bar">
+    <div class="row">
+      <div class="col-xl-3 role_item">
+        <div class="form_field_wrapper">
+          <mat-checkbox
+            class="example-margin"
+            (change)="makeJSONAll($event.checked)"
+            checked="{{ selectall }}"
+            >{{ "select_all" | translate }}</mat-checkbox
+          >
+        </div>
+      </div>
+      <div class="col-xl-3 role_item" *ngFor="let menu of allMenus">
+        <div class="form_field_wrapper">
+          <mat-checkbox
+            class="example-margin"
+            checked="{{ checkedmainMenuArray(menu.id) ? true : false }}"
+            (change)="makeJSON($event.checked, menu.id, menu.menu_order)"
+            >{{ menu.name | translate }}</mat-checkbox
+          >
+          <mat-icon
+            (click)="
+              openVerticallyCommonModal(commanModalForAll, menu.id, menu.name)
+            "
+            >add</mat-icon
+          >
+        </div>
+      </div>
+    </div>
+    <div class="primary_btn float-right">
+      <button type="button" (click)="handleClick()" class="btn btn-secondary">
+        {{ "cancel" | translate }}
+      </button>
+      <button type="button" (click)="assignSubmit()" class="btn btn-primary">
+        {{ "assign" | translate }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Prescriptions -->
+
+<div class="permission_commit">
+  <ng-template #commanModalForAll let-modal>
+    <div class="custome_modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ menuName }}</h4>
+        <!-- <button type="button" class="btn-close" aria-label="Close" (click)="closePopup()"><mat-icon>close</mat-icon></button> -->
+      </div>
+      <div class="modal-body">
+        <!-- [indeterminate]="checkedmainMenuArrayintermidiate(activemainmenuselectedid)" -->
+        <div class="form_frame">
+          <div class="heading">
+            <div class="inner_heading">
+              <p>{{ "select_all" | translate }}</p>
+              <div class="icon_group">
+                <mat-checkbox
+                  class="example-margin"
+                  aria-label="Select All"
+                  checked="{{
+                    checkedmainMenuArray(activemainmenuselectedid)
+                      ? true
+                      : false
+                  }}"
+                  (change)="
+                    makeJSON($event.checked, activemainmenuselectedid, 0)
+                  "
+                ></mat-checkbox>
+              </div>
+            </div>
+          </div>
+          <!-- [indeterminate]="checkedinnerMenuArrayintermidiate(activemainmenuselectedid,submenues) && (activeSubmenuIdsubmenu == submenues)" -->
+          <mat-accordion>
+            <mat-expansion-panel
+              *ngFor="
+                let submenues of objectKeys(menuWiseSubmenu);
+                let i = index
+              "
+            >
+              <mat-expansion-panel-header (click)="check(i, submenues)">
+                <mat-panel-title>
+                  {{ menuWiseSubmenu[submenues].name }}
+                </mat-panel-title>
+                <div class="icon_group">
+                  <mat-checkbox
+                    class="example-margin"
+                    checked="{{
+                      checkedsubMenuArray(activemainmenuselectedid, submenues)
+                        ? true
+                        : false
+                    }}"
+                    (change)="
+                      removesubmenu(activemainmenuselectedid, submenues, $event)
+                    "
+                    (click)="$event.stopPropagation()"
+                  ></mat-checkbox>
+                </div>
+              </mat-expansion-panel-header>
+              <div
+                class="checklist"
+                *ngFor="let innerSubmenus of objectMenus[activeSubmenuId]"
+              >
+                <div class="icon_group_check">
+                  <label>{{ innerSubmenus.name }} </label>
+                  <mat-checkbox
+                    class="example-margin"
+                    checked="{{
+                      checkedinnnersubMenuArray(
+                        activemainmenuselectedid,
+                        activeSubmenuIdsubmenu,
+                        innerSubmenus.slug
+                      )
+                        ? true
+                        : false
+                    }}"
+                    (change)="
+                      removeinnersubmenu(
+                        activemainmenuselectedid,
+                        activeSubmenuIdsubmenu,
+                        innerSubmenus.slug,
+                        $event
+                      )
+                    "
+                    (click)="$event.stopPropagation()"
+                  ></mat-checkbox>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-primary"
+            aria-label="Close"
+            (click)="closePopup()"
+          >
+            {{ "done" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

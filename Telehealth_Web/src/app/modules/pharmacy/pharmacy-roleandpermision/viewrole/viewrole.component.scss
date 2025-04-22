@@ -1,0 +1,205 @@
+@import '../../../../../assets/css/variable/variable';
+.material-icons{
+    cursor: pointer;
+}
+
+
+.view_role {
+    .top_bar{
+        margin: 0 0 35px;
+        .left_part{
+            display: flex;
+            .search_bar{
+                .input-group{
+                    background: #F6F8FC;
+                    border-radius: 6px;
+                    .form-control{
+                        border: none;
+                        background-color: transparent;
+                        padding: 12px 12px 12px 0;
+                        width: 210px;
+                        &::placeholder{
+                            font-weight: 400;
+                            font-size: $font_small;
+                            line-height: 24px;
+                        }
+                        &:focus{
+                            box-shadow: none;
+                        }
+                    }
+                    .btn{
+                        padding: 0;
+                        border: none;
+                        .mat-icon{
+                            line-height: 50px;
+                            height: 50px;
+                            width: 50px;
+                            color: #9B9B9B;
+                            font-size: 24px;
+                        }
+                    }
+                }
+            }
+            .content_wrap{
+                .policy{
+                    margin: 0 0 0 20px;
+                    label{
+                        margin-right: 12px;
+                    }
+                    .mat-form-field{
+                        .mat-form-field-wrapper{
+                            padding: 0;
+                            .mat-form-field-flex{
+                                background-color: $white_color;
+                                border: 1px solid #B6C8D6;
+                                .mat-form-field-infix{
+                                    width: 200px;
+                                    .mat-select{
+                                        .mat-select-value{
+                                            color: $formfiled_color;
+                                            font-weight: 500;
+                                        }
+                                    }
+                                }
+                            }
+                            .mat-form-field-underline{
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .bottom_bar{
+        .role_item{
+            margin-bottom: 25px;
+            .form_field_wrapper{
+                display: flex;
+                justify-content: space-between;
+                background: #FFFFFF;
+                border: 1px solid rgba(11, 73, 119, 0.15);
+                border-radius: 10px;
+                padding: 10px;
+                padding: 15px 10px;
+                .mat-checkbox{
+                    width: 100%;
+                    .mat-checkbox-layout{
+                        display: flex;
+                        .mat-checkbox-inner-container{
+                            order: 2;
+                        }
+                        .mat-checkbox-label{
+                            order: 1;
+                            color: $bodycolor;
+                            font-size: 15px;
+                            font-weight: 500;
+                            margin: 0 10px 0 0;
+                        }
+                    }
+                }
+                .mat-icon{
+                    color: #130F26;
+                }
+                &:hover{
+                    background: $bodycolor;
+                    border: 1px solid $bodycolor;
+                    .mat-checkbox{
+                        .mat-checkbox-layout{
+                            .mat-checkbox-label{
+                                color: $white_color;
+                            }
+                        }
+                    }
+                    .mat-icon{
+                        color: $white_color;
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+
+.add_role {
+    .modal-dialog{
+        max-width: 550px;
+        .custome_modal {
+            .modal-body {
+                .category_service{
+                    border: none;
+                    margin: 0 0 10px;
+                    .modal_content_inner{
+                        display: flex;
+                        margin: 0 -15px;
+                        padding: 0;
+                        .item{
+                            width: auto;
+                            padding: 0 15px;
+                            .mat-form-field-infix{
+                                width: 370px;
+                            }
+                            .mat-slide-toggle{
+                                margin-top: 10px;
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+    } 
+}
+
+
+@media screen and (max-width:$desktop_large) {
+    .view_role .bottom_bar .role_item{
+        width: auto;
+        min-width: 250px;
+    }
+}
+@media screen and (max-width:$desktop) {
+    .view_role .top_bar{
+        flex-direction: column;
+    }
+    .view_role .top_bar .right_part{
+        margin-top: 20px;
+    }
+}   
+@media screen and (max-width:$large_phone) {
+    .view_role .top_bar .left_part{
+        flex-direction: column;
+    }
+    .view_role .top_bar .left_part .content_wrap .policy {
+        margin: 0;
+        width: 100%;
+    }
+    .view_role .top_bar .left_part .primary_btn{
+        margin-top: 10px;
+    }
+    .view_role .bottom_bar .role_item{
+        width: 50%;
+        min-width: auto;
+    }
+}
+@media screen and (max-width:$medium_iphone) {
+    .view_role .bottom_bar .role_item{
+        width: 100%;
+        min-width: auto;
+    }
+    .add_role .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix {
+        width: 290px;
+    }
+}
+
+@media screen and (max-width:$medium_phone) {
+    .view_role .top_bar .left_part .content_wrap .policy .mat-form-field .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix {
+        width: 100%;
+    }
+    .view_role .top_bar .left_part .content_wrap .mat-form-field{
+        display: block;
+    }
+    .add_role .modal-dialog .custome_modal .modal-body .category_service .modal_content_inner .item .mat-form-field-infix {
+        width: 100%;
+    }
+}

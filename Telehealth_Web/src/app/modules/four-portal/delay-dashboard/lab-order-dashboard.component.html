@@ -1,0 +1,177 @@
+<div class="super_admin_dashboard dashboard_main_content">
+  <!-- <div class="top_bar up_bar common_space">
+    <div class="content_wrap">
+      <div class="policy">
+        <form [formGroup]="dateRangeForm">
+          <div class="form_field_wrapper d-flex align-items-center gap-3" style="margin: 10px;">
+            <div class="main_title">{{ "from" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker1" formControlName="fromDate"
+                (dateChange)="onDateChange('from', $event.value)" />
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <div class="main_title">{{ "to" | translate }}:</div>
+            <mat-form-field class="example-full-width choosedate" appearance="fill">
+              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
+                [matDatepicker]="picker2" formControlName="toDate" (dateChange)="onDateChange('to', $event.value)" />
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="counter_section common_space">
+    <div class="row">
+
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_blue">
+          <div class="cust_col_inner header-card-inner">
+            <div class="left">
+              <div class="counter">{{countData?.totalCount ? countData?.totalCount : 0}}</div>
+              <div class="counter_title">
+                {{ "total_order" | translate }}
+              </div>
+            </div>
+            <div class="right"  (click)="labOrderListForExport('ALL')" ngbTooltip="Export all order list">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/total.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_green">
+          <div class="cust_col_inner header-card-inner">
+            <div class="left">
+              <div class="counter">{{countData?.completedCount? countData?.completedCount : 0}}</div>
+              <div class="counter_title">
+                {{ "total_completed_order" | translate }}
+              </div>
+            </div>
+            <div class="right"  (click)="labOrderListForExport('COMPLETED')" ngbTooltip="Export completed order list">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/completed 1.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
+        <div class="cust_col light_violet">
+          <div class="cust_col_inner header-card-inner">
+            <div class="left">
+              <div class="counter">{{countData?.delayedCount ? countData?.delayedCount : 0}}</div>
+              <div class="counter_title">
+                {{ "total_delayed_order" | translate }}
+              </div>
+            </div>
+            <div class="right"  (click)="exportDelayOrder()" ngbTooltip="Export delay order list">
+              <div class="counter_img">
+                <img src="../../../../assets/img/dashboard/dashboard25.svg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph_section common_space">
+    <div class="row">
+      <div class="left_part">
+        <div class="main_title">
+          {{'delayed_order' | translate}}
+        </div>
+      </div>
+      <div class="bottom_bar mt-2">
+        <div class="table-wrap">
+          <div class="table-inner without_pagination_block">
+            <table mat-table [dataSource]="listData" class="mat-elevation-z8 withoutpagination">
+              <ng-container matColumnDef="patientname">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "patient_name" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+
+                  {{ element?.patientName ? element?.patientName : "-" }}
+
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="prescribeBy">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "prescribed_by" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.doctorName ? element?.doctorName : "-"
+                  }}
+                </td>
+
+              </ng-container>
+              <ng-container matColumnDef="orderName">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "order_id" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <a class="name_user"  (click)="goTOorder(element?._id)">
+                    {{ element?.appointmentId ? element?.appointmentId : "-"
+                  }}
+                  </a>
+                 
+                </td>
+              </ng-container>  
+              <ng-container matColumnDef="orderDateandTime">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "order_date_time" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.consultationDate ? (element?.consultationDate | date : "dd/MM/YYYY") : "-" }} |
+                  {{element?.consultationTime ? element?.consultationTime :"-"}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "status" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.status ? element?.status: "-"
+                  }}
+                </td>
+
+              </ng-container>
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "action" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="icon_group">
+                    <a class="svgicon">
+                      <mat-icon type="button" aria-expanded="false" (click)="goTo_details(element?._id)">
+                        visibility
+                      </mat-icon>
+                    </a>
+                  </div>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <div *ngIf="listData.length === 0" class="text-center">
+              <b>{{ "no_record_found" | translate }}</b>
+            </div>
+          </div>
+          <mat-paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)"
+            [pageSize]="pageSize" [pageSizeOptions]="[5, 20, 50, 100]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

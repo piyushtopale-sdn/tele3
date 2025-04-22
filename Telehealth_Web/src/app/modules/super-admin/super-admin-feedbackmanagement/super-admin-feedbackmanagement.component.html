@@ -1,0 +1,268 @@
+<div class="feedback dashboard_main_content">
+  <div class="export_list">
+    <div class="inner_exprot_list">
+      <div class="top_bar">
+        <div class="col-md-3">
+          <div class="form_field_wrapper">
+            <label>{{ "doctor_name" | translate }}</label>
+            <div style="position: relative;">
+              <select2
+                [overlay]="overlay"
+                [limitSelection]="1"
+                [minCountForSearch]="1"
+                placeholder='{{"select_doctor" | translate}}'
+                [data]="doctorNameList"
+                [(ngModel)]="selectedDoctor"
+                (update)="onDoctorSelectionChange($event)"
+                style="width: calc(100% - 30px);">
+              </select2>
+              <a (click)="clearSelection()" *ngIf="selectedDoctor"
+                style="position: absolute; top: 50%; right: -36px; transform: translateY(-50%); cursor: pointer;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                  fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                  <path
+                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+      <!----------------PATIENT TO DOCTOR------------------------>
+      <div class="bottom_bar" style="margin-top: 5px" *ngIf="tabFor === 'Pateint_To_Doctor'">
+        <div class="table-wrap">
+          <div class="table-inner">
+            <table mat-table [dataSource]="dataSourceDoctor" class="mat-elevation-z8">
+              <!-- Patient Name Column -->
+              <ng-container matColumnDef="patientname">
+                <th mat-header-cell *matHeaderCellDef (click)="onSortData('patientName')">
+                  {{ "patient_name" | translate }}
+                  <span *ngIf="sortColumn === 'patientName'" class="material-icons sorticon">{{ sortIconClass }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <span class="user_image_wrapper">
+                    <img class="user_image" src="{{
+                        element?.patientProfilePic
+                          ? element?.patientProfilePic
+                          : '../../../assets/img/default_user.png'
+                      }}" />
+                  </span>
+                  <span class="name_user">
+                    {{ element?.patientName }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <!-- MRN number-->
+
+              <ng-container matColumnDef="patient_Mrn">
+                <th mat-header-cell *matHeaderCellDef >
+                  {{ "mrn_number" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.patientMrn }}
+                </td>
+              </ng-container>
+
+              <!-- Date & Time Column -->
+              <ng-container matColumnDef="dateandtime">
+                <th mat-header-cell *matHeaderCellDef (click)="onSortData('createdAt')">
+                  {{ "date_and_time" | translate }}
+                  <span *ngIf="sortColumn === 'createdAt'" class="material-icons sorticon">{{ sortIconClass }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{
+                  element?.createdAt
+                  | date : "dd/MM/yyyy | HH:mm"
+                  }}
+                </td>
+              </ng-container>
+
+              <!--Feedback by Column -->
+              <ng-container matColumnDef="doctorname">
+                <th mat-header-cell *matHeaderCellDef (click)="onSortData('doctorFullName')">
+                  {{ "doctor_name" | translate }}
+                  <span *ngIf="sortColumn === 'doctorname'" class="material-icons sorticon">{{ sortIconClass }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element?.doctorFullName }}
+                </td>
+              </ng-container>
+
+              <!--Review  Column -->
+              <ng-container matColumnDef="review">
+                <th mat-header-cell *matHeaderCellDef (click)="onSortData('comment')">
+                  {{ "review" | translate }}
+                  <span *ngIf="sortColumn === 'comment'" class="material-icons sorticon">{{ sortIconClass }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ trimComment(element?.comment) }}
+                </td>
+              </ng-container>
+
+              <!-- Rating  -->
+              <ng-container matColumnDef="rating">
+                <th mat-header-cell *matHeaderCellDef (click)="onSortData('rating')">
+                  {{ "rating" | translate }}
+                  <span *ngIf="sortColumn === 'rating'" class="material-icons sorticon">{{ sortIconClass }}</span>
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="rating">
+                    <span class="ratings-star">
+                      {{ element?.rating }}
+                      <div class="star">
+                        <i class="fa-solid fa-star" *ngFor="
+                            let f of [].constructor(
+                              adjustRatingStar(element?.rating)
+                            )
+                          "></i>
+                        <i class="fa-solid fa-star-half-alt" *ngIf="element?.rating % 1 !== 0"></i>
+                      </div>
+                    </span>
+                  </div>
+                </td>
+              </ng-container>
+
+              <!-- isDisabled -->
+              <ng-container matColumnDef="activeStatus">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "active_status" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <ng-container *ngIf="giveInnerPermission('active_status_request')">
+                    <div class="toggel-slide">
+                      <mat-slide-toggle [checked]="element?.status"
+                        (change)="handleToggleChangeForActiveStatus($event.checked, element?.id)"></mat-slide-toggle>
+                    </div>
+                  </ng-container>
+                </td>
+              </ng-container>
+
+
+              <!--Action column -->
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{ "action" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="icon_group">
+                    <ng-container *ngIf="giveInnerPermission('delete')">
+                      <a class="svgicon" (click)="
+                        openVerticallyCenteredsecond(deletePopup, element.id)
+                      "><svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+                          <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M13.2153 2.93223C13.5071 2.93223 13.75 3.17447 13.75 3.48272V3.76772C13.75 4.06846 13.5071 4.31821 13.2153 4.31821H0.78539C0.492895 4.31821 0.25 4.06846 0.25 3.76772V3.48272C0.25 3.17447 0.492895 2.93223 0.78539 2.93223H2.97217C3.41639 2.93223 3.80298 2.61648 3.90291 2.17098L4.01743 1.65949C4.1954 0.962745 4.78112 0.5 5.45145 0.5H8.54855C9.21158 0.5 9.80387 0.962745 9.97528 1.62274L10.0978 2.17023C10.197 2.61648 10.5836 2.93223 11.0286 2.93223H13.2153ZM12.1044 13.3505C12.3327 11.2228 12.7324 6.16784 12.7324 6.11684C12.747 5.96235 12.6967 5.8161 12.5967 5.69835C12.4895 5.5881 12.3538 5.52285 12.2043 5.52285H1.80139C1.65113 5.52285 1.50817 5.5881 1.40897 5.69835C1.30831 5.8161 1.25871 5.96235 1.266 6.11684C1.26734 6.12621 1.28168 6.30428 1.30566 6.60197C1.41219 7.92441 1.70888 11.6076 1.90059 13.3505C2.03626 14.6345 2.87874 15.4415 4.09905 15.4708C5.04072 15.4925 6.01084 15.5 7.00284 15.5C7.93722 15.5 8.88619 15.4925 9.85704 15.4708C11.1197 15.449 11.9614 14.6563 12.1044 13.3505Z" />
+                        </svg></a>
+                    </ng-container>
+                    <ng-container *ngIf="giveInnerPermission('view')">
+                      <a class="svgicon" (click)="
+                        openVerticallyCenteredreview(
+                          reviewcontent,
+                          element?.comment
+                        )
+                      "><svg xmlns="http://www.w3.org/2000/svg" width="16" height="10" viewBox="0 0 16 10" fill="none">
+                          <path
+                            d="M8 0.550781C2.7512 0.550781 0 4.43364 0 5.05078C0 5.66632 2.7512 9.55078 8 9.55078C13.248 9.55078 16 5.66632 16 5.05078C16 4.43364 13.248 0.550781 8 0.550781ZM8 8.51176C6.036 8.51176 4.444 6.96248 4.444 5.05078C4.444 3.13908 6.036 1.58819 8 1.58819C9.964 1.58819 11.5552 3.13908 11.5552 5.05078C11.5552 6.96248 9.964 8.51176 8 8.51176ZM8 5.05078C7.6744 4.69158 8.5304 3.31989 8 3.31989C7.0176 3.31989 6.2216 4.09533 6.2216 5.05078C6.2216 6.00623 7.0176 6.78167 8 6.78167C8.9816 6.78167 9.7784 6.00623 9.7784 5.05078C9.7784 4.61123 8.2768 5.35533 8 5.05078Z" />
+                        </svg></a>
+                    </ng-container>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsDoctor"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsDoctor"></tr>
+            </table>
+            <div class="text-center" *ngIf="dataSourceDoctor?.length === 0">
+              <b> {{ "no_record_found" | translate }}</b>
+            </div>
+          </div>
+          <mat-paginator #paginator class="pagination" [length]="totalLength" (page)="handlePageEvent($event)"
+            [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review modal -->
+
+  <div class="review">
+    <ng-template #reviewcontent let-modal>
+      <div class="custome_modal">
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">
+            {{ "review" | translate }}
+          </h4>
+          <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form_field_wrapper">
+              <mat-form-field appearance="fill">
+                <textarea matInput [(ngModel)]="selectedReview" name="myTextarea" [readonly]=true></textarea>
+              </mat-form-field>
+            </div>
+          </form>
+          <div class="primary_btn mt-4">
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+              {{ "cancel" | translate }}
+            </button>
+            <!-- <button type="button" class="btn btn-primary">Save</button> -->
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<ng-template #deletePopup let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img class="img-fluid" src="../../../../assets/img/delete.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>{{ "delete_this_review_rating" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="deleteReviewAndRating()">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #activeStatusModal let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete">
+          <img class="img-fluid" src="../../../../assets/img/reject.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p>
+          {{"status_Update" | translate }}
+        </p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button type="button" class="btn btn-primary" (click)="chnageStatusReviewAndRating()">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

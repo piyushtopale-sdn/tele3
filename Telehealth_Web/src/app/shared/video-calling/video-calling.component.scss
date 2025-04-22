@@ -1,0 +1,743 @@
+.voiceCall_modal{
+    .modal-dialog{
+        // max-width: 225px;
+        // min-width: 225px;
+    }
+    .modal-content{
+        // box-shadow: 0px 4px 7px 0px rgba(189, 219, 249, 0.36);
+        // border-radius: 15px;
+        // border: 1px solid #707070;
+    }
+    .modal-header{
+        border: none;
+        padding: 0;
+        justify-content: flex-end;
+        position: relative;
+        .modal-title{
+          font-size: 17px;
+          font-weight: 600;
+          color: #272727;
+        }
+        .btn-close{
+          margin: 0;
+          right: 0;
+          top: 0;
+          font-size: 18px;
+          z-index: 99999;
+          line-height: 0;
+          color: #9c9c9c;
+          background: none;
+          &:focus{
+            box-shadow: none;
+          }
+        }
+    }
+    .modal-body {
+        padding-top: 0;
+        text-align: center;
+        
+        .cardBox{
+            .imgBox{
+                width: 135px;
+                height: 135px;
+                border-radius: 50%;
+                margin: 0 auto;
+
+                img{
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                }
+            }
+
+            p{
+                color: #272727;
+                font-size: 18px;
+                margin: 15px 0 10px;
+                font-weight: 500;
+            }
+
+            .timer_div{
+                text-align: center;
+                margin-bottom: 15px;
+                span{
+                    display: inline-block;
+                    color: #9B9B9B;
+                    font-weight: 400;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+    .pay_submit_box{
+        text-align: center;
+        padding: 0 1rem .5rem;
+        margin: 0 0 1rem;
+        
+        .voice_btn{
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 400;
+        color: #fff;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        text-align: center;
+        padding: 6px 0px;
+        background: #D6D6D6;
+        border: none;
+
+        svg{
+            width: 12px;
+        }
+        
+        &.end_call_btn{
+            background: #9F1F0C;
+            margin: 0 10px;
+
+            svg{
+                width: 16px;
+            }
+        }
+
+        &.call_pickUp_btn{
+            background: #64BD05;
+
+            svg{
+                path{
+                    fill: #fff;         
+                }
+            }
+        }
+        }
+        
+    }
+}
+
+.all_chats_reciever_box{
+    .all_chats_modal{
+        .modal-dialog{
+            max-width: 100%;
+        }
+        .modal-content{
+            .calling_section{
+                // padding: 10px 10px 0;
+                .user_call_box {
+                    width: 100%;
+                    // height: calc(100vh - 365px);
+                    height: calc(100vh - 229px);
+                    background: #181b1f;
+                    // display: flex;
+                    // justify-content: center;
+                    // flex-direction: row;
+                    // flex-wrap: wrap;
+                    position: relative;
+                
+                    .main_caller_box{
+                        .caller_box {
+                            width: 24%;
+                            display: flex;
+                            // justify-content: space-around;
+                            align-items: flex-end;
+                            background: #22272c;
+                            position: absolute;
+                            width: 200px;
+                            background: #bdbdbd;
+                            height: 135px;
+                            right: 0;
+                            top: 5px;
+                            z-index: 99;
+                            border: 1px solid #666;
+                    
+                            img{
+                                width: 65px;
+                                height: 65px;
+                                border-radius: 50%;
+                                position: absolute;
+                                top:30px;
+                                left: 50%;
+                                transform: translateX(-50%)
+                            }
+
+                            .video_box{
+                                width: 100%;
+                                height: 100%;
+
+                                video{
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: contain !important;
+                                }
+                            }
+                    
+                            .user-buttons {
+                                max-width: 125px;
+                                display: flex;
+                                justify-content: flex-start;
+                                padding: 0;
+                                position: absolute;
+                                left: 0;
+                                bottom: 0;
+                                border: 1px solid #666666;
+                                border-radius: 4px;
+
+                
+                                .userName{
+                                    display: inline-block;
+                                    background: #000;
+                                    width: 100%;
+                                    padding: 5px 8px;
+                                    font-size: 12px;
+                                    text-decoration: none;
+                                    color: #fff;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    position: relative;
+                                    border-radius: 4px;
+                
+                                    .flt_btn{
+                                        position: absolute;
+                                        right: 3px;
+                                        top: 5px;
+                
+                                        .btn {
+                                            display: none;
+                                            text-decoration: none;
+                                            outline: none;
+                                            cursor: pointer;
+                                            text-align: center;
+                                            background-color: #000;
+                                            padding: 0;
+                                            border: none;
+                                            font-size: 12px;
+
+                                            i {
+                                                color: #cccccc;
+                                            }
+                                            &:hover {
+                                                background-color: rgba(0, 0, 0, .1);
+                                                color: #d9d9d9;
+                                            }
+                                        }
+                                    }
+                
+                                    &:hover{
+                
+                                        padding: 5px 25px 5px 8px;
+                                        .flt_btn{
+                                            .btn{
+                                                display: inline-block;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                    
+                            .close_btn{
+                                position: absolute;
+                                top: 5px;
+                                right: 10px;
+                                border: none;
+                                outline: none;
+                                background: none;
+                                cursor: pointer;
+                                display: inline-block;
+                            }
+                        }
+                    }
+
+                    .append_main_videoBox{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 100%;
+                        height: 100%;
+                        flex-wrap: wrap;
+
+                        .user {
+                            // width: 24%;
+                            height: 100%;
+                            margin: 2px;
+                            // display: flex;
+                            // justify-content: flex-start;
+                            // align-items: flex-end;
+                            background: #22272c;
+                            position: relative;
+                            border: 1px solid #666;
+                    
+                            img{
+                                width: 100px;
+                                position: absolute;
+                                height: 100px;
+                                border-radius: 50%;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                border: 3px solid red;
+                                padding: 2px;
+                                box-shadow: 0px 0px 5px 2px rgba(239, 230, 225, 0.6);
+                            }
+    
+                            .video_box{
+                                // position: absolute;
+                                // top: 0;
+                                // bottom: 0;
+                                // right: 0;
+                                // left: 0;
+                                width: 100%;
+                                height: 100%;
+                
+                                video{
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: contain !important;
+                                    height: 100%;
+                                    position: absolute;
+                                    left: 0px;
+                                    top: 0px;
+                                }
+                            }
+                    
+                            .user-buttons {
+                                max-width: 125px;
+                                display: flex;
+                                justify-content: flex-start;
+                                padding: 0;
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                border: 1px solid #666666;
+                                border-radius: 4px;
+                    
+                                .userName{
+                                    display: inline-block;
+                                    background: #000;
+                                    width: 100%;
+                                    padding: 5px 8px;
+                                    font-size: 12px;
+                                    text-decoration: none;
+                                    color: #fff;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    position: relative;
+                                    border-radius: 4px;
+                    
+                                    .flt_btn{
+                                        position: absolute;
+                                        right: 5px;
+                                        top: 5px;
+                    
+                                        .btn {
+                                            display: none;
+                                            text-decoration: none;
+                                            outline: none;
+                                            cursor: pointer;
+                                            text-align: center;
+                                            background-color: #000;
+                                            padding: 0;
+                                            border: none;
+                                            font-size: 12px;
+    
+                                            i {
+                                                color: #cccccc;
+                                            }
+                                            &:hover {
+                                                background-color: rgba(0, 0, 0, .1);
+                                                color: #d9d9d9;
+                                            }
+                                        }
+                                    }
+                                    &:hover{
+                                        padding: 5px 25px 5px 8px;
+                    
+                                        .flt_btn{
+                                            .btn{
+                                                display: inline-block;
+                                            }
+                                        }
+                                    }
+    
+                                    &:focus-visible{
+                                        outline: none;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                
+                    &.userOne{
+                        .append_main_videoBox{
+                            .user{
+                                width: 100%;
+                                height: 100%;
+                            }
+                        }
+                    }
+                
+                    &.userTwo{
+                        .append_main_videoBox{
+                            .user{
+                                width: 46%;
+                                height: 100%;
+                            }
+                        }
+                    }
+                
+                    &.userThree{
+                        .append_main_videoBox{
+                            .user{
+                                width: 32.33%;
+                                height: 100%;
+                                // &:last-child{
+                                //     width: 92%;
+                                // }
+                            }
+                        }
+                    }
+                
+                    &.userFour{
+                        .append_main_videoBox{
+                            .user{
+                                width: 48%;
+                                height: 43vh;
+                            }
+                        }
+                    }
+                
+                    &.userFive{
+                        .append_main_videoBox{
+                            .user{
+                                width: 33%;
+                                height: 43vh;
+                            }
+                        }
+                    }
+                }
+                
+                .user_call_box-options {
+                    width: 100%;
+                    // height: 75px;
+                    background: #b6c8d6;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+                    position: relative;
+                
+                    .options {
+                        width: 25%;
+                        height: 100%;
+                        display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                        .btn {
+                            text-decoration: none;
+                            outline: none;
+                            border: 1px solid rgba(0, 0, 0, .2);
+                            padding: 0;
+                            width: 35px;
+                            height: 35px;
+                            background-color: rgba(0, 0, 0, .2);
+                            cursor: pointer;
+                            text-align: center;
+                            border-radius: 50%;
+                            i {
+                                color: #cccccc;
+                                font-size: 16px;
+                            }
+                            &:hover {
+                                background-color: rgba(0, 0, 0, .1);
+                                color: #d9d9d9;
+                            }
+                        }
+                    }
+
+                    &.user_audio_call_option{
+                       .options{
+                        justify-content: center;
+                        .btn{
+                            margin: 0 10px;
+                        }
+                       } 
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+@import '../../../assets/css/variable/variable';
+
+.video_call{
+    .top_bar{
+        justify-content: flex-end;
+        margin: 0 0 30px;
+        .primary_btn{
+            .btn{
+                margin: 0 0 0 15px;
+            }
+        }
+    }
+    .video_btn{
+        justify-content: center;
+        align-items: center;
+        margin-top: 35px;
+        flex-wrap: wrap;
+        .btn{
+            background: #FFFFFF;
+            border: 1.30968px solid rgba(61, 57, 137, 0.1);
+            box-shadow: 0px 5.23871px 13.0968px rgb(61 57 137 / 5%);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            padding: 0;
+            margin: 0 8px 8px;
+            &.call_end{
+                background: #D92029;
+            }
+        }
+    }
+}
+
+// Assessment Modal css
+.assessment{
+    .assessment_item{
+        border: 1px solid #B6C8D6;
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin: 0 0 20px;
+        label{
+            font-weight: 500;
+            line-height: 20px;
+            margin: 0 0 5px;
+            font-size: $font_small;
+            color: $bodyopacitycolor;
+        }
+        .answer{
+            font-weight: 500;
+            font-size: $font_medium;
+            color: $table_color;
+        }
+    }
+}
+
+// Shop Notes Modal css
+.shop_notes{
+    .custome_modal{
+        form{
+            .form_field_wrapper{
+                .mat-form-field{
+                    textarea{
+                        min-height: 120px;
+                    }
+                }
+            }
+        }
+        .primary_btn{
+            .btn{
+                width: 100%;
+                font-size: $font_large;
+                padding: 10px 15px;
+            }
+        }
+    }
+}
+@media screen and (max-width:$small_phone) {
+    .video_call .top_bar .primary_btn{
+        flex-direction: column;
+    }
+    .video_call .top_bar .primary_btn .btn{
+        width: 100%;
+        margin: 0 0 15px;
+    }
+}
+
+.groupcalldiolog
+{
+width: 100%  !important;
+max-width: none !important;
+// .mat-dialog-container
+// {
+// padding: 13px 20px !important;
+// height: auto !important;
+// }
+.dashboard_main_content
+{
+    padding: 0px;
+}
+}
+.stop_consultation
+{
+    z-index: 99999  !important;
+}
+
+.viewprofile
+{
+    z-index: 999999  !important;
+}
+.assessment
+{
+    z-index: 99999  !important;
+}
+.quick_view
+{
+    z-index: 999999  !important;
+}
+.chat_div
+{
+    // background: #c5c5c5c5;
+    margin: 0px;
+    padding: 0px;
+}
+.chatheader
+{
+    background: #2839ff;
+    color: white;
+    padding: 5px 1px 6px 9px;
+    text-align: left;
+}
+.chatfooter
+{
+    background: black;
+    color: white;
+    padding: 5px 5px 5px 9px;
+    text-align: left;
+    textarea {
+        width: 100%;
+    }
+}
+.chatbody
+{
+    padding: 12px 10px;
+    height: 474px;
+            overflow-y: scroll;  
+            .leftdiv{
+                padding: 1px 8px;
+                background: #a5ccf9;
+                width: 100%;
+                float: left;
+                text-align: left;
+                max-width: 74%;
+                word-break: break-word;
+                margin-bottom: 8px;
+                border-radius: 6px;
+            }
+            .rightdiv
+            {
+               
+                padding: 1px 8px;
+                background: #d9e9fb;
+                width: 100%;
+                text-align: right;
+                max-width: 74%;
+                word-break: break-word;
+                border-radius: 6px;
+                float: right;
+                margin-bottom: 8px;
+            }
+}
+
+.displaynone
+{
+    display: none;
+}
+.displayblock
+{
+    display: block;
+}
+.close-icon {
+    float: right; /* Align to the right */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    padding: 5px; /* Add padding for better clickability */
+}
+
+.close-icon:hover {
+    color: red; /* Change color on hover */
+}
+
+.badge {
+    position: absolute;
+    top: -14px !important;
+    right: -23px;
+    background-color: green;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+}
+  .btn_chat {
+    position: relative;
+  }
+
+//   #remoteVideo {
+    // width: 50%;
+    // max-width: 600px;  /* Max width for 720p resolution */
+    // height: auto;
+// }
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .chatbody {
+    // flex: 1;
+    overflow-y: auto; /* Allows scrolling if messages overflow */
+    padding: 10px;
+    background-color: #f5f5f5; /* Optional styling */
+  }
+  
+  .chatfooter {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #b6c8d6;
+    color: #fff;
+    position: sticky; /* Keeps it visible when scrolling */
+    bottom: 0;
+  }
+  
+  textarea {
+    flex: 1;
+    resize: none;
+    margin-right: 10px;
+  }
+  
+  .primary_btn button {
+    white-space: nowrap;
+  }
+  .video_btn .btn_chat {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+   
+  #messageCountBadge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ff0000; /* Red color for the badge */
+    color: #ffffff; /* White text */
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%; /* Circular badge */
+    width: 20px; /* Badge dimensions */
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Optional shadow for better visibility */
+  }
+  .upload-icon {
+    position: relative;
+    color: #007bff; /* Optional: Adjust the color to match your design */
+  }
