@@ -12,7 +12,7 @@ const readFileContent = (req, res) => {
             defval: "",
             raw: false
         })
-        temp.forEach((res, index) => {
+        temp.forEach((res) => {
             let obj = 0
             for (const key in res) {
 

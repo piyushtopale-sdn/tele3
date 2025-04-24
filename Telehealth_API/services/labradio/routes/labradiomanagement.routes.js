@@ -57,7 +57,7 @@ const uploadFileToLocalStorage = async (req, res, next) => {
     const filename = file.name.split(".")[0] + "-" + Date.now() + ".xlsx";
     req.filename = filename;
     const newPath = `${__dirname.replace("routes", "uploads")}/${filename}`;
-    fs.writeFile(newPath, file.data, (err, data) => {
+    fs.writeFile(newPath, file.data, (err) => {
       if (err) {
         return handleResponse(req, res, 500, {
           status: false,

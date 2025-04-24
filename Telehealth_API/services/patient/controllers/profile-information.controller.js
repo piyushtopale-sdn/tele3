@@ -84,7 +84,9 @@ class ProfileInformation {
 
       // Update family member ID in parent patient profile
       const getPatientDetails = await Profile_info.findOne({ for_portal_user: patientId }, { familyMemberIds: 1, full_name: 1 });
-      const data = getPatientDetails?.familyMemberIds ? [...getPatientDetails?.familyMemberIds, portalUserData._id] : [portalUserData._id];
+      const familyMemberIds = getPatientDetails?.familyMemberIds || [];
+      const data = [...familyMemberIds, portalUserData._id];
+
 
       await Profile_info.findOneAndUpdate(
         { for_portal_user: patientId },
@@ -113,7 +115,8 @@ class ProfileInformation {
       const getFamilyInfo = await Family_info.findOne({ for_portal_user: patientId })
 
       if (getFamilyInfo) {
-        const data = getFamilyInfo?.family_members ? [...getFamilyInfo?.family_members, addObject] : [addObject]
+        const familyMembers = getFamilyInfo?.family_members || [];
+        const data = [...familyMembers, addObject];
         await Family_info.findOneAndUpdate(
           { for_portal_user: patientId },
           {
@@ -167,10 +170,9 @@ class ProfileInformation {
       const getRecords = await Family_info.find({ for_portal_user: { $eq: patientId } }).lean();
       let familyRecords = getRecords[0]?.family_members || [];
 
-      for (let index = 0; index < familyRecords.length; index++) {
-        const element = familyRecords[index];
+      for (const [index, element] of familyRecords.entries()) {
         if (element?.profile_pic) {
-          familyRecords[index].signedUrl = await generateSignedUrl(element?.profile_pic);
+          familyRecords[index].signedUrl = await generateSignedUrl(element.profile_pic);
         }
       }
 
@@ -201,10 +203,9 @@ class ProfileInformation {
       let familyRecords = getRecords[0]?.family_members || [];
 
       familyRecords = familyRecords.filter(member => member.isDeleted);
-      for (let index = 0; index < familyRecords.length; index++) {
-        const element = familyRecords[index];
+      for (const [index, element] of familyRecords.entries()) {
         if (element?.profile_pic) {
-          familyRecords[index].signedUrl = await generateSignedUrl(element?.profile_pic);
+          familyRecords[index].signedUrl = await generateSignedUrl(element.profile_pic);
         }
       }
 

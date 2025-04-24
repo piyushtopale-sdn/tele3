@@ -23,6 +23,8 @@ const validateColumnWithExcel = (toValidate, excelColumn) => {
   return true;
 };
 
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 class ICDCodeManagement {
   async addICD_code(req, res) {
     try {
@@ -363,10 +365,7 @@ class ICDCodeManagement {
       }
 
       let filter = { delete_status: false };
-       function escapeRegex(text) {
-        return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
-      }
-  
+     
       if (searchText) {
         let safeSearchText = escapeRegex(searchText);
         filter.$or = [

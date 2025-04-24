@@ -4,8 +4,6 @@ import Http from "./httpservice";
 const httpService = new Http();
 import { sendPushNotification } from "./firebase_notification";
 import { sendSms } from "../middleware/sendSms";
-const config = require("../config/constants");
-const BaseUrl = config.config.BaseUrl;
 
 export const notification = (paramsData, headers, requestData) => {
   return new Promise(async(resolve, reject) => {

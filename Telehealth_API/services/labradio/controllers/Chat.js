@@ -812,7 +812,6 @@ export const getNotification = async (req, res) => {
       });
   
     } catch (err) {
-      ;
       return sendResponse(req, res, 500, {
         status: false,
         body: err,

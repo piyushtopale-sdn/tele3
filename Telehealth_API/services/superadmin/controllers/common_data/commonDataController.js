@@ -33,6 +33,9 @@ const validateColumnWithExcel = (toValidate, excelColumn) => {
   }
   return true;
 };
+
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 class CommonDataController {
   async countryList(req, res) {
     try {
@@ -865,7 +868,8 @@ class CommonDataController {
       ];
 
       if (searchKey && searchKey !== "") {
-        const regex = new RegExp(searchKey, "i");
+        const safeSearch = escapeRegex(searchKey);
+        const regex = new RegExp(safeSearch, "i");
         aggregate.push({ $match: { name: regex } });
       }
 
@@ -1490,8 +1494,7 @@ class CommonDataController {
           },
         ]);
       }
-
-      ;
+      
       let array = result.map((obj) => Object.values(obj));
       sendResponse(req, res, 200, {
         status: true,
@@ -4081,28 +4084,37 @@ async addStudyType(req,res)
 {
   try {
     const { studyTypes } = req.body
-
     let existingStudyType = []
     for (const data of studyTypes) {
-        const getStudyType = await StudyType.find({ studyTypeName: data.studyTypeName, isDeleted: false })
-        if (getStudyType.length > 0) {
-          existingStudyType.push(data.studyType)
-        } else {
-            const addStudyType = new StudyType(data)
-            await addStudyType.save()
-        }
+      const studyTypeName = data.studyTypeName.trim();
+
+      const getStudyType = await StudyType.findOne({
+        studyTypeName: { $regex: `^${studyTypeName}$`, $options: 'i' },
+        isDeleted: false,
+      });
+
+      if (getStudyType) {
+        existingStudyType.push(studyTypeName);
+      } else {
+        const addStudyType = new StudyType(data);
+        await addStudyType.save();
+      }
     }
     let message;
+    let status;
     if (studyTypes.length == existingStudyType.length) {
         message = `This study type already exists.`
+        status = false
     } else if(existingStudyType.length > 0 && studyTypes.length != existingStudyType.length) {
+        status = false
         message = `This study type already exists. Remaining are added successfully`
     } else {
+        status = true
         message = `Study Type added successfully.`
     }
-
+ 
     sendResponse(req, res, 200, {
-        status: true,
+        status: status,
         message,
         body: null,
         errorCode: null,

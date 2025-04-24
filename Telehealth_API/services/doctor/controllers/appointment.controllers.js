@@ -1379,7 +1379,7 @@ class AppointmentController {
   }
 
   /** New function created to send reminder before 24 hr and 1 hr - Jan 24, 2024 */
-  async sendReminderNotifications(req, res) {
+  async sendReminderNotifications() {
     try {
       const token = generateToken({ role: "patient" });
       const headers = {

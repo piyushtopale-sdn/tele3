@@ -282,6 +282,7 @@ const processSubscriptionPayment = async (user, headers) => {
     }
 };
 
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 class PaymentController {
     async getPaymentHistory(req, res) {
         const headers = {
@@ -825,7 +826,7 @@ class PaymentController {
             if (status && status !== 'all') matchStage.transactionType = status;
             if (mongoose.Types.ObjectId.isValid(patientId)) matchStage.forUser = new mongoose.Types.ObjectId(patientId);
             if (fromDate && toDate) matchStage.createdAt = { $gte: new Date(fromDate), $lte: new Date(toDate) };
-            if (searchText) matchStage["forUser.full_name"] = { $regex: new RegExp(searchText, "i") };
+            if (searchText)  matchStage["forUser.full_name"] = { $regex: new RegExp(escapeRegex(searchText), "i") };
     
             // Sorting logic
             let sort = req.query.sort;

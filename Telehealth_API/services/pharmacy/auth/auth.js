@@ -77,7 +77,7 @@ export const login = async (req, res) => {
                         messageID: messageID.failureCode,
                         message: messages.internalServerError
                     }))
-                };
+                }
                 return res.status(messageID.successCode).json(encryptObjectData({
                     status: responseCodes.successStatus,
                     messageID: messageID.successCode,

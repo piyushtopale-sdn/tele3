@@ -3,7 +3,6 @@
 // models
 import HospitalAdminInfo from "../models/hospital_admin_info";
 import BasicInfo from "../models/basic_info";
-import HospitalOpeningHours from "../models/hospital_opening_hours";
 import ReviewAndRating from "../models/review";
 import PortalUser from "../models/portal_user";
 import Appointment from "../models/appointment";
@@ -15,7 +14,6 @@ import moment from "moment";
 import { sendResponse } from "../helpers/transmission";
 import mongoose from "mongoose";
 import Http from "../helpers/httpservice";
-import { notification } from "../helpers/notification";
 import StaffInfo from "../models/staff_info";
 import PathologyTestInfoNew from "../models/pathologyTestInfoNew";
 import { generateSignedUrl } from "../helpers/gcs";
@@ -151,84 +149,9 @@ const getHospitalTeam = async (hospital_portal_id) => {
     }
   });
 };
-const getDoctorOpeningsHours = async (week_days) => {
-  let Sunday = [];
-  let Monday = [];
-  let Tuesday = [];
-  let Wednesday = [];
-  let Thursday = [];
-  let Friday = [];
-  let Saturday = [];
-  if (week_days) {
-    week_days.forEach((data) => {
-      Sunday.push({
-        start_time:
-          data.sun_start_time.slice(0, 2) +
-          ":" +
-          data.sun_start_time.slice(2, 4),
-        end_time:
-          data.sun_end_time.slice(0, 2) + ":" + data.sun_end_time.slice(2, 4),
-      });
-      Monday.push({
-        start_time:
-          data.mon_start_time.slice(0, 2) +
-          ":" +
-          data.mon_start_time.slice(2, 4),
-        end_time:
-          data.mon_end_time.slice(0, 2) + ":" + data.mon_end_time.slice(2, 4),
-      });
-      Tuesday.push({
-        start_time:
-          data.tue_start_time.slice(0, 2) +
-          ":" +
-          data.tue_start_time.slice(2, 4),
-        end_time:
-          data.tue_end_time.slice(0, 2) + ":" + data.tue_end_time.slice(2, 4),
-      });
-      Wednesday.push({
-        start_time:
-          data.wed_start_time.slice(0, 2) +
-          ":" +
-          data.wed_start_time.slice(2, 4),
-        end_time:
-          data.wed_end_time.slice(0, 2) + ":" + data.wed_end_time.slice(2, 4),
-      });
-      Thursday.push({
-        start_time:
-          data.thu_start_time.slice(0, 2) +
-          ":" +
-          data.thu_start_time.slice(2, 4),
-        end_time:
-          data.thu_end_time.slice(0, 2) + ":" + data.thu_end_time.slice(2, 4),
-      });
-      Friday.push({
-        start_time:
-          data.fri_start_time.slice(0, 2) +
-          ":" +
-          data.fri_start_time.slice(2, 4),
-        end_time:
-          data.fri_end_time.slice(0, 2) + ":" + data.fri_end_time.slice(2, 4),
-      });
-      Saturday.push({
-        start_time:
-          data.sat_start_time.slice(0, 2) +
-          ":" +
-          data.sat_start_time.slice(2, 4),
-        end_time:
-          data.sat_end_time.slice(0, 2) + ":" + data.sat_end_time.slice(2, 4),
-      });
-    });
-  }
-  return {
-    Sunday,
-    Monday,
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday,
-    Saturday,
-  };
-};
+
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 class PatientController {
   async hospitalDetailsById(req, res) {
     try {
@@ -288,14 +211,6 @@ class PatientController {
         });
 
       let data = result[0];
-
-      //Opening hours status
-      if (data.opening_hours_status) {
-      } else {
-        await HospitalOpeningHours.find({
-          for_portal_user: { $eq: hospital_portal_id },
-        });
-      }
 
       let hospitalPicture = [];
 
@@ -1283,13 +1198,13 @@ class PatientController {
 
     let condition = {};
     let mytext = req.query.searchText || "";
-    let regexValue = new RegExp(mytext);
     if (mytext) {
+      const regexValue = new RegExp(escapeRegex(mytext), "i");
       condition = {
         $or: [
-          { firstName: { $regex: regexValue, $options: "i" } },
-          { middleName: { $regex: regexValue, $options: "i" } },
-          { lastName: { $regex: regexValue, $options: "i" } },
+          { firstName: { $regex: regexValue } },
+          { middleName: { $regex: regexValue } },
+          { lastName: { $regex: regexValue } },
         ],
       };
     }

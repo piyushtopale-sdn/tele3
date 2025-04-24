@@ -1,8 +1,6 @@
 const {
   RtcTokenBuilder,
-  RtmTokenBuilder,
   RtcRole,
-  RtmRole,
 } = require("agora-access-token");
 import "dotenv/config.js";
 import axios from "axios";

@@ -43,7 +43,6 @@ class HospitalStaffController {
             creatorId,
             doj
         } = req.body;
-        ;
 
         try {
             const checkUser = await PortalUser.findOne({_id:creatorId});

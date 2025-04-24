@@ -120,7 +120,6 @@ class StaffManagementController {
 
     async editStaff(req, res) {
         const { id, first_name, middle_name, last_name, first_name_arabic, middle_name_arabic, last_name_arabic, staff_profile, dob, language, address, neighbourhood, country, region, province, department, city, village, pincode, role, about, degree, country_code, phone } = req.body;
-        ;
         try {
 
             const selectedLanguagesArray = JSON.parse(language);

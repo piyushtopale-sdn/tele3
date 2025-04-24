@@ -240,7 +240,6 @@ export const deleteNotification = async (req, res) => {
         })
        }
     } catch (err) {
-        ;
         return sendResponse(req, res, 500, {
             status: false,
             body: err,

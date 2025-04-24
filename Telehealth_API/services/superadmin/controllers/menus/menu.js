@@ -212,5 +212,6 @@ module.exports = {
     all_submenus,
     add_perm,
     all_perms,
-    edit_perm
+    edit_perm,
+    delete_menu
 }

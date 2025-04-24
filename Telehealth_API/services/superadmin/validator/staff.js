@@ -1,4 +1,4 @@
-const { body, check } = require("express-validator");
+const { body } = require("express-validator");
 
 const staffValidator = [
     body("staff_name", "Please Enter a Valid Name").not().isEmpty(),

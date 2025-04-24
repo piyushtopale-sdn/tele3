@@ -2797,7 +2797,10 @@ class Patient {
   }
 
   async patientFullDetails(req, res) {
-    const { patient_id } = req.query;
+    const { patient_id ,page,limit} = req.query;
+
+  const pageNumber = parseInt(page) 
+  const pageSize = parseInt(limit)
     const headers = {
       Authorization: req.headers["authorization"],
     };
@@ -2989,17 +2992,56 @@ class Patient {
           result[0].personalDetails.profile_pic_signed_url =
             await generateSignedUrl(result[0]?.personalDetails?.profile_pic);
         }
+        //medical History
         if (result[0]?.personalDetails?.medicalInformation?.medicalHistory) {
-          result[0].personalDetails.medicalInformation.medicalHistory.sort((a, b) => {
-              return new Date(b.createdAt) - new Date(a.createdAt);
-          });
-      }
-      if (result[0]?.personalDetails?.medicalInformation?.socialHistory) {
-        result[0].personalDetails.medicalInformation.socialHistory = 
-            result[0].personalDetails.medicalInformation.socialHistory
-                .filter(record => !record.isDeleted)
-                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          let medicalHistory = result[0].personalDetails.medicalInformation.medicalHistory
+            .filter(item => item.isDeleted === false)
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+          const total = medicalHistory.length;
+          const totalPages = Math.ceil(total / pageSize);
+        
+          const paginatedMedicalHistory = medicalHistory.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
+        
+          result[0].personalDetails.medicalInformation.medicalHistory = paginatedMedicalHistory;
+          result[0].personalDetails.medicalInformation.medicalHistoryTotal = total;
+          result[0].personalDetails.medicalInformation.medicalHistoryTotalPages = totalPages;
+          result[0].personalDetails.medicalInformation.medicalHistoryCurrentPage = pageNumber;
+        }
+        //Social History
+        if (result[0]?.personalDetails?.medicalInformation?.socialHistory) {
+          const socialHistory = result[0].personalDetails.medicalInformation.socialHistory
+              .filter(item => item.isDeleted === false)
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          
+          const socialTotal = socialHistory.length;
+          const paginatedSocialHistory = socialHistory.slice(
+              (pageNumber - 1) * pageSize,
+              pageNumber * pageSize
+          );
+          
+          result[0].personalDetails.medicalInformation.socialHistory = paginatedSocialHistory;
+          result[0].personalDetails.medicalInformation.socialHistoryTotal = socialTotal;
+          result[0].personalDetails.medicalInformation.socialHistoryTotalPages = Math.ceil(socialTotal / pageSize);
+          result[0].personalDetails.medicalInformation.socialHistoryCurrentPage = pageNumber;                
     }
+        //Family history
+        if (result[0]?.familyDetails) {
+          const familyHistory = result[0].familyDetails
+              .filter(item => item.isDeleted === false)
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          
+          const familyTotal = familyHistory.length;
+          const paginatedFamilyHistory = familyHistory.slice(
+              (pageNumber - 1) * pageSize,
+              pageNumber * pageSize
+          );
+          
+          result[0].familyDetails = paginatedFamilyHistory;
+          result[0].familyDetailsTotal = familyTotal;
+          result[0].familyDetailsTotalPages = Math.ceil(familyTotal / pageSize);
+          result[0].familyDetailsCurrentPage = pageNumber;
+      }
 
       }
 
@@ -7867,122 +7909,7 @@ async getAllPatientForSuperAdminNew(req, res) {
     }
   }
 
-  async exportMainRevenueList(req, res) {
-    const headers = { Authorization: req.headers["authorization"] };
-    try {
-      const getAllPatient = await ProfileInfo.find({ isFamilyMember: false })
-        .populate({ path: 'for_portal_user', select: 'subscriptionDetails' })
-        .select('first_name last_name full_name_arabic mrn_number');
 
-      let __activeSubscriptionList = [];
-      let __cancelSubscriptionList = [];
-
-      let planIdsSet = new Set();
-      let userIdsSet = new Set();
-
-      getAllPatient.forEach(patient => {
-        const portalUser = patient?.for_portal_user;
-        if (portalUser) {
-          const planId = portalUser.subscriptionDetails?.subscriptionPlanId;
-          if (planId) planIdsSet.add(planId);
-          userIdsSet.add(portalUser._id.toString());
-        }
-      });
-
-      const uniquePlanIds = [...planIdsSet];
-      const uniqueUserIds = [...userIdsSet];
-
-      let planDetailsMap = new Map();
-      if (uniquePlanIds.length > 0) {
-        const plansResponse = await httpService.getStaging(
-          `superadmin/get-subscription-plan/`,
-          { planIds: uniquePlanIds },
-          headers,
-          'superadminServiceUrl'
-        );
-
-        if (plansResponse?.body) {
-          plansResponse.body.forEach(plan => {
-            planDetailsMap.set(plan._id, {
-              plan_name: plan?.plan_name,
-              plan_name_arabic: plan?.plan_name_arabic,
-              plan_price: plan?.price_per_member
-            });
-          });
-        }
-      }
-
-      const getPurchaseHistory = await purchasehistory.find({
-        status: 'paid',
-        forUser: { $in: uniqueUserIds },
-        subscriptionPlanId: { $in: uniquePlanIds }
-      }).select('amountPaid forUser subscriptionPlanId');
-
-      let purchaseHistoryMap = new Map();
-      getPurchaseHistory.forEach(purchase => {
-        const key = `${purchase.forUser}_${purchase.subscriptionPlanId}`;
-        purchaseHistoryMap.set(key, purchase.amountPaid);
-      });
-
-      getAllPatient.forEach(patient => {
-        const portalUser = patient?.for_portal_user;
-        const subscriptionDetails = portalUser?.subscriptionDetails;
-        if (!subscriptionDetails) return;
-
-        const planInfo = planDetailsMap.get(subscriptionDetails.subscriptionPlanId) || {
-          plan_name: "",
-          plan_name_arabic: "",
-          plan_price: ""
-        };
-
-        const revenueKey = `${portalUser._id.toString()}_${subscriptionDetails.subscriptionPlanId}`;
-        const amountPaid = purchaseHistoryMap.get(revenueKey) || "0.00";
-
-        const formattedData = {
-          first_name: patient.first_name,
-          last_name: patient.last_name,
-          full_name_arabic: patient.full_name_arabic,
-          mrn_number: patient.mrn_number,
-          subscriptionDetails: {
-            plan_name: planInfo.plan_name,
-            plan_name_arabic: planInfo.plan_name_arabic,
-            plan_price: planInfo.plan_price,
-            startDate: subscriptionDetails?.period?.start,
-            endDate: subscriptionDetails?.period?.end,
-            amountPaid: parseFloat(amountPaid).toFixed(2)
-          },
-        };
-        if (subscriptionDetails.isPlanActive) {
-          __activeSubscriptionList.push(formattedData);
-        }
-
-        if (subscriptionDetails.isPlanCancelled) {
-          __cancelSubscriptionList.push(formattedData);
-        }
-      });
-
-      return sendResponse(req, res, 200, {
-        status: true,
-        message: `Total revenue.`,
-        data: {
-          __activeSubscriptionList,
-          __cancelSubscriptionList,
-        },
-        errorCode: null,
-      });
-
-    } catch (error) {
-      console.log("error__", error);
-
-      return sendResponse(req, res, 500, {
-        status: false,
-        message: "Internal server error",
-        body: error,
-        errorCode: null,
-      });
-    }
-  } 
-  
   async exportMainRevenueList(req, res) {
     const headers = { Authorization: req.headers["authorization"] };
     try {

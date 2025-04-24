@@ -77,7 +77,7 @@ const edit_menu = async (req, res) => {
         await Menus.findByIdAndUpdate(
             { _id: req.body.id },
             menu
-        ).then((docs) => handleResponse(req, res, 200, {
+        ).then(() => handleResponse(req, res, 200, {
             status: true,
             body: null,
             message: "Menu updated successfully",
@@ -170,7 +170,7 @@ const edit_perm = async (req, res) => {
         await Menus.findByIdAndUpdate(
             { _id: req.body.id },
             menu
-        ).then((docs) => res.json({
+        ).then(() => res.json({
             status: true,
             message: "Data updated"
         })).catch((err) => res.status(500).send({ message: err }));

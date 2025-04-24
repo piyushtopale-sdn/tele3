@@ -13,7 +13,7 @@ const add_user_menu = async (req, res) => {
         user_id: req.body.user_id
     });
     try {
-        await addUserMenu.save((err, result) => {
+        await addUserMenu.save((err) => {
             if (err) {
                 sendResponse(req, res, 500, {
                     status: false,
@@ -85,7 +85,7 @@ const edit_user_menu = async (req, res) => {
         await MenuPermission.findByIdAndUpdate(
             { _id: req.body.id },
             menu
-        ).then((docs) => sendResponse(req, res, 200, {
+        ).then(() => sendResponse(req, res, 200, {
             status: true,
             body: null,
             message: "successfully data updated",
@@ -121,7 +121,7 @@ const addSubmenuPermission = async (req, res) => {
         await PortalUser.findByIdAndUpdate(
             { _id: portal_user_id },
             permissionObject
-        ).then((docs) => sendResponse(req, res, 200, {
+        ).then(() => sendResponse(req, res, 200, {
             status: true,
             body: null,
             message: "successfully data updated",

@@ -9,30 +9,14 @@ import Eyeglass from "../models/eyeglass"
 const Http = require('../helpers/httpservice');
 import { EyeglassColumns, ImagingTestColumns, LabTestColumns, OthersTestColumns, VaccinationColumns } from "../config/constants"
 
-
 // utils
 import { sendResponse } from "../helpers/transmission";
 import { processExcel } from "../middleware/utils";
-const csv = require('fast-csv');
 const fs = require('fs');
 
 
 const httpService = new Http()
-const csvExtraction = (filePath) => {
-    let fileRows = []
-    return new Promise(function (resolve, reject) {
-        fs.createReadStream(filePath)
-            .pipe(csv.parse({ headers: true }))
-            .on("error", (error) => {
-                reject(error.message)
-            })
-            .on("data", (row) => {
-                fileRows.push(row);
-            }).on("end", function () {
-                resolve(fileRows)
-            })
-    })
-}
+
 const validateColumnWithExcel = (toValidate, excelColumn) => {
     const requestBodyCount = Object.keys(toValidate).length
     const fileColumnCount = Object.keys(excelColumn).length

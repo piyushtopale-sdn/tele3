@@ -6,6 +6,9 @@ import { sendResponse } from "../helpers/transmission";
 import HospitalAdminInfo from "../models/hospital_admin_info";
 import StaffInfo from "../models/staff_info";
 
+
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 // Add leave
 export const addLeave = async (req, res) => {
   const {
@@ -660,9 +663,10 @@ export const getAllMyStaffLeaves = async (req, res) => {
       },
       { $unwind: "$StaffData" },
     ];
-
+    
     if (searchKey && searchKey !== "") {
-      const regex = new RegExp(searchKey, "i");
+      const safeSearch = escapeRegex(searchKey);
+      const regex = new RegExp(safeSearch, "i");
       aggregate.push({ $match: { leave_type: regex } });
     }
 

@@ -10,6 +10,8 @@ import { sendResponse } from "../../helpers/transmission";
 import { hashPassword } from "../../helpers/string";
 import { sendStaffDetails } from "../../helpers/emailTemplate";
 import { sendEmail } from "../../helpers/ses";
+
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 class StaffManagementController {
 
   async addStaff(req, res) {
@@ -227,7 +229,8 @@ class StaffManagementController {
       ];
 
       if (searchKey != "") {
-        const regex = new RegExp(searchKey, "i");
+        const safeSearch = escapeRegex(searchKey);
+        const regex = new RegExp(safeSearch, "i");
         aggregate.push({ $match: { staff_name: regex } });
       }
 

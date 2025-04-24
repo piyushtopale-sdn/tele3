@@ -1,4 +1,4 @@
-const { body, check } = require("express-validator");
+const { body } = require("express-validator");
 
 const menuValidator = [
     body("menu_order", "Please Enter a Valid Number").not().isEmpty(),

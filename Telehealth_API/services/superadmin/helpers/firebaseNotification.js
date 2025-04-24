@@ -2,7 +2,7 @@ const FCM = require("fcm-node");
 const serverKey = process.env.SERVERKEY;
 const fcm = new FCM(serverKey)
 
-export const sendNotification = async (bodyMessage, title, fcmToken, receiverId) => {
+export const sendNotification = async (bodyMessage, title, fcmToken) => {
   try {
     const message = {
       to: fcmToken,

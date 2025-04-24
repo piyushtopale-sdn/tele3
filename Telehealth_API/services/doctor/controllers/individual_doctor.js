@@ -1726,7 +1726,7 @@ class IndividualDoctor {
         }
       });
 
-      Promise.all([completepromise]).then(async (values) => {
+      Promise.all([completepromise]).then(async () => {
         const roomName = req.body.roomName;
         const uniqueId = req.body.uid;
         if (!roomName) {
@@ -1895,7 +1895,7 @@ class IndividualDoctor {
       if (result) {
         let receiverId = result._id;
         let serviceurl = "doctorServiceUrl";
-        let message = `Join Meeting to open the given link <a href="${link}">${link}</a>`;
+        let message = `Join Meeting to open the given link`;
 
         let requestData = {
           created_by_type: "doctor",
@@ -4453,7 +4453,7 @@ async findOnlineDoctors(req, res) {
   try {
 
     const findOnlineDoc = await PortalUser.find({ activeToken: { $ne: "" } }, 
-      { country_code :1, mobile: 1, email: 1, full_name: 1, full_name_arabic: 1 }).lean(); ;
+      { country_code :1, mobile: 1, email: 1, full_name: 1, full_name_arabic: 1 }).lean();
       if(findOnlineDoc){
         const updatedDocs = [];
         for (const user of findOnlineDoc) {

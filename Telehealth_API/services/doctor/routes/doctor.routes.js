@@ -32,7 +32,7 @@ const uploadFileToLocalStorage = async (req, res, next) => {
     const filename = file.name.split('.')[0] + '-' + Date.now() + '.xlsx';
     req.filename = filename;
     const newPath = `${__dirname.replace('routes', 'uploads')}/${filename}`
-    fs.writeFile(newPath, file.data, (err, data) => {
+    fs.writeFile(newPath, file.data, (err) => {
         if (err) {
             return handleResponse(req, res, 500, {
                 status: false,
@@ -45,42 +45,6 @@ const uploadFileToLocalStorage = async (req, res, next) => {
     })
 }
 
-
-const uploadFileToLocalStoragecsv = (req, res, next) => {
-    if (!req.files) {
-        return handleResponse(req, res, 200, {
-            status: false,
-            body: null,
-            message: "No files found",
-            errorCode: "INTERNAL_SERVER_ERROR",
-        })
-    }
-    const file = req.files.file;
-    if (file.mimetype !== "text/csv") {
-        return handleResponse(req, res, 200, {
-
-            status: false,
-            body: null,
-            message: "Only .csv mime type allowed!",
-            errorCode: "INTERNAL_SERVER_ERROR",
-        })
-    }
-    const filename = file.name.split('.')[0] + '-' + Date.now() + '.xlsx';
-    req.filename = filename;
-    const path = `./uploads/${filename}`
-
-    file.mv(path, (err) => {
-        if (err) {
-            return handleResponse(req, res, 500, {
-                status: false,
-                body: null,
-                message: "Something went wrong while uploading file",
-                errorCode: "INTERNAL_SERVER_ERROR",
-            })
-        }
-        next()
-    });
-}
 
 doctor2Route.post("/admin-signup", hospital.signup);
 doctor2Route.get("/get-hospital-details", hospital.getHospitalDetails);

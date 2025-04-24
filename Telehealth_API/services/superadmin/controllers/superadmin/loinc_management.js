@@ -82,7 +82,10 @@ class LoincCodeManagement {
   
       // Search by LOINC code only
       if (searchText) {
-        filter.loincCode = { $regex: searchText, $options: "i" };
+        filter.$or = [
+          { loincCode: { $regex: searchText, $options: "i" } },
+          { description: { $regex: searchText, $options: "i" } }
+        ];
       }
   
       // Date range filter

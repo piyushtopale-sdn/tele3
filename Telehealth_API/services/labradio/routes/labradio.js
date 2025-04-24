@@ -20,19 +20,8 @@ import fs from "fs"
 import { addMembersToGroupChat, allMessage, clearAllmessages, clearSinglemessages, createdChat, createGroupChat, getAllUsersForChat, getCreatedChats, getNotification, markAllReadNotification, markReadNotificationByID, saveNotification, sendMessage, updateNotification, updateOnlineStatus } from "../controllers/Chat";
 const labRadioRoute = express.Router();
 
-const uploadImage = async (req, res, next) => {
-    const file = req.files.file;
-    const filename = file.name.split('.')[0] + '-' + Date.now() + '.jpg';
-    req.filename = filename;
-    
-    const newPath = `${__dirname.replace('routes', 'uploadEsignature')}/${filename}`
-    file.mv(newPath);
-    next()
-}
 
 const uploadFileToLocalStorage = async (req, res, next) => {
-
-
 
     if (!req.files) {
         return handleResponse(req, res, 500, {
@@ -54,7 +43,7 @@ const uploadFileToLocalStorage = async (req, res, next) => {
     const filename = file.name.split('.')[0] + '-' + Date.now() + '.xlsx';
     req.filename = filename;
     const newPath = `${__dirname.replace('routes', 'uploads')}/${filename}`
-    fs.writeFile(newPath, file.data, (err, data) => {
+    fs.writeFile(newPath, file.data, (err) => {
         if (err) {
             return handleResponse(req, res, 500, {
                 status: false,
@@ -194,7 +183,6 @@ labRadioRoute.get('/get-fourportal-registered-user', labradio.getAllPortal_Regis
 labRadioRoute.post("/four-portal-appointment", fourportalappointment.portalAppointment);
 labRadioRoute.get("/four-portal-view-Appointment", fourportalappointment.portal_viewAppointment);
 labRadioRoute.post("/four-portal-update-Appointment", fourportalappointment.portal_updateAppointmentPaymentStatus);
-labRadioRoute.get("/four-portal-list-Appointment", fourportalappointment.portal_listAppointment);
 labRadioRoute.post('/four-portal-cancel-and-approve-appointment', fourportalappointment.portal_cancelAppointment);
 labRadioRoute.get('/four-portal_appointment-details', fourportalappointment.portal_appointmentDetails);
 
@@ -207,7 +195,6 @@ labRadioRoute.post("/four-portal-set-reminder", fourportalappointment.portal_set
 labRadioRoute.get("/four-portal-get-reminder", fourportalappointment.portal_getReminder);
 labRadioRoute.post("/four-portal-add-and-edit-assessment", fourportalappointment.portal_addAssessment);
 labRadioRoute.get("/four-portal-assessment-list", fourportalappointment.portal_assessmentList);
-labRadioRoute.post("/four-portal-available-slots", fourportalappointment.fourPortalAvailableSlot);
 labRadioRoute.get("/four-portal-to-hospital-payment-history", fourportalappointment.hospitalPaymentHistory);
 /* videocalling */
 labRadioRoute.get('/four-portal-view-appointment-by-roomname', portal_viewAppointmentByRoomName);

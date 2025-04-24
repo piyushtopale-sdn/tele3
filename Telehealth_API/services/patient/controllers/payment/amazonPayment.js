@@ -255,26 +255,27 @@ class AmazonPaymentController {
 
             // Check payment status
             switch (paymentResponse.status) {
-                case '14':
+                case '14': {
                     console.log('Payment Successful:', paymentResponse);
-
+            
                     const headers = {
                         Authorization: req.headers["authorization"],
                     };
-
+            
                     // const getPaymentDataByReference = await fetchPaymentDetails(paymentResponse.merchant_reference);
                     // console.log("getPaymentDataByReference>>>>>>>>>>>>>>", getPaymentDataByReference);
-                    //Get subscription plan information
+                    // Get subscription plan information
                     let subscriptionDetails = await httpService.getStaging('superadmin/get-subscription-plan-details', { id: subscriptionPlanId }, headers, 'superadminServiceUrl');
-
+            
                     if (!subscriptionDetails.status) {
                         return handleResponse(req, res, 500, {
                             status: false,
                             body: null,
                             message: subscriptionDetails.message,
                             errorCode: null,
-                        })
+                        });
                     }
+            
                     const existingSubscription = subscriptionDetails.body;
                     const params = {
                         discountedAmount,
@@ -287,13 +288,13 @@ class AmazonPaymentController {
                         discountCoupon,
                         trialDays: existingSubscription?.trial_period,
                         merchantReference: paymentResponse.merchant_reference
-                    }
-
+                    };
+            
                     await saveData(paymentResponse, existingSubscription, params);
-
+            
                     const getPatientName = await Profile_info.findOne({ for_portal_user: { $eq: params?.forUser } })
-                        .select('full_name')
-
+                        .select('full_name');
+            
                     let requestBody = {
                         userId: params?.forUser,
                         userName: getPatientName?.full_name,
@@ -301,23 +302,23 @@ class AmazonPaymentController {
                         action: `create`,
                         actionDescription: `${getPatientName?.full_name} purchased new subscription plan.`,
                         metadata: params
-                    }
-
+                    };
+            
                     await httpService.postStaging(
                         "superadmin/add-logs",
                         requestBody,
                         {},
                         "superadminServiceUrl"
                     );
-
+            
                     return handleResponse(req, res, 200, {
                         status: true,
                         message: "Data saved successfully",
                         body: null,
                         errorCode: null,
                     });
-
-                // Store transaction details in DB
+                }
+            
                 case '02':
                     console.log('Payment Authorization Failed:', paymentResponse);
                     return handleResponse(req, res, 200, {
@@ -326,6 +327,7 @@ class AmazonPaymentController {
                         message: "Payment Authorization Failed",
                         errorCode: "INTERNAL_SERVER_ERROR",
                     });
+            
                 case '04':
                     console.log('Payment Cancelled:', paymentResponse);
                     return handleResponse(req, res, 200, {
@@ -334,6 +336,7 @@ class AmazonPaymentController {
                         message: "Payment Cancelled",
                         errorCode: "INTERNAL_SERVER_ERROR",
                     });
+            
                 case '07':
                     console.log('Payment Pending', paymentResponse);
                     return handleResponse(req, res, 200, {
@@ -342,6 +345,7 @@ class AmazonPaymentController {
                         message: "Payment Pending:",
                         errorCode: "INTERNAL_SERVER_ERROR",
                     });
+            
                 default:
                     console.log('Unknown Status:', paymentResponse);
                     return handleResponse(req, res, 200, {
@@ -351,7 +355,7 @@ class AmazonPaymentController {
                         errorCode: "INTERNAL_SERVER_ERROR",
                     });
             }
-
+            
         } catch (error) {
             console.log('Failed to process payment Catch:', error);
             return handleResponse(req, res, 500, {

@@ -1,6 +1,4 @@
 import express from "express";
-const multer = require('multer');
-const path = require('path')
 import readFileContent from "../controller/readFile";
 import { sendResponse } from '../helpers/transmission'
 

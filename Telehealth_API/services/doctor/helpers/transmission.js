@@ -2,17 +2,6 @@ import { validationResult } from "express-validator";
 import { config } from "../config/constants";
 import { encryptObjectData } from "../middleware/utils";
 
-const getIpFromRequest = (req) => {
-    let ips = (
-        req.headers["cf-connecting-ip"] ||
-        req.headers["x-real-ip"] ||
-        req.headers["x-forwarded-for"] ||
-        req.socket.remoteAddress ||
-        ""
-    ).split(",");
-    return ips[0].trim();
-};
-
 const sendResponse = (req, res, statusCode, result) => {
     if (
         // req.useragent.browser === "PostmanRuntime" && config.NODE_ENV === "local"

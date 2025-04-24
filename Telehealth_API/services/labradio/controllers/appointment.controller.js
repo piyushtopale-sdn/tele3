@@ -2588,7 +2588,7 @@ class AppointmentController {
     try {
       const resultId = req.params.id
 
-      const getTestResult = await TestResult.findById(resultId).lean();;
+      const getTestResult = await TestResult.findById(resultId).lean();
       if (!getTestResult) {
         return sendResponse(req, res, 200, {
           status: false,
@@ -2913,7 +2913,7 @@ class AppointmentController {
           //Get general setting
           let getSettings = await httpService.getStaging('superadmin/general-settings', { role: 'labradio' }, headers, 'superadminServiceUrl');
           let delayTime = 24 //Default 24 hour
-          if (getSettings.status) {
+          if (getSettings?.status) {
             const data = getSettings?.body?.filter(val => val?.settingName == 'AppointmentDelayTime')
             delayTime = parseInt(data[0]?.settingValue)
 

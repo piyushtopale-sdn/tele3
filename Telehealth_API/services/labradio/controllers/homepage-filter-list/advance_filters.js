@@ -629,7 +629,7 @@ class advFiltersLabRadio {
         }
 
         if (daysArray.length > 0) {
-          daysArray.forEach((element, index) => {
+          daysArray.forEach((element) => {
             let totalH = 0;
             let totalM = 0;
             startTimeH = element.startTime.slice(0, 2);

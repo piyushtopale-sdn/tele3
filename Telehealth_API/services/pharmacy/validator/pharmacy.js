@@ -1,4 +1,4 @@
-const { body, check } = require("express-validator");
+const { body } = require("express-validator");
 
 export const registerValidator = [
   body("email", "Please Enter the Email Id").not().isEmpty(),

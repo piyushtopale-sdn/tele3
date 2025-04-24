@@ -208,7 +208,6 @@ export const updateSlotAvailability = async (
 };
 
 export const addTestsForMngDoc = async (pathologyInfo, id) => {
-  let pathologyTestData;
   for (const test of pathologyInfo) {
     try {
       const existingTest = await PathologyTestInfoNew.findOne({

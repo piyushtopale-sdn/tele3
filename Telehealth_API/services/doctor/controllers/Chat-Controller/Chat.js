@@ -51,6 +51,10 @@ const generateNotificationMessage = (type, content, patient_name, doctorName) =>
         .replace(/{{doctor_name}}/g, doctorName)
 
       break;
+    case "CHAT_MESSAGE":
+    message = content
+      .replace(/{{message}}/g, content)
+    break;
     default:
       message = content; // Fallback in case the type doesn't match
       break;
@@ -399,15 +403,6 @@ export const sendMessage = async (req, res) => {
     const headers = {
       Authorization: req.headers["authorization"],
     };
-
-    let chcekRoom = await Chat.findOne({
-      _id: mongoose.Types.ObjectId(req.body.data.chatId),
-    });
-    
-    const receivers =
-      req.body.data.receiverID == req.body.data.senderID
-        ? chcekRoom?.senderID
-        : chcekRoom?.receiverID;
 
     let saveData = new Message({
       chatId: req.body.data.chatId,
@@ -824,27 +819,31 @@ export const saveNotification = async (req, res) => {
         notitype: req.body.notitype,
         created_by_type: req.body.created_by_type,
       };
-      const saveNotiInPatient = await httpService.postStaging(
-        "patient/save-superadmin-notification",
-        { data },
-        headers,
-        "patientServiceUrl"
-      );
-      if (saveNotiInPatient) {
-        return sendResponse(req, res, 200, {
-          status: true,
-          body: saveNotiInPatient,
-          message: "Notification Saved Successfully",
-        });
-      } else {
-        return sendResponse(req, res, 400, {
-          status: true,
-          body: null,
-          message: "Notification not Saved",
-        });
+      const senderData = await PortalUser.findOne({ _id: mongoose.Types.ObjectId(req.body.created_by) });
+         
+      const findPatient = await httpService.getStaging("patient/get-portal-data", { data: receiverData[0] }, headers, "patientServiceUrl");
+      
+      if (findPatient?.status) {
+        let fcmToken = findPatient?.data[0].deviceToken;
+        const isNotification = findPatient?.data[0].notification;
+
+        const notificationData = {
+          title: senderData?.full_name,
+          body: generateNotificationMessage('CHAT_MESSAGE', req.body.content, '', '')
+        };          
+        if (isNotification === true) {
+          sendPushNotification(fcmToken, notificationData);
+        }
       }
+      return sendResponse(req, res, 200, {
+        status: true,
+        body: null,
+        message: "Notification Sent Successfully",
+      });
+    
     }
   } catch (err) {
+    console.log("err______",err);    
     return sendResponse(req, res, 500, {
       status: false,
       body: err,
@@ -1139,7 +1138,7 @@ export const sendPushNotificattionToPatient = async (req, res) => {
             title: getContent?.data[0].notification_title,
             body: generateNotificationMessage(condition, getContent?.data[0].content, patient_name, doctorName)
           };
-          if (isNotification == true) {
+          if (isNotification === true) {
             sendPushNotification(fcmToken, notificationData);
           }
         }

@@ -3349,7 +3349,7 @@ class LabRadiology {
         }
       });
 
-      Promise.all([completepromise]).then(async (values) => {
+      Promise.all([completepromise]).then(async () => {
         const roomName = req.body.roomName;
         const uniqueId = req.body.uid;
         if (!roomName) {

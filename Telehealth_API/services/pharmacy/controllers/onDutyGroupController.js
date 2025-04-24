@@ -1,8 +1,6 @@
 "use strict";
 
 const fs = require('fs');
-const stream = require('stream');
-const csv = require('fast-csv');
 import mongoose from "mongoose";
 // models
 import PortalUser from "../models/portal_user";
@@ -18,22 +16,6 @@ import { hashPassword } from "../helpers/string";
 import Http from "../helpers/httpservice"
 import { OnDutyGroupColumns, OnDutyPharmacyGroupColumns } from "../config/constants";
 const httpService = new Http()
-
-const csvExtraction = (filePath) => {
-    let fileRows = []
-    return new Promise(function (resolve, reject) {
-        fs.createReadStream(filePath)
-            .pipe(csv.parse({ headers: true }))
-            .on("error", (error) => {
-                reject(error.message)
-            })
-            .on("data", (row) => {
-                fileRows.push(row);
-            }).on("end", function () {
-                resolve(fileRows)
-            })
-    })
-}
 
 const validateColumnWithExcel = (toValidate, excelColumn) => {
     const requestBodyCount = Object.keys(toValidate).length
@@ -980,7 +962,6 @@ class OnDutyGroupController {
 
 
         } catch (error) {
-            ;
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,

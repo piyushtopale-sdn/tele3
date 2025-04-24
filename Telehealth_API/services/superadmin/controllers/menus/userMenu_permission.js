@@ -90,18 +90,6 @@ const all_user_menu = async (req, res) => {
     }
 
 }
-function getAllCacheData() {
-    const keys = myCache.keys();
-    const data = myCache.mget(keys);
-    const result = [];
-
-    // Combine keys and values into an array of objects
-    for (let i = 0; i < keys.length; i++) {
-        result.push({ key: keys[i], value: data[i] });
-    }
-
-    return result;
-}
 
 const edit_user_menu = async (req, res) => {
     try {
@@ -113,7 +101,7 @@ const edit_user_menu = async (req, res) => {
         await MenuPermission.findByIdAndUpdate(
             { _id: req.body.id },
             menu
-        ).then((docs) => handleResponse(req, res, 200, {
+        ).then(() => handleResponse(req, res, 200, {
             status: true,
             body: null,
             message: "successfully data updated",
@@ -148,7 +136,7 @@ const addSubmenuPermission = async (req, res) => {
         await PortalUser.findOneAndUpdate(
             { superadmin_id: mongoose.Types.ObjectId(portal_user_id) },
             permissionObject
-        ).then((docs) => handleResponse(req, res, 200, {
+        ).then(() => handleResponse(req, res, 200, {
             status: true,
             body: permissionObject,
             message: "successfully data updated",
