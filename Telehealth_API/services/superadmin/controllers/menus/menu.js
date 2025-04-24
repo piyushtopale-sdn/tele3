@@ -35,11 +35,12 @@ const add_menu = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,
-            message: err.message ? err.message : "failed to add menu",
-            errorCode: err.code ? err.code : "INTERNAL_SERVER_ERROR",
+            message: error.message ? error.message : "failed to add menu",
+            errorCode: error.code ? error.code : "INTERNAL_SERVER_ERROR",
         })
     }
 
@@ -55,6 +56,7 @@ const all_menus = async (req, res) => {
             errorCode: null,
         })
     } catch (error) {
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,
@@ -75,6 +77,7 @@ const all_submenus = async (req, res) => {
             errorCode: null,
         })
     } catch (error) {
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,
@@ -97,7 +100,7 @@ const edit_menu = async (req, res) => {
         await Menus.findByIdAndUpdate(
             { _id: req.body.id },
             menu
-        ).then((docs) => handleResponse(req, res, 200, {
+        ).then(() => handleResponse(req, res, 200, {
             status: true,
             body: null,
             message: "Menu updated successfully",
@@ -119,7 +122,7 @@ const delete_menu = async (req, res) => {
         const role = {
             is_delete: req.body.is_delete
         };
-        const updatedRole = await Role.findByIdAndUpdate(
+        const updatedRole = await Menus.findByIdAndUpdate(
             { _id: req.body.id },
             role
         );
@@ -155,6 +158,7 @@ const add_perm = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,
@@ -184,10 +188,10 @@ const edit_perm = async (req, res) => {
             status: req.body.perm_name,
             perm_order:req.body.perm_order
         };
-        await Menu.findByIdAndUpdate(
+        await Menus.findByIdAndUpdate(
             { _id: req.body.id },
             menu
-        ).then((docs) => res.json({
+        ).then(() => res.json({
             status: true,
             message: "Data updated"
         })).catch((err) => res.status(500).send({ message: err }));

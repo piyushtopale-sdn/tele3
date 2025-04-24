@@ -363,6 +363,7 @@ export const listMedicine = async (req, res) => {
             errorCode: null,
         })
     } catch (error) {
+        console.error("An error occurred:", error);
         return sendResponse(req, res, 500, {
           status: false,
           body: null,
@@ -384,6 +385,7 @@ export const getMedicineById = async (req, res) => {
             errorCode: null,
         })
     } catch (error) {
+        console.error("An error occurred:", error);
         return sendResponse(req, res, 500, {
           status: false,
           body: null,

@@ -5,7 +5,6 @@ import axios from "axios";
 import { decryptionData } from "./crypto";
 const config = require("../config/constants");
 const BaseUrl = config.config.BaseUrl;
-const BACKEND_SERVER_URL = config.config.BACKEND_SERVER_URL;
 class Http {
 
     get(path, data, headers, service) {

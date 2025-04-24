@@ -220,7 +220,7 @@ export const addTestsForMngDoc = async (pathologyInfo, id) => {
       if (existingTest) {
       } else {
         if (test.isExist === false) {
-          pathologyTestData = await PathologyTestInfoNew.create({
+          await PathologyTestInfoNew.create({
             for_portal_user: id,
             typeOfTest: test.typeOfTest,
             nameOfTest: test.nameOfTest,
@@ -229,7 +229,7 @@ export const addTestsForMngDoc = async (pathologyInfo, id) => {
         }
       }
     } catch (error) {
-
+      console.error("An error occurred:", error);
     }
   }
 };
@@ -316,6 +316,7 @@ class DoctorController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -750,6 +751,7 @@ class DoctorController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -783,6 +785,7 @@ class DoctorController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -817,6 +820,7 @@ class DoctorController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -841,6 +845,7 @@ class DoctorController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -881,6 +886,7 @@ class DoctorController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -906,6 +912,7 @@ class DoctorController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -931,6 +938,7 @@ class DoctorController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -970,6 +978,7 @@ class DoctorController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1001,6 +1010,7 @@ class DoctorController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1037,6 +1047,7 @@ class DoctorController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2876,7 +2887,6 @@ async doctorManagementUpdateAvailability(req, res) {
             middle_name: 1,
             last_name: 1,
             full_name: 1,
-            for_portal_user: 1,
             _id: 0,
             for_portal_user: {
               _id: "$for_portal_user._id",
@@ -2958,7 +2968,7 @@ async doctorManagementUpdateAvailability(req, res) {
 
   async getRelatedDoctors(req, res) {
     try {
-      const { speciality, limit, current_doctor_id } = req.query;
+      const { speciality, current_doctor_id } = req.query;
 
       const filter = {
         speciality: mongoose.Types.ObjectId(speciality),
@@ -2967,26 +2977,7 @@ async doctorManagementUpdateAvailability(req, res) {
         "for_portal_user_d.lock_user": false,
         "for_portal_user_d.isActive": true,
       };
-      const project = {
-        full_name: 1,
-        years_of_experience: 1,
-        profile_picture: "$profile_picture.url",
-        fee_management: {
-          online: "$in_fee_management.online",
-          home_visit: "$in_fee_management.home_visit",
-          f2f: "$in_fee_management.f2f",
-        },
-        about: 1,
-        portal_user_data: {
-          mobile: "$for_portal_user_d.mobile",
-          email: "$for_portal_user_d.email",
-          country_code: "$for_portal_user_d.country_code",
-          portal_user_id: "$for_portal_user_d._id",
-          average_rating: "$for_portal_user_d.average_rating",
-        },
-        services: "$services.service",
-        speciality: "$specialties.specilization",
-      };
+  
       let aggregate = [
         {
           $lookup: {
@@ -3239,7 +3230,7 @@ async doctorManagementUpdateAvailability(req, res) {
         );
 
       }
-      sendResponse(req, res, 200, {
+      return sendResponse(req, res, 200, {
         status: true,
         body: result,
         message: messages.templateUpdate.en,
@@ -3247,7 +3238,7 @@ async doctorManagementUpdateAvailability(req, res) {
         errorCode: null,
       });
     } catch (error) {
-      if ((error.code = 11000)) {
+      if ((error.code == 11000)) {
         return sendResponse(req, res, 200, {
           status: false,
           body: null,
@@ -5021,10 +5012,7 @@ async doctorManagementUpdateAvailability(req, res) {
           status =
             todayDate == appointment.consultationDate ? "Today" : "Upcoming";
         }
-        let consultationType = "";
-        if (appointment.appointmentType == "FACE_TO_FACE")
-          consultationType = "Face to Face";
-
+       
         listArray.push({
           // appointment_id: appointment._id,
           // patient_name: appointment.patientDetails.patientFullName,
@@ -5564,6 +5552,7 @@ async doctorManagementUpdateAvailability(req, res) {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -5609,6 +5598,7 @@ async doctorManagementUpdateAvailability(req, res) {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -5667,7 +5657,6 @@ async doctorManagementUpdateAvailability(req, res) {
   async actionOnHealthCentre(req, res) {
     try {
       const { healthcentreId, action_name, action_value } = req.body;
-      let message = "";
 
       const filter = {};
       if (action_name == "active") filter["active_status"] = action_value;
@@ -5866,6 +5855,7 @@ async doctorManagementUpdateAvailability(req, res) {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -6413,6 +6403,7 @@ async doctorManagementUpdateAvailability(req, res) {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -6457,6 +6448,7 @@ async doctorManagementUpdateAvailability(req, res) {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,

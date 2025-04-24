@@ -42,6 +42,7 @@ class AssessmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -78,6 +79,7 @@ class AssessmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -123,6 +125,7 @@ class AssessmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -167,6 +170,7 @@ class AssessmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,

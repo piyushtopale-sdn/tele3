@@ -210,6 +210,7 @@ function generateSequenceCounter() {
         }
         resolve(sequenceDocument.sequence_value)
       } catch (error) {
+        console.error("An error occurred:", error);
         const randomNumber = generate4DigitOTP();
         resolve(randomNumber)
       }

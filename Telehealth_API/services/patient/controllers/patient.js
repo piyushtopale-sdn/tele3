@@ -150,6 +150,7 @@ const storeMedicalDocuments = (fileKey, req) => {
       await addData.save();
       resolve(true);
     } catch (error) {
+      console.error("An error occurred:", error);
       resolve(false);
     }
   });
@@ -701,7 +702,7 @@ class Patient {
           errorCode: "MAX ATTEMPT_EXCEEDED",
         });
       }
-      let otp = 1111;
+      let otp;
 
       if (process.env.NODE_ENV === "production") {
         otp = generate4DigitOTP();
@@ -1826,7 +1827,6 @@ class Patient {
             medical_documents.push(docId);
           });
         }
-        let personalDetails;
         const checkExist = await ProfilePermission.find({
           doctor_id: { $eq: doctor_id },
           patient_id: { $eq: patient_id },
@@ -1907,7 +1907,6 @@ class Patient {
             medical_documents.push(docId);
           });
         }
-        let personalDetails;
         const checkExist = await ProfilePermission.find({
           doctor_id: { $eq: doctor_id },
           patient_id: { $eq: patient_id },
@@ -1944,7 +1943,7 @@ class Patient {
             patient_id,
             permission,
           });
-          personalDetails = await data.save();
+          await data.save();
         }
       }
       return sendResponse(req, res, 200, {
@@ -2526,6 +2525,7 @@ class Patient {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -5336,6 +5336,7 @@ async getAllPatientForSuperAdminNew(req, res) {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -5380,6 +5381,7 @@ async getAllPatientForSuperAdminNew(req, res) {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -5861,6 +5863,7 @@ async getAllPatientForSuperAdminNew(req, res) {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,

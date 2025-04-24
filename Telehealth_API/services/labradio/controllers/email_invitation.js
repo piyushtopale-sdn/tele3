@@ -220,7 +220,7 @@ export const deleteInvitation = async (req, res) => {
         invitationId
     } = req.body
     try {
-        const result = await Article.findOneAndUpdate(
+        const result = await Invitation.findOneAndUpdate(
             { _id: invitationId },
             {
                 isDeleted: true

@@ -326,7 +326,7 @@ const notificationSaved = (paramsData, headers, requestData) => {
       }
       resolve(true)
     } catch (error) {
-      console.log("error in notificationSaved");
+      console.error("An error occurred:", error);
       resolve(false)
     }
   })
@@ -1888,9 +1888,6 @@ class AppointmentController {
     }
   }
   async allAppointmentForTimeline(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
 
     try {
       const {
@@ -2609,7 +2606,7 @@ class AppointmentController {
         .select('address')
       getTestResult.centerDetails = getCenterDetails[0]
       let resultData = []
-      if (getTestResult?.resultType == 'upload' && getTestResult?.uploadResultData?.length > 0) {
+      if (getTestResult?.resultType === 'upload' && getTestResult?.uploadResultData?.length > 0) {
         for (const val of getTestResult?.uploadResultData) {
           resultData.push({
             key: val,
@@ -3604,7 +3601,7 @@ class AppointmentController {
                 allServicesLink: alborgeRes?.allServicesLink
               }
 
-              const updateResponseOnTest = await responseFormation(alborgeRes?.results, element._id);
+              await responseFormation(alborgeRes?.results, element._id);
 
               if (alborgeRes?.allServicesLink && alborgeRes?.results?.length) {
                 if (element?.labTestIds?.length == alborgeRes?.results?.length) {

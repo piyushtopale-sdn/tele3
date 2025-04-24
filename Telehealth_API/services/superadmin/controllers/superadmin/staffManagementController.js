@@ -490,7 +490,7 @@ class StaffManagementController {
       return sendResponse(req, res, 500, {
         status: false,
         data: error,
-        message: `failed to ${actionMessage} staff`,
+        message: `failed to update staff`,
         errorCode: "INTERNAL_SERVER_ERROR",
       });
     }

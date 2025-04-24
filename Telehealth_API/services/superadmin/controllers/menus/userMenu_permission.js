@@ -50,7 +50,7 @@ const add_user_menu = async (req, res) => {
         }
 
     } catch (error) {
-        
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,
@@ -80,6 +80,7 @@ const all_user_menu = async (req, res) => {
             errorCode: null,
         })
     } catch (error) {
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,
@@ -128,7 +129,7 @@ const edit_user_menu = async (req, res) => {
         });
 
     } catch (error) {
-        
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,
@@ -163,7 +164,7 @@ const addSubmenuPermission = async (req, res) => {
         });
 
     } catch (error) {
-        
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,
@@ -186,7 +187,7 @@ const getSubmenuByUser = async (req, res) => {
             errorCode: null,
         })
     } catch (error) {
-        
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,

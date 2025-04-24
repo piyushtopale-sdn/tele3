@@ -32,6 +32,7 @@ const add_menu = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,
@@ -52,6 +53,7 @@ const all_menus = async (req, res) => {
             errorCode: null,
         })
     } catch (error) {
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,
@@ -96,7 +98,7 @@ const delete_menu = async (req, res) => {
         const role = {
             is_delete: req.body.is_delete
         };
-        const updatedRole = await Role.findByIdAndUpdate(
+        const updatedRole = await Menus.findByIdAndUpdate(
             { _id: req.body.id },
             role
         );
@@ -132,6 +134,7 @@ const add_perm = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
             status: false,
             body: null,

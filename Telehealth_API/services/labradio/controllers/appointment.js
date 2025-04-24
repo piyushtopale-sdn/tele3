@@ -44,7 +44,7 @@ export const formatDateAndTime = (date) => {
 
 function filterBookedSlots(array1, array2) {
   array1.forEach((element, index) => {
-    var xyz = array2.indexOf(element.slot);
+    let xyz = array2.indexOf(element.slot);
     if (xyz != -1) {
       array1[index].status = 1;
     }
@@ -54,7 +54,7 @@ function filterBookedSlots(array1, array2) {
 
 function filterBookedSlotsToday(array1) {
   array1.forEach((element, index) => {
-    var xyz =
+    let xyz =
       element.slot.split("-")[0].split(":")[0] +
       element.slot.split("-")[0].split(":")[1];
 
@@ -63,7 +63,7 @@ function filterBookedSlotsToday(array1) {
       date.getHours() + TimeZone.hours,
       date.getMinutes() + TimeZone.minute
     );
-    var hm = date.getHours().toString() + date.getMinutes().toString();
+    let hm = date.getHours().toString() + date.getMinutes().toString();
     if (parseInt(hm) > parseInt(xyz)) {
       array1[index].status = 1;
     }
@@ -72,25 +72,67 @@ function filterBookedSlotsToday(array1) {
   return array1;
 }
 
+function filterUnavailableSlotFunction(array1, value, lastValue) {
+  let startTime = value.split("-")[0];
+  let endTime = lastValue.split("-")[0];
+  let arr = [];
+  array1.forEach((element, index) => {
+    let start = element.slot.split("-")[0];
+
+    if (
+      start.split(":")[0] + start.split(":")[1] <
+      startTime.split(":")[0] + startTime.split(":")[1]
+    ) {
+    } else {
+      if (
+        endTime.split(":")[0] + endTime.split(":")[1] <
+        start.split(":")[0] + start.split(":")[1]
+      ) {
+      } else {
+        arr.push(array1[index]);
+      }
+    }
+  });
+  return arr;
+}
+
+function uniqueArray(array1, array2) {
+  let a = array1;
+  let b = array2;
+  const isSameUser = (a, b) => a.slot === b.slot && a.status === b.status;
+
+  // Get items that only occur in the left array,
+  // using the compareFunction to determine equality.
+  const onlyInLeft = (left, right, compareFunction) =>
+    left.filter(
+      (leftValue) =>
+        !right.some((rightValue) => compareFunction(leftValue, rightValue))
+    );
+
+  const onlyInA = onlyInLeft(a, b, isSameUser);
+  const onlyInB = onlyInLeft(b, a, isSameUser);
+
+  const result = [...onlyInA, ...onlyInB];
+  return result;
+}
+
 export const updatePaymentStatusAndSlot = async (appointmentId, req) => {
 
   const appointmentDetails = await Appointment.findById(
     mongoose.Types.ObjectId(appointmentId)
   );
 
-  var notificationReceiver = null;
+  let notificationReceiver = null;
   if (appointmentDetails.madeBy == "patient") {
-    notificationCreator = appointmentDetails.patientId;
     notificationReceiver = appointmentDetails.portalId;
   } else {
-    notificationCreator = appointmentDetails.portalId;
     notificationReceiver = appointmentDetails.patientId;
   }
 
 
-  var timeStamp = new Date();
-  var timeStampString;
-  var slot = null;
+  let timeStamp = new Date();
+  let timeStampString;
+  let slot = null;
 
   const locationResult = await hospital_location
     .find({
@@ -193,7 +235,7 @@ export default class appointmentController {
       const consultationDate1 = new Date(consultationDate); // Your date object
       const consultation_date = await formatDateToYYYYMMDD(consultationDate1);
 
-      var appointmentDetails;
+      let appointmentDetails;
       if (appointmentId != "") {
         if (
           paymentType != "" &&
@@ -251,8 +293,8 @@ export default class appointmentController {
           serviceurl = "patientServiceUrl";
           message = `New Appointement from ${portalfullName?.full_name}`;
         }
-        // var message = `New Appointement from ${appointmentDetails?.patientDetails?.patientFullName}`
-        var requestData = {
+        // let message = `New Appointement from ${appointmentDetails?.patientDetails?.patientFullName}`
+        let requestData = {
           created_by_type: portal_type,
           created_by: loginId,
           content: message,
@@ -279,12 +321,12 @@ export default class appointmentController {
           errorCode: null,
         });
       } else {
-        var portal_details = await BasicInfo.findOne({
+        let portal_details = await BasicInfo.findOne({
           for_portal_user: portalId,
           portal_type,
         });
         let protal_image = "";
-        var userarray = [
+        let userarray = [
           {
             user_id: patientId,
             name: patientDetails.patientFullName,
@@ -296,7 +338,7 @@ export default class appointmentController {
             image: protal_image ? protal_image : "",
           },
         ];
-        var appointment_id = await getNextSequenceValue("appointment");
+        let appointment_id = await getNextSequenceValue("appointment");
         const appointmentData = new Appointment({
           loginId,
           portalId,
@@ -365,6 +407,7 @@ export default class appointmentController {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -379,28 +422,19 @@ export default class appointmentController {
       const { locationId, appointmentType, timeStamp, portalId } = req.body;
       const current_timestamp = new Date(timeStamp);
       const onlyDate = timeStamp.split("T")[0];
-      var day = current_timestamp.getDay();
-      var hour = current_timestamp.getHours().toString();
-      var minute = current_timestamp.getMinutes().toString();
-      if (hour.toString().length == 1) {
-        hour = "0" + hour;
-      }
-      if (minute.toString().length == 1) {
-        minute = "0" + minute;
-      }
-      var startTime;
-      var startTimeH;
-      var startTimeM;
-      var startTimeHM;
-      var endTime;
-      var endTimeH;
-      var endTimeM;
-      var endTimeHM;
+      let day = current_timestamp.getDay();
+     
+      let startTime;
+      let startTimeH;
+      let startTimeM;
+      let startTimeHM;
+      let endTime;
+      let endTimeH;
+      let endTimeM;
+      let endTimeHM;
 
-      var allGeneralSlot = [];
-      var allGeneralSlot2 = [];
-      var afterUnavailable = [];
-      var x = "";
+      let allGeneralSlot = [];
+      let allGeneralSlot2 = [];
       const result = await FourPortalAvailability.findOne({
         for_portal_user: portalId,
         location_id: locationId,
@@ -410,7 +444,7 @@ export default class appointmentController {
         for_portal_user: portalId,
         location_id: locationId,
       });
-      var fee;
+      let fee;
       if (appointmentType == "ONLINE") {
         fee = allFee?.online.basic_fee;
       }
@@ -432,8 +466,8 @@ export default class appointmentController {
         });
       }
       const doctorAvailability = result.availability_slot;
-      var availabilityArray = [];
-      var availabilitySlot = [];
+      let availabilityArray = [];
+      let availabilitySlot = [];
       for (let index = 0; index < doctorAvailability.length; index++) {
         const element = doctorAvailability[index];
         const availabilityDate = element.date.split("T")[0];
@@ -451,8 +485,8 @@ export default class appointmentController {
 
       if (availabilityArray.length > 0) {
         availabilityArray.forEach((element, index) => {
-          var totalH = 0;
-          var totalM = 0;
+          let totalH = 0;
+          let totalM = 0;
           startTimeH = element.startTime.slice(0, 2);
           startTimeM = element.startTime.slice(2);
           startTimeHM = startTimeH + ":" + startTimeM;
@@ -465,25 +499,24 @@ export default class appointmentController {
           totalH = totalH + difference.hours();
           totalM = totalM + difference.minutes();
           totalH = totalH + totalM / 60;
-          var totalNumbersSlots =
+          let totalNumbersSlots =
             (totalH * 60) / result.slot_interval.slice(0, 2);
           startTime = element.startTime;
           startTimeH = startTime.slice(0, 2);
           startTimeM = startTime.slice(2);
           startTimeHM = startTimeH + ":" + startTimeM;
-          var piece = startTimeHM;
           piece = startTimeHM.split(":");
-          var mins =
+          let mins =
             piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-          var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+          let nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
           if (nextStartTimeH.toString().length == 1) {
             nextStartTimeH = "0" + startTimeH;
           }
-          var nextStartTimeM = mins % 60;
+          let nextStartTimeM = mins % 60;
           if (nextStartTimeM.toString().length == 1) {
             nextStartTimeM = nextStartTimeM + "0";
           }
-          var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+          let nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
           availabilitySlot.push({
             slot: startTimeHM + "-" + nextStartTimeHM,
@@ -491,9 +524,8 @@ export default class appointmentController {
           });
           // allGeneralSlot2.push(startTimeH + startTimeM)
           for (let index = 0; index < totalNumbersSlots - 1; index++) {
-            var piece = startTimeHM;
             piece = startTimeHM.split(":");
-            var mins =
+            mins =
               piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
             startTimeH = ((mins % (24 * 60)) / 60) | 0;
             if (startTimeH.toString().length == 1) {
@@ -505,11 +537,10 @@ export default class appointmentController {
             }
             startTimeHM = startTimeH + ":" + startTimeM;
 
-            var piece = startTimeHM;
             piece = startTimeHM.split(":");
             mins =
               piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-            var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+            nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
             if (nextStartTimeH.toString().length == 1) {
               nextStartTimeH = "0" + startTimeH;
             }
@@ -533,7 +564,7 @@ export default class appointmentController {
       if (availabilitySlot.length > 0) {
         allGeneralSlot = availabilitySlot;
       } else {
-        var daysArray = [];
+        let daysArray = [];
         for (let index = 0; index < result.week_days.length; index++) {
           if (day == 0) {
             startTime = result.week_days[index].sun_start_time;
@@ -573,8 +604,8 @@ export default class appointmentController {
 
         if (daysArray.length > 0) {
           daysArray.forEach((element, index) => {
-            var totalH = 0;
-            var totalM = 0;
+            let totalH = 0;
+            let totalM = 0;
             startTimeH = element.startTime.slice(0, 2);
             startTimeM = element.startTime.slice(2);
             startTimeHM = startTimeH + ":" + startTimeM;
@@ -588,29 +619,28 @@ export default class appointmentController {
             totalM = totalM + difference.minutes();
             totalH = totalH + totalM / 60;
 
-            var totalNumbersSlots =
+            let totalNumbersSlots =
               (totalH * 60) / result.slot_interval.slice(0, 2);
             startTime = element.startTime;
             startTimeH = startTime.slice(0, 2);
             startTimeM = startTime.slice(2);
             startTimeHM = startTimeH + ":" + startTimeM;
-            var piece = startTimeHM;
             piece = startTimeHM.split(":");
-            // var mins = piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2)
+            // let mins = piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2)
 
-            var mins =
+            let mins =
               parseInt(parseInt(piece[0]) * 60) +
               +parseInt(piece[1]) +
               +result.slot_interval.slice(0, 2);
-            var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+            let nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
             if (nextStartTimeH.toString().length == 1) {
               nextStartTimeH = "0" + startTimeH;
             }
-            var nextStartTimeM = mins % 60;
+            let nextStartTimeM = mins % 60;
             if (nextStartTimeM.toString().length == 1) {
               nextStartTimeM = nextStartTimeM + "0";
             }
-            var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+            let nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
             allGeneralSlot.push({
               slot: startTimeHM + "-" + nextStartTimeHM,
@@ -622,9 +652,8 @@ export default class appointmentController {
               index < parseInt(totalNumbersSlots) - 1;
               index++
             ) {
-              var piece = startTimeHM;
               piece = startTimeHM.split(":");
-              var mins =
+              mins =
                 parseInt(parseInt(piece[0]) * 60) +
                 +parseInt(piece[1]) +
                 +result.slot_interval.slice(0, 2);
@@ -638,21 +667,20 @@ export default class appointmentController {
               }
               startTimeHM = startTimeH + ":" + startTimeM;
 
-              var piece = startTimeHM;
               piece = startTimeHM.split(":");
-              var mins =
+              mins =
                 parseInt(parseInt(piece[0]) * 60) +
                 +parseInt(piece[1]) +
                 +result.slot_interval.slice(0, 2);
-              var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+              nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
               if (nextStartTimeH.toString().length == 1) {
                 nextStartTimeH = "0" + startTimeH;
               }
-              var nextStartTimeM = mins % 60;
+              nextStartTimeM = mins % 60;
               if (nextStartTimeM.toString().length == 1) {
                 nextStartTimeM = nextStartTimeM + "0";
               }
-              var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+              nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
               if (startTimeHM <= endTimeHM && nextStartTimeHM <= endTimeHM) {
                 allGeneralSlot.push({
                   slot: startTimeHM + "-" + nextStartTimeHM,
@@ -669,8 +697,8 @@ export default class appointmentController {
           allGeneralSlot2 = [];
         }
         const doctorUnavailability = result.unavailability_slot;
-        var unavailabilityArray = [];
-        var unavailabilitySlot = [];
+        let unavailabilityArray = [];
+        let unavailabilitySlot = [];
 
         if (allGeneralSlot.length > 0) {
           for (let index = 0; index < doctorUnavailability.length; index++) {
@@ -689,8 +717,8 @@ export default class appointmentController {
           }
           if (unavailabilityArray.length > 0) {
             unavailabilityArray.forEach((element, index) => {
-              var totalH = 0;
-              var totalM = 0;
+              let totalH = 0;
+              let totalM = 0;
               startTimeH = element.startTime.slice(0, 2);
               startTimeM = element.startTime.slice(2);
               startTimeHM = startTimeH + ":" + startTimeM;
@@ -703,25 +731,24 @@ export default class appointmentController {
               totalH = totalH + difference.hours();
               totalM = totalM + difference.minutes();
               totalH = totalH + totalM / 60;
-              var totalNumbersSlots =
+              let totalNumbersSlots =
                 (totalH * 60) / result.slot_interval.slice(0, 2);
               startTime = element.startTime;
               startTimeH = startTime.slice(0, 2);
               startTimeM = startTime.slice(2);
               startTimeHM = startTimeH + ":" + startTimeM;
-              var piece = startTimeHM;
               piece = startTimeHM.split(":");
-              var mins =
+              let mins =
                 piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-              var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+              let nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
               if (nextStartTimeH.toString().length == 1) {
                 nextStartTimeH = "0" + startTimeH;
               }
-              var nextStartTimeM = mins % 60;
+              let nextStartTimeM = mins % 60;
               if (nextStartTimeM.toString().length == 1) {
                 nextStartTimeM = nextStartTimeM + "0";
               }
-              var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+              let nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
               unavailabilitySlot.push({
                 slot: startTimeHM + "-" + nextStartTimeHM,
@@ -729,9 +756,8 @@ export default class appointmentController {
               });
               // allGeneralSlot2.push(startTimeH + startTimeM)
               for (let index = 0; index < totalNumbersSlots - 1; index++) {
-                var piece = startTimeHM;
                 piece = startTimeHM.split(":");
-                var mins =
+                mins =
                   piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
                 startTimeH = ((mins % (24 * 60)) / 60) | 0;
                 if (startTimeH.toString().length == 1) {
@@ -743,19 +769,18 @@ export default class appointmentController {
                 }
                 startTimeHM = startTimeH + ":" + startTimeM;
 
-                var piece = startTimeHM;
                 piece = startTimeHM.split(":");
-                var mins =
+                mins =
                   piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-                var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+                nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
                 if (nextStartTimeH.toString().length == 1) {
                   nextStartTimeH = "0" + startTimeH;
                 }
-                var nextStartTimeM = mins % 60;
+                nextStartTimeM = mins % 60;
                 if (nextStartTimeM.toString().length == 1) {
                   nextStartTimeM = nextStartTimeM + "0";
                 }
-                var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+                nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
                 unavailabilitySlot.push({
                   slot: startTimeHM + "-" + nextStartTimeHM,
@@ -765,7 +790,7 @@ export default class appointmentController {
                 // allGeneralSlot2.push(startTimeHM2)
               }
             });
-            var filterUnavailableSlot = filterUnavailableSlotFunction(
+            let filterUnavailableSlot = filterUnavailableSlotFunction(
               unavailabilitySlot,
               allGeneralSlot[0].slot,
               allGeneralSlot[allGeneralSlot.length - 1].slot
@@ -775,7 +800,7 @@ export default class appointmentController {
         }
       }
 
-      var todayDate = new Date().toISOString().split("T")[0];
+      let todayDate = new Date().toISOString().split("T")[0];
       if (new Date(onlyDate).getTime() === new Date(todayDate).getTime()) {
         allGeneralSlot = filterBookedSlotsToday(allGeneralSlot);
       }
@@ -806,6 +831,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -902,7 +928,7 @@ export default class appointmentController {
         }
       }
 
-      var patient_profile = "";
+      let patient_profile = "";
       let patient_profile_response = await httpService.getStaging(
         "patient/get-patient-profile-signed-url",
         { patientId: result.patientId },
@@ -956,6 +982,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -985,17 +1012,17 @@ export default class appointmentController {
         filterByPatientname,
       } = req.query;
 
-      var sort = req.query.sort;
-      var sortingarray = {};
+      let sort = req.query.sort;
+      let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = Number(value);
       } else {
         sortingarray["createdAt"] = -1;
       }
 
-      var fourPortalId = Array.isArray(portal_id)
+      let fourPortalId = Array.isArray(portal_id)
         ? portal_id.map((s) => mongoose.Types.ObjectId(s))
         : [mongoose.Types.ObjectId(portal_id)];
 
@@ -1005,7 +1032,7 @@ export default class appointmentController {
         status: ["NEW", "APPROVED"],
         portal_type,
       });
-      var dateToday = new Date().toISOString().split("T")[0]; //string
+      let dateToday = new Date().toISOString().split("T")[0]; //string
 
       const today = new Date(dateToday); //Today date
       let appointmentsToBeMissed = []; //appointment id array
@@ -1035,16 +1062,15 @@ export default class appointmentController {
         }
       }
 
-      var afterUpdateResult;
       if (appointmentsToBeMissed.length != 0) {
-        afterUpdateResult = await Appointment.updateMany(
+        await Appointment.updateMany(
           { _id: { $in: appointmentsToBeMissed } },
           { $set: { status: "MISSED" } },
           { multi: true }
         );
       }
 
-      var appointmentTypeFilter = {};
+      let appointmentTypeFilter = {};
       if (consultation_type && consultation_type != "") {
         if (consultation_type == "ALL") {
           appointmentTypeFilter = {
@@ -1057,7 +1083,7 @@ export default class appointmentController {
         }
       }
 
-      var statusFilter = {};
+      let statusFilter = {};
       if (status && status != "") {
         statusFilter = {
           status: { $ne: "NA" },
@@ -1103,7 +1129,7 @@ export default class appointmentController {
         }
       }
 
-      var dateFilter = {};
+      let dateFilter = {};
       if (date && date != "" && to_date && to_date != "") {
         dateFilter = {
           consultationDate: { $gte: date, $lte: to_date },
@@ -1115,7 +1141,7 @@ export default class appointmentController {
         };
       }
 
-      var filterName = {};
+      let filterName = {};
       if (filterByDocLocname) {
         if (typeof filterByDocLocname === "string") {
           filterName["hospital_details.hospital_id"] =
@@ -1131,7 +1157,7 @@ export default class appointmentController {
         }
       }
 
-      var filterPetName = {};
+      let filterPetName = {};
       if (filterByPatientname) {
         if (typeof filterByPatientname === "string") {
           filterPetName["patientDetails.patientFullName"] = {
@@ -1286,6 +1312,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -1301,7 +1328,7 @@ export default class appointmentController {
     try {
       const { data } = req.body;
       if (data?.metadata) {
-        let appointmentDetails = await Appointment.updateOne(
+        await Appointment.updateOne(
           { order_id: data?.metadata?.order_id },
           {
             $set: {
@@ -1322,7 +1349,7 @@ export default class appointmentController {
           errorCode: null,
         });
       } else {
-        let appointmentDetails = await Appointment.updateOne(
+        await Appointment.updateOne(
           { order_id: data?.order_id },
           {
             $set: {
@@ -1344,6 +1371,7 @@ export default class appointmentController {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -1357,10 +1385,7 @@ export default class appointmentController {
 
   async portal_cancelAppointment(req, res) {
     try {
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
-
+  
       const {
         appointment_id,
         loginId,
@@ -1373,7 +1398,7 @@ export default class appointmentController {
         cancel_by,
       } = req.body;
       if (fromDate && toDate) {
-        var cancelIddoctor = cancelledOrAcceptedBy;
+        let cancelIddoctor = cancelledOrAcceptedBy;
 
         let filter = {
           consultationDate: { $gte: fromDate, $lte: toDate },
@@ -1403,7 +1428,7 @@ export default class appointmentController {
           { new: false }
         ).exec();
       } else {
-        var appointmentDetails = await Appointment.findOneAndUpdate(
+        let appointmentDetails = await Appointment.findOneAndUpdate(
           { _id: { $eq: appointment_id } },
           {
             $set: {
@@ -1417,25 +1442,15 @@ export default class appointmentController {
           { new: true }
         ).exec();
 
-        var notificationCreator = null;
-        var notificationReceiver = null;
+        let notificationCreator = null;
+        let notificationReceiver = null;
         let serviceurl = "";
 
-        if (
-          appointmentDetails.cancel_by == "INDIVIDUAL"
-        ) {
-          notificationCreator = appointmentDetails.portalId;
-          notificationReceiver = appointmentDetails.patientId;
-          serviceurl = "patientServiceUrl";
-        } else {
-          notificationCreator = appointmentDetails.patientId;
-          notificationReceiver = appointmentDetails.portalId;
-          serviceurl = "labradioServiceUrl";
-        }
-        var appointType = appointmentDetails.appointmentType.replace("_", " ");
+     
+        let appointType = appointmentDetails.appointmentType.replace("_", " ");
 
-        var noti_messaged = "";
-        var noti_type = "";
+        let noti_messaged = "";
+        let noti_type = "";
         switch (status) {
           case "REJECTED":
             noti_type = "Appointment Rejected";
@@ -1451,25 +1466,7 @@ export default class appointmentController {
             break;
         }
 
-        var requestData = {
-          created_by_type: appointmentDetails?.portal_type,
-          created_by: notificationCreator,
-          content: noti_messaged,
-          url: "",
-          for_portal_user: notificationReceiver,
-          notitype: noti_type,
-          appointmentId: appointment_id,
-        };
-        var result = await notification(
-          appointmentDetails?.portal_type,
-          notificationCreator,
-          serviceurl,
-          req.body.portalId,
-          "one new appointment",
-          "https://mean.stagingsdei.com:451",
-          headers,
-          requestData
-        );
+      
       }
 
       const message = status == "REJECTED" ? "cancelled" : "Approved";
@@ -1481,6 +1478,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -1681,6 +1679,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -1691,11 +1690,8 @@ export default class appointmentController {
   }
 
   async appointmentList_for_patient(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
     try {
-      var { patient_portal_id, consultation_type, status, date, to_date } =
+      let { patient_portal_id, consultation_type, status, date, to_date } =
         req.query;
       //For UPDATING MISSED APPOINTMENT
       const missedAppointments = await Appointment.find({
@@ -1703,7 +1699,7 @@ export default class appointmentController {
         status: ["NEW", "APPROVED"],
       });
 
-      var dateToday = new Date().toISOString().split("T")[0]; //string
+      let dateToday = new Date().toISOString().split("T")[0]; //string
 
       const today = new Date(dateToday); //Today date
       let appointmentsToBeMissed = []; //appointment id array
@@ -1732,16 +1728,15 @@ export default class appointmentController {
         }
       }
 
-      var afterUpdateResult;
       if (appointmentsToBeMissed.length != 0) {
-        afterUpdateResult = await Appointment.updateMany(
+       await Appointment.updateMany(
           { _id: { $in: appointmentsToBeMissed } },
           { $set: { status: "MISSED" } },
           { multi: true }
         );
       }
 
-      var appointmentTypeFilter = {};
+      let appointmentTypeFilter = {};
       if (consultation_type && consultation_type != "") {
         if (consultation_type == "ALL") {
           appointmentTypeFilter = {
@@ -1754,7 +1749,7 @@ export default class appointmentController {
         }
       }
 
-      var statusFilter = {};
+      let statusFilter = {};
       if (status && status != "") {
         statusFilter = {
           status: { $ne: "NA" },
@@ -1809,7 +1804,7 @@ export default class appointmentController {
         };
       }
 
-      var dateFilter = {};
+      let dateFilter = {};
 
       if (date && date != "" && to_date && to_date != "") {
         dateFilter = {
@@ -1905,7 +1900,7 @@ export default class appointmentController {
 
         basic_info.profile_picture.url = "";
 
-        var speciality = "";
+        let speciality = "";
 
         if (basic_info?.speciality) {
           const res = await httpService.getStaging(
@@ -1957,6 +1952,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error.message ? error.message : error,
@@ -1984,6 +1980,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2012,6 +2009,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2027,14 +2025,14 @@ export default class appointmentController {
       const headers = {
         Authorization: req.headers["authorization"],
       };
-      var appointment = await Appointment.findOne({ _id: appointmentId });
+      let appointment = await Appointment.findOne({ _id: appointmentId });
       const portalId = appointment.portalId;
       const hospitalId = appointment.hospital_details.hospital_id;
       const appointmentType = appointment.appointmentType;
       const portal_type = appointment.portal_type;
-      var timeStamp = new Date();
-      var timeStampString;
-      var slot = null;
+      let timeStamp = new Date();
+      let timeStampString;
+      let slot = null;
 
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
@@ -2096,6 +2094,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2106,9 +2105,7 @@ export default class appointmentController {
   }
 
   async portal_rescheduleAppointment(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
+   
     try {
       const {
         appointmentId,
@@ -2117,9 +2114,8 @@ export default class appointmentController {
         rescheduled_by,
         rescheduled_by_id,
       } = req.body;
-      var appointment = await Appointment.findOne({ _id: appointmentId });
 
-      var newAppointmentDetails = await Appointment.findOneAndUpdate(
+      let newAppointmentDetails = await Appointment.findOneAndUpdate(
         { _id: appointmentId },
         {
           $set: {
@@ -2132,57 +2128,6 @@ export default class appointmentController {
         { upsert: false, new: true }
       ).exec();
 
-      var notificationCreator;
-      var notificationReceiver;
-      var serviceurl;
-      var message;
-      var portalDetails;
-      if (rescheduled_by == "patient") {
-        notificationCreator = appointment.patientId;
-        notificationReceiver = appointment.portalId;
-        serviceurl = "labradioServiceUrl";
-        message = `${
-          newAppointmentDetails.patientDetails.patientFullName
-        } has been reschedule the appointment from ${
-          (appointment.consultationDate, appointment.consultationTime)
-        } to  ${newAppointmentDetails.consultationDate} | ${
-          newAppointmentDetails.consultationTime
-        }`;
-      } else {
-        notificationCreator = appointment.portalId;
-        portalDetails = await PortalUser.findOne({ _id: appointment.portalId });
-        notificationReceiver = appointment.patientId;
-        serviceurl = "patientServiceUrl";
-        message = `${
-          portalDetails?.full_name
-        } has been reschedule the appointment from ${
-          (appointment.consultationDate, appointment.consultationTime)
-        } to  ${newAppointmentDetails.consultationDate} | ${
-          newAppointmentDetails.consultationTime
-        }`;
-      }
-
-      // var message = `${newAppointmentDetails?.patientDetails?.patientFullName} has been reschedule the appointment from ${appointment.consultationDate, appointment.consultationTime} to  ${newAppointmentDetails.consultationDate} | ${newAppointmentDetails.consultationTime}`
-      var requestData = {
-        created_by_type: rescheduled_by,
-        created_by: notificationCreator,
-        content: message,
-        url: "",
-        for_portal_user: notificationReceiver,
-        notitype: "Reshedule Appointment",
-        appointmentId: appointmentId,
-      };
-
-      var result = await notification(
-        newAppointmentDetails?.madeBy,
-        notificationCreator,
-        serviceurl,
-        req.body.portalId,
-        "one new appointment",
-        "https://mean.stagingsdei.com:451",
-        headers,
-        requestData
-      );
       sendResponse(req, res, 200, {
         status: true,
         body: newAppointmentDetails,
@@ -2190,6 +2135,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2226,10 +2172,7 @@ export default class appointmentController {
           await Reminder.deleteMany({ appointment_id, patientId: patientId });
         }
       }
-      // const checkExist = await Reminder.find({ appointment_id })
-      // if (checkExist.length > 0) {
-      //   await Reminder.deleteMany({ appointment_id })
-      // }
+
       let dataArray = [];
       for (const value of time_reminder_data) {
         if (value?.hours !== "" || value?.minutes !== "") {
@@ -2267,6 +2210,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2317,6 +2261,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2330,7 +2275,7 @@ export default class appointmentController {
   async portal_addAssessment(req, res) {
     try {
       const { assessments, appointmentId } = req.body;
-      var result;
+      let result;
       const assessmentDetails = await Assessment.findOne({ appointmentId });
       if (assessmentDetails) {
         result = await Assessment.findOneAndUpdate(
@@ -2356,6 +2301,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2375,6 +2321,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2385,9 +2332,6 @@ export default class appointmentController {
   }
 
   async portal_UpdateVideocallAppointment(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
 
     try {
       const {
@@ -2403,7 +2347,7 @@ export default class appointmentController {
         isAudioMuted,
         isVideoMuted,
       } = req.body;
-      var appointmentDetails;
+      let appointmentDetails;
       if (participantuserId != undefined) {
         appointmentDetails = await Appointment.findOneAndUpdate(
           { "participants.userId": participantuserId },
@@ -2460,6 +2404,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2470,13 +2415,11 @@ export default class appointmentController {
   }
 
   async portal_updateVideocallchatmessage(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
+
 
     try {
       const { appointmentId, chatmessage } = req.body;
-      var appointmentDetails;
+      let appointmentDetails;
       if (chatmessage != undefined) {
         appointmentDetails = await Appointment.findOneAndUpdate(
           { _id: appointmentId },
@@ -2491,6 +2434,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2510,8 +2454,7 @@ export default class appointmentController {
       });
       if (getData.participants) {
         getData.participants.forEach(async (ele) => {
-          let audioFlag;
-          let videoFlag;
+
           if (ele.userIdentity == req.query.identity) {
             return sendResponse(req, res, 200, {
               status: true,
@@ -2569,7 +2512,7 @@ export default class appointmentController {
         path: "for_portal_user",
         select: "email",
       });
-      var pharmacyProfile;
+      let pharmacyProfile;
       if (
         pharmacyDetails.profile_picture != "" &&
         pharmacyDetails.profile_picture != undefined
@@ -2593,7 +2536,7 @@ export default class appointmentController {
         for_portal_user,
       }).lean();
       const medicineIDArray = [];
-      var getMedicines = {
+      let getMedicines = {
         body: null,
       };
       if (medicineDetails.length > 0) {
@@ -2613,7 +2556,7 @@ export default class appointmentController {
         for_portal_user,
       }).lean();
       if (medicineBill != null) {
-        const urlArray = await DocumentInfo.find({
+        await DocumentInfo.find({
           _id: { $in: medicineBill.prescription_url },
         })
           .select("url")
@@ -2636,6 +2579,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         data: error,
@@ -2646,16 +2590,10 @@ export default class appointmentController {
   }
 
   async totalCountforAppointmentHospitalDashboard(req, res) {
-    var { hospital_id, dateFilter, filterDateWise, yearFilter } = req.query;
+    let { hospital_id, dateFilter, filterDateWise, yearFilter } = req.query;
     try {
       let dateWiseFilter = {};
-      // if (dateFilter !== '') {
-      //   dateWiseFilter = {
-      //     'appointments.createdAt': {
-      //       $lte: new Date(dateFilter).toISOString()
-      //     }
-      //   };
-      // }
+
       if (dateFilter && !isNaN(Date.parse(dateFilter))) {
         let chooseDate = new Date(dateFilter).toISOString();
         dateWiseFilter = {
@@ -2711,7 +2649,7 @@ export default class appointmentController {
           };
         }
       }
-      var filter = {
+      let filter = {
         "for_portal_user.role": { $in: ["INDIVIDUAL"] },
         "for_portal_user.isDeleted": false,
         // for_hospital: mongoose.Types.ObjectId(hospital_portal_id),
@@ -2765,6 +2703,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2787,9 +2726,6 @@ export default class appointmentController {
         page,
         type,
       } = req.query;
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
 
       let filter = [{}];
       let appointmentStatus_filter = {};
@@ -2831,7 +2767,7 @@ export default class appointmentController {
         };
       }
 
-      var FourPortalId = Array.isArray(four_portal_id)
+      let FourPortalId = Array.isArray(four_portal_id)
         ? four_portal_id.map((s) => mongoose.Types.ObjectId(s))
         : [mongoose.Types.ObjectId(four_portal_id)];
 
@@ -2960,6 +2896,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2970,7 +2907,7 @@ export default class appointmentController {
   }
 
   async hospitalPaymentHistory(req, res) {
-    var {
+    let {
       hospital_id,
       searchTextP,
       searchTextD,
@@ -2979,7 +2916,7 @@ export default class appointmentController {
       appointmentEndDate,
     } = req.query;
     try {
-      var filter = {
+      let filter = {
         "for_portal_user.role": { $in: ["INDIVIDUAL"] },
         "for_portal_user.isDeleted": false,
         for_hospitalIds: { $in: [mongoose.Types.ObjectId(hospital_id)] },
@@ -3108,6 +3045,7 @@ export default class appointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -3120,7 +3058,7 @@ export default class appointmentController {
 export const portal_viewAppointmentByRoomName = async (req, res) => {
   try {
     const { roomname, appointment_id, portal_type } = req.query;
-    var result = {};
+    let result = {};
     if (appointment_id == undefined) {
       result = await Appointment.findOne({ roomName: roomname, portal_type });
     } else {
@@ -3148,6 +3086,7 @@ export const portal_viewAppointmentByRoomName = async (req, res) => {
       errorCode: null,
     });
   } catch (error) {
+    console.error("An error occurred:", error);
     sendResponse(req, res, 500, {
       status: false,
       body: error,
@@ -3159,11 +3098,9 @@ export const portal_viewAppointmentByRoomName = async (req, res) => {
 
 export const viewAppointmentByRoomName = async (req, res) => {
   try {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
+
     const { roomname, appointment_id } = req.query;
-    var result = {};
+    let result = {};
     if (appointment_id == undefined) {
       result = await Appointment.findOne({ roomName: roomname });
     } else {
@@ -3193,6 +3130,7 @@ export const viewAppointmentByRoomName = async (req, res) => {
       errorCode: null,
     });
   } catch (error) {
+    console.error("An error occurred:", error);
     sendResponse(req, res, 500, {
       status: false,
       body: error,
@@ -3205,7 +3143,7 @@ export const viewAppointmentByRoomName = async (req, res) => {
 export const viewAppointmentCheck = async (req, res) => {
   try {
     const { appointment_id } = req.query;
-    var result = {};
+    let result = {};
 
     result = await Appointment.findOne({
       _id: appointment_id,
@@ -3226,6 +3164,7 @@ export const viewAppointmentCheck = async (req, res) => {
       });
     }
   } catch (error) {
+    console.error("An error occurred:", error);
     sendResponse(req, res, 500, {
       status: false,
       body: error,
@@ -3238,9 +3177,6 @@ export const viewAppointmentCheck = async (req, res) => {
 export const updateUnreadMessage = async (req, res) => {
   try {
     const user_id = req.query.id;
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
 
     const result = await Appointment.findOneAndUpdate(
       {
@@ -3265,6 +3201,7 @@ export const updateUnreadMessage = async (req, res) => {
       errorCode: null,
     });
   } catch (error) {
+    console.error("An error occurred:", error);
     sendResponse(req, res, 500, {
       status: false,
       body: error,

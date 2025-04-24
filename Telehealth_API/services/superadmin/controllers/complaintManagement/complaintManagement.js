@@ -53,7 +53,7 @@ class ComplaintManagementController {
                 errorCode: null,
             });
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -169,7 +169,7 @@ class ComplaintManagementController {
             }
 
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -200,6 +200,7 @@ class ComplaintManagementController {
                     userDetails = await httpService.getStaging('pharmacy/get-PharmacyBy-Id', { for_portal_user: complaintReason?.complaint_to_user_id.toString() }, headers, 'pharmacyServiceUrl');
                     
                 } catch (error) {
+                    console.error("An error occurred:", error);
                 }
             }        
         
@@ -219,7 +220,7 @@ class ComplaintManagementController {
                 errorCode: null,
             });
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -266,7 +267,7 @@ class ComplaintManagementController {
             }
            
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,

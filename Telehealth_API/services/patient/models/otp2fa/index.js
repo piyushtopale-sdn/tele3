@@ -1,4 +1,4 @@
-import mongoose, { Mongoose, now, Schema } from "mongoose";
+import mongoose from "mongoose";
 
 const otp2faSchema = new mongoose.Schema(
     {

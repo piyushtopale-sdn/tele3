@@ -265,7 +265,7 @@ class HospitalStaffController {
             } 
             
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             return sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -383,7 +383,7 @@ class HospitalStaffController {
                 errorCode: null,
             });
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -425,7 +425,7 @@ class HospitalStaffController {
                 errorCode: null,
             });
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -545,7 +545,7 @@ class HospitalStaffController {
                 errorCode: null,
             });
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -575,7 +575,7 @@ class HospitalStaffController {
                 errorCode: null,
             });
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,

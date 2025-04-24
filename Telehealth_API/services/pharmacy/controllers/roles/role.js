@@ -50,6 +50,7 @@ export const add_role = async (req, res) => {
           });
         }
       } catch (error) {
+        console.error("An error occurred:", error);
         handleResponse(req, res, 500, {
           status: false,
           body: null,
@@ -113,6 +114,7 @@ export const all_role = async (req, res) => {
       errorCode: null,
     });
   } catch (error) {
+    console.error("An error occurred:", error);
     handleResponse(req, res, 500, {
       status: false,
       body: null,
@@ -140,6 +142,7 @@ export const update_role = async (req, res) => {
       errorCode: null,
     });
   } catch (error) {
+    console.error("An error occurred:", error);
     handleResponse(req, res, 500, {
       status: false,
       body: null,
@@ -165,6 +168,7 @@ export const delete_role = async (req, res) => {
       errorCode: null,
     });
   } catch (error) {
+    console.error("An error occurred:", error);
     handleResponse(req, res, 500, {
       status: false,
       body: null,

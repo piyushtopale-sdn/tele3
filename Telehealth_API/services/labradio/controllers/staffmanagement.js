@@ -315,25 +315,25 @@ class StaffController {
                 }).lean()
           
             let department = staffFullDetails?.department;
-            let departdetails = [];
+            
             if (department.length > 0) {
-                departdetails = await department_info.find({ _id: { $in: department } });
+                await department_info.find({ _id: { $in: department } });
             }
 
             let service = staffFullDetails?.services;
-            let servicedetails = [];
+            
             if (service.length > 0) {
-                servicedetails = await service_info.find({ _id: { $in: service } });
+                await service_info.find({ _id: { $in: service } });
             }
             let unit = staffFullDetails?.unit;
-            let unitdetails = [];
+            
             if (unit.length > 0) {
-                unitdetails = await unit_info.find({ _id: { $in: unit } });
+                await unit_info.find({ _id: { $in: unit } });
             }
             let doctorIds = staffFullDetails?.for_doctor;
-            let doctorDetails = [];
+            
             if (doctorIds.length > 0) {
-                doctorDetails = await basic_info.find({ for_portal_user: { $in: doctorIds } });
+                await basic_info.find({ for_portal_user: { $in: doctorIds } });
             }
             
             let result = {
@@ -355,7 +355,7 @@ class StaffController {
                 errorCode: null,
             });
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -461,7 +461,7 @@ class StaffController {
                 errorCode: null,
             });
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -522,7 +522,7 @@ class StaffController {
                 errorCode: null,
             });
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,

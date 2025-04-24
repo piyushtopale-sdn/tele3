@@ -82,6 +82,7 @@ export const generateSignedUrl = (fileName) => {
 
             resolve(url)
         } catch (error) {
+            console.error("An error occurred:", error);
             resolve("")
         }
     })

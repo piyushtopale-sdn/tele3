@@ -41,7 +41,7 @@ export const addLeaves = async (req, res) => {
       result: resObject,
     });
   } catch (error) {
-    
+    console.error("An error occurred:", error);
     sendResponse(req, res, 500, {
       status: false,
       body: null,
@@ -222,7 +222,8 @@ export const FourPortalStaffLeaveAccept = async (req, res) => {
         result: result,
       });
     }
-  } catch (e) {
+  } catch (error) {
+    console.error("An error occurred:", error);
     res.send({
       status: false,
       messgae: "Oops!! something went wrong",
@@ -255,7 +256,8 @@ export const FourPortalStaffLeaveReject = async (req, res) => {
         result: result,
       });
     }
-  } catch (e) {
+  } catch (error) {
+    console.error("An error occurred:", error);
     res.send({
       status: false,
       messgae: "Oops!! something went wrong",
@@ -679,7 +681,8 @@ export const fourPortalLeaveAcceptInDoctor = async (req, res) => {
         result: result,
       });
     }
-  } catch (e) {
+  } catch (error) {
+    console.error("An error occurred:", error);
     res.send({
       status: false,
       messgae: "Oops!! something went wrong",
@@ -712,7 +715,8 @@ export const fourPortalLeaveRejectInDoctor = async (req, res) => {
         result: result,
       });
     }
-  } catch (e) {
+  } catch (error) {
+    console.error("An error occurred:", error);
     res.send({
       status: false,
       messgae: "Oops!! something went wrong",

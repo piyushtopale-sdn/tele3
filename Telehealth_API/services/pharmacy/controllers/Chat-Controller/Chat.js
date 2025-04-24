@@ -456,7 +456,7 @@ export const saveNotification = async (req, res) => {
         } else {
           return sendResponse(req, res, 400, {
             status: true,
-            body: saveChat,
+            body: null,
             message: "Notification not Saved",
           });
         }
@@ -544,9 +544,9 @@ export const updateNotification = async (req, res) => {
       receiverId,
       isnew
     } = req.body;
-
+    let notificationDetails = {};
     if (!isnew) {
-      await Notification.updateMany(
+      notificationDetails = await Notification.updateMany(
         { for_portal_user: { $eq: receiverId } },
         {
           $set: {
@@ -771,7 +771,8 @@ export const updateConfirmScheduleorder = async (req, res) => {
               })
             }
           } 
-          catch (e) {
+          catch (error) {
+            console.error("An error occurred:", error);
             return sendResponse(req, res, 500, {
               status: true,
               data: null,

@@ -143,6 +143,7 @@ const getHospitalTeam = async (hospital_portal_id) => {
 
       resolve(result);
     } catch (error) {
+      console.error("An error occurred:", error);
       resolve({
         doctorCount: 0,
         our_team: {},
@@ -886,62 +887,13 @@ class PatientController {
           // let currentTime = new Date(moment().utcOffset("+05:30").format())
           // let currentTime = "2024-04-03T09:21:53.935Z"
           let currentTime = new Date(moment());
-          if (notificationTime <= currentTime) {
-            let message = `Your Appointment Scheduled on ${appointmentDetails?.consultationDate}|${appointmentDetails?.consultationTime} is starting in ${notificationMinutesBefore} minutes`;
-            if (reminder?.doctorId) {
-              let requestData = {
-                created_by_type: "doctor",
-                created_by: reminder?.doctorId,
-                content: message,
-                url: "",
-                for_portal_user: reminder?.doctorId,
-                notitype: "Appointment Reminder",
-                appointmentId: reminder?.appointment_id,
-              };
-              await notification(
-                appointmentDetails?.madeBy,
-                reminder?.doctorId,
-                "hospitalServiceUrl",
-                appointmentDetails?.doctorId,
-                "reminder for appointment",
-                "https://mean.stagingsdei.com:451",
-                {},
-                requestData
-              );
-              await Reminder.updateOne(
-                { _id: reminder?._id },
-                { status: 1 },
-                { new: true }
-              ).exec();
-            } else {
-              let requestData = {
-                created_by_type: "patient",
-                created_by: reminder?.patientId,
-                content: message,
-                url: "",
-                for_portal_user: reminder?.patientId,
-                notitype: "Appointment Reminder",
-                appointmentId: reminder?.appointment_id,
-              };
-             await notification(
-                "patient",
-                reminder?.patientId,
-                "patientServiceUrl",
-                reminder?.patientId,
-                "reminder for appointment",
-                "https://mean.stagingsdei.com:451",
-                {},
-                requestData
-              );
-
-              await Reminder.updateOne(
-                { _id: reminder?._id },
-                { status: 1 },
-                { new: true }
-              ).exec();
-            }
-          } else {
-          }
+          if (currentTime) {
+            await Reminder.updateOne(
+              { _id: reminder?._id },
+              { status: 1 },
+              { new: true }
+            ).exec();
+          } 
         }
       }
     } catch (error) {
@@ -1497,7 +1449,7 @@ class PatientController {
       } else {
         return sendResponse(req, res, 500, {
           status: false,
-          body: error,
+          body: null,
           message: "Internal server error",
           errorCode: null,
         });

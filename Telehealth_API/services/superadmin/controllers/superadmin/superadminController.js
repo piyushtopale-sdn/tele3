@@ -534,7 +534,7 @@ export const matchEmailOtpFor2fa = async (req, res) => {
                 await saveLogs(objData)
                 let activeToken = generateToken(tokenData);
                 await Superadmin.findOneAndUpdate(
-                  { _id: for_portal_user },
+                  { _id: portalUserData?._id },
                   {
                     $set: { activeToken: activeToken },
                   }
@@ -578,6 +578,7 @@ export const matchEmailOtpFor2fa = async (req, res) => {
             });
         }
     } catch (error) {
+        console.error("An error occurred:", error);
         return sendResponse(req, res, 500, {
             status: false,
             body: null,
@@ -1518,7 +1519,7 @@ export const deleteSubscriptionPlan = async (req, res) => {
         if (ids.includes(id)) {
             return sendResponse(req, res, 200, {
                 status: false,
-                body: result,
+                body: null,
                 message: "Cannot delete! The subscription plan is already associated with a patient",
                 errorCode: null,
             });
@@ -2052,7 +2053,6 @@ export const getAllInvitation = async (req, res) => {
             sortingarray['createdAt'] = -1;
         }
         const filter = {};
-        // const filterDate = {};
 
         if (searchKey && searchKey !== "") {
             filter.$or = [
@@ -2415,6 +2415,7 @@ export const changePassword = async (req, res) => {
             errorCode: null,
         });
     } catch (error) {
+        console.error("An error occurred:", error);
         return sendResponse(req, res, 500, {
             status: false,
             body: null,
@@ -3309,6 +3310,7 @@ export const deteleLockAdminUser = async (req, res) => {
                 const objectId = new mongoose.Types.ObjectId(patientId);
                 query.userId = objectId;
             } catch (error) {
+                console.error("An error occurred:", error);
                 return sendResponse(req, res, 400, {
                     status: false,
                     data: null,

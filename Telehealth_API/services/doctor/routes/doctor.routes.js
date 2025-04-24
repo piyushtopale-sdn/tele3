@@ -48,7 +48,7 @@ const uploadFileToLocalStorage = async (req, res, next) => {
 
 const uploadFileToLocalStoragecsv = (req, res, next) => {
     if (!req.files) {
-        return sendResponse(req, res, 200, {
+        return handleResponse(req, res, 200, {
             status: false,
             body: null,
             message: "No files found",
@@ -57,7 +57,7 @@ const uploadFileToLocalStoragecsv = (req, res, next) => {
     }
     const file = req.files.file;
     if (file.mimetype !== "text/csv") {
-        return sendResponse(req, res, 200, {
+        return handleResponse(req, res, 200, {
 
             status: false,
             body: null,
@@ -71,7 +71,7 @@ const uploadFileToLocalStoragecsv = (req, res, next) => {
 
     file.mv(path, (err) => {
         if (err) {
-            return sendResponse(req, res, 500, {
+            return handleResponse(req, res, 500, {
                 status: false,
                 body: null,
                 message: "Something went wrong while uploading file",

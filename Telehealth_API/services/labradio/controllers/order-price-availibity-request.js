@@ -183,7 +183,6 @@ class OrderFlow {
                 { $match: searchQuery },
                 { $project: { status: 1, count: 1 } }
             ]).exec();
-            const resultData = []
             let newCount = 0
             let acceptedCount = 0
             let scheduledCount = 0
@@ -309,7 +308,6 @@ class OrderFlow {
             }));
             const ordertest_Bill = await OrdertestBill.insertMany(labtest_DataArray)
 
-            let ordertestDetails = null;
             if (ordertest_From.length >= 1) {
                 let ordertestList = []
                 for (let index = 0; index < ordertest_Bill.length; index++) {
@@ -324,16 +322,16 @@ class OrderFlow {
                             let testname;
                             let testId;
                             if(test.imaging_name){
-                                testname = test.imaging_name,
+                                testname = test.imaging_name
                                 testId = test.imagingId
                             }else if(test?.lab_name ){
-                                testname = test.lab_name,
+                                testname = test.lab_name
                                 testId = test.labId
                             }else if(test?.other_name ){
-                                testname = test?.other_name,
+                                testname = test?.other_name
                                 testId = test.otherId
                             }else if(test?.eyeglass_name ){
-                                testname = test.eyeglass_name,
+                                testname = test.eyeglass_name
                                 testId = test.eyeglassId
                             }
                             obj = {

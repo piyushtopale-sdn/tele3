@@ -132,7 +132,7 @@ class AppointmentController {
       //Get patient subscription details and prevent them to book an appointment if consultation count is 0
       const getData = await httpService.getStaging(`patient/get-patient-subscription-details/${patientId}`, {}, headers, 'patientServiceUrl');
       if (!getData.status) {
-        return handleResponse(req, res, 500, {
+        return sendResponse(req, res, 500, {
           status: false,
           body: null,
           message: getData.message,

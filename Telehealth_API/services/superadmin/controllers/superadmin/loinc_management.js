@@ -54,6 +54,7 @@ class LoincCodeManagement {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -176,9 +177,9 @@ class LoincCodeManagement {
       const filter = {};
       if (action_name == "active") filter["active_status"] = action_value;
       if (action_name == "delete") filter["delete_status"] = action_value;
-
+      let result;
       if (action_name == "active") {
-        await LoincCode.updateOne({ _id: loincCodeId }, filter, {
+        result = await LoincCode.updateOne({ _id: loincCodeId }, filter, {
           new: true,
         }).exec();
 

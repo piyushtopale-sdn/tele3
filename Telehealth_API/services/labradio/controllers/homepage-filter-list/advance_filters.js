@@ -17,7 +17,7 @@ const httpService = new Http();
 
 function filterBookedSlots(array1, array2) {
   array1.forEach((element, index) => {
-    var xyz = array2.indexOf(element.slot);
+    let xyz = array2.indexOf(element.slot);
     if (xyz != -1) {
       array1[index].status = 1;
     }
@@ -26,13 +26,13 @@ function filterBookedSlots(array1, array2) {
 }
 
 const getPortalOpeningsHours = async (week_days) => {
-  var Sunday = [];
-  var Monday = [];
-  var Tuesday = [];
-  var Wednesday = [];
-  var Thursday = [];
-  var Friday = [];
-  var Saturday = [];
+  let Sunday = [];
+  let Monday = [];
+  let Tuesday = [];
+  let Wednesday = [];
+  let Thursday = [];
+  let Friday = [];
+  let Saturday = [];
   if (week_days) {
     week_days.forEach((data) => {
       Sunday.push({
@@ -106,7 +106,7 @@ const getPortalOpeningsHours = async (week_days) => {
 
 function filterBookedSlotsToday(array1) {
   array1.forEach((element, index) => {
-    var xyz =
+    let xyz =
       element.slot.split("-")[0].split(":")[0] +
       element.slot.split("-")[0].split(":")[1];
 
@@ -115,13 +115,33 @@ function filterBookedSlotsToday(array1) {
       date.getHours() + TimeZone.hours,
       date.getMinutes() + TimeZone.minute
     );
-    var hm = date.getHours().toString() + date.getMinutes().toString();
+    let hm = date.getHours().toString() + date.getMinutes().toString();
     if (parseInt(hm) > parseInt(xyz)) {
       array1[index].status = 1;
     }
   });
 
   return array1;
+}
+
+function uniqueArray(array1, array2) {
+  let a = array1;
+  let b = array2;
+  const isSameUser = (a, b) => a.slot === b.slot && a.status === b.status;
+
+  // Get items that only occur in the left array,
+  // using the compareFunction to determine equality.
+  const onlyInLeft = (left, right, compareFunction) =>
+    left.filter(
+      (leftValue) =>
+        !right.some((rightValue) => compareFunction(leftValue, rightValue))
+    );
+
+  const onlyInA = onlyInLeft(a, b, isSameUser);
+  const onlyInB = onlyInLeft(b, a, isSameUser);
+
+  const result = [...onlyInA, ...onlyInB];
+  return result;
 }
 
 export const updateSlotAvailability = async (
@@ -131,8 +151,8 @@ export const updateSlotAvailability = async (
   req,
   portal_type
 ) => {
-  var timeStampString;
-  var slot = null;
+  let timeStampString;
+  let slot = null;
 
   const headers = {
     Authorization: req.headers["authorization"],
@@ -426,19 +446,19 @@ class advFiltersLabRadio {
 
       const current_timestamp = new Date(timeStamp);
       const onlyDate = timeStamp.split("T")[0];
-      var day = current_timestamp.getDay();
+      let day = current_timestamp.getDay();
    
-      var startTime;
-      var startTimeH;
-      var startTimeM;
-      var startTimeHM;
-      var endTime;
-      var endTimeH;
-      var endTimeM;
-      var endTimeHM;
+      let startTime;
+      let startTimeH;
+      let startTimeM;
+      let startTimeHM;
+      let endTime;
+      let endTimeH;
+      let endTimeM;
+      let endTimeHM;
 
-      var allGeneralSlot = [];
-      var allGeneralSlot2 = [];
+      let allGeneralSlot = [];
+      let allGeneralSlot2 = [];
       const result = await PortalAvailability.findOne({
         for_portal_user: portal_id,
         location_id: locationId,
@@ -451,7 +471,7 @@ class advFiltersLabRadio {
         type: portal_type,
       });
 
-      var fee;
+      let fee;
       if (appointmentType == "ONLINE") {
         fee = allFee?.online.basic_fee;
       }
@@ -473,8 +493,8 @@ class advFiltersLabRadio {
         });
       }
       const doctorAvailability = result.availability_slot;
-      var availabilityArray = [];
-      var availabilitySlot = [];
+      let availabilityArray = [];
+      let availabilitySlot = [];
       for (let index = 0; index < doctorAvailability.length; index++) {
         const element = doctorAvailability[index];
         const availabilityDate = element.date.split("T")[0];
@@ -492,8 +512,8 @@ class advFiltersLabRadio {
 
       if (availabilityArray.length > 0) {
         availabilityArray.forEach((element, index) => {
-          var totalH = 0;
-          var totalM = 0;
+          let totalH = 0;
+          let totalM = 0;
           startTimeH = element.startTime.slice(0, 2);
           startTimeM = element.startTime.slice(2);
           startTimeHM = startTimeH + ":" + startTimeM;
@@ -506,24 +526,24 @@ class advFiltersLabRadio {
           totalH = totalH + difference.hours();
           totalM = totalM + difference.minutes();
           totalH = totalH + totalM / 60;
-          var totalNumbersSlots =
+          let totalNumbersSlots =
             (totalH * 60) / result.slot_interval.slice(0, 2);
           startTime = element.startTime;
           startTimeH = startTime.slice(0, 2);
           startTimeM = startTime.slice(2);
           startTimeHM = startTimeH + ":" + startTimeM;
           piece = startTimeHM.split(":");
-          var mins =
+          let mins =
             piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-          var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+          let nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
           if (nextStartTimeH.toString().length == 1) {
             nextStartTimeH = "0" + startTimeH;
           }
-          var nextStartTimeM = mins % 60;
+          let nextStartTimeM = mins % 60;
           if (nextStartTimeM.toString().length == 1) {
             nextStartTimeM = nextStartTimeM + "0";
           }
-          var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+          let nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
           availabilitySlot.push({
             slot: startTimeHM + "-" + nextStartTimeHM,
@@ -570,7 +590,7 @@ class advFiltersLabRadio {
       if (availabilitySlot.length > 0) {
         allGeneralSlot = availabilitySlot;
       } else {
-        var daysArray = [];
+        let daysArray = [];
         for (let index = 0; index < result.week_days.length; index++) {
           if (day == 0) {
             startTime = result.week_days[index].sun_start_time;
@@ -610,8 +630,8 @@ class advFiltersLabRadio {
 
         if (daysArray.length > 0) {
           daysArray.forEach((element, index) => {
-            var totalH = 0;
-            var totalM = 0;
+            let totalH = 0;
+            let totalM = 0;
             startTimeH = element.startTime.slice(0, 2);
             startTimeM = element.startTime.slice(2);
             startTimeHM = startTimeH + ":" + startTimeM;
@@ -624,25 +644,24 @@ class advFiltersLabRadio {
             totalH = totalH + difference.hours();
             totalM = totalM + difference.minutes();
             totalH = totalH + totalM / 60;
-            var totalNumbersSlots =
+            let totalNumbersSlots =
               (totalH * 60) / result.slot_interval.slice(0, 2);
             startTime = element.startTime;
             startTimeH = startTime.slice(0, 2);
             startTimeM = startTime.slice(2);
             startTimeHM = startTimeH + ":" + startTimeM;
-            var piece = startTimeHM;
             piece = startTimeHM.split(":");
-            var mins =
+            let mins =
               piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-            var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+            let nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
             if (nextStartTimeH.toString().length == 1) {
               nextStartTimeH = "0" + startTimeH;
             }
-            var nextStartTimeM = mins % 60;
+            let nextStartTimeM = mins % 60;
             if (nextStartTimeM.toString().length == 1) {
               nextStartTimeM = nextStartTimeM + "0";
             }
-            var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+            let nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
             allGeneralSlot.push({
               slot: startTimeHM + "-" + nextStartTimeHM,
@@ -690,8 +709,8 @@ class advFiltersLabRadio {
           allGeneralSlot2 = [];
         }
         const doctorUnavailability = result.unavailability_slot;
-        var unavailabilityArray = [];
-        var unavailabilitySlot = [];
+        let unavailabilityArray = [];
+        let unavailabilitySlot = [];
 
         if (allGeneralSlot.length > 0) {
           for (let index = 0; index < doctorUnavailability.length; index++) {
@@ -710,8 +729,8 @@ class advFiltersLabRadio {
           }
           if (unavailabilityArray.length > 0) {
             unavailabilityArray.forEach((element, index) => {
-              var totalH = 0;
-              var totalM = 0;
+              let totalH = 0;
+              let totalM = 0;
               startTimeH = element.startTime.slice(0, 2);
               startTimeM = element.startTime.slice(2);
               startTimeHM = startTimeH + ":" + startTimeM;
@@ -724,24 +743,24 @@ class advFiltersLabRadio {
               totalH = totalH + difference.hours();
               totalM = totalM + difference.minutes();
               totalH = totalH + totalM / 60;
-              var totalNumbersSlots =
+              let totalNumbersSlots =
                 (totalH * 60) / result.slot_interval.slice(0, 2);
               startTime = element.startTime;
               startTimeH = startTime.slice(0, 2);
               startTimeM = startTime.slice(2);
               startTimeHM = startTimeH + ":" + startTimeM;
               piece = startTimeHM.split(":");
-              var mins =
+              let mins =
                 piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-              var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+              let nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
               if (nextStartTimeH.toString().length == 1) {
                 nextStartTimeH = "0" + startTimeH;
               }
-              var nextStartTimeM = mins % 60;
+              let nextStartTimeM = mins % 60;
               if (nextStartTimeM.toString().length == 1) {
                 nextStartTimeM = nextStartTimeM + "0";
               }
-              var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+              let nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
               unavailabilitySlot.push({
                 slot: startTimeHM + "-" + nextStartTimeHM,
@@ -783,7 +802,7 @@ class advFiltersLabRadio {
                 // allGeneralSlot2.push(startTimeHM2)
               }
             });
-            var filterUnavailableSlot = filterUnavailableSlotFunction(
+            let filterUnavailableSlot = filterUnavailableSlotFunction(
               unavailabilitySlot,
               allGeneralSlot[0].slot,
               allGeneralSlot[allGeneralSlot.length - 1].slot
@@ -793,7 +812,7 @@ class advFiltersLabRadio {
         }
       }
 
-      var todayDate = new Date().toISOString().split("T")[0];
+      let todayDate = new Date().toISOString().split("T")[0];
       if (new Date(onlyDate).getTime() === new Date(todayDate).getTime()) {
         allGeneralSlot = filterBookedSlotsToday(allGeneralSlot);
       }
@@ -908,18 +927,18 @@ class advFiltersLabRadio {
     try {
       const { portal_user_id, page, limit, reviewBy, requestFrom } = req.query;
 
-      var sort = req.query.sort;
-      var sortingarray = {};
+      let sort = req.query.sort;
+      let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = value;
       } else {
         sortingarray["createdAt"] = -1;
       }
 
-      var result;
-      var filter;
+      let result;
+      let filter;
       if (requestFrom == "hospital") {
         let doctorIDs = [];
         const hospitalDoctors = await BasicInfo.find(
@@ -953,7 +972,7 @@ class advFiltersLabRadio {
         patientIDArray.push(id.patient_login_id);
       }
 
-      var patientDetails;
+      let patientDetails;
 
       if (reviewBy == "patient") {
         const resData = await httpService.postStaging(

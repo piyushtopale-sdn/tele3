@@ -39,6 +39,7 @@ class LeaveTypeManagementController {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -88,6 +89,7 @@ class LeaveTypeManagementController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,

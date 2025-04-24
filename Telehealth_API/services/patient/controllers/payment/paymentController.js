@@ -992,13 +992,6 @@ class PaymentController {
                 }
             )
           
-            // await httpService.postStaging(
-            //     "superadmin/add-logs",
-            //     requestBody,
-            //     {},
-            //     "superadminServiceUrl"
-            // );
-
             return handleResponse(req, res, 200, {
                 status: true,
                 message: "Payment refunded success",

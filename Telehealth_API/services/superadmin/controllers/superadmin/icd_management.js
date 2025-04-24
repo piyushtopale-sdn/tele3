@@ -53,6 +53,7 @@ class ICDCodeManagement {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -107,6 +108,7 @@ class ICDCodeManagement {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -394,6 +396,7 @@ class ICDCodeManagement {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,

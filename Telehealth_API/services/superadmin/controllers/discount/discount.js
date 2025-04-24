@@ -84,6 +84,7 @@ class DiscountManagement {
                 errorCode: null,
             });
         } catch (error) {
+            console.error("An error occurred:", error);
             return handleResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -123,6 +124,7 @@ class DiscountManagement {
                 errorCode: null,
             });
         } catch (error) {
+            console.error("An error occurred:", error);
             return handleResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -153,6 +155,7 @@ class DiscountManagement {
                 errorCode: null,
             })
         } catch (error) {
+            console.error("An error occurred:", error);
             return handleResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -181,6 +184,7 @@ class DiscountManagement {
                 errorCode: null,
             })
         } catch (error) {
+            console.error("An error occurred:", error);
             return handleResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -287,6 +291,7 @@ class DiscountManagement {
                 errorCode: null,
             })
         } catch (error) {
+            console.error("An error occurred:", error);
             return handleResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -370,6 +375,7 @@ class DiscountManagement {
                 errorCode: null,
             });
         } catch (error) {
+            console.error("An error occurred:", error);
             return handleResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -482,6 +488,7 @@ class DiscountManagement {
                 errorCode: null,
             })
         } catch (error) {
+            console.error("An error occurred:", error);
             return handleResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -544,6 +551,7 @@ class DiscountManagement {
                 errorCode: null,
             })
         } catch (error) {
+            console.error("An error occurred:", error);
             return handleResponse(req, res, 500, {
                 status: false,
                 body: null,

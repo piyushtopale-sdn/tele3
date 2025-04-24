@@ -581,19 +581,7 @@ export const labRadioViewBasicInfo = async (req, res) => {
       // For Profile Picture
       await Promise.all(
         result.map(async (chat) => {
-          // For Profile Picture
-          if (chat?.profile_picture?.url) {
-            chat.profile_picture.url = await getDocument(
-              chat?.profile_picture?.url
-            );
-          }
-
-          if (chat?.license_image?.url) {
-            chat.license_details.image = await getDocument(
-              chat?.license_image?.url
-            );
-          }
-
+        
           // For Document Management
           const documents = chat?.in_document_management;
           const documentsArray = [];
@@ -606,7 +594,7 @@ export const labRadioViewBasicInfo = async (req, res) => {
                     _id: data?.image_url,
                   });
                   if (data1) {
-                    image = await getDocument(data1.url);
+                    image = data1.url;
                   }
                 } catch (error) {
                   console.error("Error fetching document info:", error);

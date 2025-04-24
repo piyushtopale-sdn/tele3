@@ -273,7 +273,7 @@ class IndividualDoctorStaffController {
         errorCode: null,
       });
     } catch (error) {
-
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -347,7 +347,7 @@ class IndividualDoctorStaffController {
         errorCode: null,
       });
     } catch (error) {
-
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -464,6 +464,7 @@ class IndividualDoctorStaffController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -521,7 +522,7 @@ class IndividualDoctorStaffController {
         errorCode: null,
       });
     } catch (error) {
-
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,

@@ -467,6 +467,7 @@ export const hospitalIds = async (req, res) => {
       result: names,
     });
   } catch (error) {
+    console.error("An error occurred:", error);
     sendResponse(req, res, 500, {
       status: false,
       body: null,
@@ -579,7 +580,8 @@ export const LeaveAccept = async (req, res) => {
         result: result,
       });
     }
-  } catch (e) {
+  } catch (error) {
+    console.error("An error occurred:", error);
     res.send({
       status: false,
       messgae: "Oops!! something went wrong",
@@ -612,7 +614,8 @@ export const LeaveReject = async (req, res) => {
         result: result,
       });
     }
-  } catch (e) {
+  } catch (error) {
+    console.error("An error occurred:", error);
     res.send({
       status: false,
       messgae: "Oops!! something went wrong",
@@ -718,7 +721,8 @@ export const StaffLeaveAccept = async (req, res) => {
         result: result,
       });
     }
-  } catch (e) {
+  } catch (error) {
+    console.error("An error occurred:", error);
     res.send({
       status: false,
       messgae: "Oops!! something went wrong",
@@ -751,7 +755,8 @@ export const StaffLeaveReject = async (req, res) => {
         result: result,
       });
     }
-  } catch (e) {
+  } catch (error) {
+    console.error("An error occurred:", error);
     res.send({
       status: false,
       messgae: "Oops!! something went wrong",
@@ -924,7 +929,8 @@ export const HospitalStaffLeaveAccept = async (req, res) => {
         result: result,
       });
     }
-  } catch (e) {
+  } catch (error) {
+    console.error("An error occurred:", error);
     res.send({
       status: false,
       messgae: "Oops!! something went wrong",
@@ -957,7 +963,8 @@ export const HospitalStaffLeaveReject = async (req, res) => {
         result: result,
       });
     }
-  } catch (e) {
+  } catch (error) {
+    console.error("An error occurred:", error);
     res.send({
       status: false,
       messgae: "Oops!! something went wrong",

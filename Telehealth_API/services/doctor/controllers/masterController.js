@@ -833,7 +833,7 @@ class MasterController {
 
             sendResponse(req, res, 200, {
                 status: true,
-                body: result,
+                body: null,
                 message: message,
                 errorCode: null,
             });
@@ -944,12 +944,7 @@ class MasterController {
                 res.download(newPath)
             })
 
-            // sendResponse(req, res, 200, {
-            //     status: true,
-            //     body: result,
-            //     message: "All eyeglass records added successfully",
-            //     errorCode: null,
-            // });
+
         } catch (error) {
             
             sendResponse(req, res, 500, {

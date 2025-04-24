@@ -32,7 +32,7 @@ class SubscriptionManagement {
                 errorCode: null,
             });
            } catch (error) {
-            
+            console.error("An error occurred:", error);
             handleResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -54,6 +54,7 @@ class SubscriptionManagement {
                 errorCode: null,
             });
            } catch (error) {
+            console.error("An error occurred:", error);
             handleResponse(req, res, 500, {
                 status: false,
                 body: null,

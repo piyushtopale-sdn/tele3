@@ -554,6 +554,7 @@ class OrderController {
             }
 
             const medicineBill = await MedicineBill.findOne({ for_order_id, for_portal_user }).lean();
+            let prescriptionUrlArray = [];
             medicineBill.prescription_url = prescriptionUrlArray
             sendResponse(req, res, 200, {
                 status: true,
@@ -845,8 +846,8 @@ class OrderController {
                 });
             }
         }
-        catch (e) {
-     
+        catch (error) {
+            console.error("An error occurred:", error);
         }
     }
 
@@ -1155,17 +1156,9 @@ class OrderController {
             const promises2 = filteredData.map(async (item) => {
                 try {
                     for (const key in item) {
-                        if(key == "plan_price"){
-                            return {
-                                ...item,
-                                totalPayment : item[key]
-                            }
-                        }
-                        else if(key == "totalApprovedAmount"){
-                            return {
-                                ...item,
-                                totalPayment : item[key]
-                            }
+                        return {
+                            ...item,
+                            totalPayment : item[key]
                         }
                     }
                 } catch (error) {

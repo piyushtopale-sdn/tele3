@@ -78,13 +78,6 @@ const portalUserSchema = new mongoose.Schema(
       type: String,
       default: 0,
     },
-    isOnline: {
-      type: Boolean,
-      default: false,
-    },
-    socketId: {
-      type: String,
-    },
     full_name: {
       type: String,
     },

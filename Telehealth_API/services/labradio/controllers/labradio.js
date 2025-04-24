@@ -325,6 +325,7 @@ class LabRadiology {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1737,6 +1738,7 @@ class LabRadiology {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2583,6 +2585,7 @@ class LabRadiology {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2693,6 +2696,7 @@ class LabRadiology {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2870,6 +2874,7 @@ class LabRadiology {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2913,6 +2918,7 @@ class LabRadiology {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2933,6 +2939,7 @@ class LabRadiology {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3256,6 +3263,7 @@ class LabRadiology {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3383,7 +3391,8 @@ class LabRadiology {
           errorCode: null,
         });
       });
-    } catch (e) {
+    } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3600,6 +3609,7 @@ class LabRadiology {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -3798,6 +3808,7 @@ class LabRadiology {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3842,6 +3853,7 @@ class LabRadiology {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3978,6 +3990,7 @@ class LabRadiology {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -4028,6 +4041,7 @@ class LabRadiology {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -4359,7 +4373,6 @@ class LabRadiology {
             middle_name: 1,
             last_name: 1,
             full_name: 1,
-            for_portal_user: 1,
             _id: 0,
             for_portal_user: {
               _id: "$for_portal_user._id",
@@ -5035,7 +5048,7 @@ class LabRadiology {
       }
       const getPortalData = await PortalUser.find({ _id: {$in: userIds} })
                                       .select('centre_name centre_name_arabic full_name full_name_arabic email country_code phone_number')
-      sendResponse(req, res, 200, {
+      return sendResponse(req, res, 200, {
           status: true,
           message: `Lab radio list fetched successfully`,
           body: getPortalData,

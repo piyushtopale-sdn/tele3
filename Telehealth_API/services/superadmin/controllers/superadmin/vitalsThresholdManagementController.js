@@ -204,7 +204,8 @@ export const getVitalsThresholdById = async (req, res) => {
 export const updateVitalsThreshold = async (req, res) => {
     try {
         const { id, vitalsType, rangeData } = req.body
-        let isExist = false
+        let isExist = false;
+        let getData;
         for (const ele of rangeData) {
             if (vitalsType === "BLOOD_PRESSURE") {
                 //Get records for BP systolic

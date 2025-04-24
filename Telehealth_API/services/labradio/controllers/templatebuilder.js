@@ -81,7 +81,7 @@ class TemplateBuilderController {
       });
     } catch (error) {
       
-      if (error.code = 11000) {
+      if (error.code == 11000) {
         return sendResponse(req, res, 200, {
           status: false,
           body: null,

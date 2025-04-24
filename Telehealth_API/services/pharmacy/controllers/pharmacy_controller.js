@@ -355,7 +355,8 @@ class PharmacyController {
                             adminData.locationinfos[0].city = locationdata.body.city_name;
                             adminData.locationinfos[0].department = locationdata.body.department_name;
                         }
-                    } catch (err) {
+                    } catch (error) {
+                        console.error("An error occurred:", error);
                     }
                 }
 
@@ -629,7 +630,6 @@ class PharmacyController {
                 send_attempts: (deviceExist ? deviceExist.send_attempts : 0) + 1,
             };
             let result = null;
-            // if (smsRes == 200) {
                 if (deviceExist) {
                     updateObject.limitExceedWithin = canOtpSend.limitExceedWithin
                     if (canOtpSend?.reset) {
@@ -1539,29 +1539,6 @@ class PharmacyController {
                     { new: true }
                 ).exec();
             }
-            // let mobilePayData = null;
-            // if (req.body.mobile_pay_details.pay_number != "") {
-            //     const findMobilePay = await MobilePayInfo.findOne({ for_portal_user: for_portal_user });
-            //     if (!findMobilePay) {
-            //         const mobilePayInfoInfo = new MobilePayInfo({
-            //             provider,
-            //             pay_number,
-            //             for_portal_user,
-            //         });
-            //         mobilePayData = mobilePayInfoInfo.save();
-            //     } else {
-            //         mobilePayData = await MobilePayInfo.findOneAndUpdate(
-            //             { for_portal_user: for_portal_user },
-            //             {
-            //                 $set: {
-            //                     provider,
-            //                     pay_number,
-            //                 },
-            //             },
-            //             { new: true }
-            //         ).exec();
-            //     }
-            // }
 
             // Mobile Pay 
             let dataArray = []
@@ -1654,7 +1631,8 @@ class PharmacyController {
                         pharmacyAdminInfo.locationinfos[0].city = locationdata?.body?.city_name;
                         pharmacyAdminInfo.locationinfos[0].department = locationdata?.body?.department_name;
                     }
-                } catch (err) {
+                } catch (error) {
+                    console.error("An error occurred:", error);
                 }
             }
 
@@ -2028,6 +2006,7 @@ class PharmacyController {
                 errorCode: null,
             });
         } catch (error) {
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 data: null,
@@ -2086,6 +2065,7 @@ class PharmacyController {
                 errorCode: null,
             });
         } catch (error) {
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 data: null,
@@ -2806,6 +2786,7 @@ class PharmacyController {
             });
         }
         catch (error) {
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -3322,6 +3303,7 @@ class PharmacyController {
                 errorCode: null,
             })
         } catch (error) {
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -3536,6 +3518,7 @@ class PharmacyController {
 
 
         } catch (error) {
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -3682,7 +3665,7 @@ class PharmacyController {
                 }
             }
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,
@@ -3749,7 +3732,7 @@ class PharmacyController {
             }
 
         } catch (error) {
-            
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 body: null,

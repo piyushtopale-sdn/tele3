@@ -144,7 +144,7 @@ export const changePassword = async (req, res) => {
 export const updateProfile = async (req, res) => {
     try {
         let payload = req.body;
-
+        let jwtSecretKey = secret.jwt;
         if (payload.password) {
             const salt = await bcrypt.genSalt(10);
             let newPassword = await bcrypt.hash(payload.password, salt);

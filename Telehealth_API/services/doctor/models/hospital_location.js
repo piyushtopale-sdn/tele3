@@ -28,9 +28,6 @@ const hospitalLocationSchema = new mongoose.Schema(
         location: {
           type: String,
         },
-        loc: {
-         type:Object
-        },
         country: {
           type: String,
         },

@@ -34,6 +34,7 @@ export const addNotification = async (req, res) => {
             errorCode: null,
         });
     } catch (error) {
+        console.error("An error occurred:", error);
         return sendResponse(req, res, 500, {
             status: false,
             body: null,
@@ -76,6 +77,7 @@ export const editNotification = async (req, res) => {
             errorCode: null,
         });
     } catch (error) {
+        console.error("An error occurred:", error);
         return sendResponse(req, res, 500, {
             status: false,
             body: null,

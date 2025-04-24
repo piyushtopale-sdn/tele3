@@ -54,7 +54,6 @@ import {
   agoraTokenGenerator,
 } from "../helpers/chat";
 import Http from "../helpers/httpservice";
-import appointment from "../models/appointment";
 import mongoose from "mongoose";
 import GuestUser from "../models/guestuser";
 import { notification } from "../helpers/notification";
@@ -64,7 +63,6 @@ const httpService = new Http();
 
 const canSendOtp = (deviceExist, currentTime) => {
   return new Promise((resolve, reject) => {
-    const test = new Date(currentTime.getTime() + 1 * 60000);
     const limitExceedWithin1 = new Date(
       currentTime.getTime() + OTP_LIMIT_EXCEED_WITHIN * 60000
     );
@@ -178,6 +176,7 @@ class IndividualDoctor {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -275,6 +274,7 @@ class IndividualDoctor {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -323,6 +323,7 @@ class IndividualDoctor {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -360,6 +361,7 @@ class IndividualDoctor {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1775,7 +1777,8 @@ class IndividualDoctor {
           errorCode: null,
         });
       });
-    } catch (e) {
+    } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1827,7 +1830,8 @@ class IndividualDoctor {
         message: "Recording started successfully",
         errorCode: null,
       });
-    } catch (e) {
+    } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1866,7 +1870,8 @@ class IndividualDoctor {
         message: "Recording stop successfully",
         errorCode: null,
       });
-    } catch (e) {
+    } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1936,7 +1941,7 @@ class IndividualDoctor {
 
   async participantInfo(req, res) {
     try {
-      let getData = await appointment.findOne({
+      let getData = await Appointment.findOne({
         roomName: req.query.roomName,
         participants: {
           $elemMatch: { userIdentity: req.query.identtity },
@@ -2001,6 +2006,7 @@ class IndividualDoctor {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2482,6 +2488,7 @@ class IndividualDoctor {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2578,6 +2585,7 @@ class IndividualDoctor {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2624,6 +2632,7 @@ class IndividualDoctor {
         }
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2720,6 +2729,7 @@ class IndividualDoctor {
         }
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2767,6 +2777,7 @@ class IndividualDoctor {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2984,8 +2995,8 @@ class IndividualDoctor {
 
   async getLabTestAppointmentDetails(req, res) {
     try {
-      const { appointmentId } = req.query;
-
+      const { appointmentId, fromDate, toDate } = req.query;
+      let filter = {};
       if (!appointmentId) {
         return res.status(400).json({ message: "Appointment ID is required" });
       }
@@ -3034,9 +3045,7 @@ class IndividualDoctor {
         ...new Set(mergedAppointments.map((p) => p.patientId.toString())),
       ];
 
-      const result = labTestDetails[0];
-
-      sendResponse(req, res, 200, {
+      return sendResponse(req, res, 200, {
         status: true,
         message: `Dashboard data fetched successfully`,
         body: {
@@ -3044,8 +3053,8 @@ class IndividualDoctor {
           totalConfirmedAppointments: confirmedAppointments, // Full confirmed appointments
           totalPatients: totalPatients.length,
           totalConsultationDone: completedAppointments, // Full completed appointments
-          totalPrescribedLabTests: prescribedLabTests,
-          totalPrescribedRadiologyTests: prescribedRadiologyTests,
+          totalPrescribedLabTests: prescribedLabTests || 0,
+          totalPrescribedRadiologyTests: prescribedRadiologyTests || 0,
           totalIncompleteOrders: eprescriptionData, // Full incomplete orders data
         },
         errorCode: null,
@@ -3053,7 +3062,7 @@ class IndividualDoctor {
     } catch (error) {
       console.log("error", error);
 
-      sendResponse(req, res, 500, {
+      return sendResponse(req, res, 500, {
         status: false,
         body: error,
         message: `Failed to get dashboard data`,

@@ -169,6 +169,7 @@ class ContentManagementController {
         message: messages.contentFetched
       })
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -200,6 +201,7 @@ class ContentManagementController {
         message: messages.contentUpdated
       })
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -225,6 +227,7 @@ class ContentManagementController {
         message: messages.contentDeleted
       })
     } catch (error) {
+      console.error("An error occurred:", error);
       return sendResponse(req, res, 500, {
         status: false,
         body: null,

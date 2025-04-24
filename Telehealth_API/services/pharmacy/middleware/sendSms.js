@@ -1,5 +1,4 @@
 import axios from "axios"
-import { resolve } from "path"
 import {config} from "../config/constants"
 
 export const sendSms = (mobile_number, text) => {
@@ -27,7 +26,7 @@ export const sendSms = (mobile_number, text) => {
             });
             resolve(true)
         } catch (error) {
-            // reject(error);
+            console.error("An error occurred:", error);
             resolve(true) //Temporarily resolved to fix otp issue.
         }
     })

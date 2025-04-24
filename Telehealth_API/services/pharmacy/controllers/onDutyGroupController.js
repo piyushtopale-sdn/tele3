@@ -176,6 +176,7 @@ class OnDutyGroupController {
                 });
             }
         } catch (error) {
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 data: null,
@@ -394,6 +395,7 @@ class OnDutyGroupController {
             });
 
         } catch (error) {
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
                 status: false,
                 data: null,
@@ -441,6 +443,7 @@ class OnDutyGroupController {
             });
 
         } catch (error) {
+            console.error("An error occurred:", error);
             sendResponse(req, res, 200, {
                 status: false,
                 data: null,
@@ -466,6 +469,7 @@ class OnDutyGroupController {
             });
 
         } catch (error) {
+            console.error("An error occurred:", error);
             sendResponse(req, res, 200, {
                 status: false,
                 data: null,

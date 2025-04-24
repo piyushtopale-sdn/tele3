@@ -45,6 +45,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -69,6 +70,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -93,6 +95,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -120,6 +123,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -147,6 +151,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -174,6 +179,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -467,6 +473,7 @@ class CommonDataController {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -569,7 +576,8 @@ class CommonDataController {
         });
       }
 
-    } catch (e) {
+    } catch (error) {
+      console.error("An error occurred:", error);
       res.send({
         status: false,
         messgae: "Oops!! something went wrong",
@@ -633,7 +641,7 @@ class CommonDataController {
 
       sendResponse(req, res, 200, {
         status: true,
-        body: result,
+        body: null,
         message: message,
         errorCode: null,
       });
@@ -814,7 +822,7 @@ class CommonDataController {
 
 
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -901,6 +909,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1169,8 +1178,8 @@ class CommonDataController {
           errorCode: null,
         });
       }
-    } catch (e) {
-      
+    } catch (error) {
+      console.error("An error occurred:", error);
       res.send({
         status: false,
         messgae: "Oops!! something went wrong",
@@ -1204,7 +1213,7 @@ class CommonDataController {
         });
       }
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1401,8 +1410,8 @@ class CommonDataController {
           errorCode: null,
         });
       }
-    } catch (e) {
-      
+    } catch (error) {
+      console.error("An error occurred:", error);
       res.send({
         status: false,
         messgae: "Oops!! something went wrong",
@@ -1613,7 +1622,7 @@ class CommonDataController {
         });
       }
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1826,8 +1835,8 @@ class CommonDataController {
           errorCode: null,
         });
       }
-    } catch (e) {
-      
+    } catch (error) {
+      console.error("An error occurred:", error);
       res.send({
         status: false,
         messgae: "Oops!! something went wrong",
@@ -2068,7 +2077,7 @@ class CommonDataController {
         });
       }
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2254,8 +2263,8 @@ class CommonDataController {
           errorCode: null,
         });
       }
-    } catch (e) {
-      
+    } catch (error) {
+      console.error("An error occurred:", error);
       res.send({
         status: false,
         messgae: "Oops!! something went wrong",
@@ -2507,7 +2516,7 @@ class CommonDataController {
         });
       }
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2690,8 +2699,8 @@ class CommonDataController {
           errorCode: null,
         });
       }
-    } catch (e) {
-      
+    } catch (error) {
+      console.error("An error occurred:", error);
       res.send({
         status: false,
         messgae: "Oops!! something went wrong",
@@ -2947,7 +2956,7 @@ class CommonDataController {
       }
 
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2999,7 +3008,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3258,7 +3267,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3299,7 +3308,7 @@ class CommonDataController {
       }
 
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3346,6 +3355,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3600,6 +3610,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3643,7 +3654,7 @@ class CommonDataController {
       }
 
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3690,7 +3701,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3947,7 +3958,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3967,7 +3978,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3989,7 +4000,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -4053,8 +4064,9 @@ class CommonDataController {
       errorCode: null,
     });
   }
-catch(err)
+catch(error)
 {
+  console.error("An error occurred:", error);
   sendResponse(req, res, 200, {
     status: false,
     body: {},
@@ -4096,8 +4108,9 @@ async addStudyType(req,res)
         errorCode: null,
     })
 }
-catch(err)
+catch(error)
 {
+  console.error("An error occurred:", error);
   sendResponse(req, res, 200, {
     status: false,
     body: {},
@@ -4201,8 +4214,9 @@ async getStudyType(req,res)
         errorCode: null,
     })
 }
-catch(err)
+catch(error)
 {
+  console.error("An error occurred:", error);
   sendResponse(req, res, 200, {
     status: false,
     body: {},
@@ -4249,8 +4263,9 @@ async updateStudyType(req,res)
         errorCode: null,
     })
 }
-catch(err)
+catch(error)
 {
+  console.error("An error occurred:", error);
   sendResponse(req, res, 200, {
     status: false,
     body: {},
@@ -4295,8 +4310,9 @@ async updateStudyTypeByAction(req,res)
         errorCode: null,
     })
 }
-catch(err)
+catch(error)
 {
+  console.error("An error occurred:", error);
   sendResponse(req, res, 200, {
     status: false,
     body: {},
@@ -4322,8 +4338,9 @@ async getStudyTypeById(req,res)
         errorCode: null,
     })
 }
-catch(err)
+catch(error)
 {
+  console.error("An error occurred:", error);
   sendResponse(req, res, 200, {
     status: false,
     body: {},

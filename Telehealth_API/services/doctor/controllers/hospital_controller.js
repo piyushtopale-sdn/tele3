@@ -10,7 +10,6 @@ import PathologyTestInfoNew from "../models/pathologyTestInfoNew";
 import BankDetailInfo from "../models/bank_detail";
 import MobilePayInfo from "../models/mobile_pay";
 import StaffInfo from "../models/staff_info";
-import EducationalDetail from "../models/educational_details";
 import DoctorAvailability from "../models/doctor_availability";
 import DocumentInfo from "../models/document_info";
 import Otp2fa from "../models/otp2fa";
@@ -33,7 +32,6 @@ import ProfileInfo from "../models/profile_info";
 // utils
 import { sendResponse } from "../helpers/transmission";
 import { hashPassword } from "../helpers/string";
-import { smsTemplateOTP } from "../config/constants";
 import { sendSms } from "../middleware/sendSms";
 import {
   checkPassword,
@@ -64,15 +62,14 @@ import {
   serviceHospital,
   unitHospital,
   TeamColumns,
+  generate6DigitOTP,
+  smsTemplateOTP
 } from "../config/constants";
-import profile_info from "../models/profile_info";
 const csv = require("fast-csv");
 const fs = require("fs");
 import HospitalLocation from "../models/hospital_location";
 import Logs from "../models/logs";
-import HospitalAdmininfo from "../models/hospital_admin_info";
 import ProviderDoc from "../models/provider_documnet";
-import { generate6DigitOTP } from "../config/constants";
 
 export const formatDateToYYYYMMDD = async (date) => {
   const year = date.getFullYear();
@@ -84,8 +81,8 @@ export const formatDateToYYYYMMDD = async (date) => {
 
 
 function uniqueArray(array1, array2) {
-  var a = array1;
-  var b = array2;
+  let a = array1;
+  let b = array2;
   const isSameUser = (a, b) => a.slot === b.slot && a.status === b.status;
 
   // Get items that only occur in the left array,
@@ -103,18 +100,17 @@ function uniqueArray(array1, array2) {
   return result;
 }
 function filterUnavailableSlotFunction(array1, value, lastValue) {
-  var startTime = value.split("-")[0];
-  var endTime = lastValue.split("-")[0];
-  var arr = [];
+  let startTime = value.split("-")[0];
+  let endTime = lastValue.split("-")[0];
+  let arr = [];
   array1.forEach((element, index) => {
-    var start = element.slot.split("-")[0];
+    let start = element.slot.split("-")[0];
 
     if (
       start.split(":")[0] + start.split(":")[1] <
       startTime.split(":")[0] + startTime.split(":")[1]
     ) {
     } else {
-      // endTime < start
       if (
         endTime.split(":")[0] + endTime.split(":")[1] <
         start.split(":")[0] + start.split(":")[1]
@@ -128,7 +124,7 @@ function filterUnavailableSlotFunction(array1, value, lastValue) {
 }
 function filterBookedSlots(array1, array2) {
   array1.forEach((element, index) => {
-    var xyz = array2.indexOf(element.slot);
+    let xyz = array2.indexOf(element.slot);
     if (xyz != -1) {
       array1[index].status = 1;
     }
@@ -137,7 +133,7 @@ function filterBookedSlots(array1, array2) {
 }
 function filterBookedSlotsToday(array1) {
   array1.forEach((element, index) => {
-    var xyz =
+    let xyz =
       element.slot.split("-")[0].split(":")[0] +
       element.slot.split("-")[0].split(":")[1];
 
@@ -150,7 +146,7 @@ function filterBookedSlotsToday(array1) {
       date.setMinutes("0" + date.getMinutes());
     }
 
-    var hm =
+    let hm =
       date.getHours().toString() + String(date.getMinutes()).padStart(2, "0");
     if (parseInt(hm) > parseInt(xyz)) {
       array1[index].status = 1;
@@ -274,7 +270,7 @@ const getUnavailabilityDate = async (unavailability_dates) => {
   return dateArray;
 };
 const getDoctorCount = async (hospital_portal_id) => {
-  var filter = {
+  let filter = {
     "for_portal_user.role": { $in: ["HOSPITAL_DOCTOR", "INDIVIDUAL_DOCTOR"] },
     "for_portal_user.isDeleted": false,
     "for_portal_user.isActive": true,
@@ -321,8 +317,6 @@ export const updateSlotAvailability = async (
       "hospitalServiceUrl"
     );
 
-    // timeStampString = moment(timeStamp, "DD-MM-YYYY").add(1, 'days');
-    // timeStamp = new Date(timeStampString)
     const slots = resData?.body?.allGeneralSlot;
 
     let isBreak = false;
@@ -343,13 +337,13 @@ export const updateSlotAvailability = async (
     }
 
     if (!isBreak) {
-      timeStampString = moment(timeStamp, "DD-MM-YYYY").add(1, "days");
+     let timeStampString = moment(timeStamp, "DD-MM-YYYY").add(1, "days");
       timeStamp = new Date(timeStampString);
     }
   }
 
   if (slot != null) {
-    const basicInfo = await BasicInfo.findOneAndUpdate(
+    await BasicInfo.findOneAndUpdate(
       { for_portal_user: { $eq: notificationReceiver } },
       {
         $set: {
@@ -364,13 +358,12 @@ export const updateSlotAvailability = async (
 };
 
 export const updatePaymentStatusAndSlot = async (appointmentId, req) => {
-  //const appointmentDetails = Appointment.findById(appointmentId);
   const appointmentDetails = await Appointment.findById(
     mongoose.Types.ObjectId(appointmentId)
   );
 
-  var notificationCreator = null;
-  var notificationReceiver = null;
+  let notificationCreator = null;
+  let notificationReceiver = null;
   if (appointmentDetails.madeBy == "doctor") {
     notificationCreator = appointmentDetails.doctorId;
     notificationReceiver = appointmentDetails.patientId;
@@ -379,10 +372,10 @@ export const updatePaymentStatusAndSlot = async (appointmentId, req) => {
     notificationReceiver = appointmentDetails.doctorId;
   }
 
-  var appointType = appointmentDetails.appointmentType.replace("_", " ");
+  let appointType = appointmentDetails.appointmentType.replace("_", " ");
 
-  var message = `You have recevied one new appoitment for ${appointType} consulation at ${appointmentDetails.hospital_details.hospital_name} on ${appointmentDetails.consultationDate} | ${appointmentDetails.consultationTime} from ${appointmentDetails.patientDetails.patientFullName}`;
-  var requestData = {
+  let message = `You have recevied one new appoitment for ${appointType} consulation at ${appointmentDetails.hospital_details.hospital_name} on ${appointmentDetails.consultationDate} | ${appointmentDetails.consultationTime} from ${appointmentDetails.patientDetails.patientFullName}`;
+  let requestData = {
     created_by_type: appointmentDetails.madeBy,
     created_by: notificationCreator,
     content: message,
@@ -391,19 +384,10 @@ export const updatePaymentStatusAndSlot = async (appointmentId, req) => {
     notitype: "New Appointment",
     appointmentId: appointmentId,
   };
-  var result = await notification(
-    appointmentDetails.madeBy,
-    notificationCreator,
-    "hospitalServiceUrl",
-    req.body.doctorId,
-    "one new appointment",
-    "https://mean.stagingsdei.com:451",
-    headers,
-    requestData
-  );
-  var timeStamp = new Date();
-  var timeStampString;
-  var slot = null;
+
+  let timeStamp = new Date();
+  let timeStampString;
+  let slot = null;
 
   const locationResult = await HospitalLocation
     .find({
@@ -458,7 +442,7 @@ export const updatePaymentStatusAndSlot = async (appointmentId, req) => {
   }
 
   if (slot != null) {
-    const basicInfo = await BasicInfo.findOneAndUpdate(
+    await BasicInfo.findOneAndUpdate(
       { for_portal_user: { $eq: notificationReceiver } },
       {
         $set: {
@@ -482,7 +466,6 @@ class HospitalController {
       const {
         email,
         password,
-        full_name,
         first_name,
         middle_name,
         last_name,
@@ -491,7 +474,7 @@ class HospitalController {
         country_code,
       } = req.body;
       const passwordHash = await hashPassword(password);
-      var sequenceDocument = await Counter.findOneAndUpdate(
+      let sequenceDocument = await Counter.findOneAndUpdate(
         { _id: "employeeid" },
         { $inc: { sequence_value: 1 } },
         { new: true }
@@ -535,7 +518,7 @@ class HospitalController {
         "superadminServiceUrl"
       );
 
-      var requestData = {
+      let requestData = {
         created_by_type: "hospital",
         created_by: userData?._id,
         content: `New Registration From ${userData?.full_name}`,
@@ -545,7 +528,7 @@ class HospitalController {
         appointmentId: adminData?._id,
       };
 
-      var result = await notification(
+      await notification(
         "",
         "",
         "superadminServiceUrl",
@@ -565,6 +548,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -591,7 +575,7 @@ class HospitalController {
         });
       }
 
-      var restrictUser = [
+      let restrictUser = [
         "INDIVIDUAL_DOCTOR",
         "INDIVIDUAL_DOCTOR_STAFF",
         "HOSPITAL_DOCTOR",
@@ -641,7 +625,7 @@ class HospitalController {
         });
       }
 
-      var userDetails;
+      let userDetails;
       const deviceExist = await Otp2fa.findOne({
         uuid,
         for_portal_user: portalUserData._id,
@@ -665,7 +649,7 @@ class HospitalController {
       }
 
       if (portalUserData.role == "HOSPITAL_ADMIN") {
-        var adminData1 = await HospitalAdminInfo.aggregate([
+        let adminData1 = await HospitalAdminInfo.aggregate([
           {
             $match: { for_portal_user: portalUserData._id },
           },
@@ -685,7 +669,7 @@ class HospitalController {
 
         if (userDetails?.locationinfos.length > 0) {
           try {
-            var locationids = {
+            let locationids = {
               country_id: userDetails?.locationinfos[0]?.country,
               region_id: userDetails?.locationinfos[0]?.region,
               province_id: userDetails?.locationinfos[0]?.province,
@@ -716,7 +700,9 @@ class HospitalController {
               userDetails.locationinfos[0].department =
                 locationdata.body.department_name;
             }
-          } catch (err) {}
+          } catch (error) {
+            console.error("An error occurred:", error);
+          }
         }
 
         userDetails.profile_picture = "";
@@ -744,7 +730,7 @@ class HospitalController {
           }).lean();
         }
 
-        staffData = await profile_info
+        staffData = await ProfileInfo
           .findOne({ for_portal_user: portalUserData._id })
           .lean();
       }
@@ -786,7 +772,6 @@ class HospitalController {
         portalUserId: portalUserData._id,
         uuid,
       };
-      // createSession(req, portalUserData);
       const findFirstLogin = await PortalUser.findOne({
         _id: mongoose.Types.ObjectId(portalUserData._id),
       });
@@ -810,7 +795,7 @@ class HospitalController {
         });
         saveLogs = await addLogs.save();
       } else {
-        let checkAdmin = await HospitalAdmininfo.findOne({
+        let checkAdmin = await HospitalAdminInfo.findOne({
           for_portal_user: mongoose.Types.ObjectId(
             portalUserData?.created_by_user
           ),
@@ -917,6 +902,7 @@ class HospitalController {
           try {
             result = await otpData.save();
           } catch (error) {
+            console.error("An error occurred:", error);
             sendResponse(req, res, 500, {
               status: false,
               body: null,
@@ -1198,7 +1184,6 @@ class HospitalController {
         licence,
         addressInfo,
         pathologyInfo,
-        pathologyInfo1,
         bankInfo,
         mobilePay,
         country_code,
@@ -1216,10 +1201,8 @@ class HospitalController {
           errorCode: "INTERNAL_SERVER_ERROR",
         });
       }
-      let portal_user_id = "";
       if (hospitalAdminId) {
-        portal_user_id = hospitalAdminId;
-        var PortalUserDetails = await PortalUser.findOneAndUpdate(
+        await PortalUser.findOneAndUpdate(
           { _id: { $eq: hospitalAdminId } },
           {
             $set: {
@@ -1233,7 +1216,7 @@ class HospitalController {
         ).exec();
       }
 
-      var locationData;
+      let locationData;
       const findLocation = await LocationInfo.findOne({
         for_portal_user: mongoose.Types.ObjectId(hospitalAdminId),
       });
@@ -1282,7 +1265,6 @@ class HospitalController {
         locationData = await locationInfo.save();
       }
 
-      var pathologyTestData;
       if (pathologyInfo) {
         for (const test of pathologyInfo) {
           try {
@@ -1294,7 +1276,7 @@ class HospitalController {
 
             if (existingTest) {
               if (test.isExist === false) {
-                pathologyTestData = await PathologyTestInfoNew.create({
+                await PathologyTestInfoNew.create({
                   for_portal_user: hospitalAdminId,
                   typeOfTest: test.typeOfTest,
                   nameOfTest: test.nameOfTest,
@@ -1312,7 +1294,7 @@ class HospitalController {
       const findBankInfo = await BankDetailInfo.findOne({
         for_portal_user: hospitalAdminId,
       });
-      var bankData;
+      let bankData;
       if (findBankInfo) {
         bankData = await BankDetailInfo.findOneAndUpdate(
           { for_portal_user: hospitalAdminId },
@@ -1334,7 +1316,7 @@ class HospitalController {
       const findMobilePay = await MobilePayInfo.findOne({
         for_portal_user: hospitalAdminId,
       });
-      var mobilePayData = {
+      let mobilePayData = {
         _id: null,
       };
       if (req.body.mobilePay) {
@@ -1402,7 +1384,7 @@ class HospitalController {
 
       if (hospitalAdminInfo?.locationinfos.length > 0) {
         try {
-          var locationids = {
+          let locationids = {
             country_id: locationinfos[0]?.country,
             region_id: locationinfos[0]?.region,
             province_id: locationinfos[0]?.province,
@@ -1433,7 +1415,9 @@ class HospitalController {
             hospitalAdminInfo.locationinfos[0].department =
               locationdata?.body?.department_name;
           }
-        } catch (err) {}
+        } catch (error) {
+          console.error("An error occurred:", error);
+        }
       }
 
       hospitalAdminInfo.profile_picture = "";
@@ -1542,6 +1526,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1569,6 +1554,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1580,7 +1566,7 @@ class HospitalController {
 
   async listHospitalAdminUser(req, res) {
     try {
-      const { page, limit, name, email } = req.query;
+      const { page, limit, name } = req.query;
       const result = await HospitalAdminInfo.find({
         $or: [
           {
@@ -1597,7 +1583,7 @@ class HospitalController {
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .exec();
-      const count = await HospitalAdminInfo.countDocuments({
+      await HospitalAdminInfo.countDocuments({
         $or: [
           {
             name: { $regex: name || "", $options: "i" },
@@ -1614,6 +1600,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1664,6 +1651,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -1676,9 +1664,7 @@ class HospitalController {
   async viewHospitalAdminDetails(req, res) {
     try {
       const { hospital_admin_id } = req.query;
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       const result = await HospitalAdminInfo.find({ _id: hospital_admin_id })
         .populate({
           path: "for_portal_user",
@@ -1749,7 +1735,7 @@ class HospitalController {
         user_id: userData._id,
         token: hashResetToken,
       });
-      let savedForgotPasswordData = await ForgotPasswordData.save();
+      await ForgotPasswordData.save();
 
       const content = forgotPasswordEmail(
         email.toLowerCase(),
@@ -1853,25 +1839,23 @@ class HospitalController {
   async getAllHospitalListForSuperAdmin(req, res) {
     try {
       const { page, limit, status, searchKey } = req.query;
-      var sort = req.query.sort;
-      var sortingarray = {};
+      let sort = req.query.sort;
+      let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = Number(value);
       } else {
         sortingarray["createdAt"] = -1;
       }
 
-      var filter = {
+      let filter = {
         "for_portal_user.role": "HOSPITAL_ADMIN",
         verify_status: status,
         // 'for_portal_user.createdBy': 'self',
         "for_portal_user.isDeleted": false,
       };
-      // if(searchKey) {
-      //     filter['staff_name'] = { $regex: searchKey || "", $options: "i" }
-      // }
+
       if (searchKey != "") {
         filter.hospital_name = { $regex: searchKey || "", $options: "i" };
       }
@@ -1929,7 +1913,6 @@ class HospitalController {
       }
 
       const result = await HospitalAdminInfo.aggregate(aggregate);
-      // const result = await HospitalAdminInfo.find({verify_status: "PENDING"});
 
       sendResponse(req, res, 200, {
         status: true,
@@ -2005,6 +1988,7 @@ class HospitalController {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2017,16 +2001,16 @@ class HospitalController {
   async allSpecialty(req, res) {
     try {
       const { limit, page, searchText, fromDate, toDate } = req.query;
-      var sort = req.query.sort;
-      var sortingarray = {};
+      let sort = req.query.sort;
+      let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = value;
       } else {
         sortingarray["createdAt"] = -1;
       }
-      var filter = { delete_status: false };
+      let filter = { delete_status: false };
       if (searchText != "") {
         filter = {
           delete_status: false,
@@ -2054,6 +2038,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2065,7 +2050,7 @@ class HospitalController {
 
   async allSpecialtyListforexport(req, res) {
     const { searchText, limit, page } = req.query;
-    var filter;
+    let filter;
     if (searchText == "") {
       filter = {
         delete_status: false,
@@ -2077,7 +2062,7 @@ class HospitalController {
       };
     }
     try {
-      var result = "";
+      let result = "";
       if (limit > 0) {
         result = await Specialty.find(filter)
           .sort([["createdAt", -1]])
@@ -2174,14 +2159,14 @@ class HospitalController {
   async actionOnSpecialty(req, res) {
     try {
       const { specialityId, action_name, action_value } = req.body;
-      var message = "";
+      let message = "";
 
       const filter = {};
       if (action_name == "active") filter["active_status"] = action_value;
       if (action_name == "delete") filter["delete_status"] = action_value;
 
       if (action_name == "active") {
-        var result = await Specialty.updateOne({ _id: specialityId }, filter, {
+        await Specialty.updateOne({ _id: specialityId }, filter, {
           new: true,
         }).exec();
 
@@ -2301,7 +2286,7 @@ class HospitalController {
   }
   async exportSpecialty(req, res) {
     try {
-      var csv;
+      let csv;
       const result = await Specialty.find({});
       const newPath = `./downloadCSV/specialtyExport.csv`;
       csv = result.map((row) => {
@@ -2322,12 +2307,7 @@ class HospitalController {
         res.download(newPath);
       });
 
-      // sendResponse(req, res, 200, {
-      //     status: true,
-      //     body: result,
-      //     message: "All eyeglass records added successfully",
-      //     errorCode: null,
-      // });
+
     } catch (error) {
       sendResponse(req, res, 500, {
         status: false,
@@ -2341,7 +2321,7 @@ class HospitalController {
   //Hospital Department
   async addDepartment(req, res) {
     try {
-      var { departmentArray, added_by } = req.body;
+      let { departmentArray, added_by } = req.body;
 
       const duplicateDepartments = await Department.find({
         $and: [
@@ -2374,6 +2354,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2386,16 +2367,16 @@ class HospitalController {
   async allDepartment(req, res) {
     try {
       const { limit, page, added_by, searchText } = req.query;
-      var sort = req.query.sort;
-      var sortingarray = {};
+      let sort = req.query.sort;
+      let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = value;
       } else {
         sortingarray["createdAt"] = -1;
       }
-      var filter = { delete_status: false, added_by };
+      let filter = { delete_status: false, added_by };
       if (searchText != "") {
         filter = {
           delete_status: false,
@@ -2425,6 +2406,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2452,6 +2434,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2548,7 +2531,7 @@ class HospitalController {
   //Hospital Service
   async addService(req, res) {
     try {
-      var { serviceArray, added_by } = req.body;
+      let { serviceArray, added_by } = req.body;
 
       const duplicateService = await Service.find({
         $and: [
@@ -2582,6 +2565,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2594,16 +2578,16 @@ class HospitalController {
   async allService(req, res) {
     try {
       const { limit, page, searchText, added_by, for_department } = req.query;
-      var sort = req.query.sort;
-      var sortingarray = {};
+      let sort = req.query.sort;
+      let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = value;
       } else {
         sortingarray["createdAt"] = -1;
       }
-      var filter = { delete_status: false, added_by, for_department };
+      let filter = { delete_status: false, added_by, for_department };
       if (searchText != "") {
         filter = {
           delete_status: false,
@@ -2647,6 +2631,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2679,6 +2664,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2776,7 +2762,7 @@ class HospitalController {
   //Hospital Unit
   async addUnit(req, res) {
     try {
-      var { unitArray, added_by } = req.body;
+      let { unitArray, added_by } = req.body;
 
       const duplicateUnits = await Unit.find({
         $and: [
@@ -2809,6 +2795,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2821,16 +2808,16 @@ class HospitalController {
   async allUnit(req, res) {
     try {
       const { limit, page, searchText, added_by, for_service } = req.query;
-      var sort = req.query.sort;
-      var sortingarray = {};
+      let sort = req.query.sort;
+      let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = value;
       } else {
         sortingarray["createdAt"] = -1;
       }
-      var filter = { delete_status: false, added_by, for_service };
+      let filter = { delete_status: false, added_by, for_service };
       if (searchText != "") {
         filter = {
           delete_status: false,
@@ -2881,6 +2868,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -2923,6 +2911,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3024,11 +3013,11 @@ class HospitalController {
     try {
       const { inputType, inputValue, added_by } = req.body;
 
-      var departmentDetails;
-      var serviceDetails;
-      var unitDetails;
-      var serviceIdArray = [];
-      var departmentIdArray = [];
+      let departmentDetails;
+      let serviceDetails;
+      let unitDetails;
+      let serviceIdArray = [];
+      let departmentIdArray = [];
 
       if (inputType == "department") {
         departmentDetails = await Department.find(
@@ -3111,7 +3100,7 @@ class HospitalController {
   //Hospital Expertise
   async addExpertise(req, res) {
     try {
-      var { expertiseArray, added_by } = req.body;
+      let { expertiseArray, added_by } = req.body;
 
       const duplicateExpertise = await Expertise.find({
         $and: [
@@ -3143,6 +3132,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3155,16 +3145,16 @@ class HospitalController {
   async allExpertise(req, res) {
     try {
       const { limit, page, added_by, searchText } = req.query;
-      var sort = req.query.sort;
-      var sortingarray = {};
+      let sort = req.query.sort;
+      let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = value;
       } else {
         sortingarray["createdAt"] = -1;
       }
-      var filter = { delete_status: false, added_by };
+      let filter = { delete_status: false, added_by };
       if (searchText != "") {
         filter = {
           delete_status: false,
@@ -3194,6 +3184,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3221,6 +3212,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3374,6 +3366,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3455,17 +3448,17 @@ class HospitalController {
     try {
       const { limit, page, searchText, doctorId, listFor, selectedlocation } =
         req.query;
-      var sort = req.query.sort;
-      var sortingarray = {};
+      let sort = req.query.sort;
+      let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = Number(value);
       } else {
         sortingarray["createdAt"] = -1;
       }
 
-      var filter = {
+      let filter = {
         added_by: mongoose.Types.ObjectId(doctorId),
         is_deleted: false,
       };
@@ -3477,7 +3470,6 @@ class HospitalController {
       if (searchText !== "") {
         filter.name = { $regex: searchText || "", $options: "i" };
       }
-      // var filter1 = {};
 
       if (selectedlocation !== "undefined" && selectedlocation !== "") {
         filter = {
@@ -3548,6 +3540,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3570,6 +3563,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3667,6 +3661,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3677,26 +3672,21 @@ class HospitalController {
   }
   async QuestionnaireList(req, res) {
     try {
-      const { limit, page, searchText, doctorId } = req.query;
-      var sort = req.query.sort;
-      var sortingarray = {};
+      const { limit, page, doctorId } = req.query;
+      let sort = req.query.sort;
+      let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = value;
       } else {
         sortingarray["createdAt"] = -1;
       }
-      var filter = {
+      let filter = {
         is_deleted: false,
         added_by: { $eq: doctorId },
       };
-      // if (searchText != "") {
-      //     filter = {
-      //         is_deleted: false,
-      //         name: { $regex: searchText || '', $options: "i" }
-      //     }
-      // }
+
       const result = await Questionnaire.find(filter)
         .sort(sortingarray)
         .skip((page - 1) * limit)
@@ -3713,6 +3703,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3732,6 +3723,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3814,7 +3806,7 @@ class HospitalController {
   async addAssessment(req, res) {
     try {
       const { assessments, appointmentId } = req.body;
-      var result;
+      let result;
       const assessmentDetails = await Assessment.findOne({ appointmentId });
       if (assessmentDetails) {
         result = await Assessment.findOneAndUpdate(
@@ -3840,6 +3832,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3859,6 +3852,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -3879,7 +3873,6 @@ class HospitalController {
       if (searchKey) {
         filter["hospital_name"] = { $regex: searchKey || "", $options: "i" };
       }
-      // const hospitalData = await HospitalAdminInfo.find(filter).select('name').populate({path:'for_portal_user'}).exec();
       const hospitalData = await HospitalAdminInfo.aggregate([
         {
           $lookup: {
@@ -3906,6 +3899,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -3970,7 +3964,7 @@ class HospitalController {
   }
   async activeLockDeleteHospital(req, res) {
     try {
-      const { action_name, action_value, hospital_portal_id } = req.body;
+      const { action_name, action_value } = req.body;
       let key;
       key =
         action_name === "delete"
@@ -4090,9 +4084,9 @@ class HospitalController {
         });
       }
 
-      var newObject;
-      var newArray = [];
-      var newArray2 = [];
+      let newObject;
+      let newArray = [];
+      let newArray2 = [];
       if (open_date_and_time.length > 0) {
         open_date_and_time.map((singleData) => {
           newObject = {
@@ -4135,7 +4129,7 @@ class HospitalController {
         ];
       }
 
-      var openingHoursData;
+      let openingHoursData;
       if (openingHoursDetails) {
         openingHoursData = await HospitalOpeningHours.findOneAndUpdate(
           { for_portal_user: hospital_id },
@@ -4176,9 +4170,7 @@ class HospitalController {
   async viewHospitalAdminDetailsForPatient(req, res) {
     try {
       const { hospital_portal_id } = req.query;
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
+
       const result = await HospitalAdminInfo.find({
         for_portal_user: hospital_portal_id,
       })
@@ -4318,39 +4310,24 @@ class HospitalController {
     async doctorAvailableSlot1(req, res) {
         try {
             const {
-                locationId,
-                appointmentType,
                 timeStamp,
                 doctorId,
             } = req.body
             const current_timestamp = new Date(timeStamp)
             const onlyDate = timeStamp.split("T")[0]
-            var day = current_timestamp.getDay()
-            var hour = current_timestamp.getHours().toString()
-            var minute = current_timestamp.getMinutes().toString()
-            if (hour.toString().length == 1) {
-                hour = "0" + hour;
-            }
-            if (minute.toString().length == 1) {
-                minute = "0" + minute;
-            }
-            const hourAndMin = hour + minute
-            var startTime
-            var startTimeH
-            var startTimeM
-            var startTimeHM
-            var endTime
-            var endTimeH
-            var endTimeM
-            var endTimeHM
-            var currentTimeH
-            var currentTimeM
-            var currentTimeHM
+            let day = current_timestamp.getDay()
+           
+            let startTime
+            let startTimeH
+            let startTimeM
+            let startTimeHM
+            let endTime
+            let endTimeH
+            let endTimeM
+            let endTimeHM
 
-      var allGeneralSlot = [];
-      var allGeneralSlot2 = [];
-      var afterUnavailable = [];
-      var x = "";
+      let allGeneralSlot = [];
+      let allGeneralSlot2 = [];
       const result = await DoctorAvailability.findOne({
         for_portal_user: doctorId,
       });
@@ -4366,8 +4343,8 @@ class HospitalController {
         });
       }
       const doctorAvailability = result.availability_slot;
-      var availabilityArray = [];
-      var availabilitySlot = [];
+      let availabilityArray = [];
+      let availabilitySlot = [];
       for (let index = 0; index < doctorAvailability.length; index++) {
         const element = doctorAvailability[index];
         const availabilityDate = element.date.split("T")[0];
@@ -4385,8 +4362,8 @@ class HospitalController {
 
       if (availabilityArray.length > 0) {
         availabilityArray.forEach((element, index) => {
-          var totalH = 0;
-          var totalM = 0;
+          let totalH = 0;
+          let totalM = 0;
           startTimeH = element.startTime.slice(0, 2);
           startTimeM = element.startTime.slice(2);
           startTimeHM = startTimeH + ":" + startTimeM;
@@ -4399,25 +4376,25 @@ class HospitalController {
           totalH = totalH + difference.hours();
           totalM = totalM + difference.minutes();
           totalH = totalH + totalM / 60;
-          var totalNumbersSlots =
+          let totalNumbersSlots =
             (totalH * 60) / result.slot_interval.slice(0, 2);
           startTime = element.startTime;
           startTimeH = startTime.slice(0, 2);
           startTimeM = startTime.slice(2);
           startTimeHM = startTimeH + ":" + startTimeM;
-          var piece = startTimeHM;
-          var piece = startTimeHM.split(":");
-          var mins =
+          let piece = startTimeHM;
+          startTimeHM.split(":");
+          let mins =
             piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-          var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+          let nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
           if (nextStartTimeH.toString().length == 1) {
             nextStartTimeH = "0" + startTimeH;
           }
-          var nextStartTimeM = mins % 60;
+          let nextStartTimeM = mins % 60;
           if (nextStartTimeM.toString().length == 1) {
             nextStartTimeM = nextStartTimeM + "0";
           }
-          var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+          let nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
           availabilitySlot.push({
             slot: startTimeHM + "-" + nextStartTimeHM,
@@ -4425,9 +4402,8 @@ class HospitalController {
           });
           // allGeneralSlot2.push(startTimeH + startTimeM)
           for (let index = 0; index < totalNumbersSlots - 1; index++) {
-            var piece = startTimeHM;
-            var piece = startTimeHM.split(":");
-            var mins =
+            piece = startTimeHM.split(":");
+            let mins =
               piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
             startTimeH = ((mins % (24 * 60)) / 60) | 0;
             if (startTimeH.toString().length == 1) {
@@ -4439,19 +4415,18 @@ class HospitalController {
             }
             startTimeHM = startTimeH + ":" + startTimeM;
 
-            var piece = startTimeHM;
-            var piece = startTimeHM.split(":");
-            var mins =
+            piece = startTimeHM.split(":");
+            mins =
               piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-            var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+            nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
             if (nextStartTimeH.toString().length == 1) {
               nextStartTimeH = "0" + startTimeH;
             }
-            var nextStartTimeM = mins % 60;
+            nextStartTimeM = mins % 60;
             if (nextStartTimeM.toString().length == 1) {
               nextStartTimeM = nextStartTimeM + "0";
             }
-            var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+            nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
             availabilitySlot.push({
               slot: startTimeHM + "-" + nextStartTimeHM,
@@ -4467,7 +4442,7 @@ class HospitalController {
       if (availabilitySlot.length > 0) {
         allGeneralSlot = availabilitySlot;
       } else {
-        var daysArray = [];
+        let daysArray = [];
         for (let index = 0; index < result.week_days.length; index++) {
           if (day == 0) {
             startTime = result.week_days[index].sun_start_time;
@@ -4507,8 +4482,8 @@ class HospitalController {
 
         if (daysArray.length > 0) {
           daysArray.forEach((element, index) => {
-            var totalH = 0;
-            var totalM = 0;
+            let totalH = 0;
+            let totalM = 0;
             startTimeH = element.startTime.slice(0, 2);
             startTimeM = element.startTime.slice(2);
             startTimeHM = startTimeH + ":" + startTimeM;
@@ -4526,31 +4501,30 @@ class HospitalController {
             totalM = totalM + difference.minutes();
             totalH = totalH + totalM / 60;
 
-            var totalNumbersSlots =
+            let totalNumbersSlots =
               (totalH * 60) / result.slot_interval.slice(0, 2);
 
             startTime = element.startTime;
             startTimeH = startTime.slice(0, 2);
             startTimeM = startTime.slice(2);
             startTimeHM = startTimeH + ":" + startTimeM;
-            var piece = startTimeHM;
-            piece = startTimeHM.split(":");
+            let piece = startTimeHM.split(":");
 
-            var mins =
+            let mins =
               parseInt(parseInt(piece[0]) * 60) +
               +parseInt(piece[1]) +
               +result.slot_interval.slice(0, 2);
 
-            var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+            let nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
 
             if (nextStartTimeH.toString().length == 1) {
               nextStartTimeH = "0" + startTimeH;
             }
-            var nextStartTimeM = mins % 60;
+            let nextStartTimeM = mins % 60;
             if (nextStartTimeM.toString().length == 1) {
               nextStartTimeM = nextStartTimeM + "0";
             }
-            var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+            let nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
             allGeneralSlot.push({
               slot: startTimeHM + "-" + nextStartTimeHM,
@@ -4563,10 +4537,9 @@ class HospitalController {
               index < parseInt(totalNumbersSlots) - 1;
               index++
             ) {
-              var piece = startTimeHM;
-              var piece = startTimeHM.split(":");
+              piece = startTimeHM.split(":");
 
-              var mins =
+              mins =
                 parseInt(parseInt(piece[0]) * 60) +
                 +parseInt(piece[1]) +
                 +result.slot_interval.slice(0, 2);
@@ -4581,21 +4554,20 @@ class HospitalController {
               }
               startTimeHM = startTimeH + ":" + startTimeM;
 
-              var piece = startTimeHM;
-              var piece = startTimeHM.split(":");
-              var mins =
+              piece = startTimeHM.split(":");
+              mins =
                 parseInt(parseInt(piece[0]) * 60) +
                 +parseInt(piece[1]) +
                 +result.slot_interval.slice(0, 2);
-              var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+                nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
               if (nextStartTimeH.toString().length == 1) {
                 nextStartTimeH = "0" + startTimeH;
               }
-              var nextStartTimeM = mins % 60;
+              nextStartTimeM = mins % 60;
               if (nextStartTimeM.toString().length == 1) {
                 nextStartTimeM = nextStartTimeM + "0";
               }
-              var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+              nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
               if (startTimeHM <= endTimeHM && nextStartTimeHM <= endTimeHM) {
                 allGeneralSlot.push({
@@ -4613,8 +4585,8 @@ class HospitalController {
           allGeneralSlot2 = [];
         }
         const doctorUnavailability = result.unavailability_slot;
-        var unavailabilityArray = [];
-        var unavailabilitySlot = [];
+        let unavailabilityArray = [];
+        let unavailabilitySlot = [];
 
         if (allGeneralSlot.length > 0) {
           for (let index = 0; index < doctorUnavailability.length; index++) {
@@ -4633,8 +4605,8 @@ class HospitalController {
           }
           if (unavailabilityArray.length > 0) {
             unavailabilityArray.forEach((element, index) => {
-              var totalH = 0;
-              var totalM = 0;
+              let totalH = 0;
+              let totalM = 0;
               startTimeH = element.startTime.slice(0, 2);
               startTimeM = element.startTime.slice(2);
               startTimeHM = startTimeH + ":" + startTimeM;
@@ -4647,25 +4619,24 @@ class HospitalController {
               totalH = totalH + difference.hours();
               totalM = totalM + difference.minutes();
               totalH = totalH + totalM / 60;
-              var totalNumbersSlots =
+              let totalNumbersSlots =
                 (totalH * 60) / result.slot_interval.slice(0, 2);
               startTime = element.startTime;
               startTimeH = startTime.slice(0, 2);
               startTimeM = startTime.slice(2);
               startTimeHM = startTimeH + ":" + startTimeM;
-              var piece = startTimeHM;
-              var piece = startTimeHM.split(":");
-              var mins =
+              let piece = startTimeHM.split(":");
+              let mins =
                 piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-              var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+              let nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
               if (nextStartTimeH.toString().length == 1) {
                 nextStartTimeH = "0" + startTimeH;
               }
-              var nextStartTimeM = mins % 60;
+              let nextStartTimeM = mins % 60;
               if (nextStartTimeM.toString().length == 1) {
                 nextStartTimeM = nextStartTimeM + "0";
               }
-              var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+              let nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
               unavailabilitySlot.push({
                 slot: startTimeHM + "-" + nextStartTimeHM,
@@ -4673,9 +4644,8 @@ class HospitalController {
               });
               // allGeneralSlot2.push(startTimeH + startTimeM)
               for (let index = 0; index < totalNumbersSlots - 1; index++) {
-                var piece = startTimeHM;
-                var piece = startTimeHM.split(":");
-                var mins =
+                piece = startTimeHM.split(":");
+                mins =
                   piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
                 startTimeH = ((mins % (24 * 60)) / 60) | 0;
                 if (startTimeH.toString().length == 1) {
@@ -4687,19 +4657,18 @@ class HospitalController {
                 }
                 startTimeHM = startTimeH + ":" + startTimeM;
 
-                var piece = startTimeHM;
-                var piece = startTimeHM.split(":");
-                var mins =
+                piece = startTimeHM.split(":");
+                mins =
                   piece[0] * 60 + +piece[1] + +result.slot_interval.slice(0, 2);
-                var nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
+                nextStartTimeH = ((mins % (24 * 60)) / 60) | 0;
                 if (nextStartTimeH.toString().length == 1) {
                   nextStartTimeH = "0" + startTimeH;
                 }
-                var nextStartTimeM = mins % 60;
+                nextStartTimeM = mins % 60;
                 if (nextStartTimeM.toString().length == 1) {
                   nextStartTimeM = nextStartTimeM + "0";
                 }
-                var nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
+                nextStartTimeHM = nextStartTimeH + ":" + nextStartTimeM;
 
                 unavailabilitySlot.push({
                   slot: startTimeHM + "-" + nextStartTimeHM,
@@ -4707,7 +4676,7 @@ class HospitalController {
                 });
               }
             });
-            var filterUnavailableSlot = filterUnavailableSlotFunction(
+            let filterUnavailableSlot = filterUnavailableSlotFunction(
               unavailabilitySlot,
               allGeneralSlot[0].slot,
               allGeneralSlot[allGeneralSlot.length - 1].slot
@@ -4717,7 +4686,7 @@ class HospitalController {
         }
       }
 
-      var todayDate = new Date().toISOString().split("T")[0];
+      let todayDate = new Date().toISOString().split("T")[0];
       if (new Date(onlyDate).getTime() === new Date(todayDate).getTime()) {
         allGeneralSlot = filterBookedSlotsToday(allGeneralSlot);
       }
@@ -4882,7 +4851,7 @@ class HospitalController {
       const { receiverId, isnew } = req.body;
 
       if (!isnew) {
-        var notificationDetails = await Notification.updateMany(
+        await Notification.updateMany(
           { for_portal_user: { $eq: receiverId } },
           {
             $set: {
@@ -4894,7 +4863,7 @@ class HospitalController {
       }
       sendResponse(req, res, 200, {
         status: true,
-        body: notificationDetails,
+        body: null,
         message: `Notification updated successfully`,
         errorCode: null,
       });
@@ -4914,13 +4883,13 @@ class HospitalController {
       const headers = {
         Authorization: req.headers["authorization"],
       };
-      var appointment = await Appointment.findOne({ _id: appointmentId });
+      let appointment = await Appointment.findOne({ _id: appointmentId });
       const doctorId = appointment.doctorId;
       const hospitalId = appointment.hospital_details.hospital_id;
       const appointmentType = appointment.appointmentType;
-      var timeStamp = new Date();
-      var timeStampString;
-      var slot = null;
+      let timeStamp = new Date();
+      let timeStampString;
+      let slot = null;
 
       const tomorrow = new Date();
       tomorrow.setDate(tomorrow.getDate() + 1);
@@ -4989,7 +4958,6 @@ class HospitalController {
   }
 
   async getHospitalType(req, res) {
-    const { hospitalTypeName } = req.body;
     try {
       const result = await HospitalType.find({});
       sendResponse(req, res, 200, {
@@ -5226,7 +5194,7 @@ class HospitalController {
       } else {
         const hashPassword = await generateTenSaltHash(newPassword);
 
-        const updatedUser = await PortalUser.findOneAndUpdate(
+        await PortalUser.findOneAndUpdate(
           { _id: user_id },
           { password: hashPassword },
           { new: true }
@@ -5252,7 +5220,7 @@ class HospitalController {
 
   async departmentListforexport(req, res) {
     const { searchKey, limit, page, userid } = req.query;
-    var filter;
+    let filter;
 
     if (searchKey == "") {
       filter = {
@@ -5268,7 +5236,7 @@ class HospitalController {
     }
 
     try {
-      var result = "";
+      let result = "";
       if (limit > 0) {
         result = await Department.find(filter)
           .sort([["createdAt", -1]])
@@ -5351,7 +5319,7 @@ class HospitalController {
         });
         return;
       }
-      var departmentArray = data;
+      let departmentArray = data;
 
       const duplicateDepartments = await Department.find({
         $and: [
@@ -5399,7 +5367,7 @@ class HospitalController {
 
   async expertiseListforexport(req, res) {
     const { searchKey, limit, page, userid } = req.query;
-    var filter;
+    let filter;
 
     if (searchKey == "") {
       filter = {
@@ -5415,7 +5383,7 @@ class HospitalController {
     }
 
     try {
-      var result = "";
+      let result = "";
       if (limit > 0) {
         result = await Expertise.find(filter)
           .sort([["createdAt", -1]])
@@ -5499,7 +5467,7 @@ class HospitalController {
         });
         return;
       }
-      var expertiseArray = data;
+      let expertiseArray = data;
 
       const duplicateExpertise = await Expertise.find({
         $and: [
@@ -5584,7 +5552,7 @@ class HospitalController {
             errorCode: null,
           });
         } else {
-          var service;
+          let service;
           for (let data of department) {
             service = data?._id;
           }
@@ -5632,7 +5600,7 @@ class HospitalController {
 
   async serviceListforexport(req, res) {
     const { searchKey, limit, page, userid } = req.query;
-    var filter;
+    let filter;
 
     if (searchKey == "") {
       filter = {
@@ -5648,7 +5616,7 @@ class HospitalController {
     }
 
     try {
-      var result = "";
+      let result = "";
       if (limit > 0) {
         result = await Service.find(filter)
           .sort([["createdAt", -1]])
@@ -5817,7 +5785,7 @@ class HospitalController {
 
   async unitListforexport(req, res) {
     const { searchKey, limit, page, userid } = req.query;
-    var filter;
+    let filter;
 
     if (searchKey == "") {
       filter = {
@@ -5833,7 +5801,7 @@ class HospitalController {
     }
 
     try {
-      var result = "";
+      let result = "";
       if (limit > 0) {
         result = await Unit.find(filter)
           .sort([["createdAt", -1]])
@@ -5955,6 +5923,7 @@ class HospitalController {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -5967,16 +5936,16 @@ class HospitalController {
   async allTeamList(req, res) {
     try {
       const { limit, page, searchText, userId } = req.query;
-      var sort = req.query.sort;
-      var sortingarray = {};
+      let sort = req.query.sort;
+      let sortingarray = {};
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = value;
       } else {
         sortingarray["createdAt"] = -1;
       }
-      var filter = {
+      let filter = {
         added_by: mongoose.Types.ObjectId(userId),
         delete_status: false,
       };
@@ -6005,6 +5974,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -6061,14 +6031,14 @@ class HospitalController {
     try {
       const { teamId, action_name, action_value } = req.body;
 
-      var message = "";
+      let message = "";
 
       const filter = {};
       if (action_name == "active") filter["active_status"] = action_value;
       if (action_name == "delete") filter["delete_status"] = action_value;
 
       if (action_name == "active") {
-        var result = await Team.updateOne({ _id: teamId }, filter, {
+        await Team.updateOne({ _id: teamId }, filter, {
           new: true,
         }).exec();
 
@@ -6117,7 +6087,7 @@ class HospitalController {
 
   async allTeamListforexport(req, res) {
     const { searchText, limit, page, userId } = req.query;
-    var filter;
+    let filter;
     if (searchText == "") {
       filter = {
         added_by: mongoose.Types.ObjectId(userId),
@@ -6131,7 +6101,7 @@ class HospitalController {
       };
     }
     try {
-      var result = "";
+      let result = "";
       if (limit > 0) {
         result = await Team.find(filter)
           .sort([["createdAt", -1]])
@@ -6189,9 +6159,6 @@ class HospitalController {
         });
         return;
       }
-
-      const existingTeams = await Team.find({}, "team");
-      const existingTeamNames = existingTeams.map((team) => team.team);
 
       const inputArray = [];
       const duplicateTeams = [];
@@ -6262,6 +6229,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -6289,6 +6257,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -6453,9 +6422,7 @@ class HospitalController {
 
   async getServiceData(req, res) {
     try {
-      let data1;
       let result = await Service.find({ _id: req.query.data }).exec();
-      // data1=result[0]?.service;
       sendResponse(req, res, 200, {
         status: true,
         data: result,
@@ -6474,9 +6441,7 @@ class HospitalController {
 
   async getDepartmentData(req, res) {
     try {
-      let data1;
       let result = await Department.find({ _id: req.query.data }).exec();
-      // data1=result[0]?.department;
       sendResponse(req, res, 200, {
         status: true,
         data: result,
@@ -6495,7 +6460,6 @@ class HospitalController {
 
   async getUnitData(req, res) {
     try {
-      let data1;
       let result = await Unit.find({ _id: req.query.data }).exec();
 
       sendResponse(req, res, 200, {
@@ -6629,6 +6593,7 @@ class HospitalController {
         errorCode: null,
       });
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -6948,7 +6913,7 @@ class HospitalController {
       const currentDate = new Date();
       const formattedDate = currentDate.toISOString();
       if (userAddress) {
-        const findData = await Logs.findOneAndUpdate(
+        await Logs.findOneAndUpdate(
           { _id: mongoose.Types.ObjectId(currentLogID) },
           {
             $set: {
@@ -6958,7 +6923,7 @@ class HospitalController {
           { new: true }
         ).exec();
       } else {
-        const findData = await Logs.findOneAndUpdate(
+        await Logs.findOneAndUpdate(
           { _id: mongoose.Types.ObjectId(currentLogID) },
           {
             $set: {
@@ -6988,12 +6953,12 @@ class HospitalController {
   async getAllLogs(req, res) {
     const { userId, limit, page } = req.query;
     try {
-      var sort = req.query.sort;
-      var sortingarray = {};
+      let sort = req.query.sort;
+      let sortingarray = {};
 
       if (sort != "undefined" && sort != "" && sort != undefined) {
-        var keynew = sort.split(":")[0];
-        var value = sort.split(":")[1];
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
         sortingarray[keynew] = value;
       } else {
         sortingarray["createdAt"] = -1;
@@ -7071,6 +7036,7 @@ class HospitalController {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -7082,7 +7048,6 @@ class HospitalController {
 
   async getProviderDocument(req, res) {
     try {
-      const { url } = req.query;
       const dataurl = '';
       sendResponse(req, res, 200, {
         status: true,
@@ -7141,6 +7106,7 @@ class HospitalController {
         });
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -7151,7 +7117,7 @@ class HospitalController {
   }
 
   async totalCountforHospitalDashboard(req, res) {
-    var { hospital_id, dateFilter, yearFilter } = req.query;
+    let { hospital_id, dateFilter } = req.query;
     let checkUser = await PortalUser.findOne({
       _id: mongoose.Types.ObjectId(hospital_id),
     });
@@ -7178,7 +7144,7 @@ class HospitalController {
         };
       }
 
-      var filter = {
+      let filter = {
         "for_portal_user.role": {
           $in: ["HOSPITAL_DOCTOR", "INDIVIDUAL_DOCTOR"],
         },
@@ -7276,11 +7242,6 @@ class HospitalController {
         console.error("Error in one of the promises:", error);
       }
 
-      let totalAppointmentRevenue = 0;
-      totalAppointmentRevenue =
-        totalDoctorAppointmentFees + totalFourPortalAppointmentFees;
-
-    
       let totalRevenue = 0;
       totalRevenue =
         totalDoctorAppointmentFees + totalFourPortalAppointmentFees;
@@ -7307,7 +7268,7 @@ class HospitalController {
   }
 
   async totalStaffDoctorHospitalDashboard(req, res) {
-    var { hospital_id, dateFilter } = req.query;
+    let { hospital_id, dateFilter } = req.query;
 
     try {
       // const staffCount = await PortalUser.find({role:'HOSPITAL_STAFF',created_by_user: hospital_id})
@@ -7336,7 +7297,7 @@ class HospitalController {
         };
       }
 
-      var filter1 = {
+      let filter1 = {
         "for_portal_user.role": {
           $in: ["HOSPITAL_DOCTOR", "INDIVIDUAL_DOCTOR"],
         },
@@ -7424,7 +7385,7 @@ class HospitalController {
           );
         }
 
-        var locationData;
+        let locationData;
 
         const findLocation = await LocationInfo.findOne({
           for_portal_user: mongoose.Types.ObjectId(hospitalAdminId),
@@ -7494,6 +7455,7 @@ class HospitalController {
         }
       }
     } catch (error) {
+      console.error("An error occurred:", error);
       sendResponse(req, res, 500, {
         status: false,
         body: null,
@@ -7529,7 +7491,7 @@ export const getListforHospital = async (
       for_hospitalIds: mongoose.Types.ObjectId(loggedInId),
     };
 
-    var filter = {
+    let filter = {
       isDeleted: false,
       isActive: true,
     };
@@ -7854,10 +7816,6 @@ export const getIndividualDoctorStaff = async (loggedInId, adminId) => {
 
 export const getListforHospitalDoctor = async (loggedInId, adminId) => {
   try {
-    const matchFilter = {
-      isDeleted: false,
-      isActive: true,
-    };
 
     const getData = await BasicInfo.findOne({
       for_portal_user: mongoose.Types.ObjectId(loggedInId),
@@ -7866,7 +7824,6 @@ export const getListforHospitalDoctor = async (loggedInId, adminId) => {
       _id: mongoose.Types.ObjectId(getData?.for_hospitalIds[0]),
     });
 
-    let query = [];
     let aggregateResults = [];
 
     let getHospitalData = {
@@ -7887,7 +7844,6 @@ export const getListforHospitalDoctor = async (loggedInId, adminId) => {
         if (staffId.trim() === "") {
           continue;
         }
-        // const staffInfo = await httpService.getStaging('hospital/get-staff-profile-data', { data: staffId }, headers, 'hospitalServiceUrl');
         const staffInfo = await ProfileInfo.find({
           _id: mongoose.Types.ObjectId(staffId),
         }).exec();
@@ -7906,38 +7862,6 @@ export const getListforHospitalDoctor = async (loggedInId, adminId) => {
         staffDataArray.push(staffData);
       }
     }
-
-    // query = [
-    //     {
-    //         $match: matchFilter,
-    //     },
-    //     {
-    //         $lookup: {
-    //             from: "staffinfos",
-    //             localField: "_id",
-    //             foreignField: "for_portal_user",
-    //             as: "staffinfos",
-    //         },
-    //     },
-    //     { $unwind: "$staffinfos" },
-    //     {
-    //         $match: {
-    //             "staffinfos.for_doctor": { $in: [mongoose.Types.ObjectId(adminId)] },
-    //             "staffinfos.for_portal_user": { $ne: mongoose.Types.ObjectId(loggedInId) }
-    //         }
-    //     },
-    //     {
-    //         $project: {
-    //             role: 1,
-    //             id: "$staffinfos.for_portal_user",
-    //             name: "$staffinfos.name",
-    //             profile_pic: "$staffinfos.profile_picture",
-    //         },
-    //     },
-    // ];
-
-    // // Execute the query and aggregate pipelines separately
-    // const queryResults = await PortalUser.aggregate(query);
 
     // Combine the results
     const combinedResults = [...aggregateResults, ...staffDataArray];

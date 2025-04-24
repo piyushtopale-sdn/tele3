@@ -1,4 +1,3 @@
-const mongoose = require('mongoose')
 import { SocketChat } from "./chat-middleware";
 import HttpService from "./httpservice";
 import { joinRoom, muteAndUnmute } from "./chat"
@@ -243,9 +242,9 @@ exports = module.exports = function (io) {
       try {
         console.log("close-ringer >>>>>>>> End", data)
         await io.in(data.loggedInUserId).emit("close-ringer-dialog", data);
-      } catch (e) {
-        console.error("An error occurred:", e);
-        throw err
+      } catch (error) {
+        console.error("An error occurred:", error);
+        throw error
         
       }
     });

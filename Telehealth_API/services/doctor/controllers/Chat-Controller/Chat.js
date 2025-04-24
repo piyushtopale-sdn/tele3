@@ -809,7 +809,7 @@ export const saveNotification = async (req, res) => {
         } else {
           return sendResponse(req, res, 400, {
             status: true,
-            body: saveChat,
+            body: null,
             message: "Notification not Saved",
           });
         }
@@ -917,7 +917,7 @@ export const updateNotification = async (req, res) => {
     }
     sendResponse(req, res, 200, {
       status: true,
-      body: notificationDetails,
+      body: null,
       message: `Notification updated successfully`,
       errorCode: null,
     });

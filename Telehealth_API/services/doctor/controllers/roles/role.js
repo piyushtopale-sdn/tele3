@@ -50,7 +50,7 @@ const add_role = async (req, res) => {
                     });
                 }
                }catch(error){
-                
+                console.error("An error occurred:", error);
                 sendResponse(req, res, 500, {
                   status: false,
                   body: null,
@@ -116,6 +116,7 @@ const all_role = async (req, res) => {
             errorCode: null,
         })
     } catch (error) {
+        console.error("An error occurred:", error);
         sendResponse(req, res, 500, {
             status: false,
             body: null,
@@ -145,6 +146,7 @@ const update_role = async(req,res)=>{
             errorCode: null,
         })
       } catch (error) {
+        console.error("An error occurred:", error);
         sendResponse(req, res, 500, {
             status: false,
             body: null,
@@ -171,6 +173,7 @@ const delete_role = async(req,res)=>{
             errorCode: null,
         })
       } catch (error) {
+        console.error("An error occurred:", error);
         sendResponse(req, res, 500, {
             status: false,
             body: null,
