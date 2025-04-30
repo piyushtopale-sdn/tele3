@@ -16,14 +16,15 @@ import axios from "axios";
 const { MOYASAR_SECRET_KEY } = config
 const httpService = new Http();
 
-const getAllPatient = (patientIdsArray) => {
+const getAllPatient = (patientIdsArray, headers) => {
+
   return new Promise(async (resolve, reject) => {
     let patientDetails = {}
     if (patientIdsArray.length > 0) {
       const getDetails = await httpService.postStaging(
         "patient/get-patient-details-by-id",
         { ids: patientIdsArray },
-        {},
+        headers,
         "patientServiceUrl"
       );
 
@@ -550,6 +551,9 @@ class PatientClinicalInfoController {
   }
 
   async getEprescription(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const {
         page,
@@ -688,7 +692,7 @@ class PatientClinicalInfoController {
       const resultArray = limit == 0 ? result : result[0].paginatedResults;
       const idsArray = resultArray.map(val => val.patientId.toString());
       const userIds = [...new Set(idsArray)];
-      const getPatientData = await getAllPatient(userIds);
+      const getPatientData = await getAllPatient(userIds,headers);
       
       for (let index = 0; index < resultArray.length; index++) {
         const element = resultArray[index];
@@ -1123,6 +1127,9 @@ class PatientClinicalInfoController {
     }
   }
   async getPrescribeLabTest(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const {
         page,
@@ -1236,7 +1243,7 @@ class PatientClinicalInfoController {
 
       const idsArray = resultArray.map(val => val.patientId.toString())
       const userIds = [... new Set(idsArray)]
-      const getPatientData = await getAllPatient(userIds);
+      const getPatientData = await getAllPatient(userIds,headers);
 
       for (let index = 0; index < resultArray.length; index++) {
         const element = resultArray[index];
@@ -1270,6 +1277,9 @@ class PatientClinicalInfoController {
   }
 
   async getPrescribeLabTestCount(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const { page, limit, patientId, doctorId, appointmentId, status } = req.query;
 
@@ -1352,7 +1362,7 @@ class PatientClinicalInfoController {
 
       const idsArray = resultArray.map(val => val.patientId.toString());
       const userIds = [...new Set(idsArray)];
-      const getPatientData = await getAllPatient(userIds);
+      const getPatientData = await getAllPatient(userIds,headers);
 
       let pendingLabTestCount = 0;
 
@@ -1467,6 +1477,9 @@ class PatientClinicalInfoController {
     }
   }
   async getPrescribeRadiologyTest(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const {
         page,
@@ -1580,7 +1593,7 @@ class PatientClinicalInfoController {
       const resultArray = limit == 0 ? result : result[0].paginatedResults
       const idsArray = resultArray.map(val => val.patientId.toString())
       const userIds = [... new Set(idsArray)]
-      const getPatientData = await getAllPatient(userIds)
+      const getPatientData = await getAllPatient(userIds,headers)
 
       for (let index = 0; index < resultArray.length; index++) {
         const element = resultArray[index];
@@ -1611,6 +1624,9 @@ class PatientClinicalInfoController {
     }
   }
   async getPrescribeRadiologyTestCount(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const {
         page,
@@ -1708,7 +1724,7 @@ class PatientClinicalInfoController {
       const resultArray = limit == 0 ? result : result[0].paginatedResults
       const idsArray = resultArray.map(val => val.patientId.toString())
       const userIds = [... new Set(idsArray)]
-      const getPatientData = await getAllPatient(userIds)
+      const getPatientData = await getAllPatient(userIds,headers)
   
       let unpaidRadiologyTestCount = 0;
       for (let index = 0; index < resultArray.length; index++) {
@@ -1956,7 +1972,7 @@ class PatientClinicalInfoController {
 
         const getDoctorName = BasicInfo.find({ for_portal_user: { $in: userIds } })
           .select('full_name full_name_arabic for_portal_user')
-        const getPatientData = getAllPatient(userIds)
+        const getPatientData = getAllPatient(userIds, headers)
         const getLabRadioData = getAllLabRadioName(headers, userIds)
         const allData = await Promise.all([getDoctorName, getPatientData, getLabRadioData])
         let getNameObject = {}
@@ -2303,6 +2319,9 @@ async updatePrescribedArrayForExternalLabs(req, res) {
 
 
 async getUnBookedPrescribeLabTest(req, res) {
+  const headers = {
+    Authorization: req.headers["authorization"],
+  };
   try {
     const {
       page,
@@ -2458,7 +2477,7 @@ async getUnBookedPrescribeLabTest(req, res) {
     const resultArray = limit == 0 ? result : result[0].paginatedResults;
     const idsArray = resultArray.map(val => val.patientId.toString());
     const userIds = [...new Set(idsArray)];
-    const getPatientData = await getAllPatient(userIds);
+    const getPatientData = await getAllPatient(userIds,headers);
 
     for (let index = 0; index < resultArray.length; index++) {
       const element = resultArray[index];
@@ -2494,6 +2513,9 @@ async getUnBookedPrescribeLabTest(req, res) {
 
 
 async getUnBookedPrescribeRadiologyTest(req, res) {
+  const headers = {
+    Authorization: req.headers["authorization"],
+  };
   try {
     const {
       page,
@@ -2657,7 +2679,7 @@ async getUnBookedPrescribeRadiologyTest(req, res) {
     const resultArray = limit == 0 ? result : result[0].paginatedResults;
     const idsArray = resultArray.map(val => val.patientId.toString());
     const userIds = [...new Set(idsArray)];
-    const getPatientData = await getAllPatient(userIds);
+    const getPatientData = await getAllPatient(userIds,headers);
 
     for (let index = 0; index < resultArray.length; index++) {
       const element = resultArray[index];

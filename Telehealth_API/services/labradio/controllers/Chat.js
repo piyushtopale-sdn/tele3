@@ -872,7 +872,6 @@ export const markAllReadNotification = async (req, res) => {
       });
   
     } catch (err) {
-      ;
       return sendResponse(req, res, 500, {
         status: false,
         body: err,

@@ -173,7 +173,8 @@ const getAllDoctor = (paginatedResults, headers) => {
     resolve(doctorDetails)
   })
 }
-const getAllPatient = (paginatedResults, ids = []) => {
+const getAllPatient = (paginatedResults,headers,ids = []) => {
+  
   return new Promise(async (resolve, reject) => {
     const patientIdsArray = ids && ids.length > 0 ? ids : paginatedResults.map(val => val.patientId)
     let patientDetails = {}
@@ -181,7 +182,7 @@ const getAllPatient = (paginatedResults, ids = []) => {
       const getDetails = await httpService.postStaging(
         "patient/get-patient-details-by-id",
         { ids: patientIdsArray },
-        {},
+        headers,
         "patientServiceUrl"
       );
 
@@ -1346,7 +1347,7 @@ class AppointmentController {
         MISSED: 'Missed'
       }
       const paginatedResults = result[0].paginatedResults
-      const patientDetails = getAllPatient(paginatedResults)
+      const patientDetails = getAllPatient(paginatedResults, headers)
       const doctorDetails = getAllDoctor(paginatedResults, headers)
       const promisesResult = await Promise.all([patientDetails, doctorDetails])
 
@@ -1541,7 +1542,7 @@ class AppointmentController {
       };
 
       const paginatedResults = result[0].paginatedResults;
-      const patientDetails = getAllPatient(paginatedResults);
+      const patientDetails = getAllPatient(paginatedResults,headers);
       const doctorDetails = getAllDoctor(paginatedResults, headers);
       const promisesResult = await Promise.all([patientDetails, doctorDetails]);
 
@@ -3064,7 +3065,7 @@ class AppointmentController {
         MISSED: 'Missed'
       }
       const paginatedResults = result[0].paginatedResults
-      const patientDetails = getAllPatient(paginatedResults)
+      const patientDetails = getAllPatient(paginatedResults,headers)
       const doctorDetails = getAllDoctor(paginatedResults, headers)
       //Find all Counts
       let filter = { serviceType }
@@ -3120,6 +3121,9 @@ class AppointmentController {
     }
   }
   async getTestHistory(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const appointmentId = req.params.id
       const getAppointment = await Appointment.findById(appointmentId)
@@ -3151,7 +3155,7 @@ class AppointmentController {
       let testHistory = []
       let orderHistory = []
       if (userIds.length > 0) {
-        const getPatientData = getAllPatient('', userIds)
+        const getPatientData = getAllPatient('', headers,userIds)
         const getPortalData = PortalUser.find({ _id: { $in: userIds } }).select('centre_name centre_name_arabic full_name full_name_arabic')
         const allData = await Promise.all([getPatientData, getPortalData])
         let getNameObject = {}
@@ -3385,7 +3389,7 @@ class AppointmentController {
         MISSED: 'Missed'
       }
       const paginatedResults = result[0].paginatedResults
-      const patientDetails = getAllPatient(paginatedResults)
+      const patientDetails = getAllPatient(paginatedResults,headers)
       const doctorDetails = getAllDoctor(paginatedResults, headers)
       const promisesResult = await Promise.all([patientDetails, doctorDetails])
 
@@ -3630,15 +3634,15 @@ class AppointmentController {
                 }
 
               } else if (element.status == "PENDING" || element.status == "APPROVED") {
-                await Appointment.findOneAndUpdate(
-                  { _id: element._id },
-                  {
-                    $set: {
-                      status: "UNDER_PROCESSED"
-                    },
-                  },
-                  { upsert: false, new: true }
-                ).exec();
+                // await Appointment.findOneAndUpdate(
+                //   { _id: element._id },
+                //   {
+                //     $set: {
+                //       status: "UNDER_PROCESSED"
+                //     },
+                //   },
+                //   { upsert: false, new: true }
+                // ).exec();
 
               }
             }
@@ -3851,7 +3855,7 @@ class AppointmentController {
 
       // **Fetch patient and doctor details in parallel**
       const [patientDetails, doctorDetails] = await Promise.all([
-        getAllPatient(getTotalAppointments),
+        getAllPatient(getTotalAppointments, headers),
         getAllDoctor(getTotalAppointments, headers),
       ]);
 

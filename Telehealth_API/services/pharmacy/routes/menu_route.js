@@ -19,6 +19,7 @@ menuRoute.post("/add-menu",menuValidator,
     }
     next();
 },menuController.add_menu);
+
 menuRoute.post("/edit-menu",editMenuValidator,(req,res,next)=>{
     const errors = validationResult(req);
     if(!errors.isEmpty()){
@@ -45,7 +46,6 @@ menuRoute.post("/add-perm",permValidator,
     }
     next();
 },menuController.add_perm);
-
 
 menuRoute.put("/edit-perm",editPermValidator,(req,res,next)=>{
     const errors = validationResult(req);

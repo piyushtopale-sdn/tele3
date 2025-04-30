@@ -24,7 +24,8 @@ import {
     uploadLabSubTest,
     bulkImportLabMainTest,
     getRadioTestexp,
-    getLabTestExport
+    getLabTestExport,
+    bulkImportRadioTests
 } from "../controllers/lab_test_configuration.controller";
 import { handleResponse } from "../middleware/utils";
 const fs = require("fs");
@@ -99,5 +100,7 @@ labRadioManagementRoute.get('/exportsheetlistExport-radioTest', verifyRole(['sup
 //Import sub tests for lab
 labRadioManagementRoute.post('/upload-labSub-test', verifyRole(['superadmin']), uploadFileToLocalStorage, uploadLabSubTest)
 labRadioManagementRoute.post('/upload-labMain-test', verifyRole(['superadmin']), uploadFileToLocalStorage, bulkImportLabMainTest)
+labRadioManagementRoute.post('/upload-radio-tests', verifyRole(['superadmin']), uploadFileToLocalStorage, bulkImportRadioTests)
+
 
 export default labRadioManagementRoute;

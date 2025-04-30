@@ -39,7 +39,7 @@ const getAllDoctor = (paginatedResults, headers) => {
       resolve(doctorDetails)
     })
   }
-    const getAllPatient = (paginatedResults) => {
+    const getAllPatient = (paginatedResults, headers) => {
         return new Promise(async (resolve, reject) => {
         const patientIdsArray = paginatedResults.map(val => val.patientId)
             let patientDetails = {}
@@ -47,7 +47,7 @@ const getAllDoctor = (paginatedResults, headers) => {
             const getDetails = await httpService.postStaging(
                 "patient/get-patient-details-by-id",
                 { ids: patientIdsArray },
-                {},
+                headers,
                 "patientServiceUrl"
             );
         
@@ -284,7 +284,7 @@ class OrderController {
             const result = await OrderDetail.aggregate(aggregateQuery).exec();
 
             const paginatedResults = result[0].paginatedResults
-            const patientDetails = getAllPatient(paginatedResults)
+            const patientDetails = getAllPatient(paginatedResults, headers)
             const doctorDetails = getAllDoctor(paginatedResults, headers)
             const promisesResult = await Promise.all([patientDetails,doctorDetails])
             let dasageIdsArray = []
@@ -380,7 +380,7 @@ class OrderController {
               const getDetails = await httpService.postStaging(
                 "patient/get-patient-details-by-id",
                 { ids: [getOrder?.patientId] },
-                {},
+                headers,
                 "patientServiceUrl"
               );
         

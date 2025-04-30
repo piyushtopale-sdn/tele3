@@ -4,7 +4,7 @@ import RadiologyTest from "../models/radiology_test";
 import { sendResponse } from "../helpers/transmission";
 import Http from "../helpers/httpservice";
 import mongoose from "mongoose";
-import { LabMainTestColumns, LabSubTestColumns } from "../config/constants";
+import { LabMainTestColumns, LabSubTestColumns, RadioTestColumns } from "../config/constants";
 import { processExcel } from "../middleware/utils";
 const fs = require("fs");
 const httpService = new Http();
@@ -1684,6 +1684,138 @@ export const bulkImportLabMainTest = async (req, res) => {
 
     } catch (error) {
         console.log("Error:", error);
+        return sendResponse(req, res, 500, {
+            status: false,
+            body: error,
+            message: "Internal server error",
+            errorCode: null,
+        });
+    }
+};
+
+export const bulkImportRadioTests = async (req, res) => {
+    const headers = {
+        Authorization: req.headers["authorization"],
+    };
+
+    try {
+        const filePath = "./uploads/" + req.filename;
+        const data = await processExcel(filePath);
+        fs.unlinkSync(filePath);
+
+        const isValidFile = validateColumnWithExcel(RadioTestColumns, data[0]);
+        if (!isValidFile) {
+            return sendResponse(req, res, 500, {
+                status: false,
+                message: "Invalid excel sheet! Column not matched.",
+                errorCode: null,
+            });
+        }
+
+        // Fetch existing lab tests
+        const existingTests = await RadiologyTest.find({ 
+            radiologyId: req.body.radiologyId,
+            isDeleted: false 
+        }).select("radiologyId testName").lean();
+        
+        const existingTestSet = new Set(existingTests.map(item => `${item.radiologyId}-${item.testName}`));
+
+        // Collect all unique studyTypes and LOINC codes
+        const allStudyTypes = [...new Set(data.map(item => item.studyType))];
+        const allLoincCodes = [...new Set(data.filter(item => item.lonicCode).map(item => item.lonicCode))];
+
+        // Batch fetch study types
+        const studyTypePromises = allStudyTypes.map(studyType => 
+            httpService.postStaging(
+                `common-api/find-or-create`,
+                { studyTypeName: studyType },
+                headers,
+                'superadminServiceUrl'
+            )
+        );
+
+        const studyTypeResults = await Promise.all(studyTypePromises);
+        const studyTypeMap = new Map();
+        studyTypeResults.forEach((result, index) => {
+            if (result?.body) {
+                studyTypeMap.set(allStudyTypes[index], result.body._id);
+            }
+        });
+
+        // Batch fetch LOINC codes
+        const loincPromises = allLoincCodes.map(code => {
+            const testName = data.find(item => item.lonicCode === code)?.testName;
+            return httpService.postStaging(
+                `superadmin/get-lonic-code-by-code`,
+                { code, description: testName },
+                headers,
+                'superadminServiceUrl'
+            );
+        });
+
+        const loincResults = await Promise.all(loincPromises);
+        const loincCache = new Map();
+        loincResults.forEach((result, index) => {
+            if (result?.status && result?.body?.length > 0) {
+                const loincData = result.body[0];
+                loincCache.set(allLoincCodes[index], {
+                    loincId: mongoose.Types.ObjectId(loincData._id),
+                    loincCode: loincData.loincCode
+                });
+            }
+        });
+
+        // Process data in chunks
+        const chunkSize = 100;
+        const inputArray = [];
+        
+        for (let i = 0; i < data.length; i += chunkSize) {
+            const chunk = data.slice(i, i + chunkSize);
+            const chunkResults = await Promise.all(chunk.map(singleData => {
+                const testKey = `${req.body.radiologyId}-${singleData.testName}`;
+                if (existingTestSet.has(testKey)) return null;
+
+                const studyTypeId = studyTypeMap.get(singleData.studyType) || null;
+                const loincObject = singleData.lonicCode ? loincCache.get(singleData.lonicCode) : null;
+
+                return {
+                    radiologyId: req.body.radiologyId,
+                    testName: singleData.testName,
+                    studyTypeId,
+                    loinc: loincObject,
+                    testFees: singleData.fees || "0",
+                    notes: singleData.notes || "",
+                    isDeleted: false
+                };
+            }));
+            
+            inputArray.push(...chunkResults.filter(test => test !== null));
+        }
+
+        if (inputArray.length > 0) {
+            await RadiologyTest.bulkWrite(
+                inputArray.map(test => ({
+                    insertOne: {
+                        document: test
+                    }
+                }))
+            );
+            
+            return sendResponse(req, res, 200, {
+                status: true,
+                message: `${inputArray.length} tests added successfully`,
+                errorCode: null,
+            });
+        } else {
+            return sendResponse(req, res, 200, {
+                status: true,
+                message: "No new tests added",
+                errorCode: null,
+            });
+        }
+
+    } catch (error) {
+        console.error("Error in bulkImportRadioTests:", error);
         return sendResponse(req, res, 500, {
             status: false,
             body: error,

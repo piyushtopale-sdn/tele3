@@ -1939,7 +1939,6 @@ class CommonDataController {
         ]);
       }
 
-      ;
       let array = result.map((obj) => Object.values(obj));
       sendResponse(req, res, 200, {
         status: true,
@@ -4243,10 +4242,13 @@ async updateStudyType(req,res)
   try {
     const { studyTypeId, studyTypeName, studyTypeNameArabic, description, status } = req.body
 
-    const getStudyType = await StudyType.find({ studyTypeName, isDeleted: false, _id: {$ne: studyTypeId} })
-
+    const getStudyType = await StudyType.find({
+      studyTypeName: { $regex: `^${studyTypeName}$`, $options: 'i' },
+      isDeleted: false,
+      _id: { $ne: studyTypeId }, 
+    });
     if (getStudyType.length > 0) {
-        return sendResponse(req, res, 400, {
+        return sendResponse(req, res, 200, {
             status: false,
             body: null,
             message: "Study Type already exist",
@@ -4470,6 +4472,65 @@ async AddBusssinesSolutiondetails(req,res){
     });
   }
 }
+
+async findOrCreateStudyType(req, res) {
+  try {
+    const { studyTypeName } = req.body;
+
+    if (!studyTypeName) {
+      return sendResponse(req, res, 400, {
+        status: false,
+        message: "studyTypeName is required",
+        body: {},
+        errorCode: null,
+      });
+    }
+
+    // Normalize the input for consistency (e.g., lowercase)
+    const normalizedStudyTypeName = studyTypeName.trim().toLowerCase();
+
+    // Check if studyTypeName already exists (case-insensitive)
+    const existingStudyType = await StudyType.findOne({
+      studyTypeName: { $regex: `^${normalizedStudyTypeName}$`, $options: "i" },
+      isDeleted: false,
+    });
+
+    if (existingStudyType) {
+      return sendResponse(req, res, 200, {
+        status: true,
+        message: "Study Type found",
+        body: existingStudyType,
+        errorCode: null,
+      });
+    }
+
+    // Save only normalized lowercase version
+    const newStudyType = new StudyType({
+      studyTypeName: normalizedStudyTypeName,
+      studyTypeNameArabic: "-",
+      description: "-"      
+    });
+
+    await newStudyType.save();
+
+    return sendResponse(req, res, 201, {
+      status: true,
+      message: "New Study Type created",
+      body: newStudyType,
+      errorCode: null,
+    });
+  } catch (error) {
+    console.error("An error occurred:", error);
+    return sendResponse(req, res, 500, {
+      status: false,
+      message: "Something went wrong",
+      body: {},
+      errorCode: null,
+    });
+  }
+}
+
+
 }
 
 module.exports = new CommonDataController();

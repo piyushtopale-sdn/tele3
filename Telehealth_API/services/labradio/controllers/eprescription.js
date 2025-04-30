@@ -335,80 +335,6 @@ class ePrescriptionController {
     }
   }
 
-  async addEprescriptionEyeglass(req, res) {
-    const {
-      _id,
-      ePrescriptionId,
-      eyeglassId,
-      portalId,
-      eyeglass_name,
-      left_eye,
-      right_eye,
-      treatments,
-      visual_acuity,
-      comment,
-      portal_type
-    } = req.body;
-
-    try {
-
-      let result;
-      let message;
-
-      if (_id == "" || _id == null) {
-        const labData = new EprescriptionEyeglass({
-          ePrescriptionId,
-          eyeglassId,
-          portalId,
-          eyeglass_name,
-          left_eye,
-          right_eye,
-          treatments,
-          visual_acuity,
-          comment,
-          portal_type
-        })
-
-        result = await labData.save()
-        message = "Eyeglass Test added successfully"
-
-      } else {
-        let obj = {
-          left_eye,
-          right_eye,
-          treatments,
-          visual_acuity,
-          comment
-        }
-
-        result = await EprescriptionEyeglass.findOneAndUpdate({ _id: _id, portal_type }, { $set: obj }, { new: true })
-        if (result == null) {
-          return sendResponse(req, res, 200, {
-            status: false,
-            body: result,
-            message: 'No Record Found',
-            errorCode: null,
-          });
-        }
-        message = "Eyeglass Test Updated successfully"
-      }
-
-      sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: message,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Failed To Imaging Test",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
   async addEprescriptionOther(req, res) {
     const {
       _id,
@@ -761,51 +687,6 @@ class ePrescriptionController {
       });
     }
   }
-
-  async getEprescriptionEyeglassTest(req, res) {
-    const {
-      ePrescriptionId,
-      portal_type,
-      eyeglassId
-    } = req.query;
-
-    try {
-      let result;
-
-      if (eyeglassId) {
-        result = await EprescriptionEyeglass.findOne({ ePrescriptionId, eyeglassId, portal_type })
-      } else {
-        result = await EprescriptionEyeglass.find({ ePrescriptionId, portal_type })
-      }
-
-
-      if (result) {
-        sendResponse(req, res, 200, {
-          status: true,
-          body: result,
-          message: 'Eyeglass Tests fetched successfully',
-          errorCode: null,
-        });
-      } else {
-        sendResponse(req, res, 200, {
-          status: false,
-          body: null,
-          message: 'No Eyeglass Tests Found!!',
-          errorCode: null,
-        });
-      }
-
-    } catch (error) {
-
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Failed to get eyeglass test",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
 
   async getAllTests(req, res) {
     const {

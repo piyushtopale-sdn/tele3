@@ -1,5 +1,5 @@
 import express from "express";
-import { addVitals, advanceSearchPharmacyList, familyDetails, historyDetails, immunizationDetails, login, matchEmailOtpFor2fa, matchSmsOtpFor2fa, medicalDocument, medicineDetails, personalDetails, profileDetails, sendEmailOtpFor2fa, sendSmsOtpFor2fa, signup, subscriptionPurchasedPlans, viewSubscriptionPurchasedPlans, getPaymentDetails } from "../controller/patientController";
+import { addVitals, advanceSearchPharmacyList, familyDetails, historyDetails, login, matchEmailOtpFor2fa, matchSmsOtpFor2fa, medicalDocument, medicineDetails, personalDetails, profileDetails, sendEmailOtpFor2fa, sendSmsOtpFor2fa, signup, subscriptionPurchasedPlans, viewSubscriptionPurchasedPlans, getPaymentDetails } from "../controller/patientController";
 
 const patientRoute = express.Router()
 //patient
@@ -13,7 +13,6 @@ patientRoute.post("/match-sms-otp-for-2fa", matchSmsOtpFor2fa)
 patientRoute.post('/create-profile/personal-details', personalDetails)
 patientRoute.post("/create-profile/add-vitals", addVitals);
 patientRoute.post("/create-profile/medicine-details", medicineDetails);
-patientRoute.post("/create-profile/immunization-details", immunizationDetails);
 patientRoute.post("/create-profile/history-details", historyDetails);
 patientRoute.post("/create-profile/medical-document", medicalDocument);
 patientRoute.post("/create-profile/family-details", familyDetails);

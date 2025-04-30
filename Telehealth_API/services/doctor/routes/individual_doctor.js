@@ -19,6 +19,8 @@ individualDoctorRoute.post("/match-otp-for-2fa", individualDoctor.matchOtpFor2fa
 individualDoctorRoute.post("/match-Email-Otp-For-2-fa", individualDoctor.matchEmailOtpFor2fa);
 
 individualDoctorRoute.post("/change-password", individualDoctor.changePassword);
+
+individualDoctorRoute.use(verifyToken)
 //Staff
 individualDoctorRoute.post("/add-staff", individualDoctorStaff.addStaff);
 individualDoctorRoute.post("/edit-staff", individualDoctorStaff.editStaff);
@@ -34,9 +36,6 @@ individualDoctorRoute.post("/update-staff-role", individualDoctorStaffRole.updat
 individualDoctorRoute.post("/delete-staff-role", individualDoctorStaffRole.delete_role);
 
 //Individual Doctor For Super-admin
-individualDoctorRoute.get("/get-individual-doctors-by-status", individualDoctor.getIndividualDoctorsByStatus);
-individualDoctorRoute.post("/approve-or-reject-individual-doctor", individualDoctor.approveOrRejectIndividualDoctor);
-individualDoctorRoute.get("/get-individual-doctors-by-id", individualDoctor.getIndividualDoctorsById);
 
 //update logs
 individualDoctorRoute.post("/update-logs" ,individualDoctor.updatelogsData);
@@ -48,7 +47,9 @@ individualDoctorRoute.post("/create-unregister-doctor-staff", individualDoctor.u
 individualDoctorRoute.get("/get-unregister-doctor", individualDoctor.get_unregisterDoctor);
 individualDoctorRoute.post("/update-unregister-doctor", individualDoctor.updateUnregisterDoctor);
 
-individualDoctorRoute.use(verifyToken)
+
+individualDoctorRoute.get("/get-individual-doctors-by-id", individualDoctor.getIndividualDoctorsById);
+
 individualDoctorRoute.post("/logout", individualDoctor.logout);
 individualDoctorRoute.post("/fetch-room-call", individualDoctor.fetchRoomCall);
 individualDoctorRoute.post("/start-recordings", individualDoctor.startRecordings);

@@ -14,7 +14,6 @@ export const uploadSingleOrMultipleDocuments = (req) => {
             const { userId, docType, serviceType } = req.body;
             const files = req.files.file;
             let keysArray = [];
-            console.log(req.files, "===req.files");
             // Convert single file to an array for uniform processing
             const fileArray = Array.isArray(files) ? files : [files];
  

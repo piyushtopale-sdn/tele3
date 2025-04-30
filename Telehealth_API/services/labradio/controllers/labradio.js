@@ -63,113 +63,6 @@ const validateColumnWithExcel = (toValidate, excelColumn) => {
   return true;
 };
 
-export const addTestsForMngDoc = async (pathologyInfo, id, type) => {
-  for (const test of pathologyInfo) {
-    try {
-      const existingTest = await PathologyTestInfoNew.findOne({
-        for_portal_user: id,
-        typeOfTest: test.typeOfTest,
-        nameOfTest: test.nameOfTest,
-      });
-
-      if (existingTest) {
-      } else {
-        if (test.isExist === false) {
-          await PathologyTestInfoNew.create({
-            for_portal_user: id,
-            typeOfTest: test.typeOfTest,
-            nameOfTest: test.nameOfTest,
-            isExist: true,
-            type,
-          });
-        }
-      }
-    } catch (error) {
-      console.error("Erroroccurreddddd:", error);
-      // Handle the error as needed
-    }
-  }
-};
-
-const getDoctorOpeningsHours = async (week_days) => {
-  let Sunday = [];
-  let Monday = [];
-  let Tuesday = [];
-  let Wednesday = [];
-  let Thursday = [];
-  let Friday = [];
-  let Saturday = [];
-  if (week_days) {
-    week_days.forEach((data) => {
-      Sunday.push({
-        start_time:
-          data.sun_start_time.slice(0, 2) +
-          ":" +
-          data.sun_start_time.slice(2, 4),
-        end_time:
-          data.sun_end_time.slice(0, 2) + ":" + data.sun_end_time.slice(2, 4),
-      });
-      Monday.push({
-        start_time:
-          data.mon_start_time.slice(0, 2) +
-          ":" +
-          data.mon_start_time.slice(2, 4),
-        end_time:
-          data.mon_end_time.slice(0, 2) + ":" + data.mon_end_time.slice(2, 4),
-      });
-      Tuesday.push({
-        start_time:
-          data.tue_start_time.slice(0, 2) +
-          ":" +
-          data.tue_start_time.slice(2, 4),
-        end_time:
-          data.tue_end_time.slice(0, 2) + ":" + data.tue_end_time.slice(2, 4),
-      });
-      Wednesday.push({
-        start_time:
-          data.wed_start_time.slice(0, 2) +
-          ":" +
-          data.wed_start_time.slice(2, 4),
-        end_time:
-          data.wed_end_time.slice(0, 2) + ":" + data.wed_end_time.slice(2, 4),
-      });
-      Thursday.push({
-        start_time:
-          data.thu_start_time.slice(0, 2) +
-          ":" +
-          data.thu_start_time.slice(2, 4),
-        end_time:
-          data.thu_end_time.slice(0, 2) + ":" + data.thu_end_time.slice(2, 4),
-      });
-      Friday.push({
-        start_time:
-          data.fri_start_time.slice(0, 2) +
-          ":" +
-          data.fri_start_time.slice(2, 4),
-        end_time:
-          data.fri_end_time.slice(0, 2) + ":" + data.fri_end_time.slice(2, 4),
-      });
-      Saturday.push({
-        start_time:
-          data.sat_start_time.slice(0, 2) +
-          ":" +
-          data.sat_start_time.slice(2, 4),
-        end_time:
-          data.sat_end_time.slice(0, 2) + ":" + data.sat_end_time.slice(2, 4),
-      });
-    });
-  }
-  return {
-    Sunday,
-    Monday,
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday,
-    Saturday,
-  };
-};
-
 const canSendOtp = (deviceExist, currentTime) => {
   return new Promise((resolve, reject) => {
       const limitExceedWithin1 = new Date(currentTime.getTime() + OTP_LIMIT_EXCEED_WITHIN * 60000);
@@ -213,7 +106,7 @@ const getAllDoctor = (paginatedResults, headers) => {
     resolve(doctorDetails)
   })
 }
-const getAllPatient = (paginatedResults) => {
+const getAllPatient = (paginatedResults,headers) => {
   return new Promise(async (resolve, reject) => {
     const patientIdsArray = paginatedResults.map(val => val.patientId)
       let patientDetails = {}
@@ -221,7 +114,7 @@ const getAllPatient = (paginatedResults) => {
         const getDetails = await httpService.postStaging(
           "patient/get-patient-details-by-id",
           { ids: patientIdsArray },
-          {},
+          headers,
           "patientServiceUrl"
         );
   
@@ -4758,7 +4651,7 @@ class LabRadiology {
         MISSED: 'Missed'
       }
       const paginatedResults = result[0].paginatedResults
-      const patientDetails = getAllPatient(paginatedResults)
+      const patientDetails = getAllPatient(paginatedResults,headers)
       const doctorDetails = getAllDoctor(paginatedResults, headers)
       const promisesResult = await Promise.all([patientDetails,doctorDetails])
       
@@ -5196,7 +5089,7 @@ if (labRadioId && labRadioId !== "null" && mongoose.isValidObjectId(labRadioId))
         MISSED: 'Missed'
       }
       const paginatedResults = result[0].paginatedResults
-      const patientDetails = getAllPatient(paginatedResults)
+      const patientDetails = getAllPatient(paginatedResults,headers)
       const doctorDetails = getAllDoctor(paginatedResults, headers)
       const promisesResult = await Promise.all([patientDetails,doctorDetails])
       

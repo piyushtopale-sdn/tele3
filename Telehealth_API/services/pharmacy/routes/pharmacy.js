@@ -52,8 +52,6 @@ const uploadFileToLocalStorage = (req, res, next) => {
     });
 }
 
-
-
 pharmacyRoute.get(
     "/view-pharmacy-admin-details",
     pharmacy.viewPharmacyAdminDetails
@@ -67,7 +65,6 @@ pharmacyRoute.post("/login", pharmacy.login);
 pharmacyRoute.post("/refresh-token", pharmacy.refreshToken);
 pharmacyRoute.post("/forgot-password", pharmacy.forgotPassword);
 pharmacyRoute.post("/change-password", pharmacy.changePassword);
-// pharmacyRoute.post("/pharmacy-profile", pharmacy.pharmacyProfile);
 pharmacyRoute.post("/lock-profile", pharmacy.lockProfile);
 pharmacyRoute.post('/delete-active-admin', pharmacy.deleteActiveadmin)
 pharmacyRoute.get("/get-document-metadata", pharmacy.documentInformation);

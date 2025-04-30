@@ -6,7 +6,6 @@ require("@babel/polyfill");
 const app = require("../app").default;
 const http = require("http");
 require("dotenv/config");
-const NODE_ENV = process.env.NODE_ENV || "local"; //local
 const { config } = require("../config/constants.js");
 
 const normalizePort = function (val) {

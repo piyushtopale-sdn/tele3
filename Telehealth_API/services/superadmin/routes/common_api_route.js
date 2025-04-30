@@ -156,6 +156,8 @@ commonRoute.put("/update-study-type", authorizeRole(['superadmin']), commonDataC
 commonRoute.put("/delete-active-inactive-study-type", authorizeRole(['superadmin']), commonDataController.updateStudyTypeByAction);
 commonRoute.get("/get-study-type-byId/:id", commonDataController.getStudyTypeById);
 commonRoute.get('/exportsheetlist-studyType', authorizeRole(['superadmin']), commonDataController.allStudyTypeforexport)
+commonRoute.post('/find-or-create', authorizeRole(['superadmin']), commonDataController.findOrCreateStudyType)
+
 
 
 

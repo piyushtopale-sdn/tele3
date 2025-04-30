@@ -140,99 +140,6 @@ const saveVideoCallMessagesToChat = async (chatmessage) => {
   }
 };
 
-
-export const updateSlotAvailability = async (
-  hospitalId,
-  notificationReceiver,
-  timeStamp,
-  req
-) => {
-  let timeStampString;
-  let slot = null;
-
-  const headers = {
-    Authorization: req.headers["authorization"],
-  };
-  for (let index = 0; index < 3; index++) {
-    const resData = await httpService.postStaging(
-      "hospital/doctor-available-slot",
-      {
-        locationId: hospitalId,
-        doctorId: notificationReceiver,
-        appointmentType: "ONLINE",
-        timeStamp: timeStamp,
-      },
-      headers,
-      "hospitalServiceUrl"
-    );
-
-    const slots = resData?.body?.allGeneralSlot;
-
-    let isBreak = false;
-    if (slots) {
-      for (let index = 0; index < slots.length; index++) {
-        const element = slots[index];
-        if (element.status == 0) {
-          slot = element;
-          isBreak = true;
-          break;
-        }
-      }
-    }
-
-    if (slot != null) {
-      isBreak = true;
-      break;
-    }
-
-    if (!isBreak) {
-      timeStampString = moment(timeStamp, "DD-MM-YYYY").add(1, "days");
-      timeStamp = new Date(timeStampString);
-    }
-  }
-
-  if (slot != null) {
-    await BasicInfo.findOneAndUpdate(
-      { for_portal_user: { $eq: notificationReceiver } },
-      {
-        $set: {
-          nextAvailableSlot: slot.slot,
-          nextAvailableDate: timeStamp,
-        },
-      },
-
-      { upsert: false, new: true }
-    ).exec();
-    // update data in basic info
-  }
-};
-
-export const addTestsForMngDoc = async (pathologyInfo, id) => {
-  for (const test of pathologyInfo) {
-    try {
-      const existingTest = await PathologyTestInfoNew.findOne({
-        for_portal_user: id,
-        typeOfTest: test.typeOfTest,
-        nameOfTest: test.nameOfTest,
-      });
-
-      if (existingTest) {
-      } else {
-        if (test.isExist === false) {
-          await PathologyTestInfoNew.create({
-            for_portal_user: id,
-            typeOfTest: test.typeOfTest,
-            nameOfTest: test.nameOfTest,
-            isExist: true,
-          });
-        }
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-    }
-  }
-};
-
 class DoctorController {
   async addStaff(req, res) {
     try {
@@ -3687,78 +3594,6 @@ async doctorManagementUpdateAvailability(req, res) {
     }
   }
 
-  async addEprescriptionEyeglass(req, res) {
-    const {
-      _id,
-      ePrescriptionId,
-      eyeglassId,
-      doctorId,
-      eyeglass_name,
-      left_eye,
-      right_eye,
-      treatments,
-      visual_acuity,
-      comment,
-    } = req.body;
-
-    try {
-      let result;
-
-      if (_id == "" || _id == null) {
-        const labData = new EprescriptionEyeglass({
-          ePrescriptionId,
-          eyeglassId,
-          doctorId,
-          eyeglass_name,
-          left_eye,
-          right_eye,
-          treatments,
-          visual_acuity,
-          comment,
-        });
-
-        result = await labData.save();
-      } else {
-        let obj = {
-          left_eye,
-          right_eye,
-          treatments,
-          visual_acuity,
-          comment,
-        };
-
-        result = await EprescriptionEyeglass.findOneAndUpdate(
-          { _id: _id },
-          { $set: obj },
-          { new: true }
-        );
-        if (result == null) {
-          return sendResponse(req, res, 200, {
-            status: false,
-            body: result,
-            message: messages.recordNotFound.en,
-            messageArabic: messages.recordNotFound.ar,
-            errorCode: null,
-          });
-        }
-      }
-
-      sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: messages.eyeGlassTestUpdate.en,
-        messageArabic: messages.eyeGlassTestUpdate.ar,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Failed To Imaging Test",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
 
   async addEprescriptionOther(req, res) {
     const {
@@ -4095,47 +3930,6 @@ async doctorManagementUpdateAvailability(req, res) {
     }
   }
 
-  async getEprescriptionEyeglassTest(req, res) {
-    const { ePrescriptionId, eyeglassId } = req.query;
-
-    try {
-      let result;
-
-      if (eyeglassId) {
-        result = await EprescriptionEyeglass.findOne({
-          ePrescriptionId,
-          eyeglassId,
-        });
-      } else {
-        result = await EprescriptionEyeglass.find({ ePrescriptionId });
-      }
-
-      if (result) {
-        sendResponse(req, res, 200, {
-          status: true,
-          body: result,
-          message:messages.eyeGlassTestFetched.en,
-          messageArabic:messages.eyeGlassTestFetched.ar,
-          errorCode: null,
-        });
-      } else {
-        sendResponse(req, res, 200, {
-          status: false,
-          body: null,
-          message: messages.eyeGlassTestNotFound.en,
-          messageArabic: messages.eyeGlassTestNotFound.ar,
-          errorCode: null,
-        });
-      }
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Failed to get eyeglass test",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
 
   async getAllTests(req, res) {
     const { appointmentId } = req.query;
@@ -6658,6 +6452,9 @@ async doctorManagementUpdateAvailability(req, res) {
 
 
   async getAppointmentsWithDoctorPatientDetails(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const {startDate,endDate} = req.query;
       let filter = {};
@@ -6680,7 +6477,7 @@ async doctorManagementUpdateAvailability(req, res) {
         const getDetails = await httpService.postStaging(
             "patient/get-patient-details-by-id",
             { ids: patientIds },
-            {},
+            headers,
             "patientServiceUrl"
         );
 

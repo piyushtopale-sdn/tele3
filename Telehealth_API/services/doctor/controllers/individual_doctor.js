@@ -2994,6 +2994,9 @@ class IndividualDoctor {
   }
 
   async getLabTestAppointmentDetails(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const { appointmentId, fromDate, toDate } = req.query;
       let filter = {};
@@ -3024,7 +3027,7 @@ class IndividualDoctor {
       const getPatientDetails = await httpService.postStaging(
         "patient/get-patient-details-by-id",
         { ids: patientIdsArray },
-        {},
+        headers,
         "patientServiceUrl"
       );
       const patientDetailsMap = getPatientDetails?.data || {};
@@ -3217,6 +3220,9 @@ class IndividualDoctor {
 
   
   async getRadiologyTestAppointmentDetails(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
       try {
           const { appointmentId } = req.query;
   
@@ -3286,7 +3292,7 @@ class IndividualDoctor {
           const patientResponse = await httpService.postStaging(
               "patient/get-patient-details-by-id",
               { ids: [result.patientId] },
-              {},
+              headers,
               "patientServiceUrl"
           );
   
@@ -3538,6 +3544,9 @@ class IndividualDoctor {
   }
 
   async getLabTestAppointmentList(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const { fromDate, toDate, limit, page, sort } = req.query;
       let filter = {};
@@ -3622,7 +3631,7 @@ class IndividualDoctor {
       const patientResponse = await httpService.postStaging(
         "patient/get-patient-details-by-id",
         { ids: patientIds },
-        {},
+        headers,
         "patientServiceUrl"
       );
       const patientDetailsMap = patientResponse?.data || {};
@@ -3729,6 +3738,9 @@ class IndividualDoctor {
   
 
   async getRadiologyTestAppointmentList(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const { fromDate, toDate, limit, page, sort } = req.query;
       let filter = {};
@@ -3819,7 +3831,7 @@ class IndividualDoctor {
       const patientResponse = await httpService.postStaging(
         "patient/get-patient-details-by-id",
         { ids: patientIds },
-        {},
+        headers,
         "patientServiceUrl"
       );
   
@@ -3929,6 +3941,9 @@ class IndividualDoctor {
   
 
   async getDashboardRecords(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const { fromDate, toDate } = req.query;
       let filter = {};
@@ -3960,7 +3975,7 @@ class IndividualDoctor {
       const getPatientDetails = await httpService.postStaging(
         "patient/get-patient-details-by-id",
         { ids: patientIdsArray },
-        {},
+        headers,
         "patientServiceUrl"
       );
       const patientDetailsMap = getPatientDetails?.data || {};
@@ -4118,6 +4133,9 @@ async getExportAllDoctorLastLogin(req, res) {
 }
 
 async getPendingLabTests(req, res) {
+  const headers = {
+    Authorization: req.headers["authorization"],
+  };
   try {
     const { doctorId } = req.params;
     const { fromDate, toDate } = req.query;
@@ -4235,7 +4253,7 @@ async getPendingLabTests(req, res) {
     const patientResponse = await httpService.postStaging(
       "patient/get-patient-details-by-id",
       { ids: patientIds },
-      {},
+      headers,
       "patientServiceUrl"
     );
 
@@ -4280,6 +4298,9 @@ async getPendingLabTests(req, res) {
 
 
 async getPendingRadiologyTests(req, res) {
+  const headers = {
+    Authorization: req.headers["authorization"],
+  };
   try {
     const { doctorId } = req.params;
     const { fromDate, toDate } = req.query;
@@ -4403,7 +4424,7 @@ async getPendingRadiologyTests(req, res) {
     const patientResponse = await httpService.postStaging(
       "patient/get-patient-details-by-id",
       { ids: patientIds },
-      {},
+      headers,
       "patientServiceUrl"
     );
 

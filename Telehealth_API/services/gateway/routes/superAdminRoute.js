@@ -26,7 +26,6 @@ import {
     superadminLogin,
     setMaximumRequest,
 } from "../controller/superadminController";
-import { listAllHospitalAdminUser, approveOrRejectHospital, viewHospitalAdminDetails } from "../controller/superadmin/hospitalController";
 import { addStaff, listStaff, getAllStaff, editStaff, viewStaff, deleteActiveLockStaff, listStaffForChat } from "../controller/superadmin/staffManagementController";
 import { subscriptionPlanListing, allSubscriptionPlansConfig } from "../controller/subscription/subscriptionController";
 const superadminRoute = express.Router()
@@ -52,11 +51,6 @@ superadminRoute.post('/create', createSpeciality)
 superadminRoute.get('/speciality-list', specialityList)
 superadminRoute.put('/update', specialityUpdate)
 superadminRoute.delete('/delete', specialityDelete)
-
-//Hospital Routes
-superadminRoute.get('/hospital/list-all-hospital-admin-user', listAllHospitalAdminUser)
-superadminRoute.post('/hospital/approve-or-reject-hospital', approveOrRejectHospital)
-superadminRoute.get('/hospital/view-hospital-admin-details', viewHospitalAdminDetails)
 
 //Subscription Routes
 superadminRoute.get('/subscription/subscription-plan-listing', subscriptionPlanListing)

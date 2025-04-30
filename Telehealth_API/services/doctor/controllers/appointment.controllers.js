@@ -311,7 +311,9 @@ class AppointmentController {
 
   // 11 Feb 2025 ---- Altamash
   async listAppointment(req, res) {
-
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const {
         patientId,
@@ -334,7 +336,7 @@ class AppointmentController {
         if (doctorId && doctorId == 'all') {
           getAllAppointment = await Appointment.find({}).select('patientId');
         } else {
-          getAllAppointment = await Appointment.find({ doctorId: { $eq: doctorId ? doctorId : req?.user?._id } }).select('patientId');
+          getAllAppointment = await Appointment.find({ doctorId: { $eq: doctorId ?? req?.user?._id } }).select('patientId');
         }
         const idsArray = getAllAppointment.map(val => val?.patientId.toString());
         const patientIdsArray = [...new Set(idsArray)];
@@ -342,7 +344,7 @@ class AppointmentController {
         const getDetails = await httpService.postStaging(
           "patient/get-patient-details-by-id",
           { ids: patientIdsArray },
-          {},
+          headers,
           "patientServiceUrl"
         );
         if (getDetails.status) {
@@ -1158,6 +1160,7 @@ class AppointmentController {
         reasonForAppointment: result?.reasonForAppointment,
         patientConfirmation: result?.patientConfirmation,
         cancelReason: result?.cancelReason,
+        declinedReason:result?.declinedReason,
       }
       const getBasicInfo = await BasicInfo.findOne({ for_portal_user: { $eq: result?.doctorId?._id } })
         .populate({ path: 'speciality', select: 'specilization' }).

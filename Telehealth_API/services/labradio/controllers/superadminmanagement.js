@@ -119,11 +119,15 @@ export const getLab_RadioList = async (req, res) => {
     const result = await BasicInfo.aggregate(aggregate);
     /**Fetching signed url - Feb 7 */
     const signedResults = await Promise.all(
-      result.map(async (item) => ({
-        ...item,
-        signed_profile_picture: await generateSignedUrl(item.profile_picture),
-      }))
+      result.map(async (item) => {
+        const signedItem = { ...item };
+        if (item?.profile_picture !== "") {
+          signedItem.signed_profile_picture = await generateSignedUrl(item.profile_picture);
+        }
+        return signedItem;
+      })
     );
+    
     
     sendResponse(req, res, 200, {
       status: true,

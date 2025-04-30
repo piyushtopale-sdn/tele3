@@ -2245,6 +2245,9 @@ class PharmacyController {
         }
     }
     async getReviewAndRating(req, res) {
+        const headers = {
+            Authorization: req.headers["authorization"],
+          };
         try {
             let { portal_user_id, page, limit } = req.query;
             let sort = req.query.sort
@@ -2324,7 +2327,7 @@ class PharmacyController {
                 patientIDArray.push(id.patient_login_id)
             }
 
-            const resData = await httpService.postStaging('patient/get-patient-details-by-id', { ids: patientIDArray }, {}, 'patientServiceUrl');
+            const resData = await httpService.postStaging('patient/get-patient-details-by-id', { ids: patientIDArray }, headers, 'patientServiceUrl');
             const patientDetails = resData.data
             let ratingArray = [];
 
@@ -3223,7 +3226,7 @@ class PharmacyController {
         }
     }
 
-    async notificationlist(req, res) {
+    async notificationlist(req, res) {     
         try {
             const notificationData = await Notification.find({
                 for_portal_user: mongoose.Types.ObjectId(req.query.for_portal_user)
@@ -4084,7 +4087,7 @@ class PharmacyController {
             const getDetails = await httpService.postStaging(
                 "patient/get-patient-details-by-id",
                 { ids: patientIds },
-                {},
+                headers,
                 "patientServiceUrl"
             );
 

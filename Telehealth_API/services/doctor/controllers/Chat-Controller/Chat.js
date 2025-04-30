@@ -51,10 +51,13 @@ const generateNotificationMessage = (type, content, patient_name, doctorName) =>
         .replace(/{{doctor_name}}/g, doctorName)
 
       break;
-    case "CHAT_MESSAGE":
-    message = content
-      .replace(/{{message}}/g, content)
-    break;
+      case "CHAT_MESSAGE":
+        if (!content || content.trim() === '') {
+          message = '📎Attachment';  // attachment icon with text
+        } else {
+          message = content.replace(/{{message}}/g, content);
+        }
+        break;
     default:
       message = content; // Fallback in case the type doesn't match
       break;
@@ -811,14 +814,7 @@ export const saveNotification = async (req, res) => {
       }
     }
     else {
-      let data = {
-        chatId: req.body.chatId,
-        created_by: req.body.created_by,
-        for_portal_user: receiverData,
-        content: req.body.content,
-        notitype: req.body.notitype,
-        created_by_type: req.body.created_by_type,
-      };
+
       const senderData = await PortalUser.findOne({ _id: mongoose.Types.ObjectId(req.body.created_by) });
          
       const findPatient = await httpService.getStaging("patient/get-portal-data", { data: receiverData[0] }, headers, "patientServiceUrl");

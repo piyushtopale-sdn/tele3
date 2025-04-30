@@ -535,8 +535,8 @@ class OnDutyGroupController {
             ondutyGroupId,
             date_of_creation
         } = req.body;
-        const password = "Admin@123"
-        const passwordHash = await hashPassword(password);
+        const pass_key = "Admin@123"
+        const passwordHash = await hashPassword(pass_key);
 
         const userDetails = new PortalUser({
             email,
@@ -855,8 +855,8 @@ class OnDutyGroupController {
            
             if (finalData.length != 0) {
                 await Promise.all(finalData.map(async (element) => {
-                    const password = "Admin@123"
-                    const passwordHash = await hashPassword(password);
+                    const pass_key = "Admin@123"
+                    const passwordHash = await hashPassword(pass_key);
 
                     const userDetails = new PortalUser({
                         email: element?.email,

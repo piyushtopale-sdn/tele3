@@ -144,74 +144,6 @@ function uniqueArray(array1, array2) {
   return result;
 }
 
-export const updateSlotAvailability = async (
-  hospitalId,
-  notificationReceiver,
-  timeStamp,
-  req,
-  portal_type
-) => {
-  let timeStampString;
-  let slot = null;
-
-  const headers = {
-    Authorization: req.headers["authorization"],
-  };
-  for (let index = 0; index < 3; index++) {
-    const resData = await httpService.postStaging(
-      "labradio/four-portal-management-available-slots",
-      {
-        locationId: hospitalId,
-        portal_id: notificationReceiver,
-        appointmentType: "ONLINE",
-        timeStamp: timeStamp,
-        portal_type: portal_type,
-      },
-      headers,
-      "labradioServiceUrl"
-    );
-
-    const slots = resData?.body?.allGeneralSlot;
-
-    let isBreak = false;
-    if (slots) {
-      for (let index = 0; index < slots.length; index++) {
-        const element = slots[index];
-        if (element.status == 0) {
-          slot = element;
-          isBreak = true;
-          break;
-        }
-      }
-    }
-
-    if (slot != null) {
-      isBreak = true;
-      break;
-    }
-
-    if (!isBreak) {
-      timeStampString = moment(timeStamp, "DD-MM-YYYY").add(1, "days");
-      timeStamp = new Date(timeStampString);
-    }
-  }
-
-  if (slot != null) {
-    await BasicInfo.findOneAndUpdate(
-      { for_portal_user: { $eq: notificationReceiver } },
-      {
-        $set: {
-          nextAvailableSlot: slot.slot,
-          nextAvailableDate: timeStamp,
-        },
-      },
-
-      { upsert: false, new: true }
-    ).exec();
-    // update data in basic info
-  }
-};
-
 class advFiltersLabRadio {
   async viewFourPortalDetailsForPatient(req, res) {
     try {
@@ -924,6 +856,9 @@ class advFiltersLabRadio {
   }
 
   async getReviewAndRating(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const { portal_user_id, page, limit, reviewBy, requestFrom } = req.query;
 
@@ -978,7 +913,7 @@ class advFiltersLabRadio {
         const resData = await httpService.postStaging(
           "patient/get-patient-details-by-id",
           { ids: patientIDArray },
-          {},
+          headers,
           "patientServiceUrl"
         );
         patientDetails = resData.data;

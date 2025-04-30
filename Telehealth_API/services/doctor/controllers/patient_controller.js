@@ -183,6 +183,9 @@ class PatientController {
   }
 
   async viewHospitalAdminDetailsForPatient(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const { hospital_portal_id } = req.query;
 
@@ -225,7 +228,7 @@ class PatientController {
           limit: 10,
           reviewBy: "patient",
         },
-        {},
+        headers,
         "hospitalServiceUrl"
       );
       //Get Doctors count and group them by specialization
@@ -516,6 +519,9 @@ class PatientController {
   }
 
   async getReviewAndRating(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const { doctorId, page, limit } = req.query;
 
@@ -545,7 +551,7 @@ class PatientController {
         const resData = await httpService.postStaging(
           "patient/get-patient-details-by-id",
           { ids: patientIDArray },
-          {},
+          headers,
           "patientServiceUrl"
         );
         patientDetails = resData.data;    
@@ -614,6 +620,9 @@ class PatientController {
   }
 
   async getReviewAndRatingForSupeAdmin(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const { page, limit, reviewBy, reviewTo } = req.query;
       let sort = req.query.sort;
@@ -688,7 +697,7 @@ class PatientController {
         const resData = await httpService.postStaging(
           "patient/get-patient-details-by-id",
           { ids: patientIDArray },
-          {},
+          headers,
           "patientServiceUrl"
         );
         patientDetails = resData.data;
@@ -1380,6 +1389,9 @@ class PatientController {
   }
 
   async getReviewAndRatingForAdmin(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const { page, limit, doctorName, sort } = req.query;
      
@@ -1455,7 +1467,7 @@ class PatientController {
         const resData = await httpService.postStaging(
           "patient/get-patient-details-by-id",
           { ids: patientIDArray },
-          {},
+          headers,
           "patientServiceUrl"
         );
         if (resData && resData.data && typeof resData.data === 'object') {

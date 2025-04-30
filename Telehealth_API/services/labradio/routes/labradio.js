@@ -207,14 +207,12 @@ labRadioRoute.post('/four-portal-add-eprescription-medicine', portal_ePrescripti
 labRadioRoute.post('/four-portal-add-eprescription-lab', portal_ePrescription.addEprescriptionLabTest);
 labRadioRoute.post('/four-portal-add-eprescription-imaging', portal_ePrescription.addEprescriptionImagingTest);
 labRadioRoute.post('/four-portal-add-eprescription-vaccination', portal_ePrescription.addEprescriptionVaccination);
-labRadioRoute.post('/four-portal-add-eprescription-eyeglasses', portal_ePrescription.addEprescriptionEyeglass);
 labRadioRoute.post('/four-portal-add-eprescription-others', portal_ePrescription.addEprescriptionOther);
 
 labRadioRoute.get('/four-portal-get-eprescription-medicine', portal_ePrescription.getEprescriptionMedicineDosage);
 labRadioRoute.get('/four-portal-get-eprescription-labTest', portal_ePrescription.getEprescriptionLabTest);
 labRadioRoute.get('/four-portal-get-eprescription-imaging', portal_ePrescription.getEprescriptionImagingTest);
 labRadioRoute.get('/four-portal-get-eprescription-vaccination', portal_ePrescription.getEprescriptionVaccinationTest);
-labRadioRoute.get('/four-portal-get-eprescription-eyeglasses', portal_ePrescription.getEprescriptionEyeglassTest);
 labRadioRoute.get('/four-portal-get-eprescription-others', portal_ePrescription.getEprescriptionOtherTest);
 
 labRadioRoute.get('/four-portal-get-all-tests-eprescription', portal_ePrescription.getAllTests);

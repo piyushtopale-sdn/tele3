@@ -4,8 +4,6 @@ import 'dotenv/config';
 import axios from "axios";
 import HttpService from "../middleware/httpservice";
 
-const NODE_ENV = process.env.NODE_ENV || "local";
-
 const config = require("../config/config.js").get();
 const { BASEURL } = config;
 
@@ -128,20 +126,6 @@ export const medicineDetails = async (req, res) => {
     axios({
         method: 'post',
         url: `${baseurl}/patient/create-profile/medicine-details`,
-        data: req.body
-    }).then(async function (response) {
-        await res.status(200).json({ data: response.data })
-    }).catch(async function (error) {
-        
-        await res.status(200).json({ data: error.response.data })
-    });
-}
-
-export const immunizationDetails = async (req, res) => {
-    const baseurl = BASEURL.patientServiceUrl;
-    axios({
-        method: 'post',
-        url: `${baseurl}/patient/create-profile/immunization-details`,
         data: req.body
     }).then(async function (response) {
         await res.status(200).json({ data: response.data })

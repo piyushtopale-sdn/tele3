@@ -5,8 +5,6 @@ import axios from "axios";
 import HttpService from "../middleware/httpservice";
 const FormData = require('form-data');
 
-const NODE_ENV = process.env.NODE_ENV || "local";
-
 const config = require("../config/config.js").get();
 const { BASEURL } = config;
 

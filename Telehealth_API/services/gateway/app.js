@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import path from "path";
-import { readFile, superAdminRoute, roleRoute, menuRoute, patientRoute, individualDoctorRoute, pharmacyRoute, doctorRoute } from "./routes/index";
+import { readFile, superAdminRoute, roleRoute, menuRoute, patientRoute, pharmacyRoute } from "./routes/index";
 
 const { proxyRoute } = require("./routes/proxy-route");
 
@@ -35,13 +35,10 @@ app.use((err, req, res, next) => {
 
 app.use('/read-file', readFile);
 app.use("/superadmin", superAdminRoute);
-app.use("/individual-doctor", individualDoctorRoute);
 app.use("/patient", patientRoute);
 app.use("/pharmacy", pharmacyRoute);
-app.use("/doctor", doctorRoute);
 app.use("/role", roleRoute);
 app.use("/menu", menuRoute);
-app.use("/patient", patientRoute);
 app.use("/", (req, res) => {
     res.send("connected to gatewaay")
 });

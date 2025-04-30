@@ -172,8 +172,6 @@ doctorRoute.post('/add-eprescription-imagingTest', doctorController.addEprescrip
 doctorRoute.get('/get-eprescription-imaging-test', doctorController.getEprescriptionImagingTest);
 doctorRoute.post('/add-eprescription-vaccination', doctorController.addEprescriptionVaccination);
 doctorRoute.get('/get-eprescription-vaccination-test', doctorController.getEprescriptionVaccinationTest);
-doctorRoute.post('/add-eprescription-eyeglass', doctorController.addEprescriptionEyeglass);
-doctorRoute.get('/get-eprescription-eyeglass-test', doctorController.getEprescriptionEyeglassTest);
 doctorRoute.post('/add-eprescription-other', doctorController.addEprescriptionOther);
 doctorRoute.get('/get-eprescription-other-test', doctorController.getEprescriptionOtherTest);
 doctorRoute.get('/get-eprescription-medicine-dosage', doctorController.getEprescriptionMedicineDosage);

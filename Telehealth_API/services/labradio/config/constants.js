@@ -42,17 +42,27 @@ export const config = {
     JWT_EXPIRATION_IN_MINUTES: process.env.JWT_EXPIRATION_IN_MINUTES || 1440,
     SMS_API_KEY: process.env.SMS_API_KEY,
     NODE_ENV: process.env.NODE_ENV || "local",
-    terst_Backend_url: process.env.terst_Backend_url,
+    test_p_Backend_url: process.env.test_p_Backend_url,
     TIMEZONE: process.env.TIMEZONE,
     OTP_EXPIRATION: process.env.OTP_EXPIRATION || 10,
     OTP_LIMIT_EXCEED_WITHIN: process.env.OTP_LIMIT_EXCEED_WITHIN || 5,
     OTP_TRY_AFTER: process.env.OTP_TRY_AFTER || 60,
     SEND_ATTEMPTS: process.env.SEND_ATTEMPTS || 5,
-    BUCKET_NAME: process.env.BUCKET_NAME,
-    terst_FRONTEND_URL: process.env.terst_FRONTEND_URL,
+    BUCKET_NAME: process.env.BUCKET_NAME || "test_pdev",
+    test_p_FRONTEND_URL: process.env.test_p_FRONTEND_URL,
     LOGIN_AFTER: process.env.LOGIN_AFTER || 60,
     PASSWORD_ATTEMPTS: process.env.PASSWORD_ATTEMPTS || 3,
-
+    ALBORGE: {
+        "username": process.env.ALBORGE_USERNAME || "test_pAPI",
+        "password": process.env.ALBORGE_PASSWORD || "MBJYRC6Xgd8p",
+        "clientCode": process.env.ALBORGE_CLIENTCODE || "test_pAPI",
+        "branchCode": process.env.ALBORGE_BRANCH_CODE || "205",
+        "payerCode": process.env.ALBORGE_PAYER_CODE || "5645",
+        "contractCode": process.env.ALBORGE_CONTRACT_CODE || "5645",
+        "generateToken_API": process.env.ALBORGE_TOKEN_API || "https://ldm.alborglaboratories.com/LDM/Api/Integration/NT/Authentication/V2/GenerateToken",
+        "addRegistration_API": process.env.ALBORGE_REGISTRATION || "https://ldm.alborglaboratories.com/LDM/api/integration/AlBorg/GeneralAPIs/AddRegistration",
+        "getResultLink_API": process.env.ALBORGE_GET_RESULT_LINK || `https://ldm.alborglaboratories.com/LDM/api/Integration/AlBorg/GeneralAPIs/GetAccessionResultLink?orderID=&accessionNumber={{accessionNumber}}&reviewDateFrom=&reviewDateTo=&`
+    },
     SENDGRID_PASSWORD: process.env.SENDGRID_PASSWORD,
     SENDGRID_EMAIL: process.env.SENDGRID_EMAIL,
     MOYASAR_SECRET_KEY: process.env.MOYASAR_SECRET_KEY
@@ -141,6 +151,13 @@ export const LabMainTestColumns = {
     col1: 'testName',
     col2: 'fees',
     col3: 'lonicCode',
+}
+
+export const RadioTestColumns = {
+    col1: 'testName',
+    col2: 'fees',
+    col3: 'lonicCode',
+    col4: 'studyType'
 }
 
 export const generate4DigitOTP = () => {
