@@ -335,6 +335,7 @@ export class TypeOfStudyComponent implements OnInit {
         } else {
           this.loader.stop();
           this.toastr.error(response.message);
+          this.closePopup();
         }
       });
   }

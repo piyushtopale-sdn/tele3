@@ -1,14 +1,21 @@
 import axios from "axios"
 import {config} from "../config/constants"
+import { randomInt } from 'crypto';
 
-export const sendSms = (mobile_number, text) => {
+export const sendSms = (mobile_number, text, isPatientLogin) => {
     return new Promise(async (resolve,reject)=>{
         const AppSid = config.SMS_APP_SID;
         const SenderID = config.SENDER_ID;
 
          // Make the SMS text unique by appending a timestamp
-         const uniqueSuffix = Math.floor(Math.random() * 1000); // 3-digit random number
-         const uniqueText = `${text} (Ref: ${uniqueSuffix})`;
+         const uniqueSuffix = randomInt(0, 1000); // 3-digit random number
+         let uniqueText;
+
+         if(isPatientLogin && isPatientLogin === 'login'){
+            uniqueText = `(Ref: ${uniqueSuffix}) ${text}`
+         }else{
+            uniqueText = `${text} (Ref: ${uniqueSuffix})`
+         }
 
         try {
             await axios({

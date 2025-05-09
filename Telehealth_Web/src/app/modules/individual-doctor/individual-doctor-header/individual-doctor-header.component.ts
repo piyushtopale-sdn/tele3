@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
+import { Component,  Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "src/app/shared/auth.service";
 import { CoreService } from "src/app/shared/core.service";
@@ -32,26 +32,21 @@ export class IndividualDoctorHeaderComponent implements OnInit {
   totalLength: number = 0;
   page: any = 1;
   chatNoti: any;
-  constructor(private auth: AuthService, private _coreService: CoreService, private modalService: NgbModal,
-    private websocket: WebSocketService, private doctorservice: IndiviualDoctorService, private _webSocketService: WebSocketService,
-    private router: Router) {
+  constructor(
+    private readonly auth: AuthService, 
+    private readonly _coreService: CoreService, 
+    private readonly modalService: NgbModal,
+    private readonly doctorservice: IndiviualDoctorService, 
+    private readonly _webSocketService: WebSocketService,
+    private readonly router: Router) {
     this._coreService.SharingMenu.subscribe((res) => {
       if (res != "default") {
         this.menuSelected = res;
       } else {
-        this.menuSelected =  JSON.parse(localStorage.getItem("menuTitle"));
+        this.menuSelected =  localStorage.getItem("menuTitle")
       }
     });
   }
-
-  ngAfterViewInit(): void {
-    if (this._coreService.getLocalStorage("loginData")) {
-      let loginData = JSON.parse(localStorage.getItem("loginData"));
-    }
-
-  }
-
-
 
   ngOnInit(): void {
 
@@ -96,7 +91,9 @@ export class IndividualDoctorHeaderComponent implements OnInit {
       let response = this._coreService.decryptObjectData(encryptedData);
       if(response.status){
         this._coreService.showSuccess("", response.message)
-        this.auth.logout("/individual-doctor/login");
+        this.auth.clearStore();
+        window.location.href ="/individual-doctor/login";
+
       }     
     })   
   }
@@ -123,9 +120,6 @@ export class IndividualDoctorHeaderComponent implements OnInit {
 
         let responsedecrypt = this._coreService.decryptObjectData({ data: response })
         if (responsedecrypt.status) {
-          // this.notificationlist = responsedecrypt.body.list;
-          // this.notiCount = responsedecrypt.body.count;
-          // this.isViewcount = responsedecrypt.body.isViewcount;
           this.isViewcount = responsedecrypt.body.isViewcount;
           if (this.isViewcount === 0) {
             this.notificationlist = [];
@@ -180,23 +174,6 @@ export class IndividualDoctorHeaderComponent implements OnInit {
     })
   }
 
-  // getnotificationList() {
-  //   let notifylist = {
-  //     for_portal_user: JSON.parse(localStorage.getItem("loginData"))?._id
-  //   };
-
-  //   this.doctorservice.getAllNotificationService(notifylist).subscribe((res) => {
-  //     let encryptedData = { data: res };
-  //     let response = this._coreService.decryptObjectData(encryptedData);
-  //     if(response.status)
-  //    {
-  //     this.notificationlist=response.body.list;
-  //     this.notiCount = response.body.count;
-  //     this.isViewcount = response.body.isViewcount;     
-  //    }
-  //   }
-  //   );
-  // }
 
   changeIsViewStatus() {
     if (this.notiCount > 0) {
@@ -209,8 +186,6 @@ export class IndividualDoctorHeaderComponent implements OnInit {
           let result = this._coreService.decryptContext(res);
           if (result.status) {
             this.notiCount = 0
-            // this._coreService.showSuccess(result.message, '');
-          } else {
           }
         },
         error: (err) => {
@@ -220,50 +195,7 @@ export class IndividualDoctorHeaderComponent implements OnInit {
     }
   }
 
-  // markAllRead() {
-  //   let params = {
-  //     sender: JSON.parse(localStorage.getItem("loginData"))?._id,
-  //   };
-
-  //   this.doctorservice.markAllReadNotification(params).subscribe((res: any) => {
-  //     let encryptedData = { data: res };
-  //     let response = this._coreService.decryptObjectData(encryptedData);
-  //     this.ncount = [];
-  //     this.getRealTimeNotification();
-  //     this.getnotificationdata();
-  //     // this.getnotificationList();
-  //   })
-  // }
-
-  // markReadById(data: any) {
-  //   let params = {
-  //     _id: data._id
-  //   };
-  //   this.doctorservice.markReadNotificationById(params).subscribe((res: any) => {
-  //     let encryptedData = { data: res };
-  //     let response = this._coreService.decryptObjectData(encryptedData);
-  //     if (response.status) {
-  //       if (data.notitype == "New Appointment" || data.notitype == "Appointment" || data.notitype == "Cancel Appointment" || data.notitype == "Reshedule Appointment" || data.notitype == "Appointment Approved" || data.notitype == "Booked Appointment" || data.notitype == "Appointment Reminder") {
-  //         this.router.navigate(['/individual-doctor/appointment/appointmentdetails/' + data.appointmentId])
-  //       } else if (data.notitype == "chat") {
-  //         this.router.navigate(['/individual-doctor/communication'], {
-  //           queryParams: {
-  //             type: data.chatId,
-  //           }
-  //         })
-  //       } else {
-  //         this.router.navigate(['/individual-doctor/notification'])
-  //       }
-  //     }
-
-  //     this.ncount = [];
-  //     this.getRealTimeNotification();
-  //     this.getnotificationdata();
-  //     // this.getnotificationList();
-  //   })
-  // }
-
-
+ 
 
   markAllRead() {
     let params = {
@@ -305,7 +237,7 @@ export class IndividualDoctorHeaderComponent implements OnInit {
             } 
 
             else if (data.notitype && data.notitype.includes("New Message From")) {  
-                let chatId = data.chatId || data.content;  
+                let chatId = data.chatId ?? data.content;  
 
                 if (chatId) {
                     this.router.navigate(['/individual-doctor/communication'], {

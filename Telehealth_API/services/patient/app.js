@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import path from "path";
 import InitiateMongoServer from "./config/db.js";
 import Payment from "./controllers/payment/paymentController";
+import AmazonPayment from "./controllers/payment/amazonPayment";
 const cron = require('node-cron');
 
 const useragent = require('express-useragent');
@@ -32,6 +33,7 @@ app.use(express.static(path.join(_dirname, "public")));
 /** PT - Feb 19 Cron will trigger 12am to 5am */
 cron.schedule('0 0-5 * * *', () => {
     Payment.checkSubscriptionExpiry();
+    AmazonPayment.recurringCheck();
 });
 
 app.use((err, req, res, next) => {

@@ -30,12 +30,24 @@
           ></app-availability>
         </ng-template>
       </mat-step>
+      <mat-step [completed]="educationalForm">
+        <ng-template matStepLabel>{{ "educational" | translate }}</ng-template>
+        <ng-template [ngIf]="stepIndex === 2">
+          <app-education-super-admin
+            [mstepper]="passToChild"
+            (calldoctordata)="getDoctorDetails()"
+            (fromChild)="handleEvent($event)"
+            (callParent)="getDoctorDetails()"
+            *ngIf="isEnable"
+          ></app-education-super-admin>
+        </ng-template>
+      </mat-step>
 
       <mat-step>
         <ng-template matStepLabel>{{
           "manage_permissions" | translate
         }}</ng-template>
-        <ng-template [ngIf]="stepIndex === 2">
+        <ng-template [ngIf]="stepIndex === 3">
           <app-managepermission></app-managepermission>
         </ng-template>
       </mat-step>

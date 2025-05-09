@@ -28,7 +28,7 @@ export class FourPortalNotificationComponent implements OnInit {
   pageSize: number = 5;
   totalLength: number = 0;
   page: any = 1;
-  constructor( private _coreService: CoreService,  private fouePortalService: FourPortalService,  private router: Router) { 
+  constructor( private readonly _coreService: CoreService,  private readonly fouePortalService: FourPortalService,  private readonly router: Router) { 
 
     let type = localStorage.getItem("type");
     this.userType = type;
@@ -97,7 +97,7 @@ export class FourPortalNotificationComponent implements OnInit {
 
 
   markReadById(data: any) {
-    if (!data || !data._id) {
+    if (!data._id) {
       console.error("Notification data is missing or undefined.");
       return;
     }

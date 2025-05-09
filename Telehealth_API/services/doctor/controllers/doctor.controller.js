@@ -24,7 +24,6 @@ import EprescriptionMedicineDosage from "../models/eprescription_medicine_dosage
 import EprescriptionLab from "../models/eprescription_lab";
 import EprescriptionImaging from "../models/eprescription_imaging";
 import EprescriptionVaccination from "../models/eprescription_vaccination";
-import EprescriptionEyeglass from "../models/eprescription_eyeglass";
 import EprescriptionOther from "../models/eprescription_other";
 import HospitalType from "../models/hospitalType";
 import { sendNotification } from "../helpers/notification";
@@ -1170,7 +1169,7 @@ class DoctorController {
       sendResponse(req, res, 200, {
         status: true,
         data: null,
-        message: `education details ${
+        message: `Education details ${
           checkExist.length > 0 ? "updated" : "added"
         } successfully`,
         errorCode: null,
@@ -1488,7 +1487,6 @@ async doctorManagementUpdateAvailability(req, res) {
       });
     }
 
-    // Doctor availability find k liye
     let doctorAvailability = await DoctorAvailability.findOne({
       for_portal_user: mongoose.Types.ObjectId(portal_user_id),
     });
@@ -1502,7 +1500,6 @@ async doctorManagementUpdateAvailability(req, res) {
       });
     }
 
-    // Agar week_days nahi hai ya empty hai
     if (!doctorAvailability.week_days || doctorAvailability.week_days.length === 0) {
       return sendResponse(req, res, 400, {
         status: false,
@@ -1512,32 +1509,28 @@ async doctorManagementUpdateAvailability(req, res) {
       });
     }
 
-    // Update sirf jo days false/true diye gaye hain
     let updatedWeekDays = doctorAvailability.week_days.map((day) => {
       let updatedDay = { ...day._doc }; 
 
       Object.keys(availability).forEach((key) => {
         if (availability[key] === false) {
-          // Agar false bheja hai to empty string kar do
-          updatedDay[`${key}_start_time`] = "";
-          updatedDay[`${key}_end_time`] = "";
+
+          updatedDay[`${key}_start_time`] = "0000";
+          updatedDay[`${key}_end_time`] = "0000";
         } else if (availability[key] === true) {
-          // Agar true bheja hai to koi default ya previous value assign karo
-          updatedDay[`${key}_start_time`] = updatedDay[`${key}_start_time`] || "1000"; // Default: 10:00 AM
-          updatedDay[`${key}_end_time`] = updatedDay[`${key}_end_time`] || "1800"; // Default: 6:00 PM
+
+          updatedDay[`${key}_start_time`] = "1000"; 
+          updatedDay[`${key}_end_time`] = "1800"; 
         }
       });
-
       return updatedDay;
     });
 
-    // MongoDB me sirf required update apply karo
     await DoctorAvailability.updateOne(
       { for_portal_user: mongoose.Types.ObjectId(portal_user_id) },
       { $set: { week_days: updatedWeekDays } }
     );
 
-    // Updated data wapas fetch karlo
     let updatedDoctorAvailability = await DoctorAvailability.findOne({
       for_portal_user: mongoose.Types.ObjectId(portal_user_id),
     });
@@ -2006,7 +1999,7 @@ async doctorManagementUpdateAvailability(req, res) {
 
   async getDoctorList(req, res) {
     try {
-      const { page, limit, status, searchText } = req.query;
+      const { page, limit, status, searchText, isAdmin } = req.query;
   
       // Get sort parameter
       let sort = req.query.sort;
@@ -2022,7 +2015,7 @@ async doctorManagementUpdateAvailability(req, res) {
       }
   
       // Role filter
-      let docRoleChange = req.query.docRole === "" ? ["INDIVIDUAL_DOCTOR"] : ["INDIVIDUAL_DOCTOR", "HOSPITAL_DOCTOR"];
+      let docRoleChange = ["INDIVIDUAL_DOCTOR", "INDIVIDUAL_DOCTOR_ADMIN"];
   
       // Base filter
       let filter = {
@@ -2094,12 +2087,15 @@ async doctorManagementUpdateAvailability(req, res) {
               isActive: "$for_portal_user.isActive",
               createdAt: "$for_portal_user.createdAt",
               fcmToken: "$for_portal_user.fcmToken",
+              isAdmin: "$for_portal_user.isAdmin"
             },
             updatedAt: 1,
           },
         },
       ];
-  
+      if (isAdmin === 'true') {
+        filter["for_portal_user.isAdmin"] = true;
+      }
       // Get total count before pagination
       const totalCountResult = await BasicInfo.aggregate([...aggregate, { $count: "total" }]);
       const totalCount = totalCountResult.length > 0 ? totalCountResult[0].total : 0;
@@ -4177,56 +4173,6 @@ async doctorManagementUpdateAvailability(req, res) {
     }
   }
 
-  async listRecentMedicinesPrescribed(req, res) {
-    const { doctorId, recentItemsFor } = req.query;
-
-    try {
-      let result;
-
-      if (recentItemsFor == "Medicines") {
-        result = await EprescriptionMedicineDosage.find({ doctorId })
-          .sort({ createdAt: -1 })
-          .limit(10);
-      } else if (recentItemsFor == "Labs") {
-        result = await EprescriptionLab.find({ doctorId })
-          .sort({ createdAt: -1 })
-          .limit(10);
-      } else if (recentItemsFor == "Imaging") {
-        result = await EprescriptionImaging.find({ doctorId })
-          .sort({ createdAt: -1 })
-          .limit(10);
-      } else if (recentItemsFor == "Vaccination") {
-        result = await EprescriptionVaccination.find({ doctorId })
-          .sort({ createdAt: -1 })
-          .limit(10);
-      } else if (recentItemsFor == "Eyeglass") {
-        result = await EprescriptionEyeglass.find({ doctorId })
-          .sort({ createdAt: -1 })
-          .limit(10);
-      } else {
-        result = await EprescriptionOther.find({ doctorId })
-          .sort({ createdAt: -1 })
-          .limit(10);
-      }
-
-      if (result) {
-        sendResponse(req, res, 200, {
-          status: true,
-          body: result,
-          message:messages.recentEprescriptionFetched.en,
-          messageArabic:messages.recentEprescriptionFetched.ar,
-          errorCode: null,
-        });
-      }
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Failed to recent prescribes",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
 
   async getDoctorLocationInfo(req, res) {
     const { doctorId } = req.query;

@@ -133,6 +133,8 @@ export const sendNotification = (paramsData, headers) => {
           consultationTime: paramsData?.consultationTime,
           newConsultationDate: paramsData?.newConsultationDate,
           newConsultationTime: paramsData?.newConsultationTime,
+          accessionNumber: paramsData?.accessionNumber,
+          order_number:paramsData?.order_number
         }
         if (getPromiseDetails[0]?.status) {
           const userData = getPromiseDetails[0].data

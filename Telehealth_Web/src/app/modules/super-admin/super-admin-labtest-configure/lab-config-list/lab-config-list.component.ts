@@ -56,6 +56,12 @@ export class LabConfigListComponent {
   currentUrl:any =[];
   selecteduser: any;  
   selectedFiles: any;
+  selectedCentre:any;
+  selectedCentreId:any;
+  centresList:any;
+  overlay = false;
+
+
 
   constructor(
     private modalService: NgbModal,
@@ -88,6 +94,7 @@ export class LabConfigListComponent {
     // }, 300);
     this.currentUrl = this.route.url;
     this.onNavigate(this.currentUrl);
+    this.getAllCentresList();
   }
 
 
@@ -136,6 +143,7 @@ export class LabConfigListComponent {
       page: this.page,
       limit: this.pageSize,
       searchText: this.searchText,
+      centreName:this.selectedCentre ?? "",
       sort: sort
     };
 
@@ -251,39 +259,51 @@ export class LabConfigListComponent {
   routeToedit(id:any){
     this.route.navigate([`/super-admin/test-configuration/edit-test/${id}`])
   }
-  exportManageTest() {
+exportManageTest() {
     var data: any = [];
     this.pageSize = 0;
 
-      let reqData = {
-        page: this.page,  limit:this.pageSize, searchText:this.searchText,
-        labId :''
-      }
-      this.lad_radioService.labTestConfigForExport(reqData)
-        .subscribe((res) => {
-          let result = this.coreService.decryptObjectData({ data: res });
-          
-          if (result.status) {
-            this.loader.stop();
-            var array = [
-              "Test Name",
-              "Note",
-              "Test Configuration"
-            ];
-            data = result.data.array
-            data.unshift(array);
-            var fileName = 'Laboratory_Tests.xlsx';
-            const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
-            /* generate workbook and add the worksheet */
-            const wb: XLSX.WorkBook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-            /* save to file */
-            XLSX.writeFile(wb, fileName);
-          }
-        });
-    
+    let reqData = {
+        centreName: this.selectedCentre || "",
+        labId: ''
+    }
 
-  }
+    this.loader.start();
+    this.lad_radioService.getLabTestConfigurationExport(reqData)
+        .subscribe((res) => {
+            let result = this.coreService.decryptObjectData({ data: res });
+
+            if (result.status) {
+                this.loader.stop();
+
+                // Header row (column names)
+                var array = [
+                    "Test Name",
+                    "Note",
+                    "Test Configuration"
+                ];
+
+                // Mapping result data properly
+                let mappedData = result?.body?.result.map(item => [
+                    item.testName,        
+                    item.labName,         
+                    item.testConfiguration 
+                ]);
+
+                // Add the header row at the beginning
+                data = [array, ...mappedData];
+
+                var fileName = 'Laboratory_Tests.xlsx';
+                const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
+                /* generate workbook and add the worksheet */
+                const wb: XLSX.WorkBook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+                /* save to file */
+                XLSX.writeFile(wb, fileName);
+            }
+        });
+}
+
 
   onNavigate(url: any): void {
     const menuitems = JSON.parse(localStorage.getItem("activeMenu"));
@@ -386,5 +406,60 @@ export class LabConfigListComponent {
     link.click();
     link.remove();
   }
-  
+  onSelect2ChangeLab(event: any): void {
+    this.loader.start()
+    if (!event?.value || !event?.options?.length) return;
+
+    const selectedOption = event?.options?.[0];
+
+    this.selectedCentre = selectedOption?.label ?? "";
+    this.selectedCentreId = selectedOption?.value ?? ""
+
+    if (this.paginator) {
+      this.paginator.firstPage();
+  }
+  if(this.selectedCentre){
+    this.getTestList()
+    this.loader.stop()
+  }
+  }
+  clearSelect2() {     
+    this.loader.start()
+    this.selectedCentre = '';
+    this.selectedCentreId = '';
+    this.pageSize = 10,
+    this.getTestList();
+    this.loader.stop()
+  }
+  getAllCentresList(): void {
+    let reqData = {
+      limit: 0,
+      status: "APPROVED",
+      type: "Laboratory"
+    };
+    
+    this.lad_radioService.laboratoryList(reqData).subscribe(async (res) => {
+    
+        const response = await this.coreService.decryptObjectData({ data: res });
+        if (response?.status && response?.data?.data?.length) {
+          const allLabs = response.data.data.map((lab: any) => ({
+            label: lab.centre_name ?? "",
+            value: lab._id,
+            originalData: lab 
+          }));
+          
+          const uniqueLabsMap = new Map();
+          allLabs.forEach(lab => {
+            if (!uniqueLabsMap.has(lab.label)) {
+              uniqueLabsMap.set(lab.label, lab);
+            }
+          });
+          
+          this.centresList = Array.from(uniqueLabsMap.values());
+          
+        } else {
+          this.centresList = [];
+        }
+      }) 
+  }
 }

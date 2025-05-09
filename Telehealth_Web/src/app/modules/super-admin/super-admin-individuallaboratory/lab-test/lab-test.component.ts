@@ -67,7 +67,8 @@ export class LabTestComponent {
   selectedTestIds:any[] = [];
   noDataFound: boolean = false; 
   isLoadingTests: boolean = false;
-
+  filteredLoincCodes: any[] = [];
+  loincCodeInputControl = new FormControl("");
   constructor(
     private readonly modalService: NgbModal,
     private readonly coreService: CoreService,
@@ -116,6 +117,12 @@ export class LabTestComponent {
       if (this.selectedLab) {
         this.getTest_nameList(this.selectedLab, searchText);
       }
+    });
+
+    this.loincCodeInputControl.valueChanges
+    .pipe(debounceTime(300), distinctUntilChanged())
+    .subscribe((searchText: string) => {
+      this.getAllLoincCodeList(searchText);
     });
 
   }
@@ -229,21 +236,13 @@ export class LabTestComponent {
         testName: test.testName
       }));
 
-        
-      let loincElement = this.loincCodeList.find(test => test?.value === this.selectedLoinc);
-      let loinc;
-      if(loincElement){
-        let loinc_code = loincElement?.label.replace(/\s?\(.*\)/, '');
-        loinc =  { loincId: loincElement?.value, loincCode: loinc_code };
-      }
-
     
     if(type === 'add'){
       let reqData = {
         labId:this.labTestForm.value.centre_name,
         testName:this.labTestForm.value.testName,
         tests:newSelectedTestArray,
-        loinc:loinc,
+        loinc:this.selectedLoinc,
         notes: this.labTestForm.value.notes,
         testFees: this.labTestForm.value.testFees,
         // couponCode: couponCode
@@ -272,7 +271,7 @@ export class LabTestComponent {
         labId:this.labTestForm.value.centre_name,
         testName:this.labTestForm.value.testName,
         tests:newSelectedTestArray,
-        loinc:loinc,
+        loinc:this.selectedLoinc,
         notes: this.labTestForm.value.notes,
         testFees: this.labTestForm.value.testFees,
         // couponCode: couponCode,
@@ -309,6 +308,7 @@ export class LabTestComponent {
       centreName:this.selectedCentre ?? "",
       sort: 'createdAt:-1'
     };
+    this.loader.start();
     this.lad_radioService.getLabTestLIstAPiExport(reqData)
     .subscribe((res) => {
       
@@ -345,6 +345,8 @@ export class LabTestComponent {
     this.testResults=[];
     this.selectedTestIds = []; // Clear selected items list
     this.noDataFound = false; // Reset "No Data Found" flag
+    this.loincCodeInputControl.setValue('');
+    
   }
 
   handleSearchFilter(text: any) {
@@ -392,32 +394,25 @@ export class LabTestComponent {
     this.getAllCouponList();
   }
 
-  getAllLoincCodeList(data: any = ''){
-    let reqData = {
-      page:  1, // this.page,
-      limit: 0,//this.pageSize,
+  getAllLoincCodeList(searchText: string = '') {
+    const reqData = {
+      page: 1,
+      limit: 100,
+      searchText: searchText
     };
-
+  
     this.service.getAllLoincCodes(reqData).subscribe((res) => {
       let encryptedData = { data: res };
-      let response = this.coreService.decryptObjectData(encryptedData);
+      let response = this.coreService.decryptObjectData(encryptedData);      
       if (response?.status) {
-        this.loincCodeList = []
-        response?.body?.data?.map((loincCode) => {
-          this.loincCodeList.push(
-            {
-              label: `${loincCode?.loincCode} (${loincCode?.description})`,    //[[6 Feb Lionic code description display]]
-              value: loincCode?._id
-            }
-          )
-        })
-
-        if(data !== ''){
-          this.slectedLonicCode = data
-        }
+        this.loincCodeList = response?.body?.data?.map((loincCode) => ({
+          label: `${loincCode?.loincCode} (${loincCode?.description})`,
+          value: loincCode?._id
+        })) ?? [];
       } else {
-        this.loincCodeList = []       
+        this.loincCodeList = [];
       }
+      this.filteredLoincCodes = [...this.loincCodeList]; // show suggestions
     });
   }
 
@@ -448,17 +443,19 @@ export class LabTestComponent {
 
         if (response.status) {
           let data = response?.body?.result[0];  
+          
           this.selectedTestIds = data?.tests;          
           this.labTestForm.patchValue({
             testName: data?.testName,
             notes: data?.notes,
             centre_name:data?.labId?._id,
             selectedTest:data?.tests,
-            // loincCode:data?.loinc?.loincId,
             testFees: data?.testFees,
+            loincCode : data?.loinc?.loincCode
           });
-          this.getAllCouponList(data?.couponCode[0]?.couponCodeId);
-          this.getAllLoincCodeList(data?.loinc?.loincId);        
+          const loincLabel = data?.loinc?.loincCode;
+          this.loincCodeInputControl.setValue(loincLabel); // <-- Triggers valueChanges
+          this.getAllLoincCodeListFilter(loincLabel);        
         } else {
           this.loader.stop();
           this.coreService.showError("", response.message);
@@ -524,9 +521,18 @@ export class LabTestComponent {
     }
   }
 
-  onSelectionChangLoincCode(event: any): void {    
-    if(event.value){
-     this.selectedLoinc = event.value;
+  onSelectionChangLoincCode(event: any) {
+    const selectedText = event.option?.value;
+    
+    const matchedItem = this.loincCodeList.find(item => item?.label === selectedText);
+    if(matchedItem){
+      this.selectedLoinc = {
+        loincCode: selectedText,
+        loincId: matchedItem?.value
+      };
+      this.labTestForm.patchValue({
+        loincCode: this.selectedLoinc?.loincCode
+      });
     }
   }
 
@@ -763,5 +769,25 @@ export class LabTestComponent {
     this.labTestForm.patchValue({
       selectedTest: [...this.selectedTestIds]
     });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  }
+
+
+  onFocusShowList() {
+    if (!this.filteredLoincCodes.length) {
+      this.getAllLoincCodeList(); // Load default list
+    }
+    setTimeout(() => {
+      this.autocompleteTrigger?.openPanel(); // Safe + reliable
+    });
+  }
+
+
+  getAllLoincCodeListFilter(searchText: string) {
+    if(searchText !== undefined){
+      const lowerText = searchText.toLowerCase();
+      this.filteredLoincCodes = this.loincCodeList.filter(item =>
+        item.label.toLowerCase().includes(lowerText)
+      );
+    }
   }
 }

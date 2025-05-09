@@ -29,7 +29,7 @@ export class AddNotiComponent {
     ["ordered_list", "bullet_list"],
     ["code", "blockquote"],
     [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
-    ["link", "image"],
+    // ["link", "image"],
   ];
   // toolbar_arabic: Toolbar = [
   //   ["bold", "italic", "underline", "text_color", "background_color", "strike"],
@@ -83,7 +83,8 @@ export class AddNotiComponent {
     { value: 'REGISTERED_EXTERNAL_LAB', label: 'registered_external_lab' },
     { value: 'BOOK_LABORATORY_RADIOLOGY', label: 'lab_booking_confirmation_patient' },
     { value: 'CANCELLED_LABRADIO_APPOINTMENT', label: 'lab_booking_cancelled_patient' },
-    { value: 'RESCHEDULE_LABORATORY_RADIOLOGY', label: 'lab_booking_reschedule_patient' }
+    { value: 'RESCHEDULE_LABORATORY_RADIOLOGY', label: 'lab_booking_reschedule_patient' },
+    { value: 'CHAT_MESSAGE', label: 'chat_message' }
   ];  
 
 

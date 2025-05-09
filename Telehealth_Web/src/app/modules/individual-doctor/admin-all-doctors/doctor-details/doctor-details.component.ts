@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, ViewEncapsulation } from "@angular/core";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
-import { ActivatedRoute } from "@angular/router";
 import { CoreService } from "src/app/shared/core.service";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { SuperAdminIndividualdoctorService } from "src/app/modules/super-admin/super-admin-individualdoctor.service";
 import { SuperAdminService } from "src/app/modules/super-admin/super-admin.service";
 
@@ -46,12 +45,12 @@ export class DoctorDetailsComponent {
   unavaliabledate_time: any;
   categoriesValue: any;
   constructor(
-    private modalService: NgbModal,
-    private activatedRoute: ActivatedRoute,
-    private doctorService: SuperAdminIndividualdoctorService,
-    private coreService: CoreService,
-    private route: Router,
-    private sadminService: SuperAdminService,
+    private readonly modalService: NgbModal,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly doctorService: SuperAdminIndividualdoctorService,
+    private readonly coreService: CoreService,
+    private readonly route: Router,
+    private readonly sadminService: SuperAdminService,
   ) {
     this.loginrole = this.coreService.getLocalStorage("adminData").role;
   }
@@ -62,10 +61,6 @@ export class DoctorDetailsComponent {
     let adminData = JSON.parse(localStorage.getItem("loginData"));
     this.superAdminId = adminData?._id;
     this.getDoctorDetails();
-
-    // setTimeout(() => {
-    //   this.checkInnerPermission();
-    // }, 300);
   }
 
 
@@ -79,14 +74,15 @@ export class DoctorDetailsComponent {
     if (userPermission) {
 
       let checkData = this.findObjectByKey(userPermission, "parent_id", menuID)
+      let checkSubmenu;
       if (checkData) {
-        if (checkData.isChildKey == true) {
-          var checkSubmenu = checkData.submenu;
+        if (checkData.isChildKey) {
+          checkSubmenu = checkData.submenu;
           if (checkSubmenu.hasOwnProperty("pharmacy")) {
             this.innerMenuPremission = checkSubmenu['pharmacy'].inner_menu;
           }
         } else {
-          var checkSubmenu = checkData.submenu;
+          checkSubmenu = checkData.submenu;
           let innerMenu = [];
           for (let key in checkSubmenu) {
             innerMenu.push({ name: checkSubmenu[key].name, slug: key, status: true });
@@ -119,7 +115,6 @@ export class DoctorDetailsComponent {
         this.availabilityArray = response?.data?.availabilityArray;
         this.getDesignationList(response?.data?.result[0]?.designation)
         response?.data?.availabilityArray.forEach((element) => {
-          // if (element.appointment_type === this.appointmenType) {
             this.slot_interval_time = element.slot_interval;
             this.unavaliabledate_time = element.unavailability_slot;
             this.arrangAvailability(element?.week_days);
@@ -317,14 +312,13 @@ export class DoctorDetailsComponent {
 
   checkForExpiry = (expiry_date: any) => {
     let d = new Date();
-    var g1 = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    let g1 = new Date(d.getFullYear(), d.getMonth(), d.getDate());
     // (YYYY, MM, DD)
     let statusData;
-    var g2 = new Date(expiry_date);
+    let g2 = new Date(expiry_date);
     if (g1.getTime() < g2.getTime()) statusData = "active";
     else if (g1.getTime() > g2.getTime()) statusData = "expired";
 
-    // this.globalStatus = statusData;
     return statusData;
   };
 

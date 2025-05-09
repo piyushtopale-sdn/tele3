@@ -1,7 +1,7 @@
 <div class="profile_manage dashboard_main_content" *ngIf="userRole !== 'STAFF'">
   <div class="profile_tab">
     <mat-tab-group animationDuration="0ms">
-      <mat-tab  *ngIf="userRole !== 'ADMIN'">
+      <mat-tab>
         <ng-template mat-tab-label>         
           {{ "profile_setting" | translate }}
         </ng-template>
@@ -42,7 +42,7 @@
                   </div>
                 </div>
               </div>
-              <div class="right part" *ngIf="userRole !== 'ADMIN'">
+              <div class="right part">
                 <div class="primary_btn">
                   <button
                     class="btn btn-secondary"

@@ -506,6 +506,8 @@ patchValues(element: any) {
   }
 
   arrangeWeekDaysForPatch(element: any) {
+
+    console.log("objectelement ",element)
     let wkD = {
       sun_start_time:
         element.sun_start_time.slice(0, 2) +
@@ -716,4 +718,56 @@ patchValues(element: any) {
       this.menuSubscription.unsubscribe();
     }
   }
+  
+
+
+  onClick(event: any, day: string, index: number): void {
+    const doctor_id = localStorage.getItem("loginData");
+    const id = JSON.parse(doctor_id);
+  
+    const data = {
+      portal_user_id: id._id,
+      availability: {
+        [day]: event.checked
+      }
+    };
+  
+    this.doctorService.ChangeAvailability(data).subscribe((res) => {
+      const response = this.coreService.decryptObjectData({ data: res });
+      const dayTimes = response.data.week_days[0]; // Assuming week_days is an array
+      console.log("Response>>>>",dayTimes)
+  
+      const formGroup = this.weekDaysOnline.at(index);
+      if (event.checked && dayTimes) {
+  console.log("aryannnn");
+  
+        const startRaw = dayTimes[`${day}_start_time`];
+        const endRaw = dayTimes[`${day}_end_time`];
+
+        console.log("timessss",startRaw,endRaw)
+  
+        const formatTime = (time: string): string => {
+          if (!time || time.length !== 4) return '';
+          return time.slice(0, 2) + ':' + time.slice(2);
+        };
+  
+        const startFormatted = formatTime(startRaw);
+        const endFormatted = formatTime(endRaw);
+
+        console.log("startFormatted",startFormatted,endFormatted)
+  
+        formGroup.patchValue({
+          [`${day}_start_time`]: startFormatted,
+          [`${day}_end_time`]: endFormatted
+        });
+      }
+      else{
+        formGroup.patchValue({
+          [`${day}_start_time`]: "00:00",
+          [`${day}_end_time`]: "00:00"
+        });
+      }
+    });
+  }
+  
 }

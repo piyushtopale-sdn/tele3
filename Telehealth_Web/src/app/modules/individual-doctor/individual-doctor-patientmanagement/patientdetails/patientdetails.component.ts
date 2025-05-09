@@ -1,30 +1,18 @@
 import { PatientService } from "src/app/modules/patient/patient.service";
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation,
-  Input,
-  Pipe,
-  ChangeDetectorRef
-} from "@angular/core";
+import { Component, OnInit,ViewEncapsulation,Input,Pipe,ChangeDetectorRef} from "@angular/core";
 import { ToastrService } from "ngx-toastr";
 import { CoreService } from "src/app/shared/core.service";
 import { DatePipe,Location } from "@angular/common";
 import { DateAdapter } from "@angular/material/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Router } from "@angular/router";
-import { ActivatedRoute } from "@angular/router";
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { Router,ActivatedRoute } from "@angular/router";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { FourPortalService } from "src/app/modules/four-portal/four-portal.service";
 import { PharmacyService } from "src/app/modules/pharmacy/pharmacy.service";
 import { NgxUiLoaderService } from "ngx-ui-loader";
 import { IndiviualDoctorService } from "../../indiviual-doctor.service";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
-import { MatAutocomplete } from "@angular/material/autocomplete";
-import { SuperAdminService } from "src/app/modules/super-admin/super-admin.service";
 import { MatCheckboxChange } from "@angular/material/checkbox"; 
 
 interface VitalRange {
@@ -496,28 +484,38 @@ export class PatientdetailsComponent implements OnInit {
   searchControl = new FormControl(""); // Search input control
     parentDetails: any;
   updateNotes: any;
+  totalLengthSocial:any;
+  totalLengthAllergy:any;
+  totalLengthFamily:any;
 
   constructor(
-    private acctivatedRoute: ActivatedRoute,
-    private _coreService: CoreService,
-    private service: PatientService,
-    private toastr: ToastrService,
-    private datepipe: DatePipe,
-    private pharmacyService: PharmacyService,
-    private coreService: CoreService,
-    private modalService: NgbModal,
-    private route: Router,
-    private fb: FormBuilder,
-    private labRadioService: FourPortalService,
-    private activateRoute: ActivatedRoute,
-    private dateAdapter: DateAdapter<Date>,
-    private loader: NgxUiLoaderService,
-    private doctorService: IndiviualDoctorService,
-    private location: Location,
-    private _superAdminService: SuperAdminService,
-    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
+    private readonly acctivatedRoute: ActivatedRoute,
+    private readonly _coreService: CoreService,
+    private readonly service: PatientService,
+    private readonly toastr: ToastrService,
+    private readonly datepipe: DatePipe,
+    private readonly pharmacyService: PharmacyService,
+    private readonly coreService: CoreService,
+    private readonly modalService: NgbModal,
+    private readonly route: Router,
+    private readonly fb: FormBuilder,
+    private readonly labRadioService: FourPortalService,
+    private readonly dateAdapter: DateAdapter<Date>,
+    private readonly loader: NgxUiLoaderService,
+    private readonly doctorService: IndiviualDoctorService,
+    private readonly location: Location,
+    private readonly cdr: ChangeDetectorRef // Inject ChangeDetectorRef
 
   ) {
+    const patientId = this.acctivatedRoute.snapshot.paramMap.get('id');
+    this.patient_id = patientId;
+
+    const appointmentId = this.acctivatedRoute.snapshot.queryParamMap.get('appointmentId'); 
+    this.appointmentId = appointmentId;
+
+    const showAddButtonParam = this.acctivatedRoute.snapshot.queryParamMap.get('showAddButtton');
+    this.showAddButtton = showAddButtonParam === 'true';
+    
     this.loader.stop();
     this.vitalForm = this.fb.group({
       height: ['', [Validators.required]],
@@ -587,58 +585,11 @@ export class PatientdetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUrl = this.route.url;
-    this.onNavigate(this.currentUrl);
-    this.activateRoute.paramMap.subscribe((params) => {
-      
-      this.loader.stop();
+    this.onNavigate(this.currentUrl);   
 
-      this.patient_id = params.get('id'); // Get the 'id' parameter
-      this.patientId = this.patient_id
-    });
-    this.activateRoute.queryParams.subscribe((res) => {
-      this.queryParams = res;
-      this.backType = this.queryParams?.type;
-      this.appointmentId = this.queryParams?.appointmentId;
-      if(this.queryParams.id)
-         this.patient_id = this.queryParams.id
-
-    });
-    this.activateRoute.queryParamMap.subscribe((params) => {
-      if(params.get('appointmentId'))
-         this.appointmentId = params.get('appointmentId');
-      if(params.get('showAddButtton') === 'true'){
-        this.showAddButtton = true
-      }else{
-        this.showAddButtton = false
-      }  
-    });
-    
-    if (this.queryParams != '' && this.patientId != '' && this.patientId !== undefined) {      
-      this.queryParams = this.patientId;
-      this.openbyvideo = this.patientId.openbyvideo;
-      this.patient_id = this.patientId
-    }
-    if (Object.keys(this.queryParams).length != 0) {
-
-      this.isAssesments = true;
-
-      this.adminCheck = this.queryParams?.adminView
-      
-      if(this.queryParams?.appointmentId && this.queryParams?.patientId){
-        this.appointmentId = this.queryParams?.appointmentId;
-        this.patient_id = this.queryParams?.patientId
-      }
-      this.getAssessmentList();
-    } else {
-      let patientId = this.acctivatedRoute.snapshot.paramMap.get("id");
-      this.patientId = patientId;     
-      this.patient_id = patientId;
-    }
-
-    let loginData = JSON.parse(localStorage.getItem("loginData"));
+    let loginData = this._coreService.getLocalStorage("loginData");
     this.doctor_id = loginData?._id;
     this.userRole = loginData?.role;
-
 
     const now = new Date();
     const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -653,11 +604,10 @@ export class PatientdetailsComponent implements OnInit {
     this.toDate = this.formatDate(lastDay);
 
 
-
     this.getAlVitals(this.fromDate, this.toDate);
     this.getAllDetails();
-    //bpvitals
     this.fetchVitals();
+    
 
   }
 
@@ -665,6 +615,8 @@ export class PatientdetailsComponent implements OnInit {
   getAllDetails() {
     let params = {
       patient_id: this.patient_id,
+      page: this.page,
+      limit: this.pageSize 
     };
 
     this.service.profileDetails(params).subscribe(
@@ -679,24 +631,22 @@ export class PatientdetailsComponent implements OnInit {
           this.locationData = response?.body?.locationDetails;
           let data1 = []
 
-       data1 = response?.body?.personalDetails?.medicalInformation?.medicalHistory
-            ? response?.body?.personalDetails?.medicalInformation?.medicalHistory
-            : [];
-            this.allergiesdataSource = data1.filter(item => !item.isDeleted);
-
-          this.familyhistorydataSource = response?.body?.familyDetails
-            ? response?.body?.familyDetails
-            : [];
+          data1 = response?.body?.personalDetails?.medicalInformation?.medicalHistory ?? [];
+          this.totalLengthAllergy = response?.body?.personalDetails?.medicalInformation?.medicalHistoryTotal;
+          this.allergiesdataSource = data1.filter(item => !item.isDeleted);
+          this.familyhistorydataSource = response?.body?.familyDetails ?? [];
 
           this.socialdataSource =
             response?.body?.personalDetails?.medicalInformation?.socialHistory;
+            this.totalLengthSocial = response?.body?.personalDetails?.medicalInformation?.socialHistoryTotal;
           this.medicalDocuments = response?.body?.medicalDocument;
           this.isFamilyMember = response?.body?.personalDetails?.isFamilyMember;
+          this.totalLengthFamily = response?.body?.familyDetailsTotal;
           this.profile_pic = response?.body?.personalDetails?.profile_pic_signed_url;
           this.patientGender = this.profile?.gender;
 
 
-          if (this.isFamilyMember == true) {
+          if (this.isFamilyMember) {
             this.patientParentFullDetails(); 
           }
 
@@ -824,7 +774,7 @@ export class PatientdetailsComponent implements OnInit {
           startDate: new Date().toISOString(),
           endDate: new Date().toISOString(),
           value: value,
-          unit: unit || undefined, 
+          unit: unit ?? undefined, 
           // is_manual: true
         };
       }
@@ -877,6 +827,7 @@ export class PatientdetailsComponent implements OnInit {
     };
     this.pharmacyService.orderList(reqData).subscribe((res) => {
       let response = this.coreService.decryptObjectData({ data: res });
+      console.log("response__________",response);
       
       if (response.status) {
         this.res_details_med = response?.data?.data;
@@ -944,13 +895,23 @@ export class PatientdetailsComponent implements OnInit {
       if (response.status) {
         this.totalLength = response?.body?.totalRecords;
         this.dataDiagnosisSource = response?.body?.result;
-        // this.dataDiagnosisSource = this.dataDiagnosisSource.map(item => ({
-        //   ...item,
-        //   slicedIcdCode: this.sliceIcdCodes(item.icdCode),
-        // }));
+        this.dataDiagnosisSource = this.dataDiagnosisSource.map(item => ({
+          ...item,
+          slicedIcdCode: this.formatIcdCodes(item.icdCode),
+        }));
 
       }
     });
+  }
+  formatIcdCodes(icdCodes: any[], maxCodes: number = 3): string {
+    if (!icdCodes || icdCodes.length === 0) return '';
+    
+    const codeStrings = icdCodes.map(code => code.code);
+    
+    if (codeStrings.length > maxCodes) {
+      return codeStrings.slice(0, maxCodes).join(', ') + `... (+${codeStrings.length - maxCodes} more)`;
+    }
+    return codeStrings.join(', ');
   }
 
 truncateWords(text: string, maxWords: number = 10): string {
@@ -963,19 +924,8 @@ truncateWords(text: string, maxWords: number = 10): string {
   return text;
 }
   
-  // sliceIcdCodes(icdCodes: any[]) {
-  //   if (!icdCodes || icdCodes.length === 0) return [];
-  //   const sliced = icdCodes.slice(0, 3);
-  //   return sliced.length < icdCodes.length
-  //     ? sliced.map(i => i.code).join(', ') + '...'
-  //     : sliced.map(i => i.code).join(', ');
-  // }
 
-  openVerticallyCenteredconsultation_notes(
-    consultation_notes_content: any,
-    data: any= "",type:any
-  ) {
-    
+  openVerticallyCenteredconsultation_notes(consultation_notes_content: any,data: any= "") {    
     if (data) {
       this.NoteId = data?._id
       this.notesForm.patchValue({
@@ -1011,7 +961,7 @@ truncateWords(text: string, maxWords: number = 10): string {
       let response = this.coreService.decryptObjectData(encryptedData);
       
       if (response.status) {
-        this.totalICDList = response?.body?.data || [];
+        this.totalICDList = response?.body?.data ?? [];
         this.filteredICDList = [...this.totalICDList]; // Show all initially
       }
       
@@ -1110,12 +1060,12 @@ truncateWords(text: string, maxWords: number = 10): string {
           let encryptedData = { data: res };
           let response = this.coreService.decryptObjectData(encryptedData);
           if (response.status) {
-            // this.loader.stop();
+            
             this.getAlVitals();
             this.toastr.success(response.message);
             this.closePopup();
           } else {
-            // this.loader.stop();
+            
             this.toastr.error(response.message);
           }
         })
@@ -1132,12 +1082,12 @@ truncateWords(text: string, maxWords: number = 10): string {
           let encryptedData = { data: res };
           let response = this.coreService.decryptObjectData(encryptedData);
           if (response.status) {
-            // this.loader.stop();
+            
             this.getAllDetails();
             this.toastr.success(response.message);
             this.closePopup();
           } else {
-            // this.loader.stop();
+            
             this.toastr.error(response.message);
           }
         })
@@ -1153,12 +1103,12 @@ truncateWords(text: string, maxWords: number = 10): string {
           let encryptedData = { data: res };
           let response = this.coreService.decryptObjectData(encryptedData);
           if (response.status) {
-            // this.loader.stop();
+            
             this.getAllDetails();
             this.toastr.success(response.message);
             this.closePopup();
           } else {
-            // this.loader.stop();
+            
             this.toastr.error(response.message);
           }
         })
@@ -1200,25 +1150,34 @@ truncateWords(text: string, maxWords: number = 10): string {
     this.page = data.pageIndex + 1;
     this.pageSize = data.pageSize;
     this.getAlVitals();
+    this.getAllDetails();
+  }
+
+  handlePageEventHistory(data: any) {
+    this.page = data.pageIndex + 1;
+    this.pageSize = data.pageSize;  
+    this.loader.start()
+    this.getAllDetails();
+    this.loader.stop()
   }
 
   handlePageEventMedication(data: any) {
     this.page = data.pageIndex + 1;
-    this.pageSize = data.pageSize;
-    // this.getAllMedicationInfoList();
+    this.pageSize = data.pageSize;  
     this.tabSelection( this.selected_tab,this.fromDate,this.toDate)
   }
 
   handlePageEventPast(data: any) {
     this.page = data.pageIndex + 1;
     this.pageSize = data.pageSize;
-    this.getPastAppointment();
+    this.loader.start()
+    this.getPastAppointment(this.datepipe.transform(this.fromDate, 'yyyy-MM-dd'),this.datepipe.transform(this.toDate, 'yyyy-MM-dd'));
+    this.loader.stop()
   }
 
   handlePageEventLab(data: any) {
     this.page = data.pageIndex + 1;
-    this.pageSize = data.pageSize;
-    // this.getAllLabTests();
+    this.pageSize = data.pageSize;   
     this.tabSelection( this.selected_tab,this.fromDate,this.toDate)
 
   }
@@ -1243,7 +1202,6 @@ truncateWords(text: string, maxWords: number = 10): string {
   handlePageEventRadio(data: any) {
     this.page = data.pageIndex + 1;
     this.pageSize = data.pageSize;
-    // this.getAllRadioTests();
     this.tabSelection( this.selected_tab,this.fromDate,this.toDate)
   }
 
@@ -1268,23 +1226,10 @@ truncateWords(text: string, maxWords: number = 10): string {
     this.cdr.detectChanges(); // Ensure UI updates
   }
 
-
-
-  // Add Vital Model
-  // openVitalModal(vitalModal: any) {
-
-
-  //   this.modalService.open(vitalModal, {
-  //     centered: true,
-  //     size: "lg",
-  //     windowClass: "add_vital",
-  //   });
-  // }
-
   openVitalModal(vitalModal: any) {
     this.getAllVitalRanges();
 
-    const modalRef = this.modalService.open(vitalModal, {
+    this.modalService.open(vitalModal, {
       centered: true,
       size: "lg",
       windowClass: "add_vital",
@@ -1350,27 +1295,14 @@ truncateWords(text: string, maxWords: number = 10): string {
   }
 
   handleBack() {
-    
-    if (this.backType === 'emr') {
-      this.route.navigate([`/individual-doctor/appointment/appointmentdetails/${this.appointmentId}`]);
-    } else if (this.backType === 'back_to_appointment_list') {
-      this.location.back();
-    }else {
-      this.location.back();
-    }
-
-    if (this.adminCheck === 'admin-view'){
-      this.location.back();
-
-    }
-
+    this.location.back();    
   }
 
   onTabChange(event: MatTabChangeEvent): void {
     this.selectedIndex = event.index;
     let fromDate;
     let toDate;
-    if (this.selectedIndex === 5 || this.selectedIndex === 6 || this.selectedIndex === 8) {
+    if (this.selectedIndex === 5 || this.selectedIndex === 6 || this.selectedIndex === 7 || this.selectedIndex === 8) {
       fromDate = this.formatDate(new Date(this.fromDate), 'type');
       toDate = this.formatDate(new Date(this.toDate), 'type');
     }
@@ -1402,6 +1334,7 @@ truncateWords(text: string, maxWords: number = 10): string {
         break;
       case 7:
         this.getPastAppointment(fromDate, toDate);
+        this.getTabName('past_appointment',fromDate,toDate);  
         break;
       case 8:
         this.getMedicalDocument();
@@ -1427,8 +1360,8 @@ truncateWords(text: string, maxWords: number = 10): string {
 
   /* pagination for history tab */
   updateDisplayedData() {    
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
     if (this.selectedSection === 'allergies') {
 
       this.displayedData = this.allergiesdataSource.slice(startIndex, endIndex);
@@ -1473,8 +1406,8 @@ truncateWords(text: string, maxWords: number = 10): string {
   }
 
   updateDisplayedHistory() {    
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
     if (this.selectedSection === 'allergies') {
 
       this.displayedData = this.allergiesdataSource.slice(startIndex, endIndex);
@@ -1644,9 +1577,11 @@ truncateWords(text: string, maxWords: number = 10): string {
     this.toDate = this.formatDate(toDate);
 
 
-
+    this.loader.start()
     this.getTabName(tabName, this.fromDate, this.toDate);
     this.tabSelection( this.selected_tab,this.fromDate,this.toDate)
+    this.loader.stop()
+
 
   }
 
@@ -1667,6 +1602,7 @@ truncateWords(text: string, maxWords: number = 10): string {
         break;
       case 'past_appointment':
         this.getPastAppointment(fromDate, toDate);
+        this.loader.stop()
         break;
       case 'diagnosis':
         this.getAllDignosis(from, to);
@@ -1733,26 +1669,8 @@ truncateWords(text: string, maxWords: number = 10): string {
     return fileKey.endsWith('.pdf');
   }
   routeTOdetails(id: any) {
-    if(this.adminCheck === "admin-view") {
-    this.route.navigate([`/individual-doctor/appointment/appointmentdetails/${id}`],
-      {
-        queryParams: {
-          type: 'emr',
-          adminCheck :this.adminCheck
-        }
-
-      }
-    )
-  }else{
-    this.route.navigate([`/individual-doctor/appointment/appointmentdetails/${id}`],
-      {
-        queryParams: {
-          type: 'emr'
-        }
-
-      }
-    )
-  }
+    this.route.navigate([`/individual-doctor/appointment/appointmentdetails/${id}`]);
+  
   }
   openVerticallyPopupformedicalHistory(medicalHistory: any, element: any = '') {
     if (element) {
@@ -1801,8 +1719,7 @@ truncateWords(text: string, maxWords: number = 10): string {
 
         }
       });
-    } else {
-      if (this.medicalHistoryForm.valid) {
+    } else  if (this.medicalHistoryForm.valid) {
         this.service.addMedicalHistory(reqData).subscribe((res) => {
           let response = this.coreService.decryptObjectData({ data: res });
           if (response.status) {
@@ -1813,8 +1730,7 @@ truncateWords(text: string, maxWords: number = 10): string {
             this.closePopup();
 
           }
-        });
-      }
+        });      
     }
   }
 
@@ -1878,20 +1794,14 @@ truncateWords(text: string, maxWords: number = 10): string {
 
   routeToDetailsPage(id) {
     this.loader.start();
-    if(this.adminCheck === 'admin-view'){
-      this.route.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.route.navigate([`/individual-doctor/patientmanagement/details/${id}`]);
-      });
-    }else{
-      this.route.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.route.navigate([`/individual-doctor/patientmanagement/details/${id}`]);
-      });
-    }
+    this.route.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.route.navigate([`/individual-doctor/patientmanagement/details/${id}`]);
+    });
   }
   openvitalGraph(vgraphpopup: any, graphType: any) {
     this.graphType = graphType;
 
-    const colorConfig = this.lineChartColorsMap[this.graphType] || {};
+    const colorConfig = this.lineChartColorsMap[this.graphType] ?? {};
     const dateFormatter = new Intl.DateTimeFormat('en-GB', {
       day: '2-digit',
       month: '2-digit',
@@ -1911,7 +1821,6 @@ truncateWords(text: string, maxWords: number = 10): string {
           },
         ];
         this.lineChartLabels = this.heightdataSource.map(item => dateFormatter.format(new Date(item?.endDate)));
-        // this.lineChartLabels = this.heightdataSource.map(item => item?.endDate);
         break;
       case 'Weight':
         this.lineChartData = [
@@ -2032,7 +1941,6 @@ truncateWords(text: string, maxWords: number = 10): string {
       let response = await this.coreService.decryptObjectData({ data: res });
     
       if (response.status) {
-        // this.totalLength = response?.body?.totalRecords;
         let resultSource = response?.body?.result;
         
         if(resultSource !== undefined) {
@@ -2067,106 +1975,7 @@ truncateWords(text: string, maxWords: number = 10): string {
       }
     });
   }
-  // opendetailsPopup(infopopup: any, data: any, type: any) {
-   
-  //   this.currentDate = data?.createdAt;
-  //   switch (type) {
-  //     case 'Height':
-  //       this.infoLabel = "Height";
-  //       this.currentValue = data?.value;
-  //       this.criticalHigh = this.heightRange?.criticalHigh
-  //       this.criticalLow = this.heightRange?.criticalLow
-  //       this.normalHigh = this.heightRange?.high
-  //       this.normalLow = this.heightRange?.low
-  //       this.unit = this.heightRange?.unit
-  //       break;
-  //     case 'Weight':
-  //       this.infoLabel = "Weight";
-  //       this.currentValue = data?.value;
-  //       this.criticalHigh = this.weightRange?.criticalHigh
-  //       this.criticalLow = this.weightRange?.criticalLow
-  //       this.normalHigh = this.weightRange?.high
-  //       this.normalLow = this.weightRange?.low
-  //       this.unit = this.weightRange?.unit
-
-  //       break;
-  //     case 'Heart-Rate':
-  //       this.infoLabel = "Heart-Rate";
-  //       this.currentValue = data?.value;
-  //       this.criticalHigh = this.HeartRateRange?.criticalHigh
-  //       this.criticalLow = this.HeartRateRange?.criticalLow
-  //       this.normalHigh = this.HeartRateRange?.high
-  //       this.normalLow = this.HeartRateRange?.low
-  //       this.unit = this.HeartRateRange?.unit
-
-  //       break;
-  //     case 'BMI':
-  //       this.infoLabel = "BMI";
-  //       this.currentValue = data?.value;
-  //       this.unit = this.bpiRange?.unit;
-
-  //       break;
-  //     case 'BP Systolic':
-  //       this.infoLabel = "BP Systolic";
-  //       this.currentValue = data?.value;
-  //       this.criticalHigh = this.bloodPressureSystolic?.criticalHigh
-  //       this.criticalLow = this.bloodPressureSystolic?.criticalLow
-  //       this.normalHigh = this.bloodPressureSystolic?.high
-  //       this.normalLow = this.bloodPressureSystolic?.low
-  //       this.unit = this.bloodPressureSystolic?.unit
-
-  //       break;
-  //     case 'BP Diastolic':
-  //       this.infoLabel = "BP Diastolic";
-  //       this.currentValue = data?.value;
-  //       this.criticalHigh = this.bloodPressureBPDiastolic?.criticalHigh
-  //       this.criticalLow = this.bloodPressureBPDiastolic?.criticalLow
-  //       this.normalHigh = this.bloodPressureBPDiastolic?.high
-  //       this.normalLow = this.bloodPressureBPDiastolic?.low
-  //       this.unit = this.bloodPressureBPDiastolic?.unit
-
-  //       break;
-  //     case 'Pulse':
-  //       this.infoLabel = "Pulse";
-  //       this.currentValue = data?.value;
-  //       this.criticalHigh = this.pulseRange?.criticalHigh
-  //       this.criticalLow = this.pulseRange?.criticalLow
-  //       this.normalHigh = this.pulseRange?.high
-  //       this.normalLow = this.pulseRange?.low
-  //       this.unit = this.pulseRange?.unit
-
-  //       break;
-  //     case 'Temperature':
-  //       this.infoLabel = "Temperature";
-  //       this.currentValue = data?.value;
-  //       this.criticalHigh = this.temperatureRange?.criticalHigh
-  //       this.criticalLow = this.temperatureRange?.criticalLow
-  //       this.normalHigh = this.temperatureRange?.high
-  //       this.normalLow = this.temperatureRange?.low
-  //       this.unit = this.temperatureRange?.unit
-
-  //       break;
-  //     case 'Blood Glucose':
-  //       this.infoLabel = "Blood Glucose";
-  //       this.currentValue = data?.value;
-  //       this.criticalHigh = this.bloodGlucoseRange?.criticalHigh
-  //       this.criticalLow = this.bloodGlucoseRange?.criticalLow
-  //       this.normalHigh = this.bloodGlucoseRange?.high
-  //       this.normalLow = this.bloodGlucoseRange?.low
-  //       this.unit = this.bloodGlucoseRange?.unit
-
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   this.modalService.open(infopopup, {
-  //     centered: true,
-  //     size: "md",
-  //     windowClass: "add_immunization",
-  //   });
-  // }
-
-  //New for PopupData
+ 
   opendetailsPopup(infopopup: any, data: any, type: any) {
     this.currentDate = data?.createdAt;
 
@@ -2351,7 +2160,7 @@ truncateWords(text: string, maxWords: number = 10): string {
       let reqData: any = {
           limit: this.pageSize,
           page: this.page,
-          patientId: this.patientId
+          patientId: this.patient_id
       };
   
       if (fromDate && toDate) {
@@ -2378,7 +2187,7 @@ truncateWords(text: string, maxWords: number = 10): string {
     let reqData: any = {
       limit: this.pageSize,
       page: this.page,
-      patientId: this.patientId
+      patientId: this.patient_id
     };
   
     if (fromDate && toDate) {
@@ -2403,7 +2212,7 @@ truncateWords(text: string, maxWords: number = 10): string {
     let reqData: any = {
       limit: this.pageSize,
       page: this.page,
-      patientId:this.patientId
+      patientId:this.patient_id
     };
     if (fromDate && toDate) {
       reqData.fromDate = this.formatDate(fromDate, 'yyyy-MM-dd');
@@ -2550,17 +2359,17 @@ getBMIRanges() {
 // BP Systolic Ranges
 getBPSystolicRanges() {
   const bpRanges = this.getFilteredBpVitals(this.profile?.gender)[0];
-  this.bpsystolicHigh = bpRanges?.BPSystolicHigh || 120;
-  this.bpsystolicLow = bpRanges?.BPSystolicLow || 90;
-  this.bpsystolicUnit = bpRanges?.BPSystolicunit || "mmHg";
+  this.bpsystolicHigh = bpRanges?.BPSystolicHigh ?? 120;
+  this.bpsystolicLow = bpRanges?.BPSystolicLow ?? 90;
+  this.bpsystolicUnit = bpRanges?.BPSystolicunit ?? "mmHg";
 }
 
 // BP Diastolic Ranges
 getBPDiastolicRanges() {
   const bpRanges = this.getFilteredBpVitals(this.profile?.gender)[0];
-  this.bpdiastolicHigh = bpRanges?.BPDiastolicHigh || 80;
-  this.bpdiastolicLow = bpRanges?.BPDiastolicLow || 60;
-  this.bpdiastolicUnit = bpRanges?.BPDiasystolicunit || "mmHg";
+  this.bpdiastolicHigh = bpRanges?.BPDiastolicHigh ?? 80;
+  this.bpdiastolicLow = bpRanges?.BPDiastolicLow ?? 60;
+  this.bpdiastolicUnit = bpRanges?.BPDiasystolicunit ?? "mmHg";
 
 }
 // Height Ranges
@@ -2640,15 +2449,15 @@ getAllVitalRanges() {
 
   getBpRanges() {
     return {
-      BPSystolicHigh: this.bpRanges?.BPSystolicHigh || 120, 
-      BPSystolicLow: this.bpRanges?.BPSystolicLow || 90,
-      BPSystolicCriticalHigh: this.bpRanges?.BPSystolicCriticalHigh || 145,
-      BPSystolicCriticalLow: this.bpRanges?.BPSystolicCriticalLow || 70,
+      BPSystolicHigh: this.bpRanges?.BPSystolicHigh ?? 120, 
+      BPSystolicLow: this.bpRanges?.BPSystolicLow ?? 90,
+      BPSystolicCriticalHigh: this.bpRanges?.BPSystolicCriticalHigh ?? 145,
+      BPSystolicCriticalLow: this.bpRanges?.BPSystolicCriticalLow ?? 70,
       
-      BPDiastolicHigh: this.bpRanges?.BPDiastolicHigh || 80,
-      BPDiastolicLow: this.bpRanges?.BPDiastolicLow || 60,
-      BPDiastolicCriticalHigh: this.bpRanges?.BPDiastolicCriticalHigh || 100,
-      BPDiastolicCriticalLow: this.bpRanges?.BPDiastolicCriticalLow || 40
+      BPDiastolicHigh: this.bpRanges?.BPDiastolicHigh ?? 80,
+      BPDiastolicLow: this.bpRanges?.BPDiastolicLow ?? 60,
+      BPDiastolicCriticalHigh: this.bpRanges?.BPDiastolicCriticalHigh ?? 100,
+      BPDiastolicCriticalLow: this.bpRanges?.BPDiastolicCriticalLow ?? 40
     };
   }
   getBpClass(value: number, type: 'systolic' | 'diastolic'): string {

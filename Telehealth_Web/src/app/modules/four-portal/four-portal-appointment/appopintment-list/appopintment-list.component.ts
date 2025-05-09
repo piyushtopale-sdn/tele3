@@ -7,19 +7,16 @@ import {
   ChangeDetectorRef,
 } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { CoreService } from "src/app/shared/core.service";
 import {
-  FormArray,
   FormBuilder,
   FormGroup,
   FormControl,
   Validators,
 } from "@angular/forms";
-import { PatientService } from "src/app/modules/patient/patient.service";
 import { DatePipe } from "@angular/common";
 import * as XLSX from "xlsx";
 import { FourPortalService } from "../../four-portal.service";
@@ -175,18 +172,17 @@ export class AppopintmentListComponent implements OnInit {
   innerMenuPremission: any = [];
   currentUrl:any=[]
   constructor(
-    private modalService: NgbModal,
-    private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute,
-    private cdr: ChangeDetectorRef,
-    private coreService: CoreService,
-    private toastr: ToastrService,
-    private router: Router,
-    private loader: NgxUiLoaderService,
-    private datePipe: DatePipe,
-    private fourPortalService: FourPortalService,
-    private service: IndiviualDoctorService,
-    private dateAdapter: DateAdapter<Date>    ,
+    private readonly modalService: NgbModal,
+    private readonly fb: FormBuilder,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly coreService: CoreService,
+    private readonly toastr: ToastrService,
+    private readonly router: Router,
+    private readonly loader: NgxUiLoaderService,
+    private readonly datePipe: DatePipe,
+    private readonly fourPortalService: FourPortalService,
+    private readonly service: IndiviualDoctorService,
+    private readonly dateAdapter: DateAdapter<Date>    ,
 
 
   ) {
@@ -263,20 +259,19 @@ export class AppopintmentListComponent implements OnInit {
     if (userPermission) {
       let menuID = sessionStorage.getItem("currentPageMenuID");
       let checkData = this.findObjectByKey(userPermission, "parent_id", menuID)
-
+      let checkSubmenu;
       if (checkData) {
-        if (checkData.isChildKey == true) {
+        if (checkData.isChildKey) {
 
-          var checkSubmenu = checkData.submenu;
+          checkSubmenu = checkData.submenu;
 
           if (checkSubmenu.hasOwnProperty("claim-process")) {
             this.innerMenuPremission = checkSubmenu['claim-process'].inner_menu;
 
-          } else {
           }
 
         } else {
-          var checkSubmenu = checkData.submenu;
+          checkSubmenu = checkData.submenu;
 
           let innerMenu = [];
 
@@ -302,32 +297,6 @@ export class AppopintmentListComponent implements OnInit {
     }
 
   }
-
-
-// // allapointmentlist
-//   async getAppointmentlist(sort: any = '') {
-
-//     let reqData = {
-//       limit: this.pageSize,
-//       page: this.page,
-//       status: this.selectedStatus,
-//       // date: this.dateFilter,
-//       serviceType: this.serviceType,
-//       searchText:this.searchText,
-//       fromDate: this.fromDate,
-//       toDate: this.toDate
-//     };
-
-//     this.fourPortalService.fourPortal_appointment_list(reqData).subscribe((res) => {
-//       let encryptedData = { data: res };
-//       let response = this.coreService.decryptObjectData(encryptedData);
-
-//       if (response.status) {
-//         this.dataSource = response?.data?.data;
-//         this.totalLength = response?.data?.totalRecords;
-//       }
-//     });
-//   }
   async getAppointmentlist(sort: any = '') {                                    //Fixed Pagination KAN-417
     let reqData = {
       limit: this.pageSize,
@@ -519,7 +488,7 @@ export class AppopintmentListComponent implements OnInit {
 
 
   exportManageTest() {
-    var data: any = [];
+    let data: any = [];
 
     let reqData = {
       limit: 0,
@@ -535,7 +504,7 @@ export class AppopintmentListComponent implements OnInit {
         let result = this.coreService.decryptObjectData({ data: res });    
         if (result.status) {
           this.loader.stop();
-          var array = [
+          let array = [
             "Patient Name",
             "Patient MRN",
             "Prescribed By",
@@ -546,7 +515,7 @@ export class AppopintmentListComponent implements OnInit {
           ];
           data = result.data.array
           data.unshift(array);
-          var fileName = 'OrderList.xlsx';
+          let fileName = 'OrderList.xlsx';
           const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');

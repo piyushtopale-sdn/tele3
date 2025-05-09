@@ -120,16 +120,6 @@ commonRoute.get('/exportsheetlist-designation', commonDataController.allDesignat
 commonRoute.post('/upload-csv-for-designation-list', uploadFileToLocalStorage, commonDataController.uploadCSVForDesignation)
 commonRoute.get('/getById-designation', commonDataController.designationById)
 
-// Title
-commonRoute.post('/add-title', commonDataController.addTitle_SuperAdmin)
-commonRoute.get('/list-title', commonDataController.allTitleList)
-commonRoute.put('/update-title', commonDataController.updateTitle)
-commonRoute.post('/delete-title', commonDataController.actionOnTitle)
-commonRoute.get('/exportsheetlist-title', commonDataController.allTitleListforexport)
-commonRoute.post('/upload-csv-for-title-list', uploadFileToLocalStorage, commonDataController.uploadCSVForTitle)
-commonRoute.get('/getById-title', commonDataController.TitleById)
-
-
 
 // Language
 commonRoute.post('/add-language', commonDataController.addLanguage_SuperAdmin)
@@ -141,7 +131,6 @@ commonRoute.post('/upload-csv-for-language-list', uploadFileToLocalStorage, comm
 
 // Common list api's
 commonRoute.get('/common-designationlist', commonDataController.commmonDesignationList)
-commonRoute.get('/common-titlelist', commonDataController.commmonTitleList)
 commonRoute.get('/common-language', commonDataController.commmonLanguageList)
 
 commonRoute.post('/get-location-name', commonDataController.getLocationName)

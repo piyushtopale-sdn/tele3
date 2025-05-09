@@ -10,7 +10,7 @@
         <ul class="profile_info_inner">
           <li class="col_item profile_image_wrapper">
             <div class="profile_image">
-              <img
+              <img alt=""
                 [src]="
                   centreProfile
                     ? centreProfile
@@ -20,7 +20,6 @@
             </div>
             <div class="profile_contact">
               <div class="profile_title">{{ "centre_name" | translate }}</div>
-              <!-- <div class="lable">{{ "email" | translate }}</div>-->
               <div class="user_value">{{ centreName }}</div> 
             </div>
           </li>
@@ -139,7 +138,7 @@
                 class="item col-sm-3 col-xl-2"
                 *ngFor="let pic of centrePictures"
               >
-                <img src="{{ pic }}" width="170px" height="170px" />
+                <img alt="" src="{{ pic }}" width="170px" height="170px" />
               </div>             
             </div>
             <div *ngIf="centrePictures.length === 0">
@@ -158,15 +157,14 @@
         <div class="row">
           <div class="item_info">
             <div class="user_img">
-              <img
+              <img alt=""
               class="license_img"
               [src]="
                   licencePicSign
                     ? licencePicSign
                     : '../../../assets/img/doc.png'
                 "
-              />
-              <!-- <img src="../../../../../assets/img/doc.png" /> -->
+              />             
             </div>
           </div>
           <div class="item_info">

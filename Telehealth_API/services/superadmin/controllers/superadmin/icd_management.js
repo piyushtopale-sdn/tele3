@@ -222,67 +222,121 @@ class ICDCodeManagement {
     }
   }
 
-  async allICDListforexport(req, res) {
-    const { searchText, limit, page } = req.query;
-    let filter;
-    if (searchText == "") {
-      filter = {
-        delete_status: false,
-      };
-    } else {
-      filter = {
-        delete_status: false,
-        $or: [
-          { code: { $regex: searchText || "", $options: "i" } },
-          { disease_title: { $regex: searchText || "", $options: "i" } },
-        ],
-      };
-    }
-    try {
-      let result = "";
-      if (limit > 0) {
-        result = await ICDcode.find(filter)
-          .sort([["createdAt", -1]])
-          .skip((page - 1) * limit)
-          .limit(limit * 1)
-          .exec();
-      } else {
-        result = await ICDcode.aggregate([
-          {
-            $match: filter,
-          },
-          { $sort: { createdAt: -1 } },
-          {
-            $project: {
-              _id: 0,
-              code: "$code",
-              disease_title: "$disease_title",
-              description: "$description",
-            },
-          },
-        ]);
-      }
-      let array = result.map((obj) => Object.values(obj));
-      return sendResponse(req, res, 200, {
-        status: true,
-        data: {
-          result,
-          array,
-        },
-        message: `ICD-Code added successfully`,
-        errorCode: null,
-      });
-    } catch (err) {
-      return sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `failed to add ICD-Code`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
+    /* old-code 
 
-  async uploadExcelforICDCode(req, res) {
+    async allICDListforexport(req, res) {
+        const { searchText, limit, page } = req.query;
+        let filter;
+        if (searchText == "") {
+          filter = {
+            delete_status: false,
+          };
+        } else {
+          filter = {
+            delete_status: false,
+            $or: [
+              { code: { $regex: searchText || "", $options: "i" } },
+              { disease_title: { $regex: searchText || "", $options: "i" } },
+            ],
+          };
+        }
+        try {
+          let result = "";
+          if (limit > 0) {
+            result = await ICDcode.find(filter)
+              .sort([["createdAt", -1]])
+              .skip((page - 1) * limit)
+              .limit(limit * 1)
+              .exec();
+          } else {
+            result = await ICDcode.aggregate([
+              {
+                $match: filter,
+              },
+              { $sort: { createdAt: -1 } },
+              {
+                $project: {
+                  _id: 0,
+                  code: "$code",
+                  disease_title: "$disease_title",
+                  description: "$description",
+                },
+              },
+            ]);
+          }
+          let array = result.map((obj) => Object.values(obj));
+          return sendResponse(req, res, 200, {
+            status: true,
+            data: {
+              result,
+              array,
+            },
+            message: `ICD-Code added successfully`,
+            errorCode: null,
+          });
+        } catch (err) {
+          return sendResponse(req, res, 500, {
+            status: false,
+            data: err,
+            message: `failed to add ICD-Code`,
+            errorCode: "INTERNAL_SERVER_ERROR",
+          });
+        }
+      } */
+
+ 
+    /* new-code-for-export */
+    async allICDListforexport(req, res) {
+      const { searchText } = req.query;
+
+      let filter = {
+        delete_status: false,
+      };
+
+      if (searchText) {
+        filter.$or = [
+          { code: { $regex: searchText, $options: "i" } },
+          { disease_title: { $regex: searchText, $options: "i" } },
+        ];
+      }
+
+      try {
+        const projection = {
+          _id: 0,
+          code: 1,
+          disease_title: 1,
+          description: 1,
+        };
+
+        const result = await ICDcode.find(filter, projection)
+          .sort({ createdAt: -1 })
+          .lean()
+          .exec(); // lean() gives plain JS objects = better performance
+
+        const array = result.map((obj) => Object.values(obj));
+
+        return sendResponse(req, res, 200, {
+          status: true,
+          data: {
+            result,
+            array,
+          },
+          message: "ICD-Code added successfully",
+          errorCode: null,
+        });
+
+      } catch (err) {
+        console.log("err________",err);
+        
+        return sendResponse(req, res, 500, {
+          status: false,
+          data: err,
+          message: "Failed to fetch ICD-Codes",
+          errorCode: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    }
+    async uploadExcelforICDCode(req, res) {
     try {
       const filePath = "./uploads/" + req.filename;
       const data = await processExcel(filePath);

@@ -62,7 +62,7 @@
                     >{{ "select_country" | translate }}*</span
                   >
                 </div>
-                <div class="item col-sm-6 col-md-4">
+                <!-- <div class="item col-sm-6 col-md-4">
                   <div class="form_field_wrapper">
                     <label>{{ "start_date" | translate }}</label>
                     <mat-form-field
@@ -113,7 +113,7 @@
                     *ngIf="isSubmitted && validation(i).controls['end_date'].errors?.['required'] "
                     >{{ "select_end_date" | translate }}*</span
                   >
-                </div>
+                </div> -->
               </div>
               <ng-container *ngIf="i === education.length - 1; else remove">
                 <div

@@ -42,7 +42,6 @@ import { RouterModule } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
-import { ExternalVideoCallComponent } from '../shared/external-video-call/external-video-call.component';
 import {
     MatDialog,
     MatDialogModule,
@@ -55,7 +54,6 @@ import { ActivityPermissionComponent } from '../shared/activity-permission/activ
         ActivityPermissionComponent,
         VideoCallingComponent,
         PatientdetailsComponent,
-        ExternalVideoCallComponent
     ],
     imports: [
         ReactiveFormsModule,

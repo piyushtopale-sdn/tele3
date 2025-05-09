@@ -7,18 +7,17 @@ import {
 } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 import { CoreService } from "src/app/shared/core.service";
-import { DatePipe } from "@angular/common";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
 import { MatTabGroup } from "@angular/material/tabs";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
-import { LabimagingdentalopticalService } from "../../labimagingdentaloptical.service";
 import { NgxUiLoaderService } from "ngx-ui-loader";
-import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SuperAdminService } from "../../super-admin.service";
+import { LabimagingdentalopticalService } from "../../labimagingdentaloptical.service";
 export type IVerifyStatus = "APPROVED" | "PENDING" | "DECLINED";
 // Pending request table
 export interface PendingPeriodicElement {
@@ -29,11 +28,7 @@ export interface PendingPeriodicElement {
   email: string;
   phonenumber: string;
   province: string;
-  // department: string;
-  // service: string;
-  // unit: string;
   experience: string;
-  // createdAt:string;
 }
 const PENDING_ELEMENT_DATA: PendingPeriodicElement[] = [];
 
@@ -62,6 +57,8 @@ export class LaboratorylistComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   portalId: any;
   tabNumber: number;
+  permissionType: any;
+  isAdmin: any;
   ngAfterViewInit() {
     this.pendingdataSource.paginator = this.paginator;
      
@@ -82,7 +79,6 @@ export class LaboratorylistComponent implements OnInit {
   public selectedTabIndex = 0;
 
   searchText = "";
- 
   startDate: string = null;
   endDate: string = null;
   displayedColumns: string[];
@@ -103,14 +99,14 @@ export class LaboratorylistComponent implements OnInit {
   @ViewChild("activeOrInactivemodal") activeOrInactivemodal: TemplateRef<any>;
   @ViewChild("statusTab", { static: false }) tab: MatTabGroup;
   constructor(
-    private modalService: NgbModal,
-    private coreService: CoreService,
-    private fb: FormBuilder,
-    private toastr: ToastrService,
-    private route :Router,
-    private labimagingdentaloptical :LabimagingdentalopticalService,
-    private loader: NgxUiLoaderService,
-    private superadminService : SuperAdminService,
+    private readonly modalService: NgbModal,
+    private readonly coreService: CoreService,
+    private readonly fb: FormBuilder,
+    private readonly toastr: ToastrService,
+    private readonly route :Router,
+    private readonly centreService :LabimagingdentalopticalService,
+    private readonly loader: NgxUiLoaderService,
+    private readonly superadminService : SuperAdminService,
     
   ) {
     this.loginrole = this.coreService.getLocalStorage("adminData").role;
@@ -142,10 +138,6 @@ export class LaboratorylistComponent implements OnInit {
     this.superAdminId = adminData?._id;
     this.resetDate();
     this.getLabList(`${this.sortColumn}:${this.sortOrder}`);
-
-    // setTimeout(() => {
-    //   this.checkInnerPermission();
-    // }, 300);
     this.currentUrl = this.route.url;
     this.onNavigate(this.currentUrl);
   }
@@ -160,17 +152,16 @@ export class LaboratorylistComponent implements OnInit {
     if(userPermission){
 
       let menuID = sessionStorage.getItem("currentPageMenuID");
-      let checkData = this.findObjectByKey(userPermission, "parent_id",menuID)
+      let checkData = this.findObjectByKey(userPermission, "parent_id",menuID);
+      let checkSubmenu;
       if(checkData){
-        if(checkData.isChildKey == true){
-          var checkSubmenu = checkData.submenu;      
+        if(checkData.isChildKey){
+           checkSubmenu = checkData.submenu;      
           if (checkSubmenu.hasOwnProperty("pharmacy")) {
-            this.innerMenuPremission = checkSubmenu['pharmacy'].inner_menu;
-  
-          } else {
+            this.innerMenuPremission = checkSubmenu['pharmacy'].inner_menu;  
           }
         }else{
-          var checkSubmenu = checkData.submenu;
+           checkSubmenu = checkData.submenu;
           let innerMenu = [];
           for (let key in checkSubmenu) {
             innerMenu.push({name: checkSubmenu[key].name, slug: key, status: true});
@@ -199,10 +190,11 @@ export class LaboratorylistComponent implements OnInit {
       status: "APPROVED",
       searchText: this.searchText,     
       sort:sort,
-      type : "Laboratory"
+      type : "Laboratory",
+      isAdmin: this.isAdmin === false ? '' : this.isAdmin ?? ''
     };
 
-    this.labimagingdentaloptical.laboratoryList(reqData).subscribe(async (res) => {
+    this.centreService.laboratoryList(reqData).subscribe(async (res) => {
       let response = await this.coreService.decryptObjectData({ data: res });
       this.totalLength = await response?.data?.totalCount;
 
@@ -242,7 +234,7 @@ export class LaboratorylistComponent implements OnInit {
     };
     this.loader.start();
 
-    this.labimagingdentaloptical.activeLockDeleteLabimagingdentaloptical(reqData).subscribe(
+    this.centreService.activeLockDeleteLabimagingdentaloptical(reqData).subscribe(
       (res) => {
         let response = this.coreService.decryptObjectData({ data: res });
         if (response.status) {
@@ -301,14 +293,10 @@ export class LaboratorylistComponent implements OnInit {
   }
 
   public onTabChanged(data: { index: number }): void {
-    this.tabNumber = data.index;
-    if (this.tabNumber === 3) {
-
-    } else {
+    this.tabNumber = data.index; 
     this.resetPagination();
     this.verifyStatus = this.statusList[this.tabNumber];
-    this.getLabList();
-    }
+    this.getLabList();    
   }
 
   private resetPagination(): void {
@@ -398,6 +386,33 @@ export class LaboratorylistComponent implements OnInit {
     } else {
       console.error("No matching menu found for URL:", this.currentUrl);
     }
+  }
+
+  openVerticallyCenteredAssignPermission(assignPermission: any, id: any, type:any) {
+    this.labId = id;
+    this.permissionType = type;
+    this.modalService.open(assignPermission, { centered: true, size: "md" });
+  }
+
+  updateLabPermission(data:any){
+    let reqData ={
+      userId:this.labId,
+      isAdmin:data 
+    }
+    this.centreService.updateUserAsAdmin(reqData).subscribe(async (res) => {
+      let response = await this.coreService.decryptObjectData({ data: res });
+      if(response.status){
+        this.coreService.showSuccess("", response.message);
+        this.closePopup();
+      }else{
+        this.coreService.showError("", response.message);
+      }
+    });
+  }
+
+  viewAdminList(data:any){
+    this.isAdmin = data;
+    this.getLabList()
   }
  
 }

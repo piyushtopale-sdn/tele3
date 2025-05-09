@@ -232,7 +232,6 @@
                             .mat-tab-label-content {
                                 .btn_svg {
 
-                                    // background-color: #EBF0F4;
                                     svg {
                                         fill: #ffffff;
                                     }
@@ -243,11 +242,9 @@
 
                     .mat-ink-bar {
                         display: none;
-                    }
-
-                    .mat-ink-bar {
                         background-color: $bodycolor;
                     }
+
                 }
             }
 
@@ -641,11 +638,6 @@
         }
 
         .choose_detail {
-
-            // display: flex;
-            // justify-content: space-between;
-            // align-items: flex-end;
-            // flex-wrap: wrap;
             .nearest_slot {
                 margin: 0 0 10px;
 
@@ -705,7 +697,6 @@
                             white-space: break-spaces;
                             color: #214469;
                             line-height: 22px;
-                            white-space: break-spaces;
                         }
 
                         &:hover {

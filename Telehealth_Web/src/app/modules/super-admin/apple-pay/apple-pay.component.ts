@@ -101,6 +101,6 @@ export class ApplePayComponent implements AfterViewInit {
   // ✅ Navigate to Home Page
   goToHomePage() {
     const lang = this.translate.store.currentLang || 'en';
-    this.router.navigate([`/test/home-${lang}`]);
+    this.router.navigate([`/test_p/home-${lang}`]);
   }
 }

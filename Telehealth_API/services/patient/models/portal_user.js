@@ -105,14 +105,23 @@ const portalUserSchema = new mongoose.Schema(
         type: Number,
         default: 0
       },
-      period:{
+      period: {
         start: {
-            type: String,
+          type: String,
         },
         end: {
-            type: String,
+          type: String,
         }
-    },
+      },
+      paymentGateway: {
+        type: String
+      },
+      agreement_id: {
+        type: String
+      },
+      token_name: {
+        type: String
+      },
     },
     parent_userid: {
       type: String,

@@ -74,7 +74,7 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
   groupProfileImage: any = "";
   groupProfilePicFile: any = null;
   groupImage: any;
-  showAllChatWindow : Boolean = false;
+  showAllChatWindow : boolean = false;
 
   chatWithName: any;
   senderName: any;
@@ -89,18 +89,18 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
   disableSendButton:boolean = false;
   filteredList: any[] = [];
   constructor(
-    private router: Router,
-    private modalService: NgbModal,
-    private fb: FormBuilder,
-    private _coreService: CoreService,
-    private loader: NgxUiLoaderService,
-    private toastr: ToastrService,
-    private doctorService: IndiviualDoctorService,
-    private activatedRoute: ActivatedRoute,
-    private _webSocketService: WebSocketService,
-    private audioRecordingService: AudioRecordingService,
-    private ref: ChangeDetectorRef,
-    private sanitizer: DomSanitizer,
+    private readonly router: Router,
+    private readonly modalService: NgbModal,
+    private readonly fb: FormBuilder,
+    private readonly _coreService: CoreService,
+    private readonly loader: NgxUiLoaderService,
+    private readonly toastr: ToastrService,
+    private readonly doctorService: IndiviualDoctorService,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly _webSocketService: WebSocketService,
+    private readonly audioRecordingService: AudioRecordingService,
+    private readonly ref: ChangeDetectorRef,
+    private readonly sanitizer: DomSanitizer,
   ) {
     const userData = this._coreService.getLocalStorage("loginData");
     this.userID = userData._id;
@@ -123,7 +123,7 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
     this._webSocketService.receivedMessageDeleteresponse().subscribe((data: any) => {      
       if (data.status === true) {
         this.closePopup();
-        const { scrollTop, scrollHeight, offsetHeight } = this.chatContainer?.nativeElement || {};
+        const { scrollTop, scrollHeight, offsetHeight } = this.chatContainer?.nativeElement ?? {};
         
         if ((scrollTop + offsetHeight) < scrollHeight - 100) { // User scrolled up
           this.isUserScrollingUp = true;
@@ -155,7 +155,7 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
     this.audioRecordingService.getRecordedBlob().subscribe((data) => {
       this.audioBlob = data.blob;
       this.audioName = data.title;
-      var file = new File([data.blob], data.title);
+      let file = new File([data.blob], data.title);
       let formData: any = new FormData();
       formData.append("userId", this.userID);
       formData.append("file", file);
@@ -251,7 +251,7 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
   
   scrollToBottomIfNeeded(): void {
     if (this.chatContainer) {
-      const { scrollTop, scrollHeight, offsetHeight } = this.chatContainer.nativeElement;
+      const {  scrollHeight } = this.chatContainer.nativeElement;
   
       // If user is scrolling up, do not scroll to the bottom
       if (this.isUserScrollingUp) {
@@ -267,13 +267,13 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
     }
   }
 
-  ngOnDestroy(): void {
-    let data = {
-      userId: this.userID,
-      token: "Bearer " + localStorage.getItem("token"),
-    }
-    this._webSocketService.leaveChatRoom_patient_doc(data);
-  }
+  // ngOnDestroy(): void {
+  //   let data = {
+  //     userId: this.userID,
+  //     token: "Bearer " + localStorage.getItem("token"),
+  //   }
+  //   this._webSocketService.leaveChatRoom_patient_doc(data);
+  // }
 
   get groupMembers() {
     return this.groupForm.get('members') as FormArray;
@@ -354,16 +354,6 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
     return this.status;
   }
 
-  // addGroupMember(data: any) {
-  //   const idExists = this.receiverID.some((ele: any) => ele === data.id);
-  //   if (!idExists) {
-  //     this.receiverID.push(data.id);
-
-  //     // Add the following code to update the form control array
-  //     const memberControl = this.fb.control(data);
-  //     this.groupMembers.push(memberControl);
-  //   }
-  // }
 
  //Curently Not In Use
   addGroupMember(data: any) {
@@ -475,7 +465,7 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
     this.doctorService.getRoomlistService(params).subscribe((res: any) => {
       const decryptedData = this._coreService.decryptObjectData({ data: res });
 
-      if (decryptedData.status == true) {
+      if (decryptedData.status) {
         this.listData = decryptedData?.body;
         this.filteredList = [...this.listData];
         if (this.listData.length > 0) {
@@ -488,7 +478,7 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
           }
 
           if (chatId != '') {
-            let data = this.listData.filter((ele: any) => {  
+            this.listData.filter((ele: any) => {  
               return ele?._id == chatId
             })
        
@@ -591,7 +581,6 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
   async sendMessage() {
     this.isSubmitted = true;
 
-    // const hasMessage = this.typeMessageForm.get('message').value.trim() !== '';
     const messageValue = this.typeMessageForm.get('message').value;
     const hasMessage = messageValue && messageValue.trim() !== '';
     const hasAttachment = this.attachmentToUpload !== '';
@@ -915,6 +904,7 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
 
 
   removeUnreadCountAspertheChatId(chatid:any){   
+    
     const chatIndex = this.listData.findIndex((chat: any) => chat?._id === chatid);
     if (chatIndex !== -1 && this.listData[chatIndex].unreadCount > 0) {
       let data1 ={
@@ -922,7 +912,9 @@ export class IndividualDoctorCommunicationComponent implements OnInit {
         token: "Bearer " + localStorage.getItem("token")
       }      
       this._webSocketService.readMessageCount(data1);
-      this.listData[chatIndex].unreadCount = 0;      
+      if(this.chatRoomID === chatid){
+        this.listData[chatIndex].unreadCount = 0;      
+      }
     }
   }
   removeMatchingUsers(listData:any = [], dataSource:any = []) {

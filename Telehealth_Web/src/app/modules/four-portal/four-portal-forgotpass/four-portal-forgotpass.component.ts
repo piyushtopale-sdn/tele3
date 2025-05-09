@@ -1,6 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -8,7 +7,6 @@ import {
   Validators,
 } from "@angular/forms";
 import { CoreService } from "src/app/shared/core.service";
-import { IndiviualDoctorService } from "../../../modules/individual-doctor/indiviual-doctor.service";
 import { FourPortalService } from '../four-portal.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { TranslateService } from '@ngx-translate/core';
@@ -27,13 +25,13 @@ export class FourPortalForgotpassComponent implements OnInit {
   response: any = [];
   route_type:any;
   constructor(
-    private fb: FormBuilder,
-    private coreService: CoreService,
-    private route: Router,
-    private activateRoute: ActivatedRoute,
-    private fourPortalService: FourPortalService,
-    private loader: NgxUiLoaderService,   
-    private translate: TranslateService, 
+    private readonly fb: FormBuilder,
+    private readonly coreService: CoreService,
+    private readonly route: Router,
+    private readonly activateRoute: ActivatedRoute,
+    private readonly fourPortalService: FourPortalService,
+    private readonly loader: NgxUiLoaderService,   
+    private readonly translate: TranslateService, 
   ) {
     this.forgotPassForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
@@ -89,9 +87,9 @@ export class FourPortalForgotpassComponent implements OnInit {
 
   goToHomePage(){
     if(this.translate.store.currentLang === undefined || this.translate.store.currentLang === 'ar'){
-      this.route.navigate([`/test/home-ar`]);
+      this.route.navigate([`/test_p/home-ar`]);
     }else{
-      this.route.navigate([`/test/home-en`]);
+      this.route.navigate([`/test_p/home-en`]);
     }
   }
 }

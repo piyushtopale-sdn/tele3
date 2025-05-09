@@ -398,7 +398,7 @@ export class IndiviualDoctorService {
       this.getBasePath() + `/doctor-service/patient/get-review-and-rating`,
       {
         params: param,
-        // headers: this.getHeader(token),
+        headers: this.getHeader(token),
       }
     );
   }
@@ -409,7 +409,7 @@ export class IndiviualDoctorService {
       this.getBasePath() + `/doctor-service/patient/get-review-and-rating-for-admin`,
       {
         params: param,
-        // headers: this.getHeader(token),
+        headers: this.getHeader(token),
       }
     );
   }
@@ -2600,7 +2600,17 @@ export class IndiviualDoctorService {
       }
     );
   }
-
+  ChangeAvailability(data: any) {
+    let token = this.auth.getToken();
+    return this.http.put(
+      this.getBasePath() +
+      `/doctor-service/doctor/doctor-management-update-availability`,
+      data,
+      {
+        headers: this.getHeader(token),
+      }
+    );
+  }
 
 }
 

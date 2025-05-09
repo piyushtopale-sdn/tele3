@@ -44,6 +44,28 @@
             </svg>
           </a>
         </button>
+        <div class="policy" style="margin-left:10px;">
+          <div class="form_field_wrapper d-flex">
+            <div class="select-dropdown-box" style="display:flex; margin-right: 10px;">
+              <select2 class="select-dropdown-box"
+                      [value]="selectedPatientId"
+                      [overlay]="overlay"
+                      [data]="userList"
+                      (update)="onSelect2ChangePatient($event)"
+                      placeholder="{{ 'select_patient' | translate }}"
+                      style="width: 250px;">
+              </select2>
+              <a style="margin-right: 10px ;margin-top: 12px;" (click)="clearSelect2()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"
+                style="margin-left: 10px; cursor: pointer" >
+                <title>{{ "reset_lab" | translate }}</title>
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path
+                  d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+              </svg></a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="right_part">
@@ -68,9 +90,6 @@
                   <mat-option value="CANCELLED">{{
                     "cancelled" | translate
                   }}</mat-option>
-                  <!-- <mat-option value="PENDING">{{
-                    "pending" | translate
-                  }}</mat-option> -->
                   <mat-option value="MISSED">{{
                     "missed" | translate
                   }}</mat-option>
@@ -78,38 +97,6 @@
               </mat-form-field>
             </div>
           </div>
-          <!-- <div class="policy date">
-            <div class="filter-field">
-              <label style="color: #222222">{{
-                "appointment_date" | translate
-              }}</label>
-              <div class="form_field_wrapper">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <input
-                    matInput
-                    placeholder="{{ 'date' | translate }}"
-                    [(ngModel)]="dateFilter"
-                    [matDatepicker]="picker1"
-                    (dateChange)="handleSelectDateFilter($event)"
-                  />
-                  <mat-datepicker-toggle
-                    matSuffix
-                    [for]="picker1"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #picker1></mat-datepicker>
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="primary_btn" style="color: #222222">
-              <button
-                type="button"
-                class="btn btn-link"
-                (click)="clearDateFilter()"
-              >
-                {{ "clear_date" | translate }}
-              </button>
-            </div>
-          </div> -->
           <div class="content_wrap">
             <div class="policy">
               <form [formGroup]="dateRangeForm">
@@ -160,7 +147,7 @@
             </th>
             <td mat-cell *matCellDef="let element">
               <span class="user_image_wrapper" (click)="goTOEmr(element?.patientId)">
-                <img
+                <img alt=""
                   class="user_image"
                   [src]="
                     element?.patientProfile
@@ -809,7 +796,7 @@
             <h3>
               {{ doctordetailsData?.full_name
               }}<span class="status-icon"
-                ><img
+                ><img alt=""
                   class="img-fluid"
                   src="../../../../../assets/img/greenelip.svg"
               /></span>
@@ -919,7 +906,7 @@
               <h3>
                 {{ doctordetailsData?.full_name
                 }}<span class="status-icon"
-                  ><img
+                  ><img alt=""
                     class="img-fluid"
                     src="../../../../../assets/img/greenelip.svg"
                 /></span>
@@ -986,13 +973,6 @@
                     <div class="expansion_item appointment col-md-4">
                       <h2>{{ "appointment_type" | translate }}</h2>
                       <mat-radio-group aria-label="Appointment Type">
-                        <!-- <mat-radio-button
-                          [value]="type.appointment_type"
-                          *ngFor="let type of doctor_availability"
-                          (change)="onSelection({ type: $event.value })"
-                        >
-                          {{ type?.appointment_type }}
-                        </mat-radio-button> -->
                         <mat-radio-button
                           value="Online"
                           (change)="onSelection({ type: $event.value })"

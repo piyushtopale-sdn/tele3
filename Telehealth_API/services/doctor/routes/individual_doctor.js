@@ -56,11 +56,6 @@ individualDoctorRoute.post("/start-recordings", individualDoctor.startRecordings
 individualDoctorRoute.put("/stop-recordings/:id", individualDoctor.stopRecordings);
 individualDoctorRoute.get("/get-participant-details", individualDoctor.participantInfo);
 
-individualDoctorRoute.post("/send-email-invitation", individualDoctor.sendInvitation);
-individualDoctorRoute.get("/get-email-invitation-list", individualDoctor.getAllInvitation);
-individualDoctorRoute.get("/get-email-invitation-id", individualDoctor.getInvitationById);
-individualDoctorRoute.post("/delete-email-invitation", individualDoctor.deleteInvitation);
-
 individualDoctorRoute.get("/get-individualdoctor-count-superadmin-dashboard", individualDoctor.totalIndividualDoctorforAdminDashboard);
 
 individualDoctorRoute.post("/send-external-user-email", individualDoctor.sendEmailtojoinexternaluser);
@@ -81,7 +76,7 @@ individualDoctorRoute.get("/doctor-admin-dashboard-export-last-login", verifyRol
 individualDoctorRoute.get("/get-pending-labtest-appointment-list/:doctorId", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getPendingLabTests); //Dilip 
 individualDoctorRoute.get("/get-pending-radio-test-appointment-list/:doctorId", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getPendingRadiologyTests); //Dilip 
 individualDoctorRoute.get("/get-all-online-doctor", verifyRole(['superadmin']), individualDoctor.findOnlineDoctors); //findOnlineDoctors
-
+individualDoctorRoute.put("/update-mark-as-doctor-admin",verifyRole(['superadmin']),individualDoctor.markAsDoctorAdmin);
 
 
 

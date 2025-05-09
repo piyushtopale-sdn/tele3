@@ -272,8 +272,8 @@ export class AddLabComponent {
         ),
         Validators.minLength(8),
       ])),
-      centre_name: new FormControl("", [Validators.required]),
-      centre_name_arabic: new FormControl("", [Validators.required]),
+      centre_name: new FormControl("", [Validators.required,this.coreService.nameValidator()]),
+      centre_name_arabic: new FormControl("", [Validators.required,this.coreService.nameValidator()]),
       slogan: new FormControl(""),
       main_phone_number: new FormControl("", [Validators.required, Validators.pattern(/^\d{2}-\d{3}-\d{4}$/)]),
       additional_phone_number: new FormControl("",Validators.pattern(/^\d{2}-\d{3}-\d{4}$/)),
@@ -613,6 +613,9 @@ export class AddLabComponent {
     if ((data === "lisencePic")) {
       this.lisencePic = false;
       this.license_picture = "";
+      this.profileFields.get('licence_details')?.patchValue({
+        licence_picture: ''
+      });      
       // this.profileFields.get("licence_picture").reset();
     }
     if ((data === "centre_pic")) {

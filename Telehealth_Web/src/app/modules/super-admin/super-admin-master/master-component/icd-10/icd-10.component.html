@@ -85,16 +85,6 @@
             >{{ "download_sample_excel_file" | translate }}
           </button>
         </ng-container>
-         <!-- <ng-container *ngIf="giveInnerPermission('export')">
-          <button
-            type="button"
-            [disabled]="dataSource?.length === 0"
-            class="btn btn-primary"
-            (click)="exportSpeciality()"
-          >
-            <mat-icon>share</mat-icon>{{ "export" | translate }}
-          </button>
-        </ng-container> -->
         <ng-container *ngIf="giveInnerPermission('import')">
           <button
             type="button"
@@ -266,7 +256,7 @@
           [length]="totalLength"
           (page)="handlePageEvent($event)"
           [pageSize]="pageSize"
-          [pageSizeOptions]="[5, 10, 20]"
+          [pageSizeOptions]="[100, 500, 1000, 2000]"
           showFirstLastButtons
           aria-label="Select page of periodic elements"
         >
@@ -573,7 +563,6 @@
 <ng-template #importMedicine let-modal>
   <div class="custome_modal">
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title"></h4>
       <button
         type="button"
         class="btn-close"

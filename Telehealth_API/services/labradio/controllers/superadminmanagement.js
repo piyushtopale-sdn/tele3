@@ -12,7 +12,7 @@ import RadiologyTest from "../models/radiology_test";
 import { generateSignedUrl } from "../helpers/gcs";
 export const getLab_RadioList = async (req, res) => {
   try {
-    const { page, limit, status, searchText, type } = req.query;
+    const { page, limit, status, searchText, type, isAdmin } = req.query;
 
     let sort = req.query.sort;
     let sortingarray = {};
@@ -23,13 +23,14 @@ export const getLab_RadioList = async (req, res) => {
     } else {
       sortingarray["createdAt"] = -1;
     }
+    let centerRole = ["INDIVIDUAL", "ADMIN"];
 
     let filter
     if(type){
       if(req.user.role === 'superadmin'){
         filter = {
           "for_portal_user.type": type,
-          "for_portal_user.role": "INDIVIDUAL",
+          "for_portal_user.role": { $in: centerRole },
           "for_portal_user.isDeleted": false,
           verify_status: status,
         };
@@ -37,7 +38,7 @@ export const getLab_RadioList = async (req, res) => {
       }else{
         filter = {
           "for_portal_user.type": type,
-          "for_portal_user.role": "INDIVIDUAL",
+          "for_portal_user.role":  { $in: centerRole },
           "for_portal_user.isDeleted": false,
           "for_portal_user.lock_user":false,
           verify_status: status,
@@ -45,7 +46,7 @@ export const getLab_RadioList = async (req, res) => {
       }
     }else{
       filter = {
-        "for_portal_user.role": "INDIVIDUAL",
+        "for_portal_user.role":  { $in: centerRole },
         "for_portal_user.isDeleted": false,
         "for_portal_user.lock_user":false,
          verify_status: status,
@@ -103,11 +104,15 @@ export const getLab_RadioList = async (req, res) => {
             type: "$for_portal_user.type",
             role: "$for_portal_user.role",
             notification: "$for_portal_user.notification",
+            isAdmin: "$for_portal_user.isAdmin",
           },
           updatedAt: 1,
         },
       },
     ];
+    if (isAdmin === 'true') {
+      filter["for_portal_user.isAdmin"] = true;
+    }
     const totalCount = await BasicInfo.aggregate(aggregate);
     aggregate.push({
       $sort: sortingarray,

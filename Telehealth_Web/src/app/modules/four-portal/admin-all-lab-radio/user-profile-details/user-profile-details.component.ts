@@ -1,5 +1,5 @@
 import { Location } from "@angular/common";
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, ViewEncapsulation } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LabimagingdentalopticalService } from "src/app/modules/super-admin/labimagingdentaloptical.service";
 import { CoreService } from "src/app/shared/core.service";
@@ -45,11 +45,11 @@ export class UserProfileDetailsComponent {
   innerMenuPremission:any=[];
   loginrole: any;
   constructor(
-    private activeRoute: ActivatedRoute,
-    private labimagingdentaloptical: LabimagingdentalopticalService,
-    private _coreService: CoreService,
-    private route :Router,
-    private location: Location
+    private readonly activeRoute: ActivatedRoute,
+    private readonly labimagingdentaloptical: LabimagingdentalopticalService,
+    private readonly _coreService: CoreService,
+    private readonly route :Router,
+    private readonly location: Location
   ) {
     this.currentId = this.activeRoute.snapshot.params["id"];
     this.tabsId = this.activeRoute.snapshot.params["tabId"];
@@ -81,7 +81,7 @@ export class UserProfileDetailsComponent {
         );
         this.centreName = this.profileDetails?.centre_name;
         this.centreEmail = result?.data?.portalUserData?.email;
-        this.centrePhone = this.profileDetails?.main_phone_number ? this.profileDetails?.main_phone_number : result?.data?.portalUserData?.phone_number;
+        this.centrePhone = this.profileDetails?.main_phone_number ?? result?.data?.portalUserData?.phone_number;
         this.centreJoinDate = this.profileDetails?.createdAt;
         this.pharCountryCode = result?.data?.portalUserData?.country_code;
         this.addressInfo = result?.data?.locationData;
@@ -110,16 +110,16 @@ export class UserProfileDetailsComponent {
     if(userPermission){
       let menuID = sessionStorage.getItem("currentPageMenuID");
       let checkData = this.findObjectByKey(userPermission, "parent_id",menuID)
+      let checkSubmenu;
       if(checkData){
-        if(checkData.isChildKey == true){
-          var checkSubmenu = checkData.submenu;      
+        if(checkData.isChildKey){
+          checkSubmenu = checkData.submenu;      
           if (checkSubmenu.hasOwnProperty("centre")) {
             this.innerMenuPremission = checkSubmenu['centre'].inner_menu;
   
-          } else {
           }
         }else{
-          var checkSubmenu = checkData.submenu;
+          checkSubmenu = checkData.submenu;
           let innerMenu = [];
           for (let key in checkSubmenu) {
             innerMenu.push({name: checkSubmenu[key].name, slug: key, status: true});

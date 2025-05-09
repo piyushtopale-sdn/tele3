@@ -102,9 +102,15 @@ export class AppointmentlistComponent implements OnInit {
   sortOrder: 1 | -1 = -1;
   sortIconClass: string = 'arrow_upward';
   currentUrl : any = [];
+  selectedPatient:any;
+  selectedPatientId:any;
+  centresList:any;
+  overlay = false;
+  userList:any;
+  allDoctorIds:any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  showCallButtonNow: Boolean = true;
+  showCallButtonNow: boolean = true;
 
   @ViewChild("rejectappointment") rejectappointment: ElementRef;
 
@@ -193,8 +199,6 @@ export class AppointmentlistComponent implements OnInit {
   doctorId: any[];
   indi_doc_staffId: any;
   doctor__Id: any[];
-  private _doctor_Id: any[];
-  // new_doctor_id: any;
   get_doctorId: any;
   user_id: any;
   currentDate: any = new Date();
@@ -213,21 +217,21 @@ export class AppointmentlistComponent implements OnInit {
   value = new Date();
   innerMenuPremission: any = [];
   constructor(
-    private modalService: NgbModal,
-    private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute,
-    private doctorService: IndiviualDoctorService,
-    private coreService: CoreService,
-    private toastr: ToastrService,
-    private router: Router,
-    private _patientService: PatientService,
-    private datePipe: DatePipe,
-    private websocket: WebSocketService,
-    private cdr: ChangeDetectorRef,
-    private services: IndiviualDoctorService,
-    private dateAdapter: DateAdapter<Date>    ,
-    private loader: NgxUiLoaderService,
-    private superAdminServcie : SuperAdminService
+    private readonly modalService: NgbModal,
+    private readonly fb: FormBuilder,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly doctorService: IndiviualDoctorService,
+    private readonly coreService: CoreService,
+    private readonly toastr: ToastrService,
+    private readonly router: Router,
+    private readonly _patientService: PatientService,
+    private readonly datePipe: DatePipe,
+    private readonly websocket: WebSocketService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly services: IndiviualDoctorService,
+    private readonly dateAdapter: DateAdapter<Date>    ,
+    private readonly loader: NgxUiLoaderService,
+    private readonly superAdminServcie : SuperAdminService
 
   ) {
     this.dateAdapter.setLocale('en-GB');
@@ -241,7 +245,6 @@ export class AppointmentlistComponent implements OnInit {
     const userData = this.coreService.getLocalStorage("loginData");
     this.userID = userData._id;
     this.userName = userData.fullName;
-    // this.checkForPlan();
 
     this.dateCancelAppointmentForm = this.fb.group({
       appoint: [""],
@@ -343,6 +346,8 @@ export class AppointmentlistComponent implements OnInit {
     // setTimeout(() => {
     //   this.checkInnerPermission();
     // }, 2000);
+    this.getAllPatientList();
+    this.getAppointmentlist()
   }
 
 
@@ -442,7 +447,6 @@ export class AppointmentlistComponent implements OnInit {
 
   // allapointmentlist
   async getAppointmentlist(sort: any = '') {
-
     let reqData = {
       doctor_portal_id: this.doctor_portal_id,
       limit: this.pageSize,
@@ -451,15 +455,18 @@ export class AppointmentlistComponent implements OnInit {
       // date: this.dateFilter,
       sort: sort,
       fromDate: this.fromDate,
-      toDate: this.toDate
+      toDate: this.toDate,
+      patientId:this.selectedPatientId ?? "",
     };
 
     this.doctorService.appoinmentListApi(reqData).subscribe((res) => {
       let encryptedData = { data: res };
       let response = this.coreService.decryptObjectData(encryptedData);
-      if(response.status){      
+        if(response.status){      
         this.dataSource = response?.data?.data;
         this.allAppointmentList = response?.data?.data;
+        this.allDoctorIds = response?.data?.data[0]?.doctorId;
+        this.getAllPatientList();
         // this.new_doctor_id = response?.data?.data.map((ele) => {
         //   return ele.doctorId;
         // })
@@ -694,7 +701,6 @@ export class AppointmentlistComponent implements OnInit {
       this.dateCancelAppointmentForm.value.fromDate ||
       this.dateCancelAppointmentForm.value.toDate
     ) {
-      // this.showDateModal.close();
     } else {
       this.rejectModal.close();
     }
@@ -1102,7 +1108,6 @@ export class AppointmentlistComponent implements OnInit {
           throw new Error("No audio device found");
         }
   
-        let selectedMicrophoneId = audioDevices[0].deviceId;
   
         // Filter for video devices (only if it's a video call)
         if (type == "video") {
@@ -1112,8 +1117,6 @@ export class AppointmentlistComponent implements OnInit {
           // If no video devices, allow joining the call without video
           if (!videoAvailable) {
             console.warn("No video device found, joining video call without video.");
-          } else {
-            let selectedCameraId = videoDevices[0].deviceId;
           }
         }
   
@@ -1121,7 +1124,7 @@ export class AppointmentlistComponent implements OnInit {
         let roomid = apptId;
   
         const data = {
-          loggedInUserId: this.userID ? this.userID : "",
+          loggedInUserId: this.userID ?? "",
           loggedInUserName: this.userName,
           chatId: roomid,
           type: type,
@@ -1175,12 +1178,7 @@ export class AppointmentlistComponent implements OnInit {
   }
   
   goTOEmr(id){
-    this.router.navigate([`/individual-doctor/patientmanagement/details/${id}`],{
-      queryParams: {
-        type:"back_to_appointment_list",
-        patientId: id
-      }
-    })
+    this.router.navigate([`/individual-doctor/patientmanagement/details/${id}`])
   }
 
   onNavigate(url:any): void {
@@ -1247,6 +1245,55 @@ export class AppointmentlistComponent implements OnInit {
         })
       }
     });
+  }
+  onSelect2ChangePatient(event: any): void {
+    this.loader.start()
+    if (!event?.value || !event?.options?.length) return;
+
+    const selectedOption = event?.options?.[0];
+
+    this.selectedPatient = selectedOption?.label ?? "";
+    this.selectedPatientId = selectedOption?.value ?? ""
+
+    if (this.paginator) {
+      this.paginator.firstPage();
+  }
+  if(this.selectedPatientId){
+    this.getAppointmentlist()
+    this.loader.stop()
+  }
+  }
+  clearSelect2() {     
+    this.loader.start()
+    this.selectedPatient = '';
+    this.selectedPatientId = '';
+    this.getAppointmentlist();
+    this.loader.stop()
+  }
+  getAllPatientList(): void {
+    if (!this.allDoctorIds) {
+      return;
+    }
+    let reqData = {
+      doctorId:this.allDoctorIds,
+      page: 1,
+      limit: 0,
+    };
+    this.doctorService
+      .getPatientListAddedByDoctor(reqData)
+      .subscribe(async (res) => {
+        let response = await this.coreService.decryptObjectData({ data: res });     
+        if (response.status) {
+          this.userList = [];
+          const arr = response?.body?.result;
+          arr.map((curentval: any) => {
+            this.userList.push({
+              label : curentval?.fullName + (curentval?.mrn_number ? ` (${curentval.mrn_number})` : ''),
+              value: curentval?.portalUserId,
+            });
+          });
+        }
+      });
   }
   
 }

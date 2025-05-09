@@ -10,7 +10,14 @@
             [ngModel]="searchText" #text (keyup)="handleSearchFilter(text.value)"
             (search)="handleSearchFilter(text.value)" />
         </div>
-      </div>      
+      </div>  
+      <div class="checkbox-below-button">
+        <mat-checkbox
+        (change)="viewAdminList($event.checked)"        
+      >
+        {{"view_admin_user" | translate}}  
+        </mat-checkbox>
+      </div>    
     </div>
     <div class="right_part">
       <button type="button" class="btn btn-primary" [routerLink]="['/super-admin/doctor/add-doctor']">
@@ -29,7 +36,7 @@
               {{ "doctor_name" | translate }}
               <span *ngIf="sortColumn === 'full_name'" class="material-icons sorticon">{{ sortIconClass }}</span>
             </th>
-            <td mat-cell *matCellDef="let element">
+            <td mat-cell *matCellDef="let element" style="text-transform: capitalize;">
               {{ element?.full_name }}
             </td>
           </ng-container>
@@ -109,7 +116,6 @@
             </th>
             <td mat-cell *matCellDef="let element">
               <ng-container *ngIf="giveInnerPermission('lock')">
-                <!-- class="matslidetoggleblock" -->
                 <div class="toggel-slide">
                 
                   <mat-slide-toggle [checked]="element?.for_portal_user?.lock_user" (change)="
@@ -163,6 +169,12 @@
                         d="M15.6025 4.45371C15.8943 4.45371 16.1372 4.69596 16.1372 5.0042V5.2892C16.1372 5.58995 15.8943 5.8397 15.6025 5.8397H3.1726C2.8801 5.8397 2.63721 5.58995 2.63721 5.2892V5.0042C2.63721 4.69596 2.8801 4.45371 3.1726 4.45371H5.35938C5.80359 4.45371 6.19018 4.13796 6.29011 3.69247L6.40463 3.18097C6.58261 2.48423 7.16833 2.02148 7.83866 2.02148H10.9358C11.5988 2.02148 12.1911 2.48423 12.3625 3.14422L12.485 3.69172C12.5842 4.13796 12.9708 4.45371 13.4158 4.45371H15.6025ZM14.4916 14.872C14.7199 12.7443 15.1196 7.68933 15.1196 7.63833C15.1342 7.48383 15.0839 7.33758 14.9839 7.21983C14.8767 7.10958 14.741 7.04433 14.5915 7.04433H4.1886C4.03834 7.04433 3.89537 7.10958 3.79617 7.21983C3.69551 7.33758 3.64591 7.48383 3.65321 7.63833C3.65455 7.6477 3.66889 7.82576 3.69287 8.12345C3.79939 9.44588 4.09608 13.1291 4.2878 14.872C4.42347 16.156 5.26594 16.963 6.48625 16.9922C7.42793 17.014 8.39805 17.0215 9.39005 17.0215C10.3244 17.0215 11.2734 17.014 12.2442 16.9922C13.5069 16.9705 14.3486 16.1777 14.4916 14.872Z" />
                     </svg>
                   </a>
+                </ng-container>
+                <ng-container *ngIf="!element?.for_portal_user?.isAdmin">
+                  <mat-icon (click)="openVerticallyCenteredAssignPermission(assignPermission,element?.for_portal_user?._id, 'granted')" style="color: #ec9656;margin: inherit;" ngbTooltip="Grant Admin Access" >person</mat-icon>                 
+                </ng-container>
+                <ng-container *ngIf="element?.for_portal_user?.isAdmin">
+                  <mat-icon (click)="openVerticallyCenteredAssignPermission(assignPermission,element?.for_portal_user?._id, 'removed')" style="color: green; margin: inherit;" ngbTooltip="Admin Access Granted" >supervisor_account</mat-icon>
                 </ng-container>
               </div>
             </td>
@@ -225,6 +237,35 @@
           <button type="button" class="btn btn-primary" (click)="
               activeLockDeleteDoctor('lock', abc === 'Lock' ? true : false)
             ">
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #assignPermission let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete"  *ngIf="permissionType === 'granted'">
+          <img class="img-fluid" src="../../../../assets/img/approved.svg" alt="" />
+        </div>
+        <div class="image delete"  *ngIf="permissionType === 'removed'">
+          <img class="img-fluid" src="../../../../assets/img/cancel.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p *ngIf="permissionType === 'granted'">{{ "you_want_to_give_admin_privileges_to_this_user" | translate }}</p>
+        <p *ngIf="permissionType === 'removed'">{{ "you_want_remove_admin_privileges_to_this_user" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button *ngIf="permissionType === 'granted'" type="button" class="btn btn-primary" (click)="updateDoctorPermission(true)">
+            {{ "yes" | translate }}
+          </button>
+          <button *ngIf="permissionType === 'removed'" type="button" class="btn btn-primary" (click)="updateDoctorPermission(false)">
             {{ "yes" | translate }}
           </button>
         </div>

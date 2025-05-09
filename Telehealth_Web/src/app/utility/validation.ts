@@ -15,8 +15,15 @@ export default class Validation {
         controls.get(checkControlName)?.setErrors({ matching: true });
         return { matching: true };
       } else {
-        return null;
+        if (checkControl.hasError('matching')) {
+          delete checkControl.errors['matching'];
+          if (Object.keys(checkControl.errors).length === 0) {
+            checkControl.setErrors(null);
+          }
+        }
+        
       }
+      return null;
     };
   }
 

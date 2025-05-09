@@ -1,22 +1,19 @@
 import {
   Component,
-  OnInit,
   ViewEncapsulation,
   ViewChild,
   TemplateRef,
 } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
 import { CoreService } from "src/app/shared/core.service";
-import { DatePipe } from "@angular/common";
 import { ToastrService } from "ngx-toastr";
-import { Router } from "@angular/router";
 import { MatTabGroup } from "@angular/material/tabs";
 import { MatDatepickerInputEvent } from "@angular/material/datepicker";
 import { NgxUiLoaderService } from "ngx-ui-loader";
-import { AbstractControl, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { LabimagingdentalopticalService } from "../../super-admin/labimagingdentaloptical.service";
 export type IVerifyStatus = "APPROVED" | "PENDING" | "DECLINED";
 // Pending request table
@@ -28,11 +25,7 @@ export interface PendingPeriodicElement {
   email: string;
   phonenumber: string;
   province: string;
-  // department: string;
-  // service: string;
-  // unit: string;
   experience: string;
-  // createdAt:string;
 }
 const PENDING_ELEMENT_DATA: PendingPeriodicElement[] = [];
 
@@ -103,13 +96,12 @@ newPortal_form: FormGroup
 @ViewChild("activeOrInactivemodal") activeOrInactivemodal: TemplateRef<any>;
 @ViewChild("statusTab", { static: false }) tab: MatTabGroup;
 constructor(
-  private modalService: NgbModal,
-  private coreService: CoreService,
-  private fb: FormBuilder,
-  private toastr: ToastrService,
-  private route :Router,
-  private labimagingdentaloptical :LabimagingdentalopticalService,
-  private loader: NgxUiLoaderService
+  private readonly modalService: NgbModal,
+  private readonly coreService: CoreService,
+  private readonly fb: FormBuilder,
+  private readonly toastr: ToastrService,
+  private readonly labimagingdentaloptical :LabimagingdentalopticalService,
+  private readonly loader: NgxUiLoaderService
   
 ) {
   this.loginrole = this.coreService.getLocalStorage("adminData").role;
@@ -144,10 +136,6 @@ ngOnInit(): void {
   this.superAdminId = adminData?._id;
   this.resetDate();
   this.getLabList(`${this.sortColumn}:${this.sortOrder}`);
-
-  // setTimeout(() => {
-  //   this.checkInnerPermission();
-  // }, 300);
 }
 
 
@@ -161,16 +149,16 @@ checkInnerPermission(){
 
     let menuID = sessionStorage.getItem("currentPageMenuID");
     let checkData = this.findObjectByKey(userPermission, "parent_id",menuID)
+    let checkSubmenu;
     if(checkData){
-      if(checkData.isChildKey == true){
-        var checkSubmenu = checkData.submenu;      
+      if(checkData.isChildKey){
+        checkSubmenu = checkData.submenu;      
         if (checkSubmenu.hasOwnProperty("pharmacy")) {
           this.innerMenuPremission = checkSubmenu['pharmacy'].inner_menu;
 
-        } else {
         }
       }else{
-        var checkSubmenu = checkData.submenu;
+         checkSubmenu = checkData.submenu;
         let innerMenu = [];
         for (let key in checkSubmenu) {
           innerMenu.push({name: checkSubmenu[key].name, slug: key, status: true});
@@ -303,13 +291,9 @@ clearFilter() {
 
 public onTabChanged(data: { index: number }): void {
   this.tabNumber = data.index;
-  if (this.tabNumber === 3) {
-
-  } else {
   this.resetPagination();
   this.verifyStatus = this.statusList[this.tabNumber];
-  this.getLabList();
-  }
+  this.getLabList();  
 }
 
 private resetPagination(): void {

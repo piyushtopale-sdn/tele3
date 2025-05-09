@@ -40,16 +40,7 @@
         </div>
     </div>
     <div class="right_part">
-      <div class="primary_btn">
-        <ng-container *ngIf="giveInnerPermission('export')">
-          <button
-            type="button"
-            class="btn btn-primary"
-            (click)="exportManageTest()"
-          >
-            <mat-icon>download</mat-icon>{{ "export" | translate }}
-          </button>
-        </ng-container> 
+      <div class="primary_btn">        
         <button
           type="button"
           class="btn btn-primary"
@@ -57,6 +48,34 @@
         >
           {{ "add_test" | translate }}
         </button>
+        <button
+        type="button"
+        class="btn btn-primary"
+        (click)="openVerticallyCenteredimport(importTest)"
+      >
+        <a class="btn_svg"
+          ><svg
+            width="17"
+            height="15"
+            viewBox="0 0 19 17"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M2.70702 0.0104581C2.35458 0.068045 2.14937 0.132128 1.86268 0.274083C1.40132 0.502557 0.97754 0.942847 0.758933 1.42088C0.482758 2.0248 0.50022 1.57399 0.50022 8.09617C0.50022 12.9014 0.509776 14.035 0.55184 14.2135C0.717983 14.9191 1.21541 15.5686 1.8243 15.875C2.38912 16.1593 2.18433 16.1464 6.14194 16.1464H9.71119L9.88221 16.0467C9.97624 15.9919 10.1037 15.8725 10.1653 15.7812C10.2688 15.6282 10.2815 15.5697 10.329 15.0238C10.4356 13.8003 10.7776 12.9004 11.4602 12.0464C12.1823 11.1432 13.1294 10.555 14.2693 10.3017C14.6271 10.2222 14.8098 10.2123 16.3188 10.1915L17.9755 10.1685L18.1418 10.0472C18.2333 9.98044 18.3513 9.84594 18.4041 9.7483L18.5 9.57071L18.4998 7.11979L18.4997 4.66886L18.3953 4.35004C18.1169 3.49978 17.5074 2.88881 16.677 2.62765C16.49 2.56883 16.1025 2.55875 13.2776 2.53906L10.0893 2.51682L9.93295 2.40938C9.82035 2.33195 9.65551 2.11499 9.34318 1.63305C9.10481 1.26517 8.83965 0.884663 8.75398 0.787502C8.53058 0.53412 8.0822 0.243117 7.72051 0.116785L7.40845 0.00778804L5.10571 0.00129208C3.8392 -0.00229465 2.75979 0.00184999 2.70702 0.0104581ZM14.0838 11.9775C13.9867 12.0233 13.5948 12.3851 13.0476 12.9344C12.0537 13.9318 11.9386 14.0915 11.9652 14.4363C11.9738 14.5479 12.0142 14.7048 12.055 14.785C12.172 15.0153 13.9025 16.8423 14.0853 16.9286C14.3751 17.0652 14.7298 17.0019 14.9629 16.7719C15.1698 16.5679 15.1979 16.4686 15.2186 15.8674L15.2378 15.3095L16.6066 15.2895L17.9754 15.2696L18.1418 15.1483C18.5595 14.8436 18.6203 14.2555 18.2748 13.861C18.0801 13.6388 18.0697 13.6372 16.6002 13.6157L15.2378 13.5958L15.2186 13.0379C15.1979 12.4367 15.1698 12.3374 14.9629 12.1334C14.7293 11.9029 14.3751 11.8401 14.0838 11.9775Z"
+            /></svg></a
+        >{{ "import" | translate }}
+      </button>
+      <ng-container *ngIf="giveInnerPermission('export')">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="exportManageTest()"
+        >
+          <mat-icon>download</mat-icon>{{ "export" | translate }}
+        </button>
+      </ng-container> 
       </div>      
     </div>
   </div>
@@ -298,33 +317,32 @@
                 >
                   {{ "field_is_required" | translate }}
                 </mat-error>
-              </div>    
+              </div>  
               <div class="item form-group">
                 <div class="form_field_wrapper">
-                  <label
-                  >{{ "select_loinc_code" | translate
-                  }}<span class="danger">*</span></label
+                <label
+                  >{{ "fees" | translate
+                  }}(SAR)<span class="danger">*</span></label
                 >
-                <select2
-                [placeholder]="'select_loinc_code' | translate"
-                [overlay]="true"
-                [limitSelection]="0"
-                [minCountForSearch]="1"
-                [data]="loincCodeList"
-                formControlName="loincCode"
-                (update)="onSelectionChangLoincCode($event)"
-              >
-              </select2>
-                </div>
-                <mat-error
-                  *ngIf="
-                    radioTestForm.get('loincCode').invalid &&
-                    radioTestForm.get('loincCode').touched
-                  "
-                >
-                  {{ "field_is_required" | translate }}
-                </mat-error>
-              </div>     
+                <mat-form-field appearance="fill">
+                  <input
+                    type="number"
+                    placeholder="{{ 'fees' | translate }}"
+                    matInput
+                    formControlName="testFees"
+                    min="0"
+                  />
+                </mat-form-field> 
+              </div>
+              <mat-error
+              *ngIf="
+                radioTestForm.get('testFees').invalid &&
+                radioTestForm.get('testFees').touched
+              "
+            >
+              {{ "field_is_required" | translate }}
+            </mat-error>                
+            </div>  
             </div>
             <div class="item-box d-flex form-row">
             <div class="item form-group">
@@ -351,44 +369,39 @@
             <div class="item-box d-flex form-row">
               <div class="item form-group">
                 <div class="form_field_wrapper">
-                <label
-                  >{{ "fees" | translate
-                  }}(SAR)<span class="danger">*</span></label
-                >
-                <mat-form-field appearance="fill">
+                  <label>
+                    {{ "select_loinc_code" | translate }}
+                    <span class="danger">*</span>
+                  </label>
+                  <mat-form-field appearance="fill">
                   <input
-                    type="number"
-                    placeholder="{{ 'fees' | translate }}"
                     matInput
-                    formControlName="testFees"
-                    min="0"
+                    [formControl]="loincCodeInputControl"
+                    [matAutocomplete]="auto"
+                    placeholder="Search and Select Loinc Code"
+                    (focus)="onFocusShowList()"
                   />
-                </mat-form-field> 
-              </div>
-              <mat-error
-              *ngIf="
-                radioTestForm.get('testFees').invalid &&
-                radioTestForm.get('testFees').touched
-              "
-            >
-              {{ "field_is_required" | translate }}
-            </mat-error>                
-            </div>       
-              <!-- <div class="item form-group">
-                <div class="form_field_wrapper">
-                  <label>{{ "select_coupon_code" | translate }}</label>
-                  <select2
-                    [placeholder]="'select_coupon_code' | translate"
-                    [overlay]="true"
-                    [limitSelection]="0"
-                    [minCountForSearch]="1"
-                    [data]="couponList"
-                    formControlName="couponCode"
-                    (update)="onSelectedChangeCouponCode($event)"
+                  </mat-form-field>
+                  <mat-autocomplete
+                    #auto="matAutocomplete"
+                    (optionSelected)="onSelectionChangLoincCode($event)"
+                    autoActiveFirstOption
                   >
-                  </select2>
+                    <mat-option *ngFor="let item of filteredLoincCodes" [value]="item.label">
+                      {{ item.label }}
+                    </mat-option>
+                  </mat-autocomplete>
+              
+                  <mat-error
+                    *ngIf="
+                      radioTestForm.get('loincCode')?.invalid &&
+                      radioTestForm.get('loincCode')?.touched
+                    "
+                  >
+                    {{ 'field_is_required' | translate }}
+                  </mat-error>
                 </div>
-              </div>             -->
+              </div>
             </div>                    
             <div class="item-box d-flex">
               <div class="item full-width">
@@ -509,30 +522,29 @@
               </div>    
               <div class="item form-group">
                 <div class="form_field_wrapper">
-                  <label
-                  >{{ "select_loinc_code" | translate
-                  }}<span class="danger">*</span></label
+                <label
+                  >{{ "fees" | translate
+                  }}(SAR)<span class="danger">*</span></label
                 >
-                <select2
-                [placeholder]="'select_loinc_code' | translate"
-                [overlay]="true"
-                [limitSelection]="0"
-                [minCountForSearch]="1"
-                [data]="loincCodeList"
-                formControlName="loincCode"
-                (update)="onSelectionChangLoincCode($event)"
-              >
-              </select2>
-                </div>
-                <mat-error
-                  *ngIf="
-                    radioTestForm.get('loincCode').invalid &&
-                    radioTestForm.get('loincCode').touched
-                  "
-                >
-                  {{ "field_is_required" | translate }}
-                </mat-error>
-              </div>     
+                <mat-form-field appearance="fill">
+                  <input
+                    type="number"
+                    placeholder="{{ 'fees' | translate }}"
+                    matInput
+                    formControlName="testFees"
+                    min="0"
+                  />
+                </mat-form-field> 
+              </div>
+              <mat-error
+              *ngIf="
+                radioTestForm.get('testFees').invalid &&
+                radioTestForm.get('testFees').touched
+              "
+            >
+              {{ "field_is_required" | translate }}
+            </mat-error>                
+            </div>     
             </div>
             <div class="item-box d-flex form-row">
             <div class="item form-group">
@@ -556,48 +568,43 @@
               </div>
             </div>  
           </div>
-            <div class="item-box d-flex form-row">
-              <div class="item form-group">
-                <div class="form_field_wrapper">
-                <label
-                  >{{ "fees" | translate
-                  }}(SAR)<span class="danger">*</span></label
-                >
+          <div class="item-box d-flex form-row">
+            <div class="item form-group">
+              <div class="form_field_wrapper">
+                <label>
+                  {{ "select_loinc_code" | translate }}
+                  <span class="danger">*</span>
+                </label>
                 <mat-form-field appearance="fill">
-                  <input
-                    type="number"
-                    placeholder="{{ 'fees' | translate }}"
-                    matInput
-                    formControlName="testFees"
-                    min="0"
-                  />
-                </mat-form-field> 
+                <input
+                  matInput
+                  [formControl]="loincCodeInputControl"
+                  [matAutocomplete]="auto"
+                  placeholder="Search and Select Loinc Code"
+                  (focus)="onFocusShowList()"
+                />
+                </mat-form-field>
+                <mat-autocomplete
+                  #auto="matAutocomplete"
+                  (optionSelected)="onSelectionChangLoincCode($event)"
+                  autoActiveFirstOption
+                >
+                  <mat-option *ngFor="let item of filteredLoincCodes" [value]="item.label">
+                    {{ item.label }}
+                  </mat-option>
+                </mat-autocomplete>
+            
+                <mat-error
+                  *ngIf="
+                    radioTestForm.get('loincCode')?.invalid &&
+                    radioTestForm.get('loincCode')?.touched
+                  "
+                >
+                  {{ 'field_is_required' | translate }}
+                </mat-error>
               </div>
-              <mat-error
-              *ngIf="
-                radioTestForm.get('testFees').invalid &&
-                radioTestForm.get('testFees').touched
-              "
-            >
-              {{ "field_is_required" | translate }}
-            </mat-error>                
-            </div>       
-              <!-- <div class="item form-group">
-                <div class="form_field_wrapper">
-                  <label>{{ "select_coupon_code" | translate }}</label>
-                  <select2
-                    [placeholder]="'select_coupon_code' | translate"
-                    [overlay]="true"
-                    [limitSelection]="0"
-                    [minCountForSearch]="1"
-                    [data]="couponList"
-                    formControlName="couponCode"
-                    (update)="onSelectedChangeCouponCode($event)"
-                  >
-                  </select2>
-                </div>
-              </div>             -->
-            </div>                    
+            </div>
+          </div>                  
             <div class="item-box d-flex">
               <div class="item full-width">
                 <div class="form_field_wrapper">
@@ -637,6 +644,120 @@
           </button>
           <button type="submit" class="btn btn-primary">
             {{ "save" | translate }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #importTest let-modal>
+  <div class="custome_modal">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{ "upload_excel_file" | translate }}</h4>
+      <button
+        type="button"
+        class="btn-close"
+        aria-label="Close"
+        (click)="closePopup()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="modal-body import_services">
+      <form [formGroup]="teamExcelForm" (ngSubmit)="excleSubmit()">
+        <div class="modal_content  flex-column mb-3">           
+        <div class="row modal_content_inner">
+          <div class="col-sm-12  mb-3">
+            <div class="form_field_wrapper">
+              <label
+                >{{ "radio_centre" | translate
+                }}<span class="danger">*</span></label
+              >
+              <select2
+                [placeholder]="'select_centre' | translate"
+                [overlay]="true"
+                [limitSelection]="0"
+                [minCountForSearch]="1"
+                [data]="radioUserList"
+                (update)="onSelect2Change($event)"
+                [value]="selecteduser"
+                formControlName="centre"
+              >
+              </select2>
+              <mat-error
+              *ngIf="
+                isSubmitted &&
+                teamExcelForm.get('centre').hasError('required')
+              "
+              >{{ "select_centre" | translate }}</mat-error
+            >
+            </div>
+          </div>
+          <div class="col-sm-6 upload_item">
+            <div class="form_field_wrapper">
+              <div class="upload_input">
+                <div class="upload_input_content">
+                  <label>
+                    <a class="btn_svg"
+                      ><svg
+                        width="19"
+                        height="17"
+                        viewBox="0 0 19 17"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M2.70702 0.0104581C2.35458 0.068045 2.14937 0.132128 1.86268 0.274083C1.40132 0.502557 0.97754 0.942847 0.758933 1.42088C0.482758 2.0248 0.50022 1.57399 0.50022 8.09617C0.50022 12.9014 0.509776 14.035 0.55184 14.2135C0.717983 14.9191 1.21541 15.5686 1.8243 15.875C2.38912 16.1593 2.18433 16.1464 6.14194 16.1464H9.71119L9.88221 16.0467C9.97624 15.9919 10.1037 15.8725 10.1653 15.7812C10.2688 15.6282 10.2815 15.5697 10.329 15.0238C10.4356 13.8003 10.7776 12.9004 11.4602 12.0464C12.1823 11.1432 13.1294 10.555 14.2693 10.3017C14.6271 10.2222 14.8098 10.2123 16.3188 10.1915L17.9755 10.1685L18.1418 10.0472C18.2333 9.98044 18.3513 9.84594 18.4041 9.7483L18.5 9.57071L18.4998 7.11979L18.4997 4.66886L18.3953 4.35004C18.1169 3.49978 17.5074 2.88881 16.677 2.62765C16.49 2.56883 16.1025 2.55875 13.2776 2.53906L10.0893 2.51682L9.93295 2.40938C9.82035 2.33195 9.65551 2.11499 9.34318 1.63305C9.10481 1.26517 8.83965 0.884663 8.75398 0.787502C8.53058 0.53412 8.0822 0.243117 7.72051 0.116785L7.40845 0.00778804L5.10571 0.00129208C3.8392 -0.00229465 2.75979 0.00184999 2.70702 0.0104581ZM14.0838 11.9775C13.9867 12.0233 13.5948 12.3851 13.0476 12.9344C12.0537 13.9318 11.9386 14.0915 11.9652 14.4363C11.9738 14.5479 12.0142 14.7048 12.055 14.785C12.172 15.0153 13.9025 16.8423 14.0853 16.9286C14.3751 17.0652 14.7298 17.0019 14.9629 16.7719C15.1698 16.5679 15.1979 16.4686 15.2186 15.8674L15.2378 15.3095L16.6066 15.2895L17.9754 15.2696L18.1418 15.1483C18.5595 14.8436 18.6203 14.2555 18.2748 13.861C18.0801 13.6388 18.0697 13.6372 16.6002 13.6157L15.2378 13.5958L15.2186 13.0379C15.1979 12.4367 15.1698 12.3374 14.9629 12.1334C14.7293 11.9029 14.3751 11.8401 14.0838 11.9775Z"
+                        /></svg></a
+                    >{{ "import_excel" | translate }}
+                  </label>
+                </div>
+                <input
+                  (change)="fileChange($event)"
+                  formControlName="subtestfile"
+                  class="ng-hide user_upload_input"
+                  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                  id="input-file-id"
+                  type="file"
+                />
+                <mat-error
+                  *ngIf="
+                    isSubmitted &&
+                    teamExcelForm.get('subtestfile').hasError('required')
+                  "
+                  >{{ "excel_required" | translate }}</mat-error
+                >
+              </div>
+            </div>
+          </div>
+          <div class="download_content col-sm-6">
+            <button
+              type="button"
+              placement="top"
+              class="btn btn-primary"
+              (click)="downLoadExcel()"
+            >
+              {{ "download_sample_excel_file" | translate }}
+            </button>
+          </div>
+          <div class="pt-20">
+            <i>{{ "note_only_excel_file_allowed" | translate }}</i>
+          </div>
+        </div>
+      </div>
+        <div class="primary_btn">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closePopup()"
+          >
+            {{ "cancel" | translate }}
+          </button>
+          <button type="submit" class="btn btn-primary">
+            {{ "import_file" | translate }}
           </button>
         </div>
       </form>

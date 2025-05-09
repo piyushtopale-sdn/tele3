@@ -6,17 +6,14 @@ import AdminInfo from "../models/admin_info";
 import StaffInfo from "../models/staff_info";
 import LocationInfo from "../models/location_info";
 import BankDetailInfo from "../models/bank_detail";
-import MobilePayInfo from "../models/mobile_pay";
 import ResetPasswordHistory from "../models/reset_password_history";
 import Otp2fa from "../models/otp2fa";
 import OpeningHours from "../models/opening_hours_info";
-import OnDuty from "../models/on_duty_info";
 import DocumentInfo from "../models/document_info";
 import ReviewAndRating from "../models/review"
 // utils
 import { sendResponse, createSession } from "../helpers/transmission";
 import { hashPassword } from "../helpers/string";
-import { sendMailInvitations } from "../helpers/emailTemplate";
 import { sendEmail } from "../helpers/ses";
 import { config, generate4DigitOTP, smsTemplateOTP } from "../config/constants";
 const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS } = config
@@ -28,7 +25,6 @@ import {
 } from "../middleware/utils";
 import mongoose from "mongoose";
 import Http from "../helpers/httpservice"
-import Invitation from "../models/email_invitation";
 import crypto from "crypto"
 import OrderDetail from "../models/order/order_detail";
 const httpService = new Http()
@@ -210,18 +206,19 @@ class PharmacyController {
                     {new: true}
                   )
                 }
-                if (data?.lock_details?.passwordAttempts == PASSWORD_ATTEMPTS) {
-                  const addMinutes = new Date(currentTime.getTime() + LOGIN_AFTER * 60000);
-                  await PortalUser.findOneAndUpdate(
-                    {_id: portalUserData._id},
-                    { $set: {
-                      lock_user: true,
-                      'lock_details.timestamps': addMinutes,
-                      'lock_details.lockedReason': "Incorrect password attempt",
-                      'lock_details.lockedBy': "pharmacy",
-                    }}
-                  )
-                }
+                 /** Commented code as client don't want to lock user */
+                // if (data?.lock_details?.passwordAttempts == PASSWORD_ATTEMPTS) {
+                //   const addMinutes = new Date(currentTime.getTime() + LOGIN_AFTER * 60000);
+                //   await PortalUser.findOneAndUpdate(
+                //     {_id: portalUserData._id},
+                //     { $set: {
+                //       lock_user: true,
+                //       'lock_details.timestamps': addMinutes,
+                //       'lock_details.lockedReason': "Incorrect password attempt",
+                //       'lock_details.lockedBy': "pharmacy",
+                //     }}
+                //   )
+                // }
                 return sendResponse(req, res, 200, {
                     status: false,
                     body: null,
@@ -1552,18 +1549,7 @@ class PharmacyController {
                 }
             }
             let mobilePayResult
-            const getMobilePayInfo = await MobilePayInfo.find({ for_portal_user: { $eq: for_portal_user } }).select('_id').exec();
-            if (for_portal_user && getMobilePayInfo.length > 0) {
-                mobilePayResult = await MobilePayInfo.findOneAndUpdate({ for_portal_user: { $eq: for_portal_user } }, {
-                    $set: { mobilePay: dataArray }
-                }).exec();
-            } else {
-                const mobilePayData = new MobilePayInfo({
-                    mobilePay: dataArray,
-                    for_portal_user: for_portal_user
-                })
-                mobilePayResult = await mobilePayData.save()
-            }
+           
             const mobile_pay_object_id = mobilePayResult?._id
 
             await Promise.all([locationData, bankData]);
@@ -1771,71 +1757,6 @@ class PharmacyController {
                 status: false,
                 data: error,
                 message: "failed to add pharmacy opening hours",
-                errorCode: "INTERNAL_SERVER_ERROR",
-            });
-        }
-    }
-
-    async pharmacyOnDuty(req, res) {
-        try {
-            const { pharmacy_id, on_duty, getDetails } = req.body;
-            const onDutyDetails = await OnDuty.findOne({ for_portal_user: pharmacy_id })
-            if (getDetails != "") {
-                return sendResponse(req, res, 200, {
-                    status: true,
-                    data: { onDutyDetails },
-                    message: "successfully get details pharmacy on duty",
-                    errorCode: null,
-                });
-            }
-            let newObject
-            let newArray = []
-            if (on_duty.length > 0) {
-                on_duty.map((singleData) => {
-                    newObject = {
-                        from_date_timestamp: new Date(singleData.from_date + "T" + singleData.from_time + ":15.215Z"),
-                        to_date_timestamp: new Date(singleData.to_date + "T" + singleData.to_time + ":15.215Z")
-                    }
-                    newArray.push(newObject)
-                })
-            } else {
-                newArray = [
-                    {
-                        "from_date_timestamp": new Date(),
-                        "to_date_timestamp": new Date()
-                    }
-                ]
-            }
-
-            let onDutyData
-            if (onDutyDetails) {
-                onDutyData = await OnDuty.findOneAndUpdate(
-                    { for_portal_user: pharmacy_id },
-                    {
-                        $set: {
-                            on_duty: newArray
-                        },
-                    },
-                    { new: true }
-                ).exec();
-            } else {
-                const onDutyInfo = new OnDuty({
-                    on_duty: newArray,
-                    for_portal_user: pharmacy_id
-                });
-                onDutyData = await onDutyInfo.save();
-            }
-            sendResponse(req, res, 200, {
-                status: true,
-                data: { onDutyData },
-                message: "successfully added pharmacy on duty",
-                errorCode: null,
-            });
-        } catch (error) {
-            sendResponse(req, res, 500, {
-                status: false,
-                data: error,
-                message: "failed to add pharmacy on duty",
                 errorCode: "INTERNAL_SERVER_ERROR",
             });
         }
@@ -2530,118 +2451,6 @@ class PharmacyController {
     //     }
     // }
 
-    async pharmacyDetails(req, res) {
-        try {
-            const { pharmacyId } = req.query
-            const headers = {
-                'Authorization': req.headers['authorization']
-            }
-            const portalUserData = await PortalUser.findOne({ _id: pharmacyId })
-            const adminData = await AdminInfo.findOne({ for_portal_user: pharmacyId }).populate({ path: "for_portal_user" })
-            const openingHours = await OpeningHours.findOne({ for_portal_user: pharmacyId })
-            const onDuty = await OnDuty.findOne({ for_portal_user: pharmacyId })
-            let onDutyStatus = false
-            if (onDuty) {
-                for (let index = 0; index < onDuty.on_duty.length; index++) {
-                    onDutyStatus = onDuty.on_duty[index].from_date_timestamp < new Date() && onDuty.on_duty[index].to_date_timestamp > new Date()
-                    if (onDutyStatus == true) {
-                        break
-                    }
-                }
-            }
-            const pharmacy_location = await LocationInfo.findOne({ _id: mongoose.Types.ObjectId(adminData?.in_location) })
-            const profilePictureArray = [adminData?.profile_picture]
-            const pharmacyLogo = await httpService.postStaging('pharmacy/get-signed-url', { url: profilePictureArray }, headers, 'pharmacyServiceUrl');
-
-            let Sunday = []
-            let Monday = []
-            let Tuesday = []
-            let Wednesday = []
-            let Thursday = []
-            let Friday = []
-            let Saturday = []
-            if (openingHours) {
-                openingHours.week_days.forEach((data) => {
-                    Sunday.push({
-                        "start_time": data.sun.start_time.slice(0, 2) + ":" + data.sun.start_time.slice(2, 4),
-                        "end_time": data.sun.end_time.slice(0, 2) + ":" + data.sun.end_time.slice(2, 4)
-                    })
-                    Monday.push({
-                        "start_time": data.mon.start_time.slice(0, 2) + ":" + data.mon.start_time.slice(2, 4),
-                        "end_time": data.mon.end_time.slice(0, 2) + ":" + data.mon.end_time.slice(2, 4)
-                    })
-                    Tuesday.push({
-                        "start_time": data.tue.start_time.slice(0, 2) + ":" + data.tue.start_time.slice(2, 4),
-                        "end_time": data.tue.end_time.slice(0, 2) + ":" + data.tue.end_time.slice(2, 4)
-                    })
-                    Wednesday.push({
-                        "start_time": data.wed.start_time.slice(0, 2) + ":" + data.wed.start_time.slice(2, 4),
-                        "end_time": data.wed.end_time.slice(0, 2) + ":" + data.wed.end_time.slice(2, 4)
-                    })
-                    Thursday.push({
-                        "start_time": data.thu.start_time.slice(0, 2) + ":" + data.thu.start_time.slice(2, 4),
-                        "end_time": data.thu.end_time.slice(0, 2) + ":" + data.thu.end_time.slice(2, 4)
-                    })
-                    Friday.push({
-                        "start_time": data.fri.start_time.slice(0, 2) + ":" + data.fri.start_time.slice(2, 4),
-                        "end_time": data.fri.end_time.slice(0, 2) + ":" + data.fri.end_time.slice(2, 4)
-                    })
-                    Saturday.push({
-                        "start_time": data.sat.start_time.slice(0, 2) + ":" + data.sat.start_time.slice(2, 4),
-                        "end_time": data.sat.end_time.slice(0, 2) + ":" + data.sat.end_time.slice(2, 4)
-                    })
-                }
-                )
-            }
-
-
-            let backGround = {
-                "pharmacy_name": adminData?.pharmacy_name,
-                "createdBy": portalUserData?.createdBy,
-                "hoursset": adminData?.hoursset,
-                "PharmacyId": portalUserData?._id,
-                "pharmacy_logo": pharmacyLogo?.data[0],
-                "slogan": adminData?.slogan,
-                "medicine_request": adminData?.medicine_request,
-                "about_pharmacy": adminData?.about_pharmacy,
-                "show_to_patient": adminData?.show_to_patient,
-                "contactInfo": {
-                    "phone": adminData?.main_phone_number,
-                    "email": adminData?.for_portal_user.email,
-                    "location": adminData?.address,
-                },
-                "pharmacyLocation": pharmacy_location,
-                // "openingHours": openingHours.week_days,
-                "openingHours": {
-                    Sunday,
-                    Monday,
-                    Tuesday,
-                    Wednesday,
-                    Thursday,
-                    Friday,
-                    Saturday
-                },
-                onDutyStatus
-            }
-            sendResponse(req, res, 200, {
-                status: true,
-                data: {
-                    backGround,
-                    reviews
-                },
-                message: `pharmacy details fetched successfully`,
-                errorCode: null,
-            });
-        } catch (error) {
-            sendResponse(req, res, 500, {
-                status: false,
-                data: error,
-                message: `failed to get all pharmacy details`,
-                errorCode: "INTERNAL_SERVER_ERROR",
-            });
-        }
-    }
-
     async getReviewAndRatinByPatient(req, res) {
         try {
             const { patientId } = req.query;
@@ -2850,247 +2659,6 @@ class PharmacyController {
             });
         }
     }
-
-    async sendInvitation(req, res) {
-        try {
-            const {
-                first_name,
-                middle_name,
-                last_name,
-                email,
-                phone,
-                address,
-                created_By,
-            } = req.body;
-
-            if (invitationId) {
-                // Update the existing record
-                const updatedUserData = await Invitation.findOneAndUpdate(
-                    { _id: invitationId },
-                    {
-                        $set: {
-                            first_name,
-                            middle_name,
-                            last_name,
-                            email,
-                            phone,
-                            address,
-                            created_By,
-                            verify_status: "PENDING"
-                        }
-                    },
-                    { new: true }
-                );
-
-                if (updatedUserData) {
-                    const loggedInData = await AdminInfo.find({ for_portal_user: created_By });
-                    const loggeInname = loggedInData[0].pharmacy_name;
-                    const content = sendMailInvitations(email, first_name, last_name, loggeInname);
-                    const mailSent = await sendEmail(content);
-
-                    if (mailSent) {
-                        updatedUserData.verify_status = "SEND";
-                       await updatedUserData.save();
-                        
-                    }
-
-                    return sendResponse(req, res, 200, {
-                        status: true,
-                        data: updatedUserData,
-                        message: `Invitation updated and sent successfully`,
-                        errorCode: null,
-                    });
-                } else {
-                    return sendResponse(req, res, 404, {
-                        status: false,
-                        data: null,
-                        message: `Invitation with ID ${invitationId} not found`,
-                        errorCode: "NOT_FOUND",
-                    });
-                }
-            } else {
-                // Create a new record
-                let userData = await Invitation.findOne({ email, verify_status: "PENDING" });
-
-                if (!userData) {
-                    userData = new Invitation({
-                        first_name,
-                        middle_name,
-                        last_name,
-                        email,
-                        phone,
-                        address,
-                        created_By,
-                        verify_status: "PENDING"
-                    });
-                    userData = await userData.save();
-                }
-
-                const loggedInData = await AdminInfo.find({ for_portal_user: created_By });
-                const loggeInname = loggedInData[0].pharmacy_name;
-                const content = sendMailInvitations(email, first_name, last_name, loggeInname);
-                const mailSent = await sendEmail(content);
-
-                if (mailSent) {
-                    userData.verify_status = "SEND";
-                    await userData.save();
-                    
-                }
-
-                if (userData) {
-                    return sendResponse(req, res, 200, {
-                        status: true,
-                        data: userData,
-                        message: `Invitation sent successfully`,
-                        errorCode: null,
-                    });
-                } else {
-                    return sendResponse(req, res, 200, {
-                        status: false,
-                        data: null,
-                        message: `Invitation Send successfully`,
-                        errorCode: null,
-                    });
-                }
-            }
-        } catch (err) {
-            
-            sendResponse(req, res, 500, {
-                status: false,
-                data: err,
-                message: `Failed to send invitation`,
-                errorCode: "INTERNAL_SERVER_ERROR",
-            });
-        }
-    };
-
-    async getAllInvitation(req, res) {
-        try {
-            let { for_portal_user, page, limit, searchKey, createdDate, updatedDate } = req.query;
-            let sort = req.query.sort
-            let sortingarray = {};
-            if (sort != 'undefined' && sort != '' && sort != undefined) {
-                let keynew = sort.split(":")[0];
-                let value = sort.split(":")[1];
-                sortingarray[keynew] = value;
-            } else {
-                sortingarray['createdAt'] = -1;
-            }
-
-            let checkUser = await PortalUser.findOne({ _id: mongoose.Types.ObjectId(for_portal_user) });
-
-            if (checkUser.role === 'PHARMACY_STAFF') {
-
-                let adminData = await StaffInfo.findOne({ for_portal_user: mongoose.Types.ObjectId(for_portal_user) });
-
-                for_portal_user = adminData?.for_staff
-
-            }
-
-
-            const filter = {};
-
-            if (searchKey && searchKey !== "") {
-                filter.$or = [
-                    { first_name: { $regex: searchKey } },
-                ];
-            }
-
-            let dateFilter = {}
-            if (createdDate && createdDate !== "" && updatedDate && updatedDate !== "") {
-                const createdDateObj = new Date(createdDate);
-                const updatedDateObj = new Date(updatedDate);
-                dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
-            }
-            else if (createdDate && createdDate !== "") {
-                const createdDateObj = new Date(createdDate);
-                dateFilter.createdAt = { $gte: createdDateObj };
-            }
-            else if (updatedDate && updatedDate !== "") {
-                const updatedDateObj = new Date(updatedDate);
-                dateFilter.createdAt = { $lte: updatedDateObj };
-            }
-
-            const listdata = await Invitation.find({
-                created_By: for_portal_user,
-                ...filter,
-                ...dateFilter,
-            })
-                .sort(sortingarray)
-                .limit(limit * 1)
-                .skip((page - 1) * limit)
-                .exec();
-
-            const count = await Invitation.countDocuments({});
-
-            sendResponse(req, res, 200, {
-                status: true,
-                body: {
-                    totalPages: Math.ceil(count / limit),
-                    currentPage: page,
-                    totalRecords: count,
-                    listdata,
-                },
-                message: `List Fetch successfully`,
-                errorCode: null,
-            });
-        } catch (err) {
-            
-            sendResponse(req, res, 500, {
-                status: false,
-                data: err,
-                message: `Failed to fetch list`,
-                errorCode: "INTERNAL_SERVER_ERROR",
-            });
-        }
-    }
-
-    async getInvitationById(req, res) {
-        try {
-            const { id } = req.query;
-            const result = await Invitation.findOne({ _id: mongoose.Types.ObjectId(id) })
-
-            sendResponse(req, res, 200, {
-                status: true,
-                data: result,
-                message: `Invitation Send successfully`,
-                errorCode: null,
-            })
-
-        } catch (err) {
-            
-            sendResponse(req, res, 500, {
-                status: false,
-                data: err,
-                message: `Failed to fetch list`,
-                errorCode: "INTERNAL_SERVER_ERROR",
-            });
-        }
-    }
-
-    async deleteInvitation(req, res) {
-        try {
-            const { id } = req.body;
-            const result = await Invitation.deleteOne({ _id: mongoose.Types.ObjectId(id) })
-
-            sendResponse(req, res, 200, {
-                status: true,
-                data: result,
-                message: `Invitation Deleted successfully`,
-                errorCode: null,
-            })
-
-        } catch (err) {
-            
-            sendResponse(req, res, 500, {
-                status: false,
-                data: err,
-                message: `Failed to fetch list`,
-                errorCode: "INTERNAL_SERVER_ERROR",
-            });
-        }
-    }
-
 
     async getOrderDetailsById(req, res) {
         try {

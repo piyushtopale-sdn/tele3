@@ -51,6 +51,15 @@
                     <mat-error *ngIf="isSubmitted && profileFields.get('pharmacy_name').hasError('pattern')">
                       {{"pharmacy_name_must_contain_alphabets" | translate }}.
                     </mat-error>
+                     <!-- Invalid characters -->
+                      <span class="text-danger" *ngIf="f['pharmacy_name'].errors?.['onlyCharacters'] as error">
+                        {{ error.message }}
+                      </span>
+
+                      <!-- Length exceeded -->
+                      <span class="text-danger" *ngIf="f['pharmacy_name'].errors?.['maxLength'] as error">
+                        {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+                      </span>
                   </div>
                 </div>
                 <div class="col-sm-12 mb-3">
@@ -64,6 +73,15 @@
                     <mat-error *ngIf="isSubmitted && profileFields.get('pharmacy_name_arabic').hasError('pattern')">
                       {{"pharmacy_name_must_contain_alphabets" | translate }}.
                     </mat-error>
+                     <!-- Invalid characters -->
+                      <span class="text-danger" *ngIf="f['pharmacy_name_arabic'].errors?.['onlyCharacters'] as error">
+                        {{ error.message }}
+                      </span>
+
+                      <!-- Length exceeded -->
+                      <span class="text-danger" *ngIf="f['pharmacy_name_arabic'].errors?.['maxLength'] as error">
+                        {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+                      </span>
                   </div>
                 </div>
 
@@ -355,6 +373,15 @@
                           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                           <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
+                        <div
+                      class="text-danger"
+                      *ngIf="
+                        isSubmitted &&
+                        profileFields.get('licence_details.expiry_date')?.errors?.['notFutureDate']
+                      "
+                    >
+                    {{"License_expiry_must_future_date" | translate}}
+                  </div>
                         <!-- <mat-error
                           *ngIf="
                           isSubmitted &&  profileFields

@@ -11,7 +11,7 @@ import { Constants } from "src/app/config/constants";
 export class ApiEndpointsService {
   constructor(
     // Application Constants
-    private constants: Constants
+    private readonly constants: Constants
   ) {}
   /* #region URL CREATOR */
   // URL

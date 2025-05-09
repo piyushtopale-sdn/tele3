@@ -1,0 +1,178 @@
+// primary btn
+$btn_primary_color: #2839FF;
+$btn_primary_hover_color: #ffffff;
+
+// secondary btn
+$btn_secondary_color: #ffffff;
+$btn_secondary_hover_color: #2839FF;
+
+// light btn
+$btn_light_color: #2839FF;
+$btn_light_background_color: #F6F8FC;
+$btn_light_border_color: #B6C8D6;
+$btn_light_hover_color: #ffffff;
+
+// link btn
+$btn-link_color: #2839FF;
+$btn-link_hover_color: #0C2F49;
+
+.button,
+button,
+.btn {
+  padding: 8px 15px;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: initial;
+  transition: 0.3s ease-in;
+}
+
+.primary_btn {
+  display: flex;
+  button,
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .mat-icon {
+      margin-right: 10px;
+    }
+   
+  }
+  .btn.btn-primary {
+    background-color: $btn_primary_color;
+    border: 2px solid $btn_primary_color;
+    color: $btn_primary_hover_color;
+    margin: 0 0 0 15px;
+    &:first-child{
+      margin: 0; 
+    }
+    .mat-icon {
+      height: 26px;
+      width: 26px;
+      min-width: 26px;
+      border-radius: 50px;
+      color: $btn_primary_color;
+      background-color: $btn_primary_hover_color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .btn_svg {
+       border-radius: 50px;
+       background-color: $btn_primary_hover_color;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       height: 26px;
+       width: 26px;
+       margin-right: 10px;
+       svg {
+        fill:$btn_primary_color;
+       }
+    }
+    &:hover {
+      background-color: $btn_primary_hover_color;
+      border: 2px solid $btn_primary_color;
+      color: $btn_primary_color;
+      .mat-icon {
+        background: white;
+        color: $btn_primary_hover_color;
+        background-color: $btn_primary_color;
+      }
+      a {
+        border-radius: 50px;
+        background-color: $btn_primary_color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 26px;
+        width: 26px;
+        svg {
+         fill:$btn_primary_hover_color;
+        }
+     }
+    }
+  }
+  .btn-secondary{
+    background-color: $btn_primary_hover_color;
+      border: 2px solid $btn_primary_color;
+      color: $btn_primary_color;
+      &:hover{
+        background-color: $btn_primary_color;
+        border: 2px solid $btn_primary_color;
+        color: $btn_primary_hover_color;
+      }
+  }
+  .btn-light{
+    background-color: $btn_light_background_color;
+      border: 1px solid $btn_light_border_color;
+      color: $btn_light_color;
+      &:hover{
+        background-color: $btn_light_color;
+        border: 1px solid $btn_light_color;
+        color: $btn_light_hover_color;
+      }
+  }
+  .btn-link{
+      color: $btn_link_color;
+      text-decoration: none;
+      white-space: nowrap;
+      &:hover{
+        color: $btn_link_hover_color;
+      }
+  }
+
+  .btn-tranprent {
+    background: #FFFFFF;
+    border: 0.833333px solid #B6C8D6;
+    line-height: 32px;
+    &:hover{
+      background-color: $btn_light_color;
+      border: 1px solid $btn_light_color;
+      color: $btn_light_hover_color;
+      a {
+        border-radius: 50px;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 28px;
+        width: 28px;
+        svg {
+         fill:$btn_primary_color;
+        }
+     }
+    
+    }
+    a {
+      border-radius: 50px;
+      background-color: $btn_primary_color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 28px;
+      width: 28px;
+      margin-right: 10px;
+      svg {
+       fill:$btn_primary_hover_color;
+       width: 17px;
+      }
+   }
+
+  }
+
+}
+
+.btn.btn-primary{
+  background-color: $btn_primary_color;
+  border: 2px solid $btn_primary_color;
+  color: $btn_primary_hover_color;
+  white-space: nowrap;
+  &:hover{
+    background-color: $btn_primary_hover_color;
+    border: 2px solid $btn_primary_color;
+    color: $btn_primary_color;
+    white-space: nowrap;
+  }
+}

@@ -15,13 +15,8 @@
               <div class="row expansion_item img_item_block gap-5">
                 <div class="upper-block-doc d-flex align-items-center">
                   <div class="left_block">
-                    <!-- <div class="profile_image">
-                      <img class="profile_img_fluid" src="{{
-                        profileImage ? profileImage : 'assets/img/create_profile.png'
-                      }}" />
-                    </div> -->
                     <div class="profile_image">
-                       <img style="width: 100px"
+                       <img  alt="" style="width: 100px"
                       [src]="
                         profileImage
                           ? profileImage
@@ -33,12 +28,6 @@
                     <p class="m-0 doctor-name-text">{{ profileDetails?.full_name }}</p>
                   </div>
                 </div>
-               
-                 <!-- <div class="right_block row">
-                   <div class="item_info"> -->
-                    <!-- <label>{{ "doctor_name" | translate }}</label> -->
-                    <!-- <div class="value">{{ profileDetails?.full_name }}</div> -->
-                  <!-- </div> -->
                   <div class="item_info">
                     <label>{{ "date_of_birth" | translate }}</label>
                     <div class="value">
@@ -318,7 +307,7 @@
               <div class="row expansion_item">
                 <div class="item_info">
                   <div class="users_img">
-                     <img
+                     <img alt=""
                       class="license_img"
                       src="{{
                         profileDetails?.license_details?.license_image_signed_url

@@ -9,9 +9,8 @@ import {
   ValidationErrors,
 } from "@angular/forms";
 import { CoreService } from "src/app/shared/core.service";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { NgxUiLoaderService } from "ngx-ui-loader";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { LabimagingdentalopticalService } from "src/app/modules/super-admin/labimagingdentaloptical.service";
 import { Location } from "@angular/common";
 
@@ -38,13 +37,13 @@ export class LabTestViewComponent {
   isReadOnly = true; 
 
   constructor(
-    private coreService: CoreService,
-    private sadminService: SuperAdminService,
-    private lad_radioService: LabimagingdentalopticalService,
-    private location: Location,
-    private loader: NgxUiLoaderService,
-    private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute,
+    private readonly coreService: CoreService,
+    private readonly sadminService: SuperAdminService,
+    private readonly lad_radioService: LabimagingdentalopticalService,
+    private readonly location: Location,
+    private readonly loader: NgxUiLoaderService,
+    private readonly fb: FormBuilder,
+    private readonly activatedRoute: ActivatedRoute,
   ) {
     let paramId = this.activatedRoute.snapshot.paramMap.get("id");
 

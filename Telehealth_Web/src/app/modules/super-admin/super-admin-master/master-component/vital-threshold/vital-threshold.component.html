@@ -374,7 +374,7 @@
                               <mat-form-field appearance="fill">
                                 <mat-select formControlName="vitalsType" placeholder="Select Vitals Type" (selectionChange)="onValueChange($event)">
                                   <mat-option *ngFor="let type of vitalsTypes" [value]="type">
-                                    {{ type }}
+                                    {{ formatVitalType(type) }}
                                   </mat-option>
                                 </mat-select>
                               </mat-form-field>
@@ -602,7 +602,7 @@
                             *ngFor="let type of vitalsTypes"
                             [value]="type"
                           >
-                            {{ type }}
+                          {{ formatVitalType(type) }}
                           </mat-option>
                         </mat-select>
                       </mat-form-field>

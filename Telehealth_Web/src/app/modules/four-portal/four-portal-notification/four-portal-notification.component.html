@@ -19,14 +19,12 @@
                                         </div>
                                         <div class="name_detail">
                                             <h4>{{data?.notitype ? data?.notitype.split('_').join(' ') : ""}}</h4>  
-                                            <!-- <h4>{{data?.notitype ? data?.notitype : ""}}</h4> -->
                                             <p [innerHTML]="data?.content"></p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-xl-5 notify_time">
                                     <div class="time_slot">
-                                        <!-- <p>From : Pacific Medical Center </p> -->
                                         <p>{{ data?.createdAt | date : "dd/MM/yyy" }} | {{ data?.createdAt | date : "HH:mm " }}</p>
                                     </div>
                                 </div>

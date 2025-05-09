@@ -3,9 +3,8 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { SuperAdminService } from "../../super-admin/super-admin.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { FourPortalService } from "../four-portal.service";
 import { IndiviualDoctorService } from "../../individual-doctor/indiviual-doctor.service";
-declare var $: any;
+declare let $: any;
 @Component({
   selector: 'app-four-portal-sidebar',
   templateUrl: './four-portal-sidebar.component.html',
@@ -28,13 +27,12 @@ export class FourPortalSidebarComponent implements OnInit {
   Url: any;
 
   constructor(
-    private _coreService: CoreService,
-    private sadminServce: SuperAdminService,
-    private route: Router,
-    private modalService: NgbModal,
-    private activateroute: ActivatedRoute,
-    private service : FourPortalService,
-    private indservice: IndiviualDoctorService,
+    private readonly _coreService: CoreService,
+    private readonly sadminServce: SuperAdminService,
+    private readonly route: Router,
+    private readonly modalService: NgbModal,
+    private readonly activateroute: ActivatedRoute,
+    private readonly indservice: IndiviualDoctorService,
 
   ) {
     let loginData = JSON.parse(localStorage.getItem("loginData"));

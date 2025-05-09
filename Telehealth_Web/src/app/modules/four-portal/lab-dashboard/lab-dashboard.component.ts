@@ -1,21 +1,18 @@
-import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { Chart, ChartConfiguration, ChartOptions, ChartType, registerables } from "chart.js";
+import { ChangeDetectorRef, Component, OnInit} from "@angular/core";
+import { Chart,  ChartOptions,  registerables } from "chart.js";
 import { CoreService } from "src/app/shared/core.service";
-import { Router } from "@angular/router";
 import * as XLSX from 'xlsx';
 export interface PeriodicElement {
   patientname: string;
   dateandtime: string;
   consultationtype: string;
 }
-import { ActivatedRoute } from '@angular/router';
+import { Router } from "@angular/router";
 import { IndiviualDoctorService } from "../../individual-doctor/indiviual-doctor.service";
 import { FourPortalService } from "../four-portal.service";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { DatePipe } from "@angular/common";
 import { DateAdapter } from "@angular/material/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
-import { SuperAdminService } from "../../super-admin/super-admin.service";
 import { NgxUiLoaderService } from "ngx-ui-loader";
 
 @Component({
@@ -58,7 +55,6 @@ export class LabDashboardComponent implements OnInit {
     private _coreService: CoreService,
     private service: IndiviualDoctorService,
     private route: Router,
-    private act_route: ActivatedRoute,
     private fourPortalService: FourPortalService,
     private loader: NgxUiLoaderService,
     private datepipe: DatePipe,
@@ -304,14 +300,16 @@ export class LabDashboardComponent implements OnInit {
   }
   onNavigate(url: any): void {
     const menuitems = JSON.parse(localStorage.getItem("activeMenu"));
-    this.currentUrl = url;
-
-    const matchedMenu = menuitems.find(
-      (menu) => menu.route_path === this.currentUrl
-    );
-    this.route.navigate([url]).then(() => {
-      this.service.setActiveMenu(matchedMenu?.name);
-    });
+    if(menuitems){
+      this.currentUrl = url;
+  
+      const matchedMenu = menuitems.find(
+        (menu) => menu.route_path === this.currentUrl
+      );
+      this.route.navigate([url]).then(() => {
+        this.service.setActiveMenu(matchedMenu?.name);
+      });
+    }
   }
 
 

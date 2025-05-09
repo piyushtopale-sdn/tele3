@@ -1,5 +1,5 @@
 import "dotenv/config.js";
-
+import { randomInt } from 'crypto';
 export const config = {
     DB: {
         HOST: process.env.MONGO_DB_HOST || "54.201.160.69",
@@ -47,8 +47,10 @@ export const config = {
         "sha_response_phrase": process.env.AMAZON_RESPONSE_PHRASE || "48gkXLAaAsk4YD5qDJolFa[)",
         "test_payment_page_url": process.env.AMAZON_PAYMENT_PAGE_URL || "https://sbcheckout.payfort.com/FortAPI/paymentPage",
         "live_payment_page_url": process.env.AMAZON_PAYMENT_PAGE_URL || "https://checkout.payfort.com/FortAPI/paymentPage",
-        "test_payment_process_api": process.env.AMAZONP_PAYMENT_CHARGE_API || "https://sbpaymentservices.payfort.com/FortAPI/paymentApi",
-        "live_payment_process_api": process.env.AMAZONP_PAYMENT_CHARGE_API || "https://paymentservices.payfort.com/FortAPI/paymentApi",
+        "test_payment_process_api": process.env.AMAZON_PAYMENT_CHARGE_API || "https://sbpaymentservices.payfort.com/FortAPI/paymentApi",
+        "live_payment_process_api": process.env.AMAZON_PAYMENT_CHARGE_API || "https://paymentservices.payfort.com/FortAPI/paymentApi",
+        "paymentSession": process.env.AMAZON_PAYMENT_SESSION || "https://apple-pay-gateway.apple.com/paymentservices/startSession",
+        "domain": process.env.test_p_DOMAIN || 'dev.test_papp.com'
     },
 };
 
@@ -59,7 +61,7 @@ export const messages = {
     userNotFound: "Please check your credentials.",
     dataNotFound: "No data found.",
     incorrectPassword: "Incorrect password.",
-    passwordNotCreated: "Password not created.",
+    userPasswordError: "Password not created.",
     loginSuccess: "Login successful.",
     listSuccess: "Data fetched successfully.",
     updateSuccess: "Data updated successfully.",
@@ -198,11 +200,11 @@ export const responseCodes = {
 };
 
 export const generate4DigitOTP = () => {
-    return Math.floor(1000 + Math.random() * 9000);
+    return randomInt(1000, 10000);
 };
 
 export const generate6DigitOTP = () => {
-    return Math.floor(100000 + Math.random() * 900000);
+    return randomInt(100000, 1000000);
 }
 
 export const forgetPasswordSub = {

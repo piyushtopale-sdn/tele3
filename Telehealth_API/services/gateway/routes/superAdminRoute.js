@@ -12,7 +12,6 @@ import {
     deleteSubscriptionPlan,
     editSubscriptionPlan,
     forgotPassword,
-    getPeriodicList,
     getServiceField,
     getSubscriptionPlanDetails,
     matchEmailOtpFor2fa,
@@ -44,7 +43,6 @@ superadminRoute.get("/all-subscription-plans", allSubscriptionPlans);
 superadminRoute.get("/get-subscription-plan-details", getSubscriptionPlanDetails);
 superadminRoute.put("/update-subscription-plan", editSubscriptionPlan)
 superadminRoute.post("/delete-subscription-plan", deleteSubscriptionPlan)
-superadminRoute.get("/get-periodic-list", getPeriodicList);
 
 //speciality 
 superadminRoute.post('/create', createSpeciality)

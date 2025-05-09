@@ -1,6 +1,6 @@
 "use strict";
 
-import { handleResponse } from "../../helpers/transmission";
+import { handleResponse1 } from "../../helpers/transmission";
 import PurchaseHistory from "../../models/subscription/purchasehistory";
 import { config } from "../../config/constants";
 import Http from "../../helpers/httpservice"
@@ -18,164 +18,200 @@ const crypto = require('crypto');
 const { AMAZONPAY } = config
 const httpService = new Http();
 
-// Generate SHA-256 Signature
-const generateSignature = (data, phrase) => {
-    const stringToHash = Object.keys(data)
-        .sort()
-        .map(key => `${key}=${data[key]}`)
-        .join('');
-    console.log(`${phrase}${stringToHash}${phrase}`);
-    return crypto.createHash('sha256').update(`${phrase}${stringToHash}${phrase}`).digest('hex');
+const generateInvoiceNumber = () => {
+    const prefix = "INV";
+    const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const randomPart = Math.floor(1000 + Math.random() * 9000); // 4-digit random
+    return `${prefix}-${datePart}-${randomPart}`;
 };
 
-// Verify SHA-256 Signature
-const verifySignature = (responseData, responsePhrase) => {
-    const sortedKeys = Object.keys(responseData).sort();
-    let signatureString = responsePhrase;
-    sortedKeys.forEach(key => {
-        if (key !== 'signature') { // Exclude the signature itself
-            signatureString += `${key}=${responseData[key]}`;
-        }
-    });
-    signatureString += responsePhrase;
-
-    const expectedSignature = crypto.createHash('sha256').update(signatureString).digest('hex');
-    return expectedSignature === responseData.signature;
-};
-
-// Verify SHA-256 Signature
-const fetchPaymentDetails = (merchantReference) => {
-    const payload = {
-        merchant_identifier: AMAZONPAY.merchant_identifier,
-        access_code: AMAZONPAY.access_code,
-        command: 'INQUIRY',
-        merchant_reference: merchantReference,
-        language: 'en'
-    };
+const savePaymentData = (getPaymentData, requestData) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // Calculate the signature
-            const signatureString = `SHA-256:${payload.merchant_identifier}:${AMAZONPAY.sha_request_phrase}:${payload.access_code}:${payload.command}:${payload.merchant_reference}:en`;
-            const signature = crypto.createHash('sha256').update(signatureString).digest('hex');
-            payload.signature = signature;
+            const { subscriptionPlanId, forUser, planPrice, discountedAmount, vatCharges, discountCoupon, paymentType, isUpgrade } = requestData;
 
-            const response = await axios.post(AMAZONPAY.test_payment_process_api, payload, {
-                headers: { 'Content-Type': 'application/json' }
-            });
-            resolve(response.data)
-        } catch (error) {
-            console.log(error, "fetchPaymentDetails>>>>>>>>>")
-            reject(error);
-        }
-    })
-}
+            const token = generateToken({ role: 'superadmin' });
+            const headers = {
+                Authorization: `Bearer ${token}`,
+            };
 
-// Save payment data
-const saveData = (getPaymentData, existingSubscription, params) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const currentDate = moment(new Date()).utc(); // Current date
-            let endDate
-            if (params?.trialDays) {
-                endDate = currentDate.add(params?.trialDays, 'days').toISOString();
-            } else {
-                const duration = params?.planDuration == "monthly" ? 30 : 365
-                endDate = currentDate.add(duration, 'days').toISOString();
-            }
-            const period = {
-                start: currentDate,
-                end: endDate
-            }
-            const addObject = {
-                invoiceId: null,
-                invoiceUrl: null,
-                planPrice: params?.planPrice,
-                vatCharges: params?.vatCharges,
-                amountPaid: getPaymentData?.amount/100,
-                discountedAmount: params?.discountedAmount,
-                paymentMode: "amazonpay",
-                paymentType: params?.paymentType,
-                currencyCode: params?.currencyCode,
-                status: "paid",
-                forUser: params?.forUser,
-                period,
-                subscriptionPlanId: params?.subscriptionPlanId,
-                subscriptionStatus: params?.status == 'paid' ? 'active' : null,
-                transactionType: 'subscription',
-                paymentGateway: 'amazon',
-                amazonResponse: getPaymentData,
-                // ip: getPaymentData?.ip
-            }
-            console.log(addObject, "saveData amazon pay");
-            const addData = new PurchaseHistory(addObject)
-            await addData.save()
-            let services = {}
-            if (params?.services) {
-                services = params?.services
-            } else {
-                for (const service of existingSubscription.services) {
-                    services[service.name] = service.max_number
-                }
-            }
+            let subscriptionDetails = await httpService.getStaging('superadmin/get-subscription-plan-details', { id: subscriptionPlanId }, headers, 'superadminServiceUrl');
 
-            if (getPaymentData?.status == '14') {
-                const getDetails = await PortalUser.findOne({ _id: { $eq: params?.forUser } }).select('subscriptionDetails')
-                let updateObject = {
-                    isPlanActive: true,
-                    subscriptionPlanId: params?.subscriptionPlanId,
-                    moyasarToken: null,
-                    services,
-                    period,
-                    discountCoupon: params?.discountCoupon,
-                    subscriptionDuration: params?.planDuration,
-                    trialDays: params?.trialDays,
-                }
-                let updateOperations = {
-                    $set: {
-                        "subscriptionDetails.isPlanActive": updateObject.isPlanActive,
-                        "subscriptionDetails.subscriptionPlanId": updateObject.subscriptionPlanId,
-                        "subscriptionDetails.nextBillingPlanId": updateObject.subscriptionPlanId,
-                        "subscriptionDetails.moyasarToken": null,
-                        "subscriptionDetails.services": updateObject.services,
-                        "subscriptionDetails.period": updateObject.period,
-                        "subscriptionDetails.discountCoupon": updateObject.discountCoupon,
-                        "subscriptionDetails.subscriptionDuration": updateObject.subscriptionDuration,
-                        "subscriptionDetails.trialDays": updateObject.trialDays,
-                        "subscriptionDetails.isPlanCancelled": false,
-                        "subscriptionDetails.paymentRetried": 0
-                    }
+            if (subscriptionDetails) {
+                const existingSubscription = subscriptionDetails.body;
+
+                const params = {
+                    discountedAmount,
+                    subscriptionPlanId,
+                    forUser,
+                    vatCharges,
+                    planPrice,
+                    planDuration: existingSubscription?.plan_duration[0]?.duration,
+                    discountCoupon,
+                    trialDays: existingSubscription?.trial_period,
+                    merchantReference: getPaymentData.merchant_reference,
+                    paymentType
                 };
+                if (isUpgrade && isUpgrade !== "recurring") {
+                    const getSubscriptionData = await PortalUser.findOne({ _id: { $eq: forUser } })
+                        .select('subscriptionDetails')
+                    const getSubscription = getSubscriptionData?.subscriptionDetails
+                    let services = {
+                        consultation: getSubscription?.services?.consultation || 0
+                    }
+                    for (const service of existingSubscription?.services) {
+                        services[service?.name] = parseInt(services[service?.name]) + parseInt(service?.max_number)
+                    }
+                    params["services"] = services;
+                }
 
-                // Conditional logic to reset or increment `discountUsedCount`
-                if (params?.discountCoupon) {
-                    if (getDetails?.discountCoupon && getDetails?.discountCoupon != params?.discountCoupon) {
-                        updateOperations.$set["subscriptionDetails.discountUsedCount"] = 0; // Reset count to 0
-                    } else {
-                        updateOperations.$inc = { "subscriptionDetails.discountUsedCount": 1 }; // Increment count by 1
+                const currentDate = moment(new Date()).utc(); // Current date
+                let endDate
+                if (params?.trialDays) {
+                    endDate = currentDate.clone().add(params?.trialDays, 'days').toISOString();
+                } else {
+                    const duration = params?.planDuration == "monthly" ? 30 : 365
+                    endDate = currentDate.clone().add(duration, 'days').toISOString();
+                }
+                const period = {
+                    start: currentDate.toISOString(),
+                    end: endDate
+                }
+
+                if (isUpgrade && isUpgrade !== "recurring") {
+                    await PurchaseHistory.findOneAndUpdate(
+                        {
+                            forUser,
+                            transactionType: 'subscription',
+                            subscriptionStatus: 'active'
+                        },
+                        {
+                            $set: {
+                                subscriptionStatus: 'upgraded',
+                            }
+                        }
+                    )
+                }
+
+                const addObject = {
+                    invoiceId: generateInvoiceNumber(),
+                    invoiceUrl: null,
+                    planPrice: params?.planPrice,
+                    vatCharges: params?.vatCharges,
+                    amountPaid: getPaymentData?.amount / 100,
+                    discountedAmount: params?.discountedAmount,
+                    paymentMode: "amazonpay",
+                    paymentType: getPaymentData?.payment_option,
+                    currencyCode: getPaymentData?.currency,
+                    status: getPaymentData?.status == '14' ? "paid" : "failed",
+                    forUser: params?.forUser,
+                    period,
+                    subscriptionPlanId: params?.subscriptionPlanId,
+                    subscriptionStatus: getPaymentData?.status == '14' ? 'active' : null,
+                    transactionType: 'subscription',
+                    paymentGateway: 'amazon',
+                    discountCoupon: params?.discountCoupon,
+                    ip: getPaymentData?.customer_ip,
+                    amazonResponse: getPaymentData
+                }
+                console.log(addObject, "saveData amazon pay");
+
+
+                const addData = new PurchaseHistory(addObject)
+                await addData.save()
+                let services = {}
+                if (params?.services) {
+                    services = params?.services
+                } else {
+                    for (const service of existingSubscription.services) {
+                        services[service.name] = service.max_number
                     }
                 }
-                await PortalUser.findOneAndUpdate(
-                    { _id: params?.forUser },
-                    updateOperations
-                ).exec();
-            } else {
-                await PortalUser.findOneAndUpdate(
-                    { _id: params?.forUser },
-                    {
-                        $inc: {
-                            "subscriptionDetails.paymentRetried": 1
+
+                if (getPaymentData?.status == '14') {
+                    const getDetails = await PortalUser.findOne({ _id: { $eq: params?.forUser } }).select('subscriptionDetails')
+                    let updateObject = {
+                        isPlanActive: true,
+                        subscriptionPlanId: params?.subscriptionPlanId,
+                        moyasarToken: null,
+                        token_name: getPaymentData?.token_name,
+                        agreement_id: getPaymentData?.agreement_id,
+                        services,
+                        period,
+                        discountCoupon: params?.discountCoupon,
+                        subscriptionDuration: params?.planDuration,
+                        trialDays: params?.trialDays,
+                    }
+                    let updateOperations = {
+                        $set: {
+                            "subscriptionDetails.isPlanActive": updateObject.isPlanActive,
+                            "subscriptionDetails.subscriptionPlanId": updateObject.subscriptionPlanId,
+                            "subscriptionDetails.nextBillingPlanId": updateObject.subscriptionPlanId,
+                            "subscriptionDetails.moyasarToken": null,
+                            "subscriptionDetails.services": updateObject.services,
+                            "subscriptionDetails.period": updateObject.period,
+                            "subscriptionDetails.discountCoupon": updateObject.discountCoupon,
+                            "subscriptionDetails.subscriptionDuration": updateObject.subscriptionDuration,
+                            "subscriptionDetails.trialDays": updateObject.trialDays,
+                            "subscriptionDetails.isPlanCancelled": false,
+                            "subscriptionDetails.paymentRetried": 0,
+                            "subscriptionDetails.token_name": updateObject.token_name,
+                            "subscriptionDetails.agreement_id": updateObject.agreement_id,
+                            "subscriptionDetails.paymentGateway": "amazon"
+                        }
+                    };
+
+                    // Conditional logic to reset or increment `discountUsedCount`
+                    if (params?.discountCoupon) {
+                        if (getDetails?.discountCoupon && getDetails?.discountCoupon != params?.discountCoupon) {
+                            updateOperations.$set["subscriptionDetails.discountUsedCount"] = 0; // Reset count to 0
+                        } else {
+                            updateOperations.$inc = { "subscriptionDetails.discountUsedCount": 1 }; // Increment count by 1
                         }
                     }
-                ).exec();
+                    await PortalUser.findOneAndUpdate(
+                        { _id: params?.forUser },
+                        updateOperations
+                    ).exec();
+
+                    const getPatientName = await Profile_info.findOne({ for_portal_user: { $eq: params?.forUser } })
+                        .select('full_name');
+
+                    let requestBody = {
+                        userId: params?.forUser,
+                        userName: getPatientName?.full_name,
+                        role: 'patient',
+                        action: isUpgrade ? 'update' : 'create',
+                        actionDescription: isUpgrade ? 'Subscription plan upgraded successfully' : `${getPatientName?.full_name} purchased new subscription plan.`,
+                        metadata: params
+                    };
+
+                    await httpService.postStaging(
+                        "superadmin/add-logs",
+                        requestBody,
+                        {},
+                        "superadminServiceUrl"
+                    );
+
+                } else {
+                    await PortalUser.findOneAndUpdate(
+                        { _id: params?.forUser },
+                        {
+                            $inc: {
+                                "subscriptionDetails.paymentRetried": 1
+                            }
+                        }
+                    ).exec();
+                }
+
             }
             resolve(true)
         } catch (error) {
-            console.log(error, "saveData amazon pay ")
+            console.log(error, "Amazon pay save data error ")
             reject(error)
         }
     })
 }
-
 
 function randomReference(prefix) {
     return prefix + Math.floor(100000 + Math.random() * 900000);
@@ -206,18 +242,134 @@ function calculateSignature(data, passphrase) {
     return crypto.createHash('sha256').update(shaString).digest('hex');
 }
 
+const resetServiceData = (services) => {
+    const resetServices = {};
+    for (const service in services) {
+        resetServices[service] = 0;
+    }
+    return resetServices;
+};
+
+const processSubscriptionPayment = async (user, headers) => {
+    try {
+        let subscriptionDetails = await httpService.getStaging(
+            'superadmin/get-subscription-plan-details',
+            { id: user?.subscriptionDetails?.nextBillingPlanId },
+            headers,
+            'superadminServiceUrl'
+        );
+
+        if (!subscriptionDetails.status) {
+            console.error(`Failed to get subscription plan details for user ${user?._id}`);
+            return;
+        }
+
+        const existingSubscription = subscriptionDetails.body;
+
+        // Fetch VAT charges
+        let getSettings = await httpService.getStaging(
+            'superadmin/general-settings',
+            { role: 'patient' },
+            headers,
+            'superadminServiceUrl'
+        );
+
+        let vatCharges = 0;
+        if (getSettings.status) {
+            const data = getSettings.body.find(val => val.settingName === 'VatCharges');
+            vatCharges = parseInt(data?.settingValue) || 0;
+        }
+
+        const planDuration = existingSubscription?.plan_duration.find(val => val.duration === user?.subscriptionDetails?.subscriptionDuration);
+        let vat = (vatCharges / 100) * parseFloat(planDuration?.price);
+        let amount = parseFloat(planDuration?.price) + vat;
+        let discountCoupon = '';
+        let validateCoupon;
+
+        if (user?.subscriptionDetails?.discountCoupon) {
+            validateCoupon = await httpService.getStaging(
+                'subscription/validate-discount-coupon',
+                {
+                    patientId: user?._id,
+                    duration: user?.subscriptionDetails?.subscriptionDuration,
+                    subscriptionPlanId: user?.subscriptionDetails?.nextBillingPlanId,
+                    couponCode: user?.subscriptionDetails?.discountCoupon
+                },
+                headers,
+                'superadminServiceUrl'
+            );
+
+            if (validateCoupon?.status) {
+                discountCoupon = user?.subscriptionDetails?.discountCoupon;
+                let vatCalculated = (vatCharges / 100) * parseFloat(validateCoupon.body.priceAfterDiscount.finalAmount);
+                amount = parseFloat(validateCoupon.body.priceAfterDiscount.finalAmount) + vatCalculated;
+            }
+        }
+
+        const metadata = {
+            discountedAmount: discountCoupon ? validateCoupon.body.priceAfterDiscount.discount : 0,
+            forUser: user?._id,
+            subscriptionPlanId: user?.subscriptionDetails?.nextBillingPlanId,
+            vatCharges,
+            planPrice: discountCoupon ? validateCoupon.body.priceAfterDiscount.total : planDuration?.price,
+            discountCoupon,
+        };
+
+        const getDetails = await PortalUser.findOne({ _id: { $eq: user?._id } }).select('email')
+
+        const baseUrl = AMAZONPAY.live_payment_process_api;
+        const merchant_reference = randomReference('RX');
+
+        const requestData = {
+            command: 'PURCHASE',
+            digital_wallet: 'APPLE_PAY',
+            access_code: AMAZONPAY.access_code,
+            merchant_identifier: AMAZONPAY.merchant_identifier,
+            merchant_reference,
+            language: 'en',
+            amount: amount * 100,
+            currency: 'SAR',
+            customer_email: getDetails?.email,
+            eci: 'RECURRING',
+            recurring_mode: 'UNSCHEDULED',
+            token_name: user?.subscriptionDetails?.token_name,
+            agreement_id: user?.subscriptionDetails?.agreement_id
+        };
+        const signature = calculateSignature(requestData, AMAZONPAY.sha_request_phrase);
+        requestData.signature = signature;
+
+        const response = await axios.post(baseUrl, requestData);
+        if (response?.data) {
+            const params = {
+                discountedAmount: metadata.discountedAmount,
+                subscriptionPlanId: metadata.subscriptionPlanId,
+                forUser: metadata.forUser,
+                vatCharges: vatCharges,
+                planPrice: metadata.planPrice,
+                planDuration: user?.subscriptionDetails?.subscriptionDuration,
+                isUpgrade: "recurring",
+                discountCoupon,
+                paymentType: response?.data?.payment_option
+            };
+
+            savePaymentData(response.data, params);
+        }
+
+    } catch (error) {
+        console.error(`Error processing payment for user ${user?._id}:`, error);
+    }
+};
 
 class AmazonPaymentController {
     /** April - 28 - Apple Pay Start*/
     async validateMerchant(req, res) {
-
+        const { validationURL } = req.body;
         try {
-            const baseUrl = AMAZONPAY.paymentSession;
             const requestData = {
-                merchantIdentifier: 'merchant.com.test_papp', // Identifier Name
-                displayName: 'test_p', // Any Random Name
+                merchantIdentifier: 'merchant.com.test_papp',
+                displayName: 'test_p',
                 initiative: 'web',
-                initiativeContext: 'test_papp.com' // Domain Name
+                initiativeContext: AMAZONPAY.domain
             };
 
             const keyPath = path.join(__dirname, 'ssl_keys', '../../../helpers/newfile.key.pem');
@@ -229,12 +381,12 @@ class AmazonPaymentController {
                 key: fs.readFileSync(keyPath),
             });
             // POST Request
-            const response = await axios.post(baseUrl, requestData, {
+            const response = await axios.post(validationURL, requestData, {
                 httpsAgent: agent,
             });
 
-            console.log(response, "validateMerchant");
-            return handleResponse(req, res, 200, {
+            console.log(response?.data, "validateMerchant");
+            return handleResponse1(req, res, 200, {
                 status: true,
                 body: response.data,
                 message: "Merchant validation success",
@@ -242,7 +394,7 @@ class AmazonPaymentController {
             });
         } catch (error) {
             console.error('Error validating merchant:', error);
-            return handleResponse(req, res, 500, {
+            return handleResponse1(req, res, 500, {
                 status: false,
                 body: null,
                 message: error.message,
@@ -270,7 +422,7 @@ class AmazonPaymentController {
                 merchant_identifier: AMAZONPAY.merchant_identifier,
                 language: 'en',
                 customer_email: email,
-                amount: amount,
+                amount: Math.round(parseFloat(amount) * 100),
                 currency: 'SAR',
                 merchant_reference: merchantReference,
                 agreement_id: agreementId,
@@ -289,21 +441,24 @@ class AmazonPaymentController {
                     apple_type: applePaymentMethod?.type
                 }
             };
-           
+
             const signature = calculateSignature(requestData, AMAZONPAY.sha_request_phrase);
             requestData.signature = signature;
             console.log(requestData, "requestData");
             const response = await axios.post(baseUrl, requestData);
+            console.log(response.data, "responseData>>>");
 
-            return handleResponse(req, res, 200, {
+            savePaymentData(response.data, req.body);
+
+            return handleResponse1(req, res, 200, {
                 status: true,
                 body: response.data,
-                message: "Payment Processed",
+                message: response.data.response_message,
                 errorCode: null,
             });
         } catch (error) {
             console.error('Error processing Apple Pay:', error);
-            return handleResponse(req, res, 500, {
+            return handleResponse1(req, res, 500, {
                 status: false,
                 body: null,
                 message: error.message,
@@ -312,200 +467,7 @@ class AmazonPaymentController {
         }
     }
 
-    /** April - 28 - Apple Pay End*/
-
-    async verifyPayment(req, res) {
-
-        try {
-            const { paymentResponse, paymentId, discountedAmount, subscriptionPlanId, forUser, vatCharges, planPrice, planDuration, token, discountCoupon } = req.body
-            console.log(req.body, "verifyPayment");
-            // Verify the response signature
-            // const isValid = verifySignature(paymentResponse, AMAZONPAY.sha_response_phrase);
-            // if (!isValid) {
-            //     return handleResponse(req, res, 200, {
-            //         status: false,
-            //         body: null,
-            //         message: "Invalid Signature",
-            //         errorCode: null,
-            //     });
-            // }
-
-            // Check payment status
-            switch (paymentResponse.status) {
-                case '14': {
-                    console.log('Payment Successful:', paymentResponse);
-
-                    const headers = {
-                        Authorization: req.headers["authorization"],
-                    };
-
-                    // const getPaymentDataByReference = await fetchPaymentDetails(paymentResponse.merchant_reference);
-                    // console.log("getPaymentDataByReference>>>>>>>>>>>>>>", getPaymentDataByReference);
-                    // Get subscription plan information
-                    let subscriptionDetails = await httpService.getStaging('superadmin/get-subscription-plan-details', { id: subscriptionPlanId }, headers, 'superadminServiceUrl');
-
-                    if (!subscriptionDetails.status) {
-                        return handleResponse(req, res, 500, {
-                            status: false,
-                            body: null,
-                            message: subscriptionDetails.message,
-                            errorCode: null,
-                        });
-                    }
-
-                    const existingSubscription = subscriptionDetails.body;
-                    const params = {
-                        discountedAmount,
-                        subscriptionPlanId,
-                        forUser,
-                        vatCharges,
-                        planPrice,
-                        planDuration,
-                        token,
-                        discountCoupon,
-                        trialDays: existingSubscription?.trial_period,
-                        merchantReference: paymentResponse.merchant_reference
-                    };
-
-                    await saveData(paymentResponse, existingSubscription, params);
-
-                    const getPatientName = await Profile_info.findOne({ for_portal_user: { $eq: params?.forUser } })
-                        .select('full_name');
-
-                    let requestBody = {
-                        userId: params?.forUser,
-                        userName: getPatientName?.full_name,
-                        role: 'patient',
-                        action: `create`,
-                        actionDescription: `${getPatientName?.full_name} purchased new subscription plan.`,
-                        metadata: params
-                    };
-
-                    await httpService.postStaging(
-                        "superadmin/add-logs",
-                        requestBody,
-                        {},
-                        "superadminServiceUrl"
-                    );
-
-                    return handleResponse(req, res, 200, {
-                        status: true,
-                        message: "Data saved successfully",
-                        body: null,
-                        errorCode: null,
-                    });
-                }
-
-                case '02':
-                    console.log('Payment Authorization Failed:', paymentResponse);
-                    return handleResponse(req, res, 200, {
-                        status: false,
-                        body: null,
-                        message: "Payment Authorization Failed",
-                        errorCode: "INTERNAL_SERVER_ERROR",
-                    });
-
-                case '04':
-                    console.log('Payment Cancelled:', paymentResponse);
-                    return handleResponse(req, res, 200, {
-                        status: false,
-                        body: null,
-                        message: "Payment Cancelled",
-                        errorCode: "INTERNAL_SERVER_ERROR",
-                    });
-
-                case '07':
-                    console.log('Payment Pending', paymentResponse);
-                    return handleResponse(req, res, 200, {
-                        status: false,
-                        body: null,
-                        message: "Payment Pending:",
-                        errorCode: "INTERNAL_SERVER_ERROR",
-                    });
-
-                default:
-                    console.log('Unknown Status:', paymentResponse);
-                    return handleResponse(req, res, 200, {
-                        status: false,
-                        body: null,
-                        message: "Failed to process payment",
-                        errorCode: "INTERNAL_SERVER_ERROR",
-                    });
-            }
-
-        } catch (error) {
-            console.log('Failed to process payment Catch:', error);
-            return handleResponse(req, res, 500, {
-                status: false,
-                body: null,
-                message: "Failed to process payment",
-                errorCode: "INTERNAL_SERVER_ERROR",
-            });
-        }
-    }
-
-    // Get SDK Token Endpoint
-    async getSDKToken(req, res) {
-        try {
-            const { device_id } = req.body;
-            const requestData = {
-                service_command: "SDK_TOKEN",
-                merchant_identifier: AMAZONPAY.merchant_identifier,
-                access_code: AMAZONPAY.access_code,
-                language: "en",
-                device_id: device_id,
-            };
-
-            // Generate Signature
-            requestData.signature = generateSignature(requestData, AMAZONPAY.sha_request_phrase);
-            // Send POST request to get SDK Token
-            const response = await axios.post(AMAZONPAY.test_payment_process_api, requestData, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            /** 00: Operation in progress
-                02: Order stored
-                04: Authorization failed
-                06: Capture failed
-                08: Refund failed
-                10: Authorization voided
-                12: Incomplete
-                14: Transaction expired
-                16: 3-D Secure check failed
-                18: Tokenization failed
-                20: Purchase failed
-                22: Success */
-
-            if (response?.data?.status === '22') {
-                return handleResponse(req, res, 200, {
-                    status: true,
-                    body: response?.data,
-                    message: "Successfully get generated token",
-                    errorCode: null,
-                });
-            } else {
-                console.error("Failed to get SDK token:");
-                return handleResponse(req, res, 200, {
-                    status: false,
-                    body: null,
-                    message: "Failed to get SDK token",
-                    errorCode: null,
-                });
-            }
-        } catch (error) {
-            console.error("Error in SDK Token Request:", error);
-            return handleResponse(req, res, 500, {
-                status: false,
-                body: null,
-                message: "Error in SDK Token Request",
-                errorCode: null,
-            });
-        }
-    }
-
-    // Subscription expiry cron - INPROGRESS
-    async checkSubscriptionExpiryAmazon() {
+    async recurringCheck() {
         try {
             const getUsersSubscription = await PortalUser.find({
                 lock_user: false,
@@ -529,8 +491,8 @@ class AmazonPaymentController {
                         if (getExpiredTime < getCurrentTime) {
                             let patientUpdateObject = {
                                 ['subscriptionDetails.isPlanActive']: false,
-                                // ['subscriptionDetails.services']: resetServiceData(user?.subscriptionDetails?.services),
-                                // ['subscriptionDetails.addonServices']: resetServiceData(user?.subscriptionDetails?.addonServices),
+                                ['subscriptionDetails.services']: resetServiceData(user?.subscriptionDetails?.services),
+                                ['subscriptionDetails.addonServices']: resetServiceData(user?.subscriptionDetails?.addonServices),
                             };
 
                             let isRetried = false;
@@ -552,8 +514,8 @@ class AmazonPaymentController {
                                 { $set: { subscriptionStatus: 'expired' } }
                             );
                             // Create payment if conditions allow
-                            if (!isRetried && user?.subscriptionDetails?.moyasarToken && !user?.subscriptionDetails?.isPlanCancelled) {
-                                // await processSubscriptionPayment(user, headers);
+                            if (!isRetried && user?.subscriptionDetails?.paymentGateway === "amazon" && !user?.subscriptionDetails?.isPlanCancelled) {
+                                await processSubscriptionPayment(user, headers);
                             }
                         }
                     }
@@ -565,132 +527,6 @@ class AmazonPaymentController {
             console.error("Error while checking subscription expiry:", error);
         }
     }
-
-    /** Mar 10 Start */
-    async initiateApplePay(req, res) {
-        try {
-            const { amount, customerEmail, apple_data, apple_header, apple_paymentMethod, apple_signature } = req.body;
-            //Send request to apple pay
-            //Below details we will get
-
-            const requestData = {
-                "apple_data": apple_data,
-                "apple_header": {
-                    "apple_ephemeralPublicKey": apple_header.apple_ephemeralPublicKey,
-                    "apple_publicKeyHash": apple_header.apple_publicKeyHash,
-                    "apple_transactionId": apple_header.apple_transactionId
-                },
-                "apple_paymentMethod": {
-                    "apple_displayName": apple_paymentMethod.apple_displayName,
-                    "apple_network": apple_paymentMethod.apple_network,
-                    "apple_type": apple_paymentMethod.apple_type
-                },
-                "apple_signature": apple_signature,
-                "digital_wallet": "APPLE_PAY",
-                "command": "PURCHASE",
-                "amount": amount,
-                "currency": "SAR",
-                "customer_email": customerEmail,
-                "access_code": AMAZONPAY.access_code,
-                "merchant_identifier": AMAZONPAY.merchant_identifier,
-                "merchant_reference": `SUB_${Date.now()}`,
-                "language": "en",
-                "recurring_mode": "UNSCHEDULED"
-            };
-
-            // const signatureGenerate = {
-            //     "command": "AUTHORIZATION",
-            //     "amount": "1000",
-            //     "currency": "SAR",
-            //     "customer_email": "test123@yopmail.com",
-            //     "access_code": AMAZONPAY.access_code,
-            //     "merchant_identifier": AMAZONPAY.merchant_identifier,
-            //     "merchant_reference": `SUB_${Date.now()}`,
-            //     "language": "en",
-            //     "order_description": "lab order"
-            //  };
-
-            requestData.signature = generateSignature(requestData, AMAZONPAY.sha_request_phrase);
-            // requestData.signature1 = generateSignature(requestData, AMAZONPAY.sha_request_phrase);
-
-            const response = await axios.post(AMAZONPAY.test_payment_process_api, requestData, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            return handleResponse(req, res, 200, {
-                status: true,
-                body: response?.data,
-                message: "Payment Initiated Successfully",
-                errorCode: null,
-            });
-        } catch (error) {
-            console.log(error, "Payment Initiated Failed");
-            return handleResponse(req, res, 500, {
-                status: false,
-                body: null,
-                message: "Failed to initiate payment",
-                errorCode: "INTERNAL_SERVER_ERROR",
-            });
-        }
-    }
-
-    async fetchSignatureDetails(req, res) {
-        try {
-            const { amount, currency, language, customerEmail } = req.body;
-            let merchantRef = `SUB_${Date.now()}`;
-            let data = {
-                "access_code": AMAZONPAY.access_code,
-                "merchant_identifier": AMAZONPAY.merchant_identifier,
-                "merchant_reference": merchantRef,
-                "amount": amount,
-                "currency": currency,
-                "language": language,
-                "customer_email": customerEmail
-            };
-            const signatureeithApplePay = {
-                "command": "PURCHASE",
-                "access_code": AMAZONPAY.access_code,
-                "merchant_identifier": AMAZONPAY.merchant_identifier,
-                "merchant_reference": merchantRef,
-                "amount": amount,
-                "currency": currency,
-                "language": language,
-                "customer_email": customerEmail,
-                "payment_option": "APPLEPAY"
-            };
-            const signatureGenerate = {
-                "command": "PURCHASE",
-                "access_code": AMAZONPAY.access_code,
-                "merchant_identifier": AMAZONPAY.merchant_identifier,
-                "merchant_reference": merchantRef,
-                "amount": amount,
-                "currency": currency,
-                "language": language,
-                "customer_email": customerEmail
-            };
-
-            data.signature1 = generateSignature(signatureeithApplePay, AMAZONPAY.sha_request_phrase);
-            data.signature = generateSignature(signatureGenerate, AMAZONPAY.sha_request_phrase);
-
-            return handleResponse(req, res, 200, {
-                status: true,
-                body: data,
-                message: "Details are fetch successfully",
-                errorCode: null,
-            });
-        } catch (error) {
-            console.log(error, "Failed to fetch details");
-            return handleResponse(req, res, 200, {
-                status: false,
-                body: null,
-                message: "Failed to fetch details",
-                errorCode: null,
-            });
-        }
-    }
-    /** Mar 10 End */
 
 }
 

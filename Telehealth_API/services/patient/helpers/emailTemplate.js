@@ -67,37 +67,3 @@ export const verifyEmail2fa = (email, code) => ({
         }
     },
 })
-
-export const sendMailInvitations = (email, first_name, last_name, loggeInname, portalmessage, portalname) => ({
-    Source: '<no-reply@yopmail.com>',
-    Destination: {
-        ToAddresses: [
-            email
-        ],
-    },
-    ReplyToAddresses: ['no-reply@yopmail.com'],
-    Message: {
-        Body: {
-            Html: {
-                Charset: 'UTF-8',
-                Data: `
-          <h3>Mail Invitation</h3>
-          <br/>
-          <p>Hello ${first_name} ${last_name},</p>
-          <br/>
-          <p>Please register yourself on this portal</p>
-          <br/>
-          <a href="${test_pFrontendUrl}/${portalname}/signup" role="button">CLICK HERE</a>
-          <br/>
-          <p>${portalmessage}</p>
-          <br/>
-          <p>Thanks,</p>
-          <p>${loggeInname}</p>`
-            },
-        },
-        Subject: {
-            Charset: 'UTF-8',
-            Data: `Mail Invitation from  `,
-        }
-    },
-})

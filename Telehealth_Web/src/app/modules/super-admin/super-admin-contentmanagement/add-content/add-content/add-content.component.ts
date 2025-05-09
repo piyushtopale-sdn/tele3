@@ -29,7 +29,7 @@ export class AddContentComponent {
     ["ordered_list", "bullet_list"],
     ["code", "blockquote"],
     [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
-    ["link", "image"],
+    // ["link", "image"],
   ];
   toolbar_arabic: Toolbar = [
     ["bold", "italic", "underline", "text_color", "background_color", "strike"],
@@ -37,7 +37,7 @@ export class AddContentComponent {
     ["ordered_list", "bullet_list"],
     ["code", "blockquote"],
     [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
-    ["link", "image"],
+    // ["link", "image"],
   ];
   contentId: string;
 

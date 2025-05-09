@@ -294,13 +294,13 @@ export class RetailpharmacydetailComponent implements OnInit {
         order_confirmation: false,
         user_name: this.coreService.getLocalStorage("profileData").full_name
           ? this.coreService.getLocalStorage("profileData").full_name
-          : "test Patient",
+          : "test_p Patient",
       },
       from_user: {
         user_id: this.loginuser_id,
         user_name: this.coreService.getLocalStorage("profileData").full_name
           ? this.coreService.getLocalStorage("profileData").full_name
-          : "test Patient",
+          : "test_p Patient",
       },
       medicine_list: [],
       // orderFor :'Pharmacy'

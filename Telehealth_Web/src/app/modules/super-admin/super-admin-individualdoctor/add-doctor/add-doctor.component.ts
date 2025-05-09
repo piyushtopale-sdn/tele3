@@ -67,6 +67,7 @@ export class AddDoctorComponent implements OnDestroy {
       this.pageForAdd = false;     this.availability = true;
       this.basicInfo = true;    
       this.availability = true;
+      this.educationalForm = true;
       this.getDoctorDetails();
     }
   }
@@ -81,6 +82,7 @@ export class AddDoctorComponent implements OnDestroy {
       this.pageForAdd = false;
       this.basicInfo = true;
       this.availability = true;
+      this.educationalForm = true;
       this.getDoctorDetails();
     }
     this.cdr.detectChanges();
@@ -134,6 +136,10 @@ export class AddDoctorComponent implements OnDestroy {
     if (event === "availabilty") {
       this.availability = true;
     } 
+
+    if(event === "educationalForm") {
+      this.educationalForm = true;
+    }
 
     this.goForward();
   }

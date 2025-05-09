@@ -6,10 +6,9 @@ import Province from "../../models/common_data/province";
 import Department from "../../models/common_data/department";
 import City from "../../models/common_data/city";
 import Village from "../../models/common_data/village";
-import { CityColumns, CountryColumns, DepartmentColumns, DesignationColumns, LanguageColumns, messages, RegionColumns, TitleColumns, VillageColumns } from "../../config/constants";
+import { CityColumns, CountryColumns, DepartmentColumns, DesignationColumns, LanguageColumns, messages, RegionColumns, VillageColumns } from "../../config/constants";
 import { processExcel } from "../../middleware/utils";
 import Designation from "../../models/designation";
-import Title from "../../models/title";
 import Language from "../../models/language";
 import StudyType from "../../models/studytype";
 import Nationality from "../../models/common_data/nationality";
@@ -39,7 +38,7 @@ const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 class CommonDataController {
   async countryList(req, res) {
     try {
-     
+
       const list = await Country.find({ is_deleted: false });
       sendResponse(req, res, 200, {
         status: true,
@@ -64,7 +63,7 @@ class CommonDataController {
       if (country_id != "") {
         list = await Region.find({ country_id: country_id, is_deleted: false });
       } else {
-        list = await Region.find({is_deleted: false});
+        list = await Region.find({ is_deleted: false });
       }
       sendResponse(req, res, 200, {
         status: true,
@@ -89,7 +88,7 @@ class CommonDataController {
       if (region_id != "") {
         list = await Province.find({ region_id: region_id, is_deleted: false });
       } else {
-        list = await Province.find({is_deleted: false});
+        list = await Province.find({ is_deleted: false });
       }
       sendResponse(req, res, 200, {
         status: true,
@@ -117,7 +116,7 @@ class CommonDataController {
           is_deleted: false,
         });
       } else {
-        list = await Department.find({is_deleted: false});
+        list = await Department.find({ is_deleted: false });
       }
       sendResponse(req, res, 200, {
         status: true,
@@ -145,7 +144,7 @@ class CommonDataController {
           is_deleted: false,
         });
       } else {
-        list = await City.find({is_deleted: false});
+        list = await City.find({ is_deleted: false });
       }
       sendResponse(req, res, 200, {
         status: true,
@@ -173,7 +172,7 @@ class CommonDataController {
           is_deleted: false,
         });
       } else {
-        list = await Village.find({is_deleted: false});
+        list = await Village.find({ is_deleted: false });
       }
       sendResponse(req, res, 200, {
         status: true,
@@ -369,19 +368,13 @@ class CommonDataController {
       const { name, department_id } = req.query;
       let city_data = null;
 
-      if (department_id) {
-        if (name != "") {
-          city_data = await City.findOne({
-            name: { $regex: name, $options: "i" },
-            department_id: department_id,
-          });
+      if (name !== "") {
+        const query = { name: { $regex: name, $options: "i" } };
+        if (department_id) {
+          query.department_id = department_id;
         }
-      } else {
-        if (name != "") {
-          city_data = await City.findOne({
-            name: { $regex: name, $options: "i" },
-          });
-        }
+
+        city_data = await City.findOne(query);
       }
 
       if (city_data != null) {
@@ -489,14 +482,13 @@ class CommonDataController {
   async countryLists(req, res) {
     try {
       const { page, limit, searchKey } = req.query;
-      let sort=req.query.sort
-      let sortingarray={};
-      if (sort != 'undefined' && sort != '' && sort != undefined)
-      {
-          let keynew=sort.split(":")[0];
-          let value=sort.split(":")[1];
-          sortingarray[keynew] = value;
-      }else{
+      let sort = req.query.sort
+      let sortingarray = {};
+      if (sort != 'undefined' && sort != '' && sort != undefined) {
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
+        sortingarray[keynew] = value;
+      } else {
         sortingarray['createdAt'] = -1;
 
       }
@@ -518,8 +510,10 @@ class CommonDataController {
         .skip((page - 1) * limit)
         .exec();
 
-      const count = await Country.countDocuments({ is_deleted: "false",
-      ...filter});
+      const count = await Country.countDocuments({
+        is_deleted: "false",
+        ...filter
+      });
 
       sendResponse(req, res, 200, {
         status: true,
@@ -549,7 +543,7 @@ class CommonDataController {
         country_code: req.body.country_code,
         iso_code: req.body.iso_code,
       };
-      const list = await Country.find({ name: req.body.name, _id:{$ne: mongoose.Types.ObjectId(req.body._id)}, is_deleted: false });
+      const list = await Country.find({ name: req.body.name, _id: { $ne: mongoose.Types.ObjectId(req.body._id) }, is_deleted: false });
       if (list) {
         const result = await Country.updateOne(
           { _id: mongoose.Types.ObjectId(req.body._id) },
@@ -587,8 +581,8 @@ class CommonDataController {
       });
     }
   }
- 
-  
+
+
 
   async deleteCountry(req, res) {
     try {
@@ -601,17 +595,17 @@ class CommonDataController {
 
       if (action_name == "delete") {
         if (vaccinationId == "") {
-          
+
           let checkisDeleted = await Country.find({ is_deleted: false }, { _id: 1 });
           const _idValues = checkisDeleted.map(item => item._id);
-          let regiondetails = await Region.find({ country_id: { $in: _idValues } ,is_deleted:false})
+          let regiondetails = await Region.find({ country_id: { $in: _idValues }, is_deleted: false })
           if (regiondetails.length > 0) {
-              return sendResponse(req, res, 200, {
-                  status: false,
-                  body: null,
-                  message: "This Country is assigned to region. If you want to delete, please assign another Country to region or delete region and try",
-                  errorCode: null,
-              });
+            return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "This Country is assigned to region. If you want to delete, please assign another Country to region or delete region and try",
+              errorCode: null,
+            });
           }
 
           await Country.updateMany(
@@ -622,14 +616,14 @@ class CommonDataController {
             { new: true }
           );
         } else {
-          let regiondetails = await Region.find({ country_id: { $in: vaccinationId } ,is_deleted:false})
+          let regiondetails = await Region.find({ country_id: { $in: vaccinationId }, is_deleted: false })
           if (regiondetails.length > 0) {
-              return sendResponse(req, res, 200, {
-                  status: false,
-                  body: null,
-                  message: "This Country is assigned to region. If you want to delete, please assign another Country to region or delete region and try",
-                  errorCode: null,
-              });
+            return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "This Country is assigned to region. If you want to delete, please assign another Country to region or delete region and try",
+              errorCode: null,
+            });
           }
           await Country.updateMany(
             { _id: { $in: vaccinationId } },
@@ -714,7 +708,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -788,7 +782,7 @@ class CommonDataController {
         });
       }
     } catch (error) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -800,8 +794,8 @@ class CommonDataController {
 
   async addRegion(req, res) {
     try {
-      const { name, country_id,createdBy } = req.body;
-      const getlist = await Region.findOne({ country_id: mongoose.Types.ObjectId(req.body.country_id), name: name  });
+      const { name, country_id, createdBy } = req.body;
+      const getlist = await Region.findOne({ country_id: mongoose.Types.ObjectId(req.body.country_id), name: name });
       if (getlist === null || getlist === undefined) {
         let result = new Region({
           name,
@@ -839,14 +833,13 @@ class CommonDataController {
     // 
     try {
       const { page, limit, searchKey } = req.query;
-      let sort=req.query.sort
-      let sortingarray={};
-      if (sort != 'undefined' && sort != '' && sort != undefined)
-      {
-          let keynew=sort.split(":")[0];
-          let value=sort.split(":")[1];
-          sortingarray[keynew] = Number(value);
-      }else{
+      let sort = req.query.sort
+      let sortingarray = {};
+      if (sort != 'undefined' && sort != '' && sort != undefined) {
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
+        sortingarray[keynew] = Number(value);
+      } else {
         sortingarray['createdAt'] = -1;
 
       }
@@ -893,7 +886,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -936,14 +929,14 @@ class CommonDataController {
         if (vaccinationId == "") {
           let checkisDeleted = await Region.find({ is_deleted: false }, { _id: 1 });
           const _idValues = checkisDeleted.map(item => item._id);
-          let Provincedetails = await Province.find({ region_id: { $in: _idValues },is_deleted:false })
+          let Provincedetails = await Province.find({ region_id: { $in: _idValues }, is_deleted: false })
           if (Provincedetails.length > 0) {
-              return sendResponse(req, res, 200, {
-                  status: false,
-                  body: null,
-                  message: "This Region is assigned to province. If you want to delete, please assign another Region to province or delete province and try",
-                  errorCode: null,
-              });
+            return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "This Region is assigned to province. If you want to delete, please assign another Region to province or delete province and try",
+              errorCode: null,
+            });
           }
           await Region.updateMany(
             { is_deleted: { $eq: false } },
@@ -953,14 +946,14 @@ class CommonDataController {
             { new: true }
           );
         } else {
-          let Provincedetails = await Province.find({ region_id: { $in: vaccinationId },is_deleted:false })
+          let Provincedetails = await Province.find({ region_id: { $in: vaccinationId }, is_deleted: false })
           if (Provincedetails.length > 0) {
-              return sendResponse(req, res, 200, {
-                  status: false,
-                  body: null,
-                  message: "This Region is assigned to province. If you want to delete, please assign another Region to province or delete province and try",
-                  errorCode: null,
-              });
+            return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "This Region is assigned to province. If you want to delete, please assign another Region to province or delete province and try",
+              errorCode: null,
+            });
           }
           await Region.updateMany(
             { _id: { $in: vaccinationId } },
@@ -980,7 +973,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -1055,7 +1048,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -1137,7 +1130,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+
       return sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -1153,7 +1146,7 @@ class CommonDataController {
         name: req.body.name,
         country_id: req.body.country_id,
       };
-      const list = await Region.findOne({ country_id: mongoose.Types.ObjectId(req.body.country_id), name: req.body.name, _id:{$ne: mongoose.Types.ObjectId(req.body._id)}, is_deleted: false });
+      const list = await Region.findOne({ country_id: mongoose.Types.ObjectId(req.body.country_id), name: req.body.name, _id: { $ne: mongoose.Types.ObjectId(req.body._id) }, is_deleted: false });
       if (list == null || list == undefined) {
         const result = await Region.updateOne(
           { _id: mongoose.Types.ObjectId(req.body._id) },
@@ -1228,19 +1221,18 @@ class CommonDataController {
   }
 
   async provincemasterList(req, res) {
-    
+
     try {
       const { page, limit, searchKey } = req.query;
-      let sort=req.query.sort
-      let sortingarray={};
-      if (sort != 'undefined' && sort != '' && sort != undefined)
-      {
-          let keynew=sort.split(":")[0];
-          let value=sort.split(":")[1];
-          sortingarray[keynew] = Number(value);
-      }else{
+      let sort = req.query.sort
+      let sortingarray = {};
+      if (sort != 'undefined' && sort != '' && sort != undefined) {
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
+        sortingarray[keynew] = Number(value);
+      } else {
         sortingarray['createdAt'] = -1;
-        
+
       }
       const filter = {
         is_deleted: false,
@@ -1302,7 +1294,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -1325,14 +1317,14 @@ class CommonDataController {
         if (vaccinationId == "") {
           let checkisDeleted = await Province.find({ is_deleted: false }, { _id: 1 });
           const _idValues = checkisDeleted.map(item => item._id);
-          let departmentdetails = await Department.find({ province_id: { $in: _idValues },is_deleted:false })
+          let departmentdetails = await Department.find({ province_id: { $in: _idValues }, is_deleted: false })
           if (departmentdetails.length > 0) {
-              return sendResponse(req, res, 200, {
-                  status: false,
-                  body: null,
-                  message: "This Province is assigned to Department. If you want to delete, please assign another Province to Department or delete Department and try",
-                  errorCode: null,
-              });
+            return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "This Province is assigned to Department. If you want to delete, please assign another Province to Department or delete Department and try",
+              errorCode: null,
+            });
           }
           await Province.updateMany(
             { is_deleted: { $eq: false } },
@@ -1342,14 +1334,14 @@ class CommonDataController {
             { new: true }
           );
         } else {
-          let departmentdetails = await Department.find({ province_id: { $in: vaccinationId } ,is_deleted:false})
+          let departmentdetails = await Department.find({ province_id: { $in: vaccinationId }, is_deleted: false })
           if (departmentdetails.length > 0) {
-              return sendResponse(req, res, 200, {
-                  status: false,
-                  body: null,
-                  message: "This Province is assigned to Department. If you want to delete, please assign another Province to Department or delete Department and try",
-                  errorCode: null,
-              });
+            return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "This Province is assigned to Department. If you want to delete, please assign another Province to Department or delete Department and try",
+              errorCode: null,
+            });
           }
           await Province.updateMany(
             { _id: { $in: vaccinationId } },
@@ -1369,7 +1361,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -1385,7 +1377,7 @@ class CommonDataController {
         name: req.body.name,
         region_id: req.body.region_id,
       };
-      const list = await Province.find({ region_id: mongoose.Types.ObjectId(req.body.region_id), name: req.body.name, _id:{$ne: mongoose.Types.ObjectId(req.body._id)} });
+      const list = await Province.find({ region_id: mongoose.Types.ObjectId(req.body.region_id), name: req.body.name, _id: { $ne: mongoose.Types.ObjectId(req.body._id) } });
       if (list.length == 0) {
         const result = await Province.updateOne(
           { _id: mongoose.Types.ObjectId(req.body._id) },
@@ -1494,7 +1486,7 @@ class CommonDataController {
           },
         ]);
       }
-      
+
       let array = result.map((obj) => Object.values(obj));
       sendResponse(req, res, 200, {
         status: true,
@@ -1506,7 +1498,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -1522,7 +1514,7 @@ class CommonDataController {
     try {
       const filePath = "./uploads/" + req.filename;
       const data = await processExcel(filePath);
-   
+
       if (data.length === 0) {
         return sendResponse(req, res, 400, {
           status: false,
@@ -1586,7 +1578,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+
       return sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -1638,14 +1630,13 @@ class CommonDataController {
   async provincedepartmentList(req, res) {
     try {
       const { page, limit, searchKey } = req.query;
-      let sort=req.query.sort
-      let sortingarray={};
-      if (sort != 'undefined' && sort != '' && sort != undefined)
-      {
-          let keynew=sort.split(":")[0];
-          let value=sort.split(":")[1];
-          sortingarray[keynew] = Number(value);
-      }else{
+      let sort = req.query.sort
+      let sortingarray = {};
+      if (sort != 'undefined' && sort != '' && sort != undefined) {
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
+        sortingarray[keynew] = Number(value);
+      } else {
         sortingarray['createdAt'] = -1;
 
       }
@@ -1708,7 +1699,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -1731,23 +1722,23 @@ class CommonDataController {
         if (vaccinationId == "") {
           let checkisDeleted = await Department.find({ is_deleted: false }, { _id: 1 });
           const _idValues = checkisDeleted.map(item => item._id);
-          let citydetails = await City.find({ department_id: { $in: _idValues } ,is_deleted:false})
+          let citydetails = await City.find({ department_id: { $in: _idValues }, is_deleted: false })
           if (citydetails.length > 0) {
-              return sendResponse(req, res, 200, {
-                  status: false,
-                  body: null,
-                  message: "This Department is assigned to City. If you want to delete, please assign another Department to those City or delete City and try",
-                  errorCode: null,
-              });
+            return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "This Department is assigned to City. If you want to delete, please assign another Department to those City or delete City and try",
+              errorCode: null,
+            });
           }
-          let villagedetails = await Village.find({ department_id: { $in: _idValues } ,is_deleted:false})
+          let villagedetails = await Village.find({ department_id: { $in: _idValues }, is_deleted: false })
           if (villagedetails.length > 0) {
-              return sendResponse(req, res, 200, {
-                  status: false,
-                  body: null,
-                  message: "This Department is assigned to Village. If you want to delete, please assign another Department to those Village or delete Village and try",
-                  errorCode: null,
-              });
+            return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "This Department is assigned to Village. If you want to delete, please assign another Department to those Village or delete Village and try",
+              errorCode: null,
+            });
           }
           await Department.updateMany(
             { is_deleted: { $eq: false } },
@@ -1757,23 +1748,23 @@ class CommonDataController {
             { new: true }
           );
         } else {
-          let citydetails = await City.find({ department_id: { $in: vaccinationId },is_deleted:false })
+          let citydetails = await City.find({ department_id: { $in: vaccinationId }, is_deleted: false })
           if (citydetails.length > 0) {
-              return sendResponse(req, res, 200, {
-                  status: false,
-                  body: null,
-                  message: "This Department is assigned to City. If you want to delete, please assign another Department to those City or delete City and try",
-                  errorCode: null,
-              });
+            return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "This Department is assigned to City. If you want to delete, please assign another Department to those City or delete City and try",
+              errorCode: null,
+            });
           }
-          let villagedetails = await Village.find({ department_id: { $in: vaccinationId },is_deleted:false })
+          let villagedetails = await Village.find({ department_id: { $in: vaccinationId }, is_deleted: false })
           if (villagedetails.length > 0) {
-              return sendResponse(req, res, 200, {
-                  status: false,
-                  body: null,
-                  message: "This Department is assigned to Village. If you want to delete, please assign another Department to those Village or delete Village and try",
-                  errorCode: null,
-              });
+            return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "This Department is assigned to Village. If you want to delete, please assign another Department to those Village or delete Village and try",
+              errorCode: null,
+            });
           }
           await Department.updateMany(
             { _id: { $in: vaccinationId } },
@@ -1793,7 +1784,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -1809,7 +1800,7 @@ class CommonDataController {
         name: req.body.name,
         province_id: req.body.province_id,
       };
-      const list = await Department.find({ province_id: mongoose.Types.ObjectId(req.body.province_id), name: req.body.name, _id:{$ne: mongoose.Types.ObjectId(req.body._id)} });
+      const list = await Department.find({ province_id: mongoose.Types.ObjectId(req.body.province_id), name: req.body.name, _id: { $ne: mongoose.Types.ObjectId(req.body._id) } });
       if (list.length == 0) {
         const result = await Department.updateOne(
           { _id: mongoose.Types.ObjectId(req.body._id) },
@@ -1950,7 +1941,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -1963,7 +1954,7 @@ class CommonDataController {
 
   async uploadCSVForDepartmentList(req, res) {
     try {
-      
+
       const filePath = "./uploads/" + req.filename;
       const data = await processExcel(filePath);
       const isValidFile = validateColumnWithExcel(DepartmentColumns, data[0]);
@@ -1988,7 +1979,7 @@ class CommonDataController {
       }
 
       for (const element of data) {
-        
+
         if (!element.province_name) {
           return sendResponse(req, res, 400, {
             status: false,
@@ -2030,7 +2021,7 @@ class CommonDataController {
               province_id: province._id,
             };
             const department = new Department(payload);
-            await department.save();            
+            await department.save();
           }
         }
       }
@@ -2042,7 +2033,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+
       return sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2092,14 +2083,13 @@ class CommonDataController {
   async mastercityList(req, res) {
     try {
       const { page, limit, searchKey } = req.query;
-      let sort=req.query.sort
-      let sortingarray={};
-      if (sort != 'undefined' && sort != '' && sort != undefined)
-      {
-          let keynew=sort.split(":")[0];
-          let value=sort.split(":")[1];
-          sortingarray[keynew] = Number(value);
-      }else{
+      let sort = req.query.sort
+      let sortingarray = {};
+      if (sort != 'undefined' && sort != '' && sort != undefined) {
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
+        sortingarray[keynew] = Number(value);
+      } else {
         sortingarray["createdAt"] = -1;
 
       }
@@ -2154,7 +2144,7 @@ class CommonDataController {
 
       const totalCount = await City.aggregate(aggregate);
       aggregate.push(
-        { $sort: sortingarray},
+        { $sort: sortingarray },
         { $skip: (page - 1) * limit },
         { $limit: limit * 1 }
       );
@@ -2171,7 +2161,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -2219,7 +2209,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2235,8 +2225,8 @@ class CommonDataController {
         name: req.body.name,
         department_id: req.body.department_id,
       };
-      
-      const list = await City.find({ department_id: mongoose.Types.ObjectId(req.body.department_id), name: req.body.name, _id:{$ne: mongoose.Types.ObjectId(req.body._id)} });
+
+      const list = await City.find({ department_id: mongoose.Types.ObjectId(req.body.department_id), name: req.body.name, _id: { $ne: mongoose.Types.ObjectId(req.body._id) } });
       if (list.length == 0) {
         const result = await City.updateOne(
           { _id: mongoose.Types.ObjectId(req.body._id) },
@@ -2393,7 +2383,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -2405,7 +2395,7 @@ class CommonDataController {
 
   async uploadCSVForCityList(req, res) {
     try {
-      
+
       const filePath = "./uploads/" + req.filename;
       const data = await processExcel(filePath);
       const isValidFile = validateColumnWithExcel(CityColumns, data[0]);
@@ -2430,7 +2420,7 @@ class CommonDataController {
       }
 
       for (const element of data) {
-        
+
         if (!element.department_name) {
           return sendResponse(req, res, 400, {
             status: false,
@@ -2483,7 +2473,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+
       return sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2531,14 +2521,13 @@ class CommonDataController {
   async mastervillageList(req, res) {
     try {
       const { page, limit, searchKey } = req.query;
-      let sort=req.query.sort
-      let sortingarray={};
-      if (sort != 'undefined' && sort != '' && sort != undefined)
-      {
-          let keynew=sort.split(":")[0];
-          let value=sort.split(":")[1];
-          sortingarray[keynew] = Number(value);
-      }else{
+      let sort = req.query.sort
+      let sortingarray = {};
+      if (sort != 'undefined' && sort != '' && sort != undefined) {
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
+        sortingarray[keynew] = Number(value);
+      } else {
         sortingarray['createdAt'] = -1;
 
       }
@@ -2610,7 +2599,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -2631,7 +2620,7 @@ class CommonDataController {
 
       if (action_name == "delete") {
         if (vaccinationId == "") {
-         await Village.updateMany(
+          await Village.updateMany(
             { is_deleted: { $eq: false } },
             {
               $set: { is_deleted: true },
@@ -2657,7 +2646,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2672,7 +2661,7 @@ class CommonDataController {
         name: req.body.name,
         department_id: req.body.department_id,
       };
-      const list = await Village.find({ department_id: mongoose.Types.ObjectId(req.body.department_id), name: req.body.name, _id:{$ne: mongoose.Types.ObjectId(req.body._id)}, is_deleted:false });
+      const list = await Village.find({ department_id: mongoose.Types.ObjectId(req.body.department_id), name: req.body.name, _id: { $ne: mongoose.Types.ObjectId(req.body._id) }, is_deleted: false });
       if (list.length == 0) {
         const result = await Village.updateOne(
           { _id: mongoose.Types.ObjectId(req.body._id) },
@@ -2829,7 +2818,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -2917,7 +2906,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (error) {
-      
+
       return sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -2971,14 +2960,13 @@ class CommonDataController {
   async allDesignationList(req, res) {
     try {
       const { limit, page, searchText, fromDate, toDate } = req.query
-      let sort=req.query.sort
-      let sortingarray={};
-      if (sort != 'undefined' && sort != '' && sort != undefined)
-      {
-          let keynew=sort.split(":")[0];
-          let value=sort.split(":")[1];
-          sortingarray[keynew] = value;
-      }else{
+      let sort = req.query.sort
+      let sortingarray = {};
+      if (sort != 'undefined' && sort != '' && sort != undefined) {
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
+        sortingarray[keynew] = value;
+      } else {
         sortingarray["createdAt"] = -1;
 
       }
@@ -2989,7 +2977,7 @@ class CommonDataController {
           designation: { $regex: searchText || '', $options: "i" }
         }
       }
-      if(fromDate && toDate) {
+      if (fromDate && toDate) {
         const fromDateObj = new Date(`${fromDate} 00:00:00`);
         const toDateObj = new Date(`${toDate} 23:59:59`);
         filter.createdAt = { $gte: fromDateObj, $lte: toDateObj }
@@ -3029,7 +3017,7 @@ class CommonDataController {
         active_status,
         delete_status
       } = req.body
-      const list = await Designation.find({ designation: designation, active_status: active_status,  _id:{$ne: mongoose.Types.ObjectId(designationId)} });
+      const list = await Designation.find({ designation: designation, active_status: active_status, _id: { $ne: mongoose.Types.ObjectId(designationId) } });
       if (list.length == 0) {
         const updateDesignation = await Designation.updateOne(
           { _id: designationId },
@@ -3059,7 +3047,7 @@ class CommonDataController {
       }
 
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -3117,7 +3105,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -3162,7 +3150,7 @@ class CommonDataController {
         }
         ])
       }
-      
+
       let array = result.map(obj => Object.values(obj));
       sendResponse(req, res, 200, {
         status: true,
@@ -3174,7 +3162,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -3246,7 +3234,7 @@ class CommonDataController {
         });
       }
     } catch (error) {
-      
+
       return sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -3278,352 +3266,6 @@ class CommonDataController {
       });
     }
   }
-
-  // Title by Super-admin
-  async addTitle_SuperAdmin(req, res) {
-    try {
-      const { titleArray, added_by, creator_name } = req.body
-      const list = titleArray.map((singleData) => ({
-        ...singleData,
-        added_by, creator_name
-      }));
-      const namesToFind = list.map((item) => item.title);
-      const foundItems = await Title.find({
-        title: { $in: namesToFind },
-      });
-      const CheckData = foundItems.map((item) => item.title);
-      if (foundItems.length == 0) {
-        const savedTitle = await Title.insertMany(list)
-        sendResponse(req, res, 200, {
-          status: true,
-          body: savedTitle,
-          message: "Successfully add Title",
-          errorCode: null,
-        });
-      } else {
-        sendResponse(req, res, 200, {
-          status: false,
-
-          message: `${CheckData} already exist`,
-          errorCode: null,
-        });
-      }
-
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to add Title",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async allTitleList(req, res) {
-    try {
-      const { limit, page, searchText } = req.query
-      let sort=req.query.sort
-      let sortingarray={};
-      if (sort != 'undefined' && sort != '' && sort != undefined)
-      {
-          let keynew=sort.split(":")[0];
-          let value=sort.split(":")[1];
-          sortingarray[keynew] = value;
-      }else{
-        sortingarray["createdAt"] = -1;
-
-      }
-      let filter = { delete_status: false }
-      if (searchText != "") {
-        filter = {
-          delete_status: false,
-          title: { $regex: searchText || '', $options: "i" }
-        }
-      }
-      const titleList = await Title.find(filter)
-        .sort(sortingarray)
-        .skip((page - 1) * limit)
-        .limit(limit * 1)
-        .exec();
-      const count = await Title.countDocuments(filter);
-      sendResponse(req, res, 200, {
-        status: true,
-        body: {
-          totalCount: count,
-          data: titleList,
-        },
-        message: "Successfully get Title list",
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to get title list",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async updateTitle(req, res) {
-    try {
-      const {
-        titleId,
-        title,
-        active_status,
-        delete_status
-      } = req.body
-      const list = await Title.find({ title: title, active_status: active_status,_id:{$ne: mongoose.Types.ObjectId(titleId)}, is_deleted:false  });
-      if (list.length == 0) {
-        const updateTitle = await Title.updateOne(
-          { _id: titleId },
-          {
-            $set: {
-              title,
-              active_status,
-              delete_status
-            }
-          },
-          { new: true }
-        ).exec();
-        sendResponse(req, res, 200, {
-          status: true,
-          body: updateTitle,
-          message: "Successfully updated Title",
-          errorCode: null,
-        });
-      } else {
-        sendResponse(req, res, 200, {
-          status: false,
-          message: "Title Already Exist",
-          errorCode: null,
-        });
-      }
-
-    } catch (err) {
-      
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `failed to update Title`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async actionOnTitle(req, res) {
-    try {
-      const { titleId, action_name, action_value } = req.body
-      let message = ''
-
-      const filter = {}
-      if (action_name == "active") filter['active_status'] = action_value
-      if (action_name == "delete") filter['delete_status'] = action_value
-
-      if (action_name == "active") {
-        await Title.updateOne(
-          { _id: titleId },
-          filter,
-          { new: true }
-        ).exec();
-
-        message = action_value == true ? 'Successfully Active Title' : 'Successfully In-active Title'
-      }
-
-      if (action_name == "delete") {
-        if (titleId == '') {
-          await Title.updateMany(
-            { delete_status: { $eq: false } },
-            {
-              $set: { delete_status: true }
-            },
-            { new: true }
-          )
-        }
-        else {
-          await Title.updateMany(
-            { _id: { $in: titleId } },
-            {
-              $set: { delete_status: true }
-            },
-            { new: true }
-          )
-        }
-        message = 'Successfully Title deleted'
-      }
-
-      sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: message,
-        errorCode: null,
-      });
-    } catch (err) {
-      
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `failed to title done`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async allTitleListforexport(req, res) {
-    const { searchText, limit, page } = req.query
-    let filter
-    if (searchText == "") {
-      filter = {
-        delete_status: false
-      }
-    } else {
-      filter = {
-        delete_status: false,
-        title: { $regex: searchText || '', $options: "i" },
-      }
-    }
-    try {
-      let result = '';
-      if (limit > 0) {
-        result = await Title.find(filter)
-          .sort([["createdAt", -1]])
-          .skip((page - 1) * limit)
-          .limit(limit * 1)
-          .exec();
-      }
-      else {
-        result = await Title.aggregate([{
-          $match: filter
-        },
-        { $sort: { "createdAt": -1 } },
-        {
-          $project: {
-            _id: 0,
-            title: "$title"
-          }
-        }
-        ])
-      }
-      let array = result.map(obj => Object.values(obj));
-      sendResponse(req, res, 200, {
-        status: true,
-        data: {
-          result,
-          array
-        },
-        message: `Title added successfully`,
-        errorCode: null,
-      });
-    } catch (err) {
-      
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `failed to add Title`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async uploadCSVForTitle(req, res) {
-    try {
-      const filePath = './uploads/' + req.filename;
-      const data = await processExcel(filePath);
-
-      const isValidFile = validateColumnWithExcel(TitleColumns, data[0]);
-      fs.unlinkSync(filePath);
-
-      if (!isValidFile) {
-        sendResponse(req, res, 500, {
-          status: false,
-          body: isValidFile,
-          message: "Invalid excel sheet! column not matched.",
-          errorCode: null,
-        });
-        return;
-      }
-
-      const existingTitles = await Title.find({}, 'title');
-      const existingTitleNames = existingTitles.map(title => title.title);
-
-      const inputArray = [];
-      const duplicateTitles = [];
-
-      for (const singleData of data) {
-        const trimmedTitle = singleData.title.trim();
-        if (existingTitleNames.includes(trimmedTitle)) {
-          duplicateTitles.push(trimmedTitle);
-        } else {
-          inputArray.push({
-            title: trimmedTitle,
-            added_by: req.body.added_by,
-          });
-        }
-      }
-
-      if (duplicateTitles.length > 0) {
-        return sendResponse(req, res, 400, {
-          status: false,
-          body: null,
-          message: `Titles already exist: ${duplicateTitles.join(', ')}`,
-          errorCode: null,
-        });
-      }
-
-      if (inputArray.length > 0) {
-        const result = await Title.insertMany(inputArray);
-        return sendResponse(req, res, 200, {
-          status: true,
-          body: result,
-          message: "All title records added successfully",
-          errorCode: null,
-        });
-      } else {
-        return sendResponse(req, res, 200, {
-          status: true,
-          body: null,
-          message: "No new titles added",
-          errorCode: null,
-        });
-      }
-    } catch (error) {
-      
-      return sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Internal server error",
-        errorCode: null,
-      });
-    }
-  }
-
-
-  async TitleById(req, res) {
-    try {
-      const { _id } = req.query;
-
-      const list = await Title.find({ _id: _id });
-      sendResponse(req, res, 200, {
-        status: true,
-        body: { list },
-        message: `All Title list`,
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to get Title list",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-
-
 
   // Type of language by superadmin
   async addLanguage_SuperAdmin(req, res) {
@@ -3669,14 +3311,13 @@ class CommonDataController {
   async allLanguageList(req, res) {
     try {
       const { limit, page, searchText } = req.query
-      let sort=req.query.sort
-      let sortingarray={};
-      if (sort != 'undefined' && sort != '' && sort != undefined)
-      {
-          let keynew=sort.split(":")[0];
-          let value=sort.split(":")[1];
-          sortingarray[keynew] = value;
-      }else{
+      let sort = req.query.sort
+      let sortingarray = {};
+      if (sort != 'undefined' && sort != '' && sort != undefined) {
+        let keynew = sort.split(":")[0];
+        let value = sort.split(":")[1];
+        sortingarray[keynew] = value;
+      } else {
         sortingarray["createdAt"] = -1;
 
       }
@@ -3722,7 +3363,7 @@ class CommonDataController {
         active_status,
         delete_status
       } = req.body
-      const list = await Language.find({ language: language, active_status: active_status,_id:{$ne: mongoose.Types.ObjectId(languageId)}, is_deleted:false });
+      const list = await Language.find({ language: language, active_status: active_status, _id: { $ne: mongoose.Types.ObjectId(languageId) }, is_deleted: false });
       if (list.length == 0) {
         const updateLanguage = await Language.updateOne(
           { _id: languageId },
@@ -3752,7 +3393,7 @@ class CommonDataController {
       }
 
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -3810,7 +3451,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -3855,7 +3496,7 @@ class CommonDataController {
         }
         ])
       }
-      
+
       let array = result.map(obj => Object.values(obj));
       sendResponse(req, res, 200, {
         status: true,
@@ -3867,7 +3508,7 @@ class CommonDataController {
         errorCode: null,
       });
     } catch (err) {
-      
+
       sendResponse(req, res, 500, {
         status: false,
         data: err,
@@ -3939,7 +3580,7 @@ class CommonDataController {
         });
       }
     } catch (error) {
-      
+
       return sendResponse(req, res, 500, {
         status: false,
         body: error,
@@ -3969,28 +3610,6 @@ class CommonDataController {
       });
     }
   }
-  // 
-  async commmonTitleList(req, res) {
-    try {
-      const list = await Title.find({ delete_status: false, active_status: true });
-      sendResponse(req, res, 200, {
-        status: true,
-        body: { list },
-        message: `All Title list`,
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to get Title list",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-
 
   async commmonLanguageList(req, res) {
     try {
@@ -4013,522 +3632,504 @@ class CommonDataController {
   }
   // 
 
-  async getLocationName(req,res)
-{
-  try{
-    const { locationids } = req.body
-    let countrydata={}
-    let regiondata={}
-    let provincedata={}
-    let departmentdata={}
-    let citydata={}
-    let villagedata={}
-  
- 
-    if(locationids?.country_id)
-    {
-      countrydata= await Country.findOne({_id:locationids.country_id},{name:1,iso_code:1}).lean()
-    }
-    if(locationids?.region_id)
-    {
-      regiondata= await Region.findOne({_id:locationids.region_id},{name:1}).lean()
-    }
-    if(locationids?.province_id)
-    {
-     provincedata= await Province.findOne({_id:locationids.province_id},{name:1}).lean()
-    }
-    if(locationids?.department_id)
-    {
-      departmentdata= await Department.findOne({_id:locationids.department_id},{name:1}).lean()
-    }
-    if(locationids?.city_id)
-    {
-      citydata= await City.findOne({_id:locationids.city_id},{name:1}).lean()
-    }
-    if(locationids?.village_id)
-    {
-      villagedata= await Village.findOne({_id:locationids.village_id},{name:1}).lean()
-    }
-    let locationName={
-      country_name:countrydata?.name?countrydata?.name:"",
-      country_iso_code:countrydata?.iso_code?countrydata?.iso_code:"",
-      region_name:regiondata?.name?regiondata?.name:"",
-      province_name:provincedata?.name?provincedata?.name:"",
-      department_name:departmentdata?.name?departmentdata?.name:"",
-      village_name:villagedata?.name?villagedata?.name:"",
-      city_name:citydata?.name?citydata?.name:"",
- 
-    }
-    sendResponse(req, res, 200, {
-      status: true,
-      body: locationName,
-      message: `All location Name`,
-      errorCode: null,
-    });
-  }
-catch(error)
-{
-  console.error("An error occurred:", error);
-  sendResponse(req, res, 200, {
-    status: false,
-    body: {},
-    message: `Something went wrong`,
-    errorCode: null,
-  });
-}
-}
+  async getLocationName(req, res) {
+    try {
+      const { locationids } = req.body
+      let countrydata = {}
+      let regiondata = {}
+      let provincedata = {}
+      let departmentdata = {}
+      let citydata = {}
+      let villagedata = {}
 
-/** Oct 08 */
-async addStudyType(req,res)
-{
-  try {
-    const { studyTypes } = req.body
-    let existingStudyType = []
-    for (const data of studyTypes) {
-      const studyTypeName = data.studyTypeName.trim();
 
-      const getStudyType = await StudyType.findOne({
-        studyTypeName: { $regex: `^${studyTypeName}$`, $options: 'i' },
-        isDeleted: false,
-      });
-
-      if (getStudyType) {
-        existingStudyType.push(studyTypeName);
-      } else {
-        const addStudyType = new StudyType(data);
-        await addStudyType.save();
+      if (locationids?.country_id) {
+        countrydata = await Country.findOne({ _id: locationids.country_id }, { name: 1, iso_code: 1 }).lean()
       }
+      if (locationids?.region_id) {
+        regiondata = await Region.findOne({ _id: locationids.region_id }, { name: 1 }).lean()
+      }
+      if (locationids?.province_id) {
+        provincedata = await Province.findOne({ _id: locationids.province_id }, { name: 1 }).lean()
+      }
+      if (locationids?.department_id) {
+        departmentdata = await Department.findOne({ _id: locationids.department_id }, { name: 1 }).lean()
+      }
+      if (locationids?.city_id) {
+        citydata = await City.findOne({ _id: locationids.city_id }, { name: 1 }).lean()
+      }
+      if (locationids?.village_id) {
+        villagedata = await Village.findOne({ _id: locationids.village_id }, { name: 1 }).lean()
+      }
+      let locationName = {
+        country_name: countrydata?.name ? countrydata?.name : "",
+        country_iso_code: countrydata?.iso_code ? countrydata?.iso_code : "",
+        region_name: regiondata?.name ? regiondata?.name : "",
+        province_name: provincedata?.name ? provincedata?.name : "",
+        department_name: departmentdata?.name ? departmentdata?.name : "",
+        village_name: villagedata?.name ? villagedata?.name : "",
+        city_name: citydata?.name ? citydata?.name : "",
+
+      }
+      sendResponse(req, res, 200, {
+        status: true,
+        body: locationName,
+        message: `All location Name`,
+        errorCode: null,
+      });
     }
-    let message;
-    let status;
-    if (studyTypes.length == existingStudyType.length) {
+    catch (error) {
+      console.error("An error occurred:", error);
+      sendResponse(req, res, 200, {
+        status: false,
+        body: {},
+        message: `Something went wrong`,
+        errorCode: null,
+      });
+    }
+  }
+
+  /** Oct 08 */
+  async addStudyType(req, res) {
+    try {
+      const { studyTypes } = req.body
+      let existingStudyType = []
+      for (const data of studyTypes) {
+        const studyTypeName = data.studyTypeName.trim();
+
+        const getStudyType = await StudyType.findOne({
+          studyTypeName: { $regex: `^${studyTypeName}$`, $options: 'i' },
+          isDeleted: false,
+        });
+
+        if (getStudyType) {
+          existingStudyType.push(studyTypeName);
+        } else {
+          const addStudyType = new StudyType(data);
+          await addStudyType.save();
+        }
+      }
+      let message;
+      let status;
+      if (studyTypes.length == existingStudyType.length) {
         message = `This study type already exists.`
         status = false
-    } else if(existingStudyType.length > 0 && studyTypes.length != existingStudyType.length) {
+      } else if (existingStudyType.length > 0 && studyTypes.length != existingStudyType.length) {
         status = false
         message = `This study type already exists. Remaining are added successfully`
-    } else {
+      } else {
         status = true
         message = `Study Type added successfully.`
-    }
- 
-    sendResponse(req, res, 200, {
+      }
+
+      sendResponse(req, res, 200, {
         status: status,
         message,
         body: null,
         errorCode: null,
-    })
-}
-catch(error)
-{
-  console.error("An error occurred:", error);
-  sendResponse(req, res, 200, {
-    status: false,
-    body: {},
-    message: `Something went wrong`,
-    errorCode: null,
-  });
-}
-}
-
-async getStudyType(req,res)
-{
-  try {
-    const { page, limit, searchText, status, sort, fromDate, toDate } = req.query
-
-    let search_filter = [{}]
-    if (searchText) {
-        search_filter = [
-            { studyTypeName: {$regex: searchText || '', $options: "i"} }
-        ]
+      })
     }
+    catch (error) {
+      console.error("An error occurred:", error);
+      sendResponse(req, res, 200, {
+        status: false,
+        body: {},
+        message: `Something went wrong`,
+        errorCode: null,
+      });
+    }
+  }
 
-    let match = {
+  async getStudyType(req, res) {
+    try {
+      const { page, limit, searchText, status, sort, fromDate, toDate } = req.query
+
+      let search_filter = [{}]
+      if (searchText) {
+        search_filter = [
+          { studyTypeName: { $regex: searchText || '', $options: "i" } }
+        ]
+      }
+
+      let match = {
         isDeleted: false,
         $or: search_filter
-    }
-    if (status && status != 'all') {
+      }
+      if (status && status != 'all') {
         match.status = status == 'active' ? true : false
-    }
+      }
 
-    let fieldName = 'createdAt'
-    let sortOrder = '-1'
-    if (sort) {
+      let fieldName = 'createdAt'
+      let sortOrder = '-1'
+      if (sort) {
         fieldName = sort.split(':')[0]
         sortOrder = sort.split(':')[1]
-    }
-    if(fromDate && toDate) {
-      const fromDateObj = new Date(`${fromDate} 00:00:00`);
-      const toDateObj = new Date(`${toDate} 23:59:59`);
-      match['$and'] = [{
-        createdAt: { $gte: fromDateObj, $lte: toDateObj }
-      }]
-    }
+      }
+      if (fromDate && toDate) {
+        const fromDateObj = new Date(`${fromDate} 00:00:00`);
+        const toDateObj = new Date(`${toDate} 23:59:59`);
+        match['$and'] = [{
+          createdAt: { $gte: fromDateObj, $lte: toDateObj }
+        }]
+      }
 
-    const pipeline = [
+      const pipeline = [
         {
-            $match: match
+          $match: match
         },
         {
-            $group: {
-                _id: "$_id",
-                studyTypeName: { $first: "$studyTypeName"},
-                studyTypeNameArabic: { $first: "$studyTypeNameArabic"},
-                description: { $first: "$description"},
-                status: { $first: "$status"},
-                createdAt: { $first: "$createdAt"}
-            }
+          $group: {
+            _id: "$_id",
+            studyTypeName: { $first: "$studyTypeName" },
+            studyTypeNameArabic: { $first: "$studyTypeNameArabic" },
+            description: { $first: "$description" },
+            status: { $first: "$status" },
+            createdAt: { $first: "$createdAt" }
+          }
         },
         {
-            $sort: {
-                [fieldName]: parseInt(sortOrder)
-            }
+          $sort: {
+            [fieldName]: parseInt(sortOrder)
+          }
         },
         {
-            $facet: {
-                totalCount: [
-                    {
-                        $count: 'count'
-                    }
-                ]
-            }
+          $facet: {
+            totalCount: [
+              {
+                $count: 'count'
+              }
+            ]
+          }
         }
-    ]
-    if (limit != 0) {
+      ]
+      if (limit != 0) {
         pipeline[pipeline.length - 1]['$facet']['paginatedResults'] = [
-            { $skip: searchText ? 0 : (page - 1) * limit },
-            { $limit: limit * 1}
+          { $skip: searchText ? 0 : (page - 1) * limit },
+          { $limit: limit * 1 }
         ]
-    } else {
+      } else {
         pipeline[pipeline.length - 1]['$facet']['paginatedResults'] = [
-            { $skip: 0 }, 
-            // { $limit: 1000 },
+          { $skip: 0 },
+          // { $limit: 1000 },
         ]
-    }
+      }
 
-    const result = await StudyType.aggregate(pipeline)
-    let totalCount = 0
-    if (result[0].totalCount.length > 0) {
+      const result = await StudyType.aggregate(pipeline)
+      let totalCount = 0
+      if (result[0].totalCount.length > 0) {
         totalCount = result[0].totalCount[0].count
-    }
+      }
 
 
-    sendResponse(req, res, 200, {
+      sendResponse(req, res, 200, {
         status: true,
         message: "Study Type fetched successfully",
         body: {
-            totalPages: limit != 0 ? Math.ceil(totalCount / limit) : 1,
-            currentPage: page,
-            totalRecords: totalCount,
-            result: result[0].paginatedResults
+          totalPages: limit != 0 ? Math.ceil(totalCount / limit) : 1,
+          currentPage: page,
+          totalRecords: totalCount,
+          result: result[0].paginatedResults
         },
         errorCode: null,
-    })
-}
-catch(error)
-{
-  console.error("An error occurred:", error);
-  sendResponse(req, res, 200, {
-    status: false,
-    body: {},
-    message: `Something went wrong`,
-    errorCode: null,
-  });
-}
-}
-
-async updateStudyType(req,res)
-{
-  try {
-    const { studyTypeId, studyTypeName, studyTypeNameArabic, description, status } = req.body
-
-    const getStudyType = await StudyType.find({
-      studyTypeName: { $regex: `^${studyTypeName}$`, $options: 'i' },
-      isDeleted: false,
-      _id: { $ne: studyTypeId }, 
-    });
-    if (getStudyType.length > 0) {
-        return sendResponse(req, res, 200, {
-            status: false,
-            body: null,
-            message: "Study Type already exist",
-            errorCode: null,
-        })
+      })
     }
+    catch (error) {
+      console.error("An error occurred:", error);
+      sendResponse(req, res, 200, {
+        status: false,
+        body: {},
+        message: `Something went wrong`,
+        errorCode: null,
+      });
+    }
+  }
+
+  async updateStudyType(req, res) {
+    try {
+      const { studyTypeId, studyTypeName, studyTypeNameArabic, description, status } = req.body
+
+      const getStudyType = await StudyType.find({
+        studyTypeName: { $regex: `^${studyTypeName}$`, $options: 'i' },
+        isDeleted: false,
+        _id: { $ne: studyTypeId },
+      });
+      if (getStudyType.length > 0) {
+        return sendResponse(req, res, 200, {
+          status: false,
+          body: null,
+          message: "Study Type already exist",
+          errorCode: null,
+        })
+      }
 
 
-   await StudyType.findOneAndUpdate(
-    {
-        _id: studyTypeId,
-    },
-    {
-        $set: {
+      await StudyType.findOneAndUpdate(
+        {
+          _id: studyTypeId,
+        },
+        {
+          $set: {
             studyTypeName,
             studyTypeNameArabic,
             description,
             status
+          }
         }
-    }
-   )
-    sendResponse(req, res, 200, {
+      )
+      sendResponse(req, res, 200, {
         status: true,
         body: null,
         message: `Study Type updated successfully`,
         errorCode: null,
-    })
-}
-catch(error)
-{
-  console.error("An error occurred:", error);
-  sendResponse(req, res, 200, {
-    status: false,
-    body: {},
-    message: `Something went wrong`,
-    errorCode: null,
-  });
-}
-}
-
-async updateStudyTypeByAction(req,res)
-{
-  try {
-    const { studyTypeId, actionName, actionValue, studyTypeIds } = req.body
-
-    if (actionName == 'isDeleted' && studyTypeIds.length > 0) {
-        await StudyType.updateMany(
-            {
-                _id: { $in: studyTypeIds },
-            },
-            {
-                $set: {
-                    [actionName]: actionValue
-                }
-            }
-        )
-    } else {
-        await StudyType.findOneAndUpdate(
-            {
-                _id: studyTypeId,
-            },
-            {
-                $set: {
-                    [actionName]: actionValue
-                }
-            }
-        )  
+      })
     }
-    sendResponse(req, res, 200, {
+    catch (error) {
+      console.error("An error occurred:", error);
+      sendResponse(req, res, 200, {
+        status: false,
+        body: {},
+        message: `Something went wrong`,
+        errorCode: null,
+      });
+    }
+  }
+
+  async updateStudyTypeByAction(req, res) {
+    try {
+      const { studyTypeId, actionName, actionValue, studyTypeIds } = req.body
+
+      if (actionName == 'isDeleted' && studyTypeIds.length > 0) {
+        await StudyType.updateMany(
+          {
+            _id: { $in: studyTypeIds },
+          },
+          {
+            $set: {
+              [actionName]: actionValue
+            }
+          }
+        )
+      } else {
+        await StudyType.findOneAndUpdate(
+          {
+            _id: studyTypeId,
+          },
+          {
+            $set: {
+              [actionName]: actionValue
+            }
+          }
+        )
+      }
+      sendResponse(req, res, 200, {
         status: true,
         body: null,
         message: `Study Type ${actionName == 'isDeleted' ? 'deleted' : 'updated'} successfully`,
         errorCode: null,
-    })
-}
-catch(error)
-{
-  console.error("An error occurred:", error);
-  sendResponse(req, res, 200, {
-    status: false,
-    body: {},
-    message: `Something went wrong`,
-    errorCode: null,
-  });
-}
-}
+      })
+    }
+    catch (error) {
+      console.error("An error occurred:", error);
+      sendResponse(req, res, 200, {
+        status: false,
+        body: {},
+        message: `Something went wrong`,
+        errorCode: null,
+      });
+    }
+  }
 
-async getStudyTypeById(req,res)
-{
-  try {
-    const { id } = req.params;
+  async getStudyTypeById(req, res) {
+    try {
+      const { id } = req.params;
 
-    let getStudyType = await StudyType.findOne({
-      _id: mongoose.Types.ObjectId(id),
-    });
-    
-    sendResponse(req, res, 200, {
+      let getStudyType = await StudyType.findOne({
+        _id: mongoose.Types.ObjectId(id),
+      });
+
+      sendResponse(req, res, 200, {
         status: true,
         message: "Study Type fetched successfully",
         body: getStudyType,
         errorCode: null,
-    })
-}
-catch(error)
-{
-  console.error("An error occurred:", error);
-  sendResponse(req, res, 200, {
-    status: false,
-    body: {},
-    message: `Something went wrong`,
-    errorCode: null,
-  });
-}
-}
-
-async allStudyTypeforexport(req, res) {
-  const { searchText, limit, page } = req.query
-  let filter
-  if (searchText == "") {
-    filter = {
-      isDeleted: false
+      })
     }
-  } else {
-    filter = {
-      isDeleted: false,
-      team: { $regex: searchText || '', $options: "i" },
-    }
-  }
-  try {
-    let result = '';
-    if (limit > 0) {
-      result = await StudyType.find(filter)
-        .sort([["createdAt", -1]])
-        .skip((page - 1) * limit)
-        .limit(limit * 1)
-        .exec();
-    }
-    else {
-      result = await StudyType.aggregate([{
-        $match: filter
-      },
-      { $sort: { "createdAt": -1 } },
-      {
-        $project: {
-          _id: 0,
-          studyTypeName: "$studyTypeName",
-          description: "$description"
-        }
-      }
-      ])
-    }
-    let array = result.map(obj => Object.values(obj));
-    sendResponse(req, res, 200, {
-      status: true,
-      data: {
-        result,
-        array
-      },
-      message: `Data exported successfully`,
-      errorCode: null,
-    });
-  } catch (err) {
-    
-    sendResponse(req, res, 500, {
-      status: false,
-      data: err,
-      message: `failed to export data`,
-      errorCode: "INTERNAL_SERVER_ERROR",
-    });
-  }
-}
-
- //Fetching Nationality
- async getAllUsersNationality(req, res) {
-  try {
-    const Countries = await Nationality.find();
-    sendResponse(req, res, 200, {
-      status: true,
-      body: { Countries },
-      message: 'Nationalities fetched successfully',
-      errorCode: null,
-    });
-  } catch (error) {
-    console.error(error);
-    sendResponse(req, res, 500, {
-      status: false,
-      body: null,
-      message: 'Failed to fetch nationalities',
-      errorCode: 'INTERNAL_SERVER_ERROR',
-    });
-  }
-}
-
-async AddBusssinesSolutiondetails(req,res){
-  const {fullName,email,phone,country_code,subject,message} = req.body;
-
-  try {
-    const data = new BussinessSolution({
-      fullName,
-      email,
-      phone,
-      country_code,
-      subject,
-      message
-    });
-    
-    const result = await data.save();
-    return sendResponse(req,res,200,{
-      status: true,
-      body: result,
-      message: messages.enquirySent.en,
-      messageArabic: messages.enquirySent.ar,
-      errorCode:null,
-    });
-  } catch (error) {
-    return sendResponse(req, res, 500, {
-      status: false,
-      body: null,
-      message: error.message ? error.message : "failed to process request",
-      errorCode: error.code ? error.code : "INTERNAL_SERVER_ERROR",
-    });
-  }
-}
-
-async findOrCreateStudyType(req, res) {
-  try {
-    const { studyTypeName } = req.body;
-
-    if (!studyTypeName) {
-      return sendResponse(req, res, 400, {
+    catch (error) {
+      console.error("An error occurred:", error);
+      sendResponse(req, res, 200, {
         status: false,
-        message: "studyTypeName is required",
+        body: {},
+        message: `Something went wrong`,
+        errorCode: null,
+      });
+    }
+  }
+
+  async allStudyTypeforexport(req, res) {
+    const { searchText, limit, page } = req.query
+    let filter
+    if (searchText == "") {
+      filter = {
+        isDeleted: false
+      }
+    } else {
+      filter = {
+        isDeleted: false,
+        team: { $regex: searchText || '', $options: "i" },
+      }
+    }
+    try {
+      let result = '';
+      if (limit > 0) {
+        result = await StudyType.find(filter)
+          .sort([["createdAt", -1]])
+          .skip((page - 1) * limit)
+          .limit(limit * 1)
+          .exec();
+      }
+      else {
+        result = await StudyType.aggregate([{
+          $match: filter
+        },
+        { $sort: { "createdAt": -1 } },
+        {
+          $project: {
+            _id: 0,
+            studyTypeName: "$studyTypeName",
+            description: "$description"
+          }
+        }
+        ])
+      }
+      let array = result.map(obj => Object.values(obj));
+      sendResponse(req, res, 200, {
+        status: true,
+        data: {
+          result,
+          array
+        },
+        message: `Data exported successfully`,
+        errorCode: null,
+      });
+    } catch (err) {
+
+      sendResponse(req, res, 500, {
+        status: false,
+        data: err,
+        message: `failed to export data`,
+        errorCode: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }
+
+  //Fetching Nationality
+  async getAllUsersNationality(req, res) {
+    try {
+      const Countries = await Nationality.find();
+      sendResponse(req, res, 200, {
+        status: true,
+        body: { Countries },
+        message: 'Nationalities fetched successfully',
+        errorCode: null,
+      });
+    } catch (error) {
+      console.error(error);
+      sendResponse(req, res, 500, {
+        status: false,
+        body: null,
+        message: 'Failed to fetch nationalities',
+        errorCode: 'INTERNAL_SERVER_ERROR',
+      });
+    }
+  }
+
+  async AddBusssinesSolutiondetails(req, res) {
+    const { fullName, email, phone, country_code, subject, message } = req.body;
+
+    try {
+      const data = new BussinessSolution({
+        fullName,
+        email,
+        phone,
+        country_code,
+        subject,
+        message
+      });
+
+      const result = await data.save();
+      return sendResponse(req, res, 200, {
+        status: true,
+        body: result,
+        message: messages.enquirySent.en,
+        messageArabic: messages.enquirySent.ar,
+        errorCode: null,
+      });
+    } catch (error) {
+      return sendResponse(req, res, 500, {
+        status: false,
+        body: null,
+        message: error.message ? error.message : "failed to process request",
+        errorCode: error.code ? error.code : "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }
+
+  async findOrCreateStudyType(req, res) {
+    try {
+      const { studyTypeName } = req.body;
+
+      if (!studyTypeName) {
+        return sendResponse(req, res, 400, {
+          status: false,
+          message: "studyTypeName is required",
+          body: {},
+          errorCode: null,
+        });
+      }
+
+      // Normalize the input for consistency (e.g., lowercase)
+      const normalizedStudyTypeName = studyTypeName.trim().toLowerCase();
+
+      // Check if studyTypeName already exists (case-insensitive)
+      const existingStudyType = await StudyType.findOne({
+        studyTypeName: { $regex: `^${normalizedStudyTypeName}$`, $options: "i" },
+        isDeleted: false,
+      });
+
+      if (existingStudyType) {
+        return sendResponse(req, res, 200, {
+          status: true,
+          message: "Study Type found",
+          body: existingStudyType,
+          errorCode: null,
+        });
+      }
+
+      // Save only normalized lowercase version
+      const newStudyType = new StudyType({
+        studyTypeName: normalizedStudyTypeName,
+        studyTypeNameArabic: "-",
+        description: "-"
+      });
+
+      await newStudyType.save();
+
+      return sendResponse(req, res, 201, {
+        status: true,
+        message: "New Study Type created",
+        body: newStudyType,
+        errorCode: null,
+      });
+    } catch (error) {
+      console.error("An error occurred:", error);
+      return sendResponse(req, res, 500, {
+        status: false,
+        message: "Something went wrong",
         body: {},
         errorCode: null,
       });
     }
-
-    // Normalize the input for consistency (e.g., lowercase)
-    const normalizedStudyTypeName = studyTypeName.trim().toLowerCase();
-
-    // Check if studyTypeName already exists (case-insensitive)
-    const existingStudyType = await StudyType.findOne({
-      studyTypeName: { $regex: `^${normalizedStudyTypeName}$`, $options: "i" },
-      isDeleted: false,
-    });
-
-    if (existingStudyType) {
-      return sendResponse(req, res, 200, {
-        status: true,
-        message: "Study Type found",
-        body: existingStudyType,
-        errorCode: null,
-      });
-    }
-
-    // Save only normalized lowercase version
-    const newStudyType = new StudyType({
-      studyTypeName: normalizedStudyTypeName,
-      studyTypeNameArabic: "-",
-      description: "-"      
-    });
-
-    await newStudyType.save();
-
-    return sendResponse(req, res, 201, {
-      status: true,
-      message: "New Study Type created",
-      body: newStudyType,
-      errorCode: null,
-    });
-  } catch (error) {
-    console.error("An error occurred:", error);
-    return sendResponse(req, res, 500, {
-      status: false,
-      message: "Something went wrong",
-      body: {},
-      errorCode: null,
-    });
   }
-}
 
 
 }

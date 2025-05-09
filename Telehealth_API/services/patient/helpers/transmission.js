@@ -35,6 +35,10 @@ const handleResponse = async (req, res, code, result) => {
     return res.status(code).json(encryptObjectData(result));
 }
 
+const handleResponse1 = async (req, res, code, result) => {
+    return res.status(code).json(result);
+};
+
 const validationResultData = (req, res, next) => {
     try {
         validationResult(req).throw();
@@ -65,6 +69,7 @@ module.exports = {
     sendResponse,
     dataValidation,
     handleResponse,
+    handleResponse1,
     validationResultData,
     createSession
 };

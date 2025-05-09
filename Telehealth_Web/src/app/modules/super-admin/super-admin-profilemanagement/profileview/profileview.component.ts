@@ -23,15 +23,16 @@ export class ProfileviewComponent implements OnInit {
   staffID: any;
   staffData: any;
   editStaff: any = FormGroup;
+  editAdminProfile:any = FormGroup;
   iti: any;
   isSubmitted: boolean = false;
   changePasswordForm: any = FormGroup;
   @ViewChild('editstaffcontent') editstaffcontent: TemplateRef<any>;
-  @ViewChild('editassociationgroup') editassociationgroup: TemplateRef<any>;
+  @ViewChild('editadminmprofile') editadminmprofile: TemplateRef<any>;
 
   autoComplete: google.maps.places.Autocomplete;
   @ViewChild("mobile") mobile: ElementRef<HTMLInputElement>;
-  @ViewChild("countryPhone") countryPhone: ElementRef<HTMLInputElement>;
+  @ViewChild("countryPhone") countryPhone: ElementRef;
   selectedCountryCode:  any = '+966';
   countrycodedb: any = '';
   loc: any = {};
@@ -62,7 +63,7 @@ export class ProfileviewComponent implements OnInit {
   page: any = 1;
   pageSize: number = 10;
   totalLength: number = 0;
-  sortColumn: string = 'createdAt';
+  sortColumn: string = 'fullName';
   sortOrder: -1 | 1 = -1;
   sortIconClass: string = 'arrow_upward';
   displayedColumns: string[] = [
@@ -199,14 +200,20 @@ export class ProfileviewComponent implements OnInit {
       fromDate: [null],
       toDate: [null]
     });
+
+    this.editAdminProfile = this.fb.group({
+      fullName: ["", [Validators.required]],
+      email: ["", [Validators.required]],
+      mobile: ["", [Validators.required, Validators.pattern(/^\d{2}-\d{3}-\d{4}$/)]],
+      adminId:[""],
+      country_code:[""]
+    });
   }
 
   ngOnInit(): void {
-    this.getStaffDetails();
-    this.roleList();
-    this.getSpokenLanguage();
-    this.get_generalSettingData();
+    this.getSpokenLanguage();   
     this.listOfAllAdminList(`${this.sortColumn}:${this.sortOrder}`);
+    this.get_generalSettingData();
   }
 
   onSortData(column:any) {
@@ -217,6 +224,7 @@ export class ProfileviewComponent implements OnInit {
   }
   ngAfterViewInit() {
     this.getCountryCode();
+    this.getCountrycodeintlTelInput();
   }
   onFocus = () => {
     var getCode = this.iti.getSelectedCountryData().dialCode;
@@ -242,48 +250,25 @@ export class ProfileviewComponent implements OnInit {
       this.selectedCountryCode = "+" + this.iti.getSelectedCountryData().dialCode;
     }
   }
-  getCountrycodeintlTelInput() {
-    var country_code = '';
+  getCountrycodeintlTelInput() {    
+    let country_code = 'sa';
     const countryData = (window as any).intlTelInputGlobals.getCountryData();
     for (let i = 0; i < countryData.length; i++) {
+      
       if (countryData[i].dialCode === this.countrycodedb.split("+")[1]) {
+        
         country_code = countryData[i].iso2;
-        break; // Break the loop when the country code is found
+        break; 
       }
     }
-    const input = document.getElementById('mobile') as HTMLInputElement;
-    const adressinput = document.getElementById('address') as HTMLInputElement;
+    const input = document.getElementById('countryPhone') as HTMLInputElement;
+    if (!input) return;
     this.iti = intlTelInput(input, {
       initialCountry: country_code,
       separateDialCode: true,
     });
-    this.selectedCountryCode = "+" + this.iti.getSelectedCountryData().dialCode;
-    const options = {
-      fields: [
-        "address_components",
-        "geometry.location",
-        "icon",
-        "name",
-        "formatted_address",
-      ],
-      strictBounds: false,
-    };
-    this.autoComplete = new google.maps.places.Autocomplete(
-      adressinput,
-      options
-    );
-    this.autoComplete.addListener("place_changed", (record) => {
-      const place = this.autoComplete.getPlace();
-      this.loc.type = "Point";
-      this.loc.coordinates = [
-        place.geometry.location.lng(),
-        place.geometry.location.lat(),
-      ];
-      this.editStaff.patchValue({
-        address: place.formatted_address,
-        loc: this.loc,
-      });
-    })
+    this.countrycodedb = "+" + this.iti.getSelectedCountryData().dialCode;
+    
   }
 
   getStaffDetails() {
@@ -602,12 +587,6 @@ export class ProfileviewComponent implements OnInit {
 
   closePopup() {
     this.modalService.dismissAll("close");
-    this.selectedPharmacy.splice(0);
-    this.association_group_selected_pharmacy = null;
-
-    for (let pharmacy of this.relatedPharmacies) {
-      this.selectedPharmacy.push(pharmacy.portal_user_id);
-    }
   }
 
   //  Order Medicine modal
@@ -656,15 +635,23 @@ export class ProfileviewComponent implements OnInit {
   }
 
 
-  openVerticallyCenterededitassociationgroup(editassociationgroup: any) {
-
-
-    this.getStaffDetails();
-    this.modalService.open(editassociationgroup, {
+  openVerticallyCenterededit(data: any) {    
+    this.modalService.open(this.editadminmprofile, {
       centered: true,
-      size: "xl",
-      windowClass: "edit_staffnew",
+      size: "md",
+      windowClass: "editprofile",
     });
+    this.countrycodedb = data?.country_code
+    this.editAdminProfile.patchValue({
+      fullName: data?.fullName,
+      email: data?.email, 
+      mobile: data?.mobile,
+      adminId:data?._id,
+      country_code : this.countrycodedb
+    })
+    setTimeout(() => {
+      this.getCountrycodeintlTelInput();
+    }, 200);
   }
 
   routeToEdit(){
@@ -753,6 +740,7 @@ export class ProfileviewComponent implements OnInit {
     }
   
     this.adminProfile.get('mobile')?.setValue(formattedNumber, { emitEvent: false });
+    this.editAdminProfile.get('mobile')?.setValue(formattedNumber, { emitEvent: false });
   }
   get apc() {
     return this.adminProfile.controls;
@@ -892,5 +880,24 @@ export class ProfileviewComponent implements OnInit {
     }
   }
   
-  
+  editAdminProfileSubmit(){
+  let reqData ={
+    fullName: this.editAdminProfile.value?.fullName,
+    email: this.editAdminProfile.value?.email, 
+    mobile: this.editAdminProfile.value?.mobile,
+    adminId:this.editAdminProfile.value?.adminId,
+    country_code : this.selectedCountryCode
+  }
+   this.service.updateAdminProfile(reqData).subscribe((res) => {
+    let response = this.coreService.decryptObjectData({ data: res });   
+    if(response.status){
+    this.coreService.showSuccess("",response.message);
+    this.closePopup();
+    this.router.navigate([`/super-admin/profile/assign-menus-permissions/${response?.body?._id}`]);
+    }
+  });
+  }
+
+
+
 }

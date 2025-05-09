@@ -242,7 +242,6 @@ export class FourPortalBookAppointmentComponent implements OnInit {
 
       }
 
-      this.resonForAppoinment();
       this.getDependentFamilyMembers("yes");
       this.viweAppoinment();
     });
@@ -320,7 +319,6 @@ export class FourPortalBookAppointmentComponent implements OnInit {
 
         }
 
-        this.portalAvailableSlot();
         this.handelFeeandhospital();
       },
       error: (err) => {
@@ -358,54 +356,9 @@ export class FourPortalBookAppointmentComponent implements OnInit {
       this.handelFeeandhospital();
     }
     this.selectelocationId = data?.locationid;
-    this.resonForAppoinment();
-    this.portalAvailableSlot();
 
 
 
-  }
-
-  portalAvailableSlot() {
-    const originalDateString = this.dateForSlot.toDateString();
-
-    const originalDate = new Date(originalDateString);
-    const timeZoneOffsetMinutes = originalDate.getTimezoneOffset();
-    originalDate.setMinutes(originalDate.getMinutes() + 330 + 30);
-    const formattedDate = originalDate.toISOString();
-
-
-    let param = {
-      locationId: this.location_id,
-      appointmentType: this.appointment_type,
-      timeStamp: formattedDate,
-      portal_id: this.portal_id,
-      portal_type: this.portal_type
-    };
-
-    this.fourPortalService.portalAvailableSlot(param).subscribe({
-      next: async (res) => {
-        let result = await this._CoreService.decryptObjectData({ data: res });
-        
-        if (result.status) {
-          this.doctorAvailableTimeSlot = await result?.body?.allGeneralSlot;
-
-          this.consultationFee = await result?.body?.fee;
-
-          if (this.consultationFee === undefined || this.consultationFee === null) {
-            this.toster.error("Don't have consultation fee.");
-            return
-          }
-
-        } else {
-
-          this.doctorAvailableTimeSlot = [];
-          this.consultationFee = "";
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
   }
 
   handelSlot(data: any) {
@@ -671,37 +624,6 @@ export class FourPortalBookAppointmentComponent implements OnInit {
     });
   }
 
-  resonForAppoinment() {
-    let param = {
-      searchText: "",
-      limit: 0,
-      page: 1,      
-      loginPortalId: this.portal_id,
-      listFor:this.portal_type,
-      selectedlocation:this.selectelocationId
-    };
-
-    this.fourPortalService.listAppointmentReason(param).subscribe({
-      next: (res) => {
-        let result = this._CoreService.decryptObjectData({ data: res });
-        this.resonForAppoinmentList = [];
-        if(result?.body?.data.length>0){
-        result.body.data.map((curentval, index) => {
-          this.resonForAppoinmentList.push({
-            label: curentval.name,
-            value: curentval._id,
-          });
-        });
-      }else{
-        this.resonForAppoinmentList=[];
-      }
-        this.filterOptions("");
-      },
-      error: (err) => {
-        console.log(err);
-      },
-    });
-  }
 
   handelSubscribPatient(user: any) {
     if (user.value === " ") {
@@ -897,7 +819,6 @@ export class FourPortalBookAppointmentComponent implements OnInit {
           this.patient_details.controls["familyMember"].setValue(
             obj
           );
-          this.portalAvailableSlot();
         },
         error: (err) => {
           console.log(err);

@@ -1368,13 +1368,13 @@ export class LabImgDentalOptDetailsComponent implements OnInit {
         order_confirmation: false,
         user_name: this._CoreService.getLocalStorage("profileData").full_name
           ? this._CoreService.getLocalStorage("profileData").full_name
-          : "test Patient",
+          : "test_p Patient",
       },
       from_user: {
         user_id: this.loginuser_id,
         user_name: this._CoreService.getLocalStorage("profileData").full_name
           ? this._CoreService.getLocalStorage("profileData").full_name
-          : "test Patient",
+          : "test_p Patient",
       },
       test_list: [],
       portal_type: this.route_type

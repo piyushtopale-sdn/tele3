@@ -430,8 +430,7 @@ const registerPatientInBackground = async (appointmentDetail, userDetail, portal
   try {
     const getPortalData = await PortalUser.findOne({ _id: labRadiologyId }).lean();
 
-    // if(getPortalData?.identifier?.branchKey === "alborg" && getPortalData?.identifier?.branchCode){
-    if (true) {
+    if (getPortalData?.identifier?.branchKey === "alborg" && getPortalData?.identifier?.branchCode) {
       const isTokengenerated = await generateTokenForLabTest(requestBody);
       if (!isTokengenerated.isSuccess) {
         console.log("Failed To Generate The Token");
@@ -472,8 +471,8 @@ const registerPatientInBackground = async (appointmentDetail, userDetail, portal
           "sex": userDetail.gender
         },
         "registrationDate": new Date().toISOString(),
-        "branchCode": config.ALBORGE.branchCode,
-        // "branchCode": getPortalData?.identifier?.branchCode,
+        // "branchCode": config.ALBORGE.branchCode,
+        "branchCode": getPortalData?.identifier?.branchCode,
         "payerCode": config.ALBORGE.payerCode,
         "contractCode": config.ALBORGE.contractCode,
         "servicesList": servicesList

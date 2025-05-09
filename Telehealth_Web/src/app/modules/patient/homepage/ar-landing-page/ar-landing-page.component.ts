@@ -79,7 +79,7 @@ export class ArLandingPageComponent implements OnInit{
     this.selectedLang = lang; // Update selected language
     this.translate.use(lang); 
     if(this.selectedLang === 'en'){
-      this.router.navigate([`/test/home-en`]).then((res) => {
+      this.router.navigate([`/test_p/home-en`]).then((res) => {
         if (res) {
           this.ngxLoader.stop();
         }
@@ -89,7 +89,7 @@ export class ArLandingPageComponent implements OnInit{
   
       })   
     }else{
-      this.router.navigate([`/test/home-ar`]).then((res) => {
+      this.router.navigate([`/test_p/home-ar`]).then((res) => {
         if (res) {
           this.ngxLoader.stop();
         }

@@ -4,7 +4,7 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CoreService } from "src/app/shared/core.service";
 import { NgxUiLoaderService } from "ngx-ui-loader";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Route, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import * as XLSX from "xlsx";
 import { LabimagingdentalopticalService } from "../../super-admin/labimagingdentaloptical.service";
 import { IndiviualDoctorService } from "../../individual-doctor/indiviual-doctor.service";
@@ -53,13 +53,13 @@ export class TestManagementComponent {
   currentUrl:any=[]
 
   constructor(
-    private modalService: NgbModal,
-    private coreService: CoreService,
-    private fb: FormBuilder,
-    private lad_radioService: LabimagingdentalopticalService,
-    private loader: NgxUiLoaderService,
-    private route: Router,
-    private service: IndiviualDoctorService,
+    private readonly modalService: NgbModal,
+    private readonly coreService: CoreService,
+    private readonly fb: FormBuilder,
+    private readonly lad_radioService: LabimagingdentalopticalService,
+    private readonly loader: NgxUiLoaderService,
+    private readonly route: Router,
+    private readonly service: IndiviualDoctorService,
 
   ) {
     this.loginrole = this.coreService.getLocalStorage("loginData").role;
@@ -108,9 +108,6 @@ export class TestManagementComponent {
     this.getTestList(`${this.sortColumn}:${this.sortOrder}`);
     this.getRadioList();
     this.getStudyList();
-    // setTimeout(() => {
-    //   this.checkInnerPermission();
-    // }, 300);
     this.currentUrl = this.route.url;
     this.onNavigate(this.currentUrl);
   }
@@ -126,16 +123,16 @@ export class TestManagementComponent {
 
       let menuID = sessionStorage.getItem("currentPageMenuID");
       let checkData = this.findObjectByKey(userPermission, "parent_id", menuID)
+      let checkSubmenu ;
       if (checkData) {
-        if (checkData.isChildKey == true) {
-          var checkSubmenu = checkData.submenu;
+        if (checkData.isChildKey) {
+          checkSubmenu = checkData.submenu;
           if (checkSubmenu.hasOwnProperty("pharmacy")) {
             this.innerMenuPremission = checkSubmenu['pharmacy'].inner_menu;
 
-          } else {
-          }
+          } 
         } else {
-          var checkSubmenu = checkData.submenu;
+          checkSubmenu = checkData.submenu;
           let innerMenu = [];
           for (let key in checkSubmenu) {
             innerMenu.push({ name: checkSubmenu[key].name, slug: key, status: true });
@@ -396,7 +393,7 @@ export class TestManagementComponent {
 
 
   exportManageTest() {
-    var data: any = [];
+    let data: any = [];
     this.pageSize = 0;
     if(this.portalType === 'Radiology'){
       let reqData = {
@@ -408,14 +405,14 @@ export class TestManagementComponent {
           let result = this.coreService.decryptObjectData({ data: res });
           if (result.status) {
             this.loader.stop();
-            var array = [
+            let array = [
               "Test Name",
               "Note",
               "Radiology Center"
             ];
             data = result.data.array
             data.unshift(array);
-            var fileName = 'Radiology_Tests.xlsx';
+            let fileName = 'Radiology_Tests.xlsx';
             const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
             /* generate workbook and add the worksheet */
             const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -437,14 +434,14 @@ export class TestManagementComponent {
           
           if (result.status) {
             this.loader.stop();
-            var array = [
+            let array = [
               "Test Name",
               "Note",
               "Test Configuration"
             ];
             data = result.data.array
             data.unshift(array);
-            var fileName = 'Laboratory_Tests.xlsx';
+            let fileName = 'Laboratory_Tests.xlsx';
             const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
             /* generate workbook and add the worksheet */
             const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -458,13 +455,16 @@ export class TestManagementComponent {
   }
   onNavigate(url: any): void {
     const menuitems = JSON.parse(localStorage.getItem("activeMenu"));
-    this.currentUrl = url;
-
-    const matchedMenu = menuitems.find(
-      (menu) => menu.route_path === this.currentUrl
-    );
-    this.route.navigate([url]).then(() => {
-      this.service.setActiveMenu(matchedMenu.name);
-    });
+    if(menuitems){
+      this.currentUrl = url;
+  
+      const matchedMenu = menuitems.find(
+        (menu) => menu.route_path === this.currentUrl
+      );
+      this.route.navigate([url]).then(() => {
+        this.service.setActiveMenu(matchedMenu?.name);
+      });
+      
+    }
   }
 }

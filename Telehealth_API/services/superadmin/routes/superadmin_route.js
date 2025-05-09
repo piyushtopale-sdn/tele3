@@ -5,11 +5,11 @@ const fs = require("fs");
 import contentManagementController from "../controllers/contentManagement/contentManagementController"
 import {
     listMedicineWithoutPaginationForDoctor, uploadCSVForMedicine, allSubscriptionPlans, listSubscriptionPlans,subscriptionPlanGetById,
-    createSubscriptionPlan, deleteSubscriptionPlan, editSubscriptionPlan, forgotPassword, getPeriodicList, getServiceField, getSubscriptionPlanDetails, login, logout, matchEmailOtpFor2fa,
+    createSubscriptionPlan, deleteSubscriptionPlan, editSubscriptionPlan, forgotPassword, getServiceField, getSubscriptionPlanDetails, login, logout, matchEmailOtpFor2fa,
      matchSmsOtpFor2fa, resetForgotPassword, sendEmailOtpFor2fa, sendSmsOtpFor2fa, setMaximumRequest, listMedicineWithoutPagination,
      fetchedMedicineByID, getLocationName, refreshToken, getMaximumRequest, getSelectedMasterData, addOrUpdateAppointmentCommission, getAppointmentCommission,listMedicineforexport,allAdminProfileList,
      getallplanPriceforSuperAdmin,gettotalMonthWiseforSuperAdmingraph,deteleLockAdminUser,
-     getallPaymentHistory,sendInvitation, getAllInvitation, getInvitationById,changePassword, deleteInvitation, updatelogsData, getAllLogs, getSuperAdminData, notification, viewRes, addUserLogs, getGeneralSettings, getDashboardData, getDashboardGraphData,updateGeneralSettings,
+     getallPaymentHistory,changePassword, updatelogsData, getAllLogs, getSuperAdminData, notification, viewRes, addUserLogs, getGeneralSettings, getDashboardData, getDashboardGraphData,updateGeneralSettings,
      createAdminProfile,
      getPatientRecords,
      getDoctorRecords,
@@ -19,7 +19,7 @@ import {
      getRadiologyRecords,
      getDoctorPatientRecords,
      getPharmacyOrderRecords,getlabRecords,
-     getLatestPatientLogin} from "../controllers/superadmin/superadminController";
+     getLatestPatientLogin,updateAdminProfile} from "../controllers/superadmin/superadminController";
 
 
 import { authorizeRole, verifyToken } from "../helpers/verifyToken";
@@ -140,7 +140,6 @@ superadminRoute.get("/list-subscription-plans", listSubscriptionPlans);
 superadminRoute.get("/get-subscription-plan-details", getSubscriptionPlanDetails);
 superadminRoute.delete("/delete-subscription-plan/:id", deleteSubscriptionPlan);
 superadminRoute.put("/update-subscription-plan", editSubscriptionPlan)
-superadminRoute.get("/get-periodic-list", getPeriodicList);
 superadminRoute.get(
   "/getallplanPriceforSuperAdmin",
   getallplanPriceforSuperAdmin
@@ -203,12 +202,6 @@ superadminRoute.post("/update-notification", updateNotification);
 superadminRoute.put("/clear-all-messages", clearAllmessages);
 superadminRoute.put("/clear-single-message", clearSinglemessages);
 superadminRoute.post("/update-online-status", updateOnlineStatus);
-
-// email invitation
-superadminRoute.post("/send-email-invitation", sendInvitation);
-superadminRoute.get("/get-email-invitation-list", getAllInvitation);
-superadminRoute.get("/get-email-invitation-id", getInvitationById);
-superadminRoute.post("/delete-email-invitation", deleteInvitation);
 
 // notification management
 superadminRoute.post("/add-notification", addNotification);
@@ -278,6 +271,8 @@ superadminRoute.post("/create-admin-profile",  authorizeRole(['superadmin']),cre
 superadminRoute.get("/all-admin-profile-list",  authorizeRole(['superadmin']),allAdminProfileList);
 superadminRoute.post("/detele-lock-admin-user",  authorizeRole(['superadmin']),deteleLockAdminUser);
 superadminRoute.get("/get-latest-patient-login",  authorizeRole(['superadmin']),getLatestPatientLogin);
+superadminRoute.put("/update-admin-profile",  authorizeRole(['superadmin']),updateAdminProfile);
+
 
 
 

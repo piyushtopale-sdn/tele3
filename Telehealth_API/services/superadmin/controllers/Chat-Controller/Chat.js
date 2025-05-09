@@ -84,9 +84,7 @@ export const createdChat = async (req, res) => {
 
 
 const approveOrRejectMedicine = (data) => {
-  return new Promise((resolve) => {
-    resolve(""); // Resolve with an empty string
-  });
+  return Promise.resolve(""); // or some string later
 };
 
 export const getCreatedChats = async (req, res) => {

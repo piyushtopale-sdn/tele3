@@ -1,16 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { ExternalVideoCallComponent } from './shared/external-video-call/external-video-call.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'test/home-ar', pathMatch: 'full' },
+  { path: '', redirectTo: 'test_p/home-ar', pathMatch: 'full' }, 
   {
-    path:"external-video",
-    component: ExternalVideoCallComponent
-  },
-  {
-    path: 'test',
+    path: 'test_p',
     loadChildren: () => import('./modules/patient/patient.module').then((m) => m.PatientModule)
   }, 
   {

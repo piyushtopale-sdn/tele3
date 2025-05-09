@@ -1,4 +1,5 @@
 import "dotenv/config.js";
+import { randomInt } from 'crypto';
 
 export const config = {
     DB: {
@@ -41,8 +42,8 @@ export const config = {
     OTP_LIMIT_EXCEED_WITHIN: process.env.OTP_LIMIT_EXCEED_WITHIN || 5,
     OTP_TRY_AFTER: process.env.OTP_TRY_AFTER || 60,
     SEND_ATTEMPTS: process.env.SEND_ATTEMPTS || 5,
-    BUCKET_NAME: process.env.BUCKET_NAME,
-    terst_FRONTEND_URL: process.env.terst_FRONTEND_URL,
+    BUCKET_NAME: process.env.BUCKET_NAME || "test_pdev",
+    test_p_FRONTEND_URL: process.env.test_p_FRONTEND_URL,
     LOGIN_AFTER: process.env.LOGIN_AFTER || 60,
     PASSWORD_ATTEMPTS: process.env.PASSWORD_ATTEMPTS || 3,
     SENDGRID_PASSWORD: process.env.SENDGRID_PASSWORD,
@@ -56,7 +57,7 @@ export const messages = {
     userNotFound: "Please check your credentials.",
     dataNotFound: "No data found.",
     incorrectPassword: "Incorrect password.",
-    passwordNotCreated: "Password not created.",
+    userPasswordError: "Password not created.",
     loginSuccess: "Login successful.",
     listSuccess: "Data fetched successfully.",
     updateSuccess: "Data updated successfully.",
@@ -170,11 +171,11 @@ export const responseCodes = {
 };
 
 export const generate4DigitOTP = () => {
-    return Math.floor(1000 + Math.random() * 9000);
+    return randomInt(1000, 10000);
 };
 
 export const generate6DigitOTP = () => {
-    return Math.floor(100000 + Math.random() * 900000);
+    return randomInt(100000, 1000000);
 }
 
 export const smsTemplateOTP = (otp2fa) => {
@@ -217,7 +218,7 @@ export const htmlForgetPassword = (token, role) => {
          <h1 style="font-size: 32px; color: #272727; font-weight: 600; margin-top: 0; margin-bottom: 0;">Hello</h1>
         <p style="font-size: 15px; font-weight: 300; color: #656565; margin-top: 25px;">To reset your password, click on the below link:</p>
         <a href=http://localhost:4200/create-password/${token} style="background-color: #64BD05; text-align: center; display: inline-block; padding: 8px 0px; max-width: 150px; width: 100%; font-size: 14px; font-weight: 300; margin: 15px  auto 0; color: #fff; border-radius: 35px; text-decoration: none;">Click To change Password</a>
-        <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, terst.</p>
+        <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, test_p.</p>
      </div>
    </div>
    <script>
@@ -260,7 +261,7 @@ export const htmlEmailVerify = (token, name, role) => {
                       <h1 style="font-size: 32px; color: #272727; font-weight: 600; margin-top: 0; margin-bottom: 0;">Welcome ${name}</h1>
                       <p style="font-size: 15px; font-weight: 300; color: #656565; margin-top: 25px;">Your account is created please verify your Email using click below.</p>
                       <a href=http://localhost:4200/email-verify/${token}?data=${role} style="background-color: #64BD05; text-align: center; display: inline-block; padding: 8px 0px; max-width: 150px; width: 100%; font-size: 14px; font-weight: 300; margin: 15px  auto 0; color: #fff; border-radius: 35px; text-decoration: none;">Verify Email</a>
-                      <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, terst.</p>
+                      <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, test_p.</p>
                   </div>
           </div>
                   </body>

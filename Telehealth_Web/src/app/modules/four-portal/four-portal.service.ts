@@ -3,18 +3,18 @@ import { Injectable } from "@angular/core";
 import { AuthService } from "src/app/shared/auth.service";
 import { CoreService } from "src/app/shared/core.service";
 import { environment } from "src/environments/environment";
-import { Observable, of,BehaviorSubject } from "rxjs";
+import { Observable,BehaviorSubject } from "rxjs";
 @Injectable({
   providedIn: "root",
 })
 export class FourPortalService {
   param: any;
-  private shareprofiledata = new BehaviorSubject<string>('');
+  private readonly shareprofiledata = new BehaviorSubject<string>('');
 
   constructor(
-    private http: HttpClient,
-    private auth: AuthService,
-    private _coreService: CoreService
+    private readonly http: HttpClient,
+    private readonly auth: AuthService,
+    private readonly _coreService: CoreService
   ) {
     this.param = {
       module_name: this.auth.getRole(),
@@ -61,19 +61,6 @@ export class FourPortalService {
     return environment.apiUrl;
   }
 
-
-  fourPortalSignup(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() + `/labradio-service/lab-radio/sign-up`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-
   fourPortalLogin(data: any) {
     return this.http.post(
       this.getBasePath() + `/labradio-service/lab-radio/login`,
@@ -95,31 +82,6 @@ export class FourPortalService {
     );
   }
 
-
-  listCategoryStaff(param: any): Observable<any> {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/listCategoryStaff?pharmacyId=${param.pharmacyId}&staffRoleId=${param.staffRoleId}`,
-      {
-        // params: param,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-
-  all_role(param: any): Observable<any> {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/all-role`,
-      {
-        params: param,
-        headers: this.getHeader(token),
-      }
-    );
-  }
 
   sendOtpEmail(data: any, uuid: any = ""): Observable<any> {
     return this.http.post(
@@ -189,30 +151,6 @@ export class FourPortalService {
     );
   }
 
-  addManualTestss(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() + `/labradio-service/lab-radio/add-manuall-tests`,
-      data,
-
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  editTests(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() + `/labradio-service/lab-radio/edit-manual-tests`,
-      data,
-
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
   getProfileDetailsById(param: any) {
     let token = this.auth.getToken();
     return this.http.get(
@@ -220,17 +158,6 @@ export class FourPortalService {
       `/labradio-service/lab-radio/centre-view-profile`,
       {
         params:param,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  getLocationDetailsById(data: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/get-all-location-by-id?portal_user_id=${data.portal_user_id}&type=${data.type}`,
-      {
         headers: this.getHeader(token),
       }
     );
@@ -249,121 +176,7 @@ export class FourPortalService {
     );
   }
 
-  educationalDetails(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/four-portal-management-educational-details`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  locationDetails(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/four-portal-management-hospital-location`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  fourPortalAvailability(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/four-portal-management-availability`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  getLocations(params: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/four-portal-management-get-locations`,
-      {
-        params,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  feeManagement(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/four-portal-management-fee-management`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  documentManage(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/four-portal-management-document-management`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  deleteAvailabiltiesOnDeletingLocation(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/delete-availabilty-by-deleting-location`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  //--------User Invitation--------------
-  invitationList(paramData: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() + `/labradio-service/lab-radio/get-email-invitation-list`,
-      {
-        params: paramData,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  invitationListById(paramData: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() + `/labradio-service/lab-radio/get-email-invitation-id`,
-      {
-        params: paramData,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  inviteUser(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(this.getBasePath() + `/labradio-service/lab-radio/send-email-invitation`, data, {
-      headers: this.getHeader(token),
-    });
-  }
-
-
+ 
   changePassword(data: any) {
     let token = this.auth.getToken();
     return this.http.post(
@@ -375,41 +188,6 @@ export class FourPortalService {
         headers: this.getHeader(token),
       }
     );
-  }
-
-
-
-  checkForPlanPurchased(params: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      ``, //{}-lab-radio/payment/four-portal-is-plan-purchased
-      {
-        params,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  async isPlanPurchesdByfourPortal(user_id: any, portal_type: any): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
-      let reqData = {
-        user_id,
-        portal_type
-      };
-
-      this.checkForPlanPurchased(reqData).subscribe(async (res) => {
-        let isPlanPurchased = false;
-        let response = await this._coreService.decryptObjectData({ data: res });
-
-        if (response.status) {
-          isPlanPurchased = response?.isPlanPurchased;
-        }
-        resolve(isPlanPurchased);
-      }, error => {
-        reject(error);
-      });
-    });
   }
 
   getUserMenus(params: any) {
@@ -431,110 +209,6 @@ export class FourPortalService {
     });
   }
 
-
-  getPurchasedPlanOfUser(parameter: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      ``,///{}-lab-radio/payment/subscription-purchased-plan
-      {
-        params: parameter,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-
-
-  getSubscriptionPlan(parameter: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      `/superadmin-service/superadmin/all-subscription-plans`,
-      {
-        params: parameter,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  getcinetpaylink(data: any) {
-    return this.http.post('https://api-checkout.cinetpay.com/v2/payment', data, { headers: this.getHeader("") });
-  }
-
-  getSubscriptionPlanDetails(parameter: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      `/superadmin-service/superadmin/get-subscription-plan-details`,
-      {
-        params: parameter,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-
-  addAppointmentReason(data: any) {
-
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/four-portal-management-appointmentReasons`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  listAppointmentReason(params: any): Observable<any> {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/four-portal-management-getAppointmentReasons`,
-      {
-        params,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  updateAppointmentReason(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/four-portal-management-updateAppointmentReasons`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  deleteAppointmentReason(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/four-portal-management-updateAppointmentReasonsStatus`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  uploadExcelAppointmentReason(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() + `/labradio-service/lab-radio/four-portal-management-bulkImportAppointmentReasons`,
-      data,
-      {
-        headers: this.getHeaderFileUpload(token),
-      }
-    );
-  }
-
   addQuestionnaire(data: any) {
     let token = this.auth.getToken();
     return this.http.post(
@@ -546,61 +220,6 @@ export class FourPortalService {
     );
   }
 
-  questiinnaireList(params: any): Observable<any> {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() + `/labradio-service/lab-radio/four-portal-management-getQuestionnaires`,
-      {
-        params,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  getQuestionnaireDetails(params: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() + `/labradio-service/lab-radio/four-portal-management-getQuestionnaireDetail`,
-      {
-        params,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  updateQuestionnaire(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() + `/labradio-service/lab-radio/four-portal-management-updateQuestionnaire`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  deleteQuestionnaire(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() + `/labradio-service/lab-radio/four-portal-management-deleteQuestionnaire`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  serachFilterForFourPortals(param: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      `/labradio-service/lab-radio/four-portal-management-advFilters`,
-      param,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
 
   fourPortalDetails(param: any): Observable<any> {
     let token = this.auth.getToken();
@@ -642,7 +261,7 @@ export class FourPortalService {
       this.getBasePath() + `/labradio-service/lab-radio/four-portal-management-getReviews`,
       {
         params: param,
-        // headers: this.getHeader(token),
+        headers: this.getHeader(token),
       }
     );
   }
@@ -1622,8 +1241,6 @@ export class FourPortalService {
   }
 
   getPortaldocumentList(param: any) {
-
-    // return of({ status: true });
     let token = this.auth.getToken();
     return this.http.get(
       this.getBasePath() + `/labradio-service/lab-radio/getProviderDocumentslist`,
@@ -1654,99 +1271,6 @@ export class FourPortalService {
         params: param,
         headers: this.getHeader(token),
 
-      }
-    );
-  }
-
-  addleaves(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() + ``, ///{}-lab-radio/leave/addfourPortalleave
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  getStaffLeaveListinStaffPortal(paramData: any) {
-    // return of({ status: true });
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() + ``, ///{}-lab-radio/leave/getLeavelistforstaffportal
-      {
-        params: paramData,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  getallStaffLeavesInfourPortals(paramData: any) {
-    // return of({ status: true });
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() + ``, //{}-lab-radio/leave/getallStaffleavesInfourportal
-      {
-        params: paramData,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-
-  leaveAccepts(data: any) {
-    let token = this.auth.getToken();
-    return this.http.put(
-      this.getBasePath() + ``, ///{}-lab-radio/leave/fourportalstaffleaveaccept
-      data,
-      {
-        headers: this.getHeader(token),
-
-      }
-    );
-  }
-  leaveRejects(data: any) {
-    let token = this.auth.getToken();
-    return this.http.put(
-      this.getBasePath() + ``, ///{}-lab-radio/leave/fourportalstaffleavereject
-      data,
-      {
-        headers: this.getHeader(token),
-
-      }
-    );
-  }
-  addHospitalIds(data: any) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() + `/doctor-service/leave/hospitalIds`,
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  myLeaveListforFourportal(paramData: any) {
-    // return of({ status: true });
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() + ``, ///{}-lab-radio/leave/getAllMyLeaveFourPortal
-      {
-        params: paramData,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  fourPortalRatingBySuperAdmin(paramData: any) {
-    // return of({ status: true });
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() + `/labradio-service/lab-radio/get-reviews-rating-superadmin`,
-      {
-        params: paramData,
-        headers: this.getHeader(token),
       }
     );
   }

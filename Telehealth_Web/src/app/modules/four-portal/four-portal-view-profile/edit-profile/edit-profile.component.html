@@ -89,7 +89,16 @@
                           profileFields.get('centre_name').hasError('required')
                         "
                         >{{ "field_is_required" | translate }}.</mat-error
-                      >                      
+                      > 
+                       <!-- Invalid characters -->
+                     <span class="text-danger" *ngIf="f['centre_name'].errors?.['onlyCharacters'] as error">
+                      {{ error.message }}
+                    </span>
+
+                    <!-- Length exceeded -->
+                    <span class="text-danger" *ngIf="f['centre_name'].errors?.['maxLength'] as error">
+                      {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+                    </span>                     
                     </div>
                   </div>
                   <div class="col-sm-12 mb-3">
@@ -111,7 +120,16 @@
                           profileFields.get('centre_name_arabic').hasError('required')
                         "
                         >{{ "field_is_required" | translate }}.</mat-error
-                      >                      
+                      >                     
+                         <!-- Invalid characters -->
+                     <span class="text-danger" *ngIf="f['centre_name_arabic'].errors?.['onlyCharacters'] as error">
+                      {{ error.message }}
+                    </span>
+
+                    <!-- Length exceeded -->
+                    <span class="text-danger" *ngIf="f['centre_name_arabic'].errors?.['maxLength'] as error">
+                      {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+                    </span>                      
                     </div>
                   </div>
   
@@ -448,6 +466,15 @@
                             "
                             >{{"expiry_date_is_required" | translate}}.</mat-error
                           >
+                          <span
+                            class="text-danger"
+                            *ngIf="
+                              isSubmitted &&
+                              profileFields.get('license_details.license_expiry_date')?.errors?.['notFutureDate']
+                            "
+                          >
+                          {{"License_expiry_must_future_date" | translate}}
+                          </span>
                         </div>
                       </div>
                       <div class="col-12 mb-3">

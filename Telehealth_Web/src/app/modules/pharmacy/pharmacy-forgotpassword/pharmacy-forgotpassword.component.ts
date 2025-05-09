@@ -72,9 +72,9 @@ export class PharmacyForgotpasswordComponent implements OnInit {
 
   goToHomePage(){
     if(this.translate.store.currentLang === undefined || this.translate.store.currentLang === 'ar'){
-      this.router.navigate([`/test/home-ar`]);
+      this.router.navigate([`/test_p/home-ar`]);
     }else{
-      this.router.navigate([`/test/home-en`]);
+      this.router.navigate([`/test_p/home-en`]);
     }
   }
 }

@@ -1,30 +1,9 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  ViewChild,
-  ElementRef,
-  ChangeDetectorRef,
-} from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
-import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
-import { ActivatedRoute, Router } from "@angular/router";
-import { ToastrService } from "ngx-toastr";
+import { Component, ChangeDetectorRef} from "@angular/core";
+import {  Router } from "@angular/router";
 import { CoreService } from "src/app/shared/core.service";
-import {
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from "@angular/forms";
-import { PatientService } from "src/app/modules/patient/patient.service";
+import { FormBuilder,FormGroup} from "@angular/forms";
 import { DatePipe } from "@angular/common";
-import { DateAdapter, ThemePalette } from "@angular/material/core";
-import { IResponse } from "src/app/shared/classes/api-response";
-import { WebSocketService } from "src/app/shared/web-socket.service";
-import AgoraRTC from "agora-rtc-sdk-ng";
+import { DateAdapter } from "@angular/material/core";
 import { IndiviualDoctorService } from "../indiviual-doctor.service";
 
 @Component({
@@ -62,17 +41,13 @@ export class AdminAppointmentComponent {
   toDate: string = '';
 
   constructor(
-    private modalService: NgbModal,
-    private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute,
-    private doctorService: IndiviualDoctorService,
-    private coreService: CoreService,
-    private dateAdapter: DateAdapter<Date>    ,
-    private router: Router,
-    private _patientService: PatientService,
-    private datePipe: DatePipe,
-    private websocket: WebSocketService,
-    private cdr: ChangeDetectorRef,
+    private readonly fb: FormBuilder,
+    private readonly doctorService: IndiviualDoctorService,
+    private readonly coreService: CoreService,
+    private readonly dateAdapter: DateAdapter<Date>    ,
+    private readonly router: Router,
+    private readonly datePipe: DatePipe,
+    private readonly cdr: ChangeDetectorRef,
 
 
   ) {
@@ -158,11 +133,7 @@ export class AdminAppointmentComponent {
       let response = this.coreService.decryptObjectData(encryptedData);
       
       if(response.status){      
-        this.dataSource = response?.data?.data;
-        // this.new_doctor_id = response?.data?.data.map((ele) => {
-        //   return ele.doctorId;
-        // })
-  
+        this.dataSource = response?.data?.data;  
         this.totalLength = response?.data?.totalRecords;
       }
 
@@ -216,12 +187,7 @@ export class AdminAppointmentComponent {
   }
 
   goTOEmr(id){
-    this.router.navigate([`/individual-doctor/patientmanagement/details/${id}`],{
-      queryParams: {
-        type:"back_to_appointment_list",
-        patientId: id
-      }
-    })
+    this.router.navigate([`/individual-doctor/patientmanagement/details/${id}`])
   }
 
   myFilter = (d: Date | null): boolean => {

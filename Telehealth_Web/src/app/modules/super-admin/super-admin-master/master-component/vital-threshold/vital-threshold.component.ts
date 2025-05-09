@@ -757,4 +757,7 @@ uniqueGenderAgeValidator(): ValidatorFn {
   getFormattedType(type: string): string {
     return type.replace(/_/g, ' ');
   }
+  formatVitalType(type: string): string {
+    return type.replace(/_/g, ' ');
+  }
 }

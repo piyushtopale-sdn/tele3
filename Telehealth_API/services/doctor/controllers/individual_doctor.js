@@ -20,9 +20,7 @@ import Logs from "../models/logs";
 
 import {
   externalUserAddEmail,
-  sendMailInvitations,
 } from "../helpers/emailTemplate";
-import Invitation from "../models/email_invitation";
 
 // utils
 import { sendResponse } from "../helpers/transmission";
@@ -373,7 +371,8 @@ class IndividualDoctor {
 
   async login(req, res) {
     try {
-      const { email, password } = req.body;
+      const { email, password, role } = req.body;
+      
       const { uuid } = req.headers;
 
       const portalUserData = await PortalUser.findOne({
@@ -390,6 +389,27 @@ class IndividualDoctor {
         });
       }
 
+      if (
+        role === 'INDIVIDUAL_DOCTOR_ADMIN' &&
+        (portalUserData.isAdmin === undefined || portalUserData.isAdmin === false)
+      ) {
+        return sendResponse(req, res, 200, {
+          status: false,
+          body: null,
+          message: "Admin privileges are not assigned to you.",
+          errorCode: "USER_NOT_ADMIN",
+        });
+      }
+      
+      await PortalUser.findOneAndUpdate(
+        { _id: portalUserData._id },
+        {
+          $set: {
+            role: role
+          },
+        }
+      );
+
       const currentTime = new Date();
       const isPasswordMatch = await checkPassword(password, portalUserData);
       if (!isPasswordMatch) {
@@ -404,22 +424,23 @@ class IndividualDoctor {
             { new: true }
           );
         }
-        if (data?.lock_details?.passwordAttempts == PASSWORD_ATTEMPTS) {
-          const addMinutes = new Date(
-            currentTime.getTime() + LOGIN_AFTER * 60000
-          );
-          await PortalUser.findOneAndUpdate(
-            { _id: portalUserData._id },
-            {
-              $set: {
-                lock_user: true,
-                "lock_details.timestamps": addMinutes,
-                "lock_details.lockedReason": "Incorrect password attempt",
-                "lock_details.lockedBy": "doctor",
-              },
-            }
-          );
-        }
+        /** Commented code as client don't want to lock user */
+        // if (data?.lock_details?.passwordAttempts == PASSWORD_ATTEMPTS) {
+        //   const addMinutes = new Date(
+        //     currentTime.getTime() + LOGIN_AFTER * 60000
+        //   );
+        //   await PortalUser.findOneAndUpdate(
+        //     { _id: portalUserData._id },
+        //     {
+        //       $set: {
+        //         lock_user: true,
+        //         "lock_details.timestamps": addMinutes,
+        //         "lock_details.lockedReason": "Incorrect password attempt",
+        //         "lock_details.lockedBy": "doctor",
+        //       },
+        //     }
+        //   );
+        // }
         return sendResponse(req, res, 200, {
           status: false,
           body: null,
@@ -837,6 +858,7 @@ class IndividualDoctor {
       const currentTime = new Date();
 
       const canOtpSend = await canSendOtp(deviceExist, currentTime);
+console.log(canOtpSend,"____________canOtpSend");
 
       // Check if the OTP can be sent
       if (!canOtpSend.status) {
@@ -857,7 +879,6 @@ class IndividualDoctor {
             }
           ).exec();
         }
-
         return sendResponse(req, res, 200, {
           status: false,
           message: `Maximum limit exceeded. Try again after ${Math.ceil(
@@ -1000,7 +1021,6 @@ class IndividualDoctor {
             }
           ).exec();
         }
-
         return sendResponse(req, res, 200, {
           status: false,
           message: `Maximum limit exceeded. Try again after ${Math.ceil(
@@ -1140,6 +1160,7 @@ class IndividualDoctor {
             {
               $set: {
                 verified: true,
+                send_attempts:0
               },
             },
             { new: true }
@@ -1361,6 +1382,7 @@ class IndividualDoctor {
             {
               $set: {
                 verified: true,
+                send_attempts:0
               },
             },
             { new: true }
@@ -2015,277 +2037,7 @@ class IndividualDoctor {
       });
     }
   }
-  async sendInvitation(req, res) {
-    try {
-      const {
-        first_name,
-        middle_name,
-        last_name,
-        email,
-        phone,
-        address,
-        created_By,
-        invitationId,
-      } = req.body;
-
-      if (invitationId) {
-        // Update the existing record
-        const updatedUserData = await Invitation.findOneAndUpdate(
-          { _id: invitationId },
-          {
-            $set: {
-              first_name,
-              middle_name,
-              last_name,
-              email,
-              phone,
-              address,
-              created_By,
-              verify_status: "PENDING",
-            },
-          },
-          { new: true }
-        );
-
-        if (updatedUserData) {
-          const loggedInData = await PortalUser.find({
-            for_portal_user: created_By,
-          });
-          const loggeInname = loggedInData[0].full_name;
-          const content = sendMailInvitations(
-            email,
-            first_name,
-            last_name,
-            loggeInname
-          );
-          const mailSent = await sendEmail(content);
-
-          if (mailSent) {
-            updatedUserData.verify_status = "SEND";
-            await updatedUserData.save();
-          }
-
-          return sendResponse(req, res, 200, {
-            status: true,
-            data: updatedUserData,
-            message: `Invitation updated and sent successfully`,
-            errorCode: null,
-          });
-        } else {
-          return sendResponse(req, res, 404, {
-            status: false,
-            data: null,
-            message: `Invitation with ID ${invitationId} not found`,
-            errorCode: "NOT_FOUND",
-          });
-        }
-      } else {
-        // Create a new record
-        let userData = await Invitation.findOne({
-          email,
-          verify_status: "PENDING",
-        });
-
-        if (!userData) {
-          userData = new Invitation({
-            first_name,
-            middle_name,
-            last_name,
-            email,
-            phone,
-            address,
-            created_By,
-            verify_status: "PENDING",
-          });
-          userData = await userData.save();
-        }
-
-        const loggedInData = await PortalUser.find({
-          for_portal_user: created_By,
-        });
-        const loggeInname = loggedInData[0].full_name;
-        const content = sendMailInvitations(
-          email,
-          first_name,
-          last_name,
-          loggeInname
-        );
-        const mailSent = await sendEmail(content);
-
-        if (mailSent) {
-          userData.verify_status = "SEND";
-          await userData.save();
-        }
-
-        if (userData) {
-          sendResponse(req, res, 200, {
-            status: true,
-            data: userData,
-            message: `Invitation sent successfully`,
-            errorCode: null,
-          });
-        } else {
-          sendResponse(req, res, 200, {
-            status: false,
-            data: null,
-            message: `Invitation Send successfully`,
-            errorCode: null,
-          });
-        }
-      }
-    } catch (err) {
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `Failed to send invitation`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async getAllInvitation(req, res) {
-    try {
-      let {
-        for_portal_user,
-        page,
-        limit,
-        searchKey,
-        createdDate,
-        updatedDate,
-      } = req.query;
-      let sort = req.query.sort;
-      let sortingarray = {};
-      if (sort != "undefined" && sort != "" && sort != undefined) {
-        let keynew = sort.split(":")[0];
-        let value = sort.split(":")[1];
-        sortingarray[keynew] = value;
-      } else {
-        sortingarray["createdAt"] = -1;
-      }
-
-      let checkUser = await PortalUser.findOne({
-        _id: mongoose.Types.ObjectId(for_portal_user),
-      });
-
-      if (checkUser.role === "HOSPITAL_STAFF") {
-        let adminData = await StaffInfo.findOne({
-          for_portal_user: mongoose.Types.ObjectId(for_portal_user),
-        });
-
-        for_portal_user = adminData?.in_hospital;
-      }
-
-      if (checkUser.role === "INDIVIDUAL_DOCTOR_STAFF") {
-        let adminData = await StaffInfo.findOne({
-          for_portal_user: mongoose.Types.ObjectId(for_portal_user),
-        });
-
-        for_portal_user = adminData?.in_hospital;
-      }
-
-      const filter = {};
-
-      if (searchKey && searchKey !== "") {
-        filter.$or = [{ first_name: { $regex: searchKey } }];
-      }
-
-      let dateFilter = {};
-      if (
-        createdDate &&
-        createdDate !== "" &&
-        updatedDate &&
-        updatedDate !== ""
-      ) {
-        const createdDateObj = new Date(createdDate);
-        const updatedDateObj = new Date(updatedDate);
-        dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
-      } else if (createdDate && createdDate !== "") {
-        const createdDateObj = new Date(createdDate);
-        dateFilter.createdAt = { $gte: createdDateObj };
-      } else if (updatedDate && updatedDate !== "") {
-        const updatedDateObj = new Date(updatedDate);
-        dateFilter.createdAt = { $lte: updatedDateObj };
-      }
-
-      const listdata = await Invitation.find({
-        created_By: for_portal_user,
-        ...filter,
-        ...dateFilter,
-      })
-        .sort(sortingarray)
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec();
-
-      const count = await Invitation.countDocuments({});
-
-      sendResponse(req, res, 200, {
-        status: true,
-        body: {
-          totalPages: Math.ceil(count / limit),
-          currentPage: page,
-          totalRecords: count,
-          listdata,
-        },
-        message: `List Fetch successfully`,
-        errorCode: null,
-      });
-    } catch (err) {
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `Failed to fetch list`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async getInvitationById(req, res) {
-    try {
-      const { id } = req.query;
-      const result = await Invitation.findOne({
-        _id: mongoose.Types.ObjectId(id),
-      });
-
-      sendResponse(req, res, 200, {
-        status: true,
-        data: result,
-        message: `Invitation Send successfully`,
-        errorCode: null,
-      });
-    } catch (err) {
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `Failed to fetch list`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async deleteInvitation(req, res) {
-    try {
-      const { id } = req.body;
-      const result = await Invitation.deleteOne({
-        _id: mongoose.Types.ObjectId(id),
-      });
-
-      sendResponse(req, res, 200, {
-        status: true,
-        data: result,
-        message: `Invitation Deleted successfully`,
-        errorCode: null,
-      });
-    } catch (err) {
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `Failed to fetch list`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
+ 
   async totalIndividualDoctorforAdminDashboard(req, res) {
     try {
       const totalCount = await PortalUser.countDocuments({
@@ -4504,6 +4256,43 @@ async findOnlineDoctors(req, res) {
     });
   }
 }
+
+
+async markAsDoctorAdmin(req, res) {
+  try {
+    const {userId, isAdmin} = req.body; 
+
+    const updatedUser = await PortalUser.findOneAndUpdate(
+      { _id: userId },
+      { $set: { isAdmin: isAdmin } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return sendResponse(req, res, 404, {
+        status: false,
+        body: null,
+        message: "User not found",
+        errorCode: "USER_NOT_FOUND",
+      });
+    }
+
+    return sendResponse(req, res, 200, {
+      status: true,
+      body: updatedUser,
+      message: "User Permission Updated!",
+      errorCode: null,
+    });
+  } catch (error) {
+    return sendResponse(req, res, 500, {
+      status: false,
+      body: error,
+      message: "Internal server error",
+      errorCode: "SERVER_ERROR",
+    });
+  }
+}
+
 
 }
 

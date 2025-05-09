@@ -4,13 +4,11 @@ const bcrypt = require('bcrypt');
 import jwt from "jsonwebtoken";
 import crypto from "crypto"
 const fs = require('fs');
-const csv = require('fast-csv');
 import Superadmin from "../../models/superadmin/superadmin";
 import Medicine from "../../models/medicine";
 import MaximumRequest from "../../models/superadmin/maximum_request";
 import PortalUser from "../../models/superadmin/portal_user";
 import SubscriptionPlan from "../../models/subscription/subscriptionplans";
-import PlanPeriodical from "../../models/subscription/planperiodical";
 import SubscriptionPlanService from "../../models/subscription/subscriptionplan_service";
 import Otp2fa from "../../models/otp2fa";
 import { config, smsTemplateOTP, MedicineColumns } from "../../config/constants";
@@ -31,8 +29,6 @@ import Village from "../../models/common_data/village"
 import Speciality from "../../models/speciality"
 import AppointmentCommission from "../../models/superadmin/appointment-commision"
 import mongoose from "mongoose";
-import Invitation from '../../models/superadmin/email_invitation';
-import { sendMailInvitations } from '../../helpers/emailTemplate'
 import Notification from "../../models/superadmin/Chat/Notification";
 const Http = require('../../helpers/httpservice');
 import { decryptionData } from "../../helpers/crypto";
@@ -1379,27 +1375,6 @@ export const subscriptionPlanGetById = async (req, res) => {
     }
 };
 
-export const getPeriodicList = async (req, res) => {
-    try {
-        let allPeriodicalPlans = await PlanPeriodical.find()
-        return sendResponse(req, res, 200, {
-            status: true,
-            body: {
-                allPeriodicalPlans,
-            },
-            message: "All periodic plan list",
-            errorCode: null,
-        });
-    } catch (error) {
-        return sendResponse(req, res, 500, {
-            status: false,
-            body: error,
-            message: "Internal server error",
-            errorCode: "Internal server error",
-        });
-    }
-}
-
 export const editSubscriptionPlan = async (req, res) => {
     try {
         const {
@@ -1913,244 +1888,6 @@ export const getallplanPriceforSuperAdmin = async (req, res) => {
             body: error,
             message: error.message ? error.message : "Something went wrong",
             errorCode: error.code ? error.code : "Internal server error",
-        });
-    }
-}
-
-export const sendInvitation = async (req, res) => {
-    try {
-        const {
-            first_name,
-            middle_name,
-            last_name,
-            email,
-            phone,
-            address,
-            created_By,
-            addedBy,
-            invitationId
-        } = req.body;
-
-        if (invitationId) {
-            // Update the existing record
-            const updatedUserData = await Invitation.findOneAndUpdate(
-                { _id: invitationId },
-                {
-                    $set: {
-                        first_name,
-                        middle_name,
-                        last_name,
-                        email,
-                        phone,
-                        address,
-                        created_By,
-                        verify_status: "PENDING",
-
-                    }
-                },
-                { new: true }
-            );
-
-            if (updatedUserData) {
-                const loggedInData = await Superadmin.find({ _id: created_By });
-                const loggeInname = loggedInData[0].fullName;
-                const content = sendMailInvitations(email, first_name, last_name, loggeInname);
-                const mailSent = await sendEmail(content);
-
-                if (mailSent) {
-                    updatedUserData.verify_status = "SEND";
-                    await updatedUserData.save();
-                }
-
-                return sendResponse(req, res, 200, {
-                    status: true,
-                    data: updatedUserData,
-                    message: `Invitation updated and sent successfully`,
-                    errorCode: null,
-                });
-            } else {
-                return sendResponse(req, res, 404, {
-                    status: false,
-                    data: null,
-                    message: `Invitation with ID ${invitationId} not found`,
-                    errorCode: "NOT_FOUND",
-                });
-            }
-        } else {
-            // Create a new record
-            let userData = await Invitation.findOne({ email, verify_status: "PENDING" });
-
-            if (!userData) {
-                userData = new Invitation({
-                    first_name,
-                    middle_name,
-                    last_name,
-                    email,
-                    phone,
-                    address,
-                    created_By,
-                    addedBy,
-                    verify_status: "PENDING"
-                });
-                userData = await userData.save();
-            }
-
-            const loggedInData = await Superadmin.find({ _id: created_By });
-            const loggeInname = loggedInData[0].fullName;
-            const content = sendMailInvitations(email, first_name, last_name, loggeInname);
-            const mailSent = await sendEmail(content);
-
-            if (mailSent) {
-                userData.verify_status = "SEND";
-                await userData.save();
-            }
-
-            if (userData) {
-                return sendResponse(req, res, 200, {
-                    status: true,
-                    data: userData,
-                    message: `Invitation sent successfully`,
-                    errorCode: null,
-                });
-            } else {
-                return sendResponse(req, res, 200, {
-                    status: false,
-                    data: null,
-                    message: `Invitation Send successfully`,
-                    errorCode: null,
-                });
-            }
-        }
-    } catch (err) {
-        
-        return sendResponse(req, res, 500, {
-            status: false,
-            data: err,
-            message: `Failed to send invitation`,
-            errorCode: "INTERNAL_SERVER_ERROR",
-        });
-    }
-};
-export const getAllInvitation = async (req, res) => {
-    try {
-        let { for_portal_user, page, limit, searchKey, createdDate, updatedDate } = req.query;
-
-        let checkUser = await Superadmin.findOne({ _id: mongoose.Types.ObjectId(for_portal_user) });
-
-        if (checkUser.role === 'STAFF_USER') {
-            let userFind = await PortalUser.findOne({ superadmin_id: mongoose.Types.ObjectId(for_portal_user) });
-            for_portal_user = userFind?.for_staff;
-        }
-
-
-        let sort = req.query.sort
-        let sortingarray = {};
-        if (sort != 'undefined' && sort != '' && sort != undefined) {
-            let keynew = sort.split(":")[0];
-            let value = sort.split(":")[1];
-            sortingarray[keynew] = value;
-        } else {
-            sortingarray['createdAt'] = -1;
-        }
-        const filter = {};
-
-        if (searchKey && searchKey !== "") {
-            filter.$or = [
-                { first_name: { $regex: searchKey } },
-            ];
-        }
-
-        let dateFilter = {}
-        if (createdDate && createdDate !== "" && updatedDate && updatedDate !== "") {
-            const createdDateObj = new Date(createdDate);
-            const updatedDateObj = new Date(updatedDate);
-            dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
-        }
-        else if (createdDate && createdDate !== "") {
-            const createdDateObj = new Date(createdDate);
-            dateFilter.createdAt = { $gte: createdDateObj };
-        }
-        else if (updatedDate && updatedDate !== "") {
-            const updatedDateObj = new Date(updatedDate);
-            dateFilter.createdAt = { $lte: updatedDateObj };
-        }
-
-        const listdata = await Invitation.find({
-            created_By: for_portal_user,
-            ...filter,
-            ...dateFilter,
-        })
-            .sort(sortingarray)
-            .limit(limit * 1)
-            .skip((page - 1) * limit)
-            .exec();
-
-        const count = await Invitation.countDocuments({});
-
-        return sendResponse(req, res, 200, {
-            status: true,
-            body: {
-                totalPages: Math.ceil(count / limit),
-                currentPage: page,
-                totalRecords: count,
-                listdata,
-            },
-            message: `List Fetch successfully`,
-            errorCode: null,
-        });
-    } catch (err) {
-        
-        return sendResponse(req, res, 500, {
-            status: false,
-            data: err,
-            message: `Failed to fetch list`,
-            errorCode: "INTERNAL_SERVER_ERROR",
-        });
-    }
-}
-
-export const getInvitationById = async (req, res) => {
-    try {
-        const { id } = req.query;
-        const result = await Invitation.findOne({ _id: mongoose.Types.ObjectId(id) })
-
-        sendResponse(req, res, 200, {
-            status: true,
-            data: result,
-            message: `Invitation Send successfully`,
-            errorCode: null,
-        })
-
-    } catch (err) {
-        
-        sendResponse(req, res, 500, {
-            status: false,
-            data: err,
-            message: `Failed to fetch list`,
-            errorCode: "INTERNAL_SERVER_ERROR",
-        });
-    }
-}
-
-export const deleteInvitation = async (req, res) => {
-    try {
-        const { id } = req.body;
-        const result = await Invitation.deleteOne({ _id: mongoose.Types.ObjectId(id) })
-
-        sendResponse(req, res, 200, {
-            status: true,
-            data: result,
-            message: `Invitation Deleted successfully`,
-            errorCode: null,
-        })
-
-    } catch (err) {
-        
-        sendResponse(req, res, 500, {
-            status: false,
-            data: err,
-            message: `failed to delete invitation`,
-            errorCode: "INTERNAL_SERVER_ERROR",
         });
     }
 }
@@ -3137,7 +2874,7 @@ export const createAdminProfile = async (req, res) => {
             match._id = { $ne: mongoose.Types.ObjectId(userId) }; // Exclude the user with given userId
         }
 
-        let fieldName = 'fullName';
+        let fieldName = 'createdAt';
         let sortOrder = '-1';
         if (sort) {
             fieldName = sort.split(':')[0];
@@ -3159,6 +2896,7 @@ export const createAdminProfile = async (req, res) => {
             {
                 $group: {
                     _id: "$_id",
+                    createdAt:{$first:"$createdAt"},
                     fullName: { $first: "$fullName" },
                     email: { $first: "$email" },
                     mobile: { $first: "$mobile" },
@@ -3368,6 +3106,47 @@ export const deteleLockAdminUser = async (req, res) => {
         });
     }
 };
+
+export const updateAdminProfile = async (req,res) =>{
+ try {
+      const { adminId,email,fullName,mobile,country_code} = req.body;
+      const findUser = await Superadmin.find({
+        isDeleted: false,
+        email:email,
+        _id: { $ne: mongoose.Types.ObjectId(adminId) },
+      });
+      if (findUser.length == 0) {
+        const updateAdmin = await Superadmin.findByIdAndUpdate(
+          adminId,
+          {
+            $set: {
+                email,fullName,mobile,country_code
+            },
+          },
+          { new: true }
+        ).exec();
+        return sendResponse(req, res, 200, {
+          status: true,
+          body: updateAdmin,
+          message: "Successfully updated profile.",
+          errorCode: null,
+        });
+      } else {
+        return sendResponse(req, res, 200, {
+          status: false,
+          message: "Admin profile already exist",
+          errorCode: null,
+        });
+      }
+    } catch (err) {
+      return sendResponse(req, res, 500, {
+        status: false,
+        data: err,
+        message: `failed to update`,
+        errorCode: "INTERNAL_SERVER_ERROR",
+      });
+    }
+}
   
 
 

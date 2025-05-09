@@ -1,13 +1,4 @@
 .voiceCall_modal{
-    .modal-dialog{
-        // max-width: 225px;
-        // min-width: 225px;
-    }
-    .modal-content{
-        // box-shadow: 0px 4px 7px 0px rgba(189, 219, 249, 0.36);
-        // border-radius: 15px;
-        // border: 1px solid #707070;
-    }
     .modal-header{
         border: none;
         padding: 0;
@@ -121,23 +112,15 @@
         }
         .modal-content{
             .calling_section{
-                // padding: 10px 10px 0;
                 .user_call_box {
                     width: 100%;
-                    // height: calc(100vh - 365px);
                     height: calc(100vh - 229px);
                     background: #181b1f;
-                    // display: flex;
-                    // justify-content: center;
-                    // flex-direction: row;
-                    // flex-wrap: wrap;
-                    position: relative;
-                
+                    position: relative;                
                     .main_caller_box{
                         .caller_box {
                             width: 24%;
                             display: flex;
-                            // justify-content: space-around;
                             align-items: flex-end;
                             background: #22272c;
                             position: absolute;
@@ -256,12 +239,8 @@
                         flex-wrap: wrap;
 
                         .user {
-                            // width: 24%;
                             height: 100%;
                             margin: 2px;
-                            // display: flex;
-                            // justify-content: flex-start;
-                            // align-items: flex-end;
                             background: #22272c;
                             position: relative;
                             border: 1px solid #666;
@@ -280,11 +259,6 @@
                             }
     
                             .video_box{
-                                // position: absolute;
-                                // top: 0;
-                                // bottom: 0;
-                                // right: 0;
-                                // left: 0;
                                 width: 100%;
                                 height: 100%;
                 
@@ -292,7 +266,6 @@
                                     width: 100%;
                                     height: 100%;
                                     object-fit: contain !important;
-                                    height: 100%;
                                     position: absolute;
                                     left: 0px;
                                     top: 0px;
@@ -390,9 +363,6 @@
                             .user{
                                 width: 32.33%;
                                 height: 100%;
-                                // &:last-child{
-                                //     width: 92%;
-                                // }
                             }
                         }
                     }
@@ -418,7 +388,6 @@
                 
                 .user_call_box-options {
                     width: 100%;
-                    // height: 75px;
                     background: #b6c8d6;
                     display: flex;
                     justify-content: space-around;
@@ -560,11 +529,6 @@
 {
 width: 100%  !important;
 max-width: none !important;
-// .mat-dialog-container
-// {
-// padding: 13px 20px !important;
-// height: auto !important;
-// }
 .dashboard_main_content
 {
     padding: 0px;
@@ -579,17 +543,13 @@ max-width: none !important;
 {
     z-index: 999999  !important;
 }
-.assessment
-{
-    z-index: 99999  !important;
-}
+
 .quick_view
 {
     z-index: 999999  !important;
 }
 .chat_div
 {
-    // background: #c5c5c5c5;
     margin: 0px;
     padding: 0px;
 }
@@ -615,6 +575,7 @@ max-width: none !important;
     padding: 12px 10px;
     height: 474px;
             overflow-y: scroll;  
+            flex-grow: 1;
             .leftdiv{
                 padding: 1px 8px;
                 background: #a5ccf9;
@@ -676,12 +637,6 @@ max-width: none !important;
     position: relative;
   }
 
-//   #remoteVideo {
-    // width: 50%;
-    // max-width: 600px;  /* Max width for 720p resolution */
-    // height: auto;
-// }
-
 .chat-container {
     display: flex;
     flex-direction: column;
@@ -689,7 +644,6 @@ max-width: none !important;
   }
   
   .chatbody {
-    // flex: 1;
     overflow-y: auto; /* Allows scrolling if messages overflow */
     padding: 10px;
     background-color: #f5f5f5; /* Optional styling */

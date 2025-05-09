@@ -66,7 +66,6 @@
 
                 .mat-form-field-wrapper {
 
-                    // padding-bottom: 30px;
                     .mat-form-field-flex {
                         .mat-form-field-infix {
                             .mat-input-element {
@@ -95,10 +94,6 @@
                 .upload_input_content {
                     display: flex;
                     align-items: center;
-
-                    // position: absolute;
-                    // top: 10px;
-                    // bottom: auto;
                     label {
                         margin: 0 0 0 10px;
                     }
@@ -251,11 +246,6 @@
                 }
             }
 
-            // &.mobile_pay_wrap{
-            //     &::after{
-            //         display: none;
-            //     }
-            // }
             &.mobile_paydetails {
                 .modal-body {
                     padding: 0;
@@ -310,8 +300,6 @@
                         background: #B6C8D6;
                         opacity: 0.5;
                         border-radius: 5px;
-                        // height: 110px;
-                        // width: 110px;
                         display: flex;
                         justify-content: center;
                         align-items: center;
@@ -446,10 +434,7 @@
     color: white;
 }
 
-// .mat-error {
-//     position: relative;
-//     top: -25px;
-// }
+
 
 .healthcare_network {
     .boxes_wrapper {
@@ -484,7 +469,6 @@
 
         .preview-img {
 
-            //   margin: 0 15px;
             img {
                 height: 110px;
                 width: 110px;
@@ -493,7 +477,6 @@
 
             .quick_view {
                 position: absolute;
-                //   margin-left: 84px;
                 top: 5px;
                 right: -5px;
                 z-index: 1;
@@ -557,7 +540,6 @@
 
         .preview-img {
 
-            //   margin: 0 15px;
             img {
                 height: 110px;
                 width: 110px;
@@ -566,7 +548,6 @@
 
             .quick_view {
                 position: absolute;
-                //   margin-left: 84px;
                 top: 5px;
                 right: -5px;
                 z-index: 1;
@@ -831,7 +812,6 @@
 
 .options_block {
     gap: 10px;
-    // width:50% !important;
 }
 
 .options_block .form_field_wrapper {
@@ -862,8 +842,6 @@
 
     .row-refrence {
         display: flex;
-        // margin-right: 287px;
-        // margin-left: -18px;
         gap: 5px;
         flex-wrap:wrap;
     }
@@ -876,7 +854,6 @@
         font-weight: 600;
         line-height: 29.26px;
         }
-        // background-color: rgba(0, 60, 197, 0.1);
         padding: 20px;
     }
 }

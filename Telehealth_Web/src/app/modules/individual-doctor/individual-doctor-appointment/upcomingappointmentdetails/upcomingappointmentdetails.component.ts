@@ -6,29 +6,15 @@ import {
   ElementRef,
   Input,
 } from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import { PatientService } from "src/app/modules/patient/patient.service";
 import { CoreService } from "src/app/shared/core.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { SuperAdminService } from "src/app/modules/super-admin/super-admin.service";
 import { IndiviualDoctorService } from "../../indiviual-doctor.service";
 import { ToastrService } from "ngx-toastr";
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import { FormBuilder,FormControl,FormGroup,Validators,} from "@angular/forms";
 import { Subject } from "rxjs";
-import { DecimalPipe, Location, DatePipe } from "@angular/common";
-import { WebSocketService } from "src/app/shared/web-socket.service";
-import AgoraRTC from "agora-rtc-sdk-ng";
-import { Select2UpdateEvent } from "ng-select2-component";
+import { Location, DatePipe } from "@angular/common";
 export interface PeriodicElement {
   medicine: string;
   packorunit: string;
@@ -37,8 +23,6 @@ export interface PeriodicElement {
 }
 import { ThemePalette } from "@angular/material/core";
 import { NgxUiLoaderService } from "ngx-ui-loader";
-import { PharmacyService } from "src/app/modules/pharmacy/pharmacy.service";
-import { PharmacyPlanService } from "src/app/modules/pharmacy/pharmacy-plan.service";
 
 export interface ILocationData {
   mode: "CALENDER" | "REMAINDER_CALENDER";
@@ -141,8 +125,7 @@ export class UpcomingappointmentdetailsComponent implements OnInit {
     { name: "45  Minute", value: 45 },
     { name: "50  Minute", value: 50 },
     { name: "55  Minute", value: 55 },
-    { name: "59  Minute", value: 59 },
-    ,
+    { name: "59  Minute", value: 59 },    
   ];
   userRole: any;
   patientAllDetails: any;
@@ -248,18 +231,17 @@ export class UpcomingappointmentdetailsComponent implements OnInit {
   @ViewChild("confirmationModel") confirmationModel: any;
   @ViewChild("myDiv") myDivRef!: ElementRef;
   constructor(
-    private modalService: NgbModal,
-    private patientService: PatientService,
-    private coreService: CoreService,
-    private activatedRoute: ActivatedRoute,
-    private indiviualDoctorService: IndiviualDoctorService,
-    private toastr: ToastrService,
-    private route: Router,
-    private fb: FormBuilder,
-    private websocket: WebSocketService,
-    private datePipe: DatePipe,
-    private loader: NgxUiLoaderService,
-    private location: Location
+    private readonly modalService: NgbModal,
+    private readonly patientService: PatientService,
+    private readonly coreService: CoreService,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly indiviualDoctorService: IndiviualDoctorService,
+    private readonly toastr: ToastrService,
+    private readonly route: Router,
+    private readonly fb: FormBuilder,
+    private readonly datePipe: DatePipe,
+    private readonly loader: NgxUiLoaderService,
+    private readonly location: Location
 
   ) {
 
@@ -275,7 +257,6 @@ export class UpcomingappointmentdetailsComponent implements OnInit {
 
   ngOnInit(): void {
     let loginData = JSON.parse(localStorage.getItem("loginData"));
-    let adminData = JSON.parse(localStorage.getItem("adminData"));
     this.userRole = loginData?.role;
 
     this.loggedInUserName = loginData?.full_name;
@@ -300,9 +281,6 @@ export class UpcomingappointmentdetailsComponent implements OnInit {
     dateObject1.setHours(0, 0, 0, 0);
 
     this.currentDate = dateObject1;
-    // setTimeout(() => {
-    //   this.checkInnerPermission();
-    // }, 2000);
   }
 
   findObjectByKey(array, key, value) {
@@ -312,16 +290,16 @@ export class UpcomingappointmentdetailsComponent implements OnInit {
   checkInnerPermission() {
     let userPermission = this.coreService.getLocalStorage("loginData").permissions;
     let menuID = sessionStorage.getItem("currentPageMenuID");
-    let checkData = this.findObjectByKey(userPermission, "parent_id", menuID)
+    let checkSubmenu;
+    let checkData = this.findObjectByKey(userPermission, "parent_id", menuID);
     if (checkData) {
-      if (checkData.isChildKey == true) {
-        var checkSubmenu = checkData.submenu;
+      if (checkData.isChildKey) {
+        checkSubmenu = checkData.submenu;
         if (checkSubmenu.hasOwnProperty("claim-process")) {
           this.innerMenuPremission = checkSubmenu['claim-process'].inner_menu;
-        } else {
         }
       } else {
-        var checkSubmenu = checkData.submenu;
+        checkSubmenu = checkData.submenu;
         let innerMenu = [];
         for (let key in checkSubmenu) {
           innerMenu.push({ name: checkSubmenu[key].name, slug: key, status: true });
@@ -448,48 +426,6 @@ export class UpcomingappointmentdetailsComponent implements OnInit {
     }
   }
 
-  callUser(type?: string) {
-    let mediaPermission;
-    mediaPermission = { audio: true };
-    if (type == "video") {
-      mediaPermission = { ...mediaPermission, video: true };
-    }
-
-    AgoraRTC.getDevices()
-      .then(async (devices) => {
-        let audioDevices, videoDevices;
-
-        audioDevices = devices.filter(function (device) {
-          return device.kind === "audioinput";
-        });
-
-        let selectedMicrophoneId = audioDevices[0].deviceId;
-
-        videoDevices = devices.filter(function (device) {
-          return device.kind === "videoinput";
-        });
-
-        let selectedCameraId = videoDevices[0].deviceId;
-
-      })
-      .then((res) => {
-        let roomid = this.appointmentId;
-        const data = {
-          loggedInUserId: this.loggedInUserId ? this.loggedInUserId : "",
-          loggedInUserName: this.loggedInUserName,
-          chatId: roomid,
-          type: type,
-          token: "Bearer " + localStorage.getItem("token"),
-        };
-
-        this.websocket.isCallStarted(true);
-        this.websocket.callUser(data);
-      })
-      .catch((e) => {
-        this.toastr.error("Please check your camera and mic");
-      });
-  }
-
   ngAfterViewInit() {
     setTimeout(() => {
       const locationInfo = this.location.getState() as ILocationData;
@@ -564,7 +500,6 @@ export class UpcomingappointmentdetailsComponent implements OnInit {
           this.openVerticallyCenteredconfirmationappointment(
             this.confirmationMessage
           );
-          // this.route.navigate(["/individual-doctor/appointment"]);
         }
       },
       (err) => {
@@ -600,7 +535,6 @@ export class UpcomingappointmentdetailsComponent implements OnInit {
         this.toastr.error(errResponse.message);
       }
     );
-    // this.route.navigate(["/individual-doctor/appointment"]);
   }
 
   acceptOrRejectAppointment(status: any, reason: any) {
@@ -786,7 +720,6 @@ export class UpcomingappointmentdetailsComponent implements OnInit {
   }
 
   openVerticallyCenteredChooseDateTime(chooseCalender: any) {
-    // this.isOpen = false;
     this.nearestAvailableSlot = "";
     this.modalService.dismissAll();
     this.modalService.open(chooseCalender, {
@@ -1077,9 +1010,7 @@ export class UpcomingappointmentdetailsComponent implements OnInit {
       })
     }else{
       this.route.navigate(['/individual-doctor/appointment'])
-    }
-    // this.location.back();
-  
+    } 
 
   }
 

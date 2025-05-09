@@ -29,7 +29,7 @@ export const login = async (req, res) => {
             return res.status(messageID.unAuthorizedUser).json(encryptObjectData({
                 status: responseCodes.failedStatus,
                 messageID: messageID.unAuthorizedUser,
-                message: messages.passwordNotCreated,
+                message: messages.userPasswordError,
             }));
         }
         const isMatch = await bcrypt.compare(password, user.password);
@@ -307,7 +307,7 @@ export const createPassword = async function (req, res) {
                     return res.status(messageID.successCode).json(encryptObjectData({
                         status: responseCodes.successStatus,
                         messageID: messageID.successCode,
-                        message: messages.passwordNotCreated
+                        message: messages.userPasswordError
                     }))
                 }
                 return res.status(messageID.successCode).json(encryptObjectData({

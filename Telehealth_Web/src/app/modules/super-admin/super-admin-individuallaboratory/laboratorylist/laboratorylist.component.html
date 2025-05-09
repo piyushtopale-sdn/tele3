@@ -18,6 +18,13 @@
           />
         </div>
       </div>
+      <div class="checkbox-below-button">
+        <mat-checkbox
+        (change)="viewAdminList($event.checked)"        
+      >
+        {{"view_admin_user" | translate}}  
+        </mat-checkbox>
+      </div>  
     </div>
     <div class="right_part">
       <button
@@ -209,6 +216,12 @@
                   </svg>
                 </a>
               </ng-container>
+              <ng-container *ngIf="!element?.for_portal_user?.isAdmin">
+                <mat-icon (click)="openVerticallyCenteredAssignPermission(assignPermission,element?.for_portal_user?._id, 'granted')" style="color: #ec9656;margin: inherit;" ngbTooltip="Grant Admin Access" >person</mat-icon>                 
+              </ng-container>
+              <ng-container *ngIf="element?.for_portal_user?.isAdmin">
+                <mat-icon (click)="openVerticallyCenteredAssignPermission(assignPermission,element?.for_portal_user?._id, 'removed')" style="color: green; margin: inherit;" ngbTooltip="Admin Access Granted" >supervisor_account</mat-icon>
+              </ng-container>
               </div>
             </td>
           </ng-container>
@@ -338,6 +351,35 @@
               activeLockDeleteLab('active', def === 'Active' ? true : false)
             "
           >
+            {{ "yes" | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #assignPermission let-modal>
+  <div class="custome_modal action_modals">
+    <div class="modal-body">
+      <div class="delete_screen text-center">
+        <div class="image delete"  *ngIf="permissionType === 'granted'">
+          <img class="img-fluid" src="../../../../assets/img/approved.svg" alt="" />
+        </div>
+        <div class="image delete"  *ngIf="permissionType === 'removed'">
+          <img class="img-fluid" src="../../../../assets/img/cancel.svg" alt="" />
+        </div>
+        <p class="heading delete">{{ "are_you_sure" | translate }}</p>
+        <p *ngIf="permissionType === 'granted'">{{ "you_want_to_give_admin_privileges_to_this_user" | translate }}</p>
+        <p *ngIf="permissionType === 'removed'">{{ "you_want_remove_admin_privileges_to_this_user" | translate }}</p>
+        <div class="primary_btn mt-30">
+          <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">
+            {{ "no" | translate }}
+          </button>
+          <button *ngIf="permissionType === 'granted'" type="button" class="btn btn-primary" (click)="updateLabPermission(true)">
+            {{ "yes" | translate }}
+          </button>
+          <button *ngIf="permissionType === 'removed'" type="button" class="btn btn-primary" (click)="updateLabPermission(false)">
             {{ "yes" | translate }}
           </button>
         </div>

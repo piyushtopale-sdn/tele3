@@ -6,7 +6,7 @@ export class EncryptionDecryption {
 
   encryptObjectData(data: any) {
     const dataToEncrypt = JSON.stringify(data);
-    const encPassword = environment.cryptoSecret;
+    const encPassword = environment.CRYPTOSECRET;
     const encryptedData = CryptoJS.AES.encrypt(
       dataToEncrypt.trim(),
       encPassword.trim()
@@ -16,7 +16,7 @@ export class EncryptionDecryption {
 
   decryptObjectData(response: any) {
     if (!response.data) return false;
-    const decPassword = environment.cryptoSecret;
+    const decPassword = environment.CRYPTOSECRET;
     const decryptedOutput = CryptoJS.AES.decrypt(
       response.data.trim(),
       decPassword.trim()
@@ -26,7 +26,7 @@ export class EncryptionDecryption {
 
   decryptionData(data: any) {
     if (data) {
-      const decPassword = environment.cryptoSecret;
+      const decPassword = environment.CRYPTOSECRET;
       const conversionDecryptOutput = CryptoJS.AES.decrypt(
         data.trim(),
         decPassword.trim()

@@ -254,6 +254,9 @@
                 *matRowDef="let row; columns: neworderdisplayedColumns"
               ></tr>
             </table>
+            <div *ngIf="dataSource?.length === 0" class="text-center">
+              <b>{{ "no_record_found" | translate }}</b>
+            </div>
           </div>
           <mat-paginator
             class="pagination"

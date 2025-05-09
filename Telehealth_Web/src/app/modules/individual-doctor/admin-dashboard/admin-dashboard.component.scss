@@ -20,7 +20,6 @@
                 label{
                     margin-right: 10px;
                     margin-bottom: 0;
-                    // min-width: 90px;
                 }
                 .form_field_wrapper{
                     .mat-form-field{
@@ -275,9 +274,6 @@
                                         &.blue {
                                             background-color: #4880FF; 
                                         }
-                                        &.blue {
-                                            background-color: #4880FF;
-                                        }
                                         &.skyblue {
                                             background-color: #1BEDD4;
                                         }
@@ -374,9 +370,6 @@
         width: 100%;
     }
  }
- @media screen and (max-width:$small_phone){
-
-}
 
 .month-year-wrapper {
     display: flex;
@@ -389,4 +382,6 @@
     flex: 1; /* Make both dropdowns take equal width */
     min-width: 100px; /* Set a minimum width to control dropdown size */
   }
-
+  .clickable-card {
+    cursor: pointer;
+  }

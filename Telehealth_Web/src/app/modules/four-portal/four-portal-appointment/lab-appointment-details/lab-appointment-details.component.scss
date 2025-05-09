@@ -6,7 +6,6 @@
     display: inline-block;
 
     img {
-        // display: block;
         width: 100%;
         height: 100%;
         border: 1px solid #0015ff;
@@ -32,11 +31,6 @@
 .profile_info_with_img {
     justify-content: space-between;
 }
-
-// .col_item {
-//     margin-right: 20px;
-//     margin-bottom: 10px;
-// }
 
 .profile_image_wrapper {
     display: flex;
@@ -112,9 +106,6 @@
     .upload_input_content{
         display: flex;
         align-items: center;
-        // position: absolute;
-        // top: 10px;
-        // bottom: auto;
         label{
             margin: 0 0 0 10px;
         }
@@ -168,7 +159,6 @@
   }
   
   .timeline-content {
-    // margin-left: 1px;
     text-align: center;
     border: 1px solid #B6C8D6;
     border-radius: 9px;

@@ -234,6 +234,23 @@
       </div>
     </div>
   </div>
+ 
+  <div class="profile_appoint_details" *ngIf="appointmentDetails?.declinedReason !== null">
+    <h3 class="profileinfo_title">{{ "declined_reason" | translate }}</h3>
+    <div class="profile_data"  style="grid-template-columns: none;" >
+      <div class="profile_info"  style="grid-template-columns: none;" >
+        <ul class="profile_info_inner"  style="grid-template-columns: none;">
+          <li class="col_item">
+            <div class="profile_contact">
+              <div class="user_value">
+                {{ appointmentDetails?.declinedReason ? appointmentDetails?.declinedReason : "-" }}
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
   <!-----------------------------Other Details Tab------------------------------->
 

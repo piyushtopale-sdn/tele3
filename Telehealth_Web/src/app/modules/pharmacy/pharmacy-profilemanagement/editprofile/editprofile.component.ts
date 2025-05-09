@@ -189,8 +189,8 @@ export class EditprofileComponent implements OnInit {
       profileImage: new FormControl(""),
       loc: new FormControl(""),
       email: new FormControl("", [Validators.required]),
-      pharmacy_name: new FormControl("", [Validators.required]),
-      pharmacy_name_arabic: new FormControl("", [Validators.required]),
+      pharmacy_name: new FormControl("", [Validators.required,this.coreService.nameValidator()]),
+      pharmacy_name_arabic: new FormControl("", [Validators.required,this.coreService.nameValidator()]),
       slogan: new FormControl(""),
       main_phone_number: new FormControl("", [Validators.required, Validators.pattern(/^\d{2}-\d{3}-\d{4}$/)]),
       additional_phone_number: new FormControl("", [Validators.pattern(/^\d{2}-\d{3}-\d{4}$/)]),
@@ -198,7 +198,7 @@ export class EditprofileComponent implements OnInit {
       profile_picture: new FormControl("", []),
       licence_details: new FormGroup({
         id_number: new FormControl("", [Validators.required,Validators.pattern(/^[a-zA-Z0-9]{6,}$/)]),
-        expiry_date: new FormControl("", [Validators.required]),
+        expiry_date: new FormControl("", [Validators.required,this.coreService.LicenseDateValidator()]),
         licence_picture: new FormControl(""),
       }),
       location_info: this.locationFields,
@@ -619,5 +619,8 @@ export class EditprofileComponent implements OnInit {
       input = input.substring(0, 10);
     }
     event.target.value = input;
+  }
+  get f() {
+    return this.profileFields.controls;
   }
 }

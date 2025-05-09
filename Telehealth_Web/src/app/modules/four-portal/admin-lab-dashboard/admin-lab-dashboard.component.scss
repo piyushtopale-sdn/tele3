@@ -22,7 +22,6 @@
                 label{
                     margin-right: 10px;
                     margin-bottom: 0;
-                    // min-width: 90px;
                 }
                 .form_field_wrapper{
                     .mat-form-field{
@@ -113,7 +112,6 @@
 
                         display: flex;
 
-                        // flex-direction: column;
 
                         position: relative;
 
@@ -240,9 +238,6 @@
                 }
                 &.light_skyblue {
                     background: $light_skyblue;
-                }
-                &.light_orange {
-                    background: $light_orange;
                 }
             }
         }
@@ -391,14 +386,6 @@
 }
 
 
-// @media screen and (min-width:$desktop_large_up) {
-//     .super_admin_dashboard .common_space.counter_section .row > *{
-//         width: 20%;
-//     }
-//     .super_admin_dashboard .common_space.counter_section .cust_col{
-//         min-height: 137px;
-//     }
-// }
 @media screen and (max-width:1650px) {
     .super_admin_dashboard .common_space.counter_section .cust_col {
         min-height: 125px;

@@ -20,7 +20,6 @@
                 label{
                     margin-right: 10px;
                     margin-bottom: 0;
-                    // min-width: 90px;
                 }
                 .form_field_wrapper{
                     .mat-form-field{
@@ -49,32 +48,7 @@
                             }
                         }
                     }
-                    .mat-form-field{
-                            .mat-form-field-wrapper{
-                                padding: 0;
-                                width: 163px;
-                                .mat-form-field-flex{
-                                    background-color: #EBF0F4;
-                                    border: 1px solid #EBF0F4;
-                                    border-radius: 15px;
-                                    .mat-form-field-infix{
-                                        .mat-select{
-                                            .mat-select-arrow-wrapper{
-                                                transform: translateY(0);
-                                            }
-                                            .mat-select-value{
-                                                color: $formfiled_color;
-                                                font-weight: 500;
-                                            }
-                                        }
-                                        width: 100px;
-                                    }
-                                }
-                                .mat-form-field-underline{
-                                    display: none;
-                                }
-                            }
-                        }
+                 
                 }
    
                 &:last-child{
@@ -382,9 +356,6 @@
         width: 100%;
     }
  }
- @media screen and (max-width:$small_phone){
-
-}
 .month-year-wrapper {
     display: flex;
     gap: 16px; /* Space between month and year dropdowns */
@@ -422,3 +393,5 @@
         }
     }
 }
+
+

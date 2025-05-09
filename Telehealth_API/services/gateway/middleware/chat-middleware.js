@@ -1,6 +1,7 @@
 import HttpService from "./httpservice";
 
 export const SocketChat = (socket, io) => {
+  const activeChatRooms = new Map(); 
 
   socket.on("join-chat-room", async (userInfo) => {
     socket.join(userInfo.userId);
@@ -66,6 +67,9 @@ export const SocketChat = (socket, io) => {
         let sendMessagData = await HttpService.postStagingChat('doctor2/create-message', { data: messageData }, headers, 'doctorServiceUrl');        
         io.in(messageData?.senderID).emit("new-message-read", sendMessagData?.body);
         io.in(messageData?.receiverID).emit("new-message-read", sendMessagData?.body);
+
+        const isChatOpen = activeChatRooms.get(messageData?.receiverID) === messageData?.chatId;
+
         let saveNotification = await HttpService.postStagingChat('doctor2/save-notification',
           {
             chatId: messageData?.chatId,
@@ -73,7 +77,8 @@ export const SocketChat = (socket, io) => {
             for_portal_user: messageData?.receiverID,
             content: messageData?.message,
             notitype: messageData?.notitype,
-            created_by_type: messageData?.created_by_type
+            created_by_type: messageData?.created_by_type,
+            skipPush: isChatOpen
           }, headers, 'doctorServiceUrl')
         
        io.in(messageData?.receiverID).emit("received-notification", saveNotification)
@@ -427,6 +432,15 @@ export const SocketChat = (socket, io) => {
     } catch (error) {
       console.error("Error in delete-message event:", error);
     }
+  });
+
+
+  socket.on('chatroom-open', ({ userId, chatId }) => {    
+    activeChatRooms.set(userId, chatId);
+  });
+
+  socket.on('chatroom-close', ({ userId }) => {
+    activeChatRooms.delete(userId);
   });
   
 }

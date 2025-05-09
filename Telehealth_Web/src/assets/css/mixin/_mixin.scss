@@ -1,0 +1,46 @@
+
+@mixin loginpart {
+    min-height: 100vh;
+    padding: 40px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@mixin formfield {
+    padding: 5px 15px;
+    background-color: $formfiledbackgroundcolor;
+    border: 1px solid $formfiledbordercolor;
+    font-size: $font_medium;
+    align-items: center;
+    border-radius: 5px;
+}
+@mixin formfieldinfix {
+    border-top-width: 4px;
+    padding: 4px 0 8px;
+    font-size: $font_medium;
+}
+@mixin commonbtn {
+    font-family: $font_family_body, $font_sans_sarif;
+    height: 55px;
+    line-height: 55px;
+    text-align: center;
+    padding: 0 30px;
+    cursor: pointer;
+    font-size: $font_large;
+    border-radius: 10px;  
+    text-transform: capitalize;
+}
+
+@mixin online {
+    height: 14px;
+    width: 14px;
+    background: #0AD164;
+    border: 1.4px solid #FFFFFF;
+    display: inline-block;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    left: auto;
+    bottom: 5px;
+    top: auto; 
+ }

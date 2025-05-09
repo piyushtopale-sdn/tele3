@@ -135,12 +135,12 @@ export class BasicinfoComponent implements OnInit {
     this.basicInfo = this.fb.group(
       {
         profile_picture: [""],
-        first_name: ["", [Validators.required]],
-        first_name_arabic: ["", [Validators.required]],
+        first_name: ["", [Validators.required,this.coreService.nameValidator()]],
+        first_name_arabic: ["", [Validators.required,this.coreService.nameValidator()]],
         middle_name: [""],
         middle_name_arabic: [""],
-        last_name: ["", [Validators.required]],
-        last_name_arabic: ["", [Validators.required]],
+        last_name: ["", [Validators.required,this.coreService.nameValidator()]],
+        last_name_arabic: ["", [Validators.required,this.coreService.nameValidator()]],
         address: ["", [Validators.required]],
         loc: [""],
         neighborhood: [""],
@@ -198,7 +198,7 @@ export class BasicinfoComponent implements OnInit {
         aboutDoctorArabic: [""],
         license_details: this.fb.group({
           license_number: ["",[Validators.required,Validators.pattern(/^[a-zA-Z0-9]{6,}$/)]],
-          license_expiry_date: [""],
+          license_expiry_date: ["",this.coreService.LicenseDateValidator()],
           licence_image: [""],
         }),
         speciality: ["", [Validators.required]],   
@@ -348,6 +348,7 @@ export class BasicinfoComponent implements OnInit {
 
 
     let paramId = this.activatedRoute.snapshot.paramMap.get("id");
+    localStorage.setItem("portal_user",paramId)
     this.doctorId = paramId;
     if (paramId === null) {
       this.pageForAdd = true;
@@ -521,6 +522,7 @@ export class BasicinfoComponent implements OnInit {
           this.loader.stop();
           this.toastr.success(response.message);
           sessionStorage.setItem("doctorId", response?.data?.PortalUserDetails?._id ? response?.data?.PortalUserDetails?._id : response?.data?.portal_user_id);
+          localStorage.setItem("portal_user",response?.data?.portal_user_id)
           this.callParent.emit()
           if (this.pageForAdd) {
             this.fromChild.emit("basicInfo");
@@ -696,6 +698,11 @@ export class BasicinfoComponent implements OnInit {
       this.profileImage = ""
     } else if (index === 'license_picture_') {
       this.license_picture_ = "";
+      this.basicInfo.patchValue({
+        license_details: {
+          licence_image: null,
+        },
+      });
     }
 
   }

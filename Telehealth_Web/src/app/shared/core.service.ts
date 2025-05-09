@@ -1,18 +1,18 @@
 import { Injectable } from "@angular/core";
 import * as CryptoJS from "crypto-js";
-import { BehaviorSubject, Subject } from "rxjs";
+import { BehaviorSubject } from "rxjs";
 import { ToastrService } from "ngx-toastr";
 import { environment } from "src/environments/environment";
 import * as fingerprint from "../../assets/js/fingerprint.js";
-import * as moment from "moment";
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 @Injectable({
   providedIn: "root",
 })
 export class CoreService {
   fingerprint: any;
   deviceId: any;
-  constructor(private toastrService: ToastrService) {
-    // this.getDeviceId();
+  constructor(private readonly toastrService: ToastrService) {
+
   }
 
   SharingData = new BehaviorSubject("default");
@@ -204,7 +204,6 @@ export class CoreService {
         const visitorId = result.visitorId;
         return visitorId;
 
-        // return 'hii';
       })
       .catch((error) => console.error(error));
   }
@@ -217,11 +216,6 @@ export class CoreService {
   }
 
   public convertTwentyFourToTwelve(hours: string) {
-    // if(hours!=null && hours!=undefined){
-    //   return moment(new Date(hours)).format("hh:mm");
-    // }else{
-    //   return '0000';
-    // }
     if (hours) {
       if (hours != null && hours != undefined) {
         return hours.split(":")[0] + "" + hours.split(":")[1];
@@ -241,4 +235,99 @@ export class CoreService {
   public getKeyByValue(object: Object, value: string) {
     return Object.keys(object).find((key) => object[key] === value);
   }
+  
+  //Check Validation
+  public isValid(input: string, maxLength: number): boolean {
+    const regex = /^[a-zA-Z]*$/;
+    return regex.test(input) && input.length <= maxLength;
+  }
+
+  //Check Name Validation
+  public nameValidator(maxLength: number = 50) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value || '';
+      const regex = /^[a-zA-Z\u0600-\u06FF\s]*$/;  // Arabic + English + space
+  
+      if (!regex.test(value)) {
+        return {
+          onlyCharacters: {
+            message: 'Please enter letters only.'
+          }
+        };
+      }
+  
+      if (value.length > maxLength) {
+        return {
+          maxLength: {
+            message: `Maximum allowed length is ${maxLength} characters.`,
+            requiredLength: maxLength,
+            actualLength: value.length
+          }
+        };
+      }
+  
+      return null;
+    };
+  }
+  
+  
+  //Check Email Validation
+  public emailValidator() {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value || '';
+      return emailRegex.test(value) ? null : { pattern: true };
+    };
+  }
+
+  //Check Mobile Validation
+  public mobileValidator() {
+    const pattern = /^\d{2}-\d{3}-\d{4}$/; 
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null; 
+      
+      const isValid = pattern.test(control.value);
+      return isValid ? null : { pattern: true }; 
+    };
+}
+
+//Checks Number validation
+public numberOnlyValidator(maxDigits: number) {
+  const pattern = new RegExp(`^\\d{1,${maxDigits}}$`);
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) return null;
+
+    const value = control.value.toString();
+    const isValid = pattern.test(value);
+
+    return isValid ? null : { numberOnly: true };
+  };
+}
+
+//Checks licence validation
+public LicenseDateValidator() {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const inputDate = new Date(control.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Remove time for accurate comparison
+
+    if (control.value && inputDate <= today) {
+      return { notFutureDate: true };
+    }
+
+    return null;
+  };
+}
+
+//Checks Alphanumeric validation
+public alphanumericValidator() {
+  const alphanumericRegex = /^[a-zA-Z0-9\u0600-\u06FF]*$/; 
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value || '';
+    return alphanumericRegex.test(value) ? null : { pattern: true };
+  };
+}
+
+
+  
 }

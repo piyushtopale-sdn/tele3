@@ -3,9 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AuthService } from "src/app/shared/auth.service";
 import { CoreService } from "src/app/shared/core.service";
 import { WebSocketService } from "src/app/shared/web-socket.service"
-// import { IndiviualDoctorService } from "../indiviual-doctor.service"
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { IndiviualDoctorService } from "../../individual-doctor/indiviual-doctor.service";
 import { FourPortalService } from "../four-portal.service";
 
 @Component({
@@ -39,10 +37,10 @@ export class FourPortalHeaderComponent implements OnInit {
   pageSize: number = 5;
   totalLength: number = 0;
   page: any = 1;
-  constructor(private auth: AuthService, private _coreService: CoreService, private modalService: NgbModal,private route: ActivatedRoute,
+  constructor(private readonly auth: AuthService, private readonly _coreService: CoreService, private readonly modalService: NgbModal,private readonly route: ActivatedRoute,
 
-    private websocket: WebSocketService, private labRadioService: FourPortalService,private _webSocketService: WebSocketService,
-    private router: Router) {
+    private readonly labRadioService: FourPortalService,private readonly _webSocketService: WebSocketService,
+    private readonly router: Router) {
     this._coreService.SharingMenu.subscribe((res) => {
       if (res != "default") {
         this.menuSelected = res;
@@ -171,8 +169,6 @@ export class FourPortalHeaderComponent implements OnInit {
         let response = this._coreService.decryptObjectData(encryptedData);
         if(response.status)
        {
-        // this.notificationlist=response.body.list;
-        // this.notiCount = response.body.count;
         this.isViewcount = response.body.isViewcount;
         if (this.isViewcount === 0) {
           this.notificationlist = [];
@@ -200,7 +196,6 @@ export class FourPortalHeaderComponent implements OnInit {
         if(result.status){
           this.notiCount=0
           this._coreService.showSuccess(result.message,'');
-        }else{
         }
       },
       error:(err)=>{
@@ -218,50 +213,18 @@ export class FourPortalHeaderComponent implements OnInit {
     this.labRadioService.markAllReadNotification(params).subscribe((res: any) => {
       let encryptedData = { data: res };
       let response = this._coreService.decryptObjectData(encryptedData);
-      this.ncount = [];
-      this.getRealTimeNotification();
-      this.getnotificationList();
-      this.isViewcount = 0; 
-      this.notificationlist = []; 
+      if(response.status){
+        this.ncount = [];
+        this.getRealTimeNotification();
+        this.getnotificationList();
+        this.isViewcount = 0; 
+        this.notificationlist = []; 
+      }
     })
   }
 
-  // markReadById(data:any){
-  //   let params = {
-  //     _id:data?._id
-  //   };
-  //   this.labRadioService.markReadNotificationById(params).subscribe((res: any) => {
-  //     let encryptedData = { data: res };
-  //     let response = this._coreService.decryptObjectData(encryptedData);
-
-  //     if (response.status) {
-  //       if (data?.notitype == 'chat') {
-  //          this.router.navigate([`/portals/communication/${this.userType}`], {
-  //          queryParams: {
-  //          type: data.chatId
-  //         }
-  //       })
-  //       }else if(data?.notitype == "New Appointment" || data?.notitype == "Appointment" || data?.notitype == "Cancel Appointment" || data?.notitype == "Reshedule Appointment" || data?.notitype == "Appointment Approved" || data?.notitype == "Appointment Rejected" || data?.notitype == "Booked Appointment" ||  data.notitype == "Appointment Reminder"){
-  //         this.router.navigate([`/portals/appointment/${this.userType}/appointment-details/`+ data?.appointmentId])
-  //       } else if (data?.notitype == "Order Request" || data?.notitype == "order request" || data?.notitype == "Amount Send" || data?.notitype == "Insurance Verified" || data?.notitype == "Order Cancelled" || data?.notitype == "Order Confirmed") {
-  //         this.router.navigate([`/portals/order-request/${this.userType}/new-order-details`], {
-  //           queryParams: {
-  //             orderId: data?.appointmentId
-  //           }
-  //         })
-  //       } else {
-  //         this.router.navigate([`/portals/notification/${this.userType}`])
-  //       }
-  //     }
-
-  //     this.ncount = [];
-  //     this.getRealTimeNotification();
-  //     this.getnotificationList();
-  //   })
-  // }
-
-  markReadById(data: any) {
-    if (!data || !data._id) {
+    markReadById(data: any) {
+    if (!data._id) {
       console.error("Notification data is missing or undefined.");
       return;
     }
@@ -284,8 +247,8 @@ export class FourPortalHeaderComponent implements OnInit {
          this.router.navigate([`/portals/manage-result/${this.userType}/lab-details/` + data?.appointmentId]);
 
         } 
-        else if (data.notitype && data.notitype.includes("New Message From")) {  
-          let chatId = data.chatId || data.content;  
+        else if (data?.notitype.includes("New Message From")) {  
+          let chatId = data.chatId ?? data.content;  
   
           if (chatId) {
             this.router.navigate([`/portals/communication/${this.userType}`], {

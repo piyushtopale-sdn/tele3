@@ -59,9 +59,8 @@ export class AuthService {
       localStorage.removeItem('menuTitle');
       localStorage.removeItem('staffData');
       localStorage.removeItem('type');
-
-
-    }  
+      localStorage.removeItem('activeMenu');
+      }  
     
     if(url!='')
     {
@@ -70,8 +69,22 @@ export class AuthService {
     }
     else
     {
-    this.router.navigate(['test/home-ar']);
+    this.router.navigate(['test_p/home-ar']);
     }    
   
+  }
+
+  clearStore(){
+    this.websocket.leaveRoom(JSON.parse(localStorage.getItem("loginData"))._id)
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      localStorage.removeItem('refresh');
+      localStorage.removeItem('loginData');
+      localStorage.removeItem('adminData');
+      localStorage.removeItem('profileData');
+      localStorage.removeItem('menuTitle');
+      localStorage.removeItem('staffData');
+      localStorage.removeItem('type');
+      localStorage.removeItem('activeMenu');
   }
 }

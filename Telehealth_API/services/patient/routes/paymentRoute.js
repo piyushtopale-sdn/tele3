@@ -7,6 +7,9 @@ import validate from "../controllers/payment/payment.validate";
 import { verifyRole, verifyToken } from "../helpers/verifyToken";
 const paymentRoute = express.Router();
 //This api created for the test
+/** Under Process */
+paymentRoute.post("/validate-merchant", AmazonPaymentController.validateMerchant);
+paymentRoute.post("/process-payment", AmazonPaymentController.processPayment);
 
 paymentRoute.use(verifyToken);
 paymentRoute.get("/get-payment-history", verifyRole(["superadmin", "patient"]), validate.getPaymentHistory, Payment.getPaymentHistory);
@@ -20,15 +23,6 @@ paymentRoute.get("/get-payment-details-by-id", verifyRole(["superadmin", "patien
 paymentRoute.put("/update-purchase-history", verifyRole(["superadmin"]), Payment.updatePurchaseHistory);
 
 
-/** Amazon Pay - Under Process - Not in Use*/
-paymentRoute.post("/verify-payment-amazon", verifyRole(["superadmin", "patient"]), AmazonPaymentController.verifyPayment);
-paymentRoute.post("/get-sdk-token", verifyRole(["superadmin", "patient"]), AmazonPaymentController.getSDKToken);
-paymentRoute.post("/payment-initiate-applepay", verifyRole(["superadmin", "patient"]), AmazonPaymentController.initiateApplePay);
-paymentRoute.post("/fetch-signature-details", verifyRole(["superadmin", "patient"]), AmazonPaymentController.fetchSignatureDetails);
-/** End */
-
-paymentRoute.post("/validate-merchant", verifyRole(["superadmin", "patient"]), AmazonPaymentController.validateMerchant);
-paymentRoute.post("/process-payment", verifyRole(["superadmin", "patient"]), AmazonPaymentController.processPayment);
 
 
 

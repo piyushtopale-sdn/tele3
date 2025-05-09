@@ -4,10 +4,8 @@
 import { sendResponse } from "../helpers/transmission";
 import department_info from "../models/department_info";
 import service_info from "../models/service_info";
-import unit_info from "../models/unit_info";
 import bcrypt from "bcrypt"
 import Http from "../helpers/httpservice"
-const httpService = new Http()
 import mongoose from "mongoose";
 // models
 import Counter from "../models/counter";
@@ -325,11 +323,7 @@ class StaffController {
             if (service.length > 0) {
                 await service_info.find({ _id: { $in: service } });
             }
-            let unit = staffFullDetails?.unit;
             
-            if (unit.length > 0) {
-                await unit_info.find({ _id: { $in: unit } });
-            }
             let doctorIds = staffFullDetails?.for_doctor;
             
             if (doctorIds.length > 0) {

@@ -3,10 +3,7 @@
 import { sendResponse } from "../helpers/transmission";
 import department_info from "../models/department_info";
 import service_info from "../models/service_info";
-import unit_info from "../models/unit_info";
 import bcrypt from "bcrypt"
-import Http from "../helpers/httpservice"
-const httpService = new Http()
 import mongoose from "mongoose";
 import Counter from "../models/counter";
 import PortalUser from "../models/portal_user";
@@ -315,9 +312,7 @@ class IndividualDoctorStaffController {
       }
       let unit = staffFullDetails?.unit;
       let unitdetails = [];
-      if (unit?.length > 0) {
-        unitdetails = await unit_info.find({ _id: { $in: unit } });
-      }
+     
       let doctorIds = staffFullDetails?.for_doctor;
       let doctorDetails = [];
       if (doctorIds?.length > 0) {

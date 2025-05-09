@@ -4,7 +4,7 @@
             <div class="left_part part col-md-6">
                 <div class="leftpart_inner">
                     <div class="logo" (click)="goToHomePage()" style="cursor: pointer">
-                        <img src="../../../../assets/img/logo.svg" style=" height: 100px;">
+                        <img alt="" src="../../../../assets/img/logo.svg" style=" height: 100px;">
                     </div>
                 </div>
             </div>
@@ -17,14 +17,25 @@
                         <div class="login_form_inner">
                             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
                                 <div class="login_img" (click)="goToHomePage()">
-                                    <img src="../../../../assets/img/login_img.svg">
+                                    <img alt="" src="../../../../assets/img/login_img.svg">
                                 </div>
                                 <div class="login_title">{{ "hello_again" | translate }}</div>
-                                <!-- <div class="login_title">{{ "welcome_to_test" | translate }} {{route_type}}!</div> -->
                                 <div class="title_wrapper">
                                     <h4 class="form_title">{{ "sign_in" | translate }}</h4>
                                     <div class="form_desc">{{ "enter_your_email_and_password_for_signing_in_thanks" | translate }} </div>
                                 </div>
+                                <div class="form_field_wrapper d-flex">
+                                    <h4 class="form_title">{{ "login_as" | translate }}</h4>
+                                    <div class="me-3 align-items-center"  style="text-align: center; margin-left: 15px;">  
+                                      <input type="radio" id="doctor" name="type" value="INDIVIDUAL"   [checked]="selectedType === 'INDIVIDUAL'"
+                                        (change)="onRoleChange('INDIVIDUAL')" style="cursor:pointer;">
+                                      <label for="doctor" class="ms-1" style="margin-right: 15px;">{{route_type}}</label>
+                                      
+                                      <input type="radio" id="admin" name="type" value="ADMIN"  [checked]="selectedType === 'ADMIN'"
+                                        (change)="onRoleChange('ADMIN')" style="cursor:pointer;">
+                                      <label for="admin" class="ms-1 me-2">{{"admin" | translate}}</label>
+                                    </div>
+                                  </div>
                                 <div class="form_field_wrapper consult_note mt-3">
                                     <label>{{ "email_address" | translate }}<span class="danger">*</span></label>
                                     <mat-form-field appearance="fill">
@@ -78,9 +89,6 @@
             <h4 class="modal-title text-center" id="modal-basic-title">
                 {{ "two_factor_authentication" | translate }}
             </h4>
-            <!-- <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                      <mat-icon>close</mat-icon>
-                  </button> -->
         </div>
         <div class="modal-body">
             <div class="two_factore_button">

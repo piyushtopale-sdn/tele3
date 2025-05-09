@@ -4,6 +4,7 @@ import { config, testEmailDomains, messageID } from "../config/constants"
 const { cryptoSecret } = config;
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
+import { randomInt } from 'crypto';
 const xlsx = require('xlsx');
 
 export const validationResponse = (req, res, next) => {
@@ -141,7 +142,7 @@ export const smsTemplateOTP = (otp2fa) => {
 }
 
 export const generate4DigitOTP = () => {
-    return Math.floor(1000 + Math.random() * 9000);
+    return randomInt(1000, 10000);
 }
 
 export const generateTenSaltHash = async (data) => {

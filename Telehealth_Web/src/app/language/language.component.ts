@@ -26,8 +26,6 @@ export class LanguageComponent implements OnInit {
     this.langChange.emit(lang); // Emit the selected language
   }
 
-  ngOnInit(): void {
-  
-  }
+  ngOnInit(): void { /* document why this method 'ngOnInit' is empty */ }
 
 }

@@ -51,6 +51,15 @@
                         isSubmitted &&
                         profileFields.get('centre_name').hasError('required')
                       ">{{ "field_is_required" | translate }}.</mat-error>
+                      <!-- Invalid characters -->
+                      <span class="text-danger" *ngIf="f['centre_name'].errors?.['onlyCharacters'] as error">
+                        {{ error.message }}
+                      </span>
+
+                      <!-- Length exceeded -->
+                      <span class="text-danger" *ngIf="f['centre_name'].errors?.['maxLength'] as error">
+                        {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+                      </span>
                   </div>
                 </div>
 
@@ -64,6 +73,15 @@
                     <mat-error *ngIf=" isSubmitted && profileFields.get('centre_name_arabic').hasError('required')">
                       {{ "field_is_required" | translate }}.
                     </mat-error>
+                     <!-- Invalid characters -->
+                     <span class="text-danger" *ngIf="f['centre_name_arabic'].errors?.['onlyCharacters'] as error">
+                      {{ error.message }}
+                    </span>
+
+                    <!-- Length exceeded -->
+                    <span class="text-danger" *ngIf="f['centre_name_arabic'].errors?.['maxLength'] as error">
+                      {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+                    </span>
                   </div>
                 </div>
 

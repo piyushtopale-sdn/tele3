@@ -29,19 +29,19 @@ export class FourPortalEntercodeComponent implements OnInit {
   logo: string = "assets/img/logo.svg";
   isResendDisabled: boolean = false; // Initially the resend button is enabled
 
-  isDisabled: Boolean = true;
+  isDisabled: boolean = true;
   route_type: any;
   routeTo: any;
   constructor(
-    private _coreService: CoreService,
-    private auth: AuthService,
-    private route: Router,
-    private location: Location,
-    private activateRoute: ActivatedRoute,
-    private fourPortalService: FourPortalService,
-    private loader: NgxUiLoaderService,
-    private insuranceManagementService: InsuranceManagementService,
-    private translate: TranslateService
+    private readonly _coreService: CoreService,
+    private readonly auth: AuthService,
+    private readonly route: Router,
+    private readonly location: Location,
+    private readonly activateRoute: ActivatedRoute,
+    private readonly fourPortalService: FourPortalService,
+    private readonly loader: NgxUiLoaderService,
+    private readonly insuranceManagementService: InsuranceManagementService,
+    private readonly translate: TranslateService
 
   ) { }
 
@@ -136,7 +136,7 @@ export class FourPortalEntercodeComponent implements OnInit {
       (res: any) => {
 
         let result = this._coreService.decryptObjectData({ data: res });
-        if (result.status == true) {
+        if (result.status) {
           this.loader.stop();
           this._coreService.showSuccess(" ", result.message);
         } else {
@@ -161,7 +161,7 @@ export class FourPortalEntercodeComponent implements OnInit {
       (res: any) => {
         let result = this._coreService.decryptObjectData({ data: res });
 
-        if (result.status == true) {
+        if (result.status) {
           this.loader.stop();
           this._coreService.showSuccess(" ", result.message);
         } else {
@@ -195,7 +195,7 @@ export class FourPortalEntercodeComponent implements OnInit {
 
             let encryptedData = { data: res };
             let result = this._coreService.decryptObjectData(encryptedData);
-            if (result.status == true) {
+            if (result.status) {
               this.loader.stop();
               this._coreService.setLocalStorage(
                 result.body?.user_details.adminData,
@@ -244,7 +244,7 @@ export class FourPortalEntercodeComponent implements OnInit {
 
             if (result.status) {
               this.loader.stop();
-              if (result.status == true) {
+              if (result.status) {
                 this.loader.stop();
                 this._coreService.setLocalStorage(
                   result.body?.user_details.adminData,
@@ -324,9 +324,9 @@ export class FourPortalEntercodeComponent implements OnInit {
 
   goToHomePage(){
     if(this.translate.store.currentLang === undefined || this.translate.store.currentLang === 'ar'){
-      this.route.navigate([`/test/home-ar`]);
+      this.route.navigate([`/test_p/home-ar`]);
     }else{
-      this.route.navigate([`/test/home-en`]);
+      this.route.navigate([`/test_p/home-en`]);
     }
   }
 }

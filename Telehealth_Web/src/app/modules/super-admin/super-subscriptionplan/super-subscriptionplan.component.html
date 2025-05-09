@@ -424,6 +424,9 @@
               <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['plan_name'].errors?.['required']">
                 {{ "field_is_required" | translate }}
               </span>
+              <span class='text-danger' *ngIf=" addPlan.controls['plan_name'].errors?.['onlyCharacters']">
+                {{ "enter_only_characters" | translate }}
+              </span>
             </div>
 
             <!-- Plan Name Arabic -->
@@ -435,14 +438,22 @@
               <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['plan_name_arabic'].errors?.['required']">
                 {{ "field_is_required" | translate }}
               </span>
+              <span class='text-danger' *ngIf=" addPlan.controls['plan_name_arabic'].errors?.['onlyCharacters']">
+                {{ "enter_only_characters" | translate }}
+              </span>
             </div>
 
             <!-- ✅ New Description Field -->
             <div class="form_field_wrapper mb-3">
               <label>{{ "description" | translate }}<span class="danger">*</span></label>
-              <mat-form-field appearance="fill">
-                <textarea matInput placeholder="{{ 'please_enter_description' | translate }}" formControlName="description" rows="3"></textarea>
-              </mat-form-field>
+              <div class="editor_inner">
+                <ngx-editor-menu [editor]="abouteditor" [toolbar]="toolbar"></ngx-editor-menu>
+                <ngx-editor 
+                  [editor]="abouteditor" 
+                  formControlName="description"
+                  [placeholder]="'please_enter_description' | translate"
+                ></ngx-editor>
+              </div>            
               <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['description'].errors?.['required']">
                 {{ "field_is_required" | translate }}
               </span>
@@ -450,10 +461,15 @@
 
             <div class="form_field_wrapper mb-3">
               <label>{{ "description_arabic" | translate }}<span class="danger">*</span></label>
-              <mat-form-field appearance="fill">
-                <textarea matInput placeholder="{{ 'please_enter_description' | translate }}" formControlName="descriptionArabic" rows="3"></textarea>
-              </mat-form-field>
-              <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['descriptionArabic'].errors?.['required']">
+              <div class="editor_inner">
+                <ngx-editor-menu [editor]="abouteditor_arabic" [toolbar]="toolbar"></ngx-editor-menu>
+                <ngx-editor 
+                  [editor]="abouteditor_arabic" 
+                  formControlName="description_arabic"
+                  [placeholder]="'please_enter_description' | translate"
+                ></ngx-editor>
+              </div>     
+              <span class="text-danger" *ngIf="isSubmitted && addPlan.controls['description_arabic'].errors?.['required']">
                 {{ "field_is_required" | translate }}
               </span>
             </div>
@@ -474,6 +490,9 @@
                             <mat-form-field appearance="fill">
                               <input type="number" matInput formControlName="max_number" min="0" (keydown)="validateNumberInput($event)" />
                             </mat-form-field>
+                            <span class="text-danger" *ngIf="isSubmitted && service.get('max_number')?.errors?.['required']">
+                              {{ "field_is_required" | translate }}
+                            </span>                            
                           </div>
                         </div>
                       </div>
@@ -495,6 +514,9 @@
                       <span matPrefix>SAR&nbsp;</span>
                       <input type="number" matInput formControlName="price" placeholder="0" min="0" (keydown)="validateNumberInput($event)" />
                     </mat-form-field>
+                    <span class="text-danger" *ngIf="isSubmitted && option.get('price')?.errors?.['required']">
+                      {{ "field_is_required" | translate }}
+                    </span>                    
                   </div>
                 </div>
                 <div class="col-md-3">
@@ -504,6 +526,9 @@
                       <mat-option value="monthly">{{ "Monthly" | translate }}</mat-option>
                       <mat-option value="yearly">{{ "Yearly" | translate }}</mat-option>
                     </mat-select>
+                    <span class="text-danger" *ngIf="isSubmitted && option.get('duration')?.errors?.['required']">
+                      {{ "field_is_required" | translate }}
+                    </span>                    
                   </div>
                 </div>
               </div>
@@ -607,18 +632,28 @@
             </div>
             <div class="form_field_wrapper mb-3">
               <label>{{ "description" | translate }}<span class="danger">*</span></label>
-              <mat-form-field appearance="fill">
-                <input type="text" placeholder="{{ 'description' | translate }}" matInput formControlName="description" />
-              </mat-form-field>
+              <div class="editor_inner">
+                <ngx-editor-menu [editor]="abouteditor" [toolbar]="toolbar"></ngx-editor-menu>
+                <ngx-editor 
+                  [editor]="abouteditor" 
+                  formControlName="description"
+                  [placeholder]="'please_enter_description' | translate"
+                ></ngx-editor>
+              </div>           
               <span class="text-danger" *ngIf="isSubmitted && editPlan.controls['description'].errors?.['required']">
                 {{"field_is_required" | translate}}
               </span>
             </div>
             <div class="form_field_wrapper mb-3">
               <label>{{ "description Arabic" | translate }}<span class="danger">*</span></label>
-              <mat-form-field appearance="fill">
-                <input type="text" placeholder="{{ 'descriptionArabic' | translate }}" matInput formControlName="descriptionArabic" />
-              </mat-form-field>
+              <div class="editor_inner">
+                <ngx-editor-menu [editor]="abouteditor_arabic" [toolbar]="toolbar"></ngx-editor-menu>
+                <ngx-editor 
+                  [editor]="abouteditor_arabic" 
+                  formControlName="descriptionArabic"
+                  [placeholder]="'please_enter_description' | translate"
+                ></ngx-editor>
+              </div>     
               <span class="text-danger" *ngIf="isSubmitted && editPlan.controls['descriptionArabic'].errors?.['required']">
                 {{"field_is_required" | translate}}
               </span>

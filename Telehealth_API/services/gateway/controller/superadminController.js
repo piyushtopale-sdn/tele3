@@ -192,21 +192,6 @@ export const allSubscriptionPlans = async (req, res) => {
     });
 }
 
-export const getPeriodicList = async (req, res) => {
-    const baseurl = BASEURL.superadminServiceUrl;
-    axios({
-        method: 'get',
-        url: `${baseurl}/superadmin/get-periodic-list`,
-        data: req.body,
-        params: req.query,
-    }).then(async function (response) {
-        await res.status(200).json({ data: response.data })
-    }).catch(async function (error) {
-        
-        await res.status(200).json({ data: error })
-    });
-}
-
 export const getSubscriptionPlanDetails = async (req, res) => {
     const baseurl = BASEURL.superadminServiceUrl;
     axios({

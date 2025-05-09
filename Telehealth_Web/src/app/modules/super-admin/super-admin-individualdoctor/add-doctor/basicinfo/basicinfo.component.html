@@ -46,6 +46,15 @@
                 <span class="text-danger" *ngIf="isSubmitted && f['first_name'].errors?.['required']">
                   {{ "enter_first_name" | translate }}*
                 </span>
+                <!-- Invalid characters -->
+                <span class="text-danger" *ngIf="f['first_name'].errors?.['onlyCharacters'] as error">
+                  {{ error.message }}
+                </span>
+
+                <!-- Length exceeded -->
+                <span class="text-danger" *ngIf="f['first_name'].errors?.['maxLength'] as error">
+                  {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+                </span>
               </div>
             </div>
             <div class="col-sm-6 col-md-4 mb-3">
@@ -57,6 +66,15 @@
                 <span class="text-danger" *ngIf="isSubmitted && f['first_name_arabic'].errors?.['required']">
                   {{ "enter_first_name" | translate }}*
                 </span>
+               <!-- Invalid characters -->
+               <span class="text-danger" *ngIf="f['first_name_arabic'].errors?.['onlyCharacters'] as error">
+                {{ error.message }}
+              </span>
+
+              <!-- Length exceeded -->
+              <span class="text-danger" *ngIf="f['first_name_arabic'].errors?.['maxLength'] as error">
+                {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+              </span>
               </div>
             </div>
             <div class="col-sm-6 col-md-4 mb-3">
@@ -84,6 +102,15 @@
                 <span class="text-danger" *ngIf="isSubmitted && f['last_name'].errors?.['required']">
                   {{ "enter_last_name" | translate }}*
                 </span>
+                <!-- Invalid characters -->
+               <span class="text-danger" *ngIf="f['last_name'].errors?.['onlyCharacters'] as error">
+                {{ error.message }}
+              </span>
+
+              <!-- Length exceeded -->
+              <span class="text-danger" *ngIf="f['last_name'].errors?.['maxLength'] as error">
+                {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+              </span>
               </div>
             </div>
             <div class="col-sm-6 col-md-4 mb-3">
@@ -95,6 +122,15 @@
                 <span class="text-danger" *ngIf="isSubmitted && f['last_name_arabic'].errors?.['required']">
                   {{ "enter_last_name" | translate }}*
                 </span>
+                 <!-- Invalid characters -->
+               <span class="text-danger" *ngIf="f['last_name_arabic'].errors?.['onlyCharacters'] as error">
+                {{ error.message }}
+              </span>
+
+              <!-- Length exceeded -->
+              <span class="text-danger" *ngIf="f['last_name_arabic'].errors?.['maxLength'] as error">
+                {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+              </span>
               </div>
             </div>
             <div class="col-sm-6 col-md-8">
@@ -445,7 +481,7 @@
                   <div class="license_date">
                     <mat-form-field class="example-full-width" appearance="fill">
                       <input matInput placeholder="{{ 'expiry_date' | translate }}" [matDatepicker]="picker3"
-                        formControlName="license_expiry_date" (click)="picker3.open()" readonly/>
+                        formControlName="license_expiry_date" (click)="picker3.open()" [min]="minDate" readonly/>
                       <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
                       <mat-datepicker #picker3></mat-datepicker>
                     </mat-form-field>             
@@ -453,6 +489,15 @@
                   <span class="text-danger"
                     *ngIf="isSubmitted && f['license_details'].get('license_expiry_date').errors?.['required']">{{
                     "enter_license_expiry_date" | translate }}*</span>
+                    <span
+                      class="text-danger"
+                      *ngIf="
+                        isSubmitted &&
+                        basicInfo.get('license_details.license_expiry_date')?.errors?.['notFutureDate']
+                      "
+                    >
+                    {{"License_expiry_must_future_date" | translate}}
+                    </span>
                 </div>
               </div>
               <div class="col-12">

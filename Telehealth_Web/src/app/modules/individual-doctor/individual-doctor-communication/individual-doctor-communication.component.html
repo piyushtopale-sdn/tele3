@@ -37,7 +37,7 @@
                       <span class="chat_img">
                         <div *ngIf="data?.isGroupChat; else singleimage">
                           <div>
-                            <img src="{{
+                            <img alt="" src="{{
                                 data?.profile_pic
                                   ? data?.profile_pic
                                   : '../../../../assets/img/GroupIcon.png'
@@ -46,7 +46,7 @@
                         </div>
                         <ng-template #singleimage>
                           <div>
-                            <img src="{{
+                            <img alt="" src="{{
                                 this.userID == data?.senderDetails?._id
                                   ? data?.receiverDetails[0]?.profile_picture ||
                                     '../../../../assets/img/default_user.png'
@@ -89,7 +89,9 @@
                               (data?.latestMessage?.attachments?.length > 0 && !data?.latestMessage?.isDeleted);
                               else noChat
                             ">
-                              <i class="fa fa-image"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip" viewBox="0 0 16 16">
+                              <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z"/>
+                            </svg><span style="font-style: italic;">Attachment</span>
                             </ng-container>
                             <ng-template #noChat>
                              <span style="font-style: italic;">{{ "this_message_has_been_deleted" | translate }}</span>
@@ -147,48 +149,15 @@
               <div class="profile_top">
                 <div class="left_part"  style="cursor: pointer;">
                   <span class="chat_img"  (click)="goToEMR(selectedChatUserId)">
-                    <img src="{{ selectedrecieverimage }}" />                   
+                    <img alt="" src="{{ selectedrecieverimage }}" />                   
                     <ng-container *ngIf="isOnline && checkGroup == false">
                       <span class="online"></span>
                     </ng-container>
                   </span>
                   <div class="chat_detail">         <!--click function to navigate Particular Users EMR Detail page -->
                     <div class="chat_title" (click)="goToEMR(selectedChatUserId)">{{ chatHeaderName }}</div>
-                    <!-- <div class="aboutus_msg">{{ chatWithName }}</div> -->
                   </div>
                 </div>
-                <!-- <div class="right_part">
-                  <div class="dropdown_content">
-                    <button
-                      class="btn more_vert"
-                      type="button"
-                      id="dropdownMenuButton2"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <mat-icon>more_vert</mat-icon>
-                    </button>
-
-                    <ul
-                      class="dropdown-menu"
-                      aria-labelledby="dropdownMenuButton2"
-                    >
-                      <li>
-                        <a
-                          class="dropdown-item"
-                          style="cursor: pointer"
-                          (click)="
-                            openVerticallyCenteredsecondDelete(
-                              deleteAllMessages
-                            )
-                          "
-                          >{{ "clear_chat" | translate }}</a
-                        >
-                      </li>
-
-                    </ul>
-                  </div>
-                </div> -->
               </div>
               <div class="profile_bottom">
                 <div class="chat" #chatContainer>
@@ -196,7 +165,7 @@
                     <div *ngFor="let data of messageData; let i = index">
                       <div *ngIf="shouldShowDate(i)">
                         <div class="chat-date-separator">
-                          {{ data.createdAt | date: 'MMM dd, yyyy' }}
+                          {{ data?.createdAt | date: 'dd MMMM yyyy' }}
                         </div>
                       </div>
                       <div class="chat_wrapper">
@@ -216,14 +185,14 @@
                                 data?.attachments[0].type == 'pneg' ||
                                 data?.attachments[0].type == 'heif' 
                               ">
-                               <img src="../../../../assets/img/image_.png"  (click)="
+                               <img alt="" src="../../../../assets/img/image_.png"  (click)="
                                   previewImage(data?.attachments[0].path)
                                 " class="cursor" style="width: 60px" />
                                 
                               </ng-container>
 
                               <ng-container *ngIf="data?.attachments[0].type == 'pdf'">
-                                <img src="../../../../assets/img/PDF_file_icon.svg.png" (click)="
+                                <img alt="" src="../../../../assets/img/PDF_file_icon.svg.png" (click)="
                                   previewImage(
                                     data?.attachments[0].path
                                   )
@@ -233,7 +202,7 @@
                                 data?.attachments[0].type == 'xls' ||
                                 data?.attachments[0].type == 'xlsx'
                               ">
-                                <img src="../../../../assets/img/xlsx_icon.svg.png" (click)="
+                                <img alt="" src="../../../../assets/img/xlsx_icon.svg.png" (click)="
                                   previewImage(
                                     data?.attachments[0].path
                                   )
@@ -251,20 +220,6 @@
                               {{ data.message }}
                             </div>
                             </ng-template>
-                            <!-- <button class="btn more_vert" type="button" id="dropdownMenuButton2"
-                              data-bs-toggle="dropdown" aria-expanded="false">
-                              <mat-icon>more_vert</mat-icon>
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
-                              <li>
-                                <a class="dropdown-item" style="cursor: pointer" (click)="
-                                    openVerticallyCenteredsecond(
-                                      deleteMessage,
-                                      data
-                                    )
-                                  ">{{ "delete_message" | translate }}</a>
-                              </li>
-                            </ul> -->
                           </div>
                           <div class="date_time">
                             {{ data?.createdAt | date: "dd/MM/yyyy | HH:mm" }}
@@ -282,13 +237,13 @@
                                   data?.attachments[0].type == 'jpeg' ||
                                   data?.attachments[0].type == 'pneg'
                                 ">
-                                <img src="../../../../assets/img/image_.png"  (click)="
+                                <img alt="" src="../../../../assets/img/image_.png"  (click)="
                                     previewImage(data?.attachments[0].path)
                                   " class="cursor" style="width: 60px;cursor: pointer;" />
                               </ng-container>
 
                               <ng-container *ngIf="data?.attachments[0].type == 'pdf'">
-                                <img src="../../../../assets/img/PDF_file_icon.svg.png" (click)="
+                                <img alt="" src="../../../../assets/img/PDF_file_icon.svg.png" (click)="
                                     previewImage(
                                       data?.attachments[0].path
                                     )
@@ -299,7 +254,7 @@
                                   data?.attachments[0].type == 'xls' ||
                                   data?.attachments[0].type == 'xlsx'
                                 ">
-                                <img src="../../../../assets/img/xlsx_icon.svg.png" (click)="
+                                <img alt="" src="../../../../assets/img/xlsx_icon.svg.png" (click)="
                                     previewImage(
                                       data?.attachments[0].path
                                       
@@ -353,10 +308,10 @@
                       <i class="fa-solid fa-xmark"></i>
                     </a>
                     <div class="imgBox" *ngIf="attachmentType !== 'application/pdf'">
-                      <img [src]="attachmentFile" class="img-fluid" style="width: 60px; border-radius: 4px;" />
+                      <img alt="" [src]="attachmentFile" class="img-fluid" style="width: 60px; border-radius: 4px;" />
                     </div>
                     <div class="imgBox" *ngIf="attachmentType === 'application/pdf'">
-                      <img src="../../../../assets/img/PDF_file_icon.svg.png" class="img-fluid"
+                      <img alt="" src="../../../../assets/img/PDF_file_icon.svg.png" class="img-fluid"
                         style="width: 25px; border-radius: 4px;" />
                     </div>
                   </div>
@@ -373,20 +328,6 @@
                       </div>
                       <input id="text-message" type="text" formControlName="message" placeholder="Type something"
                         [ngClass]="{ 'audio-recording': isAudioRecording }" [value]="audioRecordedTime" />
-
-                      <!-- <div *ngIf="isAudioRecording">{{audioRecordedTime}}</div> -->
-
-                      <!-- <mat-icon class="camera">photo_camera</mat-icon> -->
-                      <!-- <mat-icon
-                        class="mic"
-                        [ngClass]="{ voice_btn_active: isAudioRecording }"
-                        (click)="
-                          !isAudioRecording
-                            ? startAudioRecording()
-                            : stopAudioRecording()
-                        "
-                        >mic_none</mat-icon
-                      > -->
                     </div>
                     <div class="primary_btn">
                       <button  type="submit" class="btn btn-primary" (click)="sendMessage()">
@@ -446,11 +387,11 @@
                       <span class="chat_img">
                         <div>
                           <div *ngIf="element?.profile_pic">
-                            <img [src]="element?.profile_pic" />
+                            <img alt="" [src]="element?.profile_pic" />
                             <span *ngIf="element?.isOnline" class="isOnline"></span>
                           </div>
                           <div *ngIf="!element?.profile_pic">
-                            <img src="../../../../assets/img/default_user.png" />
+                            <img alt="" src="../../../../assets/img/default_user.png" />
                             <span *ngIf="element?.isOnline" class="isOnline"></span>
                           </div>
                         </div>

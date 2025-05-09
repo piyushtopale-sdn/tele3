@@ -249,13 +249,15 @@ export class AvailabilityComponent implements OnInit {
         start_time: element.start_time,
         end_time: element.end_time,
       });
+    
       let date = this.formatDate(element.date);
-      unAvlOnline.push({
-        date: date,
-        start_time: time.start_time,
-        end_time: time.end_time,
-      });
-    });
+        unAvlOnline.push({
+          date: date,
+          start_time: time.start_time,
+          end_time: time.end_time,
+        });
+      }
+    );
 
     //-------------Online Type--------------------------
     let appointmenTypeOnline = {
@@ -504,8 +506,11 @@ export class AvailabilityComponent implements OnInit {
       date: [""],
       start_time: [""],
       end_time: [""],
-    });
+    })
   }
+  
+
+  
 
   addNewUnAvailabilty(add_for: string) {
     if (add_for === "all") {
@@ -777,4 +782,50 @@ export class AvailabilityComponent implements OnInit {
     }
     event.target.value = input;
   }
+
+  onClick(event: any, day: string, index: number): void {
+    const doctor_id = localStorage.getItem("portal_user");
+    // const id = JSON.parse(doctor_id);
+  
+    const data = {
+      portal_user_id: doctor_id,
+      availability: {
+        [day]: event.checked
+      }
+    };
+  
+    this.service.ChangeAvailability(data).subscribe((res) => {
+      const response = this.coreService.decryptObjectData({ data: res });
+      const dayTimes = response.data.week_days[0]; 
+  
+      const formGroup = this.weekDaysOnline.at(index);
+      if (event.checked && dayTimes) {
+  
+        const startRaw = dayTimes[`${day}_start_time`];
+        const endRaw = dayTimes[`${day}_end_time`];
+
+  
+        const formatTime = (time: string): string => {
+          if (!time || time.length !== 4) return '';
+          return time.slice(0, 2) + ':' + time.slice(2);
+        };
+  
+        const startFormatted = formatTime(startRaw);
+        const endFormatted = formatTime(endRaw);
+
+  
+        formGroup.patchValue({
+          [`${day}_start_time`]: startFormatted,
+          [`${day}_end_time`]: endFormatted
+        });
+      }
+      else{
+        formGroup.patchValue({
+          [`${day}_start_time`]: "00:00",
+          [`${day}_end_time`]: "00:00"
+        });
+      }
+    });
+  }
+ 
 }

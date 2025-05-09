@@ -1,4 +1,3 @@
-import { IndiviualDoctorService } from "src/app/modules/individual-doctor/indiviual-doctor.service";
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -6,7 +5,6 @@ import { ToastrService } from "ngx-toastr";
 import { SuperAdminService } from "src/app/modules/super-admin/super-admin.service";
 import { CoreService } from "src/app/shared/core.service";
 import Validation from "src/app/utility/validation";
-import { responsiveLayout } from "@igniteui/material-icons-extended";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import intlTelInput from "intl-tel-input";
 import { FourPortalService } from "../four-portal.service";
@@ -96,15 +94,14 @@ export class FourPortalViewProfileComponent implements OnInit {
   hide6 = true;
   license_Picture: any;
   constructor(
-    private toastr: ToastrService,
-    private sadminService: SuperAdminService,
-    private coreService: CoreService,
-    private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute,
-    private indiviualDoctorService: IndiviualDoctorService,
-    private router: Router,
-    private modalService: NgbModal,
-    private fourportalService: FourPortalService
+    private readonly toastr: ToastrService,
+    private readonly sadminService: SuperAdminService,
+    private readonly coreService: CoreService,
+    private readonly fb: FormBuilder,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly router: Router,
+    private readonly modalService: NgbModal,
+    private readonly fourportalService: FourPortalService
 
   ) {
     this.changePasswordForm = this.fb.group(
@@ -175,7 +172,6 @@ export class FourPortalViewProfileComponent implements OnInit {
 
 
     let loginData = JSON.parse(localStorage.getItem("loginData"));
-    let adminData = JSON.parse(localStorage.getItem("adminData"));
 
     this.userRole = loginData?.role;
     this.userType = loginData?.type
@@ -198,7 +194,6 @@ export class FourPortalViewProfileComponent implements OnInit {
     this.sadminService.spokenLanguage().subscribe((res) => {
       let response = this.coreService.decryptObjectData({ data: res });
 
-      // this.spokenLanguages = response.body?.spokenLanguage;
       const arr = response.body?.spokenLanguage;
       arr.map((curentval: any) => {
         this.spokenLanguages.push({
@@ -213,7 +208,7 @@ export class FourPortalViewProfileComponent implements OnInit {
   }
   /* Staff Edit profile */
   handleEditProfile() {
-    if (this.userRole == "INDIVIDUAL") {
+    if (this.userRole == "INDIVIDUAL" || this.userRole == "ADMIN") {
       // this.router.navigate([`/portals/viewProfile/${this.route_type}`])
       this.router.navigate([`/portals/editProfile/${this.route_type}`])
      
@@ -234,7 +229,7 @@ export class FourPortalViewProfileComponent implements OnInit {
     formData.append("portalType", this.userType);
 
       this.staff_profile_file = formData;
-      var reader = new FileReader();
+      let reader = new FileReader();
       reader.onload = (event: any) => {
         this.staff_profile = event.target.result;
       };
@@ -307,9 +302,11 @@ export class FourPortalViewProfileComponent implements OnInit {
     this.fourportalService.editStaff(row).subscribe({
       next: (res) => {
         let result = this.coreService.decryptObjectData({ data: res });
-        this.toastr.success("Update successfully")
-        this.getstaffdetails(this.adminId);
-        this.handleClose();
+        if(result.status){
+          this.toastr.success("Update successfully")
+          this.getstaffdetails(this.adminId);
+          this.handleClose();
+        }
       },
       error: (err) => {
         console.log(err);
@@ -320,7 +317,6 @@ export class FourPortalViewProfileComponent implements OnInit {
   public handleClose() {
     let modalDespose = this.getDismissReason(1);
     this.modalService.dismissAll(modalDespose);
-    // this.staffID = "";
   }
 
   openVerticallyCenterededitstaff(editstaffcontent: any, id: any) {
@@ -343,20 +339,6 @@ export class FourPortalViewProfileComponent implements OnInit {
         let result = this.coreService.decryptObjectData({ data: res });
         this.staff_details = result?.body
         this.selectedLanguages = this.staff_details?.in_profile?.language;
-        
-        // this.assign_doctor = result?.body?.doctorDetails.map((ele) => {
-        //   return ele?.full_name;
-        // })
-        // this.department_forStaff = result?.body?.departdetails.map((ele) => {
-        //   return ele?.department;
-        // })
-        // this.service_forStaff = result?.body?.servicedetails.map((ele) => {
-        //   return ele?.service;
-        // })
-        // this.unit_forStaff = result?.body?.unitdetails.map((ele) => {
-        //   return ele?.unit;
-        // })
-
 
         this.staff_ID = result.body.in_profile._id
         let in_profile = result.body.in_profile;
@@ -478,23 +460,7 @@ export class FourPortalViewProfileComponent implements OnInit {
       }
     });
   }
-  getLocations(data: any) {
-    let reqdata={
-      portal_user_id:this.adminId,
-      type: this.userType
-    }
-    this.fourportalService.getLocations(reqdata).subscribe((res) => {
-      let response = this.coreService.decryptObjectData({ data: res });
-      if (response.status == true) {
-        if (response.data.length != 0) {
-          this.locationList = response?.data[0]?.hospital_or_clinic_location;
-          this.handleLocationChange(this.locationList[0].hospital_id)
-          this.handleSelectedLocationChangeFees(this.locationList[0].hospital_id)
-        }
-      }
-    });
-  }
-
+ 
   selected_Location: any
   handleSelectedLocationChangeFees(location_id) {
     this.selected_Location = location_id
@@ -577,13 +543,13 @@ export class FourPortalViewProfileComponent implements OnInit {
     this.availability = obj;
   }
   onFocus = () => {
-    var getCode = this.iti.getSelectedCountryData().dialCode;
+    let getCode = this.iti.getSelectedCountryData().dialCode;
     this.selectedCountryCode = "+" + getCode;
   };
   //Calling address api's
   autoComplete: google.maps.places.Autocomplete;
   getCountrycodeintlTelInput() {
-    var country_code = '';
+    let country_code = '';
     const countryData = (window as any).intlTelInputGlobals.getCountryData();
     for (let i = 0; i < countryData.length; i++) {
       if (countryData[i].dialCode === this.countrycodedb.split("+")[1]) {
@@ -626,9 +592,6 @@ export class FourPortalViewProfileComponent implements OnInit {
         });
       })
     }
-  }
-  ngAfterViewInit() {
-
   }
 
   countryList: any[] = [];
@@ -961,7 +924,6 @@ export class FourPortalViewProfileComponent implements OnInit {
           this.changePasswordForm.reset();
         } else {
           this.toastr.error(response.message);
-          // this.toastr.error("Current Password is incorrect");
         }
       },
       (err) => {

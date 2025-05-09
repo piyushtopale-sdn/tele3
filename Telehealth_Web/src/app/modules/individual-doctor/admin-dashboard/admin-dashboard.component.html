@@ -38,7 +38,7 @@
                 </div>
                 <div class="right" (click)="exportTotalAppointmentList('click')" ngbTooltip="Export total appointment list">
                   <div class="counter_img">
-                    <img src="assets/img/dashboard/dashboard42.svg" />
+                    <img alt="" src="assets/img/dashboard/dashboard42.svg" />
                   </div>
                 </div>
               </div>
@@ -55,7 +55,7 @@
                 </div>
                 <div class="right" (click)="exportLabOrderList('click')" ngbTooltip="Export total lab order list">
                   <div class="counter_img">
-                    <img src="assets/img/dashboard/dashboard47.svg" />
+                    <img alt="" src="assets/img/dashboard/dashboard47.svg" />
                   </div>
                 </div>
               </div>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="right" (click)="exportRadioOrderList('click')" ngbTooltip="Export total radio order list">
                   <div class="counter_img">
-                    <img src="assets/img/dashboard/dashboard2.svg" />
+                    <img alt="" src="assets/img/dashboard/dashboard2.svg" />
                   </div>
                 </div>
               </div>
@@ -85,7 +85,7 @@
       </div>
       <div class="row mt20">
         <ng-container>
-          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4" (click)="onTabClick('total_unbooked_lab_orders')">
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4 clickable-card" (click)="onTabClick('total_unbooked_lab_orders')">
             <div class="cust_col light_violet">
               <div class="cust_col_inner header-card-inner">
                 <div class="left">
@@ -96,7 +96,7 @@
                 </div>
                 <div class="right" (click)="exportToExcelUnbookedLab('click')" ngbTooltip="Export unbooked lab test list">
                   <div class="counter_img">
-                    <img src="assets/img/dashboard/dashboard25.svg" />
+                    <img alt="" src="assets/img/dashboard/dashboard25.svg" />
                   </div>
                 </div>
               </div>
@@ -104,7 +104,7 @@
           </div>
         </ng-container>        
         <ng-container>
-          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4" (click)="onTabClick('total_unbooked_radiology_orders')" >
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4 clickable-card" (click)="onTabClick('total_unbooked_radiology_orders')" >
             <div class="cust_col light_skyblue">
               <div class="cust_col_inner header-card-inner">
   
@@ -116,7 +116,7 @@
                 </div>
                 <div class="right" (click)="exportToExcelUnbookedRadio('click')" ngbTooltip="Export unbooked radiology test list">
                   <div class="counter_img">
-                    <img src="assets/img/dashboard/dashboard43.svg" />
+                    <img alt="" src="assets/img/dashboard/dashboard43.svg" />
                   </div>
                 </div>
               </div>
@@ -124,7 +124,7 @@
           </div>
         </ng-container>
         <ng-container>
-          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4" (click)="onTabClick('total_unbooked_medicine_orders')" >
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4 clickable-card" (click)="onTabClick('total_unbooked_medicine_orders')" >
             <div class="cust_col light_yellow">
               <div class="cust_col_inner header-card-inner">
                 <div class="left" >
@@ -133,7 +133,7 @@
                 </div>
                 <div class="right" (click)="exportToExcelUnbookedMedicine('click')" ngbTooltip="Export unbooked medicine list">
                   <div class="counter_img">
-                    <img src="assets/img/dashboard/dashboard4.svg" />
+                    <img alt="" src="assets/img/dashboard/dashboard4.svg" />
                   </div>
                 </div>
               </div>
@@ -157,7 +157,7 @@
                 </div>
                 <div class="right" (click)="exportLastLoginData()" ngbTooltip="Export Last Login">
                   <div class="counter_img">
-                    <img src="assets/img/dashboard/dashboard43.svg" />
+                    <img alt="" src="assets/img/dashboard/dashboard43.svg" />
                   </div>
                 </div>
               </div>
@@ -179,7 +179,7 @@
                 </div>
                 <div class="right" (click)="exportPatientLeftDocData()" ngbTooltip="Export Patients Left Doctor">
                   <div class="counter_img">
-                    <img src="assets/img/dashboard/dashboard25.svg" />
+                    <img alt="" src="assets/img/dashboard/dashboard25.svg" />
                   </div>
                 </div>
               </div>
@@ -196,7 +196,7 @@
                 </div>
                 <div class="right" (click)="exportPatientAssignDoctorData()" ngbTooltip="Export Patients having Assign Doctor">
                   <div class="counter_img">
-                    <img src="assets/img/dashboard/dashboard47.svg" />
+                    <img alt="" src="assets/img/dashboard/dashboard47.svg" />
                   </div>
                 </div>
               </div>
@@ -227,33 +227,6 @@
                 <div class="main_title" *ngIf="tabLabel === 'total_lab_request'">
                   {{ "total_lab_request" | translate }}
                 </div>
-
-                <!-- <div class="top_item">
-                  <div class="form_field_wrapper">
-                    <label>{{ "status" | translate }}</label>
-                    <mat-form-field appearance="fill">
-                      <mat-select [(ngModel)]="selectedStatus" placeholder="Appointments Status"
-                        (selectionChange)="handleSelectFliterList($event)">
-                        <mat-option value="ALL">{{ "all" | translate }}</mat-option>
-                        <mat-option value="PENDING">{{
-                          "new_order" | translate
-                          }}</mat-option>
-                        <mat-option value="APPROVED">{{
-                          "approved" | translate
-                          }}</mat-option>
-                        <mat-option value="CANCELLED">{{
-                          "cancelled" | translate
-                          }}</mat-option>
-                        <mat-option value="UNDER_PROCESSED">{{
-                          "under_process" | translate
-                          }}</mat-option>
-                        <mat-option value="COMPLETED">{{
-                          "completed" | translate
-                          }}</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-                </div> -->
               </div>
 
               <div class="bottom_bar" *ngIf="tabLabel === 'total_unbooked_medicine_orders'">
@@ -566,7 +539,7 @@
                             </th>
                             <td mat-cell *matCellDef="let element">
                               <span class="user_image_wrapper">
-                                <img class="user_image" [src]="
+                                <img alt="" class="user_image" [src]="
                                     element?.patientProfile
                                       ? element?.patientProfile
                                       : '../../../../../assets/img/default_user.png'

@@ -5,10 +5,7 @@
 
 
 .text-start{
-    display:flex;
-    }
-
-    .text-start{
+        display:flex;
         .item{
            
                 .btn{
@@ -23,7 +20,6 @@
 
 .doctor_appointment{
     .top_bar{
-        // justify-content: flex-end;
             .content_wrap{
                 flex-wrap: wrap;
                 .top_item{
@@ -91,7 +87,6 @@
             }
     }
     .bottom_bar{
-        // margin-top: -65px;
         .appointment_tab{
             .mat-tab-header{
                 width: 11%;
@@ -135,7 +130,6 @@
                             background-color: $bodycolor;
                             .mat-tab-label-content{
                                 .btn_svg {
-                                    // background-color: #EBF0F4;
                                     svg{
                                         fill: #ffffff;
                                     }
@@ -145,8 +139,6 @@
                     }
                     .mat-ink-bar{
                         display: none;
-                    }
-                    .mat-ink-bar{
                         background-color: $bodycolor;
                     }
                 }
@@ -478,10 +470,6 @@
             }
         }
         .choose_detail{
-            // display: flex;
-            // justify-content: space-between;
-            // align-items: flex-end;
-            // flex-wrap: wrap;
             .nearest_slot{
                 margin: 0 0 10px;
                 p{
@@ -532,7 +520,6 @@
                             white-space: break-spaces;
                             color: #214469;        
                             line-height: 22px;
-                            white-space: break-spaces;
                         }
                         &:hover{
                             background-color: $bodycolor;

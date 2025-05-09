@@ -22,7 +22,16 @@
                       <div class="row">
                         <div class="item">
                           <div class="form_field_wrapper">
-                            <label>{{ "sun" | translate }}</label>
+                            <mat-checkbox 
+                            [checked]="!(
+                              weekDaysOnline.value[0].sun_start_time === ':' ||
+                              weekDaysOnline.value[0].sun_end_time === ':' ||
+                              (weekDaysOnline.value[0].sun_start_time === '00:00' && weekDaysOnline.value[0].sun_end_time === '00:00')
+                            )"
+                            (change)="onClick($event, 'sun', i)"
+                            ngbTooltip="{{'off_days' | translate}}"
+                            ></mat-checkbox>
+                            <label class="checkbox-label">{{ "sun" | translate }}</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -58,7 +67,16 @@
 
                         <div class="item">
                           <div class="form_field_wrapper">
-                            <label>{{ "mon" | translate }}</label>
+                            <mat-checkbox 
+                            [checked]="!(
+                              weekDaysOnline.value[0].mon_start_time === ':' ||
+                              weekDaysOnline.value[0].mon_end_time === ':' ||
+                              (weekDaysOnline.value[0].mon_start_time === '00:00' && weekDaysOnline.value[0].mon_end_time === '00:00')
+                            )"
+                            (change)="onClick($event, 'mon', i)"
+                            ngbTooltip="{{'off_days' | translate}}"
+                            ></mat-checkbox>
+                            <label class="checkbox-label">{{ "mon" | translate }}</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -92,7 +110,16 @@
                         </div>
                         <div class="item">
                           <div class="form_field_wrapper">
-                            <label>{{ "tue" | translate }}</label>
+                            <mat-checkbox 
+                            [checked]="!(
+                              weekDaysOnline.value[0].tue_start_time === ':' ||
+                              weekDaysOnline.value[0].tue_end_time === ':' ||
+                              (weekDaysOnline.value[0].tue_start_time === '00:00' && weekDaysOnline.value[0].tue_end_time === '00:00')
+                            )"
+                            (change)="onClick($event, 'tue', i)"
+                            ngbTooltip="{{'off_days' | translate}}"
+                            ></mat-checkbox>
+                            <label class="checkbox-label">{{ "tue" | translate }}</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -126,7 +153,16 @@
                         </div>
                         <div class="item">
                           <div class="form_field_wrapper">
-                            <label>{{ "wed" | translate }}</label>
+                            <mat-checkbox 
+                            [checked]="!(
+                              weekDaysOnline.value[0].wed_start_time === ':' ||
+                              weekDaysOnline.value[0].wed_end_time === ':' ||
+                              (weekDaysOnline.value[0].wed_start_time === '00:00' && weekDaysOnline.value[0].wed_end_time === '00:00')
+                            )"
+                            (change)="onClick($event, 'wed', i)"
+                            ngbTooltip="{{'off_days' | translate}}"
+                            ></mat-checkbox>
+                            <label class="checkbox-label">{{ "wed" | translate }}</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -160,7 +196,16 @@
                         </div>
                         <div class="item">
                           <div class="form_field_wrapper">
-                            <label>{{ "thu" | translate }}</label>
+                            <mat-checkbox 
+                            [checked]="!(
+                              weekDaysOnline.value[0].thu_start_time === ':' ||
+                              weekDaysOnline.value[0].thu_end_time === ':' ||
+                              (weekDaysOnline.value[0].thu_start_time === '00:00' && weekDaysOnline.value[0].thu_end_time === '00:00')
+                            )"
+                            (change)="onClick($event, 'thu', i)"
+                            ngbTooltip="{{'off_days' | translate}}"
+                            ></mat-checkbox>
+                            <label class="checkbox-label">{{ "thu" | translate }}</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -194,7 +239,16 @@
                         </div>
                         <div class="item">
                           <div class="form_field_wrapper">
-                            <label>{{ "fri" | translate }}</label>
+                            <mat-checkbox 
+                            [checked]="!(
+                              weekDaysOnline.value[0].fri_start_time === ':' ||
+                              weekDaysOnline.value[0].fri_end_time === ':' ||
+                              (weekDaysOnline.value[0].fri_start_time === '00:00' && weekDaysOnline.value[0].fri_end_time === '00:00')
+                            )"
+                            (change)="onClick($event, 'fri', i)"
+                            ngbTooltip="{{'off_days' | translate}}"
+                            ></mat-checkbox>
+                            <label class="checkbox-label">{{ "fri" | translate }}</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -228,7 +282,16 @@
                         </div>
                         <div class="item">
                           <div class="form_field_wrapper">
-                            <label>{{ "sat" | translate }}</label>
+                            <mat-checkbox 
+                            [checked]="!(
+                              weekDaysOnline.value[0].sat_start_time === ':' ||
+                              weekDaysOnline.value[0].sat_end_time === ':' ||
+                              (weekDaysOnline.value[0].sat_start_time === '00:00' && weekDaysOnline.value[0].sat_end_time === '00:00')
+                            )"
+                            (change)="onClick($event, 'sat', i)"
+                            ngbTooltip="{{'off_days' | translate}}"
+                            ></mat-checkbox>
+                            <label class="checkbox-label">{{ "sat" | translate }}</label>
                             <mat-form-field appearance="fill">
                               <input
                                 matInput
@@ -323,7 +386,7 @@
                         <span
                           class="text-danger"
                           *ngIf="isSubmitted && unavailabilityValidation(i,'OnlineForm').controls['date']
-                            .errors?.['required']"
+                            ?.errors?.['required']"
                           >{{ "select_date" | translate }}*</span
                         >
                       </div>

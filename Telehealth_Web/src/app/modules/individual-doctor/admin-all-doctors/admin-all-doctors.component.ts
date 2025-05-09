@@ -1,13 +1,12 @@
 import {
   Component,
-  OnInit,
   ViewEncapsulation,
   ViewChild,
   TemplateRef,
 } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CoreService } from "src/app/shared/core.service";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
@@ -26,9 +25,6 @@ export interface PendingPeriodicElement {
   email: string;
   phonenumber: string;
   province: string;
-  // department: string;
-  // service: string;
-  // unit: string;
   experience: string;
 }
 
@@ -108,12 +104,12 @@ export class AdminAllDoctorsComponent {
   @ViewChild("activeOrInactivemodal") activeOrInactivemodal: TemplateRef<any>;
   @ViewChild("statusTab", { static: false }) tab: MatTabGroup;
   constructor(
-    private modalService: NgbModal,
-    private doctorService: SuperAdminIndividualdoctorService,
-    private coreService: CoreService,
-    private toastr: ToastrService,
-    private route: Router,
-    private loader: NgxUiLoaderService
+    private readonly modalService: NgbModal,
+    private readonly doctorService: SuperAdminIndividualdoctorService,
+    private readonly coreService: CoreService,
+    private readonly toastr: ToastrService,
+    private readonly route: Router,
+    private readonly loader: NgxUiLoaderService
   ) {
     this.loginrole = this.coreService.getLocalStorage("adminData").role;   
   }
@@ -129,13 +125,7 @@ export class AdminAllDoctorsComponent {
     let adminData = JSON.parse(localStorage.getItem("loginData"));
     this.superAdminId = adminData?._id;
     this.resetDate();
-    // this.getDoctorsList(`${this.sortColumn}:${this.sortOrder}`);
     this.getDoctorsList(`${this.sortColumn}:${this.sortOrder}`);
-
-
-    // setTimeout(() => {
-    //   this.checkInnerPermission();
-    // }, 300);
   }
 
 
@@ -149,14 +139,15 @@ export class AdminAllDoctorsComponent {
 
       let menuID = sessionStorage.getItem("currentPageMenuID");
       let checkData = this.findObjectByKey(userPermission, "parent_id", menuID)
+      let checkSubmenu;
       if (checkData) {
-        if (checkData.isChildKey == true) {
-          var checkSubmenu = checkData.submenu;
+        if (checkData.isChildKey) {
+          checkSubmenu = checkData.submenu;
           if (checkSubmenu.hasOwnProperty("pharmacy")) {
             this.innerMenuPremission = checkSubmenu['pharmacy'].inner_menu;
           } 
         } else {
-          var checkSubmenu = checkData.submenu;
+          checkSubmenu = checkData.submenu;
           let innerMenu = [];
           for (let key in checkSubmenu) {
             innerMenu.push({ name: checkSubmenu[key].name, slug: key, status: true });

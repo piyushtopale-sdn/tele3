@@ -1,25 +1,22 @@
 import {
   Component,
-  OnInit,
   ViewEncapsulation,
   ViewChild,
   ElementRef,
   ChangeDetectorRef,
 } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
-import { MatTableDataSource } from "@angular/material/table";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { CoreService } from "src/app/shared/core.service";
 import {
-  FormArray,
+  
   FormBuilder,
   FormGroup,
   FormControl,
   Validators,
 } from "@angular/forms";
-import { PatientService } from "src/app/modules/patient/patient.service";
 import { DatePipe } from "@angular/common";
 import { DateAdapter, ThemePalette } from "@angular/material/core";
 import * as XLSX from "xlsx";
@@ -177,17 +174,17 @@ export class AdminAllRequestComponent {
   selecteduser: any ='all';
 
   constructor(
-    private modalService: NgbModal,
-    private fb: FormBuilder,
-    private labimagingdentaloptical :LabimagingdentalopticalService,
-    private cdr: ChangeDetectorRef,
-    private coreService: CoreService,
-    private toastr: ToastrService,
-    private router: Router,
-    private loader: NgxUiLoaderService,
-    private datePipe: DatePipe,
-    private fourPortalService: FourPortalService,
-    private dateAdapter: DateAdapter<Date>    ,
+    private readonly modalService: NgbModal,
+    private readonly fb: FormBuilder,
+    private readonly labimagingdentaloptical :LabimagingdentalopticalService,
+    private readonly cdr: ChangeDetectorRef,
+    private readonly coreService: CoreService,
+    private readonly toastr: ToastrService,
+    private readonly router: Router,
+    private readonly loader: NgxUiLoaderService,
+    private readonly datePipe: DatePipe,
+    private readonly fourPortalService: FourPortalService,
+    private readonly dateAdapter: DateAdapter<Date>    ,
 
   ) {
 
@@ -260,20 +257,18 @@ export class AdminAllRequestComponent {
     if (userPermission) {
       let menuID = sessionStorage.getItem("currentPageMenuID");
       let checkData = this.findObjectByKey(userPermission, "parent_id", menuID)
-
+      let checkSubmenu;
       if (checkData) {
-        if (checkData.isChildKey == true) {
+        if (checkData.isChildKey) {
 
-          var checkSubmenu = checkData.submenu;
+           checkSubmenu = checkData.submenu;
 
           if (checkSubmenu.hasOwnProperty("claim-process")) {
             this.innerMenuPremission = checkSubmenu['claim-process'].inner_menu;
 
-          } else {
-          }
-
+          } 
         } else {
-          var checkSubmenu = checkData.submenu;
+           checkSubmenu = checkData.submenu;
 
           let innerMenu = [];
 
@@ -330,7 +325,7 @@ export class AdminAllRequestComponent {
       status: this.selectedStatus,
       date: this.dateFilter,
       serviceType: this.serviceType,
-      labRadiologyId: this.selecteduser ? this.selecteduser :"all",
+      labRadiologyId: this.selecteduser ?? "all",
       fromDate: this.fromDate,
       toDate: this.toDate,
       searchText : this.searchText
@@ -349,7 +344,7 @@ export class AdminAllRequestComponent {
 
 
   handleSelectFliterList(event: any) {
-    this.selectedStatus = event.value ?  event.value :"all";
+    this.selectedStatus = event.value ?? "all";
     this.getAppointmentlist();
   }
 
@@ -490,7 +485,7 @@ export class AdminAllRequestComponent {
       this.coreService.showInfo("", "Please select lab/radio!")
       return
     }
-    var data: any = [];
+    let data: any = [];
     this.pageSize = 0;
 
     let reqData = {
@@ -508,7 +503,7 @@ export class AdminAllRequestComponent {
         let result = this.coreService.decryptObjectData({ data: res });    
         if (result.status) {
           this.loader.stop();
-          var array = [
+          let array = [
             "Patient Name",
             "Patient MRN Number",
             "Prescribed By",
@@ -519,7 +514,7 @@ export class AdminAllRequestComponent {
           ];
           data = result.data.array
           data.unshift(array);
-          var fileName = 'OrderList.xlsx';
+          let fileName = 'OrderList.xlsx';
           const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
           /* generate workbook and add the worksheet */
           const wb: XLSX.WorkBook = XLSX.utils.book_new();

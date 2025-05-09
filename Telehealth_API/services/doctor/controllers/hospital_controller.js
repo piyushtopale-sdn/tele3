@@ -10,13 +10,11 @@ import ForgotPasswordToken from "../models/forgot_password_token";
 import Specialty from "../models/specialty_info";
 import Department from "../models/department_info";
 import Service from "../models/service_info";
-import Unit from "../models/unit_info";
 import Expertise from "../models/expertise_info";
 import BasicInfo from "../models/basic_info";
 import Appointment from "../models/appointment";
 import Notification from "../models/notification";
 import HospitalType from "../models/hospitalType";
-import Team from "../models/team";
 import ProfileInfo from "../models/profile_info";
 // utils
 import { sendResponse } from "../helpers/transmission";
@@ -39,14 +37,11 @@ import mongoose from "mongoose";
 import Http from "../helpers/httpservice";
 const httpService = new Http();
 const moment = require('moment-timezone');
-import { notification } from "../helpers/notification";
 import {
   SpecialtyColumns,
   departmentHospital,
   expertiseHospital,
   serviceHospital,
-  unitHospital,
-  TeamColumns,
   generate6DigitOTP,
   smsTemplateOTP
 } from "../config/constants";
@@ -2275,26 +2270,6 @@ class HospitalController {
     }
   }
 
-  async getUnitData(req, res) {
-    try {
-      let result = await Unit.find({ _id: req.query.data }).exec();
-
-      sendResponse(req, res, 200, {
-        status: true,
-        data: result,
-        message: `hospital Unit fetch successfully`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Internal server error",
-        errorCode: null,
-      });
-    }
-  }
-
   async getSpecialityData(req, res) {
     try {
       let result = await Specialty.find({ _id: req.query.data }).exec();
@@ -2343,25 +2318,6 @@ class HospitalController {
         status: true,
         data: result,
         message: `portal data fetch successfully`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Internal server error",
-        errorCode: null,
-      });
-    }
-  }
-
-  async getTeamsData(req, res) {
-    try {
-      let result = await Team.find({ _id: req.query.data }).exec();
-      sendResponse(req, res, 200, {
-        status: true,
-        data: result,
-        message: `hospital team fetch successfully`,
         errorCode: null,
       });
     } catch (error) {

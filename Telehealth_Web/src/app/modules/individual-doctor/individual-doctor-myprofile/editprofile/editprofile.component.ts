@@ -192,7 +192,7 @@ export class EditprofileComponent implements OnInit {
   }
   /* Staff Edit profile */
   handleEditProfile() {
-    if (this.doctorRole == "INDIVIDUAL_DOCTOR") {
+    if (this.doctorRole == "INDIVIDUAL_DOCTOR" || this.doctorRole == "INDIVIDUAL_DOCTOR_ADMIN") {
       this.router.navigate(["/individual-doctor/myprofile/0"])
 
     } else if (this.doctorRole == "INDIVIDUAL_DOCTOR_STAFF") {

@@ -98,7 +98,11 @@ const portalUserSchema = new mongoose.Schema(
         },
         activeToken:{
             type: String      
-        }
+        },
+        isAdmin:{
+            type:Boolean,
+            default:false
+        },
         
     },
     { timestamps: true }

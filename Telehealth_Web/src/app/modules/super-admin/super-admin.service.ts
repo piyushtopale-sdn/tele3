@@ -4205,6 +4205,17 @@ getLabRadioTestInvoiceCancellation(params: any) {
     }
   );
 }
+
+updateAdminProfile(data: any) {
+  let token = this.auth.getToken();
+  return this.http.put(
+    this.getBasePath() + `/superadmin-service/superadmin/update-admin-profile`,
+    data,
+    {
+      headers: this.getHeader(token),
+    }
+  );
+}
 }
 
 

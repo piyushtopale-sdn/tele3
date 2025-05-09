@@ -5,6 +5,7 @@ const { cryptoSecret, secret } = config;
 const bcrypt = require("bcrypt");
 const xlsx = require("xlsx");
 import jwt from "jsonwebtoken";
+import { randomInt } from 'crypto';
 import Counter from "../models/counter";
 
 export const validationResponse = (req, res, next) => {
@@ -129,7 +130,7 @@ export const generateTenSaltHash = async (data) => {
 }
 
 export const generate4DigitOTP = () => {
-    return Math.floor(1000 + Math.random() * 9000);
+    return randomInt(1000, 10000);
 }
 
 export const bcryptCompare = async (normalData, bcryptedData) => {

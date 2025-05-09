@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/shared/auth.service';
 import { environment } from 'src/environments/environment';
 
@@ -9,7 +8,7 @@ import { environment } from 'src/environments/environment';
 })
 export class LabimagingdentalopticalService {
 
-  constructor(private http: HttpClient, private auth: AuthService) { }
+  constructor(private readonly http: HttpClient, private readonly auth: AuthService) { }
 
   getHeader(token: any) {
     const httpHeaders = new HttpHeaders({
@@ -126,86 +125,6 @@ export class LabimagingdentalopticalService {
     });
   }
 
-  getLabimagingdentalopticalDetails(params: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      ``, //"{}-labimagingdentaloptical/labimagingdentaloptical/view-doctor-profile-labimagingdentaloptical
-      { params, headers: this.getHeader(token) }
-    );
-  }
-
-  getLocations(params: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      ``, //{}-labimagingdentaloptical/labimagingdentaloptical/four-portal-management-get-locations
-      {
-        params,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  createUnregisteredUser(data) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      ``, //{}-labimagingdentaloptical/labimagingdentaloptical/create-unregister-four-portal
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    )
-  }
-  createUnregisterUserStaff(data) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      ``, //{}-labimagingdentaloptical/labimagingdentaloptical/create-unregister-four-portal-staff
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    )
-  }
-
-  updateUnregisterUser(data) {
-    let token = this.auth.getToken();
-    return this.http.post(
-      this.getBasePath() +
-      ``, //{}-labimagingdentaloptical/labimagingdentaloptical/update-unregister-four-portal
-      data,
-      {
-        headers: this.getHeader(token),
-      }
-    )
-  }
-
-  getUnregisterUserDetails(params: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      ``, //{}-labimagingdentaloptical/labimagingdentaloptical/get-unregister-four-portal
-      {
-        params,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
-  unregisteredUserList(params: any) {
-    let token = this.auth.getToken();
-    return this.http.get(
-      this.getBasePath() +
-      ``,//{}-labimagingdentaloptical/labimagingdentaloptical/get-unregister-four-portal-list
-      {
-        params,
-        headers: this.getHeader(token),
-      }
-    );
-  }
-
   addRadioTestApi(userData: any) {
     let token = this.auth.getToken();
     return this.http.post(
@@ -242,7 +161,6 @@ export class LabimagingdentalopticalService {
   }
 
   getRadioTestLIstAPi(paramData: any) {
-    // return of({ status: true });
     let token = this.auth.getToken();
     return this.http.get(
       this.getBasePath() + `/labradio-service/lab-radio-management/get-radiology-test-list`,
@@ -254,7 +172,6 @@ export class LabimagingdentalopticalService {
   }
 
   getRadioTestLIstAPiExport(paramData: any) {
-    // return of({ status: true });
     let token = this.auth.getToken();
     return this.http.get(
       this.getBasePath() + `/labradio-service/lab-radio-management/exportsheetlistExport-radioTest`,
@@ -267,7 +184,6 @@ export class LabimagingdentalopticalService {
   
 
   getRadioTestBYID(data: any) {
-    // return of({ status: true });
     let token = this.auth.getToken();
     return this.http.get(
       this.getBasePath() + `/labradio-service/lab-radio-management/get-radiology-test-by-id/${data.id}`,
@@ -324,7 +240,6 @@ export class LabimagingdentalopticalService {
   }
 
   getLabTestConfigLIstAPi(paramData: any) {
-    // return of({ status: true });
     let token = this.auth.getToken();
     return this.http.get(
       this.getBasePath() + `/labradio-service/lab-radio-management/get-lab-test-configuration-list`,
@@ -336,7 +251,6 @@ export class LabimagingdentalopticalService {
   }
 
   getLabTestConfigBYID(data: any) {
-    // return of({ status: true });
     let token = this.auth.getToken();
     return this.http.get(
       this.getBasePath() + `/labradio-service/lab-radio-management/get-lab-test-configuration-by-id/${data.id}`,
@@ -382,7 +296,6 @@ export class LabimagingdentalopticalService {
   }
 
   getLabTestLIstAPi(paramData: any) {
-    // return of({ status: true });
     let token = this.auth.getToken();
     return this.http.get(
       this.getBasePath() + `/labradio-service/lab-radio-management/get-lab-test-list`,
@@ -394,7 +307,6 @@ export class LabimagingdentalopticalService {
   }
 
   getLabTestLIstAPiExport(paramData: any) {
-    // return of({ status: true });
     let token = this.auth.getToken();
     return this.http.get(
       this.getBasePath() + `/labradio-service/lab-radio-management/exportsheetlistExport-labTest`,
@@ -504,6 +416,45 @@ export class LabimagingdentalopticalService {
     return this.http.post(
       this.getBasePath() +
       `/labradio-service/lab-radio-management/upload-labMain-test`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
+
+  bulkImportRadioTests(formData: any) {
+    let token = this.auth.getToken();
+    return this.http.post(
+      this.getBasePath() +
+      `/labradio-service/lab-radio-management/upload-radio-tests`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
+  getLabTestConfigurationExport(data: any) {
+    let token = this.auth.getToken();
+    return this.http.get(
+      this.getBasePath() +
+      `/labradio-service/lab-radio-management/get-lab-test-configuration-list-export`,
+      {
+        params: data,
+        headers: this.getHeader(token),
+      }
+    );
+  }
+
+  updateUserAsAdmin(formData: any) {
+    let token = this.auth.getToken();
+    return this.http.put(
+      this.getBasePath() +
+      `/labradio-service/lab-radio/update-center-user-admin`,
       formData,
       {
         headers: {

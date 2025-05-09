@@ -21,7 +21,6 @@
                     menu.value['name']
                   )
                 ">
-                  <!-- <a  class="nav-link {{menu.value['route_path'] == activeMenu ? 'active' : ''}}" [routerLink]="[menu.value['route_path']]"> -->
                   <a class="nav-link {{
                     menu.value['route_path'] == activeMenu ? 'active' : ''
                   }}" (click)="handleRouting(menu.value['route_path'])">
@@ -55,7 +54,6 @@
                   <div class="sidebar-submenu">
                     <ul>
                       <li *ngFor="let childMenu of menu.value['children']">
-                        <!-- <a class="{{childMenu.route_path == activeMenu ? 'active' : ''}}" [routerLink]="[childMenu.route_path]" (click)="handleNavigationClick(childMenu.route_path,childMenu.name)">{{childMenu.name}}</a> -->
                         <a class="{{
                           childMenu.route_path == activeMenu ? 'active' : ''
                         }}" (click)="handleRouting(childMenu.route_path)" (click)="
@@ -213,7 +211,6 @@
 <ng-template #confirmationModel let-modal>
   <div class="custome_modal approver">
     <div class="modal-header">
-      <!-- <h4 class="modal-title" id="modal-basic-title">Requested Amount</h4> -->
       <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <mat-icon>close</mat-icon>
       </button>

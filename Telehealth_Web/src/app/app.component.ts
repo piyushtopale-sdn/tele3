@@ -1,8 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import * as uuid from "uuid";
 import { CoreService } from "./shared/core.service";
-import { AuthService } from "./shared/auth.service";
-import { IdleService } from "./shared/idle-service.service";
 
 @Component({
   selector: "app-root",
@@ -10,16 +8,15 @@ import { IdleService } from "./shared/idle-service.service";
   styleUrls: ["./app.component.scss"],
 })
 export class AppComponent implements OnInit {
-  title = "test";
+  title = "test_p";
 
   constructor(
-    private auth: AuthService,
-    private _coreService: CoreService,private idleService: IdleService
+    private  readonly _coreService: CoreService
   ) {
-    this.getDeviceId();
   }
 
   ngOnInit(): void {
+    this.getDeviceId();
     this.setupUUID();
     this.checkInternetConnection();
   }

@@ -111,6 +111,7 @@ import { AddContentComponent } from './super-admin-contentmanagement/add-content
 import { AdminMenusPermissionComponent } from './super-admin-profilemanagement/admin-menus-permission/admin-menus-permission.component';
 import { ApplePayComponent } from './apple-pay/apple-pay.component';
 import { ManageLabCouponComponent } from './manage-lab-coupon/manage-lab-coupon.component';
+import { EducationSuperAdminComponent } from './super-admin-individualdoctor/add-doctor/education-super-admin/education-super-admin.component';
 @NgModule({
   declarations: [
     SuperAdminDashboardComponent,
@@ -199,7 +200,8 @@ import { ManageLabCouponComponent } from './manage-lab-coupon/manage-lab-coupon.
     AddContentComponent,
     AdminMenusPermissionComponent,
     ApplePayComponent,
-    ManageLabCouponComponent
+    ManageLabCouponComponent,
+    EducationSuperAdminComponent
   ],
   imports: [
     CommonModule,

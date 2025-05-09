@@ -344,7 +344,7 @@ export class ManageLabCouponComponent implements OnInit {
 
   openVerticallyCenteredsecond(deleteModal: any, _id: any) {
     this.discountPlanId = _id;
-    this.modalService.open(deleteModal, { centered: true, size: "sm" });
+    this.modalService.open(deleteModal, { centered: true, size: "md" });
   }
 
   openVerticallyCenteredadd(addmodal: any) {

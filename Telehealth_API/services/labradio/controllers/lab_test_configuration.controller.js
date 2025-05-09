@@ -28,7 +28,7 @@ const validateColumnWithExcel = (toValidate, excelColumn) => {
 
 export const getLabTestConfiguration = async (req, res) => {
     try {
-        const { page, limit, searchText, sort, labRadiologyId } = req.query;
+        const { page, limit, searchText, sort, labRadiologyId,centreName } = req.query;
 
         // Convert query params to numbers
         const pageNumber = Number(page);
@@ -48,6 +48,10 @@ export const getLabTestConfiguration = async (req, res) => {
                 { testConfiguration: { $regex: searchText, $options: "i" } },
                 { "portalusers.centre_name": { $regex: searchText, $options: "i" } },  // Corrected field reference
             ];
+        }
+        let centreFilter = {};
+        if (centreName) {
+            centreFilter["portalusers.centre_name"] = { $regex: centreName, $options: "i" };
         }
 
         // Match Query
@@ -87,9 +91,12 @@ export const getLabTestConfiguration = async (req, res) => {
                     labName: "$portalusers.centre_name",
                 },
             },
-            {
-                $match: match,
-            },
+            ...(searchText || centreName ? [{
+                $match: {
+                    ...(searchText ? search_filter : {}),
+                    ...(centreName ? centreFilter : {})
+                }
+            }] : []),
             {
                 $group: {
                     _id: "$_id",
@@ -140,6 +147,89 @@ export const getLabTestConfiguration = async (req, res) => {
         });
     } catch (error) {
         console.error("Error in getLabTestConfiguration", error);
+        sendResponse(req, res, 500, {
+            status: false,
+            body: error,
+            message: "Internal server error",
+            errorCode: null,
+        });
+    }
+};
+
+export const getLabTestConfigurationExport = async (req, res) => {
+    try {
+        const {centreName ,labRadiologyId} = req.query;
+       
+
+        let center_filter = {};
+        if (labRadiologyId) {
+            center_filter = { labId: mongoose.Types.ObjectId(labRadiologyId) };
+        }
+       
+        let centreFilter = {};
+        if (centreName) {
+            centreFilter["portalusers.centre_name"] = { $regex: centreName, $options: "i" };
+        }
+
+        // Match Query
+        let match = {
+            isDeleted: false,
+            $and: [center_filter],
+        };
+
+
+        // Aggregation Pipeline
+        const pipeline = [
+            {
+                $lookup: {
+                    from: "portalusers",   // Actual collection name of PortalUser
+                    localField: "labId",
+                    foreignField: "_id",
+                    as: "portalusers",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$portalusers",
+                    preserveNullAndEmptyArrays: true,
+                },
+            },
+            {
+                $addFields: {
+                    labName: "$portalusers.centre_name",
+                },
+            },
+            ...( centreName ? [{
+                $match: {
+                    ...(centreName ? centreFilter : {})
+                }
+            }] : []),
+            {
+                $group: {
+                    _id: "$_id",
+                    labName: { $first: "$labName" },
+                    testName: { $first: "$testName" },
+                    testConfiguration: { $first: "$testConfiguration" },
+                    referenceRange: { $first: "$referenceRange" },
+                    alphaResult: { $first: "$alphaResult" },
+                    createdAt: { $first: "$createdAt" },
+                },
+            },
+        ];
+
+        // Execute the Aggregation Pipeline
+        const result = await LabTestConfiguration.aggregate(pipeline);
+
+        sendResponse(req, res, 200, {
+            status: true,
+            message: "Test configuration fetched successfully",
+            body: {
+                result: result,
+            },
+            errorCode: null,
+        });
+    } catch (error) {
+        console.error("Error in getLabTestConfigurationExport", error);
         sendResponse(req, res, 500, {
             status: false,
             body: error,
@@ -829,7 +919,6 @@ export const allLabTestforexport = async (req, res) => {
 
       // Convert the result to an array for export (e.g., CSV or Excel)
       const array = result.map(obj => Object.values(obj));
-      console.log("Array : ",array)
       // Send success response with result and array
       sendResponse(req, res, 200, {
         status: true,

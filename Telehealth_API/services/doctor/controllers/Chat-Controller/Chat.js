@@ -814,7 +814,9 @@ export const saveNotification = async (req, res) => {
       }
     }
     else {
-
+      const skipPush = req.body.skipPush;
+      console.log("skipPush______",skipPush);
+      
       const senderData = await PortalUser.findOne({ _id: mongoose.Types.ObjectId(req.body.created_by) });
          
       const findPatient = await httpService.getStaging("patient/get-portal-data", { data: receiverData[0] }, headers, "patientServiceUrl");

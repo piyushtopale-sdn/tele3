@@ -4,9 +4,7 @@
     .inner_sidebar {
         .header_logo {
             display: flex;
-            // align-items: center;
             align-items: flex-start;
-            // justify-content: center;
             padding: 30px 27px 50px;
 
             img {
@@ -141,7 +139,6 @@
     }
 
     .offcanvas-header {
-        //   padding: 15px 0 0 0;
         padding: 0;
         justify-content: flex-end;
     }
@@ -159,7 +156,6 @@
 
         .mat-icon {
             color: $white_color;
-            ;
             font-size: 20px;
             height: 30px;
             width: 30px;

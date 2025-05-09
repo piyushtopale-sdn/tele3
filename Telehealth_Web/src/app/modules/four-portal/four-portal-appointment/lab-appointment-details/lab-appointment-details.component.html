@@ -12,7 +12,7 @@
     <div class="profile_info" style="background: var(--color-table, #0b63f61a)">
       <ul class="profile_info_inner profile_info_with_img">
         <div class="profile_image">
-          <img [src]="
+          <img alt="" [src]="
               patient_details?.profile_pic_signed_url
                 ? patient_details?.profile_pic_signed_url
                 : '../../../../../assets/img/default_user.png'
@@ -281,17 +281,6 @@
                         d="M8 0C2.7512 0 0 3.88286 0 4.5C0 5.11554 2.7512 9 8 9C13.248 9 16 5.11554 16 4.5C16 3.88286 13.248 0 8 0ZM8 7.96098C6.036 7.96098 4.444 6.4117 4.444 4.5C4.444 2.5883 6.036 1.03741 8 1.03741C9.964 1.03741 11.5552 2.5883 11.5552 4.5C11.5552 6.4117 9.964 7.96098 8 7.96098ZM8 4.5C7.6744 4.1408 8.5304 2.76911 8 2.76911C7.0176 2.76911 6.2216 3.54455 6.2216 4.5C6.2216 5.45545 7.0176 6.23089 8 6.23089C8.9816 6.23089 9.7784 5.45545 9.7784 4.5C9.7784 4.06045 8.2768 4.80455 8 4.5Z" />
                     </svg>
                   </a>
-                  <!-- <a class="svgicon" *ngIf="element?.extrenalResults?.link && element?.status === 'COMPLETED'" (click)="resultDownload(element?.extrenalResults?.link, element?.extrenalResults?.reportName)"                   
-                  >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-download" viewBox="0 0 16 16">
-                    <title>{{ "download_result" | translate }}</title>
-                    <path
-                      d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                    <path
-                      d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z" />
-                  </svg>
-                </a>  -->
                 <a style="cursor: pointer;"   *ngIf="element?.extrenalResults?.link" class="external-result"  (click)="resultDownload(element?.extrenalResults?.link, element?.extrenalResults?.reportName)"  >
                   {{"external_lab_result" | translate}} <mat-icon>open_in_new</mat-icon>
                 </a>                

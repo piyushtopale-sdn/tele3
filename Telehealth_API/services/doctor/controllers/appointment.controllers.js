@@ -328,7 +328,6 @@ class AppointmentController {
         sort,
         type
       } = req.query;
-
       // Get all patient data for requested doctor
       let patientData = {};
       if (req?.user?.role == 'INDIVIDUAL_DOCTOR' || req?.user?.role == 'INDIVIDUAL_DOCTOR_ADMIN') {

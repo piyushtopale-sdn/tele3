@@ -133,7 +133,6 @@
                             content: "";
                             height: 12px;
                             width: 12px;
-                            // background: #0B4977;
                             border-radius: 50%;
                             display: block;
                             position: absolute;      
@@ -163,7 +162,6 @@
                             border-color: transparent transparent $bodycolor transparent;
                         }
                         li {
-                            padding: 10px 0px;
                             padding: 10px 0px;
                             border: 1px solid #B6C8D6;
                             border-radius: 10px;
@@ -237,7 +235,6 @@
                             .user_name_wrapper{                 
                                 display: inline-block;
                                 vertical-align: top;
-                                // width: 110px;
                                 width: fit-content;
                                 max-width: 200px;
                                 word-break: break-all;

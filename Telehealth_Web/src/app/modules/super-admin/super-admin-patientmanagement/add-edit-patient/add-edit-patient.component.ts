@@ -57,10 +57,10 @@ export class AddEditPatientComponent {
     this.patientForm = this.fb.group(
       {
         profileImage: [""],
-        first_name: ["", [Validators.required]],
-        first_name_arabic: ["", [Validators.required]],
-        last_name: ["", [Validators.required]],
-        last_name_arabic: ["", [Validators.required]],
+        first_name: ["", [Validators.required,this.coreService.nameValidator()]],
+        first_name_arabic: ["", [Validators.required,this.coreService.nameValidator()]],
+        last_name: ["", [Validators.required,this.coreService.nameValidator()]],
+        last_name_arabic: ["", [Validators.required,this.coreService.nameValidator()]],
         address: [""],
         loc: [""],
         nationality: ["",[Validators.required]],    

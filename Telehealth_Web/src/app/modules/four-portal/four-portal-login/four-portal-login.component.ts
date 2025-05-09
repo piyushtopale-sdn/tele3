@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   AbstractControl,
-  FormBuilder,
-  FormControl,
+  FormBuilder,  
   FormGroup,
   Validators,
 } from "@angular/forms";
@@ -35,7 +34,7 @@ export class FourPortalLoginComponent implements OnInit {
   emailId: string;
   errorMessage: any;
   companyName: string = "";
-
+  selectedType:any= 'INDIVIDUAL';
   @ViewChild("addsecondsubsriber", { static: false }) addsecondsubsriber: any;
   route_type: any;
   password: any;
@@ -43,16 +42,16 @@ export class FourPortalLoginComponent implements OnInit {
   routeTo: any;
 
   constructor(
-    private modalService: NgbModal,
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router,
-    private _coreService: CoreService,
+    private readonly modalService: NgbModal,
+    private readonly fb: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly _coreService: CoreService,
     public translate: TranslateService,
-    private route: ActivatedRoute,
-    private fourPortalService: FourPortalService,
-    private loader: NgxUiLoaderService,
-    private insuranceManagementService: InsuranceManagementService,
+    private readonly route: ActivatedRoute,
+    private readonly fourPortalService: FourPortalService,
+    private readonly loader: NgxUiLoaderService,
+    private readonly insuranceManagementService: InsuranceManagementService,
 
 
 
@@ -101,7 +100,8 @@ export class FourPortalLoginComponent implements OnInit {
     let reqData = {
       email: this.loginForm.value?.email?.toLowerCase(),
       password: this.loginForm.value.password,
-      type: this.route_type
+      type: this.route_type,
+      role: this.selectedType
     }
     this.loader.start();
     this.isLoading = true;
@@ -204,7 +204,7 @@ export class FourPortalLoginComponent implements OnInit {
         (res: any) => {
           let result = this._coreService.decryptObjectData({ data: res });
 
-          if (result.status == true) {
+          if (result.status) {
             this.loader.stop();
             this.modalService.dismissAll("close");
             this.closePopUp();
@@ -238,10 +238,8 @@ export class FourPortalLoginComponent implements OnInit {
       );
     }
 
-    // this._coreService.setLocalStorage("login", "component");
-    // this._coreService.setLocalStorage(medium, "medium");
   }
-
+  
   private closePopUp() {
     let modalDespose = this.getDismissReason(1);
     this.modalService.dismissAll(modalDespose);
@@ -310,10 +308,15 @@ export class FourPortalLoginComponent implements OnInit {
 
   goToHomePage(){
     if(this.translate.store.currentLang === undefined || this.translate.store.currentLang === 'ar'){
-      this.router.navigate([`/test/home-ar`]);
+      this.router.navigate([`/test_p/home-ar`]);
     }else{
-      this.router.navigate([`/test/home-en`]);
+      this.router.navigate([`/test_p/home-en`]);
     }
+  }
+
+
+  onRoleChange(data:string){    
+    this.selectedType = data;  
   }
 }
 

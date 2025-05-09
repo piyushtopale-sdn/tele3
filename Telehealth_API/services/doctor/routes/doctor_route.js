@@ -178,7 +178,6 @@ doctorRoute.get('/get-eprescription-medicine-dosage', doctorController.getEpresc
 doctorRoute.get('/get-all-eprescription-tests', doctorController.getAllTests);
 doctorRoute.post('/add-eprescription-esignature', uploadImage, doctorController.addEprescriptionEsignature);
 doctorRoute.post('/list-all-eprescription', doctorController.listAllEprescription);
-doctorRoute.get('/recent-medicine-prescribed-by-doctor', doctorController.listRecentMedicinesPrescribed);
 doctorRoute.get('/get-doctor-location', doctorController.getDoctorLocationInfo);
 doctorRoute.get('/get-all-eprescription-details-for-medicine', doctorController.getAllEprescriptionDetailsForMedicine);
 // department_asper_hospital

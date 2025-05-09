@@ -2,23 +2,20 @@ import {
   ChangeDetectorRef,
   Component,
   OnInit,
-  ViewEncapsulation,
 } from "@angular/core";
 import {
   Chart,
-  ChartConfiguration,
   ChartOptions,
   registerables,
 } from "chart.js";
 import { CoreService } from "src/app/shared/core.service";
-import { Router } from "@angular/router";
 
 export interface PeriodicElement {
   patientname: string;
   dateandtime: string;
   consultationtype: string;
 }
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { IndiviualDoctorService } from "../../individual-doctor/indiviual-doctor.service";
 import { FourPortalService } from "../four-portal.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";

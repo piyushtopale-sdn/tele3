@@ -1,5 +1,5 @@
 import "dotenv/config";
-
+import { randomInt } from 'crypto';
 
 export const TimeZone = {
     hours: 0,
@@ -75,7 +75,7 @@ export const messages = {
     userNotFound: "Please check your credentials.",
     dataNotFound: "No data found.",
     incorrectPassword: "Incorrect password.",
-    passwordNotCreated: "Password not created.",
+    userPasswordError: "Password not created.",
     loginSuccess: "Login successful.",
     listSuccess: "Data fetched successfully.",
     updateSuccess: "Data updated successfully.",
@@ -161,7 +161,7 @@ export const RadioTestColumns = {
 }
 
 export const generate4DigitOTP = () => {
-    return Math.floor(1000 + Math.random() * 9000);
+    return randomInt(1000, 10000);
 };
 
 export const emailText = {
@@ -180,7 +180,7 @@ export const smsTemplateOTP = (otp2fa) => {
 }
 
 export const generate6DigitOTP = () => {
-    return Math.floor(100000 + Math.random() * 900000);
+    return randomInt(100000, 1000000);
 }
 
 export const forgetPasswordSub = {

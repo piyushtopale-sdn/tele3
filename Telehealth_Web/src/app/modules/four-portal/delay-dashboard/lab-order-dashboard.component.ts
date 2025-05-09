@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import * as XLSX from 'xlsx';
 import { DateAdapter } from '@angular/material/core';
 import { CoreService } from 'src/app/shared/core.service';
-import { SuperAdminService } from '../../super-admin/super-admin.service';
 import { FourPortalService } from '../four-portal.service';
 import { Router } from '@angular/router';
 import { IndiviualDoctorService } from '../../individual-doctor/indiviual-doctor.service';
@@ -44,14 +43,14 @@ export class LabOrderDashboardComponent {
   currentUrl:any=[]
   orderlistData:any []=[];
   constructor(
-    private service: FourPortalService,
-    private datepipe: DatePipe,
-    private dateAdapter: DateAdapter<Date>,
-    private fb: FormBuilder,
-    private _coreService: CoreService,
-    private router: Router,
-    private doctorservice: IndiviualDoctorService,
-    private loader: NgxUiLoaderService,
+    private readonly service: FourPortalService,
+    private readonly datepipe: DatePipe,
+    private readonly dateAdapter: DateAdapter<Date>,
+    private readonly fb: FormBuilder,
+    private readonly _coreService: CoreService,
+    private readonly router: Router,
+    private readonly doctorservice: IndiviualDoctorService,
+    private readonly loader: NgxUiLoaderService,
 
 
   ) {

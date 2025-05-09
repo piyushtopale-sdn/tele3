@@ -1,32 +1,5 @@
 <div class="super_admin_dashboard dashboard_main_content">
-  <!-- <div class="top_bar up_bar common_space">
-    <div class="content_wrap">
-      <div class="policy">
-        <form [formGroup]="dateRangeForm">
-          <div class="form_field_wrapper d-flex align-items-center gap-3" style="margin: 10px;">
-            <div class="main_title">{{ "from" | translate }}:</div>
-            <mat-form-field class="example-full-width choosedate" appearance="fill">
-              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
-                [matDatepicker]="picker1" formControlName="fromDate"
-                (dateChange)="onDateChange('from', $event.value)" />
-              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-              <mat-datepicker #picker1></mat-datepicker>
-            </mat-form-field>
-
-            <div class="main_title">{{ "to" | translate }}:</div>
-            <mat-form-field class="example-full-width choosedate" appearance="fill">
-              <input matInput [matDatepickerFilter]="myFilter" placeholder="{{ 'select_date' | translate }}"
-                [matDatepicker]="picker2" formControlName="toDate" (dateChange)="onDateChange('to', $event.value)" />
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-datepicker #picker2></mat-datepicker>
-            </mat-form-field>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div> -->
-
-  <div class="counter_section common_space">
+   <div class="counter_section common_space">
     <div class="row">
 
       <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4">
@@ -40,7 +13,7 @@
             </div>
             <div class="right"  (click)="labOrderListForExport('ALL')" ngbTooltip="Export all order list">
               <div class="counter_img">
-                <img src="../../../../assets/img/dashboard/total.svg" />
+                <img alt="" src="../../../../assets/img/dashboard/total.svg" />
               </div>
             </div>
           </div>
@@ -57,7 +30,7 @@
             </div>
             <div class="right"  (click)="labOrderListForExport('COMPLETED')" ngbTooltip="Export completed order list">
               <div class="counter_img">
-                <img src="../../../../assets/img/dashboard/completed 1.svg" />
+                <img alt="" src="../../../../assets/img/dashboard/completed 1.svg" />
               </div>
             </div>
           </div>
@@ -74,7 +47,7 @@
             </div>
             <div class="right"  (click)="exportDelayOrder()" ngbTooltip="Export delay order list">
               <div class="counter_img">
-                <img src="../../../../assets/img/dashboard/dashboard25.svg" />
+                <img alt="" src="../../../../assets/img/dashboard/dashboard25.svg" />
               </div>
             </div>
           </div>

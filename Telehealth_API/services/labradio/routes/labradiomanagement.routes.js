@@ -25,7 +25,8 @@ import {
     bulkImportLabMainTest,
     getRadioTestexp,
     getLabTestExport,
-    bulkImportRadioTests
+    bulkImportRadioTests,
+    getLabTestConfigurationExport
 } from "../controllers/lab_test_configuration.controller";
 import { handleResponse } from "../middleware/utils";
 const fs = require("fs");
@@ -73,6 +74,7 @@ const uploadFileToLocalStorage = async (req, res, next) => {
 
 // Lab Test Configuration for superadmin
 labRadioManagementRoute.get("/get-lab-test-configuration-list", verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), getLabTestConfiguration);
+labRadioManagementRoute.get("/get-lab-test-configuration-list-export", verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), getLabTestConfigurationExport);
 labRadioManagementRoute.get("/get-lab-test-configuration-by-id/:id", verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), getLabTestConfigurationById);
 labRadioManagementRoute.post("/add-lab-test-configuration", verifyRole(['superadmin']), addLabTestConfiguration);
 labRadioManagementRoute.put("/edit-lab-test-configuration", verifyRole(['superadmin']), editLabTestConfiguration);

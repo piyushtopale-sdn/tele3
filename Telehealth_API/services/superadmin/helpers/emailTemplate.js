@@ -68,40 +68,6 @@ export const verifyEmail2fa = (email, code) => ({
     },
 })
 
-export const sendMailInvitations = (email,first_name,last_name,loggeInname) => ({
-    Source: '<no-reply@yopmail.com>',
-    Destination: {
-        ToAddresses: [
-            email
-        ],
-    },
-    ReplyToAddresses: ['no-reply@yopmail.com'],
-    Message: {
-        Body: {
-            Html: {
-                Charset: 'UTF-8',
-                Data: `
-          <h3>Mail Invitation</h3>
-          <br/>
-          <p>Hello ${first_name} ${last_name},</p>
-          <br/>
-          <p>Please register yourself on this</p>
-          <br/>
-          <a href="${test_pFrontendUrl}/patient/signup" role="button">CLICK</a>
-          <br/>         
-          <br/>
-          <p>Thanks,</p>
-          <p>${loggeInname}</p>`
-            },
-        },
-        Subject: {
-            Charset: 'UTF-8',
-            Data: `Mail Invitation from `,
-        }
-    },
-})
-
-
 export const sendStaffDetails = (email, password,staff_name) => ({
     Source: '<no-reply@yopmail.com>',
     Destination: {

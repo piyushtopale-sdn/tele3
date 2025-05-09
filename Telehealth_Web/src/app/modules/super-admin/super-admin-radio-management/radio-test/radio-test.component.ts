@@ -4,18 +4,15 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CoreService } from "src/app/shared/core.service";
 import { NgxUiLoaderService } from "ngx-ui-loader";
 import * as XLSX from "xlsx";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { LabimagingdentalopticalService } from "../../labimagingdentaloptical.service";
 import { Router } from "@angular/router";
 import { SuperAdminService } from "../../super-admin.service";
 import { DatePipe } from "@angular/common";
-// Pending request table
-export interface PendingPeriodicElement {
-  radio_centre: string;
-  test: number;
-  notes: string;
-}
-const PENDING_ELEMENT_DATA: PendingPeriodicElement[] = [];
+import { debounceTime, distinctUntilChanged } from "rxjs";
+import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
+
+
 @Component({
   selector: 'app-radio-test',
   templateUrl: './radio-test.component.html',
@@ -25,6 +22,7 @@ const PENDING_ELEMENT_DATA: PendingPeriodicElement[] = [];
 export class RadioTestComponent {
   dataSource: any = [];
   @ViewChild(MatPaginator) paginator: MatPaginator;
+    @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger;
   testID: any;
   tabNumber: number;
   radioUserList: any = [];
@@ -58,16 +56,20 @@ export class RadioTestComponent {
   selectedCentre:any=[];
   selectedCentreId:any=[]
   overlay = false;
+  filteredLoincCodes: any[] = [];
+  loincCodeInputControl = new FormControl("");
+  selectedFiles: any;
+  selecteduser: string | Blob;
   
   constructor(
-    private modalService: NgbModal,
-    private coreService: CoreService,
-    private fb: FormBuilder,
-    private lad_radioService: LabimagingdentalopticalService,
-    private loader: NgxUiLoaderService,
-    private router: Router,
-    private service: SuperAdminService,
-    private datepipe: DatePipe,
+    private readonly modalService: NgbModal,
+    private readonly coreService: CoreService,
+    private readonly fb: FormBuilder,
+    private readonly lad_radioService: LabimagingdentalopticalService,
+    private readonly loader: NgxUiLoaderService,
+    private readonly router: Router,
+    private readonly service: SuperAdminService,
+    private readonly datepipe: DatePipe,
 
   ) {
     this.loginrole = this.coreService.getLocalStorage("adminData").role;
@@ -94,14 +96,17 @@ export class RadioTestComponent {
     let adminData = JSON.parse(localStorage.getItem("loginData"));
     this.superAdminId = adminData?._id;
     this.getRadioList();
-    this.getStudyList();
     this.getTestList(`${this.sortColumn}:${this.sortOrder}`);
-    // setTimeout(() => {
-    //   this.checkInnerPermission();
-    // }, 300);
     this.currentUrl = this.router.url;
     this.onNavigate(this.currentUrl);
     this.getAllCentresList()
+
+
+    this.loincCodeInputControl.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((searchText: string) => {
+        this.getAllLoincCodeList(searchText);
+      });
   }
 
 
@@ -115,16 +120,15 @@ export class RadioTestComponent {
 
       let menuID = sessionStorage.getItem("currentPageMenuID");
       let checkData = this.findObjectByKey(userPermission, "parent_id", menuID)
+      let checkSubmenu;
       if (checkData) {
-        if (checkData.isChildKey == true) {
-          var checkSubmenu = checkData.submenu;
+        if (checkData.isChildKey) {
+          checkSubmenu = checkData.submenu;
           if (checkSubmenu.hasOwnProperty("pharmacy")) {
             this.innerMenuPremission = checkSubmenu['pharmacy'].inner_menu;
-
-          } else {
-          }
+          } 
         } else {
-          var checkSubmenu = checkData.submenu;
+          checkSubmenu = checkData.submenu;
           let innerMenu = [];
           for (let key in checkSubmenu) {
             innerMenu.push({ name: checkSubmenu[key].name, slug: key, status: true });
@@ -150,7 +154,7 @@ export class RadioTestComponent {
       page: this.page,
       limit: this.pageSize,
       searchText: this.searchText,
-      centreName:this.selectedCentre ? this.selectedCentre : "",
+      centreName:this.selectedCentre ?? "",
       sort: 'createdAt:-1'
     };
 
@@ -166,6 +170,7 @@ export class RadioTestComponent {
   }
 
   async submitForm(type: any) {
+    
     this.isSubmitted = true;
 
     const isInvalid = this.radioTestForm.invalid;
@@ -184,38 +189,18 @@ export class RadioTestComponent {
       return;
     }
 
-    let loincElement = this.loincCodeList.find(test => test?.value === this.selectedLoinc);
-    let loinc;
-    if (loincElement) {
-      let loinc_code = loincElement?.label.replace(/\s?\(.*\)/, '');
-      loinc =  { loincId: loincElement?.value, loincCode: loinc_code };
-      // loinc = { loincId: loincElement?.value, loincCode: loincElement?.label };
-    }
-
-    // let couponCodeElement = this.couponCodeList.find((data)  => data?._id === this.selectedCouponCode);
     
-    // let couponCode;
-    // if (couponCodeElement) {
-    //   couponCode = { 
-    //     couponCodeId: couponCodeElement?._id, 
-    //     couponCode: couponCodeElement?.couponCode,
-    //     amountOff: couponCodeElement?.amountOff,  
-    //     percentOff: couponCodeElement?.percentOff, 
-    //     redeemBefore: couponCodeElement?.redeemBefore,
-    //     status: couponCodeElement?.status,     
-    //     type: couponCodeElement?.type};
-    // }
 
     if (type === 'add') {
       let reqData = {
         radiologyId: this.radioTestForm.value.centre_name,
         studyTypeId: this.radioTestForm.value.studyTypeId,
         testName: this.radioTestForm.value.test,
-        loinc: loinc,
+        loinc: this.selectedLoinc,
         testFees: this.radioTestForm.value.testFees,
-        // couponCode: couponCode,
         notes: this.radioTestForm.value.notes
       }
+      
       this.loader.start();
 
       this.lad_radioService.addRadioTestApi(reqData).subscribe({
@@ -241,9 +226,8 @@ export class RadioTestComponent {
         radiologyId: this.radioTestForm.value.centre_name,
         studyTypeId: this.radioTestForm.value.studyTypeId,
         testName: this.radioTestForm.value.test,
-        loinc: loinc,
+        loinc: this.selectedLoinc,
         testFees: this.radioTestForm.value.testFees,
-        // couponCode:couponCode,
         notes: this.radioTestForm.value.notes,
         id: this.updatetest_id
       }
@@ -271,13 +255,14 @@ export class RadioTestComponent {
 
   }
 
-
-
-
-
   closePopup() {
+    this.isSubmitted = false;
     this.modalService.dismissAll("close");
     this.radioTestForm.reset();
+    this.teamExcelForm.reset();
+    this.selectedFiles = '';
+    this.selecteduser = '';
+    this.loincCodeInputControl.setValue('');
     this.getTestList();
   }
 
@@ -322,42 +307,44 @@ export class RadioTestComponent {
       size: "lg",
       windowClass: "master_modal add_content",
     });
-    this.getAllLoincCodeList();
-    this.getAllCouponList();
+    this.getStudyList();
   }
-
-  getAllLoincCodeList(sort: any = '') {
-    let reqData = {
-      page:1,
-      limit: 0      
+  getAllLoincCodeList(searchText: string = '') {
+    const reqData = {
+      page: 1,
+      limit: 100,
+      searchText: searchText
     };
-
+  
     this.service.getAllLoincCodes(reqData).subscribe((res) => {
       let encryptedData = { data: res };
-      let response = this.coreService.decryptObjectData(encryptedData);
+      let response = this.coreService.decryptObjectData(encryptedData);      
       if (response?.status) {
-        this.loincCodeList = []
-        this.totalLength = response?.body?.totalCount;
-        response?.body?.data?.map((loincCode) => {
-          this.loincCodeList.push(
-            {
-              label: `${loincCode?.loincCode} (${loincCode?.description})`,    //[[6 Feb Lionic code description display]]
-              value: loincCode?._id
-            }
-          )
-        })
+        this.loincCodeList = response?.body?.data?.map((loincCode) => ({
+          label: `${loincCode?.loincCode} (${loincCode?.description})`,
+          value: loincCode?._id
+        })) ?? [];
       } else {
-        this.loincCodeList = []
-        this.totalLength = 0
+        this.loincCodeList = [];
       }
+      this.filteredLoincCodes = [...this.loincCodeList]; // show suggestions
     });
   }
-
-  onSelectionChangLoincCode(event: any): void {
-    if (event.value) {
-      this.selectedLoinc = event.value;
+  onSelectionChangLoincCode(event: any) {
+    const selectedText = event.option?.value;
+    
+    const matchedItem = this.loincCodeList.find(item => item?.label === selectedText);
+    if(matchedItem){
+      this.selectedLoinc = {
+        loincCode: selectedText,
+        loincId: matchedItem?.value
+      };
+      this.radioTestForm.patchValue({
+        loincCode: this.selectedLoinc?.loincCode
+      });
     }
   }
+ 
 
   formatDate(date: Date): string {
     return this.datepipe.transform(date, 'MM-dd-yyyy') || '';
@@ -366,14 +353,12 @@ export class RadioTestComponent {
   openVerticallyCenteredAddspecialityEditcontent(editcontent: any, data: any) {
     this.updatetest_id = data?._id
     this.getradioTest(this.updatetest_id)
-
+    this.getStudyList();
     this.modalService.open(editcontent, {
       centered: true,
       size: "lg",
       windowClass: "master_modal add_content",
     });
-    this.getAllLoincCodeList();
-    this.getAllCouponList();
   }
 
 
@@ -406,7 +391,6 @@ export class RadioTestComponent {
     let reqData = {
       page: 1,
       limit: 0,
-      searchText: '',
       status: "active",
     };
 
@@ -461,11 +445,12 @@ export class RadioTestComponent {
             notes: data?.notes,
             testFees: data?.testFees,
             studyTypeId: data?.studyTypeId,
-            loincCode: data?.loinc?.loincId,
             centre_name: data?.radiologyId?._id,
-            couponCode: data?.couponCode[0]?.couponCodeId
+            loincCode : data?.loinc?.loincCode
           });
-        
+          const loincLabel = data?.loinc?.loincCode;
+          this.loincCodeInputControl.setValue(loincLabel); // <-- Triggers valueChanges
+          this.getAllLoincCodeListFilter(loincLabel);
         } else {
           this.loader.stop();
           this.coreService.showError("", response.message);
@@ -479,13 +464,11 @@ export class RadioTestComponent {
   }
 
   exportManageTest() {
-    // this.pageSize = 0;
     let reqData = {
       page: this.page,
-      // limit: this.pageSize,
       limit: 0,
       searchText: this.searchText,
-      centreName:this.selectedCentre ? this.selectedCentre : "",
+      centreName:this.selectedCentre ?? "",
       sort: 'createdAt:-1'
     };
     this.lad_radioService.getRadioTestLIstAPiExport(reqData)
@@ -493,7 +476,7 @@ export class RadioTestComponent {
         let result = this.coreService.decryptObjectData({ data: res });
         if (result.status) {
           this.loader.stop();
-          var array = [
+          let array = [
             "Test Name",
             "Note",
             "Radiology Center",
@@ -502,16 +485,16 @@ export class RadioTestComponent {
             "Coupon Code"
           ];
           const formattedData = result.body?.result.map((item: any) => [
-            item.testName || '',
-            item.notes || '',
-            item.radiologyName || '',
-            item.testFees || '',
-            item.loinc?.loincCode || '',
-            item.couponCode?.map((c: any) => c.couponCode).join(', ') || ''
+            item.testName ?? '',
+            item.notes ?? '',
+            item.radiologyName ?? '',
+            item.testFees ?? '',
+            item.loinc?.loincCode ?? '',
+            item.couponCode?.map((c: any) => c.couponCode).join(', ') ?? ''
           ]);
 
           formattedData.unshift(array)
-          var fileName = 'Radiology_Tests.xlsx';
+          let fileName = 'Radiology_Tests.xlsx';
           const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(formattedData);
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
@@ -578,14 +561,12 @@ export class RadioTestComponent {
   }
 
   onSelect2ChangeRadio(event: any): void {
-    if (!event || !event.value || !event.options || !event.options.length) {
-      return;
-    }
+    if (!event?.value || !event?.options?.length) return;
     this.loader.start()
     const selectedOption = event?.options?.[0];
 
-    this.selectedCentre = selectedOption?.label || "";
-    this.selectedCentreId = selectedOption?.value || ""
+    this.selectedCentre = selectedOption?.label ?? "";
+    this.selectedCentreId = selectedOption?.value ?? ""
 
     if (this.paginator) {
       this.paginator.firstPage();
@@ -604,11 +585,10 @@ export class RadioTestComponent {
     };
     
     this.lad_radioService.laboratoryList(reqData).subscribe(async (res) => {
-      try {
         const response = await this.coreService.decryptObjectData({ data: res });
         if (response?.status && response?.data?.data?.length) {
           const allLabs = response.data.data.map((lab: any) => ({
-            label: lab.centre_name || "",
+            label: lab.centre_name ?? "",
             value: lab._id,
             originalData: lab 
           }));
@@ -625,9 +605,7 @@ export class RadioTestComponent {
         } else {
           this.centresList = [];
         }
-      } catch (error) {
-        this.centresList = [];
-        }    
+      
     }, error => {
       this.centresList = [];
       console.error("API Error:", error);
@@ -641,9 +619,91 @@ export class RadioTestComponent {
     this.loader.stop()
   }
 
-  // onSelectedChangeCouponCode(event: any): void {        
-  //   if (event.value) {
-  //     this.selectedCouponCode = event.value;
-  //   }
-  // }
+
+  onFocusShowList() {
+    if (!this.filteredLoincCodes.length) {
+      this.getAllLoincCodeList(); // Load default list
+    }
+    setTimeout(() => {
+      this.autocompleteTrigger?.openPanel(); // Safe + reliable
+    });
+  }
+
+  getAllLoincCodeListFilter(searchText: string) {
+    if(searchText !== undefined){
+      const lowerText = searchText.toLowerCase();
+      this.filteredLoincCodes = this.loincCodeList.filter(item =>
+        item.label.toLowerCase().includes(lowerText)
+      );
+    }
+  }
+
+    onSelect2Change(event: any): void {    
+      this.selecteduser = event.value;
+    }
+    openVerticallyCenteredimport(importTest: any) {
+      this.modalService.open(importTest, {
+        centered: true,
+        size: "lg",
+        windowClass: "master_modal Import",
+      });
+    }
+  
+    teamExcelForm: FormGroup = new FormGroup({
+      subtestfile: new FormControl("", [Validators.required]),
+      centre: new FormControl("", [Validators.required])
+    });
+  
+    excleSubmit() {          
+      this.isSubmitted = true;
+      if (this.selecteduser === undefined || this.teamExcelForm.invalid ) {
+        return;
+      }
+      const formData = new FormData();
+      formData.append("file", this.selectedFiles);
+      formData.append("radiologyId", this.selecteduser);
+    
+      this.loader.start();
+      this.lad_radioService.bulkImportRadioTests(formData).subscribe((res: any) => {
+          let encryptedData = { data: res };
+          let response = this.coreService.decryptObjectData(encryptedData);
+          if (response.status) {
+            this.loader.stop();
+            this.coreService.showSuccess("",response.message);
+            this.closePopup();
+          } else {
+            this.loader.stop();
+            this.coreService.showError("",response.message);
+            this.closePopup();
+          }        
+  
+        },
+        (error: any) => {
+          let encryptedData = { data: error.error };
+          let response = this.coreService.decryptObjectData(encryptedData);
+          if (!response.status) {
+            this.coreService.showError("",response.message);
+            this.loader.stop();
+            this.closePopup();
+          }
+        }
+      );
+    }
+    fileChange(event) {
+      let fileList: FileList = event.target.files;
+      if (fileList.length > 0) {
+        let file: File = fileList[0];
+        this.selectedFiles = file;
+      }
+    }
+
+  downLoadExcel() {
+    const link = document.createElement("a");
+    link.setAttribute("target", "_blank");
+    link.setAttribute("href", "assets/doc/radiotest.xlsx");
+    link.setAttribute("download", `Radio-Test.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
 }

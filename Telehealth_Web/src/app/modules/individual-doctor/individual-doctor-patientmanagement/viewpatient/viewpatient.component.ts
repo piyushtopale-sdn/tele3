@@ -232,7 +232,11 @@ export class ViewpatientComponent implements OnInit {
   public handlePageEvent(data: { pageIndex: number; pageSize: number }): void {
     this.page = data.pageIndex + 1;
     this.pageSize = data.pageSize;
-    this.getPatientList();
+    if(this.userRole === 'INDIVIDUAL_DOCTOR_ADMIN'){
+      this.getPatientList( '',this.selecteduser);
+    }else{
+      this.getPatientList();
+    }
   }
 
   calculateAge(dob: any) {
@@ -268,14 +272,8 @@ export class ViewpatientComponent implements OnInit {
     this.getPatientList( '',this.selecteduser);
   }
   
-  routeBack(id){
-    if(this.fromParent !== undefined){
-      this.route.navigate([`/individual-doctor/patientmanagement/details/${id}`],
-        { queryParams: {patientId: id, adminView: this.fromParent } }
-      );      
-    }else{
-      this.route.navigate([`/individual-doctor/patientmanagement/details/${id}`]);
-    }
+  routeBack(id){  
+   this.route.navigate([`/individual-doctor/patientmanagement/details/${id}`]);    
   }
   onNavigate(url:any): void {
     const menuitems = JSON.parse(localStorage.getItem('activeMenu'))

@@ -11,5 +11,5 @@ export class Constants {
   public readonly GATEWAY_API_MOCK_ENDPOINT: string = environment.apiUrl;
   public readonly PHARMACY_API_MOCK_ENDPOINT: string = "http://localhost:8001";
 
-  public static RESCHEDULING_CANCEL_HOURS : Number = 8;
+  public static readonly RESCHEDULING_CANCEL_HOURS : number = 8;
 }

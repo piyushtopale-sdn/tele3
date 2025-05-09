@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component,ViewEncapsulation } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
@@ -17,7 +17,7 @@ export interface PeriodicElement {
   duration: number;
 }
 import { FourPortalService } from "../../four-portal.service";
-import { DatePipe, Location } from "@angular/common";
+import { Location } from "@angular/common";
 import { NgxUiLoaderService } from "ngx-ui-loader";
 
 @Component({
@@ -65,14 +65,14 @@ export class LabAppointmentDetailsComponent {
   fileError: string | null = null;
   externalLabResultStatus:boolean;
   constructor(
-    private modalService: NgbModal,
-    private coreService: CoreService,
-    private router: Router,
-    private labradioService: FourPortalService,
-    private activatedRoute: ActivatedRoute,
-    private fb: FormBuilder,
-    private loader: NgxUiLoaderService,
-    private location : Location
+    private readonly modalService: NgbModal,
+    private readonly coreService: CoreService,
+    private readonly router: Router,
+    private readonly labradioService: FourPortalService,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly fb: FormBuilder,
+    private readonly loader: NgxUiLoaderService,
+    private readonly location : Location
 
   ) {
     let portalUser = this.coreService.getLocalStorage("loginData");
@@ -101,15 +101,15 @@ export class LabAppointmentDetailsComponent {
   checkInnerPermission() {
     let menuID = sessionStorage.getItem("currentPageMenuID");
     let checkData = this.findObjectByKey(this.userPermission, "parent_id", menuID)
+    let checkSubmenu;
     if (checkData) {
-      if (checkData.isChildKey == true) {
-        var checkSubmenu = checkData.submenu;
+      if (checkData.isChildKey) {
+        checkSubmenu = checkData.submenu;
         if (checkSubmenu.hasOwnProperty("order_request")) {
           this.innerMenuPremission = checkSubmenu['order_request'].inner_menu;
-        } else {
         }
       } else {
-        var checkSubmenu = checkData.submenu;
+        checkSubmenu = checkData.submenu;
         let innerMenu = [];
         for (let key in checkSubmenu) {
           innerMenu.push({ name: checkSubmenu[key].name, slug: key, status: true });
@@ -243,7 +243,7 @@ export class LabAppointmentDetailsComponent {
     }
 
     const formData = new FormData();
-    formData.append('file', this.selectedFile!); // `!` ensures non-null assertion
+    formData.append('file', this.selectedFile); // `!` ensures non-null assertion
     formData.append('appointmentId', this.appointmentId);
     formData.append('testId', this.testID);
     formData.append('comment', this.resultForm.value.comment);

@@ -79,7 +79,7 @@ export class EnLandingPageComponent implements OnInit {
   onLangChange(lang: string) {
     this.selectedLang = lang; 
     if(this.selectedLang === 'en'){
-      this.router.navigate([`/test/home-en`]).then((res) => {
+      this.router.navigate([`/test_p/home-en`]).then((res) => {
         if (res) {
           this.ngxLoader.stop();
         }
@@ -89,7 +89,7 @@ export class EnLandingPageComponent implements OnInit {
   
       })   
     }else{
-      this.router.navigate([`/test/home-ar`]).then((res) => {
+      this.router.navigate([`/test_p/home-ar`]).then((res) => {
         if (res) {
           this.ngxLoader.stop();
         }

@@ -161,17 +161,15 @@ export class SuperAdminIndividualdoctorService {
     });
   }
 
-  // getAllPatientListForPaymentHistory(params: any) {
-  //   let token = this.auth.getToken();
-  //   return this.http.get(
-  //     this.getBasePath() +
-  //     `/patient-service/patient/get-all-patient-lis-for-admin-dashboard`,
-  //     {
-  //       params,
-  //       headers: this.getHeader(token),
-  //     }
-  //   );
-  // }
+  updateDoctorAdminPermission(data: any) {
+    let token = this.auth.getToken();
+    return this.http.put(
+      this.getBasePath() +
+      `/doctor-service/individual-doctor/update-mark-as-doctor-admin`,
+      data,
+      { headers: this.getHeader(token) }
+    );
+  }
 
 
 }

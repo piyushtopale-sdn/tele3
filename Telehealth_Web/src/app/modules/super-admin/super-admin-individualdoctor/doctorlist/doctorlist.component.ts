@@ -8,7 +8,7 @@ import {
 } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CoreService } from "src/app/shared/core.service";
 import { ToastrService } from "ngx-toastr";
 import { Router } from "@angular/router";
@@ -26,9 +26,6 @@ export interface PendingPeriodicElement {
   email: string;
   phonenumber: string;
   province: string;
-  // department: string;
-  // service: string;
-  // unit: string;
   experience: string;
 }
 
@@ -65,6 +62,8 @@ export class DoctorlistComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   tabNumber: number;
+  permissionType: any;
+  isAdmin: boolean;
   ngAfterViewInit() {
     this.pendingdataSource.paginator = this.paginator;
 
@@ -106,12 +105,12 @@ export class DoctorlistComponent implements OnInit {
   @ViewChild("activeOrInactivemodal") activeOrInactivemodal: TemplateRef<any>;
   @ViewChild("statusTab", { static: false }) tab: MatTabGroup;
   constructor(
-    private modalService: NgbModal,
-    private doctorService: SuperAdminIndividualdoctorService,
-    private coreService: CoreService,
-    private toastr: ToastrService,
-    private route: Router,
-    private loader: NgxUiLoaderService
+    private readonly modalService: NgbModal,
+    private readonly doctorService: SuperAdminIndividualdoctorService,
+    private readonly coreService: CoreService,
+    private readonly toastr: ToastrService,
+    private readonly route: Router,
+    private readonly loader: NgxUiLoaderService
   ) {
     this.loginrole = this.coreService.getLocalStorage("adminData").role;   
   }
@@ -127,13 +126,7 @@ export class DoctorlistComponent implements OnInit {
     let adminData = JSON.parse(localStorage.getItem("loginData"));
     this.superAdminId = adminData?._id;
     this.resetDate();
-    // this.getDoctorsList(`${this.sortColumn}:${this.sortOrder}`);
     this.getDoctorsList(`${this.sortColumn}:${this.sortOrder}`);
-
-
-    // setTimeout(() => {
-    //   this.checkInnerPermission();
-    // }, 300);
   }
 
 
@@ -146,15 +139,16 @@ export class DoctorlistComponent implements OnInit {
     if (userPermission) {
 
       let menuID = sessionStorage.getItem("currentPageMenuID");
-      let checkData = this.findObjectByKey(userPermission, "parent_id", menuID)
+      let checkData = this.findObjectByKey(userPermission, "parent_id", menuID);
+      let checkSubmenu;
       if (checkData) {
-        if (checkData.isChildKey == true) {
-          var checkSubmenu = checkData.submenu;
+        if (checkData.isChildKey) {
+          checkSubmenu = checkData.submenu;
           if (checkSubmenu.hasOwnProperty("pharmacy")) {
             this.innerMenuPremission = checkSubmenu['pharmacy'].inner_menu;
           } 
         } else {
-          var checkSubmenu = checkData.submenu;
+          checkSubmenu = checkData.submenu;
           let innerMenu = [];
           for (let key in checkSubmenu) {
             innerMenu.push({ name: checkSubmenu[key].name, slug: key, status: true });
@@ -185,7 +179,8 @@ export class DoctorlistComponent implements OnInit {
       from_date: this.startDate,
       to_date: this.endDate,
       sort: sort,  // Pass the sort directly, default to 'createdAt:-1'
-      docRole: ''
+      docRole: '',
+      isAdmin: this.isAdmin === false ? '' : this.isAdmin ?? ''
     };
     this.doctorService.doctorsList(reqData).subscribe(async (res) => {
       let response = await this.coreService.decryptObjectData({ data: res });
@@ -387,5 +382,30 @@ export class DoctorlistComponent implements OnInit {
     }   
   }
 
+  openVerticallyCenteredAssignPermission(assignPermission: any, id: any, type:any) {
+    this.doctorId = id;
+    this.permissionType = type;
+    this.modalService.open(assignPermission, { centered: true, size: "md" });
+  }
 
+  updateDoctorPermission(data:any){
+    let reqData ={
+      userId:this.doctorId,
+      isAdmin:data 
+    }
+    this.doctorService.updateDoctorAdminPermission(reqData).subscribe(async (res) => {
+      let response = await this.coreService.decryptObjectData({ data: res });
+      if(response.status){
+        this.coreService.showSuccess("", response.message);
+        this.closePopup();
+      }else{
+        this.coreService.showError("", response.message);
+      }
+    });
+  }
+
+  viewAdminList(data:any){
+    this.isAdmin = data;
+    this.getDoctorsList()
+  }
 }

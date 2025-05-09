@@ -29,15 +29,15 @@ interface HttpOption {
   reportProgress?: boolean;
   responseType?: "json";
   withCredentials?: boolean;
-  body?: any | null;
+  body?: null;
 }
 
 @Injectable({
   providedIn: "root",
 })
 export class ApiHttpService {
-  private uuid = localStorage.getItem("deviceId");
-  constructor(private http: HttpClient) {}
+  private readonly uuid = localStorage.getItem("deviceId");
+  constructor(private readonly http: HttpClient) {}
   public get<T>(url: string, options?: HttpOption) {
     return this.http.get<IResponse<T>>(url, {
       headers: new HttpHeaders()

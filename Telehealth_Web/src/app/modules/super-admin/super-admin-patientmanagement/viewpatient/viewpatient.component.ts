@@ -332,7 +332,7 @@ export class ViewpatientComponent implements OnInit {
     })
     : '',
       "Registration Date": patient.createdAt ? patient.createdAt.split("T")[0] : "",
-      'Last Used': patient?.lastUsedDate 
+      'Last Updated': patient?.lastUsedDate 
       ? new Date(patient.lastUsedDate).toLocaleDateString('en-GB') 
       : ""
     }));

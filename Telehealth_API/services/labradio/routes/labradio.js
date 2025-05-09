@@ -1,7 +1,6 @@
 "use strict";
 
 import express from "express";
-import { deleteInvitation, getAllInvitation, getInvitationById, sendInvitation } from "../controllers/email_invitation";
 import labRadioRouteRole from "../controllers/roles/role";
 import labRadioRouteStaff from "../controllers/staffmanagement";
 import labradioTemplate from "../controllers/templatebuilder";
@@ -84,11 +83,7 @@ labRadioRoute.get("/get-lab-radio-tests-list", getLabRadioTestsList);
 labRadioRoute.post('/approve-or-reject-labradio', approveOrRejectLabRadio);
 labRadioRoute.post('/active-lock-delete-labradio', activeLockDeleteLabRadio);
 labRadioRoute.get('/view-doctor-profile-labradio', labRadioViewBasicInfo);
-// email invitation
-labRadioRoute.post("/send-email-invitation", sendInvitation);
-labRadioRoute.get("/get-email-invitation-list", getAllInvitation);
-labRadioRoute.get("/get-email-invitation-id", getInvitationById);
-labRadioRoute.post('/delete-email-invitation', deleteInvitation);
+
 //hospital management
 labRadioRoute.get('/four-portal-management-request-list', labradio.fourportalManagementRequestList);
 labRadioRoute.get('/four-portal-all-management-list', labradio.fourPortalAllManagementList);
@@ -200,7 +195,6 @@ labRadioRoute.get("/four-portal-to-hospital-payment-history", fourportalappointm
 labRadioRoute.get('/four-portal-view-appointment-by-roomname', portal_viewAppointmentByRoomName);
 //ePrescription
 labRadioRoute.post('/four-portal-create-eprescription', portal_ePrescription.createEprescription);
-labRadioRoute.get('/four-portal-recent-medicine-prescribed', portal_ePrescription.listRecentMedicinesPrescribed);
 labRadioRoute.post('/four-portal-delete-eprescription-medicine', portal_ePrescription.deleteEprescriptionMedicineDosage);
 
 labRadioRoute.post('/four-portal-add-eprescription-medicine', portal_ePrescription.addEprescriptionMedicineDosage);
@@ -268,5 +262,7 @@ labRadioRoute.get('/dashboard-graph', verifyRole(['INDIVIDUAL', 'superadmin']), 
 labRadioRoute.get('/get-labradio-details-by-id', verifyRole(['INDIVIDUAL_DOCTOR', 'patient', 'INDIVIDUAL']), labradio.getLabRadioDetailsById)
 labRadioRoute.get('/dashboard-records', verifyRole(['superadmin']), labradio.getDashboardDataRecords);
 labRadioRoute.get('/get-total-labradio-records', verifyRole(['superadmin']), labradio.getTotalLabRadioRecords);
+labRadioRoute.put('/update-center-user-admin', verifyRole(['superadmin']), labradio.markAsCenterUserAdmin);
+
 
 export default labRadioRoute;

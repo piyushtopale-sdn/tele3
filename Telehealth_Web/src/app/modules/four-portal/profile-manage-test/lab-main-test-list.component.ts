@@ -8,7 +8,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { LabimagingdentalopticalService } from "../../super-admin/labimagingdentaloptical.service";
 import { IndiviualDoctorService } from "../../individual-doctor/indiviual-doctor.service";
 import { Router } from "@angular/router";
-import { SuperAdminService } from "../../super-admin/super-admin.service";
 
 
 @Component({
@@ -54,14 +53,13 @@ export class LabMainTestListComponent {
   slectedLonicCode: any;
 
   constructor(
-    private modalService: NgbModal,
-    private coreService: CoreService,
-    private fb: FormBuilder,
-    private lad_radioService: LabimagingdentalopticalService,
-    private loader: NgxUiLoaderService,
-    private service: IndiviualDoctorService,
-    private super_service: SuperAdminService,
-    private route: Router,
+    private readonly modalService: NgbModal,
+    private readonly coreService: CoreService,
+    private readonly fb: FormBuilder,
+    private readonly lad_radioService: LabimagingdentalopticalService,
+    private readonly loader: NgxUiLoaderService,
+    private readonly service: IndiviualDoctorService,
+    private readonly route: Router,
   ) {
     this.loginrole = this.coreService.getLocalStorage("adminData").role;
     let loginUser = this.coreService.getLocalStorage('loginData')
@@ -109,16 +107,16 @@ export class LabMainTestListComponent {
 
       let menuID = sessionStorage.getItem("currentPageMenuID");
       let checkData = this.findObjectByKey(userPermission, "parent_id", menuID)
+      let checkSubmenu;
       if (checkData) {
-        if (checkData.isChildKey == true) {
-          var checkSubmenu = checkData.submenu;
+        if (checkData.isChildKey) {
+          checkSubmenu = checkData.submenu;
           if (checkSubmenu.hasOwnProperty("pharmacy")) {
             this.innerMenuPremission = checkSubmenu['pharmacy'].inner_menu;
 
-          } else {
           }
         } else {
-          var checkSubmenu = checkData.submenu;
+           checkSubmenu = checkData.submenu;
           let innerMenu = [];
           for (let key in checkSubmenu) {
             innerMenu.push({ name: checkSubmenu[key].name, slug: key, status: true });
@@ -175,7 +173,7 @@ export class LabMainTestListComponent {
 
 
   exportManageTest() {
-    var data: any = [];
+    let data: any = [];
     this.pageSize = 0;
     let reqData = {
       page: this.page,  limit:this.pageSize, searchText:this.searchText,
@@ -186,14 +184,14 @@ export class LabMainTestListComponent {
         let result = this.coreService.decryptObjectData({ data: res });
         if (result.status) {
           this.loader.stop();
-          var array = [
+          let array = [
             "Profile Name",
             "Note",
             "Laboratory Center"
           ];
           data = result.data.array
           data.unshift(array);
-          var fileName = 'Laboratory_Tests.xlsx';
+          let fileName = 'Laboratory_Tests.xlsx';
           const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
           /* generate workbook and add the worksheet */
           const wb: XLSX.WorkBook = XLSX.utils.book_new();

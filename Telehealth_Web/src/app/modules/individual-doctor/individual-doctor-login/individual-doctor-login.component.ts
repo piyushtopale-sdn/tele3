@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
 import {
   AbstractControl,
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
 } from "@angular/forms";
@@ -36,21 +35,22 @@ export class IndividualDoctorLoginComponent implements OnInit {
   emailId: string;
   errorMessage: any;
   companyName: string = "";
-
+  selectedType:any= 'INDIVIDUAL_DOCTOR';
   @ViewChild("addsecondsubsriber", { static: false }) addsecondsubsriber: any;
   password: any;
   passwordShow = false;
   routeTo: any;
+  selectedRole: any="";
   
   constructor(
-    private modalService: NgbModal,
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private route: Router,
-    private individualService: IndiviualDoctorService,
-    private _coreService: CoreService,
+    private readonly modalService: NgbModal,
+    private readonly fb: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly route: Router,
+    private readonly individualService: IndiviualDoctorService,
+    private readonly _coreService: CoreService,
     public translate: TranslateService,
-    private insuranceManagementService: InsuranceManagementService,
+    private readonly insuranceManagementService: InsuranceManagementService,
 
   ) {
     let token = this.authService.isLoggedIn();
@@ -83,11 +83,11 @@ export class IndividualDoctorLoginComponent implements OnInit {
 
   onSubmit() {
     this.isSubmitted = true;
-    if (this.loginForm.invalid) {
+    if (this.loginForm.invalid || this.selectedType == "") {
       return;
     }
     this.isLoading = true;
-    const formData = { ...this.loginForm.value, email: this.loginForm?.value?.email?.toLowerCase() };
+    const formData = { ...this.loginForm.value, email: this.loginForm?.value?.email?.toLowerCase() , role: this.selectedType};
     this.individualService.hospitalLogin(formData).subscribe(
       (res) => {
         try {
@@ -270,9 +270,12 @@ export class IndividualDoctorLoginComponent implements OnInit {
 
   goToHomePage(){
     if(this.translate.store.currentLang === undefined || this.translate.store.currentLang === 'ar'){
-      this.route.navigate([`/test/home-ar`]);
+      this.route.navigate([`/test_p/home-ar`]);
     }else{
-      this.route.navigate([`/test/home-en`]);
+      this.route.navigate([`/test_p/home-en`]);
     }
+  }
+  onRoleChange(data:string){    
+    this.selectedType = data;  
   }
 }

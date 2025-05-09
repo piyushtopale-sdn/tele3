@@ -3,54 +3,10 @@ import { registerValidator } from "../validator/pharmacy";
 import { sendResponse, dataValidation } from "../helpers/transmission";
 const pharmacy = require("../controllers/pharmacy_controller");
 import StaffManagementController from "../controllers/staffManagementController"
-import OnDutyGroupController from "../controllers/onDutyGroupController"
 import { verifyRole, verifyToken } from "../helpers/verifyToken";
 import { addMembersToGroupChat, allMessage, clearAllmessages, createdChat, createGroupChat, getCreatedChats, getNotification, markAllReadNotification, markReadNotificationByID, saveNotification, sendMessage, updateNotification, updateOnlineStatus, updateConfirmScheduleorder, clearSinglemessages } from "../controllers/Chat-Controller/Chat";
 const pharmacyRoute = express.Router();
 
-const uploadFileToLocalStorage = (req, res, next) => {
-    if (!req.files) {
-        return sendResponse(req, res, 200, {
-            status: false,
-            body: null,
-            message: "No files found",
-            errorCode: "INTERNAL_SERVER_ERROR",
-        })
-    }
-    const file = req.files.csv_file;
-    if (file.mimetype !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-        return sendResponse(req, res, 500, {
-            status: false,
-            body: null,
-            message: "Only .xlsx mime type allowed!",
-            errorCode: "INTERNAL_SERVER_ERROR",
-        })
-    }
-    // if (file.mimetype !== "text/csv") {
-    //     return sendResponse(req, res, 200, {
-
-    //         status: false,
-    //         body: null,
-    //         message: "Only .csv mime type allowed!",
-    //         errorCode: "INTERNAL_SERVER_ERROR",
-    //     })
-    // }
-    const filename = file.name.split('.')[0] + '-' + Date.now() + '.xlsx';
-    req.filename = filename;
-    const path = `./uploads/${filename}`
-
-    file.mv(path, (err) => {
-        if (err) {
-            return sendResponse(req, res, 500, {
-                status: false,
-                body: null,
-                message: "Something went wrong while uploading file",
-                errorCode: "INTERNAL_SERVER_ERROR",
-            })
-        }
-        next()
-    });
-}
 
 pharmacyRoute.get(
     "/view-pharmacy-admin-details",
@@ -69,30 +25,16 @@ pharmacyRoute.post("/lock-profile", pharmacy.lockProfile);
 pharmacyRoute.post('/delete-active-admin', pharmacy.deleteActiveadmin)
 pharmacyRoute.get("/get-document-metadata", pharmacy.documentInformation);
 pharmacyRoute.post("/pharmacy-opening-hours", pharmacy.pharmacyOpeningHours);
-pharmacyRoute.post("/pharmacy-on-duty", pharmacy.pharmacyOnDuty);
 pharmacyRoute.post("/reset-password", pharmacy.resetPassword);
 pharmacyRoute.get("/get-all-pharmacy", pharmacy.getAllPharmacy);
 pharmacyRoute.get("/get-all-pharmacy-admin-details", pharmacy.getAllPharmacyAdminDetails);
 pharmacyRoute.get("/get-pharmacy-details", pharmacy.getAllPharmacyAdminDetails);
 pharmacyRoute.get("/check-route", pharmacy.checkRoute);
 pharmacyRoute.get("/pharmacy-admin-details", pharmacy.pharmacyAdminDetails);
-pharmacyRoute.get("/pharmacy-details", pharmacy.pharmacyDetails);
 pharmacyRoute.post("/save-superadmin-notification", pharmacy.saveSuperadminNotification);
 pharmacyRoute.get("/get-pharmacy-count-superadmin-dashboard", pharmacy.totalPharmacyforAdminDashboard);
 pharmacyRoute.get("/get-orders-doctor-patient-details", pharmacy.getOrdersWithDoctorPatientDetails);
-//On Duty Group
-pharmacyRoute.post('/add-on-duty-group', OnDutyGroupController.addOnDutyGroup)
-pharmacyRoute.get('/list-on-duty-group', OnDutyGroupController.listOnDutyGroup)
-pharmacyRoute.get('/get-on-duty-group', OnDutyGroupController.getOnDutyGroup)
-pharmacyRoute.post('/delete-on-duty-group', OnDutyGroupController.deleteOnDutyGroup)
-pharmacyRoute.post('/deleteOnDutyGroupMasterAction', OnDutyGroupController.deleteOnDutyGroupMasterAction)
-pharmacyRoute.post("/upload-on-duty-group-csv", uploadFileToLocalStorage, OnDutyGroupController.uploadOnDutyGroupFromCSV);
-//On Duty Pharmacy
-pharmacyRoute.post('/add-pharmacy-on-duty-group', OnDutyGroupController.addPharmacyOnDutyGroup)
-pharmacyRoute.post("/upload-on-duty-pharmcy-group-csv", uploadFileToLocalStorage, OnDutyGroupController.addPharmacyOnDutyGroupBulkCsv);
-pharmacyRoute.post('/edit-pharmacy-on-duty-group', OnDutyGroupController.editPharmacyOnDutyGroup)
-pharmacyRoute.get('/list-pharmacy-on-duty-group', OnDutyGroupController.listPharmacyOnDutyGroup)
-pharmacyRoute.get('/details-pharmacy-on-duty-group', OnDutyGroupController.detailsPharmacyOnDutyGroup)
+
 pharmacyRoute.get('/get-review-and-rating', pharmacy.getReviewAndRating);
 pharmacyRoute.post('/delete-review-and-rating-pharmacy', pharmacy.deleteReviewAndRating);
 pharmacyRoute.get('/get-review-and-rating-by-patient', pharmacy.getReviewAndRatinByPatient);
@@ -125,12 +67,7 @@ pharmacyRoute.post("/approve-or-reject-pharmacy", pharmacy.approveOrRejectPharma
 pharmacyRoute.post("/pharmacy-profile-set-hours", pharmacy.pharmacyProfileSetHours);
 pharmacyRoute.get("/list-approved-pharmacy-admin-user", pharmacy.listApprovedPharmacyAdminUser);
 pharmacyRoute.get("/get-PharmacyBy-Id", pharmacy.getPharmacyById);
-// Invitation
-pharmacyRoute.post("/send-email-invitation", pharmacy.sendInvitation);
-pharmacyRoute.get("/get-email-invitation-list", pharmacy.getAllInvitation);
-pharmacyRoute.get("/get-email-invitation-id", pharmacy.getInvitationById);
 pharmacyRoute.get("/get-medicine-orderdetails-byid", pharmacy.getOrderDetailsById);
-pharmacyRoute.post("/delete-email-invitation", pharmacy.deleteInvitation);
 pharmacyRoute.get("/chat-list-staff", StaffManagementController.pharmacyListForChat);
 // chat route
 pharmacyRoute.post('/create-chat', createdChat);

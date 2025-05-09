@@ -1,12 +1,9 @@
 import {
   ChangeDetectorRef,
-  Component,
-  OnInit,
-  ViewEncapsulation,
+  Component
 } from "@angular/core";
 import {
   Chart,
-  ChartConfiguration,
   ChartOptions,
   registerables,
 } from "chart.js";
@@ -19,9 +16,7 @@ export interface PeriodicElement {
   dateandtime: string;
   consultationtype: string;
 }
-import { ActivatedRoute } from "@angular/router";
 import { IndiviualDoctorService } from "../../individual-doctor/indiviual-doctor.service";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { DatePipe } from "@angular/common";
 import { DateAdapter } from "@angular/material/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
@@ -137,16 +132,14 @@ export class AdminDashboardComponent {
   loadingExport: boolean = false;
 
   constructor(
-    private _coreService: CoreService,
-    private service: IndiviualDoctorService,
-    private route: Router,
-    private _superAdminService: SuperAdminService,
-    private fourPortalService: FourPortalService,
-    private modalService: NgbModal,
-    private datepipe: DatePipe,
-    private dateAdapter: DateAdapter<Date>,
-    private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private readonly _coreService: CoreService,
+    private readonly service: IndiviualDoctorService,
+    private readonly route: Router,
+    private readonly _superAdminService: SuperAdminService,
+    private readonly fourPortalService: FourPortalService,
+    private readonly datepipe: DatePipe,
+    private readonly dateAdapter: DateAdapter<Date>,
+    private readonly fb: FormBuilder,
   ) {
     this.dateAdapter.setLocale("en-GB"); //dd/MM/yyyy
     Chart.register(...registerables);

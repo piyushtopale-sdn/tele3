@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as XLSX from "xlsx";
 import { DateAdapter } from '@angular/material/core';
@@ -8,7 +8,6 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { SuperAdminService } from '../../super-admin/super-admin.service';
 import { LabimagingdentalopticalService } from '../../super-admin/labimagingdentaloptical.service';
 import { MatPaginator } from '@angular/material/paginator';
-encapsulation: ViewEncapsulation.None
 
 @Component({
   selector: 'app-admin-lab-dashboard',
@@ -49,13 +48,13 @@ export class AdminLabDashboardComponent {
   exportCancellationRecords:any[]=[];
 
   constructor(
-    private service: SuperAdminService,
-    private datepipe: DatePipe,
-    private dateAdapter: DateAdapter<Date>,
-    private fb: FormBuilder,
-    private _coreService: CoreService,
-    private labimagingdentaloptical: LabimagingdentalopticalService,
-    private loader: NgxUiLoaderService,
+    private readonly service: SuperAdminService,
+    private readonly datepipe: DatePipe,
+    private readonly dateAdapter: DateAdapter<Date>,
+    private readonly fb: FormBuilder,
+    private readonly _coreService: CoreService,
+    private readonly labimagingdentaloptical: LabimagingdentalopticalService,
+    private readonly loader: NgxUiLoaderService,
 
 
   ) {
@@ -181,16 +180,12 @@ export class AdminLabDashboardComponent {
   }
 
   myFilter = (d: Date | null): boolean => {
-    // const day = (d || new Date()).getDay();
-    // Prevent Saturday and Sunday from being selected.
-    // return day !== 0 && day !== 6;
     return true;
   };
 
   clearSelect2() {
     this.selecteduser = null;  
     this.labDashboardCount();
-    // this.labList();
   }
 
   onSelect2Change(event: any): void {
@@ -222,7 +217,7 @@ export class AdminLabDashboardComponent {
   }
 
   exportList() {
-    var data: any = [];
+    let data: any = [];
     this.pageSize = 0;
 
     let reqData = {
@@ -238,7 +233,7 @@ export class AdminLabDashboardComponent {
         let result = this._coreService.decryptObjectData({ data: res });        
         if (result.status) {
           this.loader.stop();
-          var array = [
+          let array = [
             "Patient Name",
             "Centre Name",
             "Location",
@@ -250,7 +245,7 @@ export class AdminLabDashboardComponent {
           ];
           data = result.data.array
           data.unshift(array);
-          var fileName = 'OrderList.xlsx';
+          let fileName = 'OrderList.xlsx';
           const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
           /* generate workbook and add the worksheet */
           const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -402,18 +397,29 @@ export class AdminLabDashboardComponent {
   exportOrderListDataAsPerStatus(status:any){
     const filteredData = this.listData.filter((ele: any) => status.includes(ele.status));    
     if(filteredData.length > 0){
-    const formattedData = filteredData.map(data => ({
-      'Order Date': this.formatDate__(data?.createdAt),
-      'Patient Name': data?.patientName ?? "",
-      'PrescribeBy': data?.doctorName ?? "",
-      'Order ID': data?.appointmentId ?? "",
-      'Center Name':data?.centreName ?? "",
-      'Center Location': data?.centreLocation ?? "",
-      "Tests Name": Array.isArray(data?.labTestName) && data.labTestName.length > 0
-      ? data.labTestName.join(", "): Array.isArray(data?.radiologyTestName) ? data.radiologyTestName.join(", ") : data.radiologyTestName ?? "",
-      'Order Date/Time': data?.consultationDate + "|" + data?.consultationTime,
-      'Status': data?.status ?? ""        
-    }));
+      const formattedData = filteredData.map(data => {
+        let testsName = "";
+      
+        if (Array.isArray(data?.labTestName) && data.labTestName.length > 0) {
+          testsName = data.labTestName.join(", ");
+        } else if (Array.isArray(data?.radiologyTestName)) {
+          testsName = data?.radiologyTestName.join(", ");
+        } else {
+          testsName = data?.radiologyTestName ?? "";
+        }
+      
+        return {
+          'Order Date': this.formatDate__(data?.createdAt),
+          'Patient Name': data?.patientName ?? "",
+          'PrescribeBy': data?.doctorName ?? "",
+          'Order ID': data?.appointmentId ?? "",
+          'Center Name': data?.centreName ?? "",
+          'Center Location': data?.centreLocation ?? "",
+          "Tests Name": testsName,
+          'Order Date/Time': data?.consultationDate + "|" + data?.consultationTime,
+          'Status': data?.status ?? ""
+        };
+      });
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(formattedData);
   

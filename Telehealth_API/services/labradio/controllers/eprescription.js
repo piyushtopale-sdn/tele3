@@ -12,7 +12,6 @@ import EprescriptionMedicineDosage from "../models/eprescription_medicine_dosage
 import EprescriptionLab from "../models/eprescription_lab";
 import EprescriptionImaging from "../models/eprescription_imaging";
 import EprescriptionVaccination from "../models/eprescription_vaccination";
-import EprescriptionEyeglass from "../models/eprescription_eyeglass";
 import EprescriptionOther from "../models/eprescription_other";
 import { sendEmail } from "../helpers/ses";
 import { sendEprescriptionEmail } from "../helpers/emailTemplate";
@@ -406,50 +405,7 @@ class ePrescriptionController {
       });
     }
   }
-  async listRecentMedicinesPrescribed(req, res) {
-    const {
-      portalId, portal_type,
-      recentItemsFor
-    } = req.query;
-
-    try {
-      let result;
-
-      if (recentItemsFor == 'Medicines') {
-        result = await EprescriptionMedicineDosage.find({ portalId, portal_type }).sort({ "createdAt": -1 }).limit(10);
-      } else if (recentItemsFor == 'Labs') {
-        result = await EprescriptionLab.find({ portalId, portal_type }).sort({ "createdAt": -1 }).limit(10);
-      } else if (recentItemsFor == 'Imaging') {
-        result = await EprescriptionImaging.find({ portalId, portal_type }).sort({ "createdAt": -1 }).limit(10);
-      } else if (recentItemsFor == 'Vaccination') {
-        result = await EprescriptionVaccination.find({ portalId, portal_type }).sort({ "createdAt": -1 }).limit(10);
-      } else if (recentItemsFor == 'Eyeglass') {
-        result = await EprescriptionEyeglass.find({ portalId, portal_type }).sort({ "createdAt": -1 }).limit(10);
-      } else {
-        result = await EprescriptionOther.find({ portalId, portal_type }).sort({ "createdAt": -1 }).limit(10);
-      }
-
-      if (result) {
-        sendResponse(req, res, 200, {
-          status: true,
-          body: result,
-          message: 'Recent prescribes fetched succesfully',
-          errorCode: null,
-        });
-      }
-    } catch (error) {
-
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Failed to recent prescribes",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-
-
+ 
   async deleteEprescriptionMedicineDosage(req, res) {
     const {
       doseId

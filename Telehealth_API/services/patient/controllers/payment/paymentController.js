@@ -13,6 +13,13 @@ import { generateToken } from "../../middleware/utils";
 const { MOYASAR_SECRET_KEY } = config
 const httpService = new Http();
 
+const generateInvoiceNumber = () => {
+    const prefix = "INV";
+    const datePart = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+    const randomPart = Math.floor(1000 + Math.random() * 9000); // 4-digit random
+    return `${prefix}-${datePart}-${randomPart}`;
+};
+
 const getPayment = (paymentId) => {
     return new Promise(async(resolve, reject) => {
         try {
@@ -99,7 +106,8 @@ const saveData = (getPaymentData, existingSubscription, params) => {
                         "subscriptionDetails.subscriptionDuration": updateObject.subscriptionDuration,
                         "subscriptionDetails.trialDays": updateObject.trialDays,
                         "subscriptionDetails.isPlanCancelled": false,
-                        "subscriptionDetails.paymentRetried": 0
+                        "subscriptionDetails.paymentRetried": 0,
+                        "subscriptionDetails.paymentGateway": "moyasar"
                     }
                 };
                 
@@ -228,6 +236,7 @@ const processSubscriptionPayment = async (user, headers) => {
             vatCharges,
             planPrice: discountCoupon ? validateCoupon.body.priceAfterDiscount.total : planDuration?.price,
             discountCoupon,
+            invoice_id: generateInvoiceNumber()
         };
 
         const response = await axiosWithRetry(

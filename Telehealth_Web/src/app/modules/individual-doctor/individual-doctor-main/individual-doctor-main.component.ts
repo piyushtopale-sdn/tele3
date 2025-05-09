@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { CoreService } from 'src/app/shared/core.service';
 
 @Component({
@@ -13,10 +12,9 @@ export class IndividualDoctorMainComponent implements OnInit {
   currentUrl: any = ''
   dontShowSidebard: any = ''
   menuSelected = "";
-  constructor(private route: Router, private _coreService: CoreService) {
+  constructor(private readonly _coreService: CoreService) {
     this.dontShowSidebard =  localStorage.getItem("callStatus")
 
-    const pattern = /^\/individual-doctor\/patientmanagement\/details\/[^/]+$/;
     if (this.dontShowSidebard === 'true') {
       this.dontShowSidebard = true
     }
@@ -28,12 +26,16 @@ export class IndividualDoctorMainComponent implements OnInit {
       if (res != "default") {
         this.menuSelected = res;
       } else {
-        this.menuSelected =  this._coreService.getLocalStorage("menuTitle");
+        const menuTitle = localStorage.getItem("menuTitle");
+        this.menuSelected =  menuTitle
       }
     });
+    
   }
 
   ngOnInit(): void {
+    // document why this method 'ngOnInit' is empty
+  
   }
 
 }

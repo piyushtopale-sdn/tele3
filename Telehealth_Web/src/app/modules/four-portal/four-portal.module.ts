@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
 import { FourPortalRoutingModule } from './four-portal-routing.module';
 import { FourPortalLoginComponent } from './four-portal-login/four-portal-login.component';
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -25,7 +23,6 @@ import { HttpClient } from "@angular/common/http";
 import { FourPortalStaffManagementComponent } from './four-portal-staff-management/four-portal-staff-management.component';
 import { FourPortalAddStaffComponent } from './four-portal-staff-management/four-portal-add-staff/four-portal-add-staff.component';
 import { FourPortalViewStaffComponent } from './four-portal-staff-management/four-portal-view-staff/four-portal-view-staff.component';
-import { FourPortalMasterComponent } from './four-portal-master/four-portal-master.component';
 import { FormioModule } from 'angular-formio';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -41,16 +38,14 @@ import { NgxMaterialTimepickerModule } from "ngx-material-timepicker";
 import { NgxMatDatetimePickerModule, NgxMatNativeDateModule,NgxMatTimepickerModule,} from "@angular-material-components/datetime-picker";
 import { IgxCalendarModule, IgxDialogModule, IgxPrefixModule, IgxSelectModule } from 'igniteui-angular';
 import { AppointmentDetailsComponent } from './four-portal-appointment/radio-appointment-details/appointment-details.component';
-import { DecimalPipe,DatePipe, SlicePipe } from "@angular/common";
+import { DecimalPipe,DatePipe, SlicePipe, CommonModule } from "@angular/common";
 import { FourPortalRatingandreviewComponent } from './four-portal-ratingandreview/four-portal-ratingandreview.component';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
-import { ContextMenuService } from "@perfectmemory/ngx-contextmenu";
-import { ContextMenuModule } from '@perfectmemory/ngx-contextmenu';
+import { ContextMenuModule, ContextMenuService } from '@perfectmemory/ngx-contextmenu';
 import { TooltipModule } from 'ng2-tooltip-directive';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { FourPortalNotificationComponent } from './four-portal-notification/four-portal-notification.component';
-import { LogsComponent } from './four-portal-master/logs/logs.component';
 import { EditProfileComponent } from './four-portal-view-profile/edit-profile/edit-profile.component';
 import { TestManagementComponent } from './test-management/test-management.component';
 import { LabTestViewComponent } from './test-management/lab-test-view/lab-test-view.component';
@@ -84,14 +79,12 @@ import { AdminAllRequestComponent } from './admin-all-request/admin-all-request.
     FourPortalStaffManagementComponent,
     FourPortalAddStaffComponent,
     FourPortalViewStaffComponent,
-    FourPortalMasterComponent,
     FourPortalCommunicationComponent,
     FourPortalAppointmentComponent,
     AppopintmentListComponent,
     AppointmentDetailsComponent,
     FourPortalRatingandreviewComponent,
     FourPortalNotificationComponent,
-    LogsComponent,
     EditProfileComponent,
     TestManagementComponent,
     LabTestViewComponent,

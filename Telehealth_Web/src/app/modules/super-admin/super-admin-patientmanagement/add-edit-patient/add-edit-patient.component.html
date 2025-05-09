@@ -10,7 +10,7 @@
                 <div class="user_upload_block">
                   <span class="user_upload_wrapper">
                     <span class="user_upload_icon">
-                      <img class="img-fluid" src="{{
+                      <img class="img-fluid" alt="" src="{{
                           profileImage ? profileImage : 'assets/img/create_profile.png'
                         }}" />
                       <span class="quick_view" *ngIf="profileImage ? true : false">
@@ -19,13 +19,13 @@
                     </span>
                   </span>
                   <span class="edit_upload_wrapper">
-                    <span class="edit_upload_icon"><img src="../../../assets/img/edit_profile.svg" /></span>
+                    <span class="edit_upload_icon"><img  alt=""src="../../../assets/img/edit_profile.svg" /></span>
                   </span>
                 </div>
               </div>
               <div class="image-upload d-none">
                 <label for="file-input">
-                  <img class="img-fluid mb-4" src="{{
+                  <img class="img-fluid mb-4" alt="" src="{{
                       profileImage ? profileImage : 'assets/img/create_profile.png'
                     }}" />
         
@@ -47,6 +47,15 @@
                       </mat-form-field>
                       <mat-error *ngIf="isSubmitted && patientForm.get('first_name').hasError('required')">
                         {{ "first_name_is_required" | translate }}.</mat-error>
+                          <!-- Invalid characters -->
+                        <span class="text-danger" *ngIf="f['first_name'].errors?.['onlyCharacters'] as error">
+                          {{ error.message }}
+                        </span>
+
+                        <!-- Length exceeded -->
+                        <span class="text-danger" *ngIf="f['first_name'].errors?.['maxLength'] as error">
+                          {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+                        </span>
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-4  mb-3">
@@ -57,6 +66,15 @@
                       </mat-form-field>
                       <mat-error *ngIf="isSubmitted && patientForm.get('first_name_arabic').hasError('required')">
                         {{ "first_name_is_required" | translate }}.</mat-error>
+                       <!-- Invalid characters -->
+                       <span class="text-danger" *ngIf="f['first_name_arabic'].errors?.['onlyCharacters'] as error">
+                        {{ error.message }}
+                      </span>
+
+                      <!-- Length exceeded -->
+                      <span class="text-danger" *ngIf="f['first_name_arabic'].errors?.['maxLength'] as error">
+                        {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+                      </span>
                     </div>
                   </div>
 
@@ -68,6 +86,15 @@
                       </mat-form-field>
                       <mat-error *ngIf="isSubmitted && patientForm.get('last_name').hasError('required')">
                         {{ "last_name_is_required" | translate }}.</mat-error>
+                         <!-- Invalid characters -->
+                       <span class="text-danger" *ngIf="f['last_name'].errors?.['onlyCharacters'] as error">
+                        {{ error.message }}
+                      </span>
+
+                      <!-- Length exceeded -->
+                      <span class="text-danger" *ngIf="f['last_name'].errors?.['maxLength'] as error">
+                        {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+                      </span>
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-4  mb-3">
@@ -78,6 +105,15 @@
                       </mat-form-field>
                       <mat-error *ngIf="isSubmitted && patientForm.get('last_name_arabic').hasError('required')">
                         {{ "last_name_is_required" | translate }}.</mat-error>
+                         <!-- Invalid characters -->
+                       <span class="text-danger" *ngIf="f['last_name_arabic'].errors?.['onlyCharacters'] as error">
+                        {{ error.message }}
+                      </span>
+
+                      <!-- Length exceeded -->
+                      <span class="text-danger" *ngIf="f['last_name_arabic'].errors?.['maxLength'] as error">
+                        {{ error.message }} ({{ error.actualLength }} / {{ error.requiredLength }})
+                      </span>
                     </div>
                   </div>
   
@@ -133,7 +169,6 @@
                     <div class="form_field_wrapper">
                       <label>{{ "gender" | translate }}<span class="danger">*</span></label>
                       <mat-form-field appearance="fill">
-                        <!-- <mat-label>Sub-admin</mat-label> -->
                         <mat-select disableRipple formControlName="gender">
                           <mat-option value="male">{{
                             "male" | translate
@@ -151,7 +186,6 @@
                     <div class="form_field_wrapper">
                       <label>{{ "blood_group" | translate }}</label>
                       <mat-form-field appearance="fill">
-                        <!-- <mat-label>Sub-admin</mat-label> -->
                         <mat-select disableRipple formControlName="blood_group">
                           <mat-option value="A+"> A + </mat-option>
                           <mat-option value="A-">A -</mat-option>
@@ -186,38 +220,7 @@
                       <mat-error *ngIf="isSubmitted && patientForm.get('mrn_number').hasError('required')">
                         {{ "field_is_required" | translate }}.</mat-error>
                     </div>
-                  </div>
-                  <!-- <div class="col-sm-12 col-md-4  mb-3">
-                    <div class="form_field_wrapper">
-                      <label>{{ "select_national_id" | translate }}<span class="danger">*</span></label>
-                      <mat-form-field appearance="fill">
-                        <mat-select disableRipple formControlName="selected_type">
-                          <mat-option value="iqama_number">{{
-                            "iqama_number" | translate
-                            }}</mat-option>
-                          <mat-option value="passport">{{
-                            "passport" | translate
-                            }}</mat-option>
-                            <mat-option value="saudi_id">{{
-                              "saudi_id" | translate
-                              }}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                      <mat-error *ngIf="isSubmitted && patientForm.get('selected_type').hasError('required')">
-                        {{ "field_is_required" | translate }}.</mat-error>
-                    </div>
-                  </div> -->
-                  <!-- <div class="col-sm-12 col-md-4  mb-3">
-                    <div class="form_field_wrapper">
-                      <label>{{ "iqama_number" | translate }}</label>
-                      <mat-form-field appearance="fill">
-                        <input type="text" matInput formControlName="iqama_number" maxlength="10" >
-                      </mat-form-field>
-                      <mat-error *ngIf="isSubmitted && patientForm.get('iqama_number').hasError('required')">
-                        {{ "field_is_required" | translate }}.</mat-error>
-                    </div>
-                  </div> -->
-                
+                  </div>                
                   <div class="col-sm-12 col-md-4  mb-3">
                     <div class="form_field_wrapper">
                       <label>{{ "saudi_id" | translate }} / {{ "iqama_number" | translate}}<span class="danger">*</span></label>

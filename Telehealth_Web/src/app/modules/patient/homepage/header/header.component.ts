@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { AuthService } from 'src/app/shared/auth.service';
 import { CoreService } from 'src/app/shared/core.service';
-import { WebSocketService } from 'src/app/shared/web-socket.service';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-header',

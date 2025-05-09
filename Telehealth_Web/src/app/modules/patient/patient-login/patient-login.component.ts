@@ -277,9 +277,9 @@ export class PatientLoginComponent implements OnInit {
 
   goToHomePage(){
     if(this.translate.store.currentLang === undefined || this.translate.store.currentLang === 'ar'){
-      this.route.navigate([`/test/home-ar`]);
+      this.route.navigate([`/test_p/home-ar`]);
     }else{
-      this.route.navigate([`/test/home-en`]);
+      this.route.navigate([`/test_p/home-en`]);
     }
   }
 

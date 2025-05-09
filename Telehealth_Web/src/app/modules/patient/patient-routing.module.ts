@@ -72,27 +72,33 @@ import { ExchangeRefundPolicyComponent } from "./homepage/exchange-refund-policy
 import { DeleteAccountPolicyComponent } from "./homepage/delete-account-policy/delete-account-policy.component";
 import { EnLandingPageComponent } from "./homepage/en-landing-page/en-landing-page.component";
 import { ArLandingPageComponent } from "./homepage/ar-landing-page/ar-landing-page.component";
+import { ApplePayComponent } from "./homepage/apple-pay/apple-pay.component";
 const routes: Routes = [
   { path: "", redirectTo: "home-ar", pathMatch: "full" },
   {
     path: "login",
     component: PatientLoginComponent,
+    canActivate: [CheckGuard],
   },
   {
     path: "entercode",
     component: PatientEntercodeComponent,
+    canActivate: [CheckGuard],
   },
   {
     path: "reset",
     component: PatientForgotpassComponent,
+    canActivate: [CheckGuard],
   },
   {
     path: "setnewpass",
     component: PatientSetnewpassComponent,
+    canActivate: [CheckGuard],
   },                                    
   {
     path: "signup",
     component: PatientSignupComponent,
+    canActivate: [CheckGuard],
   },
   {
     path: "home-en",
@@ -107,8 +113,13 @@ const routes: Routes = [
     component: PrivacyconditionComponent,
   },
   {
+      path: 'applepay',
+      component: ApplePayComponent
+  },
+  {
     path: "homepage",
     component: HomepageComponent,
+    canActivate: [CheckGuard],
     children: [
       {
         path: "",

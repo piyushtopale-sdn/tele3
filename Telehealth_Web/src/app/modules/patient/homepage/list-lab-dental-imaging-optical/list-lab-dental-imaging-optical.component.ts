@@ -588,79 +588,79 @@ export class ListLabDentalImagingOpticalComponent implements OnInit {
        this.imgOptDntlList = res.data.result[0].paginatedResults
      }) */
 
-    this.fourPortalService.serachFilterForFourPortals(dataNew).subscribe(
-      (res) => {
-        let response = this.coreService.decryptObjectData({ data: res });
+    // this.fourPortalService.serachFilterForFourPortals(dataNew).subscribe(
+    //   (res) => {
+    //     let response = this.coreService.decryptObjectData({ data: res });
 
-        const result = response?.data?.result;
+    //     const result = response?.data?.result;
 
-        this.totalFourPortalRecords = response?.data?.totalRecords;
+    //     this.totalFourPortalRecords = response?.data?.totalRecords;
 
-        //this.doctor_list = JSON.parse(JSON.stringify(response?.data?.result));
-        const formValues = Object.values(this.searchBarForm.value);
-        const hasValue = formValues.some(value => !!value);
+    //     //this.doctor_list = JSON.parse(JSON.stringify(response?.data?.result));
+    //     const formValues = Object.values(this.searchBarForm.value);
+    //     const hasValue = formValues.some(value => !!value);
 
-        const adformValues = Object.values(this.advanceSearchBarForm.value);
-        let adhasValue = adformValues.some(value => !!value);
-        if (this.portalGender.length > 0) {
-          adhasValue = true;
-        }
-
-
-        if (hasValue || adhasValue) {
-          this.noRecord = 0;
-          if (type == "search") {
-            this.imgOptDntlList = []
-            this.currentPage = 1;
+    //     const adformValues = Object.values(this.advanceSearchBarForm.value);
+    //     let adhasValue = adformValues.some(value => !!value);
+    //     if (this.portalGender.length > 0) {
+    //       adhasValue = true;
+    //     }
 
 
-          }
+    //     if (hasValue || adhasValue) {
+    //       this.noRecord = 0;
+    //       if (type == "search") {
+    //         this.imgOptDntlList = []
+    //         this.currentPage = 1;
 
-          const uniqueResult = result.filter((newItem) => {
-            const isDuplicate = this.imgOptDntlList.some(existingItem => {
-              const isMatching = existingItem._id === newItem._id;
-              if (isMatching) {
-              }
-              return isMatching;
-            });
-            return !isDuplicate;
-          });
 
-          // If the result is not empty, update the imgOptDntlList
-          this.imgOptDntlList = [...this.imgOptDntlList, ...uniqueResult];
+    //       }
 
-          this.isLoading = false;
-        } else if (result.length === 0 && this.currentPage > 1) {
-          this.toastr.error("No Any More List To Fetch!");
-          this.isLoading = false;
-          this.noRecord = 1;
-          this.currentPage = 1;
-        } else {
-          const uniqueResult = result.filter((newItem) => {
-            const isDuplicate = this.imgOptDntlList.some(existingItem => {
-              const isMatching = existingItem._id === newItem._id;
-              if (isMatching) {
-              }
-              return isMatching;
-            });
-            return !isDuplicate;
-          });
+    //       const uniqueResult = result.filter((newItem) => {
+    //         const isDuplicate = this.imgOptDntlList.some(existingItem => {
+    //           const isMatching = existingItem._id === newItem._id;
+    //           if (isMatching) {
+    //           }
+    //           return isMatching;
+    //         });
+    //         return !isDuplicate;
+    //       });
 
-          // If the result is not empty, update the imgOptDntlList and isLoading
-          this.imgOptDntlList = [...this.imgOptDntlList, ...uniqueResult];
+    //       // If the result is not empty, update the imgOptDntlList
+    //       this.imgOptDntlList = [...this.imgOptDntlList, ...uniqueResult];
 
-          this.isLoading = false;
-          this.noRecord = 0;
+    //       this.isLoading = false;
+    //     } else if (result.length === 0 && this.currentPage > 1) {
+    //       this.toastr.error("No Any More List To Fetch!");
+    //       this.isLoading = false;
+    //       this.noRecord = 1;
+    //       this.currentPage = 1;
+    //     } else {
+    //       const uniqueResult = result.filter((newItem) => {
+    //         const isDuplicate = this.imgOptDntlList.some(existingItem => {
+    //           const isMatching = existingItem._id === newItem._id;
+    //           if (isMatching) {
+    //           }
+    //           return isMatching;
+    //         });
+    //         return !isDuplicate;
+    //       });
 
-        }
+    //       // If the result is not empty, update the imgOptDntlList and isLoading
+    //       this.imgOptDntlList = [...this.imgOptDntlList, ...uniqueResult];
 
-      },
-      (err) => {
-        let errorResponse = this.coreService.decryptObjectData({
-          data: err.error,
-        });
-      }
-    );
+    //       this.isLoading = false;
+    //       this.noRecord = 0;
+
+    //     }
+
+    //   },
+    //   (err) => {
+    //     let errorResponse = this.coreService.decryptObjectData({
+    //       data: err.error,
+    //     });
+    //   }
+    // );
 
 
     /*   this._IndiviualDoctorService.serachFilterdoctor(data).subscribe(
@@ -1824,13 +1824,13 @@ export class ListLabDentalImagingOpticalComponent implements OnInit {
         order_confirmation: false,
         user_name: this.coreService.getLocalStorage("profileData").full_name
           ? this.coreService.getLocalStorage("profileData").full_name
-          : "test Patient",
+          : "test_p Patient",
       },
       from_user: {
         user_id: this.loginUserID,
         user_name: this.coreService.getLocalStorage("profileData").full_name
           ? this.coreService.getLocalStorage("profileData").full_name
-          : "test Patient",
+          : "test_p Patient",
       },
       test_list: [],
       portal_type: this.route_type

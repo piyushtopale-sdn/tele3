@@ -10,6 +10,8 @@ export class FourPortalAppointmentComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    // document why this method 'ngOnInit' is empty
+  
   }
 
 }

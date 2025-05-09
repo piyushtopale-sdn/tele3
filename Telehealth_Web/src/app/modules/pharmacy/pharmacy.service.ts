@@ -401,7 +401,7 @@ export class PharmacyService {
       this.getBasePath() + `/pharmacy-service/pharmacy/get-review-and-rating`,
       {
         params: param,
-        // headers: this.getHeader(token),
+        headers: this.getHeader(token),
       }
     );
   }

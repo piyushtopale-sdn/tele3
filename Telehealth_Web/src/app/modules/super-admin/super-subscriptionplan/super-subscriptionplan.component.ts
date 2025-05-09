@@ -21,6 +21,7 @@ import { SuperAdminService } from "../super-admin.service";
 import { ToastrService } from "ngx-toastr";
 import { NgxUiLoaderService } from "ngx-ui-loader";
 import { Router } from "@angular/router";
+import { Editor, Toolbar } from "ngx-editor";
 
 export interface PeriodicElement {
   _id: string;
@@ -84,6 +85,16 @@ export class SuperSubscriptionplanComponent implements OnInit {
   portalName: any;
   isTrialControl: FormControl;
   currentUrl:any =[];
+  abouteditor!: Editor;
+  abouteditor_arabic!: Editor;
+  toolbar: Toolbar = [
+    ["bold", "italic", "underline", "text_color", "background_color", "strike"],
+    ["align_left", "align_center", "align_right", "align_justify"],
+    ["ordered_list", "bullet_list"],
+    ["code", "blockquote"],
+    [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
+    // ["link", "image"],
+  ];
 
   constructor(
     private modalService: NgbModal,
@@ -195,6 +206,12 @@ export class SuperSubscriptionplanComponent implements OnInit {
     // }, 2000);
     this.currentUrl = this.router.url;
     this.onNavigate(this.currentUrl);
+    this.abouteditor = new Editor();
+    this.abouteditor_arabic = new Editor();
+  }
+  ngOnDestroy(): void {
+    this.abouteditor.destroy();
+    this.abouteditor_arabic.destroy();
   }
 
 
@@ -294,7 +311,7 @@ export class SuperSubscriptionplanComponent implements OnInit {
       plan_name: this.addPlan.value.plan_name,
       plan_name_arabic: this.addPlan.value.plan_name_arabic,
       description: this.addPlan.value.description,                  //description
-      description_arabic: this.addPlan.value.descriptionArabic,  
+      descriptionArabic: this.addPlan.value.description_arabic,  
       // price_per_member: this.addPlan.value.price_per_member,              [[6 Feb 2025 comment Add on per person ]]
       plan_duration: plan_duration,
       is_activated: this.addPlan.value.is_activated,
@@ -533,14 +550,12 @@ export class SuperSubscriptionplanComponent implements OnInit {
 
   openVerticallyCenteredsecond(deleteModal: any, _id: any) {
     this.subscriptionPlanId = _id;
-    this.modalService.open(deleteModal, { centered: true, size: "sm" });
+    this.modalService.open(deleteModal, { centered: true, size: "md" });
   }
 
   openVerticallyCenteredadd(addmodal: any) {
     this.addPlan.get('is_activated').setValue(true);
     this.addPlan.get('plan_for').setValue('patient');
-    // this.addPlan.get('plan_duration').setValue("monthly");
-    // this.addOption();
     this.addNewService();
     this.modalService.open(addmodal, { centered: true, size: "lg" });
     this.onChangeService();
@@ -584,7 +599,7 @@ export class SuperSubscriptionplanComponent implements OnInit {
       is_activated: data.is_activated,
     });
     
-    this.modalService.open(editmodal, { centered: true, size: "" });
+    this.modalService.open(editmodal, { centered: true, size: "lg" });
   }
   closePopup() {
     this.modalService.dismissAll("close");

@@ -118,7 +118,11 @@ const portalUserSchema = new mongoose.Schema(
       branchKey: {
         type: String,
       }
-    }
+    },
+    isAdmin:{
+      type:Boolean,
+      default:false
+  },
   },
   { timestamps: true }
 );

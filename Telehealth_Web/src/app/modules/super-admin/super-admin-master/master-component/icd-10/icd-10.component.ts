@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import {
   FormArray,
@@ -57,15 +57,15 @@ export class Icd10Component {
   toDate: string = "";
 
   constructor(
-    private modalService: NgbModal,
-    private fb: FormBuilder,
-    private service: SuperAdminService,
-    private _coreService: CoreService,
-    private toastr: ToastrService,
-    private loader: NgxUiLoaderService,
-    private _superAdminService: SuperAdminService,
-    private dateAdapter: DateAdapter<Date>,
-    private datepipe: DatePipe,
+    private readonly modalService: NgbModal,
+    private readonly fb: FormBuilder,
+    private readonly service: SuperAdminService,
+    private readonly _coreService: CoreService,
+    private readonly toastr: ToastrService,
+    private readonly loader: NgxUiLoaderService,
+    private readonly _superAdminService: SuperAdminService,
+    private readonly dateAdapter: DateAdapter<Date>,
+    private readonly datepipe: DatePipe,
 
   ) {
     this.codeForm = this.fb.group({
@@ -100,25 +100,8 @@ export class Icd10Component {
   }
 
   ngOnInit(): void {
-    // const now = new Date();
-    // const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-    // const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
-    // this.dateRangeForm.patchValue({
-    //   fromDate: firstDay,
-    //   toDate: lastDay
-    // });
-
-    // this.fromDate = this.formatDate(firstDay);
-    // this.toDate = this.formatDate(lastDay);
-
-
-
     this.addnewFields();
-    this.getAllList(`${this.sortColumn}:${this.sortOrder}`);
-    // setTimeout(() => {
-    //   this.checkInnerPermission();
-    // }, 300);
+    this.getAllList(`${this.sortColumn}:${this.sortOrder}`);  
   }
 
 
@@ -131,17 +114,16 @@ export class Icd10Component {
     let menuID = sessionStorage.getItem("currentPageMenuID");
     if (userPermission) {
 
-      let checkData = this.findObjectByKey(userPermission, "parent_id", menuID)
+      let checkData = this.findObjectByKey(userPermission, "parent_id", menuID);
+      let checkSubmenu; 
       if (checkData) {
-        if (checkData.isChildKey == true) {
-          var checkSubmenu = checkData.submenu;
+        if (checkData.isChildKey) {
+          checkSubmenu = checkData.submenu;
           if (checkSubmenu.hasOwnProperty("designation")) {
             this.innerMenuPremission = checkSubmenu['designation'].inner_menu;
-
-          } else {
-          }
+          } 
         } else {
-          var checkSubmenu = checkData.submenu;
+          checkSubmenu = checkData.submenu;
           let innerMenu = [];
           for (let key in checkSubmenu) {
             innerMenu.push({ name: checkSubmenu[key].name, slug: key, status: true });
@@ -228,34 +210,30 @@ export class Icd10Component {
     }
   }
 
-  exportSpeciality() {
-    /* generate worksheet */
-    var data: any = [];
-    this.pageSize = 0;
-    this.loader.start();
-    this._superAdminService.allICDListforexport(this.page, this.pageSize, this.searchText)
-      .subscribe((res) => {
-        let result = this._coreService.decryptObjectData({ data: res });
-        if (result.status == true) {
-          this.loader.stop();
-          var array = [
-            "code", "disease_title", "description"
-          ];
-
-          data = result.data.array
-
-          data.unshift(array);
-
-          var fileName = 'ICD_Codes.xlsx';
-
-          const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(data);
-          /* generate workbook and add the worksheet */
-          const wb: XLSX.WorkBook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(wb, ws, 'icdcode');
-          /* save to file */
-          XLSX.writeFile(wb, fileName);
-        }
-      });
+  exportSpeciality() {  
+    if (this.dataSource.length === 0) {
+        return;
+  
+      }
+      const formattedData = this.dataSource.map((data, index) => ({
+        'Code': data?.code ?? "",
+        'Disease Title': data?.disease_title ?? "",
+        'Description': data?.description ?? ""
+      }));
+  
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(formattedData);
+  
+      ws['!cols'] = [
+        { wch: 20 },
+        { wch: 20 },
+      ];
+  
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      const fileName = `ICD_Codes.xlsx`;
+  
+      XLSX.utils.book_append_sheet(wb, ws, 'ICD_Codes');
+  
+      XLSX.writeFile(wb, fileName);
   }
 
   getAllList(sort: any = '') {
@@ -484,7 +462,7 @@ export class Icd10Component {
   }
 
   makeSelectAll(event: any) {
-    if (event.checked == true) {
+    if (event.checked) {
       this.dataSource?.map((element) => {
         if (!this.selectedCode.includes(element?._id)) {
           this.selectedCode.push(element?._id);
@@ -496,7 +474,7 @@ export class Icd10Component {
   }
 
   handleCheckBoxChange(event, codeId) {
-    if (event.checked == true) {
+    if (event.checked) {
       this.selectedCode.push(codeId);
     } else {
       const index = this.selectedCode.indexOf(codeId);

@@ -230,7 +230,7 @@ class LabRadiology {
 
   async login(req, res) {
     try {
-      const { email, password, type } = req.body;
+      const { email, password, type, role } = req.body;
       const { uuid } = req.headers;
 
       const portalUserData = await PortalUser.findOne({
@@ -246,6 +246,25 @@ class LabRadiology {
           errorCode: "USER_NOT_FOUND",
         });
       }
+
+       if (role === 'ADMIN' && (portalUserData.isAdmin === undefined || portalUserData.isAdmin === false)) {
+            return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "Admin privileges are not assigned to you.",
+              errorCode: "USER_NOT_ADMIN",
+            });
+          }
+            
+          await PortalUser.findOneAndUpdate(
+            { _id: portalUserData._id },
+            {
+              $set: {
+                role: role
+              },
+            }
+          );
+      
       const currentTime = new Date()
 
       if (type !== portalUserData.type) {
@@ -266,18 +285,19 @@ class LabRadiology {
             {new: true}
           )
         }
-        if (data?.lock_details?.passwordAttempts == PASSWORD_ATTEMPTS) {
-          const addMinutes = new Date(currentTime.getTime() + LOGIN_AFTER * 60000);
-          await PortalUser.findOneAndUpdate(
-            {_id: portalUserData._id},
-            { $set: {
-              lock_user: true,
-              'lock_details.timestamps': addMinutes,
-              'lock_details.lockedReason': "Incorrect password attempt",
-              'lock_details.lockedBy': type.toLowerCase(),
-            }}
-          )
-        }
+         /** Commented code as client don't want to lock user */
+        // if (data?.lock_details?.passwordAttempts == PASSWORD_ATTEMPTS) {
+        //   const addMinutes = new Date(currentTime.getTime() + LOGIN_AFTER * 60000);
+        //   await PortalUser.findOneAndUpdate(
+        //     {_id: portalUserData._id},
+        //     { $set: {
+        //       lock_user: true,
+        //       'lock_details.timestamps': addMinutes,
+        //       'lock_details.lockedReason': "Incorrect password attempt",
+        //       'lock_details.lockedBy': type.toLowerCase(),
+        //     }}
+        //   )
+        // }
         return sendResponse(req, res, 200, {
           status: false,
           body: null,
@@ -2081,7 +2101,7 @@ class LabRadiology {
       sendResponse(req, res, 200, {
         status: true,
         data: null,
-        message: `education details ${
+        message: `Education details ${
           checkExist.length > 0 ? "updated" : "added"
         } successfully`,
         errorCode: null,
@@ -2214,7 +2234,6 @@ class LabRadiology {
   async forPortalManagementAvailability(req, res) {
     const { portal_user_id, doctor_availability, type } = req.body;
     try {
-      //await DoctorAvailability.deleteMany({ for_portal_user: { $eq: portal_user_id }, location_id })
       const dataArray = [];
       for (let data of doctor_availability) {
         data["for_portal_user"] = portal_user_id;
@@ -5169,6 +5188,41 @@ if (labRadioId && labRadioId !== "null" && mongoose.isValidObjectId(labRadioId))
         data: err,
         message: `failed to generate signed url`,
         errorCode: "INTERNAL_SERVER_ERROR",
+      });
+    }
+  }
+
+  async markAsCenterUserAdmin(req, res) {
+    try {
+      const {userId, isAdmin} = req.body; 
+  
+      const updatedUser = await PortalUser.findOneAndUpdate(
+        { _id: userId },
+        { $set: { isAdmin: isAdmin } },
+        { new: true }
+      );
+  
+      if (!updatedUser) {
+        return sendResponse(req, res, 404, {
+          status: false,
+          body: null,
+          message: "User not found",
+          errorCode: "USER_NOT_FOUND",
+        });
+      }
+  
+      return sendResponse(req, res, 200, {
+        status: true,
+        body: updatedUser,
+        message: "User Permission Updated!",
+        errorCode: null,
+      });
+    } catch (error) {
+      return sendResponse(req, res, 500, {
+        status: false,
+        body: error,
+        message: "Internal server error",
+        errorCode: "SERVER_ERROR",
       });
     }
   }

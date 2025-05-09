@@ -4,7 +4,7 @@
 >
   <div class="profile_tab">
     <mat-tab-group animationDuration="0ms">
-      <mat-tab  *ngIf="doctorRole !== 'INDIVIDUAL_DOCTOR_ADMIN'">
+      <mat-tab>
         <ng-template mat-tab-label>
           {{ "profile_setting" | translate }}
         </ng-template>
@@ -21,7 +21,7 @@
                   <div class="user_upload_block">
                     <span class="user_upload_wrapper">
                       <span class="user_upload_icon"
-                        ><img
+                        ><img alt=""
                           src="{{
                             profileImage
                               ? profileImage
@@ -39,22 +39,7 @@
                 </div>
               </div>
               <div class="right part">
-                <!-- <div class="open_twentyfourhour">
-                  <div class="toggel-slide">
-                    <mat-slide-toggle
-                      [checked]="profileDetails?.for_portal_user?.notification"
-                      (change)="
-                        handleToggleChangeForActive(
-                          profileDetails,
-                          $event.checked
-                        )
-                      "
-                    >
-                      {{ "notification_status" | translate }}</mat-slide-toggle
-                    >
-                  </div>
-                </div> -->
-                <div class="primary_btn" *ngIf="doctorRole !== 'INDIVIDUAL_DOCTOR_ADMIN'">
+                <div class="primary_btn">
                   <button
                     class="btn btn-secondary"
                     (click)="handleEditProfile()"
@@ -135,10 +120,6 @@
                   <label>{{ "designation" | translate }}</label>
                   <div class="value">{{ designation }}</div>
                 </li>
-                <!-- <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
-                  <label>{{ "title" | translate }}</label>
-                  <div class="value">{{ title }}</div>
-                </li> -->
                 <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
                   <label>{{ "years_of_experience" | translate }}*</label>
                   <div class="value">
@@ -424,74 +405,6 @@
               </mat-expansion-panel>
             </mat-accordion>
           </div>
-
-          <!-- <div class="subscribe_detail_inner document mt-30">
-            <mat-accordion>
-              <mat-expansion-panel [expanded]="true">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    {{ "document" | translate }}
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div class="expansion_panel">
-                  <div class="expansion_panel_inner">
-                    <div
-                      class="row"
-                      *ngFor="
-                        let doc of profileDetails?.in_document_management
-                          ?.document_details
-                      "
-                    >
-                      <div class="item">
-                        <div class="outer_detail_block">
-                          <div class="detail_section">
-                            <div class="doc_img">
-                              <img
-                                src="{{ doc?.image_url }}"
-                                (click)="
-                                  openVerticallyCenteredquickview(
-                                    quick_view,
-                                    doc?.image_url
-                                  )
-                                "
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="item">
-                        <div class="outer_detail_block">
-                          <div class="detail_section">
-                            <p>{{ "document_name" | translate }}</p>
-                            <p>{{ doc?.doc_name }}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="item">
-                        <div class="outer_detail_block">
-                          <div class="detail_section">
-                            <p>{{ "issue_date" | translate }}</p>
-                            <p>{{ doc?.issue_date | date : "dd/MM/YYYY" }}</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="item">
-                        <div class="outer_detail_block last_child">
-                          <div class="detail_section">
-                            <p>{{ "expiration_date" | translate }}</p>
-                            <p>
-                              {{ doc?.expiration_date | date : "dd/MM/YYYY" }}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </mat-expansion-panel>
-            </mat-accordion>
-          </div> -->
-
           <div class="subscribe_detail_inner document mt-30">
             <mat-accordion>
               <mat-expansion-panel [expanded]="true">
@@ -507,14 +420,13 @@
                         <div class="outer_detail_block">
                           <div class="detail_section">
                             <div class="doc_img">
-                              <img
+                              <img alt=""
                                 src="{{
                                   profileDetails?.license_details?.license_image_signed_url
                                     ? profileDetails?.license_details?.license_image_signed_url
                                     : 'License Imaging Here'
                                 }}"
                               />
-                              <!-- <p>License Imaging Here</p> -->
                             </div>
                           </div>
                         </div>
@@ -707,7 +619,7 @@
                   <div class="user_upload_block">
                     <span class="user_upload_wrapper">
                       <span class="user_upload_icon"
-                        ><img
+                        ><img alt=""
                           src="{{
                             staff_details?.in_profile?.profile_picture
                               ? staff_details?.in_profile?.profile_picture
@@ -730,11 +642,6 @@
                 </div>
               </div>
               <div class="right part">
-                <!-- <div class="open_twentyfourhour">
-                        <div class="toggel-slide">
-                            <mat-slide-toggle>Open 24 Hrs</mat-slide-toggle>
-                        </div>
-                    </div> -->
                 <div class="primary_btn">
                   <button
                     class="btn btn-secondary"
@@ -762,10 +669,6 @@
                     {{ staff_details?.in_profile?.dob | date : "dd/MM/YYYY" }}
                   </div>
                 </li>
-                <!-- <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
-                  <label>Gender</label>
-                  <div class="value">{{ staff_details?.gender }}</div>
-                </li> -->
                 <li class="col-sm-6 col-md-4 col-lg-4 col-xl-3">
                   <label>{{ "date_of_joined" | translate }}*</label>
                   <div class="value">
@@ -1013,7 +916,7 @@
       <div class="modal-body">
         <form [formGroup]="editStaff">
           <div class="profile_img">
-            <img
+            <img alt=""
               src="{{
                 staff_profile ? staff_profile : '/assets/img/create_profile.png'
               }}"
@@ -1406,7 +1309,7 @@
     </div>
     <div class="modal-body">
       <div class="docview_img">
-        <img src="{{ setDocToView }}" width="600px" height="500px" />
+        <img alt="" src="{{ setDocToView }}" width="600px" height="500px" />
       </div>
     </div>
   </div>

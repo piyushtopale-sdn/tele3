@@ -204,6 +204,243 @@ const saveNotification = (paramsData, headers, requestData) => {
   });
 };
 
+/* **Abnormal-vital-noti** */
+const getLatestAbnormalVitals = async (vitalData, vitalRanges) => {
+  const vitalKeyMap = {
+    blood_glucose: 'BLOOD_GLUCOSE',
+    bp_systolic: 'SYSTOLIC',
+    bp_diastolic: 'DIASTOLIC',
+    h_rate: 'HEART_RATE',
+    temp: 'TEMPERATURE',
+    pulse: 'PULSE',
+  };
+
+  const vitalDisplayNames = {
+    blood_glucose: 'Blood Glucose',
+    bp_systolic: 'Blood Pressure (Systolic)',
+    bp_diastolic: 'Blood Pressure (Diastolic)',
+    h_rate: 'Heart Rate',
+    temp: 'Temperature',
+    pulse: 'Pulse',
+  };
+
+  const abnormalVitals = [];
+  const now = new Date();
+  const fifteenMinutes = 15 * 60 * 1000;
+
+  for (const key in vitalData) {
+    const vitalEntry = vitalData[key];
+    if (!vitalEntry || vitalEntry.value === undefined || vitalEntry.value === null) continue;
+
+    const mappedKey = vitalKeyMap[key];
+    if (!mappedKey) continue;
+
+    const range = vitalRanges[mappedKey];
+    if (!range || range.isDeleted || !range.status) continue;
+
+    const startDate = new Date(vitalEntry.startDate);
+    const value = parseFloat(vitalEntry.value);
+
+    // Check if recorded today
+    const isToday =
+      startDate.getFullYear() === now.getFullYear() &&
+      startDate.getMonth() === now.getMonth() &&
+      startDate.getDate() === now.getDate();
+
+    // Check if time difference is within 15 minutes
+    const timeDiff = Math.abs(now.getTime() - startDate.getTime());
+    const isWithin15Min = timeDiff <= fifteenMinutes;
+
+    if (isToday && isWithin15Min) {
+      const isAbnormal =
+        value < range.low ||
+        value > range.high ||
+        value < range.criticalLow ||
+        value > range.criticalHigh;
+
+      if (isAbnormal) {
+        abnormalVitals.push({
+          vitalName: vitalDisplayNames[key] || key,
+          value,
+          startDate,
+          referenceRange: range,
+          entry: vitalEntry,
+        });
+      }
+    }
+  }
+
+  // Return only the latest abnormal reading per vital
+  const latestAbnormalByVital = {};
+  for (const abnormal of abnormalVitals) {
+    const key = abnormal.vitalName;
+    if (
+      !latestAbnormalByVital[key] ||
+      abnormal.startDate > latestAbnormalByVital[key].startDate
+    ) {
+      latestAbnormalByVital[key] = abnormal;
+    }
+  }
+
+  return Object.values(latestAbnormalByVital);
+};
+
+const sendNotiOnAbnormalVital = async (patient_id, headers, vitalData) => {  
+  try {
+    const findPatient = await ProfileInfo.findOne({ for_portal_user: patient_id }).populate("gender dob currentAssignedDoctor");
+    const patientPortalData = await PortalUser.findOne({ _id: patient_id }).populate("country_code mobile full_name");
+    if (!findPatient) return;
+    const gender = findPatient.gender?.toLowerCase(); // Normalize gender
+    const dob = new Date(findPatient.dob);
+    const assignDoctor = findPatient?.currentAssignedDoctor;     
+    const mrn_number = findPatient?.mrn_number;
+    const mobileNumber = patientPortalData?.country_code+" "+patientPortalData?.mobile;
+    const patientName = patientPortalData?.full_name;
+
+    // Calculate age
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+
+    const getVitalThershold = await httpService.getStaging(
+      `newvitalsthreshold/get-vitals-threshold`,
+      {page:1, limit:10},
+      headers,
+      "superadminServiceUrl"
+    );
+
+    const vitalRanges = {};
+console.log("getVitalThershold______________",getVitalThershold?.body?.result);
+
+    if (getVitalThershold?.body?.result?.length > 0) {
+      for (const vital of getVitalThershold.body.result) {
+        if (vital.vitalsType === "BLOOD_PRESSURE" && Array.isArray(vital.referenceRange)) {
+          // Expecting referenceRange[0] for systolic and [1] for diastolic
+          const systolicRange = vital.referenceRange[0];
+          const diastolicRange = vital.referenceRange[1];
+
+          const systolicMatch = systolicRange && (
+            systolicRange.gender.toLowerCase() === gender || systolicRange.gender === "All"
+          ) && (
+            systolicRange.age === "All" ||
+            (systolicRange.age.includes('-') && (() => {
+              const [min, max] = systolicRange.age.split('-').map(Number);
+              return age >= min && age <= max;
+            })())
+          );
+
+          const diastolicMatch = diastolicRange && (
+            diastolicRange.gender.toLowerCase() === gender || diastolicRange.gender === "All"
+          ) && (
+            diastolicRange.age === "All" ||
+            (diastolicRange.age.includes('-') && (() => {
+              const [min, max] = diastolicRange.age.split('-').map(Number);
+              return age >= min && age <= max;
+            })())
+          );
+
+          if (systolicMatch) {
+            vitalRanges["SYSTOLIC"] = systolicRange;
+          }
+          if (diastolicMatch) {
+            vitalRanges["DIASTOLIC"] = diastolicRange;
+          }
+
+        } else {
+          const matchedRange = vital.referenceRange.find((range) => {
+            const genderMatch = range.gender.toLowerCase() === gender || range.gender === "All";
+            const ageMatch =
+              range.age === "All" ||
+              (range.age.includes('-') && (() => {
+                const [min, max] = range.age.split('-').map(Number);
+                return age >= min && age <= max;
+              })());
+
+            return genderMatch && ageMatch;
+          });
+
+          if (matchedRange) {
+            vitalRanges[vital.vitalsType] = matchedRange;
+          }
+        }
+      }
+    }
+
+    console.log("vitalRanges__________",vitalRanges);
+    
+    const abnormalVitals = await getLatestAbnormalVitals(vitalData, vitalRanges);
+    console.log("abnormalVitals______________",abnormalVitals);
+    if(abnormalVitals?.length > 0){
+      const doctorData = await httpService.getStaging(
+        "doctor/get-doctor-portal-data",
+        { doctorId: assignDoctor },
+        headers,
+        "doctorServiceUrl"
+      );
+      const doctorEmail = doctorData?.body?.email;
+      const doctorName = doctorData?.body?.full_name;
+      let patientDetails = {patientName, mobileNumber, mrn_number, gender, age}
+  
+      const mailBody = `
+      <html>
+        <body>
+          <p>Hello ${doctorName},</p>
+  
+          <p>We have detected abnormal vital signs for the following patient:</p>
+  
+          <p><strong>Patient Details:</strong></p>
+          <ul>
+            <li>Name: ${patientDetails.patientName}</li>
+            <li>Mobile: ${patientDetails.mobileNumber}</li>
+            <li>MRN: ${patientDetails.mrn_number}</li>
+            <li>Gender: ${patientDetails.gender}</li>
+            <li>Age: ${age}</li>
+          </ul>
+  
+          <p><strong>Vitals Details:</strong></p>
+          <table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+            <thead>
+              <tr>
+                <th>Vital Name</th>
+                <th>Recorded Value</th>
+                <th>Reference Range</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${abnormalVitals.map(vital => `
+                <tr>
+                  <td>${vital.vitalName}</td>
+                  <td>${vital.value} ${vital.referenceRange.unit}</td>
+                  <td>${vital.referenceRange.low} - ${vital.referenceRange.high}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+  
+          <p>Please review the data at your earliest convenience.</p>
+  
+          <p>Thank You!</p>
+        </body>
+      </html>
+      `;
+  
+      const content = {
+        subject: 'Abnormal Vitals Detected for Patient',
+        body: mailBody,
+      };
+      sendEmail(content, doctorEmail);
+    }
+    
+    return vitalRanges;
+
+  } catch (error) {
+    console.error("Error in sendNotiOnAbnormalVital:", error);
+  }
+};
+
+
 class Patient {
   async signup(req, res) {
     try {
@@ -638,7 +875,7 @@ class Patient {
       } else {
         otpText = smsTemplateOTP(otp);
       }
-      await sendSms(country_code + mobile, otpText);
+      await sendSms(country_code + mobile, otpText, 'login');
       let result = null;
       if (deviceExist) {
         result = await Otp2fa.findOneAndUpdate(
@@ -1045,6 +1282,9 @@ class Patient {
     }
   }
   async addPatientVitals(req, res) {
+    const headers = {
+      Authorization: req.headers["authorization"],
+    };
     try {
       const {
         appointment_id,
@@ -1105,6 +1345,7 @@ class Patient {
         await PatientVital.insertMany(filteredVitals);
         message = "Vital details added successfully.";
       }
+      sendNotiOnAbnormalVital(patient_id, headers, vitals_data[0]);
 
       return sendResponse(req, res, 200, {
         status: true,

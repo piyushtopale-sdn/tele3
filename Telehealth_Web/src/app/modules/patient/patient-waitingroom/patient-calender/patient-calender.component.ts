@@ -380,7 +380,6 @@ export class PatientCalenderComponent implements OnInit {
             this.appointmentTime = this.portal_appointmentDetails?.time;
             this.documentsData = response?.data?.patientAllDetails?.medicalDocument;
             this.appointmentType = this.portal_appointmentDetails?.consultationType;
-            this.fourPortal_getAssesment(this.fourPortal_id);
             // this.doctorDetails();
 
             if (response.status) {
@@ -1403,69 +1402,7 @@ export class PatientCalenderComponent implements OnInit {
     });
   }
 
-  async fourPortal_getAssesment(dr_id: any) {
-    let reqData = {
-      page: 1,
-      limit: 1000,
-      searchText: "",
-      loginPortalId: dr_id
-    };
 
-    this.fourPortalService.questiinnaireList(reqData).subscribe((res) => {
-      let encryptedData = { data: res };
-      let response = this._coreService.decryptObjectData(encryptedData);
-
-      for (let data of response.body.data) {
-        if (data.controller == "textarea") {
-          this.questions.push({
-            type: "textarea",
-            question: data?.question,
-            options: data?.options,
-            answer: [],
-            question_id: data?._id,
-            required: data?.required,
-          });
-        } else if (data.controller == "checkbox") {
-          this.questions.push({
-            type: "checkbox",
-            question: data?.question,
-            options: data?.options,
-            answer: [],
-            question_id: data?._id,
-            required: data?.required,
-          });
-        } else if (data.controller == "radiobutton") {
-          this.questions.push({
-            type: "radiobutton",
-            question: data?.question,
-            options: data?.options,
-            answer: [],
-            question_id: data?._id,
-            required: data?.required,
-          });
-        } else if (data.controller == "selectlist") {
-          this.questions.push({
-            type: "selectlist",
-            question: data?.question,
-            options: data?.options,
-            answer: [],
-            question_id: data?._id,
-            required: data?.required,
-          });
-        } else if (data.controller == "textbox") {
-          this.questions.push({
-            type: "textbox",
-            question: data?.question,
-            options: data?.options,
-            answer: [],
-            question_id: data?._id,
-            required: data?.required,
-          });
-        }
-      }
-      this.getPatientFilledAssesment2();
-    });
-  }
 
   getPatientFilledAssesment2() {
     let reqData = {

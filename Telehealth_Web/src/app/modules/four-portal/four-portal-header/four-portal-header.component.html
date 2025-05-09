@@ -32,11 +32,6 @@
           </div>
         </div>
         <div class="header-right-content">
-
-          <!-- <div class="mail common_content">
-            <mat-icon>mail</mat-icon>
-          </div> -->
-
           <div
             class="notification common_content"
             (click)="changeIsViewStatus()"
@@ -97,7 +92,7 @@
                       </span>
                       <ng-template #Notification>
                         <div class="col-lg-3 col-sm-3 col-3 text-center">
-                          <img
+                          <img alt=""
                             src="{{ notification.picture ? notification.picture : '../../../../../../assets/img/default_user.png' }}"
                             class="w-75 rounded-circle"
                             style="height: 90px;"
@@ -151,21 +146,19 @@
               aria-expanded="false"
             >
               <div class="profile_img">
-                <img
+                <img alt=""
                   src="{{
                     userProfile
                       ? userProfile
                       : '../../../../../../assets/img/default_user.png'
                   }}"
                 />
-                <!-- <img src="../../../../assets/img/vector.png"> -->
               </div>
               <div class="user_wrapper dropdown-toggle">
                 <div class="user_name_wrapper">
                   <div class="user_name">{{ userName }}</div>
                   <div class="user_name">
                     <span>{{ userType }}</span>
-                    <!-- <span>{{ userRole }}</span> -->
                   </div>
                 </div>
               </div>

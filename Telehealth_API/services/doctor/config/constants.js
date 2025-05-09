@@ -1,12 +1,12 @@
 import "dotenv/config.js";
-
+import { randomInt } from 'crypto';
 export const config = {
     DB: {
-        HOST: process.env.MONGO_DB_HOST,
-        PORT: process.env.MONGO_DB_PORT,
-        DATABASE: process.env.DOCTOR_MONGO_DATABASE ,
-        USERNAME: process.env.DOCTOR_MONGO_USER,
-        PASSWORD: process.env.DOCTOR_MONGO_PASSWORD,
+        HOST: process.env.MONGO_DB_HOST || "54.201.160.69",
+        PORT: process.env.MONGO_DB_PORT || "58173",
+        DATABASE: process.env.DOCTOR_MONGO_DATABASE || "doctor",
+        USERNAME: process.env.DOCTOR_MONGO_USER || "doctor",
+        PASSWORD: process.env.DOCTOR_MONGO_PASSWORD || "RJMtygb22sdfd",
     },
     PORTS: {
         API_PORT: process.env.DOCTOR_SERVICE_PORT || 8004,
@@ -33,12 +33,12 @@ export const config = {
         JWT: process.env.JWT_SECRET || "",
     },
     MOYASAR_SECRET_KEY: process.env.MOYASAR_SECRET_KEY,
-    terst_FRONTEND_URL: process.env.terst_FRONTEND_URL,
+    test_p_FRONTEND_URL: process.env.test_p_FRONTEND_URL,
     JWT_EXPIRATION_IN_MINUTES: process.env.JWT_EXPIRATION_IN_MINUTES || 1440,
     SMS_APP_SID: process.env.SMS_APP_SID,
     SENDER_ID: process.env.SENDER_ID,
     NODE_ENV: process.env.NODE_ENV || "local",
-    terst_Backend_url: process.env.terst_Backend_url,
+    test_p_Backend_url: process.env.test_p_Backend_url,
     TIMEZONE: process.env.TIMEZONE,
     OTP_EXPIRATION: process.env.OTP_EXPIRATION || 10,
     OTP_LIMIT_EXCEED_WITHIN: process.env.OTP_LIMIT_EXCEED_WITHIN || 5,
@@ -48,7 +48,7 @@ export const config = {
     SEND_ATTEMPTS: process.env.SEND_ATTEMPTS || 5,
     UNIFONIC_PUBLIC_ID: process.env.UNIFONIC_PUBLIC_ID,
     UNIFONIC_SECRET: process.env.UNIFONIC_SECRET,
-    BUCKET_NAME: process.env.BUCKET_NAME,
+    BUCKET_NAME: process.env.BUCKET_NAME || "test_pdev",
     SEND_APPOINTMENT_REMINDER_BEFORE: process.env.SEND_APPOINTMENT_REMINDER_BEFORE || 5,
     SEND_APPOINTMENT_REMINDER_BEFORE_24HOURS: process.env.SEND_APPOINTMENT_REMINDER_BEFORE_24HOURS || 1440,
     SEND_APPOINTMENT_REMINDER_BEFORE_1HOUR: process.env.SEND_APPOINTMENT_REMINDER_BEFORE_1HOUR || 60,
@@ -63,7 +63,7 @@ export const messages = {
     userNotFound: "Please check your credentials.",
     dataNotFound: "No data found.",
     incorrectPassword: "Incorrect password.",
-    passwordNotCreated: "Password not created.",
+    userPasswordError: "Password not created.",
     loginSuccess: "Login successful.",
     listSuccess: "Data fetched successfully.",
     updateSuccess: "Data updated successfully.",
@@ -347,18 +347,6 @@ export const messages = {
         en: "No Vaccination Tests Found!!",
         ar: ""
     },
-    eyeGlassTestUpdate: {
-        en: "Eyeglass Test Updated successfully",
-        ar: ""
-    },
-    eyeGlassTestFetched: {
-        en: "Eyeglass Tests fetched successfully",
-        ar: ""
-    },
-    eyeGlassTestNotFound: {
-        en: "No Eyeglass Tests Found!!",
-        ar: ""
-    },
     allTestFetched: {
         en: "All Tests fetched successfully",
         ar: ""
@@ -540,9 +528,6 @@ export const VaccinationColumns = {
     col1: 'name'
 }
 
-export const EyeglassColumns = {
-    col1: 'eyeglass_name'
-}
 export const SpecialtyColumns = {
     col1: 'specialization',
 }
@@ -618,9 +603,6 @@ export const TeamColumns = {
 export const DesignationColumns = {
     col1: 'designation',
 }
-export const TitleColumns = {
-    col1: 'title',
-}
 export const HealthCenterColumns = {
     col1: 'name',
 }
@@ -649,13 +631,6 @@ export const serviceHospital = {
     // col3: 'iso_code'
 }
 
-export const unitHospital = {
-    col1: 'unit_name',
-    col2: 'for_department',
-    col3: 'for_service',
-    // col4: 'added_by'
-}
-
 export const emailText = {
     subjectEmail: "Email Verificaion",
     subjectEmailProfile: "Profile Setup"
@@ -667,11 +642,11 @@ export const responseCodes = {
 };
 
 export const generate4DigitOTP = () => {
-    return Math.floor(1000 + Math.random() * 9000);
+    return randomInt(1000, 10000);
 };
 
 export const generate6DigitOTP = () => {
-    return Math.floor(100000 + Math.random() * 900000);
+    return randomInt(100000, 1000000);
 }
 
 export const smsTemplateOTP = (otp2fa) => {

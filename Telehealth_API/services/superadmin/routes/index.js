@@ -1,4 +1,3 @@
-// import hospitalRoute from "./hospitalRoute";
 import roleRoute from "./role_route"
 import menuRoute from "./menu_route"
 import specialityRoute from "./speciality_route"
@@ -21,7 +20,6 @@ export {
     vitalThresholdMaster,
     newvitalsThesholdRoute,
     medicineRoute,
-    // hospitalRoute,
     specialityRoute,
     subscriptionRoute,
     superadminRoute,
