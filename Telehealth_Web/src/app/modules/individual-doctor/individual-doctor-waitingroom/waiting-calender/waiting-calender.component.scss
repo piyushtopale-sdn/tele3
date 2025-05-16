@@ -1376,3 +1376,9 @@
     opacity: 0.5;
     pointer-events: none;
   }
+  .custom-info-icon {
+    fill: #2839ff !important;
+  }
+  .custom-info-icon:hover {
+    fill: #1d2ecc !important; /* Slightly darker or different hover shade */
+  }

@@ -47,7 +47,7 @@ import "dotenv/config.js";
 import { generateSignedUrl } from "../helpers/gcs";
 import Chat from "../models/Chat/ChatModel";
 import Message from "../models/Chat/Message";
-const fs = require("fs");
+import fs from "fs";
 
 const validateColumnWithExcel = (toValidate, excelColumn) => {
   const requestBodyCount = Object.keys(toValidate).length;
@@ -3671,7 +3671,7 @@ async doctorManagementUpdateAvailability(req, res) {
 
       result = await Eprescription.findOne({ appointmentId });
 
-      let environvent = process.env.NODE_ENV;
+      let environvent = config.NODE_ENV;
 
       // result.eSignature = `http://localhost:8005/hospital/esignature-for-e-prescription/${result.eSignature}`
 
@@ -5611,8 +5611,8 @@ async doctorManagementUpdateAvailability(req, res) {
       result = await Eprescription.findOne({ appointmentId });
       let previewTemplate = "";
 
-      let environvent = process.env.NODE_ENV;
-      let url = process.env.test_p_FRONTEND_URL;
+      let environvent = config.NODE_ENV;
+      let url = config.test_p_FRONTEND_URL;
       if (result) {
         if (previewTemplate != "") {
           if (environvent == "local") {
@@ -6466,9 +6466,50 @@ async doctorManagementUpdateAvailability(req, res) {
         });
     }
 }
- 
 
-  
+async addAvailableDates(req, res) {
+  try {
+    let { doctorId, start_date, end_date } = req.body;  
+    if (!doctorId) {
+      return sendResponse(req, res, 400, {
+      status: false,
+      body: null,
+      message: "doctorId, start_date, and end_date are required",
+      errorCode: null,
+    });
+    }
+
+    const doctor = await DoctorAvailability.findOne({ for_portal_user: doctorId });
+
+    if (!doctor) {
+      return sendResponse(req, res, 200, {
+        status: true,
+        body: null,
+        message: "Doctor not found" ,
+        errorCode: null,
+      });
+    }
+
+    doctor.available_slots = { start_date, end_date };
+
+    await doctor.save();
+    return sendResponse(req, res, 200, {
+      status: true,
+      body: null,
+      message: "Available date range added successfully" ,
+      errorCode: null,
+    });
+  } catch (err) {
+    console.error("Error in addAvailableDates:", err);
+    return sendResponse(req, res, 500, {
+      status: false,
+      body: null,
+      message: "Server error" ,
+      errorCode: null,
+    });
+  }
+}
+
   
   
   

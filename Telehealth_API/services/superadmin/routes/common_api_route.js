@@ -4,7 +4,7 @@ import express from "express";
 import commonDataController from "../controllers/common_data/commonDataController";
 import { handleResponse } from "../middleware/utils";
 import { authorizeRole, verifyToken } from "../helpers/verifyToken";
-const fs = require('fs');
+import fs from "fs";
 
 const commonRoute = express.Router();
 const uploadFileToLocalStorage = async (req, res, next) => {

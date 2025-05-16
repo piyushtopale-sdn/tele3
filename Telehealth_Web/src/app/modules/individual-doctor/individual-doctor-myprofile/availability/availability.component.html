@@ -12,6 +12,57 @@
               }}</p
             >
             <div class="mat_tab_title mt-3">{{ "week_days" | translate }}</div>
+            <form [formGroup]="availabilityFormOnline">
+              <div formGroupName="availability_slots">
+                <div class="row demo_row">
+                  <!-- Start Date Field -->
+                  <div class="col-sm-4 col-md-4">
+                    <div class="form_field_wrapper">
+                      <label>{{ "start_date" | translate }}</label>
+                      <mat-form-field class="date-field-small" appearance="fill">
+                        <input matInput [matDatepicker]="startPicker" formControlName="start_date" />
+                        <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #startPicker></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <!-- Validation Error for Start Date -->
+                    <span class="text-danger" *ngIf="availabilityFormOnline.get('availability_slots.start_date').invalid && availabilityFormOnline.get('availability_slots.start_date').touched">
+                      {{ "select_start_date" | translate }}*
+                    </span>
+                  </div>
+            
+                  <!-- End Date Field -->
+                  <div class="col-sm-4 col-md-4">
+                    <div class="form_field_wrapper">
+                      <label>{{ "end_date" | translate }}</label>
+                      <mat-form-field class="date-field-small" appearance="fill">
+                        <input matInput [matDatepicker]="endPicker" formControlName="end_date" />
+                        <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                        <mat-datepicker #endPicker></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <!-- Validation Error for End Date -->
+                    <span class="text-danger" *ngIf="availabilityFormOnline.get('availability_slots.end_date').invalid && availabilityFormOnline.get('availability_slots.end_date').touched">
+                      {{ "select_end_date" | translate }}*
+                    </span>
+                  </div>
+                  <div class="col-sm-1 col-md-1 d-flex align-items-end">
+                    <a (click)="clearDateRange()" style="margin-left: 10px; cursor: pointer;"
+                    [class.disabled]="!availabilityFormOnline.get('availability_slots.start_date')?.value && !availabilityFormOnline.get('availability_slots.end_date')?.value">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                        fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"[style.opacity]="!availabilityFormOnline.get('availability_slots.start_date')?.value && !availabilityFormOnline.get('availability_slots.end_date')?.value ? '0.5' : '1'">
+                        <title>{{ "reset_date" | translate }}</title>
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                        <path
+                          d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                      </svg>
+                    </a>
+                  </div>
+                  
+                </div>
+              </div>
+            </form>
+                       
             <ng-container formArrayName="weekDays">
               <ng-container
                 *ngFor="let _ of weekDaysOnline.controls; let i = index"
@@ -482,75 +533,85 @@
                     <div class="row increse_content_inner">
                       <div class="col-sm-4 col-md-4">
                         <div class="form_field_wrapper">
-                          <label>{{ "date" | translate }}</label>
-                          <mat-form-field
-                            class="example-full-width"
-                            appearance="fill"
-                          >
+                          <label>{{ "start_date" | translate }}</label>
+                          <mat-form-field class="example-full-width" appearance="fill">
                             <input
                               matInput
-                              [matDatepicker]="picker55"
-                              formControlName="date"
+                              [matDatepicker]="startPicker"
+                              formControlName="start_date"
                             />
-                            <mat-datepicker-toggle
-                              matSuffix
-                              [for]="picker55"
-                            ></mat-datepicker-toggle>
-                            <mat-datepicker #picker55></mat-datepicker>
+                            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #startPicker></mat-datepicker>
                           </mat-form-field>
                         </div>
                         <span
                           class="text-danger"
-                          *ngIf="isSubmitted && unavailabilityValidation(i).controls['date']
-                            .errors?.['required']"
-                          >{{ "select_date" | translate }}*</span
-                        >
+                          *ngIf="isSubmitted && unavailabilityValidation(i).controls['start_date']?.errors?.['required']"
+                          >{{ "select_start_date" | translate }}*</span>
                       </div>
+                      
                       <div class="col-sm-4 col-md-4">
                         <div class="form_field_wrapper">
-                          <label>{{ "start_time" | translate }}</label>
-                          <mat-form-field appearance="fill">
-                            <!-- <input
-                                  matTimepicker
+                          <label>{{ "end_date" | translate }}</label>
+                          <mat-form-field class="example-full-width" appearance="fill">
+                            <input
+                              matInput
+                              [matDatepicker]="endPicker"
+                              formControlName="end_date"
+                            />
+                            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #endPicker></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <span
+                          class="text-danger"
+                          *ngIf="isSubmitted && unavailabilityValidation(i).controls['end_date']?.errors?.['required']"
+                          >{{ "select_end_date" | translate }}*</span>
+                      </div>
+                        <div class="row mt-3">
+                          <!-- Start Time -->
+                          <div class="col-sm-4 col-md-4">
+                            <div class="form_field_wrapper">
+                              <label>{{ "start_time" | translate }}</label>
+                              <mat-form-field appearance="fill">
+                                <input
+                                  matInput
+                                  aria-label="default time"
+                                  type="time"
+                                  placeholder="{{ 'start_time' | translate }}"
                                   formControlName="start_time"
-                                /> -->
-                            <input
-                              matInput
-                              aria-label="default time"
-                              type="time"
-                              placeholder="{{ 'start_time' | translate }}"
-                              formControlName="start_time"
-                            />
-                            <!-- <ngx-material-timepicker #unAvailStartTime>
-                            </ngx-material-timepicker> -->
-                          </mat-form-field>
-                        </div>
-                        <span
-                          class="text-danger"
-                          *ngIf="isSubmitted && unavailabilityValidation(i).controls['start_time']
-                          .errors?.['required']"
-                          >{{ "enter_start_time" | translate }}*</span
-                        >
-                      </div>
-                      <div class="col-sm-4 col-md-4">
-                        <div class="form_field_wrapper">
-                          <label>{{ "end_time" | translate }}</label>
-                          <mat-form-field appearance="fill">
-                            <!-- <input
-                                  matTimepicker
+                                />
+                              </mat-form-field>
+                            </div>
+                            <span
+                              class="text-danger"
+                              *ngIf="isSubmitted && unavailabilityValidation(i).controls['start_time']?.errors?.['required']"
+                            >
+                              {{ "enter_start_time" | translate }}*
+                            </span>
+                          </div>
+
+                          <!-- End Time -->
+                          <div class="col-sm-4 col-md-4">
+                            <div class="form_field_wrapper">
+                              <label>{{ "end_time" | translate }}</label>
+                              <mat-form-field appearance="fill">
+                                <input
+                                  matInput
+                                  aria-label="default time"
+                                  type="time"
+                                  placeholder="{{ 'end_time' | translate }}"
                                   formControlName="end_time"
-                                /> -->
-                            <input
-                              matInput
-                              aria-label="default time"
-                              type="time"
-                              placeholder="{{ 'end_time' | translate }}"
-                              formControlName="end_time"
-                            />
-                            <!-- <ngx-material-timepicker #unAvailEndTime>
-                            </ngx-material-timepicker> -->
-                          </mat-form-field>
-                        </div>
+                                />
+                              </mat-form-field>
+                            </div>
+                            <span
+                              class="text-danger"
+                              *ngIf="isSubmitted && unavailabilityValidation(i).controls['end_time']?.errors?.['required']"
+                            >
+                              {{ "enter_end_time" | translate }}*
+                            </span>
+                          </div>
                         <span
                           class="text-danger"
                           *ngIf="isSubmitted && unavailabilityValidation(i).controls['end_time']

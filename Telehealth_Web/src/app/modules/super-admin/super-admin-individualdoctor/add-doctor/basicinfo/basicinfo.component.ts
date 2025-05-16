@@ -22,7 +22,7 @@ import { MatStepper } from "@angular/material/stepper";
 import Validation from "src/app/utility/validation";
 import { ActivatedRoute } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import * as XLSX from 'xlsx';
+import { Editor, Toolbar } from "ngx-editor";
 import { IndiviualDoctorService } from "src/app/modules/individual-doctor/indiviual-doctor.service";
 import { NgxUiLoaderService } from "ngx-ui-loader";
 import { DateAdapter } from '@angular/material/core';
@@ -118,6 +118,16 @@ export class BasicinfoComponent implements OnInit {
   patchCountry: any;
   hide1 = true;
   hide2 = true;
+
+  abouteditor!: Editor;
+  abouteditor_arabic!: Editor;
+  toolbar: Toolbar = [
+    ["bold", "italic", "underline", "text_color", "background_color", "strike"],
+    ["align_left", "align_center", "align_right", "align_justify"],
+    ["ordered_list", "bullet_list"],
+    ["code", "blockquote"],
+    [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
+  ];
 
   constructor(
     private toastr: ToastrService,
@@ -368,7 +378,8 @@ export class BasicinfoComponent implements OnInit {
     this.getCategories();
 
     this.getAllDesignation();
-    // this.getAllTitle();
+    this.abouteditor = new Editor();
+    this.abouteditor_arabic = new Editor();
   }
 
   testExcelForm: FormGroup = new FormGroup({
@@ -513,7 +524,6 @@ export class BasicinfoComponent implements OnInit {
     } else {
       reqData.id = this.doctorId;
     }
-
 
     this.service.basicInformation(reqData).subscribe(
       (res) => {
@@ -795,6 +805,11 @@ export class BasicinfoComponent implements OnInit {
       input = input.substring(0, 10);
     }
     event.target.value = input;
+  }
+
+  ngOnDestroy(): void {
+    this.abouteditor.destroy();
+    this.abouteditor_arabic.destroy();
   }
 
 }

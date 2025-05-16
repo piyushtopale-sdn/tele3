@@ -16,7 +16,7 @@ import { sendResponse, createSession } from "../helpers/transmission";
 import { hashPassword } from "../helpers/string";
 import { sendEmail } from "../helpers/ses";
 import { config, generate4DigitOTP, smsTemplateOTP } from "../config/constants";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS } = config
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS, TIMEZONE, NODE_ENV } = config
 import { sendSms } from "../middleware/sendSms";
 import {
     generateRefreshToken,
@@ -360,7 +360,7 @@ class PharmacyController {
 
                 if (adminData.verify_status !== "APPROVED") {
                     const currentDate = new Date();
-                    const timeZone = process.env.TIMEZONE;                    
+                    const timeZone = TIMEZONE;                    
                     const formattedDate = currentDate.toLocaleString("en-US", { timeZone });
                     let addLogs = {};
                     let saveLogs = {};
@@ -415,7 +415,7 @@ class PharmacyController {
             createSession(req, portalUserData);
             // logs
             const currentDate = new Date();
-            const timeZone = process.env.TIMEZONE;
+            const timeZone = TIMEZONE;
             
             const formattedDate = currentDate.toLocaleString("en-US", { timeZone });
             let addLogs = {};
@@ -608,7 +608,7 @@ class PharmacyController {
 
             let otp = 1111;
 
-            if(process.env.NODE_ENV === "production"){
+            if(NODE_ENV === "production"){
                 otp = generate4DigitOTP();
             }
 
@@ -1220,7 +1220,7 @@ class PharmacyController {
                 email,
                 createdBy
             } = req.body;
-            ;
+            
             const {
                 nationality,
                 neighborhood,
@@ -2194,9 +2194,7 @@ class PharmacyController {
             }
 
             let filter = {};
-            if (portal_user_id == '') {
-
-            } else {
+            if (portal_user_id !== '') {
 
                 filter = {
                     portal_user_id: { $in: [mongoose.Types.ObjectId(portal_user_id)] },

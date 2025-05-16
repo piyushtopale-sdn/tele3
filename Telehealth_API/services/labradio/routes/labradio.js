@@ -114,7 +114,6 @@ labRadioRoute.post("/four-portal-management-deleteQuestionnaire", labradio.actio
 labRadioRoute.get("/listCategoryStaff", labradio.listCategoryStaff);
 //Advance Filter
 labRadioRoute.get("/four-portal-management-detail", advFiltersLabRadio.viewFourPortalDetailsForPatient);
-labRadioRoute.post("/four-portal-management-available-slots", advFiltersLabRadio.portalAvailableSlot);
 labRadioRoute.post('/four-portal-management-addReviews', advFiltersLabRadio.postReviewAndRating);
 labRadioRoute.get('/four-portal-management-getReviews', advFiltersLabRadio.getReviewAndRating);
 labRadioRoute.post('/delete-review-and-rating-fourportal', advFiltersLabRadio.deleteReviewAndRating);
@@ -184,7 +183,6 @@ labRadioRoute.get('/four-portal_appointment-details', fourportalappointment.port
 labRadioRoute.get('/appointmentList_for_patient', fourportalappointment.appointmentList_for_patient);
 labRadioRoute.post('/four-portal-assign-healthcare-provider', fourportalappointment.portal_assignHealthcareProvider);
 labRadioRoute.post('/four-portal-consulatation-data', fourportalappointment.portal_post_updateConsulatation);
-labRadioRoute.get("/four-portal-next-available-slot", fourportalappointment.portal_nextAvailableSlot);
 labRadioRoute.post("/four-portal-reschedule-appointment", fourportalappointment.portal_rescheduleAppointment);
 labRadioRoute.post("/four-portal-set-reminder", fourportalappointment.portal_setReminder);
 labRadioRoute.get("/four-portal-get-reminder", fourportalappointment.portal_getReminder);

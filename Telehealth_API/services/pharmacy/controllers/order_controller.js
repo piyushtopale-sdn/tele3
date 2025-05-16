@@ -853,7 +853,7 @@ class OrderController {
 
     async totalOrderDashboardCount(req, res) {
         try {
-            const {
+            let {
                 for_portal_user,
             } = req.query;
             let checkUser = await PortalUser.findOne({ _id: mongoose.Types.ObjectId(for_portal_user) });

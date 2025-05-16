@@ -139,11 +139,8 @@ export class SuperSubscriptionplanComponent implements OnInit {
       plan_duration: this.fb.array([this.createOption()]),
       is_activated: [true, [Validators.required]],
       // services: this.fb.array([]),
-      services: this.fb.array([
-        this.fb.group({ name: "consultation", max_number: [0, [Validators.required, Validators.min(0)]] }),
-        // this.fb.group({ name: "labtest", max_number: [0, [Validators.required, Validators.min(0)]] }),
-        // this.fb.group({ name: "radiology", max_number: [0, [Validators.required, Validators.min(0)]] })
-      ]),
+      // services: this.fb.group({ name: "consultation", max_number: [null, Validators.required] })
+      services: this.fb.array([]) 
     });
   }
 
@@ -310,8 +307,8 @@ export class SuperSubscriptionplanComponent implements OnInit {
       plan_for: this.addPlan.value.plan_for,
       plan_name: this.addPlan.value.plan_name,
       plan_name_arabic: this.addPlan.value.plan_name_arabic,
-      description: this.addPlan.value.description,                  //description
-      descriptionArabic: this.addPlan.value.description_arabic,  
+      description: this.getPlainText(this.addPlan.value.description),                  //description
+      descriptionArabic: this.getPlainText(this.addPlan.value.description_arabic),  
       // price_per_member: this.addPlan.value.price_per_member,              [[6 Feb 2025 comment Add on per person ]]
       plan_duration: plan_duration,
       is_activated: this.addPlan.value.is_activated,
@@ -357,17 +354,26 @@ export class SuperSubscriptionplanComponent implements OnInit {
   // }
 
   updatePlan() {
-    this.isSubmitted = true;
+    this.isSubmitted = true;  
+  
+    const formData = this.editPlan.value;
+    const descriptionText = this.getPlainText(formData.description) || '';
+    const descriptionArabicText = this.getPlainText(formData.descriptionArabic);
+
+    this.editPlan.patchValue({
+      description: descriptionText,
+      descriptionArabic: descriptionArabicText
+    });
     if (this.editPlan.invalid) {
+      this._coreService.showError("","Please fill all required feilds.")
       return;
     }
     this.isSubmitted = false;
-    this.loader.start();
-  
-    const formData = this.editPlan.value;
-    
+
     const updatedPlan = {
       ...formData,
+      description: descriptionText,
+      descriptionArabic: descriptionArabicText,
       plan_duration: [
         {
           price: formData.plan_price,
@@ -375,7 +381,7 @@ export class SuperSubscriptionplanComponent implements OnInit {
         }
       ]
     };
-    
+    this.loader.start();
     this.service.updatePlan(updatedPlan).subscribe(
       (res) => {
         let response = this._coreService.decryptObjectData({ data: res });
@@ -503,23 +509,29 @@ export class SuperSubscriptionplanComponent implements OnInit {
 
   //---------------------FromArray handling------------------------
 
-  get services() {
-    return this.addPlan.controls["services"] as FormArray;
+  get services(): FormArray {
+    return this.addPlan.get('services') as FormArray;
   }
+  
 
-  addNewService() {
-    const serviceArray = this.addPlan.get('services') as FormArray;
-    serviceArray.clear();
-    const initialServices = [
-      { name: 'consultation', max_number: 0 },
-      // { name: 'labtest', max_number: 0 },
-      // { name: 'radiologytest', max_number: 0 }
-    ];
+addNewService() {
+  const serviceArray = this.addPlan.get('services') as FormArray;
+   serviceArray.clear();
+  const initialServices = [
+    { name: 'consultation', max_number: null },
+    // { name: 'labtest', max_number: null },
+    // { name: 'radiologytest', max_number: null }
+  ];
 
-    initialServices.forEach(service => {
-      serviceArray.push(this.fb.group(service));
-    });    
-  }
+  initialServices.forEach(service => {
+    serviceArray.push(
+      this.fb.group({
+        name: service.name,
+        max_number: [service.max_number, Validators.required,Validators.min(1)]
+      })
+    );
+  });
+}
 
   // Add a getter method for convenience
   get serviceControls() {
@@ -704,5 +716,32 @@ export class SuperSubscriptionplanComponent implements OnInit {
       console.error("No matching menu found for URL:", this.currentUrl);
     }
   }
+  
+getPlainText = (editorValue: any): string => {
+    if (typeof editorValue === 'string') {
+
+      const textOnly = editorValue
+        .replace(/<[^>]*>/g, '')  
+        .replace(/&nbsp;/gi, '')    
+        .replace(/\s/g, '')        
+        .trim();
+  
+      if (!textOnly) return '';
+  
+      return editorValue.trim();
+    }
+    let text = '';
+    editorValue?.content?.forEach((block: any) => {
+      if (block.type === 'paragraph' && Array.isArray(block.content)) {
+        block.content.forEach((inner: any) => {
+          if (inner.type === 'text' && inner.text) {
+            text += inner.text + ' ';
+          }
+        });
+      }
+    });  
+    return text.trim();
+  };
+  
 
 }

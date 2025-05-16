@@ -406,6 +406,9 @@ export class DoctorlistComponent implements OnInit {
 
   viewAdminList(data:any){
     this.isAdmin = data;
+    if (this.paginator) {
+      this.paginator.firstPage();
+  }
     this.getDoctorsList()
   }
 }

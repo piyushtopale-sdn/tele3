@@ -2,8 +2,6 @@
 
 import HttpService from "../middleware/httpservice";
 import { sendResponse } from "../helpers/transmission";
-const express = require('express');
-const app = express();
 
 export const subscriptionPurchasedPlans = async (req, res) => {
     HttpService.getWithAuth(req, res, 'subscription/subscription-purchased-plan', 'pharmacyServiceUrl');

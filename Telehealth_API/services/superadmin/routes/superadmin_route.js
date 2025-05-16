@@ -1,7 +1,7 @@
 "use strict";
 
 import express from "express";
-const fs = require("fs");
+import fs from "fs";
 import contentManagementController from "../controllers/contentManagement/contentManagementController"
 import {
     listMedicineWithoutPaginationForDoctor, uploadCSVForMedicine, allSubscriptionPlans, listSubscriptionPlans,subscriptionPlanGetById,
@@ -54,8 +54,6 @@ import {
   getNotificationById,
   getNotificationList,
 } from "../controllers/Notification-management/notification-management";
-
-const path = require("path");
 
 const superadminRoute = express.Router();
 

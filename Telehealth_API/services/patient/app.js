@@ -5,7 +5,7 @@ import path from "path";
 import InitiateMongoServer from "./config/db.js";
 import Payment from "./controllers/payment/paymentController";
 import AmazonPayment from "./controllers/payment/amazonPayment";
-const cron = require('node-cron');
+import cron from 'node-cron';
 
 const useragent = require('express-useragent');
 const app = express();

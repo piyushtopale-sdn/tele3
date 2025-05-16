@@ -3,8 +3,8 @@
 
 import axios from "axios";
 import { decryptionData } from "./crypto";
-const config = require("../config/constants");
-const BASEURL = config.config.BaseUrl;
+import { config } from "../config/constants";
+const BASEURL = config.BaseUrl;
 const validateHeaders = (req, isAuth) => {
     let response = {
         error: false,
@@ -47,7 +47,7 @@ class Http {
                 params: data,
                 headers
             }).then(async function (response) {
-                if (config.config.NODE_ENV == "local") {
+                if (config.NODE_ENV == "local") {
                     resolve(response.data)
                 } else {
                     const decryData = await decryptionData(response.data)
@@ -69,7 +69,7 @@ class Http {
                 data,
                 headers
             }).then(async function (response) {
-                if (config.config.NODE_ENV == "local") {
+                if (config.NODE_ENV == "local") {
                     resolve(response.data)
                 } else {
                     const decryData = await decryptionData(response.data)
@@ -91,7 +91,7 @@ class Http {
                 data,
                 headers
             }).then(async function (response) {
-                if (config.config.NODE_ENV == "local") {
+                if (config.NODE_ENV == "local") {
                     resolve(response.data)
                 } else {
                     const decryData = decryptionData(response.data)
@@ -114,7 +114,7 @@ class Http {
                 data,
                 headers
             }).then(async function (response) {
-                if (config.config.NODE_ENV == "local") {
+                if (config.NODE_ENV == "local") {
                     resolve(response.data)
                 } else {
                     const decryData = await decryptionData(response.data)
@@ -136,7 +136,7 @@ class Http {
                 data,
                 headers
             }).then(async function (response) {
-                if (config.config.NODE_ENV == "local") {
+                if (config.NODE_ENV == "local") {
                     resolve(response.data)
                 } else {
                     const decryData = await decryptionData(response.data)
@@ -158,7 +158,7 @@ class Http {
                 data,
                 headers
             }).then(async function (response) {
-                if (config.config.NODE_ENV == "local") {
+                if (config.NODE_ENV == "local") {
                     resolve(response.data)
                 } else {
                     const decryData = await decryptionData(response.data)

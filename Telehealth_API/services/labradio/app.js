@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-const cron = require('node-cron');
+import cron from 'node-cron';
 import path from "path";
 import InitiateMongoServer from "./config/db.js";
 import { labRadioRoute, labRadioTestRoute, labRadioManagementRoute, appointmentRoutes } from "./routes/index.js"

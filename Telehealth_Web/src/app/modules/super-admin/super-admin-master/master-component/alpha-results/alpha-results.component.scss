@@ -1,3 +1,26 @@
 .material-icons{
     cursor: pointer;
 }
+.plus.addbtn{
+    color: #ffffff;
+background: #2839FF;
+border-radius: 7px;
+padding: 10px 70px;
+}
+
+.custome_modal .modal-body .row_generate.row_minus .mat-icon.btnminus {
+    color: #F05A4F;
+    background: #FDE6E5;
+    border-radius: 7px;
+    padding: 10px 70px;
+   
+}
+
+.custome_modal .modal-body .row_generate.row_add{
+    border-radius: 5px 5px 5px 5px;
+    margin: 15px;
+}
+.custome_modal .modal-body .row_generate.row_minus{
+    border-radius: 5px 5px 5px 5px;
+    margin: 16px;
+}

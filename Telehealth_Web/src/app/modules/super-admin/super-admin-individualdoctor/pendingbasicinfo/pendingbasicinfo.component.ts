@@ -45,6 +45,9 @@ export class PendingbasicinfoComponent implements OnInit {
   slot_interval_time: any;
   unavaliabledate_time: any;
   categoriesValue: any;
+  showFullAbout1: boolean = false;
+  showFullAbout2: boolean = false;
+
   constructor(
     private modalService: NgbModal,
     private activatedRoute: ActivatedRoute,
@@ -341,5 +344,41 @@ export class PendingbasicinfoComponent implements OnInit {
     }
   
     return timeStr; 
+  }
+
+  getLimitedText1(text: string, wordLimit: number): string {
+    if (!text) return '-';
+    const words = text.split(' ');
+    if (words.length <= wordLimit) {
+      return text;
+    }
+    return words.slice(0, wordLimit).join(' ') + '...';
+  }
+  
+  isViewMoreVisible1(text: string, wordLimit: number): boolean {
+    if (!text) return false;
+    return text.split(' ').length > wordLimit;
+  }
+  
+  toggleAbout1() {
+    this.showFullAbout1 = !this.showFullAbout1;
+  }
+
+  getLimitedText2(text: string, wordLimit: number): string {
+    if (!text) return '-';
+    const words = text.split(' ');
+    if (words.length <= wordLimit) {
+      return text;
+    }
+    return words.slice(0, wordLimit).join(' ') + '...';
+  }
+  
+  isViewMoreVisible2(text: string, wordLimit: number): boolean {
+    if (!text) return false;
+    return text.split(' ').length > wordLimit;
+  }
+  
+  toggleAbout2() {
+    this.showFullAbout2 = !this.showFullAbout2;
   }
 }

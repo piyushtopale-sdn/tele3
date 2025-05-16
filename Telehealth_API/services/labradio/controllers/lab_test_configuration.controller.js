@@ -6,7 +6,7 @@ import Http from "../helpers/httpservice";
 import mongoose from "mongoose";
 import { LabMainTestColumns, LabSubTestColumns, RadioTestColumns } from "../config/constants";
 import { processExcel } from "../middleware/utils";
-const fs = require("fs");
+import fs from "fs";
 const httpService = new Http();
 
 const validateColumnWithExcel = (toValidate, excelColumn) => {
@@ -93,7 +93,7 @@ export const getLabTestConfiguration = async (req, res) => {
             },
             ...(searchText || centreName ? [{
                 $match: {
-                    ...(searchText ? search_filter : {}),
+                    ...(searchText ? { $or: search_filter } : {}),
                     ...(centreName ? centreFilter : {})
                 }
             }] : []),

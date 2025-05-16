@@ -1,7 +1,6 @@
 import { validationResult } from "express-validator";
 import * as CryptoJS from "crypto-js";
-import { messageID } from "../config/constants";
-const { config } = require("../config/constants");
+import { messageID, config } from "../config/constants";
 const { CRYPTO_SECRET } = config;
 
 export const validationResponse = (req, res, next) => {

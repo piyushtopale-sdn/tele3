@@ -16,7 +16,7 @@ import Validation from "src/app/utility/validation";
 import { ActivatedRoute } from "@angular/router";
 import { IndiviualDoctorService } from "../../indiviual-doctor.service";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import * as XLSX from 'xlsx';
+import { Editor, Toolbar } from "ngx-editor";
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { DateAdapter } from "@angular/material/core";
 @Component({
@@ -99,6 +99,16 @@ export class BasicinfoComponent implements OnInit {
   overlay: false;
   basicDetails: any = {};
   maxDate = new Date();
+  abouteditor!: Editor;
+  abouteditor_arabic!: Editor;
+  toolbar: Toolbar = [
+    ["bold", "italic", "underline", "text_color", "background_color", "strike"],
+    ["align_left", "align_center", "align_right", "align_justify"],
+    ["ordered_list", "bullet_list"],
+    ["code", "blockquote"],
+    [{ heading: ["h1", "h2", "h3", "h4", "h5", "h6"] }],
+  ];
+
   constructor(
     private toastr: ToastrService,
     private sadminService: SuperAdminService,
@@ -274,7 +284,8 @@ export class BasicinfoComponent implements OnInit {
     this.getSpecialities();
     this.getAllDesignation();
     this.getCategories();
-
+    this.abouteditor = new Editor();
+    this.abouteditor_arabic = new Editor();
   }
 
   testExcelForm: FormGroup = new FormGroup({
@@ -679,5 +690,10 @@ export class BasicinfoComponent implements OnInit {
         input = input.substring(0, 10);
       }
       event.target.value = input;
+    }
+
+    ngOnDestroy(): void {
+      this.abouteditor.destroy();
+      this.abouteditor_arabic.destroy();
     }
 }

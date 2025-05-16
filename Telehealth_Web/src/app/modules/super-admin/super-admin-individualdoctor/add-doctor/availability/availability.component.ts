@@ -77,6 +77,10 @@ export class AvailabilityComponent implements OnInit {
     private dateAdapter: DateAdapter<Date>,
   ) {
     this.availabilityFormOnline = this.fb.group({
+      availability_slots: this.fb.group({
+        start_date: [""],
+        end_date: [""],
+      }),
       weekDays: this.fb.array([]),
       availability: this.fb.array([]),
       unAvailability: this.fb.array([]),
@@ -170,13 +174,17 @@ export class AvailabilityComponent implements OnInit {
             end_time: element.end_time,
           });
           arrangedUnAvlOnline.push({
-            date: element.date,
+            start_date: element.start_date,
+            end_date: element.end_date,
             start_time: obj.start_time,
             end_time: obj.end_time,
           });
         });
-
         this.availabilityFormOnline.patchValue({
+          availability_slots: {
+            start_date: element[0]?.available_slots?.start_date,
+            end_date:  element[0]?.available_slots?.end_date,
+          },
           weekDays: arrangedWeekDaysOnline,
           unAvailability: arrangedUnAvlOnline,
           bookingSlot: onlineMode?.slot_interval,
@@ -221,7 +229,7 @@ export class AvailabilityComponent implements OnInit {
     let weekArrayOnline: any = [];
     let avlOnline = [];
     let unAvlOnline = [];
-
+    let avlDates =[];
     this.availabilityFormOnline.value.weekDays.forEach((element) => {
       let obj = this.arrangeWeekDaysForRequest(element);
       if (this.shouldContinue) {
@@ -250,17 +258,31 @@ export class AvailabilityComponent implements OnInit {
         end_time: element.end_time,
       });
     
-      let date = this.formatDate(element.date);
+      let start_date = this.formatDate(element.start_date);
+      let end_date = this.formatDate(element.end_date);
         unAvlOnline.push({
-          date: date,
+          start_date: start_date,
+          end_date:end_date,
           start_time: time.start_time,
           end_time: time.end_time,
         });
       }
     );
+    const slot = this.availabilityFormOnline.value.availability_slots;
+
+    let start_date = this.formatDate(slot.start_date);
+    let end_date = this.formatDate(slot.end_date);
+    let doctorAvlId = localStorage.getItem('portal_user')
+    avlDates.push({
+      doctorId:doctorAvlId,
+      start_date:start_date,
+      end_date:end_date
+    });
+    
 
     //-------------Online Type--------------------------
     let appointmenTypeOnline = {
+      availability_slots: avlDates,
       week_days: weekArrayOnline,
       unavailability_slot: unAvlOnline,
       slot_interval: this.availabilityFormOnline.value.bookingSlot,
@@ -278,6 +300,13 @@ export class AvailabilityComponent implements OnInit {
       
     };
 
+    let availableReqData = {
+      doctorId:doctorAvlId,
+      start_date:start_date,
+      end_date:end_date,
+    }
+      
+
     if (this.shouldContinue === true) {
       this.service.doctorAvailability(reqData).subscribe(
         (res) => {
@@ -286,6 +315,8 @@ export class AvailabilityComponent implements OnInit {
             this.loader.stop();
             this.toastr.success(response.message);
             this.callParent.emit()
+            this.service.AvailableSlotDate(availableReqData).subscribe((res:any)=>{
+            })            
 
             // if (isNext === 'yes') {
             if (this.pageForAdd) {
@@ -503,7 +534,8 @@ export class AvailabilityComponent implements OnInit {
 
   unAvailForm() {
     return this.fb.group({
-      date: [""],
+      start_date: [""],
+      end_date: [""],
       start_time: [""],
       end_time: [""],
     })
@@ -826,6 +858,12 @@ export class AvailabilityComponent implements OnInit {
         });
       }
     });
+  }
+  clearDateRange(): void {
+    const slots = this.availabilityFormOnline.get('availability_slots');
+    if (slots) {
+      slots.reset();
+    }
   }
  
 }

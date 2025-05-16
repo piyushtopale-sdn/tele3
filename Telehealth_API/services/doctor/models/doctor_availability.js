@@ -51,9 +51,25 @@ const doctorAvailabilitySchema = new mongoose.Schema(
     slot_interval: {
       type: String,
     },   
+    // unavailability_slot: [
+    //   {
+    //     date: {
+    //       type: String,
+    //     },
+    //     start_time: {
+    //       type: String,
+    //     },
+    //     end_time: {
+    //       type: String,
+    //     },
+    //   },
+    // ],
     unavailability_slot: [
       {
-        date: {
+        start_date: {
+          type: String,
+        },
+        end_date: {
           type: String,
         },
         start_time: {
@@ -64,6 +80,11 @@ const doctorAvailabilitySchema = new mongoose.Schema(
         },
       },
     ],
+    available_slots:
+      {
+        start_date: { type: String },  
+        end_date: { type: String },   
+      },   
     for_portal_user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

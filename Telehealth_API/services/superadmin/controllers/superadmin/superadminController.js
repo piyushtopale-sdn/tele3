@@ -3,7 +3,7 @@
 const bcrypt = require('bcrypt');
 import jwt from "jsonwebtoken";
 import crypto from "crypto"
-const fs = require('fs');
+import fs from "fs";
 import Superadmin from "../../models/superadmin/superadmin";
 import Medicine from "../../models/medicine";
 import MaximumRequest from "../../models/superadmin/maximum_request";
@@ -12,7 +12,7 @@ import SubscriptionPlan from "../../models/subscription/subscriptionplans";
 import SubscriptionPlanService from "../../models/subscription/subscriptionplan_service";
 import Otp2fa from "../../models/otp2fa";
 import { config, smsTemplateOTP, MedicineColumns } from "../../config/constants";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL } = config
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, NODE_ENV } = config
 const { bcryptCompare, generateTenSaltHash, processExcel, generate4DigitOTP } = require("../../middleware/utils");
 const secret = config.SECRET;
 import { sendResponse } from "../../helpers/transmission";
@@ -77,16 +77,6 @@ const generateRefreshToken = payload => {
 const checkPassword = async (password, user) => {
     const isMatch = await bcrypt.compare(password, user.password);
     return isMatch
-}
-/**
- * Login using email and password
- * @param {Object} req 
- * @param {Object} res 
- */
-const checkIp = async (currentIP, userIP) => {
-    if (currentIP === userIP) {
-        return true
-    }
 }
 
 // export const saveLogs = (logData) => {
@@ -396,7 +386,7 @@ export const sendSmsOtpFor2fa = async (req, res) => {
         
         let otp = 1111;
 
-        if(process.env.NODE_ENV === "production"){
+        if(NODE_ENV === "production"){
             otp = generate4DigitOTP();
         }
         const otpExpiration = new Date(currentTime.getTime() + OTP_EXPIRATION * 60000); //This will add 10 minutes time for otp expiration
@@ -3107,22 +3097,33 @@ export const deteleLockAdminUser = async (req, res) => {
     }
 };
 
-export const updateAdminProfile = async (req,res) =>{
- try {
-      const { adminId,email,fullName,mobile,country_code} = req.body;
+export const updateAdminProfile = async (req, res) => {
+    try {
+      const { adminId, email, fullName, mobile, country_code, password } = req.body;
+  
       const findUser = await Superadmin.find({
         isDeleted: false,
-        email:email,
+        email: email,
         _id: { $ne: mongoose.Types.ObjectId(adminId) },
       });
-      if (findUser.length == 0) {
+  
+      let updateFields = {
+        email,
+        fullName,
+        mobile,
+        country_code,
+      };
+  
+      if (password) {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        updateFields.password = hashedPassword;
+      }
+  
+      if (findUser.length === 0) {
         const updateAdmin = await Superadmin.findByIdAndUpdate(
           adminId,
-          {
-            $set: {
-                email,fullName,mobile,country_code
-            },
-          },
+          { $set: updateFields },
           { new: true }
         ).exec();
         return sendResponse(req, res, 200, {
@@ -3142,11 +3143,12 @@ export const updateAdminProfile = async (req,res) =>{
       return sendResponse(req, res, 500, {
         status: false,
         data: err,
-        message: `failed to update`,
+        message: `Failed to update`,
         errorCode: "INTERNAL_SERVER_ERROR",
       });
     }
-}
+  };
+  
   
 
 

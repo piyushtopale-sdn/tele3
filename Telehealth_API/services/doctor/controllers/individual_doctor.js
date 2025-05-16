@@ -44,6 +44,8 @@ const {
   test_p_FRONTEND_URL,
   LOGIN_AFTER,
   PASSWORD_ATTEMPTS,
+  TIMEZONE,
+  NODE_ENV
 } = config;
 import { sendSms } from "../middleware/sendSms";
 import {
@@ -552,7 +554,7 @@ class IndividualDoctor {
       }
       // logs
       const currentDate = new Date();
-      const timeZone = process.env.TIMEZONE
+      const timeZone = TIMEZONE;
       const formattedDate = currentDate.toLocaleString("en-US", { timeZone });
       
       let addLogs = {};
@@ -890,7 +892,7 @@ console.log(canOtpSend,"____________canOtpSend");
 
       let otp = 1111;
 
-      if (process.env.NODE_ENV === "production") {
+      if (NODE_ENV === "production") {
         otp = generate4DigitOTP();
       }
 
@@ -1241,7 +1243,7 @@ console.log(canOtpSend,"____________canOtpSend");
           )
           // logs
           const currentDate = new Date();
-          const timeZone = process.env.TIMEZONE
+          const timeZone = TIMEZONE
           const formattedDate = currentDate.toLocaleString("en-US", { timeZone });
           
             let addLogs = {};
@@ -1451,7 +1453,7 @@ console.log(canOtpSend,"____________canOtpSend");
           )
            // logs
            const currentDate = new Date();
-           const timeZone = process.env.TIMEZONE;
+           const timeZone = TIMEZONE;
            
            const formattedDate = currentDate.toLocaleString("en-US", { timeZone });
            
@@ -1783,7 +1785,7 @@ console.log(canOtpSend,"____________canOtpSend");
           );
         }
         /** Enabled recording for prod env */
-        if (process.env.NODE_ENV === "production") {
+        if (NODE_ENV === "production") {
           let checking = startVideoRecording(
             roomName,
             uniqueId,
@@ -1910,7 +1912,7 @@ console.log(canOtpSend,"____________canOtpSend");
         Authorization: req.headers["authorization"],
       };
       let portalinfo = portaltype != "" ? `&portal=${portaltype}` : "";
-      const link = `${process.env.test_p_FRONTEND_URL}/external-video?id=${appointment}${portalinfo}`;
+      const link = `${test_p_FRONTEND_URL}/external-video?id=${appointment}${portalinfo}`;
 
       let result = await PortalUser.findOne({ email: email });
 
@@ -2808,8 +2810,8 @@ console.log(canOtpSend,"____________canOtpSend");
           totalConfirmedAppointments: confirmedAppointments, // Full confirmed appointments
           totalPatients: totalPatients.length,
           totalConsultationDone: completedAppointments, // Full completed appointments
-          totalPrescribedLabTests: prescribedLabTests || 0,
-          totalPrescribedRadiologyTests: prescribedRadiologyTests || 0,
+          totalPrescribedLabTests: 0,
+          totalPrescribedRadiologyTests: 0,
           totalIncompleteOrders: eprescriptionData, // Full incomplete orders data
         },
         errorCode: null,

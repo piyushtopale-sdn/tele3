@@ -6,8 +6,7 @@ import { verifyToken, verifyRole } from "../helpers/verifyToken";
 import { handleResponse } from "../middleware/utils";
 const hospitalStaffRole = require("../controllers/roles/role");
 const doctor2Route = express.Router();
-const fs = require('fs');
-
+import fs from "fs";
 
 const uploadFileToLocalStorage = async (req, res, next) => {
     if (!req.files) {

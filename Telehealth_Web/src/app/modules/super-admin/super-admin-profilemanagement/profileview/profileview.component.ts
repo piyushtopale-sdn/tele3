@@ -2,10 +2,9 @@ import { Component, ElementRef, OnInit, TemplateRef, ViewChild, ViewEncapsulatio
 import { CoreService } from 'src/app/shared/core.service';
 import { SuperAdminService } from '../../super-admin.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import intlTelInput from "intl-tel-input";
 import Validation from 'src/app/utility/validation';
-import { MatCheckboxChange } from "@angular/material/checkbox";
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
@@ -20,34 +19,16 @@ import { DatePipe } from "@angular/common";
 export class ProfileviewComponent implements OnInit {
   userData: any;
   userRole: any;
-  staffID: any;
-  staffData: any;
-  editStaff: any = FormGroup;
   editAdminProfile:any = FormGroup;
   iti: any;
   isSubmitted: boolean = false;
   changePasswordForm: any = FormGroup;
-  @ViewChild('editstaffcontent') editstaffcontent: TemplateRef<any>;
   @ViewChild('editadminmprofile') editadminmprofile: TemplateRef<any>;
 
-  autoComplete: google.maps.places.Autocomplete;
   @ViewChild("mobile") mobile: ElementRef<HTMLInputElement>;
   @ViewChild("countryPhone") countryPhone: ElementRef;
   selectedCountryCode:  any = '+966';
   countrycodedb: any = '';
-  loc: any = {};
-  selectedLanguages: any = [];
-  staffProfileUrl: any;
-  staffRole: any;
-  groupID: any;
-  groupData: any;
-  searchText: any = "";
-  pharmacyList: any[] = [];
-  relatedPharmacies: any[] = [];
-  selectedPharmacy: any[] = [];
-  association_group_selected_pharmacy: any; //coma seperated
-  groupIcon: any = "";
-  locationData : any = {};
   chargesForm : any = FormGroup;
   adminProfile: any = FormGroup
   hide1 = true;
@@ -78,19 +59,16 @@ export class ProfileviewComponent implements OnInit {
   loginId: any;
   adminUserId: any;
   unitMap: any = {};
+  searchText:any='';
+  
   constructor(private coreService: CoreService, private fb: FormBuilder, private modalService: NgbModal, private service: SuperAdminService,private toastr: ToastrService,private router: Router,
     private loader: NgxUiLoaderService,private dateAdapter: DateAdapter<Date>,
         private datepipe: DatePipe,) {
     const loginData = this.coreService.getLocalStorage("loginData");
-    const adminData = this.coreService.getLocalStorage("adminData");
     this.loginId = loginData?._id;
     this.userData = loginData
     this.userRole = loginData?.role;
-    if(this.userRole == 'STAFF_USER'){      
-      this.staffID = adminData?._id
-    }else{
-      this.groupID = adminData?._id
-    }
+  
     
 
     this.changePasswordForm = this.fb.group(
@@ -127,32 +105,6 @@ export class ProfileviewComponent implements OnInit {
       { validators: [Validation.match("new_password", "confirm_password")] }
     );
 
-
-
-    this.editStaff = this.fb.group({
-      staff_profile: [""],
-      staff_name: [""],
-      first_name: ["", [Validators.required]],
-      middle_name: [""],
-      last_name: ["", [Validators.required]],
-      dob: ["", [Validators.required]],
-      language: ["", [Validators.required]],
-      address: ["", [Validators.required]],
-      neighbourhood: [""],
-      country: ["", [Validators.required]],
-      region: [""],
-      province: [""],
-      department: [""],
-      city: [""],
-      village: [""],
-      pincode: [""],
-      // degree: [""],
-      mobile: ["", [Validators.required]],
-      email: ["", [Validators.required]],
-      // role: [""],
-      // userName: [""],
-      about_staff: [""],
-    });
 
     this.chargesForm = this.fb.group({
       consultationCharges: [],
@@ -206,12 +158,51 @@ export class ProfileviewComponent implements OnInit {
       email: ["", [Validators.required]],
       mobile: ["", [Validators.required, Validators.pattern(/^\d{2}-\d{3}-\d{4}$/)]],
       adminId:[""],
-      country_code:[""]
-    });
+      country_code:[""],
+      password:["", Validators.compose([       
+        Validation.patternValidator(/\d/, { hasNumber: true }),
+        Validation.patternValidator(/[A-Z]/, { hasCapitalCase: true }),
+        Validation.patternValidator(/[a-z]/, { hasSmallCase: true }),
+        Validation.patternValidator(/[ !@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, { hasSpecialCharacters: true }),
+        Validators.minLength(8),
+      ])],
+      confirmPassword: [""]
+    }, { validators: [Validation.match("password", "confirmPassword")] });
+    
+    
   }
 
+  static match(password: string, confirmPassword: string): ValidatorFn {
+    return (formGroup: AbstractControl): ValidationErrors | null => {
+      const passwordControl = formGroup.get(password);
+      const confirmPasswordControl = formGroup.get(confirmPassword);
+  
+      if (!passwordControl || !confirmPasswordControl) {
+        return null;
+      }
+  
+      const passwordValue = passwordControl.value;
+      const confirmPasswordValue = confirmPasswordControl.value;
+  
+      // If both are empty → no error
+      if (!passwordValue && !confirmPasswordValue) {
+        confirmPasswordControl.setErrors(null);
+        return null;
+      }
+  
+      // If mismatch → set error
+      if (passwordValue !== confirmPasswordValue) {
+        confirmPasswordControl.setErrors({ matching: true });
+        return { matching: true };
+      } else {
+        confirmPasswordControl.setErrors(null);
+        return null;
+      }
+    };
+  }
+  
+
   ngOnInit(): void {
-    this.getSpokenLanguage();   
     this.listOfAllAdminList(`${this.sortColumn}:${this.sortOrder}`);
     this.get_generalSettingData();
   }
@@ -271,87 +262,6 @@ export class ProfileviewComponent implements OnInit {
     
   }
 
-  getStaffDetails() {
-    if (this.staffID === null || this.staffID === undefined) {
-      return;
-    }
-    this.service.getStaffDetails(this.staffID).subscribe((res) => {
-      let response = this.coreService.decryptObjectData(res);
-      this.staffData = response?.data?.data[0];
-      // this.relatedStaff = response.data[1]?.pharmacy_details;
-
-      this.staffProfileUrl = response?.data?.documentURL;
-
-      // let expiryDate = moment(this.groupData?.license_expiry).format("MM/DD/YYYY")
-      let address = response?.data?.data[0]?.location_id
-      this.locationData = address
-      
-  
-      let details = response?.data?.data[0];
-      this.selectedLanguages = details.language;
-       
-
-      let dateString: any = new Date(details?.dob);
-      let dd = String(dateString.getDate()).padStart(2, "0");
-      let mm = String(dateString.getMonth() + 1).padStart(2, "0");
-      let yyyy = dateString.getFullYear();
-      dateString = yyyy + "-" + mm + "-" + dd;
-      this.editStaff.controls["staff_name"].setValue(
-        details?.superadmin_id?.first_name + " " + details?.superadmin_id?.middle_name + " " + details?.superadmin_id?.last_name
-      );
-      this.editStaff.controls["first_name"].setValue(
-        details?.superadmin_id?.first_name
-      );
-      this.editStaff.controls["middle_name"].setValue(
-        details?.superadmin_id?.middle_name
-      );
-      this.editStaff.controls["last_name"].setValue(
-        details?.superadmin_id?.last_name
-      );
-      this.editStaff.controls["dob"].setValue(dateString);
-      this.editStaff.controls["language"].setValue(details.language);
-      this.editStaff.controls["address"].setValue(
-        details?.location_id?.address
-      );
-      this.editStaff.controls["neighbourhood"].setValue(
-        details?.location_id?.neighborhood
-      );
-      this.editStaff.controls["country"].setValue(address?.country?._id);
-      this.editStaff.controls["region"].setValue(address?.region?._id);
-      this.editStaff.controls["province"].setValue(address?.province?._id);
-      this.editStaff.controls["department"].setValue(address?.department?._id);
-      this.editStaff.controls["city"].setValue(address?.city?._id);
-      this.editStaff.controls["village"].setValue(address?.village?._id);
-      this.editStaff.controls["pincode"].setValue(
-        details.location_id.pincode
-      );
-      // this.editStaff.controls["degree"].setValue(
-      //   details.superadmin_id.degree
-      // );
-      this.editStaff.controls["mobile"].setValue(
-        details.superadmin_id?.mobile
-      );
-      this.editStaff.controls["email"].setValue(details.superadmin_id.email);
-      // this.editStaff.controls["role"].setValue(details?.staff_role?._id);
-      // this.editStaff.controls["userName"].setValue(
-      //   details.superadmin_id.user_name
-      // );
-      this.editStaff.controls["about_staff"].setValue(details?.about_staff);
-      this.countrycodedb = details.superadmin_id.country_code;
-      // this.getCountrycodeintlTelInput();
-    });
-  }
-
-  openVerticallyCenterededitstaff(editstaffcontent: any) {
-
-
-    this.getStaffDetails();
-    this.modalService.open(editstaffcontent, {
-      centered: true,
-      size: "xl",
-      windowClass: "edit_staffnew",
-    });
-  }
 
   handleClose() {
     let modalDespose = this.getDismissReason(1);
@@ -373,117 +283,8 @@ export class ProfileviewComponent implements OnInit {
     // return day !== 0 && day !== 6;
     return true;
   };
-  get addStaffFormControl(): { [key: string]: AbstractControl } {
-    return this.editStaff.controls;
-  }
+ 
 
-
-  updateStaff() {
-    this.isSubmitted = true;
-    if (this.editStaff.invalid) {
-      this.coreService.showError("", "Please Fill All Fields!")
-      return null;
-    }
-
-    let formaData: any = new FormData();
-    let data = this.editStaff.value;
-    formaData.append("staff_profile", data.staff_profile);
-    formaData.append("staff_name", data.first_name + " " + data.middle_name + " " + data.last_name);
-    formaData.append("first_name", data.first_name);
-    formaData.append("middle_name", data.middle_name);
-    formaData.append("last_name", data.last_name);
-    formaData.append("dob", data.dob);
-    formaData.append("language", JSON.stringify(this.selectedLanguages));
-    formaData.append("address", data.address);
-    formaData.append("neighborhood", data.neighbourhood);
-    formaData.append("country", data.country);
-    formaData.append("region", data.region ? data.region : "");
-    formaData.append("province", data.province ? data.province : "");
-    formaData.append("department", data.department ? data.department : "");
-    formaData.append("city", data.city ? data.city : "");
-    formaData.append("village", data.village ? data.village : "");
-    formaData.append("pincode", data.pincode);
-    formaData.append("mobile", data.mobile);
-    formaData.append("email", data.email);
-    formaData.append("about_staff", data?.about_staff);
-    formaData.append("id", this.staffID);
-    formaData.append("country_code", this.selectedCountryCode);
-    formaData.append("userId", this.staffID);
-    for (let [key, value] of formaData) {
-    }
-
-    this.service.editStaff(formaData).subscribe(
-      (res) => {
-        let response = this.coreService.decryptObjectData(res);
-        if (response.status) {
-          this.coreService.showSuccess("", response.message);
-          this.handleClose();
-          this.getStaffDetails();
-
-        } else {
-          this.coreService.showError("", response.message);
-        }
-      },
-      (err) => {
-        let response = this.coreService.decryptObjectData({ data: err.error });
-        this.coreService.showError("", response.message);
-
-      }
-    );
-  }
-  onGroupIconChange(event: any) {
-    if (event.target.files && event.target.files[0]) {
-      let file = event.target.files[0];
-
-      this.editStaff.patchValue({
-        staff_profile: file,
-      });
-      var reader = new FileReader();
-      reader.onload = (event: any) => {
-        this.staffProfileUrl = event.target.result;
-      };
-
-      reader.readAsDataURL(event.target.files[0]);
-    }
-  }
-
-  handleRemoveLogo() {
-    this.staffProfileUrl = ''
-  }
-  onSelectionChange(event: any): void {
-    this.selectedLanguages = this.editStaff.value.language;
-
-  }
-
-  roleList() {
-    if (this.staffID === null || this.staffID === undefined) {
-      return;
-    }
-    let reqData = {
-      page: 1,
-      limit: 0,
-      searchText: "",
-      userId: this.staffID,
-    };
-    this.service.allRoleSuperAdmin(reqData).subscribe(
-      (res: any) => {
-        let encryptedData = { data: res };
-        let response = this.coreService.decryptObjectData(encryptedData);
-        this.staffRole = response?.body?.data
-
-      })
-
-  }
-
-  spokenLanguages: any[] = [];
-
-  getSpokenLanguage() {
-    this.service.spokenLanguage().subscribe((res) => {
-      let response = this.coreService.decryptObjectData({ data: res });
-
-      this.spokenLanguages = response.body?.spokenLanguage;
-    });
-  }
 
   handleChangePassword() {
     this.isSubmitted = true;
@@ -516,122 +317,8 @@ export class ProfileviewComponent implements OnInit {
     return this.changePasswordForm.controls;
   }
 
-  /***************************************association_group_profile***********************************************/
-
-
-  viewAssociationGroup() {
-    if(this.groupID == undefined){
-      return;
-    }
-    this.service.viewAssociationGroup(this.groupID).subscribe((res) => {
-      let response = this.coreService.decryptObjectData(res);
-      this.groupData = response.data[0];
-      this.groupIcon = response?.data[0]?.association_group_icon?.url;
-      this.relatedPharmacies = response.data[1]?.pharmacy_details;
-      for (let pharmacy of this.relatedPharmacies) {
-        this.selectedPharmacy.push(pharmacy.portal_user_id);
-      }
-      this.association_group_selected_pharmacy = this.selectedPharmacy.join(',')
-    });
-  }
-
-  listAllPharmacy() {
-    this.service.listPharmacy(this.searchText).subscribe((res) => {
-      let response = this.coreService.decryptObjectData(res);
-
-      this.pharmacyList = response?.body;
-
-    });
-  }
-
-  handleUpdatePharmacy() {
-    this.isSubmitted = true;
-    if (this.association_group_selected_pharmacy?.length < 1) {
-      this.toastr.error("Select Any Pharmacy");
-      return;
-    }
-    this.isSubmitted = false;
-    this.loader.start();
-    let reqData = {
-      association_group_data: this.association_group_selected_pharmacy,
-      id: this.groupID,
-    };
-
-    // return;
-
-    this.service.editPharmacyForAssociationGroup(reqData).subscribe(
-      (res) => {
-
-        let response = this.coreService.decryptObjectData({ data: res });
-        if (response.status) {
-          this.loader.stop();
-          this.toastr.success(response.message);
-          this.closePopup()
-          this.viewAssociationGroup()
-        }
-      },
-      (err) => {
-        let errorResponse = this.coreService.decryptObjectData({
-          data: err.error,
-        });
-        this.loader.stop();
-        this.toastr.error(errorResponse.message);
-      }
-    );
-  }
-
-  handleSearchFilter(event: any) {
-    this.searchText = event.target.value;
-    this.listAllPharmacy();
-  }
-
   closePopup() {
     this.modalService.dismissAll("close");
-  }
-
-  //  Order Medicine modal
-  openVerticallyCenterededitpharmacy(editpharmacycontent: any) {
-    this.modalService.open(editpharmacycontent, {
-      centered: true,
-      windowClass: "add_pharmacy",
-    });
-  }
-
- //-------------Pharmacy selection handling-------------
-  toggle(item, event: MatCheckboxChange) {
-
-    if (event.checked) {
-      this.selectedPharmacy.push(item?.for_portal_user);
-    } else {
-      const index = this.selectedPharmacy.indexOf(item?.for_portal_user);
-      if (index >= 0) {
-        this.selectedPharmacy.splice(index, 1);
-      }
-    }
-    this.association_group_selected_pharmacy = this.selectedPharmacy.join(",");
-  }
-
-  exists(id) {
-    return this.selectedPharmacy.indexOf(id) > -1;
-  }
-
-  isIndeterminate() {
-    return this.selectedPharmacy.length > 0 && !this.isChecked();
-  }
-
-  isChecked() {
-
-    return this.selectedPharmacy.length === this.pharmacyList.length;
-  }
-
-  toggleAll(event: MatCheckboxChange) {
-    if (event.checked) {
-      this.pharmacyList.forEach((pharmacy) => {
-        this.selectedPharmacy.push(pharmacy?.portal_user_id);
-      });
-    } else {
-      this.selectedPharmacy.length = 0;
-    }
   }
 
 
@@ -652,10 +339,6 @@ export class ProfileviewComponent implements OnInit {
     setTimeout(() => {
       this.getCountrycodeintlTelInput();
     }, 200);
-  }
-
-  routeToEdit(){
-    this.router.navigate([`/super-admin/profile/edit-association/${this.groupID}`])
   }
 
   onSave() {
@@ -880,23 +563,37 @@ export class ProfileviewComponent implements OnInit {
     }
   }
   
-  editAdminProfileSubmit(){
-  let reqData ={
-    fullName: this.editAdminProfile.value?.fullName,
-    email: this.editAdminProfile.value?.email, 
-    mobile: this.editAdminProfile.value?.mobile,
-    adminId:this.editAdminProfile.value?.adminId,
-    country_code : this.selectedCountryCode
+  get editAdmin() {
+    return this.editAdminProfile.controls;
   }
-   this.service.updateAdminProfile(reqData).subscribe((res) => {
-    let response = this.coreService.decryptObjectData({ data: res });   
-    if(response.status){
-    this.coreService.showSuccess("",response.message);
-    this.closePopup();
-    this.router.navigate([`/super-admin/profile/assign-menus-permissions/${response?.body?._id}`]);
+  editAdminProfileSubmit() {
+    if (this.editAdminProfile.invalid) {
+      this.editAdminProfile.markAllAsTouched();
+      return;
     }
-  });
+  
+    let reqData = {
+      fullName: this.editAdminProfile.value?.fullName,
+      email: this.editAdminProfile.value?.email,
+      mobile: this.editAdminProfile.value?.mobile,
+      adminId: this.editAdminProfile.value?.adminId,
+      country_code: this.selectedCountryCode
+    };
+  
+    if (this.editAdminProfile.value.password) {
+      reqData['password'] = this.editAdminProfile.value.password;
+    }
+  
+    this.service.updateAdminProfile(reqData).subscribe((res) => {
+      let response = this.coreService.decryptObjectData({ data: res });
+      if (response.status) {
+        this.coreService.showSuccess("", response.message);
+        this.closePopup();
+        this.router.navigate([`/super-admin/profile/assign-menus-permissions/${response?.body?._id}`]);
+      }
+    });
   }
+  
 
 
 

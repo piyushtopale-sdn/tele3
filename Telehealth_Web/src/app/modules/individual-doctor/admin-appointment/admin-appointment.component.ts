@@ -88,6 +88,9 @@ export class AdminAppointmentComponent {
     this.sortColumn = column;
     this.sortOrder = this.sortOrder === 1 ? -1 : 1;
     this.sortIconClass = this.sortOrder === 1 ? 'arrow_upward' : 'arrow_downward';
+    if(this.selecteduser === undefined){
+      this.selecteduser = 'all';
+    }
     this.getAppointmentlist(`${column}:${this.sortOrder}`);
   }
 

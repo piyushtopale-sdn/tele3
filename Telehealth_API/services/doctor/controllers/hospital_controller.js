@@ -45,7 +45,7 @@ import {
   generate6DigitOTP,
   smsTemplateOTP
 } from "../config/constants";
-const fs = require("fs");
+import fs from "fs";
 import HospitalLocation from "../models/hospital_location";
 import Logs from "../models/logs";
 import ProviderDoc from "../models/provider_documnet";
@@ -1060,110 +1060,6 @@ class HospitalController {
         body: error,
         message: "Internal server error",
         errorCode: null,
-      });
-    }
-  }
-
-  async openingHours(req, res) {
-    try {
-      const {
-        hospital_id,
-        week_days,
-        open_date_and_time,
-        close_date_and_time,
-        getDetails,
-      } = req.body;
-      const openingHoursDetails = await HospitalOpeningHours.findOne({
-        for_portal_user: hospital_id,
-      });
-      if (getDetails != "") {
-        return sendResponse(req, res, 200, {
-          status: true,
-          data: { openingHoursDetails },
-          message: "successfully get details hospital opening hours",
-          errorCode: null,
-        });
-      }
-
-      let newObject;
-      let newArray = [];
-      let newArray2 = [];
-      if (open_date_and_time.length > 0) {
-        open_date_and_time.map((singleData) => {
-          newObject = {
-            start_time_with_date: new Date(
-              singleData.date + "T" + singleData.start_time + ":15.215Z"
-            ),
-            end_time_with_date: new Date(
-              singleData.date + "T" + singleData.end_time + ":15.215Z"
-            ),
-          };
-          newArray.push(newObject);
-        });
-      } else {
-        newArray = [
-          {
-            start_time_with_date: new Date(),
-            end_time_with_date: new Date(),
-          },
-        ];
-      }
-
-      if (close_date_and_time.length > 0) {
-        close_date_and_time.map((singleData) => {
-          newObject = {
-            start_time_with_date: new Date(
-              singleData.date + "T" + singleData.start_time + ":15.215Z"
-            ),
-            end_time_with_date: new Date(
-              singleData.date + "T" + singleData.end_time + ":15.215Z"
-            ),
-          };
-          newArray2.push(newObject);
-        });
-      } else {
-        newArray2 = [
-          {
-            start_time_with_date: new Date(),
-            end_time_with_date: new Date(),
-          },
-        ];
-      }
-
-      let openingHoursData;
-      if (openingHoursDetails) {
-        openingHoursData = await HospitalOpeningHours.findOneAndUpdate(
-          { for_portal_user: hospital_id },
-          {
-            $set: {
-              week_days,
-              open_date_and_time: newArray,
-              close_date_and_time: newArray2,
-            },
-          },
-          { new: true }
-        ).exec();
-      } else {
-        const openingHoursInfo = new HospitalOpeningHours({
-          week_days,
-          open_date_and_time: newArray,
-          close_date_and_time: newArray2,
-          for_portal_user: hospital_id,
-        });
-        openingHoursData = await openingHoursInfo.save();
-      }
-      sendResponse(req, res, 200, {
-        status: true,
-        data: { openingHoursData },
-        message: "successfully added hospital opening hours",
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        data: error,
-        message: "failed to add hospital opening hours",
-        errorCode: "INTERNAL_SERVER_ERROR",
       });
     }
   }
@@ -2189,7 +2085,6 @@ class HospitalController {
       const hlocData = new HospitalLocation({
         hospital_or_clinic_location,
         for_portal_user: req.body.data.portal_user_id,
-        type,
       });
 
       const hlocResult = await hlocData.save();

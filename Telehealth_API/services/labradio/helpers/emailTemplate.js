@@ -1,6 +1,7 @@
 import "dotenv/config";
+import { config } from "../config/constants";
 
-const test_pFrontendUrl = process.env.test_p_FRONTEND_URL || "http://localhost:4200";
+const test_pFrontendUrl = config.test_p_FRONTEND_URL || "http://localhost:4200";
 
 export const forgotPasswordEmailForIndividualDoctor = (email, code, user_id, type) => {
     return {

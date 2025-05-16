@@ -310,7 +310,6 @@ class IndividualDoctorStaffController {
       if (service?.length > 0) {
         servicedetails = await service_info.find({ _id: { $in: service } });
       }
-      let unit = staffFullDetails?.unit;
       let unitdetails = [];
      
       let doctorIds = staffFullDetails?.for_doctor;

@@ -254,7 +254,7 @@ const processSubscriptionPayment = async (user, headers) => {
                         manual: false
                     }
                 },
-                auth: { username: process.env.MOYASAR_SECRET_KEY, password: '' }
+                auth: { username: MOYASAR_SECRET_KEY, password: '' }
             }
         );
 

@@ -76,7 +76,9 @@ export class EditprofileComponent implements OnInit {
   hide5 = true;
   hide6 = true;
   categoryValues: any;
-
+  showFullAbout1: boolean = false;
+  showFullAbout2: boolean = false;
+  
   constructor(
     private toastr: ToastrService,
     private sadminService: SuperAdminService,
@@ -805,4 +807,41 @@ export class EditprofileComponent implements OnInit {
       },
     });
   }
+
+  getLimitedText1(text: string, wordLimit: number): string {
+    if (!text) return '-';
+    const words = text.split(' ');
+    if (words.length <= wordLimit) {
+      return text;
+    }
+    return words.slice(0, wordLimit).join(' ') + '...';
+  }
+  
+  isViewMoreVisible1(text: string, wordLimit: number): boolean {
+    if (!text) return false;
+    return text.split(' ').length > wordLimit;
+  }
+  
+  toggleAbout1() {
+    this.showFullAbout1 = !this.showFullAbout1;
+  }
+
+  getLimitedText2(text: string, wordLimit: number): string {
+    if (!text) return '-';
+    const words = text.split(' ');
+    if (words.length <= wordLimit) {
+      return text;
+    }
+    return words.slice(0, wordLimit).join(' ') + '...';
+  }
+  
+  isViewMoreVisible2(text: string, wordLimit: number): boolean {
+    if (!text) return false;
+    return text.split(' ').length > wordLimit;
+  }
+  
+  toggleAbout2() {
+    this.showFullAbout2 = !this.showFullAbout2;
+  }
+
 }

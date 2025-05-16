@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { processExcel } from "../../middleware/utils";
 import { LoincCodeColumns } from "../../config/constants";
 
-const fs = require("fs");
+import fs from "fs";
 
 const validateColumnWithExcel = (toValidate, excelColumn) => {
   const requestBodyCount = Object.keys(toValidate).length;

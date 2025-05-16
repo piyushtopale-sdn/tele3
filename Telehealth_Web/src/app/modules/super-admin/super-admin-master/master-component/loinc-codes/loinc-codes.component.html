@@ -297,7 +297,7 @@
             <ng-container formArrayName="loinccodes">
               <ng-container *ngFor="let row of loinccodes.controls; let i = index">
                 <ng-container [formGroupName]="i">
-                  <div class="modal_content Speciality_service">
+                  <div class="modal_content Speciality_service" style="display:block">
                     <div class="row modal_content_inner">
                       <div class="item mb-3">
                         <div class="form_field_wrapper">
@@ -373,6 +373,7 @@
                       <div
                         class="row_generate row_minus"
                         (click)="removeFields(i)"
+                        style="width:50px; margin-left:300px"
                       >
                         <mat-icon class="plus btnminus">remove</mat-icon>
                       </div>

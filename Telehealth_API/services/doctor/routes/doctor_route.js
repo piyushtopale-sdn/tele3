@@ -4,8 +4,7 @@ import express from "express";
 const { doctorController } = require("../controllers/doctor.controller");
 import { verifyRole, verifyToken } from "../helpers/verifyToken";
 import { handleResponse } from "../middleware/utils";
-
-const fs = require('fs');
+import fs from "fs";
 
 const doctorRoute = express.Router();
 
@@ -141,6 +140,7 @@ doctorRoute.post('/doctor-management-active-lock-delete-doctor', verifyRole(['su
 doctorRoute.post('/delete-availabilty-by-deleting-location', doctorController.deleteAvailability);
 doctorRoute.get('/doctor-four-portal-management-list', doctorController.doctorFourPortalListForHospital);
 doctorRoute.post('/doctor-management-basic-info', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementBasicInfo);
+doctorRoute.post('/doctor-management-available-dates', doctorController.addAvailableDates); 
 
 //Doctor Routes for Super-admin
 doctorRoute.get('/get-doctor-list', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN']), doctorController.getDoctorList);

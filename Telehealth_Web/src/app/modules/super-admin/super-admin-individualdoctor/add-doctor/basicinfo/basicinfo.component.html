@@ -424,9 +424,14 @@
             <div class="row">
               <div class="col-sm-12 col-md-12">
                 <div class="form_field_wrapper">
-                  <mat-form-field appearance="fill">
-                    <input type="text" matInput formControlName="aboutDoctor" />
-                  </mat-form-field>
+                    <div class="editor_inner">
+                      <ngx-editor-menu [editor]="abouteditor" [toolbar]="toolbar"></ngx-editor-menu>
+                      <ngx-editor 
+                        [editor]="abouteditor" 
+                        formControlName="aboutDoctor"
+                        [placeholder]="'about_doctor' | translate"
+                      ></ngx-editor>
+                    </div>      
                   <span class="text-danger" *ngIf="isSubmitted && f['aboutDoctor'].errors?.['required']">{{ "required" |
                     translate }}*</span>
                 </div>
@@ -438,10 +443,15 @@
             <div class="row">
               <div class="col-sm-12 col-md-12">
                 <div class="form_field_wrapper">
-                  <mat-form-field appearance="fill">
-                    <input type="text" matInput formControlName="aboutDoctorArabic" />
-                  </mat-form-field>
-                  <span class="text-danger" *ngIf="isSubmitted && f['aboutDoctor'].errors?.['required']">
+                  <div class="editor_inner">
+                    <ngx-editor-menu [editor]="abouteditor_arabic" [toolbar]="toolbar"></ngx-editor-menu>
+                    <ngx-editor 
+                      [editor]="abouteditor_arabic" 
+                      formControlName="aboutDoctorArabic"
+                      [placeholder]="'about_doctor' | translate"
+                    ></ngx-editor>
+                  </div> 
+                  <span class="text-danger" *ngIf="isSubmitted && f['aboutDoctorArabic'].errors?.['required']">
                     {{ "required" | translate }}*
                   </span>
                 </div>

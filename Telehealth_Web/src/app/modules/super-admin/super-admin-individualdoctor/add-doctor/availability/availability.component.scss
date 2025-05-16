@@ -19,3 +19,20 @@
     .checkbox-label {
         margin-left: 8px;
       }
+
+      .demo_row{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      .plus.addbtn{
+        color: #ffffff;
+        background: #2839FF;
+        border-radius: 7px;
+    }
+
+     .btnminus {
+        color: #F05A4F;
+        background: #FDE6E5;
+        border-radius: 7px;
+    }    

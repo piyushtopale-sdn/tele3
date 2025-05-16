@@ -17,8 +17,6 @@ import moment from "moment";
 import { notification } from "../helpers/notification";
 import Assessment from "../models/assessment";
 
-const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
 export const formatDateToYYYYMMDD = async (date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Add 1 to month because it's zero-based
@@ -40,7 +38,7 @@ export const formatDateAndTime = (date) => {
   return newDate;
 };
 
-export const updatePaymentStatusAndSlot = async (appointmentId, req) => {
+export const updatePaymentStatusAndSlot = async (appointmentId) => {
 
   const appointmentDetails = await Appointment.findById(
     mongoose.Types.ObjectId(appointmentId)
@@ -828,6 +826,7 @@ export default class appointmentController {
         if (consultedDate < today) {
           appointmentsToBeMissed.push(appointment?._id.toString());
         } else if (consultedDate > today) {
+          console.log("Apply condition if any");
         } else {
           const now = new Date(); //current time
           const endTime = appointment?.consultationTime
@@ -1132,91 +1131,6 @@ export default class appointmentController {
         status: false,
         body: error,
         message: `something went wrong while updating appointment`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async portal_nextAvailableSlot(req, res) {
-    try {
-      const { appointmentId } = req.query;
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
-      let appointment = await Appointment.findOne({ _id: appointmentId });
-      const portalId = appointment.portalId;
-      const hospitalId = appointment.hospital_details.hospital_id;
-      const appointmentType = appointment.appointmentType;
-      const portal_type = appointment.portal_type;
-      let timeStamp = new Date();
-      let timeStampString;
-      let slot = null;
-
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-
-      for (let index = 0; index < 3; index++) {
-        const resData = await httpService.postStaging(
-          "labradio/four-portal-management-available-slots",
-          {
-            locationId: hospitalId,
-            portal_id: portalId,
-            appointmentType: appointmentType,
-            timeStamp: timeStamp,
-            portal_type: portal_type,
-          },
-          headers,
-          "labradioServiceUrl"
-        );
-
-        const slots = resData?.body?.allGeneralSlot;
-
-        let isBreak = false;
-        if (slots) {
-          for (let index = 0; index < slots.length; index++) {
-            const element = slots[index];
-            if (element.status == 0) {
-              slot = element;
-              isBreak = true;
-              break;
-            }
-          }
-        }
-
-        if (slot != null) {
-          isBreak = true;
-          break;
-        }
-
-        if (!isBreak) {
-          timeStampString = moment(timeStamp, "DD-MM-YYYY").add(1, "days");
-          timeStamp = new Date(timeStampString);
-        }
-      }
-      if (slot == null) {
-        return sendResponse(req, res, 200, {
-          status: true,
-          body: null,
-          message: `Choose appointment from calender`,
-          errorCode: null,
-        });
-      }
-
-      sendResponse(req, res, 200, {
-        status: true,
-        body: {
-          slot,
-          timeStamp,
-        },
-        message: `Nearest available slot`,
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: `failed to get nearest available slot`,
         errorCode: "INTERNAL_SERVER_ERROR",
       });
     }
@@ -1669,25 +1583,11 @@ export default class appointmentController {
         );
       }
 
-      const medicineBill = await MedicineBill.findOne({
-        for_order_id,
-        for_portal_user,
-      }).lean();
-      if (medicineBill != null) {
-        await DocumentInfo.find({
-          _id: { $in: medicineBill.prescription_url },
-        })
-          .select("url")
-          .exec();
-        let prescriptionUrlArray = [];
-        medicineBill.prescription_url = prescriptionUrlArray;
-      }
       sendResponse(req, res, 200, {
         status: true,
         data: {
           orderData,
           medicineDetails,
-          medicineBill,
           medicineNameObject: getMedicines.body,
           patientDetails: patientDetails.body,
           pharmacyDetails,

@@ -67,6 +67,10 @@ export class AvailabilityComponent implements OnInit, OnChanges {
 
   ) {
     this.availabilityFormOnline = this.fb.group({
+      availability_slots: this.fb.group({
+        start_date: [""],
+        end_date: [""],
+      }),
       weekDays: this.fb.array([]),
       availability: this.fb.array([]),
       unAvailability: this.fb.array([]),
@@ -157,9 +161,11 @@ export class AvailabilityComponent implements OnInit, OnChanges {
         start_time: element.start_time,
         end_time: element.end_time,
       });
-      let date = this.formatDate(element.date);
+      let start_date = this.formatDate(element.start_date);
+      let end_date = this.formatDate(element.end_date);
       unAvlOnline.push({
-        date:date,
+        start_date:start_date,
+        end_date:end_date,
         start_time: time.start_time,
         end_time: time.end_time,
       });
@@ -182,7 +188,21 @@ export class AvailabilityComponent implements OnInit, OnChanges {
       doctor_availability: doctorAvailabilityArray,
       portal_user_id: this.doctorId,
     };
-    
+
+    let available_slots = this.availabilityFormOnline.value.availability_slots
+
+
+    let startDate = this.formatDate(available_slots.start_date)
+    let endDate = this.formatDate(available_slots.end_date)
+
+    let availableReqData = {
+      doctorId:this.doctorId,
+      start_date:startDate,
+      end_date:endDate,
+    }
+
+    this.doctorService.AvailableSlotDate(availableReqData).subscribe((res:any)=>{
+    })    
               
     if (this.shouldContinue === true) {
 
@@ -324,10 +344,11 @@ export class AvailabilityComponent implements OnInit, OnChanges {
 
   unAvailForm() {
     return this.fb.group({
-      date: [""],
+      start_date: [""],
+      end_date: [""],
       start_time: [""],
       end_time: [""],
-    });
+    })
   }
 
   addNewUnAvailabilty() {
@@ -468,13 +489,18 @@ patchValues(element: any) {
           end_time: element.end_time,
         });
         arrangedUnAvlOnline.push({
-          date: element.date,
+          start_date: element.start_date,
+          end_date: element.end_date,
           start_time: obj.start_time,
           end_time: obj.end_time,
         });
       });
 
       this.availabilityFormOnline.patchValue({
+        availability_slots: {
+          start_date: element[0].available_slots.start_date,
+          end_date:  element[0].available_slots.end_date,
+        },
         weekDays: arrangedWeekDaysOnline,
         unAvailability: arrangedUnAvlOnline,
         bookingSlot: onlineMode?.slot_interval,
@@ -507,7 +533,6 @@ patchValues(element: any) {
 
   arrangeWeekDaysForPatch(element: any) {
 
-    console.log("objectelement ",element)
     let wkD = {
       sun_start_time:
         element.sun_start_time.slice(0, 2) +
@@ -734,17 +759,16 @@ patchValues(element: any) {
   
     this.doctorService.ChangeAvailability(data).subscribe((res) => {
       const response = this.coreService.decryptObjectData({ data: res });
-      const dayTimes = response.data.week_days[0]; // Assuming week_days is an array
-      console.log("Response>>>>",dayTimes)
+      const dayTimes = response.data.week_days[0]; 
+      
   
       const formGroup = this.weekDaysOnline.at(index);
       if (event.checked && dayTimes) {
-  console.log("aryannnn");
+ 
   
         const startRaw = dayTimes[`${day}_start_time`];
         const endRaw = dayTimes[`${day}_end_time`];
 
-        console.log("timessss",startRaw,endRaw)
   
         const formatTime = (time: string): string => {
           if (!time || time.length !== 4) return '';
@@ -754,7 +778,6 @@ patchValues(element: any) {
         const startFormatted = formatTime(startRaw);
         const endFormatted = formatTime(endRaw);
 
-        console.log("startFormatted",startFormatted,endFormatted)
   
         formGroup.patchValue({
           [`${day}_start_time`]: startFormatted,
@@ -769,5 +792,12 @@ patchValues(element: any) {
       }
     });
   }
+  clearDateRange(): void {
+    const slots = this.availabilityFormOnline.get('availability_slots');
+    if (slots) {
+      slots.reset();
+    }
+  }
+  
   
 }

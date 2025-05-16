@@ -44,7 +44,7 @@ import Logs from "../models/logs";
 import ProviderDocs from "../models/provider_document";
 import { notification, sendNotification } from "../helpers/notification";
 import { generateSignedUrl, uploadSingleOrMultipleDocuments } from "../helpers/gcs";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS } = config
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS, TIMEZONE, NODE_ENV } = config
 
 const validateColumnWithExcel = (toValidate, excelColumn) => {
   const requestBodyCount = Object.keys(toValidate).length;
@@ -429,7 +429,7 @@ class LabRadiology {
         }
         if (adminData.verify_status !== "APPROVED") {
           const currentDate = new Date();
-          const timeZone = process.env.TIMEZONE;
+          const timeZone = config.TIMEZONE;
           
           const formattedDate = currentDate.toLocaleString("en-US", { timeZone });
           let addLogs = {};
@@ -489,7 +489,7 @@ class LabRadiology {
  
       // logs
       const currentDate = new Date();
-      const timeZone = process.env.TIMEZONE;
+      const timeZone = TIMEZONE;
       
       const formattedDate = currentDate.toLocaleString("en-US", { timeZone });
       let addLogs = {};
@@ -663,7 +663,7 @@ class LabRadiology {
 
       let otp = 1111;
 
-      if(process.env.NODE_ENV === "production"){
+      if(NODE_ENV === "production"){
         otp = generate4DigitOTP();
        }
       const otpExpiration = new Date(currentTime.getTime() + OTP_EXPIRATION * 60000); //This will add 10 minutes time for otp expiration
@@ -3778,7 +3778,7 @@ class LabRadiology {
     const { currentLogID, userAddress } = req.body;
     try {
       const currentDate = new Date();
-      const timeZone = process.env.TIMEZONE;
+      const timeZone = TIMEZONE;
       
       const formattedDate = currentDate.toLocaleString("en-US", { timeZone });
       if (userAddress) {
@@ -4722,7 +4722,7 @@ class LabRadiology {
       const toDateObj = new Date(`${toDate} 23:59:59`);
       filter.createdAt = { $gte: fromDateObj, $lte: toDateObj }
     }
-    const todaysDate = moment().tz(config.TIMEZONE).format("YYYY-MM-DD");
+    const todaysDate = moment().tz(TIMEZONE).format("YYYY-MM-DD");
     const getTotalAppointments = Appointment.find({...filter, status: {$in: ["PENDING", "CANCELLED", "UNDER_PROCESSED", "APPROVED", "COMPLETED"]}}).countDocuments()
     const getTodaysAppointments = Appointment.find({...filter, status: 'APPROVED', consultationDate: todaysDate}).countDocuments()
     const getUnderProcessAppointments = Appointment.find({...filter, status: 'UNDER_PROCESSED'}).countDocuments()

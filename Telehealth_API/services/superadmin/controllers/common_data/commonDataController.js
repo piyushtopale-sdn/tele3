@@ -14,7 +14,7 @@ import StudyType from "../../models/studytype";
 import Nationality from "../../models/common_data/nationality";
 import BussinessSolution from "../../models/common_data/bussinessSolution";
 
-const fs = require("fs");
+import fs from "fs";
 
 const validateColumnWithExcel = (toValidate, excelColumn) => {
   const requestBodyCount = Object.keys(toValidate).length;
@@ -1356,7 +1356,7 @@ class CommonDataController {
 
       sendResponse(req, res, 200, {
         status: true,
-        body: result,
+        body: null,
         message: message,
         errorCode: null,
       });
@@ -2370,8 +2370,6 @@ class CommonDataController {
           },
         ]);
       }
-
-      ;
       let array = result.map((obj) => Object.values(obj));
       sendResponse(req, res, 200, {
         status: true,

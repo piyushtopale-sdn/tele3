@@ -1,19 +1,19 @@
 import { validationResult } from "express-validator";
 import * as CryptoJS from 'crypto-js';
 import { config } from "../config/constants"
-const { cryptoSecret, secret } = config;
+const { secret, CRYPTO_SECRET } = config;
 const bcrypt = require("bcrypt");
 import jwt from "jsonwebtoken";
 
 export const encryptObjectData = (data) => {
     const dataToEncrypt = JSON.stringify(data);
-    const encPassword = cryptoSecret;
+    const encPassword = CRYPTO_SECRET;
     const encryptedData = CryptoJS.AES.encrypt(dataToEncrypt.trim(), encPassword.trim()).toString();
     return encryptedData;
 }
 
 export const encryptData = (data) => {
-    const encPassword = cryptoSecret;
+    const encPassword = CRYPTO_SECRET;
     const encryptedData = CryptoJS.AES.encrypt(data.trim(), encPassword.trim()).toString();
     return encryptedData;
 }
@@ -21,14 +21,14 @@ export const encryptData = (data) => {
 
 export const decryptObjectData = (response) => {
     if (!response.data) return false;
-    const decPassword = cryptoSecret;
+    const decPassword = CRYPTO_SECRET;
     const decryptedOutput = CryptoJS.AES.decrypt(response.data.trim(), decPassword.trim()).toString(CryptoJS.enc.Utf8);
     return JSON.parse(decryptedOutput);
 }
 
 export const decryptionData = (data) => {
     if (data) {
-        const decPassword = cryptoSecret;
+        const decPassword = CRYPTO_SECRET;
         const conversionDecryptOutput = CryptoJS.AES.decrypt(data.trim(), decPassword.trim()).toString(CryptoJS.enc.Utf8);
         return conversionDecryptOutput;
     }

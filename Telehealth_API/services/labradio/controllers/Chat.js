@@ -895,7 +895,6 @@ export const markReadNotificationByID = async (req, res) => {
         message: "Mark All Read successfully",
       });
     } catch (err) {
-      ;
       return sendResponse(req, res, 500, {
         status: false,
         body: err,

@@ -2551,5 +2551,6 @@
   "you_want_remove_admin_privileges_to_this_user":"You want remove admin privileges to this user.",
   "select_filter":"Select Filter",
   "view_admin_user":"View Admin Users",
-  "off_days":"Off day for current day"
+  "off_days":"Off day for current day",
+  "value_must_be_greater_than_zero":"Value must be greater than 0"
 }

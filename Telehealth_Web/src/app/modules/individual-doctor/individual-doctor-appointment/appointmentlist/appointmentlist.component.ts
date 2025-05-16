@@ -1163,8 +1163,11 @@ export class AppointmentlistComponent implements OnInit {
 
   isWithinConsultationWindow(consultationDate: string, consultationTime: string): boolean {
     if (this.showCallButtonNow === false) {
+      console.log("showwwwwwwww111111111111")
       return true;
     }else{
+      console.log("showwwwwwwww22222222222");
+      
       const timeRange = consultationTime.split('-'); 
       const startTime = timeRange[0]; 
       const endTime = timeRange[1];  
@@ -1295,5 +1298,13 @@ export class AppointmentlistComponent implements OnInit {
         }
       });
   }
+
+  get callButtonTooltip(): string {
+    return Number(this.callButtonEnable) === 0
+      ? 'Button will be enabled at the consultation start time.'
+      : `Button will be enabled ${this.callButtonEnable} minutes before the consultation start time.`;
+  }
+  
+  
   
 }

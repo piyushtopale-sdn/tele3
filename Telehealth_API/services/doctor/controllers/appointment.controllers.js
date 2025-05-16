@@ -209,10 +209,14 @@ class AppointmentController {
 
       if (doctorAvailability.unavailability_slot?.length) {
         for (const slot of doctorAvailability.unavailability_slot) {
-          if (slot.date === consultationDate) {
+          const slotStartDate = moment(slot.start_date, "YYYY-MM-DD");
+          const slotEndDate = moment(slot.end_date, "YYYY-MM-DD");
+          const requestDate = moment(consultationDate, "YYYY-MM-DD");
+          
+          if (requestDate.isSameOrAfter(slotStartDate) && requestDate.isSameOrBefore(slotEndDate)) {
             const startTime = moment(`${consultationDate} ${slot.start_time}`, "YYYY-MM-DD HHmm");
             const endTime = moment(`${consultationDate} ${slot.end_time}`, "YYYY-MM-DD HHmm");
-
+      
             if (selectedTime.isBetween(startTime, endTime, null, "[)")) {
               return sendResponse(req, res, 200, {
                 status: false,
@@ -833,8 +837,22 @@ class AppointmentController {
 
       //Get doctor availability data
       const availabilityData = await DoctorAvailability.find({ for_portal_user: { $eq: doctorId } })
-      const { slot_interval, week_days, unavailability_slot } = availabilityData[0]
+      const { slot_interval, week_days, unavailability_slot} = availabilityData[0]
+     
+      const { start_date, end_date } = availabilityData[0].available_slots;
+      if (!(date >= start_date && date <= end_date)) {
+        return sendResponse(req, res, 200, {
+          status: true,
+          body: {
+            allAvailableSlots : [],
+          },
+          message: messages.getTimeSlot.en,
+          messageArabic: messages.getTimeSlot.ar,
+          errorCode: null,
+        });
+      }
 
+      
       //Generate all slots for respected day
       let allSlots = []
       for (const ele of week_days) {
@@ -878,8 +896,14 @@ class AppointmentController {
       }
 
       //Remove all unavailable slot for the requested date
-      let allAvailableSlots = []
-      const unavailableSlot = unavailability_slot.filter(slots => slots.date === date);
+      let allAvailableSlots = [];
+      const requestDate = moment(date, "YYYY-MM-DD").tz(config.TIMEZONE);
+
+      const unavailableSlot = unavailability_slot.filter(slots => {
+        const slotStartDate = moment(slots.start_date, "YYYY-MM-DD");
+        const slotEndDate = moment(slots.end_date, "YYYY-MM-DD");
+        return requestDate.isSameOrAfter(slotStartDate) && requestDate.isSameOrBefore(slotEndDate);
+      });
       /**Feb 10 Start*/
       if (unavailableSlot.length > 0) {
         for (const ele of unavailableSlot) {
@@ -909,6 +933,7 @@ class AppointmentController {
         errorCode: null,
       });
     } catch (error) {
+      console.log("error.message>>",error.message)
       return sendResponse(req, res, 500, {
         status: false,
         body: error,

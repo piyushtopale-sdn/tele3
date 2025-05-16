@@ -4,7 +4,7 @@ import ICDcode from "../../models/superadmin/icdcode";
 import { processExcel } from "../../middleware/utils";
 import { ICDCodeColumns } from "../../config/constants";
 
-const fs = require("fs");
+import fs from "fs";
 
 const validateColumnWithExcel = (toValidate, excelColumn) => {
   const requestBodyCount = Object.keys(toValidate).length;

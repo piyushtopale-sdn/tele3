@@ -29,7 +29,7 @@ import {
     getLabTestConfigurationExport
 } from "../controllers/lab_test_configuration.controller";
 import { handleResponse } from "../middleware/utils";
-const fs = require("fs");
+import fs from "fs";
 const labRadioManagementRoute = express.Router();
 labRadioManagementRoute.use(verifyToken);
 

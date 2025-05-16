@@ -14,7 +14,7 @@ const add_menu = async (req, res) => {
         parent_id: req.body.parent_id
     });
     try {
-        await addMenu.save((err, result) => {
+        await addMenu.save((err) => {
             if (err) {
                 handleResponse(req, res, 500, {
                     status: false,
@@ -118,7 +118,7 @@ const add_perm = async (req, res) => {
         perm_order:req.body.perm_order
     });
     try {
-        await addPerm.save((err, result) => {
+        await addPerm.save((err) => {
             if (err) {
                 handleResponse(req, res, 500, {
                     status: false,

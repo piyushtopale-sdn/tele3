@@ -333,5 +333,10 @@ export class WaitingCalenderComponent {
       }
     });
   }
-
+ 
+  get callButtonTooltip(): string {
+    return Number(this.callButtonEnable) === 0
+      ? 'Button will be enabled at the consultation start time.'
+      : `Button will be enabled ${this.callButtonEnable} minutes before the consultation start time.`;
+  }
 }

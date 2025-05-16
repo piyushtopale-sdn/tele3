@@ -45,7 +45,7 @@ import {
 import purchasehistory from "../models/subscription/purchasehistory";
 import { formatString } from "../helpers/string";
 const httpService = new Http();
-const fs = require("fs");
+import fs from "fs";
 const { NODE_ENV } = config;
 
 
@@ -312,7 +312,6 @@ const sendNotiOnAbnormalVital = async (patient_id, headers, vitalData) => {
     );
 
     const vitalRanges = {};
-console.log("getVitalThershold______________",getVitalThershold?.body?.result);
 
     if (getVitalThershold?.body?.result?.length > 0) {
       for (const vital of getVitalThershold.body.result) {
@@ -368,10 +367,8 @@ console.log("getVitalThershold______________",getVitalThershold?.body?.result);
       }
     }
 
-    console.log("vitalRanges__________",vitalRanges);
     
     const abnormalVitals = await getLatestAbnormalVitals(vitalData, vitalRanges);
-    console.log("abnormalVitals______________",abnormalVitals);
     if(abnormalVitals?.length > 0){
       const doctorData = await httpService.getStaging(
         "doctor/get-doctor-portal-data",
@@ -854,7 +851,7 @@ class Patient {
       }
       let otp;
 
-      if (process.env.NODE_ENV === "production") {
+      if (NODE_ENV === "production") {
         otp = generate4DigitOTP();
       } else {
         if (mobile && mobile.length === 10) {
@@ -1344,8 +1341,8 @@ class Patient {
       if (filteredVitals.length > 0) {
         await PatientVital.insertMany(filteredVitals);
         message = "Vital details added successfully.";
+        sendNotiOnAbnormalVital(patient_id, headers, vitals_data[0]);
       }
-      sendNotiOnAbnormalVital(patient_id, headers, vitals_data[0]);
 
       return sendResponse(req, res, 200, {
         status: true,

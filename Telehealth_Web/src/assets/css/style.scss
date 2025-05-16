@@ -537,6 +537,7 @@ label {
                     text-align: center;
                     padding: 4px 10px;
                     width: 70%;
+                    text-transform: capitalize;
                     &.confirmed {
                         background-color: rgba(21, 174, 50, 0.15);
                         color: #19AE01;

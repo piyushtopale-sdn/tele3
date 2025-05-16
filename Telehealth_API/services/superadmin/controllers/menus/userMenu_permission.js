@@ -2,9 +2,6 @@ import MenuPermission from "../../models/rolesandpermission/menu_permission";
 import PortalUser from "../../models/superadmin/portal_user";
 import { handleResponse } from "../../helpers/transmission";
 import mongoose from "mongoose";
-const NodeCache = require("node-cache");
-const myCache = new NodeCache();
-
 
 const add_user_menu = async (req, res) => {
     const { menu_array, children_array } = req.body

@@ -177,15 +177,29 @@
             <div class="row expansion_item">
               <div class="item_info">
                 <label>{{ "about" | translate}}</label>
-                <div class="value">
-                  {{
-                     profileDetails?.about
-                      ?  profileDetails?.about
-                      : "-"
-                  }}
+                <div>
+                  <span [innerHTML]="showFullAbout1 ? profileDetails?.about : getLimitedText1(profileDetails?.about, 20)"></span>
+                  <ng-container *ngIf="isViewMoreVisible1(profileDetails?.about, 20)">
+                    <a href="javascript:void(0)" (click)="toggleAbout1()">
+                      {{ showFullAbout1 ? 'View Less' : 'View More' }}
+                    </a>
+                  </ng-container>
                 </div>
               </div>              
             </div>
+            <div class="row expansion_item">
+              <div class="item_info">
+                <label>{{ "about_doctor_arabic" | translate}}</label>
+                <div>
+                  <span [innerHTML]="showFullAbout2 ? profileDetails?.about_arabic : getLimitedText2(profileDetails?.about_arabic, 20)"></span>
+                  <ng-container *ngIf="isViewMoreVisible2(profileDetails?.about, 20)">
+                    <a href="javascript:void(0)" (click)="toggleAbout2()">
+                      {{ showFullAbout2 ? 'View Less' : 'View More' }}
+                    </a>
+                  </ng-container>
+                </div>
+              </div>              
+            </div>            
           </div>
         </div>
       </mat-expansion-panel>

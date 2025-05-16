@@ -2612,5 +2612,18 @@ export class IndiviualDoctorService {
     );
   }
 
+  AvailableSlotDate(data: any) {
+    let token = this.auth.getToken();
+    return this.http.post(
+      this.getBasePath() +
+      `/doctor-service/doctor/doctor-management-available-dates`,
+      data,
+      {
+        headers: this.getHeader(token),
+      }
+    );
+  }
+
+
 }
 

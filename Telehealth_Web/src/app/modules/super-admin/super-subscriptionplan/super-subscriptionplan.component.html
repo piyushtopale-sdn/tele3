@@ -483,17 +483,18 @@
                     <div class="col-md-12">
                       <div formArrayName="services">
                         <div *ngFor="let service of services.controls; let i = index" [formGroupName]="i">
-                          <div class="flex-container">
-                            <label class="flex-container-label">
-                              {{ "no_of" | translate }} {{service.get('name').value | translate}}<span class="danger">*</span>
-                            </label>
-                            <mat-form-field appearance="fill">
-                              <input type="number" matInput formControlName="max_number" min="0" (keydown)="validateNumberInput($event)" />
-                            </mat-form-field>
-                            <span class="text-danger" *ngIf="isSubmitted && service.get('max_number')?.errors?.['required']">
-                              {{ "field_is_required" | translate }}
-                            </span>                            
-                          </div>
+                          <label>
+                            {{ "no_of" | translate }} {{service.get('name')?.value | translate}}<span class="danger">*</span>
+                          </label>
+                          <mat-form-field appearance="fill">
+                            <input type="number" matInput formControlName="max_number" min="1" (keydown)="validateNumberInput($event)" />
+                          </mat-form-field>
+                          <span class="text-danger" *ngIf="isSubmitted && service.get('max_number')?.errors?.['required']">
+                            {{ "field_is_required" | translate }}
+                          </span>
+                          <span class="text-danger" *ngIf="isSubmitted && service.get('max_number')?.errors?.['min']">
+                            {{ "value_must_be_greater_than_zero" | translate }}
+                          </span>
                         </div>
                       </div>
                     </div>                    

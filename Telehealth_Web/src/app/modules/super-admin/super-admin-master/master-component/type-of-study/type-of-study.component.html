@@ -195,7 +195,7 @@
                     <ng-container formArrayName="studyTypes">
                         <ng-container *ngFor="let row of studyTypes.controls; let i = index">
                             <ng-container [formGroupName]="i">
-                                <div class="modal_content Speciality_service">
+                                <div class="modal_content Speciality_service" style="display:block">
                                     <div class="row modal_content_inner">
                                         <div class="item mb-3">
                                             <div class="form_field_wrapper">
@@ -245,17 +245,19 @@
                                         </div>
                                     </div>
                                     <ng-container *ngIf="i === studyTypes.length - 1; else remove">
+                                    <div class="common-form-btns d-flex justify-content-end">
+                                        <div class="row_generate row_add" (click)="addnewSpeciality()">
+                                            <mat-icon class="plus addbtn">add</mat-icon>
+                                        </div>
                                         <div class="row_generate row_minus" (click)="removeSpeciality(i)"
                                             *ngIf="studyTypes.length>1">
-                                            <mat-icon class="plus">remove</mat-icon>
-                                        </div>
-                                        <div class="row_generate row_add" (click)="addnewSpeciality()">
-                                            <mat-icon class="plus">add</mat-icon>
-                                        </div>
+                                            <mat-icon class="plus btnminus">remove</mat-icon>
+                                        </div> 
+                                        </div>                                       
                                     </ng-container>
                                     <ng-template #remove>
-                                        <div class="row_generate row_minus" (click)="removeSpeciality(i)">
-                                            <mat-icon class="plus">remove</mat-icon>
+                                        <div class="row_generate row_minus" (click)="removeSpeciality(i)"style="width:50px; margin-left:300px">
+                                            <mat-icon class="plus btnminus">remove</mat-icon>
                                         </div>
                                     </ng-template>
                                 </div>

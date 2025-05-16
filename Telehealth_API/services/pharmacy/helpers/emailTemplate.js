@@ -1,7 +1,5 @@
 import "dotenv/config.js";
 
-const test_pFrontendUrl = process.env.test_p_FRONTEND_URL || "http://localhost:4200";
-
 export const verifyEmail2fa = (email, code) => ({
     Source: '<no-reply@yopmail.com>',
     Destination: {

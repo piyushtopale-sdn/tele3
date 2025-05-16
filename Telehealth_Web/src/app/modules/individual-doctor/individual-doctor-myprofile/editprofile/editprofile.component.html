@@ -147,10 +147,31 @@
             <div class="about_us_section">
               <div class="about_us_section_inner">
                 <label  style="color: #222222;">{{ "about_doctor" | translate }}</label>
-                <div class="value">{{ profileDetails?.about }}</div>
-              </div>
+                <div>
+                  <span [innerHTML]="showFullAbout1 ? profileDetails?.about : getLimitedText1(profileDetails?.about, 20)"></span>
+                  <ng-container *ngIf="isViewMoreVisible1(profileDetails?.about, 20)">
+                    <a href="javascript:void(0)" (click)="toggleAbout1()">
+                      {{ showFullAbout1 ? 'View Less' : 'View More' }}
+                    </a>
+                  </ng-container>
+                </div>
+              </div>       
             </div>
-
+           
+            <div class="about_us_section">
+              <div class="about_us_section_inner">
+                <label  style="color: #222222;">{{ "about_doctor_arabic" | translate }}</label>
+                <div>
+                  <span [innerHTML]="showFullAbout2 ? profileDetails?.about_arabic : getLimitedText2(profileDetails?.about_arabic, 20)"></span>
+                  <ng-container *ngIf="isViewMoreVisible2(profileDetails?.about, 20)">
+                    <a href="javascript:void(0)" (click)="toggleAbout2()">
+                      {{ showFullAbout2 ? 'View Less' : 'View More' }}
+                    </a>
+                  </ng-container>
+                </div>
+              </div>       
+            </div>
+            
            
           </div>
           <div class="subscribe_detail_inner availability mt-30">

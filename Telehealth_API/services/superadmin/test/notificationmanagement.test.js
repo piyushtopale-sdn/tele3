@@ -1,8 +1,8 @@
 
 const { addNotification, editNotification, getNotificationList, getNotificationById, getNotificationByCondition, deleteNotification } = require('../controllers/Notification-management/notification-management');
 import NotificationManagement from "../models/superadmin/notification-management" // Assuming you have a User model
-const httpMocks = require('node-mocks-http');
-const mongoose = require('mongoose');
+import httpMocks from 'node-mocks-http';
+import mongoose from "mongoose";
 import { sendResponse } from "../helpers/transmission";
 
 jest.mock('../models/superadmin/notification-management');

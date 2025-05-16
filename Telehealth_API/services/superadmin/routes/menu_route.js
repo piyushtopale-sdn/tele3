@@ -1,7 +1,7 @@
 "use strict";
 
 import express from "express";
-const { check, validationResult} = require("express-validator");
+const { validationResult} = require("express-validator");
 import { authorizeRole, verifyToken } from "../helpers/verifyToken";
 const menuController = require("../controllers/menus/menu");
 const menuUserPermController = require("../controllers/menus/userMenu_permission");

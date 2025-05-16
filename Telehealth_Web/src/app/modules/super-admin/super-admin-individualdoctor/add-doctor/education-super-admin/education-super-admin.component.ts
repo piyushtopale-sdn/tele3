@@ -113,45 +113,41 @@ export class EducationSuperAdminComponent implements OnInit {
 
   handleSave(isNext: any = "") {
     this.isSubmitted = true;
-   
+  
     const rowEducational = this.educationalForm.get("education") as FormArray;
-    if (
-      (rowEducational.controls.some(row => this.hasValueInFields(row, ['degree', 'university', 'city', 'country'])))
-
-    ) {
-      this.isSubmitted = false;
-      this.loader.start();
-      let portalUser = localStorage.getItem("portal_user")
-      let reqData = {
-        education_details: this.educationalForm.value.education,
-        portal_user_id: portalUser,
-      };
-      this.doctorservice.educationalDetails(reqData).subscribe(
-        (res) => {
-          let response = this.coreService.decryptObjectData({ data: res });
-          if (response.status) {
-            this.loader.stop();
-            this.toastr.success(response.message);
-            this.callParent.emit()
-
-            if (this.pageForAdd) {
-              this.fromChild.emit("educationalForm");
-            } else {
-              this.stepper.next();
-            }
+  
+    this.loader.start();
+    const portalUser = localStorage.getItem("portal_user");
+    const reqData = {
+      education_details: this.educationalForm.value.education,
+      portal_user_id: portalUser,
+    };
+  
+    this.doctorservice.educationalDetails(reqData).subscribe(
+      (res) => {
+        const response = this.coreService.decryptObjectData({ data: res });
+        this.loader.stop();
+  
+        if (response.status) {
+          this.toastr.success(response.message);
+          this.callParent.emit();
+  
+          if (this.pageForAdd) {
+            this.fromChild.emit("educationalForm");
           } else {
-            this.loader.stop();
-            this.toastr.error(response.message);
-
+            this.stepper.next();
           }
-        },
-
-      );
-    } else {
-      this.stepper.next();
-
-    }
+        } else {
+          this.toastr.error(response.message);
+        }
+      },
+      (err) => {
+        this.loader.stop();
+        this.toastr.error("Something went wrong!");
+      }
+    );
   }
+  
 
   //-----------FORM ARRAY HANDLING-------------
   validation(index) {

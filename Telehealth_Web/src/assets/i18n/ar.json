@@ -2549,5 +2549,8 @@
   "you_want_remove_admin_privileges_to_this_doctor": "هل تريد إزالة صلاحيات المدير من هذا الطبيب؟",
   "you_want_to_give_admin_privileges_to_this_user": "هل تريد منح صلاحيات المسؤول لهذا المستخدم؟",
   "you_want_remove_admin_privileges_to_this_user": "هل تريد إزالة صلاحيات المسؤول من هذا المستخدم؟",
-  "select_filter": "اختر الفلتر"
+  "select_filter": "اختر الفلتر",
+  "view_admin_user": "عرض مسؤولي النظام",
+  "off_days": "يوم عطلة لليوم الحالي",
+  "value_must_be_greater_than_zero": "يجب أن تكون القيمة أكبر من 0"
 }

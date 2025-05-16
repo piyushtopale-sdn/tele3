@@ -1,4 +1,4 @@
-const cron = require('node-cron');
+import cron from 'node-cron';
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
