@@ -5,7 +5,7 @@ import Family_info from "../models/family_info";
 import { sendResponse } from "../helpers/transmission";
 import { generateSignedUrl } from "../helpers/gcs";
 import { sendNotification } from "../helpers/notification";
-const Http = require("../helpers/httpservice");
+import Http from "../helpers/httpservice";
 const httpService = new Http();
 
 
@@ -233,7 +233,7 @@ class ProfileInformation {
       const { familyMemberId, patientId, actionValue } = req.body;
 
       const getRecords = await Family_info.find({ for_portal_user: { $eq: patientId } })
-      if (getRecords.length == 0) {
+      if (getRecords.length === 0) {
         return sendResponse(req, res, 200, {
           status: false,
           message: `Record not found`,
@@ -292,7 +292,7 @@ class ProfileInformation {
       }
 
       const getRecords = await Family_info.find({ for_portal_user: { $eq: patientId } })
-      if (getRecords.length == 0) {
+      if (getRecords.length === 0) {
         return sendResponse(req, res, 200, {
           status: false,
           message: `Record not found`,
@@ -471,7 +471,7 @@ class ProfileInformation {
       const { id, patientId } = req.body;
 
       const getRecords = await Profile_info.findOne({ for_portal_user: patientId }, { medicalInformation: 1 })
-      if (!getRecords?.medicalInformation || getRecords?.medicalInformation?.medicalHistory.length == 0) {
+      if (!getRecords?.medicalInformation || getRecords?.medicalInformation?.medicalHistory.length === 0) {
         return sendResponse(req, res, 200, {
           status: false,
           message: `Record not found`,
@@ -534,7 +534,7 @@ class ProfileInformation {
       const { id, patientId, allergen, allergyType, reaction, status, note, createdAt } = req.body;
 
       const getRecords = await Profile_info.findOne({ for_portal_user: patientId }, { medicalInformation: 1 })
-      if (!getRecords?.medicalInformation || getRecords?.medicalInformation?.medicalHistory.length == 0) {
+      if (!getRecords?.medicalInformation || getRecords?.medicalInformation?.medicalHistory.length === 0) {
         return sendResponse(req, res, 200, {
           status: false,
           message: `Record not found`,
@@ -689,7 +689,7 @@ class ProfileInformation {
       const { id, patientId } = req.body;
 
       const getRecords = await Profile_info.findOne({ for_portal_user: patientId }, { medicalInformation: 1 })
-      if (!getRecords?.medicalInformation || getRecords?.medicalInformation?.socialHistory.length == 0) {
+      if (!getRecords?.medicalInformation || getRecords?.medicalInformation?.socialHistory.length === 0) {
         return sendResponse(req, res, 200, {
           status: false,
           message: `Record not found`,
@@ -753,7 +753,7 @@ class ProfileInformation {
       const { id, patientId, alcohol, tobacco, drugs, createdAt } = req.body;
 
       const getRecords = await Profile_info.findOne({ for_portal_user: patientId }, { medicalInformation: 1 })
-      if (!getRecords?.medicalInformation || getRecords?.medicalInformation?.socialHistory.length == 0) {
+      if (!getRecords?.medicalInformation || getRecords?.medicalInformation?.socialHistory.length === 0) {
         return sendResponse(req, res, 200, {
           status: false,
           message: `Record not found`,

@@ -8,7 +8,7 @@ const newvitalsThesholdRoute = express.Router();
 newvitalsThesholdRoute.use(verifyToken);
 
 newvitalsThesholdRoute.post("/add-vitals-threshold", authorizeRole(['superadmin']), addNewvitalsThreshold);
-newvitalsThesholdRoute.get("/get-vitals-threshold", authorizeRole(['superadmin', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL_DOCTOR_ADMIN']), getNewvitalsThreshold);
+newvitalsThesholdRoute.get("/get-vitals-threshold", authorizeRole(['superadmin', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER']), getNewvitalsThreshold);
 newvitalsThesholdRoute.get("/get-reference-range", authorizeRole(['superadmin', 'INDIVIDUAL_DOCTOR']), getReferenceRangeById);
 newvitalsThesholdRoute.get("/get-vitals-threshold/:id/:vitalsType", authorizeRole(['superadmin']), getNewvitalsThresholdById);
 newvitalsThesholdRoute.put("/update-vitals-threshold", authorizeRole(['superadmin']), updateNewvitalsThreshold);

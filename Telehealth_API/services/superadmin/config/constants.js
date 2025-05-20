@@ -37,7 +37,7 @@ export const config = {
     JWT_EXPIRATION_IN_MINUTES: process.env.JWT_EXPIRATION_IN_MINUTES || 1440,
     SMS_APP_SID: process.env.SMS_APP_SID,
     SENDER_ID: process.env.SENDER_ID,
-    test_p_FRONTEND_URL: process.env.test_p_FRONTEND_URL,
+    TEST_P_FRONTEND_URL: process.env.TEST_P_FRONTEND_URL,
     OTP_EXPIRATION: process.env.OTP_EXPIRATION || 10,
     OTP_LIMIT_EXCEED_WITHIN: process.env.OTP_LIMIT_EXCEED_WITHIN || 5,
     OTP_TRY_AFTER: process.env.OTP_TRY_AFTER || 60,

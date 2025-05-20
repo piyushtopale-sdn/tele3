@@ -246,7 +246,7 @@ export const getLabTestConfigurationById = async (req, res) => {
 
         if (id) {
             const getTest = await LabTestConfiguration.find({ _id: {$eq: id}, isDeleted: false })
-            if (getTest.length == 0) {
+            if (getTest.length === 0) {
                 return sendResponse(req, res, 200, {
                     status: false,
                     body: null,
@@ -324,7 +324,7 @@ export const editLabTestConfiguration = async (req, res) => {
         const {id, labId, testName, testConfiguration, referenceRange, alphaResult, notes} = req.body
         if (id) {
             const getTest = await LabTestConfiguration.find({ _id: {$eq: id}, isDeleted: false })
-            if (getTest.length == 0) {
+            if (getTest.length === 0) {
                 return sendResponse(req, res, 200, {
                     status: false,
                     body: null,
@@ -386,7 +386,7 @@ export const deleteLabTestConfiguration = async (req, res) => {
         const { id } = req.params
         if (id) {
             const getTest = await LabTestConfiguration.find({ _id: {$eq: id}, isDeleted: false })
-            if (getTest.length == 0) {
+            if (getTest.length === 0) {
                 return sendResponse(req, res, 200, {
                     status: false,
                     body: null,
@@ -684,7 +684,7 @@ export const getLabTestById = async (req, res) => {
 
         if (id) {
             const getTest = await LabTest.find({ _id: {$eq: id}, isDeleted: false })
-            if (getTest.length == 0) {
+            if (getTest.length === 0) {
                 return sendResponse(req, res, 200, {
                     status: false,
                     body: null,
@@ -760,7 +760,7 @@ export const editLabTest = async (req, res) => {
         const {id, labId, testName, tests, notes, testFees, couponCode,loinc} = req.body
         if (id) {
             const getTest = await LabTest.find({ _id: {$eq: id}, isDeleted: false })
-            if (getTest.length == 0) {
+            if (getTest.length === 0) {
                 return sendResponse(req, res, 200, {
                     status: false,
                     body: null,
@@ -819,7 +819,7 @@ export const deleteLabTest = async (req, res) => {
         const { id } = req.params
         if (id) {
             const getTest = await LabTest.find({ _id: {$eq: id}, isDeleted: false })
-            if (getTest.length == 0) {
+            if (getTest.length === 0) {
                 return sendResponse(req, res, 200, {
                     status: false,
                     body: null,
@@ -1327,7 +1327,7 @@ export const getRadioTestById = async (req, res) => {
 
         if (id) {
             const getTest = await RadiologyTest.find({ _id: {$eq: id}, isDeleted: false })
-            if (getTest.length == 0) {
+            if (getTest.length === 0) {
                 return sendResponse(req, res, 200, {
                     status: false,
                     body: null,
@@ -1403,7 +1403,7 @@ export const editRadioTest = async (req, res) => {
         const {id, radiologyId, studyTypeId, testName, notes, testFees,loinc,couponCode} = req.body
         if (id) {
             const getTest = await RadiologyTest.find({ _id: {$eq: id}, isDeleted: false })
-            if (getTest.length == 0) {
+            if (getTest.length === 0) {
                 return sendResponse(req, res, 200, {
                     status: false,
                     body: null,
@@ -1462,7 +1462,7 @@ export const deleteRadioTest = async (req, res) => {
         const { id } = req.params
         if (id) {
             const getTest = await RadiologyTest.find({ _id: {$eq: id}, isDeleted: false })
-            if (getTest.length == 0) {
+            if (getTest.length === 0) {
                 return sendResponse(req, res, 200, {
                     status: false,
                     body: null,

@@ -41,7 +41,7 @@ const {
   OTP_LIMIT_EXCEED_WITHIN,
   OTP_TRY_AFTER,
   SEND_ATTEMPTS,
-  test_p_FRONTEND_URL,
+  TEST_P_FRONTEND_URL,
   LOGIN_AFTER,
   PASSWORD_ATTEMPTS,
   TIMEZONE,
@@ -58,7 +58,7 @@ import mongoose from "mongoose";
 import GuestUser from "../models/guestuser";
 import { notification } from "../helpers/notification";
 import { generateSignedUrl } from "../helpers/gcs";
-const moment = require("moment/moment")
+import moment from "moment";
 const httpService = new Http();
 
 const canSendOtp = (deviceExist, currentTime) => {
@@ -382,6 +382,7 @@ class IndividualDoctor {
         isDeleted: false,
       }).lean();
 
+
       if (!portalUserData) {
         return sendResponse(req, res, 200, {
           status: false,
@@ -391,26 +392,28 @@ class IndividualDoctor {
         });
       }
 
-      if (
-        role === 'INDIVIDUAL_DOCTOR_ADMIN' &&
-        (portalUserData.isAdmin === undefined || portalUserData.isAdmin === false)
-      ) {
-        return sendResponse(req, res, 200, {
-          status: false,
-          body: null,
-          message: "Admin privileges are not assigned to you.",
-          errorCode: "USER_NOT_ADMIN",
-        });
-      }
-      
-      await PortalUser.findOneAndUpdate(
-        { _id: portalUserData._id },
-        {
-          $set: {
-            role: role
-          },
+      if(portalUserData.role !== 'SUPER_USER'){
+        if (
+          role === 'INDIVIDUAL_DOCTOR_ADMIN' &&
+          (portalUserData.isAdmin === undefined || portalUserData.isAdmin === false)
+        ) {
+          return sendResponse(req, res, 200, {
+            status: false,
+            body: null,
+            message: "Admin privileges are not assigned to you.",
+            errorCode: "USER_NOT_ADMIN",
+          });
         }
-      );
+        
+        await PortalUser.findOneAndUpdate(
+          { _id: portalUserData._id },
+          {
+            $set: {
+              role: role
+            },
+          }
+        );
+      }
 
       const currentTime = new Date();
       const isPasswordMatch = await checkPassword(password, portalUserData);
@@ -537,7 +540,7 @@ class IndividualDoctor {
       if (
         adminData?.isInfoCompleted === false &&
         (portalUserData.role == "INDIVIDUAL_DOCTOR" ||
-          portalUserData.role == "INDIVIDUAL_DOCTOR_ADMIN")
+          portalUserData.role == "INDIVIDUAL_DOCTOR_ADMIN" || portalUserData.role == "SUPER_USER")
       ) {
         return sendResponse(req, res, 200, {
           status: true,
@@ -561,7 +564,7 @@ class IndividualDoctor {
       let saveLogs = {};
       if (
         portalUserData.role == "INDIVIDUAL_DOCTOR" ||
-        portalUserData.role == "INDIVIDUAL_DOCTOR_ADMIN"
+        portalUserData.role == "INDIVIDUAL_DOCTOR_ADMIN" || portalUserData.role == "SUPER_USER"
       ) {
         addLogs = new Logs({
           userName: portalUserData?.full_name,
@@ -646,7 +649,7 @@ class IndividualDoctor {
             userName: getDoctor?.full_name,
             role: "doctor",
             action: `logout`,
-            actionDescription: `Logout: Doctor ${getDoctor?.full_name} logout successfully.`,
+            actionDescription: `Logout: ${getDoctor?.full_name} logout successfully.`,
           },
           {},
           "superadminServiceUrl"
@@ -676,29 +679,7 @@ class IndividualDoctor {
       });
     }
   }
-  async getIndividualDoctorsByStatus(req, res) {
-    try {
-      const { status } = req.query;
-      const findUsers = await IndividualDoctorProfile.find({
-        verify_status: status,
-      }).populate({
-        path: "for_portal_user",
-      });
-      sendResponse(req, res, 200, {
-        status: true,
-        body: findUsers,
-        message: "Get individual doctor list",
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to get individual doctor list",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
+
   async approveOrRejectIndividualDoctor(req, res) {
     const { verify_status, individualDoctorId, approved_or_rejected_by } =
       req.body;
@@ -771,7 +752,7 @@ class IndividualDoctor {
       });
       await ForgotPasswordData.save();
 
-      const link = `${test_p_FRONTEND_URL}/individual-doctor/newpassword?token=${resetToken}&user_id=${userData._id}`;
+      const link = `${TEST_P_FRONTEND_URL}/individual-doctor/newpassword?token=${resetToken}&user_id=${userData._id}`;
       const getEmailContent = await httpService.getStaging(
         "superadmin/get-notification-by-condition",
         { condition: "FORGOT_PASSWORD", type: "email" },
@@ -860,7 +841,6 @@ class IndividualDoctor {
       const currentTime = new Date();
 
       const canOtpSend = await canSendOtp(deviceExist, currentTime);
-console.log(canOtpSend,"____________canOtpSend");
 
       // Check if the OTP can be sent
       if (!canOtpSend.status) {
@@ -1173,7 +1153,7 @@ console.log(canOtpSend,"____________canOtpSend");
 
           if (
             portalUserData.role === "INDIVIDUAL_DOCTOR" ||
-            portalUserData.role === "INDIVIDUAL_DOCTOR_ADMIN"
+            portalUserData.role === "INDIVIDUAL_DOCTOR_ADMIN" || portalUserData.role == "SUPER_USER"
           ) {
             adminData = await BasicInfo.findOne({
               for_portal_user: portalUserData._id,
@@ -1248,7 +1228,7 @@ console.log(canOtpSend,"____________canOtpSend");
           
             let addLogs = {};
             let saveLogs = {};
-            if (portalUserData.role == "INDIVIDUAL_DOCTOR" || portalUserData.role == "INDIVIDUAL_DOCTOR_ADMIN") {
+            if (portalUserData.role == "INDIVIDUAL_DOCTOR" || portalUserData.role == "INDIVIDUAL_DOCTOR_ADMIN" || portalUserData.role == "SUPER_USER") {
               addLogs = new Logs({
                 userName: portalUserData?.full_name,
                 userId: portalUserData?._id,
@@ -1460,7 +1440,7 @@ console.log(canOtpSend,"____________canOtpSend");
            
            let addLogs = {};
            let saveLogs = {};
-           if (portalUserData.role == "INDIVIDUAL_DOCTOR" || portalUserData.role == "INDIVIDUAL_DOCTOR_ADMIN") {
+           if (portalUserData.role == "INDIVIDUAL_DOCTOR" || portalUserData.role == "INDIVIDUAL_DOCTOR_ADMIN" || portalUserData.role == "SUPER_USER") {
              addLogs = new Logs({
                userName: portalUserData?.full_name,
                userId: portalUserData?._id,
@@ -1912,7 +1892,7 @@ console.log(canOtpSend,"____________canOtpSend");
         Authorization: req.headers["authorization"],
       };
       let portalinfo = portaltype != "" ? `&portal=${portaltype}` : "";
-      const link = `${test_p_FRONTEND_URL}/external-video?id=${appointment}${portalinfo}`;
+      const link = `${TEST_P_FRONTEND_URL}/external-video?id=${appointment}${portalinfo}`;
 
       let result = await PortalUser.findOne({ email: email });
 
@@ -2359,7 +2339,7 @@ console.log(canOtpSend,"____________canOtpSend");
       if (!portalUserData) {
         return sendResponse(req, res, 200, {
           status: false,
-          body: userFind,
+          body: null,
           message: "User not found",
           errorCode: null,
         });
@@ -4294,6 +4274,140 @@ async markAsDoctorAdmin(req, res) {
     });
   }
 }
+
+/* super-user */
+async createSuperUserProfile (req, res)  {
+    try {
+      const { fullName, mobile, country_code, email, password, created_by_user } = req.body;
+      
+      const findAdminUser = await PortalUser.findOne({ email:email.toLowerCase(), isDeleted: false }).lean();
+      if (findAdminUser) {
+        return sendResponse(req, res, 200, {
+            status: false,
+            body: null,
+            message: "User already exist",
+            errorCode: null,
+        });
+      }
+      const salt = await bcrypt.genSalt(10);
+      let newPassword = await bcrypt.hash(password, salt);
+
+      let sequenceDocument = await Counter.findOneAndUpdate(
+        { _id: "employeeid" },
+        { $inc: { sequence_value: 1 } },
+        { new: true }
+      );
+      let userData = new PortalUser({
+        full_name:fullName,
+        email,
+        country_code,
+        mobile,
+        password: newPassword,
+        role: "SUPER_USER",
+        user_id: sequenceDocument.sequence_value,
+        createdBy:"super-admin",
+        created_by_user
+      });
+
+      let userDetails = await userData.save();
+
+      let adminData = new BasicInfo({
+        full_name: fullName,        
+        for_portal_user: userDetails._id,
+        main_phone_number: mobile,
+        verify_status: "APPROVED",
+      });      
+      
+      await adminData.save();
+
+      return sendResponse(req, res, 200, {  
+        status: true,
+        body: userDetails,
+        message: "Registration Successfully!",
+        errorCode: null,  
+      });
+    } catch (error) {
+        console.log("Error wwhile create admin profile:", error);
+        return sendResponse(req, res, 500, {
+        status: false,
+        body: error,
+        message: "Internal server error",
+        errorCode: null,
+      });
+    }
+}
+
+async updateSuperUserProfile(req, res) {
+  try {
+    const { fullName, mobile, country_code, password, created_by_user, email, deleteUser } = req.body;    
+
+    if (!email) {
+      return sendResponse(req, res, 200, {
+        status: false,
+        body: null,
+        message: "Email is required",
+        errorCode: null,
+      });
+    }
+
+    // Find and Update if exists
+    let user = await PortalUser.findOneAndUpdate(
+      { email: email.toLowerCase()},
+      { $set: { isDeleted: deleteUser } },
+      { new: true }
+    ).lean();
+
+    if (!user) {      
+      let sequenceDocument = await Counter.findOneAndUpdate(
+        { _id: "employeeid" },
+        { $inc: { sequence_value: 1 } },
+        { new: true }
+      );
+      let userData = new PortalUser({
+        full_name:fullName,
+        email,
+        country_code,
+        mobile,
+        password,
+        role: "SUPER_USER",
+        user_id: sequenceDocument.sequence_value,
+        createdBy:"super-admin",
+        created_by_user
+      });
+
+      let userDetails = await userData.save();
+
+      let adminData = new BasicInfo({
+        full_name: fullName,        
+        for_portal_user: userDetails._id,
+        main_phone_number: mobile,
+        verify_status: "APPROVED",
+      });      
+      
+      await adminData.save();
+    }
+
+    return sendResponse(req, res, 200, {
+      status: true,
+      body: user,
+      message: "User updated or created successfully!",
+      errorCode: null,
+    });
+  } catch (error) {
+    console.error("Error:", error);
+    return sendResponse(req, res, 500, {
+      status: false,
+      body: error,
+      message: "Internal server error",
+      errorCode: null,
+    });
+  }
+}
+
+
+
+
+
 
 
 }

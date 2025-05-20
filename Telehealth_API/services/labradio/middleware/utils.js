@@ -2,8 +2,8 @@ import { validationResult } from "express-validator";
 import * as CryptoJS from 'crypto-js';
 import { config, generate4DigitOTP, messageID } from "../config/constants";
 const { secret, CRYPTO_SECRET } = config;
-const bcrypt = require("bcrypt");
- const xlsx = require("xlsx");
+import bcrypt from 'bcrypt';
+import xlsx from "xlsx";
 import jwt from "jsonwebtoken";
 import Counter from "../models/counter";
 

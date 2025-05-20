@@ -1,5 +1,5 @@
 import { validationResultData } from "../../helpers/transmission";
-const { check } = require("express-validator");
+import { check } from "express-validator";
 
 exports.specialization = [
     check("specialization")

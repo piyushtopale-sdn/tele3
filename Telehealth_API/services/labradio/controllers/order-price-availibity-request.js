@@ -1,4 +1,3 @@
-import DocumentInfo from "../models/document_info";
 import OrdertestBill from "../models/order/order_test_bill";
 import OrderDetail from "../models/order/order_detail";
 import OrderTestDetails from "../models/order/order_test_detail";
@@ -8,7 +7,7 @@ import { sendResponse } from "../helpers/transmission";
 import Basic_info from "../models/basic_info";
 import {notification} from "../helpers/notification";
 import PortalUser from "../models/portal_user";
-const Http = require('../helpers/httpservice');
+import Http from "../helpers/httpservice";
 const httpService = new Http()
 class OrderFlow {
     // list
@@ -422,15 +421,7 @@ class OrderFlow {
                     model: "LocationInfo",
                     select: "address"
                 });
-            let portal_Profile
-            if (portal_Details.profile_picture != "" && portal_Details.profile_picture != undefined) {
-          
-                const profilePictureArray = [portal_Details.profile_picture];
-                await DocumentInfo.findOne({ _id: profilePictureArray })
-                let image;
-                portal_Profile = image;
-
-            }
+            let portal_Profile         
 
             const testDetails = await OrderTestDetails.find({ for_order_id, for_portal_user, portal_type }).lean();
             let checkTesttype = orderData?.portal_type

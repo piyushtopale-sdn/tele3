@@ -1,4 +1,4 @@
-const firebase = require('firebase-admin');
+import firebase from 'firebase-admin';
 const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG);
 firebaseConfig.private_key = firebaseConfig.private_key.replace(/\\n/g, '\n');
 

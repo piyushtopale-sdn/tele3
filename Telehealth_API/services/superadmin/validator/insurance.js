@@ -1,4 +1,4 @@
-const { body, check } = require("express-validator");
+import { body, check } from "express-validator";
 
 const commonValidator = [
   body("name", "Please Enter a Valid Name").not().isEmpty(),

@@ -1,5 +1,6 @@
 
-const { addNotification, editNotification, getNotificationList, getNotificationById, getNotificationByCondition, deleteNotification } = require('../controllers/Notification-management/notification-management');
+import { addNotification, editNotification, getNotificationList, getNotificationById, getNotificationByCondition, deleteNotification } from '../controllers/Notification-management/notification-management';
+
 import NotificationManagement from "../models/superadmin/notification-management" // Assuming you have a User model
 import httpMocks from 'node-mocks-http';
 import mongoose from "mongoose";

@@ -35,7 +35,7 @@ const add_role = async (req, res) => {
                     is_delete:'No'
                 });
                 const CheckData = foundItems.map((item) => item.name);
-                if (foundItems.length == 0) {
+                if (foundItems.length === 0) {
                     const savedRole = await Role.insertMany(list)
                     sendResponse(req, res, 200, {
                         status: true,

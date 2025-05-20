@@ -8,7 +8,7 @@ const alphaResultRoute = express.Router();
 alphaResultRoute.use(verifyToken);
 
 alphaResultRoute.post("/add-alpha-result", authorizeRole(['superadmin']), addAlphaResult);
-alphaResultRoute.get("/get-alpha-result", authorizeRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), getAlphaResult);
+alphaResultRoute.get("/get-alpha-result", authorizeRole(['superadmin', 'INDIVIDUAL', 'ADMIN', 'SUPER_USER']), getAlphaResult);
 alphaResultRoute.put("/update-alpha-result", authorizeRole(['superadmin']), updateAlphaResult);
 alphaResultRoute.put("/delete-active-inactive-alpha-result", authorizeRole(['superadmin']), updateAlphaResultByAction);
 alphaResultRoute.get('/exportsheetlist-alphaResult', authorizeRole(['superadmin']), allAlphaResultforexport)

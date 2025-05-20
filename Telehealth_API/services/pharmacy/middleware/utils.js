@@ -2,10 +2,10 @@ import { validationResult } from "express-validator";
 import * as CryptoJS from 'crypto-js';
 import { config, generate4DigitOTP, messageID } from "../config/constants";
 import Counter from "../models/counter";
-const bcrypt = require("bcrypt");
+import bcrypt from 'bcrypt';
 const cryptoSecret = config.CRYPTO_SECRET;
 import jwt from "jsonwebtoken";
-const xlsx = require('xlsx');
+import xlsx from "xlsx";
 
 export const validationResponse = (req, res, next) => {
     const error = validationResult(req);

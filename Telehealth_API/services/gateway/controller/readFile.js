@@ -1,4 +1,4 @@
-const reader = require('xlsx')
+import * as reader from 'xlsx';
 import fs from "fs";
 import { sendResponse } from '../helpers/transmission'
 
@@ -50,7 +50,7 @@ const readFileContent = (req, res) => {
             }
         })
     }
-    if (data.length == 0) {
+    if (data.length === 0) {
         return sendResponse(req, res, 200, {
             status: false,
             body: null,

@@ -1,6 +1,6 @@
 import express from "express";
 import { registerValidator } from "../validator/pharmacy";
-import { sendResponse, dataValidation } from "../helpers/transmission";
+import { dataValidation } from "../helpers/transmission";
 const pharmacy = require("../controllers/pharmacy_controller");
 import StaffManagementController from "../controllers/staffManagementController"
 import { verifyRole, verifyToken } from "../helpers/verifyToken";
@@ -23,7 +23,6 @@ pharmacyRoute.post("/forgot-password", pharmacy.forgotPassword);
 pharmacyRoute.post("/change-password", pharmacy.changePassword);
 pharmacyRoute.post("/lock-profile", pharmacy.lockProfile);
 pharmacyRoute.post('/delete-active-admin', pharmacy.deleteActiveadmin)
-pharmacyRoute.get("/get-document-metadata", pharmacy.documentInformation);
 pharmacyRoute.post("/pharmacy-opening-hours", pharmacy.pharmacyOpeningHours);
 pharmacyRoute.post("/reset-password", pharmacy.resetPassword);
 pharmacyRoute.get("/get-all-pharmacy", pharmacy.getAllPharmacy);

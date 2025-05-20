@@ -40,6 +40,7 @@ export const config = {
     SENDER_ID: process.env.SENDER_ID,
     BUCKET_NAME: process.env.BUCKET_NAME || "test_pdev",
     TIMEZONE: process.env.TIMEZONE,
+    TEST_P_FRONTEND_URL: process.env.TEST_P_FRONTEND_URL,
     AMAZONPAY: {
         "merchant_identifier": process.env.AMAZON_MERCHANT_IDENTIFIER || "OguwiAEM",
         "access_code": process.env.AMAZON_ACCESS_CODE || "mLIoC7o8DticuCwZD8AG",
@@ -50,7 +51,7 @@ export const config = {
         "test_payment_process_api": process.env.AMAZON_PAYMENT_CHARGE_API || "https://sbpaymentservices.payfort.com/FortAPI/paymentApi",
         "live_payment_process_api": process.env.AMAZON_PAYMENT_CHARGE_API || "https://paymentservices.payfort.com/FortAPI/paymentApi",
         "paymentSession": process.env.AMAZON_PAYMENT_SESSION || "https://apple-pay-gateway.apple.com/paymentservices/startSession",
-        "domain": process.env.test_p_DOMAIN || 'dev.test_papp.com'
+        "domain": process.env.TEST_P_DOMAIN || 'dev.test_papp.com'
     },
 };
 
@@ -241,7 +242,7 @@ export const htmlForgetPassword = (token, user_id) => {
        <h1 style="font-size: 32px; color: #272727; font-weight: 600; margin-top: 0; margin-bottom: 0;">Hello</h1>
       <p style="font-size: 15px; font-weight: 300; color: #656565; margin-top: 25px;">To reset your password, click on the below link:</p>
       <a href= patient/setnewpass?token=${token}&user_id=${user_id} style="background-color: #64BD05; text-align: center; display: inline-block; padding: 8px 0px; max-width: 150px; width: 100%; font-size: 14px; font-weight: 300; margin: 15px  auto 0; color: #fff; border-radius: 35px; text-decoration: none;">Click To change Password</a>
-      <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, test_p.</p>
+      <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, Test_p.</p>
    </div>
   </div>
   </body>
@@ -280,7 +281,7 @@ export const htmlEmailVerify = (token, name, role) => {
                       <h1 style="font-size: 32px; color: #272727; font-weight: 600; margin-top: 0; margin-bottom: 0;">Welcome ${name}</h1>
                       <p style="font-size: 15px; font-weight: 300; color: #656565; margin-top: 25px;">Your account is created please verify your Email using click below.</p>
                       <a href=http://localhost:4200/email-verify/${token}?data=${role} style="background-color: #64BD05; text-align: center; display: inline-block; padding: 8px 0px; max-width: 150px; width: 100%; font-size: 14px; font-weight: 300; margin: 15px  auto 0; color: #fff; border-radius: 35px; text-decoration: none;">Verify Email</a>
-                      <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, test_p.</p>
+                      <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, Test_p.</p>
                   </div>
           </div>
                   </body>

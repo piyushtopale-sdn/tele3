@@ -8,7 +8,6 @@ import Message from "../models/Chat/Message";
 import Notification from "../models/notification";
 import { sendResponse } from "../helpers/transmission";
 import StaffInfo from "../models/staffInfo";
-import DocumentInfo from "../models/document_info"
 
 export const getAllUsersForChat = async (req, res) => {
     try {
@@ -123,7 +122,6 @@ export const getIndividualFourPortalStaff = async (loggedInId, adminId) => {
 
         let getDoctor = await BasicInfo.findOne({ for_portal_user: mongoose.Types.ObjectId(getDocPortal?._id) });
 
-        let getDocImage = await DocumentInfo.findOne({ _id: mongoose.Types.ObjectId(getDoctor?.profile_picture) });
 
         let aggregateResults = [];
 
@@ -131,7 +129,7 @@ export const getIndividualFourPortalStaff = async (loggedInId, adminId) => {
             role: getDocPortal?.role,
             id: getDocPortal?._id,
             name: getDoctor?.full_name,
-            profile_pic: getDocImage?.url
+            profile_pic: ""
         }
         aggregateResults.push(getHospitalData)
 
@@ -918,7 +916,6 @@ export const clearAllmessages = async (req, res) => {
         message: "Delete messages successfully",
       });
     } catch (err) {
-      ;
       return sendResponse(req, res, 500, {
         status: false,
         body: err,

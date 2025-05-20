@@ -3678,7 +3678,7 @@ async doctorManagementUpdateAvailability(req, res) {
       if (environvent == "local") {
         result.eSignature = `http://localhost:8005/hospital/esignature-for-e-prescription/${result.eSignature}`;
       } else {
-        result.eSignature = `${config.test_p_Backend_url}/hospital/esignature-for-e-prescription/${result.eSignature}`;
+        result.eSignature = `${config.Test_p_Backend_url}/hospital/esignature-for-e-prescription/${result.eSignature}`;
       }
 
       if (result) {
@@ -5274,7 +5274,7 @@ async doctorManagementUpdateAvailability(req, res) {
         name: { $in: namesToFind },
       });
       const CheckData = foundItems.map((item) => item.name);
-      if (foundItems.length == 0) {
+      if (foundItems.length === 0) {
         const savedHealthCentre = await HospitalType.insertMany(list);
         sendResponse(req, res, 200, {
           status: true,
@@ -5356,7 +5356,7 @@ async doctorManagementUpdateAvailability(req, res) {
         _id: { $ne: mongoose.Types.ObjectId(healthcentreId) },
         is_deleted: false,
       });
-      if (list.length == 0) {
+      if (list.length === 0) {
         const updateHealthCentre = await HospitalType.updateOne(
           { _id: healthcentreId },
           {
@@ -5612,7 +5612,7 @@ async doctorManagementUpdateAvailability(req, res) {
       let previewTemplate = "";
 
       let environvent = config.NODE_ENV;
-      let url = config.test_p_FRONTEND_URL;
+      let url = config.TEST_P_FRONTEND_URL;
       if (result) {
         if (previewTemplate != "") {
           if (environvent == "local") {
@@ -6124,7 +6124,7 @@ async doctorManagementUpdateAvailability(req, res) {
         nameOfTest: { $in: namesToFind },
       });
       const CheckData = foundItems.map((item) => item.nameOfTest);
-      if (foundItems.length == 0) {
+      if (foundItems.length === 0) {
         const savedtests = await PathologyTestInfoNew.insertMany(list);
         sendResponse(req, res, 200, {
           status: true,

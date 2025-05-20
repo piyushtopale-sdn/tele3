@@ -1,17 +1,10 @@
 import { sendResponse } from "../../helpers/transmission";
-import Country from "../../models/common_data/country";
 import mongoose from "mongoose";
-import Region from "../../models/common_data/region";
-import Province from "../../models/common_data/province";
-import Department from "../../models/common_data/department";
-import City from "../../models/common_data/city";
-import Village from "../../models/common_data/village";
 import { CityColumns, CountryColumns, DepartmentColumns, DesignationColumns, LanguageColumns, messages, RegionColumns, VillageColumns } from "../../config/constants";
 import { processExcel } from "../../middleware/utils";
 import Designation from "../../models/designation";
 import Language from "../../models/language";
 import StudyType from "../../models/studytype";
-import Nationality from "../../models/common_data/nationality";
 import BussinessSolution from "../../models/common_data/bussinessSolution";
 
 import fs from "fs";
@@ -968,7 +961,7 @@ class CommonDataController {
 
       sendResponse(req, res, 200, {
         status: true,
-        body: result,
+        body: null,
         message: message,
         errorCode: null,
       });
@@ -1189,7 +1182,7 @@ class CommonDataController {
     try {
       const { name, region_id, createdBy } = req.body;
       const list = await Province.find({ region_id: mongoose.Types.ObjectId(req.body.region_id), name: name });
-      if (list.length == 0) {
+      if (list.length === 0) {
         let result = new Province({
           name,
           region_id,
@@ -1378,7 +1371,7 @@ class CommonDataController {
         region_id: req.body.region_id,
       };
       const list = await Province.find({ region_id: mongoose.Types.ObjectId(req.body.region_id), name: req.body.name, _id: { $ne: mongoose.Types.ObjectId(req.body._id) } });
-      if (list.length == 0) {
+      if (list.length === 0) {
         const result = await Province.updateOne(
           { _id: mongoose.Types.ObjectId(req.body._id) },
           { $set: jsondata },
@@ -1595,7 +1588,7 @@ class CommonDataController {
     try {
       const { name, province_id, createdBy } = req.body;
       const list = await Department.find({ province_id: mongoose.Types.ObjectId(req.body.province_id), name: name });
-      if (list.length == 0) {
+      if (list.length === 0) {
         let result = new Department({
           name,
           province_id,
@@ -1801,7 +1794,7 @@ class CommonDataController {
         province_id: req.body.province_id,
       };
       const list = await Department.find({ province_id: mongoose.Types.ObjectId(req.body.province_id), name: req.body.name, _id: { $ne: mongoose.Types.ObjectId(req.body._id) } });
-      if (list.length == 0) {
+      if (list.length === 0) {
         const result = await Department.updateOne(
           { _id: mongoose.Types.ObjectId(req.body._id) },
           { $set: jsondata },
@@ -2049,7 +2042,7 @@ class CommonDataController {
     try {
       const { name, department_id, createdBy } = req.body;
       const list = await City.find({ department_id: mongoose.Types.ObjectId(req.body.department_id), name: name });
-      if (list.length == 0) {
+      if (list.length === 0) {
         let result = new City({
           name,
           department_id,
@@ -2227,7 +2220,7 @@ class CommonDataController {
       };
 
       const list = await City.find({ department_id: mongoose.Types.ObjectId(req.body.department_id), name: req.body.name, _id: { $ne: mongoose.Types.ObjectId(req.body._id) } });
-      if (list.length == 0) {
+      if (list.length === 0) {
         const result = await City.updateOne(
           { _id: mongoose.Types.ObjectId(req.body._id) },
           { $set: jsondata },
@@ -2485,7 +2478,7 @@ class CommonDataController {
     try {
       const { name, department_id, createdBy } = req.body;
       const list = await Village.find({ department_id: mongoose.Types.ObjectId(req.body.department_id), name: name });
-      if (list.length == 0) {
+      if (list.length === 0) {
         let result = new Village({
           name,
           department_id,
@@ -2660,7 +2653,7 @@ class CommonDataController {
         department_id: req.body.department_id,
       };
       const list = await Village.find({ department_id: mongoose.Types.ObjectId(req.body.department_id), name: req.body.name, _id: { $ne: mongoose.Types.ObjectId(req.body._id) }, is_deleted: false });
-      if (list.length == 0) {
+      if (list.length === 0) {
         const result = await Village.updateOne(
           { _id: mongoose.Types.ObjectId(req.body._id) },
           { $set: jsondata },
@@ -2803,8 +2796,6 @@ class CommonDataController {
           },
         ]);
       }
-
-      ;
       let array = result.map((obj) => Object.values(obj));
       sendResponse(req, res, 200, {
         status: true,
@@ -2927,7 +2918,7 @@ class CommonDataController {
         designation: { $in: namesToFind },
       });
       const CheckData = foundItems.map((item) => item.designation);
-      if (foundItems.length == 0) {
+      if (foundItems.length === 0) {
         const savedDesignation = await Designation.insertMany(list)
         sendResponse(req, res, 200, {
           status: true,
@@ -3016,7 +3007,7 @@ class CommonDataController {
         delete_status
       } = req.body
       const list = await Designation.find({ designation: designation, active_status: active_status, _id: { $ne: mongoose.Types.ObjectId(designationId) } });
-      if (list.length == 0) {
+      if (list.length === 0) {
         const updateDesignation = await Designation.updateOne(
           { _id: designationId },
           {
@@ -3278,7 +3269,7 @@ class CommonDataController {
         language: { $in: namesToFind },
       });
       const CheckData = foundItems.map((item) => item.language);
-      if (foundItems.length == 0) {
+      if (foundItems.length === 0) {
         const savedLanguage = await Language.insertMany(list)
         sendResponse(req, res, 200, {
           status: true,
@@ -3362,7 +3353,7 @@ class CommonDataController {
         delete_status
       } = req.body
       const list = await Language.find({ language: language, active_status: active_status, _id: { $ne: mongoose.Types.ObjectId(languageId) }, is_deleted: false });
-      if (list.length == 0) {
+      if (list.length === 0) {
         const updateLanguage = await Language.updateOne(
           { _id: languageId },
           {

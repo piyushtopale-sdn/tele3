@@ -19,7 +19,7 @@ import axios from "axios";
 import BasicInfo from "../models/basic_info";
 import { sendSms } from "../middleware/sendSms";
 import { sendPushNotification } from "../helpers/firebase_notification";
-const moment = require('moment-timezone');
+import moment from 'moment-timezone';
 const httpService = new Http();
 
 const requestBody = {
@@ -1280,7 +1280,7 @@ class AppointmentController {
         );
       } else if (req?.user?.role == 'INDIVIDUAL') {
         pipeline.push({ $match: { labRadiologyId: mongoose.Types.ObjectId(labRadiologyId ? labRadiologyId : req?.user?._id) } });
-      } else if (req?.user?.role == 'ADMIN' && labRadiologyId != 'all') {
+      } else if ((req?.user?.role == 'ADMIN' || req?.user?.role == 'SUPER_USER') && labRadiologyId != 'all') {
         pipeline.push({ $match: { labRadiologyId: mongoose.Types.ObjectId(labRadiologyId) } });
       }
 
@@ -1490,7 +1490,7 @@ class AppointmentController {
         pipeline.push({ $match: { patientId: mongoose.Types.ObjectId(patientId || req?.user?.portalUserId) } });
       } else if (req?.user?.role === 'INDIVIDUAL') {
         pipeline.push({ $match: { labRadiologyId: mongoose.Types.ObjectId(labRadiologyId || req?.user?._id) } });
-      } else if (req?.user?.role === 'ADMIN' && labRadiologyId !== 'all') {
+      } else if ((req?.user?.role === 'ADMIN' ||  req?.user?.role == 'SUPER_USER') && labRadiologyId !== 'all') {
         pipeline.push({ $match: { labRadiologyId: mongoose.Types.ObjectId(labRadiologyId) } });
       }
 
@@ -2029,6 +2029,8 @@ class AppointmentController {
           status: { $first: "$status" },
           centerLocation: { $first: "$centreLocation" },
           profile_pic_signed_url: { $first: "$profile_pic_signed_url" },
+          cancel_by: { $first :"$cancel_by" },
+          cancelReason:{ $first :"$cancelReason" }
         }
       },)
 
@@ -2230,7 +2232,7 @@ class AppointmentController {
           status: false,
           body: null,
           message: `Cancellation not allowed.`,
-          messageArabic: ``,
+          messageArabic: `إلغاء غير مسموح`,
           errorCode: null,
         })
       }
@@ -3327,7 +3329,7 @@ class AppointmentController {
         pipeline.push(
           { $match: { patientId: mongoose.Types.ObjectId(patientId ? patientId : req?.user?.portalUserId) } }
         );
-      } else if (req?.user?.role == 'INDIVIDUAL' || req?.user?.role == 'ADMIN') {
+      } else if (req?.user?.role == 'INDIVIDUAL' || req?.user?.role == 'ADMIN' ||  req?.user?.role == 'SUPER_USER') {
         pipeline.push({ $match: { labRadiologyId: mongoose.Types.ObjectId(labRadiologyId ? labRadiologyId : req?.user?._id) } });
       }
 

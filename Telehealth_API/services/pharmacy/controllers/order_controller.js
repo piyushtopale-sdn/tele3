@@ -6,7 +6,7 @@ import OrderDetail from "../models/order/order_detail";
 import AdminInfo from "../models/admin_info";
 import MedicineDetail from "../models/order/medicine_detail";
 import MedicineBill from "../models/order/medicine_bill";
-const Http = require('../helpers/httpservice');
+import Http from "../helpers/httpservice";
 import StaffInfo from "../models/staff_info";
 import mongoose from "mongoose";
 
@@ -1136,6 +1136,7 @@ class OrderController {
             let orderDetails = await OrderDetail.find({for_portal_user: pharmacyId });
 
             let orderId = [];
+            let data1 = [];
             const promises1 = orderDetails.map(async (item) => {
                 try {
                     orderId.push(item?._id)

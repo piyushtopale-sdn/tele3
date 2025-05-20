@@ -367,7 +367,7 @@ class AmazonPaymentController {
         try {
             const requestData = {
                 merchantIdentifier: 'merchant.com.test_papp',
-                displayName: 'test_p',
+                displayName: 'Test_p',
                 initiative: 'web',
                 initiativeContext: AMAZONPAY.domain
             };

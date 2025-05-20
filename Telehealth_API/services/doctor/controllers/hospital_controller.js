@@ -36,7 +36,7 @@ import crypto from "crypto";
 import mongoose from "mongoose";
 import Http from "../helpers/httpservice";
 const httpService = new Http();
-const moment = require('moment-timezone');
+import moment from 'moment-timezone';
 import {
   SpecialtyColumns,
   departmentHospital,
@@ -191,15 +191,6 @@ export const updatePaymentStatusAndSlot = async (appointmentId, req) => {
   let appointType = appointmentDetails.appointmentType.replace("_", " ");
 
   let message = `You have recevied one new appoitment for ${appointType} consulation at ${appointmentDetails.hospital_details.hospital_name} on ${appointmentDetails.consultationDate} | ${appointmentDetails.consultationTime} from ${appointmentDetails.patientDetails.patientFullName}`;
-  let requestData = {
-    created_by_type: appointmentDetails.madeBy,
-    created_by: notificationCreator,
-    content: message,
-    url: "",
-    for_portal_user: notificationReceiver,
-    notitype: "New Appointment",
-    appointmentId: appointmentId,
-  };
 
   let timeStamp = new Date();
   let timeStampString;
@@ -311,7 +302,7 @@ class HospitalController {
       const otpText = smsTemplateOTP(otp);
       const smsRes = await sendSms(country_code + mobile, otpText);
       let result = null;
-      if (smsRes == 200) {
+      if (smsRes === 200) {
         if (deviceExist) {
           result = await Otp2fa.findOneAndUpdate(
             { mobile, country_code, uuid, for_portal_user: portalUserData._id },
@@ -738,7 +729,7 @@ class HospitalController {
         delete_status: false,
       });
       const CheckData = foundItems.map((item) => item.specilization);
-      if (foundItems.length == 0) {
+      if (foundItems.length === 0) {
         const savedSpecialty = await Specialty.insertMany(list);
         sendResponse(req, res, 200, {
           status: true,
@@ -945,7 +936,7 @@ class HospitalController {
 
       sendResponse(req, res, 200, {
         status: true,
-        body: result,
+        body: null,
         message: message,
         errorCode: null,
       });
@@ -2080,31 +2071,6 @@ class HospitalController {
     }
   }
 
-  async saveFouPortalLocationData(req, res) {
-    try {
-      const hlocData = new HospitalLocation({
-        hospital_or_clinic_location,
-        for_portal_user: req.body.data.portal_user_id,
-      });
-
-      const hlocResult = await hlocData.save();
-
-      sendResponse(req, res, 200, {
-        status: true,
-        data: hlocResult,
-        message: `hospital location fetch successfully`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Internal server error",
-        errorCode: null,
-      });
-    }
-  }
-
   async getHospitalLocationData(req, res) {
     try {
       let result = await HospitalLocation.find({
@@ -3144,7 +3110,7 @@ export const getIndividualDoctorStaff = async (loggedInId, adminId) => {
   }
 };
 
-export const getListforHospitalDoctor = async (loggedInId, adminId) => {
+export const getListforHospitalDoctor = async (loggedInId) => {
   try {
 
     const getData = await BasicInfo.findOne({

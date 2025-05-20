@@ -5,7 +5,7 @@ import TermsAndCondition from "../../models/contentManagement/termsAndCondition"
 import mongoose from "mongoose";
 import Content from "../../models/contentManagement/content";
 import { messages } from "../../config/constants";
-const Http = require('../../helpers/httpservice');
+import Http from "../../helpers/httpservice";
 const httpService = new Http()
 import { sendSms } from "../../middleware/sendSms";
 import { sendEmail } from "../../helpers/ses";

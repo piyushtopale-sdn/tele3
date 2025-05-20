@@ -1,6 +1,6 @@
 "use strict";
 
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 import crypto from "crypto"
 import fs from "fs";
@@ -12,22 +12,15 @@ import SubscriptionPlan from "../../models/subscription/subscriptionplans";
 import SubscriptionPlanService from "../../models/subscription/subscriptionplan_service";
 import Otp2fa from "../../models/otp2fa";
 import { config, smsTemplateOTP, MedicineColumns } from "../../config/constants";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, NODE_ENV } = config
-const { bcryptCompare, generateTenSaltHash, processExcel, generate4DigitOTP } = require("../../middleware/utils");
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, TEST_P_FRONTEND_URL, NODE_ENV } = config
+// const { bcryptCompare, generateTenSaltHash, processExcel, generate4DigitOTP } = require("../../middleware/utils");
+import { bcryptCompare, generateTenSaltHash, processExcel, generate4DigitOTP } from "../../middleware/utils.js";
 const secret = config.SECRET;
 import { sendResponse } from "../../helpers/transmission";
 import ForgotPasswordToken from "../../models/forgot_password_token";
 import { sendSms } from "../../middleware/sendSms";
 import { sendEmail } from "../../helpers/ses";
 
-import Country from "../../models/common_data/country"
-import City from "../../models/common_data/city"
-import Department from "../../models/common_data/department"
-import Province from "../../models/common_data/province"
-import Region from "../../models/common_data/region"
-import Village from "../../models/common_data/village"
-import Speciality from "../../models/speciality"
-import AppointmentCommission from "../../models/superadmin/appointment-commision"
 import mongoose from "mongoose";
 import Notification from "../../models/superadmin/Chat/Notification";
 const Http = require('../../helpers/httpservice');
@@ -718,7 +711,7 @@ export const forgotPassword = async (req, res) => {
         });
         await ForgotPasswordData.save();
 
-        const link = `${test_p_FRONTEND_URL}/super-admin/newpassword?token=${resetToken}&user_id=${userData._id}`
+        const link = `${TEST_P_FRONTEND_URL}/super-admin/newpassword?token=${resetToken}&user_id=${userData._id}`
         const getEmailContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'FORGOT_PASSWORD', type: 'email' }, headers, 'superadminServiceUrl');
         let emailContent
         if (getEmailContent?.status && getEmailContent?.data?.length > 0) {
@@ -2787,8 +2780,12 @@ export const getRadioRecords = async (req, res) => {
 }
 
 export const createAdminProfile = async (req, res) => {
+    const headers = {
+        Authorization: req.headers["authorization"],
+      };
     try {
-      const { fullName, mobile, country_code, email, password } = req.body;
+      const { fullName, mobile, country_code, email, password, forAdmin } = req.body;
+      
       const superAdminData = await Superadmin.findOne({ email:email.toLowerCase(), isDeleted: false }).lean();
       if (superAdminData) {
         return sendResponse(req, res, 200, {
@@ -2807,13 +2804,45 @@ export const createAdminProfile = async (req, res) => {
         country_code,
         mobile,
         password: newPassword,
-        role: "superadmin"
+        role: "superadmin",
+        forAdmin:forAdmin
       });
-      let userDetails = await userData.save();
+
+        let userDetails = await userData.save();
+
         const content = {
             subject:"SuperAdmin Created Successfully",
             body: "Hey user from now u are a Superadmin",
         };
+
+        for(let item of forAdmin){
+            if(item ==='doctorAdmin'){
+                await httpService.postStaging(
+                    "individual-doctor/create-superuser-profile",
+                    {
+                       fullName, mobile, country_code, email, password,created_by_user:req.user._id
+                    },
+                    headers,
+                    "doctorServiceUrl"
+                  );
+            }else{
+                let type;
+               if(item === 'labAdmin'){
+                    type = "Laboratory";
+               } else{
+                    type = "Radiology";
+               }
+               await httpService.postStaging(
+                "lab-radio/center-lab-radio-superuser-admin",
+                {
+                   fullName, mobile, country_code, email, password,created_by_user:req.user._id, type
+                },
+                headers,
+                "labradioServiceUrl"
+              );
+            }
+        }
+
         await sendEmail(content,userData.email);
         const text = "Hey User from Now You Are SuperAdmin Check Your Email for credentials ";
         const mobileNumber = `${userData.country_code}${userData.mobile}`;
@@ -2837,7 +2866,7 @@ export const createAdminProfile = async (req, res) => {
     }
   }
 
-  export const allAdminProfileList = async (req, res) => {
+export const allAdminProfileList = async (req, res) => {
     try {
         const { page, limit, searchText, status, sort, fromDate, toDate, userId } = req.query;
 
@@ -2891,7 +2920,8 @@ export const createAdminProfile = async (req, res) => {
                     email: { $first: "$email" },
                     mobile: { $first: "$mobile" },
                     country_code: { $first: "$country_code" },
-                    isLocked: { $first: "$isLocked" }
+                    isLocked: { $first: "$isLocked" },
+                    forAdmin :  { $first: "$forAdmin" }
                 }
             },
             {
@@ -3099,51 +3129,96 @@ export const deteleLockAdminUser = async (req, res) => {
 
 export const updateAdminProfile = async (req, res) => {
     try {
-      const { adminId, email, fullName, mobile, country_code, password } = req.body;
-  
-      const findUser = await Superadmin.find({
-        isDeleted: false,
-        email: email,
-        _id: { $ne: mongoose.Types.ObjectId(adminId) },
-      });
-  
-      let updateFields = {
+      const {
+        adminId,
         email,
         fullName,
         mobile,
         country_code,
+        password,
+        forAdmin = [],
+      } = req.body;
+  
+      const findUser = await Superadmin.findOne({
+        isDeleted: false,
+        _id: mongoose.Types.ObjectId(adminId),
+      }).lean();
+  
+      if (!findUser) {
+        return sendResponse(req, res, 200, {
+          status: false,
+          message: "Admin not found",
+          errorCode: null,
+        });
+      }
+  
+      const existingForAdmin = findUser.forAdmin || [];
+      const removedAdmins = existingForAdmin.filter(role => !forAdmin.includes(role));
+  
+      const headers = { Authorization: req.headers["authorization"] };
+      
+      const serviceMappings = {
+        doctorAdmin: { url: "individual-doctor/update-superuser-profile", service: "doctorServiceUrl" },
+        labAdmin: { url: "lab-radio/update-lab-radio-superuser-admin", service: "labradioServiceUrl", type: "Laboratory" },
+        radioAdmin: { url: "lab-radio/update-lab-radio-superuser-admin", service: "labradioServiceUrl", type: "Radiology" },
       };
+  
+      const updateRoles = async (roles, deleteUser) => {
+        for (const role of roles) {
+          const mapping = serviceMappings[role];
+          if (mapping) {
+            const payload = { fullName,
+                mobile,
+                country_code,
+                password: findUser.password, email, created_by_user: req.user_id, deleteUser, ...(mapping.type && { type: mapping.type }) };
+                httpService.postStaging(mapping.url, payload, headers, mapping.service);
+          }
+        }
+      };
+  
+       await updateRoles(forAdmin, false);
+       await updateRoles(removedAdmins, true);
+  
+      const findDuplicateUser = await Superadmin.findOne({
+        isDeleted: false,
+        email,
+        _id: { $ne: mongoose.Types.ObjectId(adminId) },
+      });
+  
+      if (findDuplicateUser) {
+        return sendResponse(req, res, 200, {
+          status: false,
+          message: "Admin profile already exists",
+          errorCode: null,
+        });
+      }
+  
+      const updateFields = { email, fullName, mobile, country_code, forAdmin };
   
       if (password) {
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-        updateFields.password = hashedPassword;
+        updateFields.password = await bcrypt.hash(password, salt);
       }
   
-      if (findUser.length === 0) {
-        const updateAdmin = await Superadmin.findByIdAndUpdate(
-          adminId,
-          { $set: updateFields },
-          { new: true }
-        ).exec();
-        return sendResponse(req, res, 200, {
-          status: true,
-          body: updateAdmin,
-          message: "Successfully updated profile.",
-          errorCode: null,
-        });
-      } else {
-        return sendResponse(req, res, 200, {
-          status: false,
-          message: "Admin profile already exist",
-          errorCode: null,
-        });
-      }
+      const updateAdmin = await Superadmin.findByIdAndUpdate(
+        adminId,
+        { $set: updateFields },
+        { new: true }
+      ).exec();
+  
+      return sendResponse(req, res, 200, {
+        status: true,
+        body: updateAdmin,
+        message: "Successfully updated profile.",
+        errorCode: null,
+      });
+  
     } catch (err) {
+      console.error(err);
       return sendResponse(req, res, 500, {
         status: false,
         data: err,
-        message: `Failed to update`,
+        message: "Failed to update",
         errorCode: "INTERNAL_SERVER_ERROR",
       });
     }

@@ -5,7 +5,6 @@ import BasicInfo from "../models/basic_info";
 import Counter from "../models/counter";
 import Otp2fa from "../models/otp";
 import LocationInfo from "../models/location_info";
-import DocumentInfo from "../models/document_info";
 import StaffInfo from "../models/staffInfo";
 import ForgotPasswordToken from "../models/forgot_password_token";
 import { generate4DigitOTP, smsTemplateOTP, AppointmentReasonColumns, config } from "../config/constants";
@@ -24,27 +23,19 @@ import {
 } from "../middleware/utils";
 import mongoose from "mongoose";
 import { hashPassword } from "../helpers/string";
-import EducationalDetail from "../models/educational_details";
-import HospitalLocation from "../models/hospital_location";
 import Http from "../helpers/httpservice";
 const httpService = new Http();
 import Availability from "../models/availability";
-import FeeManagement from "../models/fee_management";
-import DocumentManagement from "../models/document_management";
-import ReasonForAppointment from "../models/reason_of_appointment";
 import ReviewAndRating from "../models/reviews";
-import Questionnaire from "../models/questionnaire";
-import fs from "fs";
 import PathologyTestInfoNew from "../models/pathologyTestInfoNew";
 import Appointment from "../models/appointment";
 import moment from "moment";
 import Notification from "../models/notification";
 import { agoraTokenGenerator } from "../helpers/chat";
 import Logs from "../models/logs";
-import ProviderDocs from "../models/provider_document";
 import { notification, sendNotification } from "../helpers/notification";
 import { generateSignedUrl, uploadSingleOrMultipleDocuments } from "../helpers/gcs";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS, TIMEZONE, NODE_ENV } = config
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, TEST_P_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS, TIMEZONE, NODE_ENV } = config
 
 const validateColumnWithExcel = (toValidate, excelColumn) => {
   const requestBodyCount = Object.keys(toValidate).length;
@@ -246,7 +237,7 @@ class LabRadiology {
           errorCode: "USER_NOT_FOUND",
         });
       }
-
+      if(portalUserData.role !== 'SUPER_USER'){
        if (role === 'ADMIN' && (portalUserData.isAdmin === undefined || portalUserData.isAdmin === false)) {
             return sendResponse(req, res, 200, {
               status: false,
@@ -264,7 +255,7 @@ class LabRadiology {
               },
             }
           );
-      
+       }
       const currentTime = new Date()
 
       if (type !== portalUserData.type) {
@@ -373,7 +364,7 @@ class LabRadiology {
         });
       }
 
-      if (portalUserData.role == "INDIVIDUAL" || portalUserData.role == "ADMIN" ) {
+      if (portalUserData.role == "INDIVIDUAL" || portalUserData.role == "ADMIN" || portalUserData.role == "SUPER_USER" ) {
         let adminData1 = await BasicInfo.aggregate([
           {
             $match: { for_portal_user: portalUserData?._id, type: type },
@@ -494,7 +485,7 @@ class LabRadiology {
       const formattedDate = currentDate.toLocaleString("en-US", { timeZone });
       let addLogs = {};
       let saveLogs = {};
-      if (portalUserData.role == "INDIVIDUAL" || portalUserData.role == "ADMIN")  {
+      if (portalUserData.role == "INDIVIDUAL" || portalUserData.role == "ADMIN" || portalUserData.role == "SUPER_USER")  {
         addLogs = new Logs({
           userName: portalUserData?.full_name,
           userId: portalUserData?._id,
@@ -1151,7 +1142,7 @@ class LabRadiology {
         token: hashResetToken,
       });
       await ForgotPasswordData.save();
-      const link = `${test_p_FRONTEND_URL}/portals/newpassword/${type}?token=${resetToken}&user_id=${userData._id}&type=${type}`
+      const link = `${TEST_P_FRONTEND_URL}/portals/newpassword/${type}?token=${resetToken}&user_id=${userData._id}&type=${type}`
       const getEmailContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'FORGOT_PASSWORD', type: 'email' }, headers, 'superadminServiceUrl');
       let emailContent
       if (getEmailContent?.status && getEmailContent?.data?.length > 0) {
@@ -1580,10 +1571,7 @@ class LabRadiology {
             .populate({
                 path: "in_location",
             })
-            .exec();            
-        const documentData = await DocumentInfo.find({
-            for_portal_user: adminData.for_portal_user._id,
-        }).exec();
+            .exec();   
         const locationData = await LocationInfo.findOne({
             for_portal_user: adminData.for_portal_user._id,
         }).exec();          
@@ -1613,7 +1601,6 @@ class LabRadiology {
                 portalUserData,
                 adminData,
                 licencePicSignedUrl,
-                documentData,
                 locationData,
             },
             message: `Account details fetched successfully,`,
@@ -2023,34 +2010,13 @@ class LabRadiology {
           { for_portal_user: doctor_portal_id },
           { $pull: { for_hospitalIds_temp: hospital_id } }
         );
-
-        await HospitalLocation.updateOne(
-          {
-            for_portal_user: doctor_portal_id,
-            "hospital_or_clinic_location.hospital_id": hospital_id,
-          },
-          {
-            $set: {
-              "hospital_or_clinic_location.$.isPermited": true,
-              "hospital_or_clinic_location.$.status": "APPROVED",
-            },
-          }
-        );
+        
       } else {
         result = await BasicInfo.updateOne(
           { for_portal_user: doctor_portal_id },
           { $pull: { for_hospitalIds_temp: hospital_id } }
         );
-
-        await HospitalLocation.updateOne(
-          { for_portal_user: doctor_portal_id },
-          {
-            $pull: {
-              hospital_or_clinic_location: { hospital_id: hospital_id },
-            },
-          },
-          { multi: true }
-        );
+      
       }
 
       if (result) {
@@ -2071,165 +2037,6 @@ class LabRadiology {
     }
   }
 
-  async fourportalManagementEducationalDetails(req, res) {
-    const { portal_user_id, education_details, type } = req.body;
-    try {
-      const checkExist = await EducationalDetail.find({
-        for_portal_user: portal_user_id,
-      }).exec();
-      if (checkExist.length > 0) {
-        await EducationalDetail.findOneAndUpdate(
-          { for_portal_user: { $eq: portal_user_id } },
-          {
-            $set: { education_details },
-          }
-        ).exec();
-      } else {
-        const eduData = new EducationalDetail({
-          education_details,
-          for_portal_user: portal_user_id,
-          type,
-        });
-        const eduResult = await eduData.save();
-        await BasicInfo.findOneAndUpdate(
-          { for_portal_user: { $eq: portal_user_id } },
-          {
-            $set: { in_education: eduResult._id },
-          }
-        ).exec();
-      }
-      sendResponse(req, res, 200, {
-        status: true,
-        data: null,
-        message: `Education details ${
-          checkExist.length > 0 ? "updated" : "added"
-        } successfully`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Internal server error",
-        errorCode: null,
-      });
-    }
-  }
-
-  async fourportalManagementHospitalLocation(req, res) {
-    const { portal_user_id, hospital_or_clinic_location, type } = req.body;
-    try {
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
-
-      const checkExist = await HospitalLocation.find({
-        for_portal_user: portal_user_id,
-      }).exec();
-
-      const basicInfo = await BasicInfo.findOne(
-        { for_portal_user: portal_user_id },
-        { for_hospitalIds: 1, for_hospitalIds_temp: 1, for_hospital: 1 }
-      );
-
-      let permissionToHospital = [];
-
-      if (basicInfo?.for_hospitalIds_temp.length > 0) {
-        for (const previousData of basicInfo?.for_hospitalIds_temp) {
-          permissionToHospital.push(previousData.toString());
-        }
-      }
-      let getRole = "";
-      if (basicInfo?.for_hospital) {
-        getRole = await httpService.getStaging(
-          "hospital/get-portal-user-data",
-          { data: basicInfo?.for_hospital },
-          headers,
-          "hospitalServiceUrl"
-        );
-      }
-
-      let locationArray = [];
-      for (const value of hospital_or_clinic_location) {
-        let status = value.locationFor == "hospital" ? "PENDING" : "APPROVED";
-        if (getRole != "") {
-          if (getRole?.data[0]?.role == "HOSPITAL_ADMIN") {
-            status = "APPROVED";
-          }
-        }
-        value.status = status;
-        locationArray.push(value);
-
-        if (value.locationFor === "hospital") {
-          if (
-            !basicInfo?.for_hospitalIds
-              .map((id) => id.toString())
-              .includes(value?.hospital_id)
-          ) {
-            if (
-              !basicInfo?.for_hospitalIds_temp
-                .map((id) => id.toString())
-                .includes(value?.hospital_id)
-            ) {
-              permissionToHospital.push(value?.hospital_id);
-            }
-          } else {
-            value.isPermited = true;
-          }
-        } else {
-          value.isPermited = true;
-        }
-      }
-
-      if (checkExist.length > 0) {
-        await HospitalLocation.findOneAndUpdate(
-          { for_portal_user: { $eq: portal_user_id } },
-          {
-            $set: { hospital_or_clinic_location },
-          }
-        ).exec();
-
-        await BasicInfo.findOneAndUpdate(
-          { for_portal_user: { $eq: portal_user_id } },
-          {
-            $set: { for_hospitalIds_temp: permissionToHospital },
-          }
-        ).exec();
-      } else {
-        const hlocData = new HospitalLocation({
-          hospital_or_clinic_location,
-          for_portal_user: portal_user_id,
-          type,
-        });
-
-        const hlocResult = await hlocData.save();
-
-        await BasicInfo.findOneAndUpdate(
-          { for_portal_user: { $eq: portal_user_id } },
-          {
-            $set: {
-              in_hospital_location: hlocResult._id,
-              for_hospitalIds_temp: permissionToHospital,
-            },
-          }
-        ).exec();
-      }
-
-      sendResponse(req, res, 200, {
-        status: true,
-        data: null,
-        message: `hospital location added successfully`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Internal server error",
-        errorCode: null,
-      });
-    }
-  }
 
   async forPortalManagementAvailability(req, res) {
     const { portal_user_id, doctor_availability, type } = req.body;
@@ -2289,645 +2096,6 @@ class LabRadiology {
         body: error,
         message: error.message ? error.message : "Something went wrong",
         errorCode: error.code ? error.code : "Internal server error",
-      });
-    }
-  }
-
-  async fourPortalManagementGetLocations(req, res) {
-    try {
-      const { portal_user_id, type } = req.query;
-      const results = await HospitalLocation.aggregate([
-        {
-          $match: {
-            for_portal_user: mongoose.Types.ObjectId(portal_user_id),
-            type: type,
-          },
-        },
-        { $unwind: "$hospital_or_clinic_location" },
-        { $match: { "hospital_or_clinic_location.isPermited": true } },
-        {
-          $group: {
-            _id: "$_id",
-            for_portal_user: { $first: "$for_portal_user" },
-            hospital_or_clinic_location: {
-              $push: "$hospital_or_clinic_location",
-            },
-          },
-        },
-      ]);
-      sendResponse(req, res, 200, {
-        status: true,
-        data: results,
-        message: `hospital locations fetched successfully`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        data: error,
-        message: `Something went wrong`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async fourPortalManagementFeeManagement(req, res) {
-    const { portal_user_id, location_id, online, home_visit, f2f, type } =
-      req.body;
-    try {
-      const checkExist = await FeeManagement.find({
-        for_portal_user: portal_user_id,
-        location_id: location_id,
-      }).exec();
-      let objectData = { online, home_visit, f2f };
-      if (checkExist.length > 0) {
-        await FeeManagement.findOneAndUpdate(
-          {
-            for_portal_user: { $eq: portal_user_id },
-            location_id: location_id,
-          },
-          {
-            $set: objectData,
-          }
-        ).exec();
-      } else {
-        objectData["for_portal_user"] = portal_user_id;
-        objectData["location_id"] = location_id;
-        objectData["type"] = type;
-        const feeData = new FeeManagement(objectData);
-        const feeResult = await feeData.save();
-        await BasicInfo.findOneAndUpdate(
-          { for_portal_user: { $eq: portal_user_id } },
-          {
-            $set: { in_fee_management: feeResult._id },
-          }
-        ).exec();
-      }
-      sendResponse(req, res, 200, {
-        status: true,
-        data: null,
-        message: `fee data ${
-          checkExist.length > 0 ? "updated" : "added"
-        } successfully`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Internal server error",
-        errorCode: null,
-      });
-    }
-  }
-
-  async fourPortalManagementDocumentManagement(req, res) {
-    const { portal_user_id, document_details, type } = req.body;
-    try {
-      const checkExist = await DocumentManagement.find({
-        for_portal_user: portal_user_id,
-      }).exec();
-      if (checkExist.length > 0) {
-        await DocumentManagement.findOneAndUpdate(
-          { for_portal_user: { $eq: portal_user_id } },
-          {
-            $set: { document_details },
-          }
-        ).exec();
-      } else {
-        const docData = new DocumentManagement({
-          document_details,
-          for_portal_user: portal_user_id,
-          type,
-        });
-        const docResult = await docData.save();
-        await BasicInfo.findOneAndUpdate(
-          { for_portal_user: { $eq: portal_user_id } },
-          {
-            $set: { in_document_management: docResult._id },
-          }
-        ).exec();
-      }
-      sendResponse(req, res, 200, {
-        status: true,
-        data: null,
-        message: `document ${
-          checkExist.length > 0 ? "updated" : "added"
-        } successfully`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Internal server error",
-        errorCode: null,
-      });
-    }
-  }
-
-  async deleteAvailability(req, res) {
-    const { portal_user_id, location_id } = req.body;
-    try {
-      await Availability.deleteMany({
-        for_portal_user: { $eq: portal_user_id },
-        location_id,
-      });
-
-      sendResponse(req, res, 200, {
-        status: true,
-        data: null,
-        message: `Location and its availability deleted successfully`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: error.message ? error.message : "Something went wrong",
-        errorCode: error.code ? error.code : "Internal server error",
-      });
-    }
-  }
-
-  async addAppointmentReason(req, res) {
-    try {
-      const {
-        appointmentReasonArray,
-        loginPortalId,
-        portalType,
-        selectedlocation,
-        createdBy,
-      } = req.body;
-
-      const list = appointmentReasonArray.map((singleData) => ({
-        ...singleData,
-        added_by_portal: loginPortalId,
-        portal_type: portalType,
-        selectedlocation: selectedlocation,
-        createdBy: createdBy,
-      }));
-
-      for (let data of list) {
-        const checkname = data.name;
-
-        let CheckData = await ReasonForAppointment.find({
-          selectedlocation: mongoose.Types.ObjectId(selectedlocation),
-          is_deleted: true,
-        });
-
-        for (let ele of CheckData) {
-          if (ele.name === checkname) {
-            return sendResponse(req, res, 200, {
-              status: false,
-              body: null,
-              message: `Appointment Reason ${checkname} already exists for the same location.`,
-              errorCode: null,
-            });
-          }
-        }
-      }
-
-      const result = await ReasonForAppointment.insertMany(list);
-
-      return sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: "Successfully added appointment reason",
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to add appointment reason",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async reasonForAppointmentList(req, res) {
-    try {
-      const {
-        limit,
-        page,
-        searchText,
-        loginPortalId,
-        listFor,
-        selectedlocation,
-      } = req.query;
-      let sort = req.query.sort;
-      let sortingarray = {};
-      if (sort != "undefined" && sort != "" && sort != undefined) {
-        let keynew = sort.split(":")[0];
-        let value = sort.split(":")[1];
-        sortingarray[keynew] = Number(value);
-      } else {
-        sortingarray["createdAt"] = -1;
-      }
-
-      let filter = {
-        added_by_portal: mongoose.Types.ObjectId(loginPortalId),
-        is_deleted: false,
-      };
-
-      if (listFor === undefined) {
-        filter = { ...filter, active: true };
-      }
-
-      if (searchText !== "") {
-        filter.name = { $regex: searchText || "", $options: "i" };
-      }
-
-      if (selectedlocation !== "undefined" && selectedlocation !== "") {
-        filter = {
-          ...filter,
-          selectedlocation: mongoose.Types.ObjectId(selectedlocation),
-        };
-      }
-      let aggregate = [
-        {
-          $match: filter,
-        },
-        {
-          $lookup: {
-            from: "hospitallocations",
-            let: { selectedlocation: "$selectedlocation" },
-            pipeline: [
-              {
-                $unwind: "$hospital_or_clinic_location",
-              },
-              {
-                $match: {
-                  $expr: {
-                    $eq: [
-                      {
-                        $toObjectId: "$hospital_or_clinic_location.hospital_id",
-                      },
-                      "$$selectedlocation",
-                    ],
-                  },
-                },
-              },
-            ],
-            as: "locationDetails",
-          },
-        },
-        {
-          $unwind: "$locationDetails",
-        },
-        {
-          $group: {
-            _id: "$_id", // Use the field that uniquely identifies each record
-            name: { $first: "$name" }, // Using $first as an accumulator
-            active: { $first: "$active" }, // Using $first as an accumulator
-            added_by_portal: { $first: "$added_by_portal" }, // Using $first as an accumulator
-            locationDetails: { $first: "$locationDetails" }, // Choose the document you want to keep
-          },
-        },
-      ];
-
-      const count = await ReasonForAppointment.aggregate(aggregate);
-      aggregate.push({
-        $sort: sortingarray,
-      });
-
-      if (limit != "0") {
-        aggregate.push({ $skip: (page - 1) * limit }, { $limit: limit * 1 });
-      }
-
-      const result = await ReasonForAppointment.aggregate(aggregate);
-      sendResponse(req, res, 200, {
-        status: true,
-        body: {
-          totalCount: count.length,
-          data: result,
-        },
-        message: "Successfully get reason for appointment list",
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to get reason for appointment list",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-  async updateReasonForAppointment(req, res) {
-    try {
-      const {
-        appointmentReasonId,
-        name,
-        active,
-        loginPortalId,
-        selectedlocation,
-      } = req.body;
-      const result = await ReasonForAppointment.findOneAndUpdate(
-        { _id: appointmentReasonId },
-        {
-          $set: {
-            name,
-            active,
-            added_by_portal: loginPortalId,
-            selectedlocation,
-          },
-        },
-        { new: true }
-      ).exec();
-      sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: "Successfully updated reason for appointment",
-        errorCode: null,
-      });
-    } catch (err) {
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `failed to update reason for appointment`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async actionOnReasonForAppointment(req, res) {
-    try {
-      const { appointmentReasonId, action_name, action_value } = req.body;
-
-      const filter = {};
-      if (action_name == "active") filter["active"] = action_value;
-      if (action_name == "delete") filter["is_deleted"] = action_value;
-
-      const result = await ReasonForAppointment.findOneAndUpdate(
-        { _id: appointmentReasonId },
-        filter,
-        { new: true }
-      ).exec();
-      sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: "Successfully deleted appointment reason",
-        errorCode: null,
-      });
-    } catch (err) {
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `failed to action done`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async bulkUploadAppointmentReason(req, res) {
-    try {
-      const filePath = "./uploads/" + req.filename;
-      const data = await processExcel(filePath);
-
-      const isValidFile = validateColumnWithExcel(
-        AppointmentReasonColumns,
-        data[0]
-      );
-      fs.unlinkSync(filePath);
-      if (!isValidFile) {
-        sendResponse(req, res, 500, {
-          status: false,
-          body: isValidFile,
-          message: "Invalid excel sheet! column not matched.",
-          errorCode: null,
-        });
-        return;
-      }
-      const inputArray = [];
-      for (const singleData of data) {
-        inputArray.push({
-          name: singleData.ReasonName,
-          selectedlocation: req.body.selectedlocation,
-          added_by_portal: req.body.loginPortalId,
-          portal_type: req.body.portalType,
-        });
-      }
-
-      for (let data of inputArray) {
-        const checkname = data.name;
-
-        let CheckData = await ReasonForAppointment.find({
-          selectedlocation: mongoose.Types.ObjectId(req.body.selectedlocation),
-          is_deleted: false,
-        });
-
-        for (let ele of CheckData) {
-          if (ele.name === checkname) {
-            return sendResponse(req, res, 200, {
-              status: false,
-              body: null,
-              message: `Appointment Reason ${checkname} already exists for the same location in sheet.`,
-              errorCode: null,
-            });
-          }
-        }
-      }
-      const result = await ReasonForAppointment.insertMany(inputArray);
-
-      sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: "Successfully added appointment reasons",
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: error.message
-          ? error.message
-          : "failed to add appointment reasons",
-        errorCode: error.code ? error.code : "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  //Questionnaire
-  async addQuestionnaire(req, res) {
-    try {
-      const {
-        controller,
-        question,
-        type,
-        options,
-        active,
-        required,
-        loginPortalId,
-        portalType,
-        createdBy,
-      } = req.body;
-
-      //  "body________");
-      const questionnaire = new Questionnaire({
-        controller,
-        question,
-        type,
-        options,
-        active,
-        required,
-        added_by_portal: loginPortalId,
-        portal_type: portalType,
-        createdBy: createdBy,
-      });
-      const result = await questionnaire.save();
-      sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: "Successfully added questionnaire",
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to add questionnaire",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async QuestionnaireList(req, res) {
-    try {
-      const { limit, page, loginPortalId } = req.query;
-
-      let sort = req.query.sort;
-      let sortingarray = {};
-      if (sort != "undefined" && sort != "" && sort != undefined) {
-        let keynew = sort.split(":")[0];
-        let value = sort.split(":")[1];
-        sortingarray[keynew] = value;
-      } else {
-        sortingarray["createdAt"] = -1;
-      }
-      let filter = {
-        is_deleted: false,
-        added_by_portal: { $eq: loginPortalId },
-      };
-
-      const result = await Questionnaire.find(filter)
-        .sort(sortingarray)
-        .skip((page - 1) * limit)
-        .limit(limit * 1)
-        .exec();
-      const count = await Questionnaire.countDocuments(filter);
-      return sendResponse(req, res, 200, {
-        status: true,
-        body: {
-          totalCount: count,
-          data: result,
-        },
-        message: "Successfully get questionnaire list",
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to get questionnaire list",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async QuestionnaireDetails(req, res) {
-    try {
-      const { questionnaireId } = req.query;
-      const result = await Questionnaire.findOne({ _id: questionnaireId });
-      sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: "Successfully get questionnaire details",
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to get questionnaire details",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async updateQuestionnaire(req, res) {
-    try {
-      const {
-        questionnaireId,
-        controller,
-        question,
-        type,
-        options,
-        active,
-        required,
-      } = req.body;
-      const result = await Questionnaire.findOneAndUpdate(
-        { _id: questionnaireId },
-        {
-          $set: {
-            controller,
-            question,
-            type,
-            options,
-            active,
-            required,
-          },
-        },
-        { new: true }
-      ).exec();
-      sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: "Successfully updated questionnaire",
-        errorCode: null,
-      });
-    } catch (err) {
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `failed to update questionnaire`,
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async actionOnQuestionnaire(req, res) {
-    try {
-      const { questionnaireId, action_name, action_value } = req.body;
-
-      const filter = {};
-      if (action_name == "active") filter["active"] = action_value;
-      if (action_name == "delete") filter["is_deleted"] = action_value;
-      if (action_name == "required") filter["required"] = action_value;
-
-      const result = await Questionnaire.findOneAndUpdate(
-        { _id: questionnaireId },
-        filter,
-        { new: true }
-      ).exec();
-      sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: "Successfully action done",
-        errorCode: null,
-      });
-    } catch (err) {
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `failed to action done`,
-        errorCode: "INTERNAL_SERVER_ERROR",
       });
     }
   }
@@ -3353,41 +2521,7 @@ class LabRadiology {
       });
     }
   }
-  
-  
 
-  async getAllLocationById(req, res) {
-    try {
-      const { portal_user_id, type } = req.query;
-      let alllocation = await HospitalLocation.find({
-        for_portal_user: portal_user_id,
-        type: type,
-      });
-
-      if (alllocation.length > 0) {
-        sendResponse(req, res, 200, {
-          status: true,
-          body: alllocation,
-          message: "List getting successfully!",
-          errorCode: null,
-        });
-      } else {
-        sendResponse(req, res, 200, {
-          status: false,
-          body: null,
-          message: "Failed to fetch list",
-          errorCode: "INTERNAL_SERVER_ERROR",
-        });
-      }
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Failed to fetch list",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
 
   async getAllHospitalandClinicList(req, res) {
     try {
@@ -3490,42 +2624,6 @@ class LabRadiology {
         status: false,
         data: error,
         message: "Failed to fetch all hospital",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async getFourPortalListforLocation(req, res) {
-    try {
-      const { clinic_id, type } = req.query;
-
-      let data1 = await HospitalLocation.find({
-        hospital_or_clinic_location: {
-          $elemMatch: {
-            hospital_id: clinic_id,
-            type: type,
-          },
-        },
-      });
-
-      let doctorDetails = await BasicInfo.find({
-        for_portal_user: data1[0]?.for_portal_user,
-      }).populate({
-        path: "for_portal_user",
-      });
-
-      sendResponse(req, res, 200, {
-        status: true,
-        body: doctorDetails,
-        message: "Successfully fetched all doctors",
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        data: err,
-        message: `Failed to fetch all hospital`,
         errorCode: "INTERNAL_SERVER_ERROR",
       });
     }
@@ -3703,7 +2801,7 @@ class LabRadiology {
         nameOfTest: { $in: namesToFind },
       });
       const CheckData = foundItems.map((item) => item.nameOfTest);
-      if (foundItems.length == 0) {
+      if (foundItems.length === 0) {
         const savedtests = await PathologyTestInfoNew.insertMany(list);
         sendResponse(req, res, 200, {
           status: true,
@@ -3869,99 +2967,6 @@ class LabRadiology {
     }
   }
 
-  async getProviderDocumentsByFilters(req, res) {
-    try {
-      const { portalUserId, startDate, endDate, type } = req.query;
-      const filter = {
-        for_portal_user: portalUserId,
-        isDeleted: false,
-        type: type,
-      };
-      if (startDate && endDate) {
-        const formattedStartDate = startDate.split("-").reverse().join("/");
-        const formattedEndDate = endDate.split("-").reverse().join("/");
-        filter.upload_date = {
-          $gte: formattedStartDate,
-          $lte: formattedEndDate,
-        };
-      }
-      const documents = await ProviderDocs.find(filter).exec();
-      if (!documents || documents.length === 0) {
-        return sendResponse(req, res, 201, {
-          status: false,
-          body: null,
-          message: "No documents found",
-          errorCode: "DOCUMENT_NOT_FOUND",
-        });
-      } else {
-        return sendResponse(req, res, 200, {
-          status: true,
-          body: { documents },
-          message: "Documents retrieved successfully",
-          errorCode: null,
-        });
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "Failed to retrieve documents",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async inActive_isDeletedProviderDocument(req, res) {
-    try {
-      const { documentId, action, status } = req.body;
-      if (!documentId || !action) {
-        return sendResponse(req, res, 201, {
-          status: false,
-          body: null,
-          message:
-            "Both documentId and action fields are required in the request body",
-          errorCode: "MISSING_PARAMETER",
-        });
-      }
-      if (action === "inactive") {
-        await ProviderDocs.findByIdAndUpdate(documentId, {
-          status: status,
-        }).exec();
-        return sendResponse(req, res, 200, {
-          status: true,
-          body: null,
-          message: "Document update successfully",
-          errorCode: null,
-        });
-      } else if (action === "deleted") {
-        await ProviderDocs.findByIdAndUpdate(documentId, {
-          isDeleted: status,
-        }).exec();
-        return sendResponse(req, res, 200, {
-          status: true,
-          body: null,
-          message: "Document deleted successfully",
-          errorCode: null,
-        });
-      } else {
-        return sendResponse(req, res, 400, {
-          status: false,
-          body: null,
-          message: "Invalid action provided",
-          errorCode: "INVALID_ACTION",
-        });
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "Failed to update document status",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
 
   async getFourPortalList(req, res) {
     try {
@@ -5223,6 +4228,126 @@ if (labRadioId && labRadioId !== "null" && mongoose.isValidObjectId(labRadioId))
         body: error,
         message: "Internal server error",
         errorCode: "SERVER_ERROR",
+      });
+    }
+  }
+
+  async createLabRadioSuperUserProfile (req, res)  {
+      try {
+        const { fullName, mobile, country_code, email, password, created_by_user, type } = req.body;
+        
+        const findAdminUser = await PortalUser.findOne({ email:email.toLowerCase(), isDeleted: false, type }).lean();
+        if (findAdminUser) {
+          return sendResponse(req, res, 200, {
+              status: false,
+              body: null,
+              message: "User already exist",
+              errorCode: null,
+          });
+        }
+        const salt = await bcrypt.genSalt(10);
+        let newPassword = await bcrypt.hash(password, salt);  
+        
+        let userData = new PortalUser({
+          centre_name:fullName,
+          email,
+          country_code,
+          phone_number:mobile,
+          password: newPassword,
+          role: "SUPER_USER",
+          createdBy:"super-admin",
+          created_by_user,
+          type
+        });
+  
+        let userDetails = await userData.save();
+  
+        let adminData = new BasicInfo({
+          centre_name: fullName,        
+          for_portal_user: userDetails._id,
+          main_phone_number: mobile,
+          verify_status: "APPROVED",
+          type
+        });      
+        
+        await adminData.save();
+  
+        return sendResponse(req, res, 200, {  
+          status: true,
+          body: userDetails,
+          message: "Registration Successfully!",
+          errorCode: null,  
+        });
+      } catch (error) {
+          console.log("Error wwhile create admin profile:", error);
+          return sendResponse(req, res, 500, {
+          status: false,
+          body: error,
+          message: "Internal server error",
+          errorCode: null,
+        });
+      }
+  }
+  
+  async updateLabRadioSuperUserProfile(req, res) {
+    try {
+      const { fullName, mobile, country_code, password, created_by_user, email, deleteUser, type } = req.body;    
+  
+      if (!email) {
+        return sendResponse(req, res, 200, {
+          status: false,
+          body: null,
+          message: "Email is required",
+          errorCode: null,
+        });
+      }
+  
+      // Find and Update if exists
+      let user = await PortalUser.findOneAndUpdate(
+        { email: email.toLowerCase(), type},
+        { $set: { isDeleted: deleteUser } },
+        { new: true }
+      ).lean();
+  
+      if (!user) {              
+        let userData = new PortalUser({
+          centre_name:fullName,
+          email,
+          country_code,
+          phone_number:mobile,
+          password,
+          role: "SUPER_USER",
+          createdBy:"super-admin",
+          created_by_user,
+          type
+        });
+  
+        let userDetails = await userData.save();
+  
+        let adminData = new BasicInfo({
+          centre_name: fullName,        
+          for_portal_user: userDetails._id,
+          main_phone_number: mobile,
+          verify_status: "APPROVED",
+          type
+        });      
+        
+        await adminData.save();
+      }
+  
+      return sendResponse(req, res, 200, {
+        status: true,
+        body: user,
+        message: "User updated or created successfully!",
+        errorCode: null,
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      return sendResponse(req, res, 500, {
+        status: false,
+        body: error,
+        message: "Internal server error",
+        errorCode: null,
       });
     }
   }

@@ -2,8 +2,6 @@
 
 // utils
 import { sendResponse } from "../helpers/transmission";
-import department_info from "../models/department_info";
-import service_info from "../models/service_info";
 import bcrypt from "bcrypt"
 import Http from "../helpers/httpservice"
 import mongoose from "mongoose";

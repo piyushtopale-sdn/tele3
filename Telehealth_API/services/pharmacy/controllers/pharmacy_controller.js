@@ -5,18 +5,15 @@ import PortalUser from "../models/portal_user";
 import AdminInfo from "../models/admin_info";
 import StaffInfo from "../models/staff_info";
 import LocationInfo from "../models/location_info";
-import BankDetailInfo from "../models/bank_detail";
 import ResetPasswordHistory from "../models/reset_password_history";
 import Otp2fa from "../models/otp2fa";
-import OpeningHours from "../models/opening_hours_info";
-import DocumentInfo from "../models/document_info";
 import ReviewAndRating from "../models/review"
 // utils
 import { sendResponse, createSession } from "../helpers/transmission";
 import { hashPassword } from "../helpers/string";
 import { sendEmail } from "../helpers/ses";
 import { config, generate4DigitOTP, smsTemplateOTP } from "../config/constants";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS, TIMEZONE, NODE_ENV } = config
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, TEST_P_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS, TIMEZONE, NODE_ENV } = config
 import { sendSms } from "../middleware/sendSms";
 import {
     generateRefreshToken,
@@ -1046,7 +1043,7 @@ class PharmacyController {
                 passwordToken
             });
             const result = await otpData.save();
-            const link = `${test_p_FRONTEND_URL}/pharmacy/newpassword?token=${passwordToken}&user_id=${portalUserData._id}`
+            const link = `${TEST_P_FRONTEND_URL}/pharmacy/newpassword?token=${passwordToken}&user_id=${portalUserData._id}`
             const getEmailContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'FORGOT_PASSWORD', type: 'email' }, headers, 'superadminServiceUrl');
             let emailContent
             if (getEmailContent?.status && getEmailContent?.data?.length > 0) {
@@ -1427,7 +1424,6 @@ class PharmacyController {
                 for_portal_user,
                 country_code
             } = req.body;
-            ;
             const {
                 nationality,
                 neighborhood,
@@ -1892,10 +1888,6 @@ class PharmacyController {
             const adminData = await AdminInfo.findOne({
                 _id: userId,
             })
-
-            const documentData = await DocumentInfo.find({
-                for_portal_user: adminData.for_portal_user._id,
-            }).exec();
             const locationData = await LocationInfo.findOne({
                 for_portal_user: adminData.for_portal_user._id,
             }).exec();
@@ -1920,7 +1912,6 @@ class PharmacyController {
                 data: {
                     portalUserData,
                     adminData,
-                    documentData,
                     locationData
                 },
                 message: `pharmacy admin details fetched successfully`,
@@ -1947,10 +1938,7 @@ class PharmacyController {
                 .populate({
                     path: "in_location",
                 })
-                .lean();            
-            const documentData = await DocumentInfo.find({
-                for_portal_user: adminData.for_portal_user._id,
-            }).exec();
+                .lean(); 
             const locationData = await LocationInfo.findOne({
                 for_portal_user: adminData.for_portal_user._id,
             }).exec();          
@@ -1979,7 +1967,6 @@ class PharmacyController {
                     portalUserData,
                     adminData,
                     licencePicSignedUrl,
-                    documentData,
                     locationData,
                 },
                 message: `pharmacy admin details fetched successfully`,
@@ -2339,28 +2326,6 @@ class PharmacyController {
         }
     }
 
-
-    async documentInformation(req, res) {
-        try {
-            const result = []
-            for (const id of req.query.id.split(',')) {
-                const data = await DocumentInfo.findOne({ _id: id }).exec();
-                result.push(data);
-            }
-            sendResponse(req, res, 200, {
-                status: true,
-                data: result,
-                message: `document fetched successfully`,
-                errorCode: null,
-            });
-        } catch (error) {
-            sendResponse(req, res, 500, {
-                status: false,
-                data: error,
-                message: `failed to get all pharmacy`,
-            });
-        }
-    }
 
     async getAllPharmacyAdminDetails(req, res) {
         try {
@@ -3206,7 +3171,7 @@ class PharmacyController {
             if (!portalUserData) {
                 return sendResponse(req, res, 200, {
                     status: false,
-                    body: userFind,
+                    body: null,
                     message: "User not found",
                     errorCode: null,
                 });

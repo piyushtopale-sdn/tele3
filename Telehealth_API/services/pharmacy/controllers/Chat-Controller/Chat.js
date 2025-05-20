@@ -157,21 +157,13 @@ export const getCreatedChats = async (req, res) => {
       },
     ]);
 
-    if (modifiedResult.length > 0) {
-      return sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: "Fetched data successfully",
-        errorCode: null,
-      });
-    } else {
       return sendResponse(req, res, 200, {
         status: false,
         body: [],
         message: "No room list found",
         errorCode: null,
       });
-    }
+    
   } catch (error) {
     
     sendResponse(req, res, 500, {

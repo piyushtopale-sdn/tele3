@@ -167,7 +167,7 @@ const edit_perm = async (req, res) => {
             status: req.body.perm_name,
             perm_order:req.body.perm_order
         };
-        await Menu.findByIdAndUpdate(
+        await Menus.findByIdAndUpdate(
             { _id: req.body.id },
             menu
         ).then(() => res.json({

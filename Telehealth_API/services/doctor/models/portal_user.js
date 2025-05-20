@@ -50,6 +50,7 @@ const portalUserSchema = new mongoose.Schema(
                 "INDIVIDUAL_DOCTOR",
                 "INDIVIDUAL_DOCTOR_STAFF",
                 "INDIVIDUAL_DOCTOR_ADMIN",
+                "SUPER_USER"
             ],
         },
         createdBy: {

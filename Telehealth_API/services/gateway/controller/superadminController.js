@@ -3,7 +3,7 @@
 import 'dotenv/config';
 import axios from "axios";
 import HttpService from "../middleware/httpservice";
-const FormData = require('form-data');
+import FormData from 'form-data';
 
 const config = require("../config/config.js").get();
 const { BASEURL } = config;

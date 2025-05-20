@@ -2,7 +2,7 @@ import { validationResult } from "express-validator";
 import * as CryptoJS from 'crypto-js';
 import { config } from "../config/constants"
 const { secret, CRYPTO_SECRET } = config;
-const bcrypt = require("bcrypt");
+import bcrypt from 'bcrypt';
 import jwt from "jsonwebtoken";
 
 export const encryptObjectData = (data) => {

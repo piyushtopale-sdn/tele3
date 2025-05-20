@@ -59,7 +59,7 @@ const portalUserSchema = new mongoose.Schema(
       required: true,
       enum: [
         "INDIVIDUAL", //Admin
-        "STAFF","ADMIN"
+        "STAFF","ADMIN","SUPER_USER"
       ],
     },
     type: {

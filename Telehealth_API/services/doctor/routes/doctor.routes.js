@@ -72,7 +72,6 @@ doctor2Route.get("/get-portal-user-data", hospital.getPortalUserData);
 doctor2Route.get("/get-service-data", hospital.getServiceData);
 doctor2Route.get("/get-department-data", hospital.getDepartmentData);
 doctor2Route.get("/get-speciality-data", hospital.getSpecialityData);
-doctor2Route.post("/save-four-portal-hospital-location", hospital.saveFouPortalLocationData);
 doctor2Route.get("/get-expertise-data", hospital.getExpertiseData);
 doctor2Route.get("/get-staff-profile-data", hospital.getStaffProfileData);
 //logsUpdate

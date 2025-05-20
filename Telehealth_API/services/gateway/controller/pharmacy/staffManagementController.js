@@ -1,7 +1,7 @@
 "use strict";
 
 import HttpService from "../../middleware/httpservice";
-const FormData = require('form-data');
+import FormData from 'form-data';
 
 export const addStaff = async (req, res) => {
     let form = new FormData();

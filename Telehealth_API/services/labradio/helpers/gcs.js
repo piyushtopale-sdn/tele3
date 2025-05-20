@@ -1,5 +1,5 @@
 import { generateRandomString } from '../middleware/utils';
-const convert = require('heic-convert');
+import convert from 'heic-convert';
 const fs = require('fs/promises')
 const { storage } = require('./google-cloud-storage')
 const path = require('path')

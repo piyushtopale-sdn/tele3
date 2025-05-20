@@ -17,7 +17,7 @@ import {
 import Http from "../helpers/httpservice";
 import { sendNotification } from "../helpers/notification";
 import { generateSignedUrl } from "../helpers/gcs";
-const moment = require("moment/moment")
+import moment from "moment";
 const httpService = new Http();
 
 const createSlot = (date, slot, providerId, isRescheduled, appointmentData) => {
@@ -334,7 +334,7 @@ class AppointmentController {
       } = req.query;
       // Get all patient data for requested doctor
       let patientData = {};
-      if (req?.user?.role == 'INDIVIDUAL_DOCTOR' || req?.user?.role == 'INDIVIDUAL_DOCTOR_ADMIN') {
+      if (req?.user?.role == 'INDIVIDUAL_DOCTOR' || req?.user?.role == 'INDIVIDUAL_DOCTOR_ADMIN' || req?.user?.role == 'SUPER_USER') {
         let getAllAppointment;
         if (doctorId && doctorId == 'all') {
           getAllAppointment = await Appointment.find({}).select('patientId');
@@ -434,7 +434,7 @@ class AppointmentController {
         }
       } else if (req?.user?.role == 'INDIVIDUAL_DOCTOR' && type !== 'past') {
         pipeline.push({ $match: { doctorId: mongoose.Types.ObjectId(req?.user?._id) } });
-      } else if (req?.user?.role == 'INDIVIDUAL_DOCTOR_ADMIN' && doctorId != 'all') {
+      } else if ((req?.user?.role == 'INDIVIDUAL_DOCTOR_ADMIN' || req?.user?.role == 'SUPER_USER') && doctorId != 'all') {
         pipeline.push({ $match: { doctorId: mongoose.Types.ObjectId(doctorId) } });
       }
 
@@ -506,7 +506,7 @@ class AppointmentController {
           delete paginatedResults[index].speciality;
         }
 
-        if (req?.user?.role == 'INDIVIDUAL_DOCTOR' || req?.user?.role == 'INDIVIDUAL_DOCTOR_ADMIN') {
+        if (req?.user?.role == 'INDIVIDUAL_DOCTOR' || req?.user?.role == 'INDIVIDUAL_DOCTOR_ADMIN' || req?.user?.role == 'SUPER_USER') {
           paginatedResults[index].patientName = patientData[paginatedResults[index].patientId.toString()]?.full_name;
           paginatedResults[index].patientProfile = patientData[paginatedResults[index].patientId.toString()]?.profile_pic;
         }

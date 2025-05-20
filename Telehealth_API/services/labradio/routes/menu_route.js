@@ -1,7 +1,8 @@
 "use strict";
 
 import express from "express";
-const { validationResult} = require("express-validator");
+// const { validationResult} = require("express-validator");
+import { validationResult } from "express-validator";
 const menuController = require("../controllers/menus/menu");
 const menuUserPermController = require("../controllers/menus/userMenu_permission");
 import { menuValidator,editMenuValidator,permValidator,editPermValidator } from "../validator/menu";

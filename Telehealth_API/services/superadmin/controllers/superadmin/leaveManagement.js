@@ -109,7 +109,7 @@ class LeaveTypeManagementController {
         _id: { $ne: mongoose.Types.ObjectId(leaveTypesId) },
         is_deleted: false,
       });
-      if (list.length == 0) {
+      if (list.length === 0) {
         const updateLeaveTypes = await LeaveTypes.updateOne(
           { _id: leaveTypesId },
           {
@@ -188,7 +188,7 @@ class LeaveTypeManagementController {
 
       sendResponse(req, res, 200, {
         status: true,
-        body: result,
+        body: null,
         message: message,
         errorCode: null,
       });

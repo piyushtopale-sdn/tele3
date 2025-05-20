@@ -38,7 +38,7 @@ class LoincCodeManagement {
         delete_status: false,
       });
       const CheckData = foundItems.map((item) => item.loincCode);
-      if (foundItems.length == 0) {
+      if (foundItems.length === 0) {
         const savedCode = await LoincCode.insertMany(list);
         return sendResponse(req, res, 200, {
           status: true,
@@ -137,7 +137,7 @@ class LoincCodeManagement {
         delete_status: false,
         _id: { $ne: mongoose.Types.ObjectId(loincCodeId) },
       });
-      if (list.length == 0) {
+      if (list.length === 0) {
         const updatedCode = await LoincCode.updateOne(
           { _id: loincCodeId },
           {

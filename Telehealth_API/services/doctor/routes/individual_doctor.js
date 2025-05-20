@@ -59,24 +59,27 @@ individualDoctorRoute.get("/get-participant-details", individualDoctor.participa
 individualDoctorRoute.get("/get-individualdoctor-count-superadmin-dashboard", individualDoctor.totalIndividualDoctorforAdminDashboard);
 
 individualDoctorRoute.post("/send-external-user-email", individualDoctor.sendEmailtojoinexternaluser);
-individualDoctorRoute.post("/get-patient-doctors", verifyRole(['patient', "INDIVIDUAL", "INDIVIDUAL_DOCTOR", "pharmacy", "superadmin", "ADMIN", 'INDIVIDUAL_DOCTOR_ADMIN']), individualDoctor.getPatientDoctors);
+individualDoctorRoute.post("/get-patient-doctors", verifyRole(['patient', "INDIVIDUAL", "INDIVIDUAL_DOCTOR", "pharmacy", "superadmin", "ADMIN", 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER']), individualDoctor.getPatientDoctors);
 individualDoctorRoute.get("/get-total-doctor-count", verifyRole(['superadmin']), individualDoctor.getTotalDoctorCount);
 individualDoctorRoute.get("/dashboard", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getDashboardData);
 individualDoctorRoute.get("/radiology-test-data", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getRadiologyTestAppointmentDetails);
 individualDoctorRoute.get("/get-lab-test-appointment-details", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getLabTestAppointmentDetails);
-individualDoctorRoute.get("/doctor-admin-dashboard", verifyRole(['INDIVIDUAL_DOCTOR_ADMIN']), individualDoctor.getDoctorAdminDashboardData);
-individualDoctorRoute.get("/get-all-doctor", verifyRole(['INDIVIDUAL_DOCTOR_ADMIN',"superadmin"]), individualDoctor.getAllDoctor);
+individualDoctorRoute.get("/doctor-admin-dashboard", verifyRole(['INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER']), individualDoctor.getDoctorAdminDashboardData);
+individualDoctorRoute.get("/get-all-doctor", verifyRole(['INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER',"superadmin"]), individualDoctor.getAllDoctor);
 individualDoctorRoute.get("/dashboard-export", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getDashboardDataExport);
 individualDoctorRoute.get("/get-patientData-export-for-doctor", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getDashboardPatientDataExport);
 individualDoctorRoute.get("/get-total-doctor-records", verifyRole(['superadmin']), individualDoctor.getTotalDoctorRecents);
 individualDoctorRoute.get("/get-labtest-appointment-list", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getLabTestAppointmentList);
 individualDoctorRoute.get("/get-radio-test-appointment-list", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getRadiologyTestAppointmentList);
 individualDoctorRoute.get("/dashboard-records", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getDashboardRecords);
-individualDoctorRoute.get("/doctor-admin-dashboard-export-last-login", verifyRole(['INDIVIDUAL_DOCTOR_ADMIN']), individualDoctor.getExportAllDoctorLastLogin); //Dilip
+individualDoctorRoute.get("/doctor-admin-dashboard-export-last-login", verifyRole(['INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER']), individualDoctor.getExportAllDoctorLastLogin); //Dilip
 individualDoctorRoute.get("/get-pending-labtest-appointment-list/:doctorId", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getPendingLabTests); //Dilip 
 individualDoctorRoute.get("/get-pending-radio-test-appointment-list/:doctorId", verifyRole(['INDIVIDUAL_DOCTOR', 'superadmin']), individualDoctor.getPendingRadiologyTests); //Dilip 
 individualDoctorRoute.get("/get-all-online-doctor", verifyRole(['superadmin']), individualDoctor.findOnlineDoctors); //findOnlineDoctors
 individualDoctorRoute.put("/update-mark-as-doctor-admin",verifyRole(['superadmin']),individualDoctor.markAsDoctorAdmin);
+/* super-user */
+individualDoctorRoute.post("/create-superuser-profile",verifyRole(['superadmin']),individualDoctor.createSuperUserProfile);
+individualDoctorRoute.post("/update-superuser-profile",verifyRole(['superadmin']),individualDoctor.updateSuperUserProfile);
 
 
 

@@ -23,7 +23,7 @@ patientRoute.get("/common-api", patient.commonAPI);
 patientRoute.use(verifyToken);
 
 patientRoute.post('/add-assessment', verifyRole(['patient', 'superadmin']), patient.addAssessment);
-patientRoute.get('/get-assessment', verifyRole(['patient', 'superadmin', 'INDIVIDUAL_DOCTOR','INDIVIDUAL_DOCTOR_ADMIN']), patient.getAssessment);
+patientRoute.get('/get-assessment', verifyRole(['patient', 'superadmin', 'INDIVIDUAL_DOCTOR','INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER']), patient.getAssessment);
 patientRoute.post('/assign-doctor', verifyRole(['patient', 'superadmin', 'INDIVIDUAL_DOCTOR']), patient.assignDoctor);
 patientRoute.get('/get-assign-doctor-family-member/:id', patient.getAssignedDoctorForFamilyMember);
 patientRoute.get('/get-assigned-doctors/:id', verifyRole(['patient', 'superadmin']), patient.getAssignedDoctors);
@@ -48,19 +48,19 @@ patientRoute.get('/subscriber-report-get-patient-data', verifyRole(['superadmin'
 patientRoute.get("/get-all-patient-lis-for-admin-dashboard", verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR']), patient.getAllPatientForAdminDashboardReport);// Added by Tanay
 patientRoute.get('/subscriber-report-active-cancel-data', verifyRole(['superadmin']), patient.getPatientActiveCancelledList); //Altamash
 
-patientRoute.get("/getAllPatient-with-previous-doc", verifyRole(['superadmin','INDIVIDUAL_DOCTOR_ADMIN']), patient.getPatientsWithPreviousDoctors) //AYAN API
-patientRoute.get("/getAllPatient-with-currentassign-doc", verifyRole(['superadmin','INDIVIDUAL_DOCTOR_ADMIN']), patient.getPatientsWithCurrentAssignedDoctors) //AYAN API
+patientRoute.get("/getAllPatient-with-previous-doc", verifyRole(['superadmin','INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER']), patient.getPatientsWithPreviousDoctors) //AYAN API
+patientRoute.get("/getAllPatient-with-currentassign-doc", verifyRole(['superadmin','INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER']), patient.getPatientsWithCurrentAssignedDoctors) //AYAN API
 patientRoute.get('/get-total-revenues', verifyRole(['superadmin']), patient.getTotalAmountPaid); //AYAN API
 
 patientRoute.post("/logout-patient", patient.logoutPatient); // Dilip
 
 patientRoute.put('/update-consultation-count', patient.updateConsultationCount);
 patientRoute.post("/upload-medical-document", verifyRole(['patient']), patient.uploadMedicalDocument);
-patientRoute.get("/get-medical-documents", verifyRole(['patient', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL_DOCTOR_ADMIN']), patient.getMedicalDocuments);
+patientRoute.get("/get-medical-documents", verifyRole(['patient', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER']), patient.getMedicalDocuments);
 patientRoute.delete("/delete-medical-documents/:id", verifyRole(['patient']), patient.deleteMedicalDocuments);
 
-patientRoute.get("/get-patient-discount-coupon-details", verifyRole(['superadmin', 'ADMIN']), patient.getLabTestsByDiscountCoupon);
-patientRoute.get("/get-labRadioTest-invoice-cancel-details", verifyRole(['superadmin', 'ADMIN']), patient.getLabRadioTestInvoiceCancelDetails)
+patientRoute.get("/get-patient-discount-coupon-details", verifyRole(['superadmin', 'ADMIN', 'SUPER_USER']), patient.getLabTestsByDiscountCoupon);
+patientRoute.get("/get-labRadioTest-invoice-cancel-details", verifyRole(['superadmin', 'ADMIN', 'SUPER_USER']), patient.getLabRadioTestInvoiceCancelDetails)
 
 /** Start */
 

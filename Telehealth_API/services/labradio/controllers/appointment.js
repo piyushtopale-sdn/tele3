@@ -12,10 +12,8 @@ import Reminder from "../models/reminder";
 import BasicInfo from "../models/basic_info";
 import Appointment from "../models/appointment";
 import { getNextSequenceValue } from "../middleware/utils";
-import DocumentInfo from "../models/document_info";
 import moment from "moment";
 import { notification } from "../helpers/notification";
-import Assessment from "../models/assessment";
 
 export const formatDateToYYYYMMDD = async (date) => {
   const year = date.getFullYear();
@@ -845,7 +843,7 @@ export default class appointmentController {
         }
       }
 
-      if (appointmentsToBeMissed.length != 0) {
+      if (appointmentsToBeMissed.length !== 0) {
        await Appointment.updateMany(
           { _id: { $in: appointmentsToBeMissed } },
           { $set: { status: "MISSED" } },
@@ -1563,10 +1561,7 @@ export default class appointmentController {
         pharmacyDetails.profile_picture = profile_picdata;
       }
 
-      const medicineDetails = await MedicineDetail.find({
-        for_order_id,
-        for_portal_user,
-      }).lean();
+      const medicineDetails = [];
       const medicineIDArray = [];
       let getMedicines = {
         body: null,
@@ -2195,7 +2190,7 @@ export const viewAppointmentCheck = async (req, res) => {
 export const updateUnreadMessage = async (req, res) => {
   try {
     const user_id = req.query.id;
-
+    const chatId = req.query.chatId;
     const result = await Appointment.findOneAndUpdate(
       {
         _id: chatId,

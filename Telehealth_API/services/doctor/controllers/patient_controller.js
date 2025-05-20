@@ -798,7 +798,7 @@ class PatientController {
     }
   }
 
-  async sendReminderNotifications(req, res) {
+  async sendReminderNotifications() {
     try {
       const reminders = await Reminder.find({ status: 0 });
       for (let reminder of reminders) {

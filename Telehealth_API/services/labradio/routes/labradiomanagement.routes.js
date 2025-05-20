@@ -73,31 +73,31 @@ const uploadFileToLocalStorage = async (req, res, next) => {
 };
 
 // Lab Test Configuration for superadmin
-labRadioManagementRoute.get("/get-lab-test-configuration-list", verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), getLabTestConfiguration);
-labRadioManagementRoute.get("/get-lab-test-configuration-list-export", verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), getLabTestConfigurationExport);
-labRadioManagementRoute.get("/get-lab-test-configuration-by-id/:id", verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), getLabTestConfigurationById);
+labRadioManagementRoute.get("/get-lab-test-configuration-list", verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN', 'SUPER_USER']), getLabTestConfiguration);
+labRadioManagementRoute.get("/get-lab-test-configuration-list-export", verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN', 'SUPER_USER']), getLabTestConfigurationExport);
+labRadioManagementRoute.get("/get-lab-test-configuration-by-id/:id", verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN', 'SUPER_USER']), getLabTestConfigurationById);
 labRadioManagementRoute.post("/add-lab-test-configuration", verifyRole(['superadmin']), addLabTestConfiguration);
 labRadioManagementRoute.put("/edit-lab-test-configuration", verifyRole(['superadmin']), editLabTestConfiguration);
 labRadioManagementRoute.delete("/delete-lab-test-configuration/:id", verifyRole(['superadmin']), deleteLabTestConfiguration);
-labRadioManagementRoute.get('/exportsheetlist-labTestConfig', verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), allLabTestConfigforexport)
+labRadioManagementRoute.get('/exportsheetlist-labTestConfig', verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN', 'SUPER_USER']), allLabTestConfigforexport)
 
 // Lab Test for superadmin
-labRadioManagementRoute.get("/get-lab-test-list", verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL', 'ADMIN', "patient"]), getLabTest);
-labRadioManagementRoute.get("/get-lab-test-by-id/:id", verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL', 'ADMIN']), getLabTestById);
+labRadioManagementRoute.get("/get-lab-test-list", verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL', 'ADMIN', "patient", 'SUPER_USER']), getLabTest);
+labRadioManagementRoute.get("/get-lab-test-by-id/:id", verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL', 'ADMIN', 'SUPER_USER']), getLabTestById);
 labRadioManagementRoute.post("/add-lab-test", verifyRole(['superadmin']), addLabTest);
 labRadioManagementRoute.put("/edit-lab-test", verifyRole(['superadmin']), editLabTest);
 labRadioManagementRoute.delete("/delete-lab-test/:id", verifyRole(['superadmin']), deleteLabTest);
-labRadioManagementRoute.get('/exportsheetlist-labTest', verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), allLabTestforexport)
-labRadioManagementRoute.get('/exportsheetlistExport-labTest', verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), getLabTestExport)
+labRadioManagementRoute.get('/exportsheetlist-labTest', verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN', 'SUPER_USER']), allLabTestforexport)
+labRadioManagementRoute.get('/exportsheetlistExport-labTest', verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN', 'SUPER_USER']), getLabTestExport)
 
 // Radio Test for superadmin
-labRadioManagementRoute.get("/get-radiology-test-list", verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL', 'ADMIN',"patient"]), getRadioTest);
-labRadioManagementRoute.get("/get-radiology-test-by-id/:id", verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL', 'ADMIN']), getRadioTestById);
+labRadioManagementRoute.get("/get-radiology-test-list", verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL', 'ADMIN',"patient", 'SUPER_USER']), getRadioTest);
+labRadioManagementRoute.get("/get-radiology-test-by-id/:id", verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR', 'INDIVIDUAL', 'ADMIN', 'SUPER_USER']), getRadioTestById);
 labRadioManagementRoute.post("/add-radiology-test", verifyRole(['superadmin']), addRadioTest);
 labRadioManagementRoute.put("/edit-radiology-test", verifyRole(['superadmin']), editRadioTest);
 labRadioManagementRoute.delete("/delete-radiology-test/:id", verifyRole(['superadmin']), deleteRadioTest);
-labRadioManagementRoute.get('/exportsheetlist-radioTest', verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), allRadioTestforexport)
-labRadioManagementRoute.get('/exportsheetlistExport-radioTest', verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN']), getRadioTestexp)
+labRadioManagementRoute.get('/exportsheetlist-radioTest', verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN', 'SUPER_USER']), allRadioTestforexport)
+labRadioManagementRoute.get('/exportsheetlistExport-radioTest', verifyRole(['superadmin', 'INDIVIDUAL', 'ADMIN', 'SUPER_USER']), getRadioTestexp)
 
 //Import sub tests for lab
 labRadioManagementRoute.post('/upload-labSub-test', verifyRole(['superadmin']), uploadFileToLocalStorage, uploadLabSubTest)

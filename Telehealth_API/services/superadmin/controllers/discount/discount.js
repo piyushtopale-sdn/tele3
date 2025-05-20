@@ -168,7 +168,7 @@ class DiscountManagement {
         try {
             const id = req.params.id
             const getActiveSubscriptionPlan = await SubscriptionPlan.find({ _id: { $eq: id }, is_deleted: false, is_activated: true })
-            if (getActiveSubscriptionPlan.length == 0) {
+            if (getActiveSubscriptionPlan.length === 0) {
                 return handleResponse(req, res, 500, {
                     status: false,
                     body: null,
@@ -450,7 +450,7 @@ class DiscountManagement {
 
             const getSubscription = await SubscriptionPlan.findById(subscriptionPlanId)
             const getPlanDuration = getSubscription?.plan_duration.filter(val => val.duration == duration)
-            if (!getSubscription && getPlanDuration.length == 0) {
+            if (!getSubscription && getPlanDuration.length === 0) {
                 return handleResponse(req, res, 500, {
                     status: false,
                     body: null,

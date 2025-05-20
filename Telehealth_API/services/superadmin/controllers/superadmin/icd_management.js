@@ -39,7 +39,7 @@ class ICDCodeManagement {
         delete_status: false,
       });
       const CheckData = foundItems.map((item) => item.code);
-      if (foundItems.length == 0) {
+      if (foundItems.length === 0) {
         const savedCode = await ICDcode.insertMany(list);
         return sendResponse(req, res, 200, {
           status: true,
@@ -129,7 +129,7 @@ class ICDCodeManagement {
         delete_status: false,
         _id: { $ne: mongoose.Types.ObjectId(codeId) },
       });
-      if (list.length == 0) {
+      if (list.length === 0) {
         const updatedCode = await ICDcode.updateOne(
           { _id: codeId },
           {
@@ -208,7 +208,7 @@ class ICDCodeManagement {
 
       return sendResponse(req, res, 200, {
         status: true,
-        body: result,
+        body: null,
         message: message,
         errorCode: null,
       });

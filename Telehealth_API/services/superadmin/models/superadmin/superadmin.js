@@ -66,7 +66,8 @@ const superadminSchema = new mongoose.Schema(
         },
         activeToken:{
             type: String      
-        }
+        },
+        forAdmin: [{ type: String }], 
     },
     { timestamps: true }
 );

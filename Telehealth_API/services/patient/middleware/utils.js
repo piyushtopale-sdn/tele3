@@ -5,7 +5,7 @@ const { CRYPTO_SECRET } = config;
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { randomInt } from 'crypto';
-const xlsx = require('xlsx');
+import xlsx from "xlsx";
 
 export const validationResponse = (req, res, next) => {
     const error = validationResult(req);

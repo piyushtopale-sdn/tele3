@@ -127,25 +127,25 @@ doctorRoute.use(verifyToken);
 doctorRoute.get('/view-appointment-by-roomname', doctorController.viewAppointmentByRoomName);
 
 //Hospital OR Individual Doctor routes
-doctorRoute.post('/doctor-management-educational-details', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementEducationalDetails);
-doctorRoute.post('/doctor-management-doctor-availability', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementDoctorAvailability);
-doctorRoute.post('/doctor-management-fee-management', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementFeeManagement);
-doctorRoute.post('/doctor-management-document-management', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementDocumentManagement);
+doctorRoute.post('/doctor-management-educational-details', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementEducationalDetails);
+doctorRoute.post('/doctor-management-doctor-availability', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementDoctorAvailability);
+doctorRoute.post('/doctor-management-fee-management', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementFeeManagement);
+doctorRoute.post('/doctor-management-document-management', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementDocumentManagement);
 doctorRoute.get('/doctor-management-view-doctor-profile', doctorController.doctorManagementViewDoctorProfile);
 doctorRoute.put('/doctor-management-update-availability', doctorController.doctorManagementUpdateAvailability); 
 doctorRoute.get('/doctor-management-list-doctor', doctorController.doctorManagementListDoctor);
 doctorRoute.get('/doctor-management-request-list', doctorController.doctorManagementRequestList);
 doctorRoute.post('/doctor-management-accept-or-reject', doctorController.acceptOrRejectDoctorRequest);
-doctorRoute.post('/doctor-management-active-lock-delete-doctor', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementActiveLockDeleteDoctor);
+doctorRoute.post('/doctor-management-active-lock-delete-doctor', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementActiveLockDeleteDoctor);
 doctorRoute.post('/delete-availabilty-by-deleting-location', doctorController.deleteAvailability);
 doctorRoute.get('/doctor-four-portal-management-list', doctorController.doctorFourPortalListForHospital);
-doctorRoute.post('/doctor-management-basic-info', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementBasicInfo);
+doctorRoute.post('/doctor-management-basic-info', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementBasicInfo);
 doctorRoute.post('/doctor-management-available-dates', doctorController.addAvailableDates); 
 
 //Doctor Routes for Super-admin
-doctorRoute.get('/get-doctor-list', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN']), doctorController.getDoctorList);
+doctorRoute.get('/get-doctor-list', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER']), doctorController.getDoctorList);
 doctorRoute.post('/approve-or-reject-doctor', doctorController.approveOrRejectDoctor);
-doctorRoute.post('/active-lock-delete-doctor', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN', 'INDIVIDUAL_DOCTOR']), doctorController.activeLockDeleteDoctor);
+doctorRoute.post('/active-lock-delete-doctor', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER', 'INDIVIDUAL_DOCTOR']), doctorController.activeLockDeleteDoctor);
 doctorRoute.get('/appointments-doctor-patient-details', doctorController.getAppointmentsWithDoctorPatientDetails);
 doctorRoute.post("/update-videocall-appointment", doctorController.UpdateVideocallAppointment);
 doctorRoute.post("/update-videocall-chatmessage", doctorController.UpdateVideocallchatmessage);

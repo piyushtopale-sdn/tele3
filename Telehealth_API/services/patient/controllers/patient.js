@@ -12,7 +12,7 @@ import Otp2fa from "../models/otp2fa";
 import ForgotPasswordToken from "../models/forgot_password_token";
 import ProfilePermission from "../models/profile_permission";
 import { sendResponse } from "../helpers/transmission";
-const Http = require("../helpers/httpservice");
+import Http from "../helpers/httpservice";
 import { sendEmail } from "../helpers/ses";
 import Vital_info from "../models/vital_info";
 import PatientVital from "../models/patient_vitals";
@@ -1335,7 +1335,6 @@ class Patient {
           return Object.keys(obj).length > 0 ? obj : null;
         })
         .filter(Boolean); // Remove null entries
-      // console.log(filteredVitals,"filteredVitals")
       // Insert filtered vitals
       let message = "No new vitals to insert.";
       if (filteredVitals.length > 0) {

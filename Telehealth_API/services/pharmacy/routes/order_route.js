@@ -6,7 +6,7 @@ const orderRoute = express.Router();
 orderRoute.use(verifyToken);
 
 orderRoute.post("/new-order", verifyRole(["patient"]), order.newOrder);
-orderRoute.post("/list-order", verifyRole(["patient", "pharmacy", "INDIVIDUAL_DOCTOR", "INDIVIDUAL_DOCTOR_ADMIN"]), order.listOrder);
+orderRoute.post("/list-order", verifyRole(["patient", "pharmacy", "INDIVIDUAL_DOCTOR", "INDIVIDUAL_DOCTOR_ADMIN",'SUPER_USER']), order.listOrder);
 orderRoute.get("/get-order-by-id/:id", verifyRole(["patient", "pharmacy"]), order.getOrderById);
 orderRoute.put('/cancel-and-approve-order', verifyRole(["patient", "pharmacy"]), order.cancelAndApproveOrder);
 orderRoute.put('/update-delivery-status', verifyRole(["pharmacy"]), order.updateDeliveryStatus);

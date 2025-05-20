@@ -1,5 +1,5 @@
 import 'dotenv/config';
-const nodemailer = require("nodemailer");
+import nodemailer from "nodemailer"
 
 const transporter = nodemailer.createTransport({
   host: "smtp.sendgrid.net",
@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 let sendEmail = async (content, email) => {
   try {
     const info = await transporter.sendMail({
-      from: `"test_p" <${process?.env?.SENDGRID_EMAIL}>`,
+      from: `"Test_p" <${process?.env?.SENDGRID_EMAIL}>`,
       to: email,
       subject: content.subject,
       html: content.body,

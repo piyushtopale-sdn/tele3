@@ -1,4 +1,4 @@
-const { body } = require("express-validator");
+import { body } from 'express-validator';
 
 const signupValidator = [
   body("username", "Please Enter a Valid Username").not().isEmpty(),
