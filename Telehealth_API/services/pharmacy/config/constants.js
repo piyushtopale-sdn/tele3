@@ -43,7 +43,7 @@ export const config = {
     OTP_TRY_AFTER: process.env.OTP_TRY_AFTER || 60,
     SEND_ATTEMPTS: process.env.SEND_ATTEMPTS || 5,
     BUCKET_NAME: process.env.BUCKET_NAME || "test_pdev",
-    TEST_P_FRONTEND_URL: process.env.TEST_P_FRONTEND_URL,
+    test_p_FRONTEND_URL: process.env.test_p_FRONTEND_URL,
     LOGIN_AFTER: process.env.LOGIN_AFTER || 60,
     PASSWORD_ATTEMPTS: process.env.PASSWORD_ATTEMPTS || 3,
     SENDGRID_PASSWORD: process.env.SENDGRID_PASSWORD,
@@ -218,7 +218,7 @@ export const htmlForgetPassword = (token, role) => {
          <h1 style="font-size: 32px; color: #272727; font-weight: 600; margin-top: 0; margin-bottom: 0;">Hello</h1>
         <p style="font-size: 15px; font-weight: 300; color: #656565; margin-top: 25px;">To reset your password, click on the below link:</p>
         <a href=http://localhost:4200/create-password/${token} style="background-color: #64BD05; text-align: center; display: inline-block; padding: 8px 0px; max-width: 150px; width: 100%; font-size: 14px; font-weight: 300; margin: 15px  auto 0; color: #fff; border-radius: 35px; text-decoration: none;">Click To change Password</a>
-        <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, Test_p.</p>
+        <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, test_p.</p>
      </div>
    </div>
    <script>
@@ -261,7 +261,7 @@ export const htmlEmailVerify = (token, name, role) => {
                       <h1 style="font-size: 32px; color: #272727; font-weight: 600; margin-top: 0; margin-bottom: 0;">Welcome ${name}</h1>
                       <p style="font-size: 15px; font-weight: 300; color: #656565; margin-top: 25px;">Your account is created please verify your Email using click below.</p>
                       <a href=http://localhost:4200/email-verify/${token}?data=${role} style="background-color: #64BD05; text-align: center; display: inline-block; padding: 8px 0px; max-width: 150px; width: 100%; font-size: 14px; font-weight: 300; margin: 15px  auto 0; color: #fff; border-radius: 35px; text-decoration: none;">Verify Email</a>
-                      <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, Test_p.</p>
+                      <p style="font-size: 15px; font-weight: 300; color: #656565; text-align: left;margin-top: 25px;">Thanks, test_p.</p>
                   </div>
           </div>
                   </body>

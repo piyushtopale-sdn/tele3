@@ -13,7 +13,7 @@ import BasicInfo from "../../models/basic_info";
 
 const httpService = new Http();
 const notification = (paramsData, headers, requestData) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     try {
       let endPoint = ''
       let serviceUrl = ''

@@ -152,7 +152,7 @@ function generateTimeSlots(startTime, endTime, slotInterval) {
   return slots;
 }
 const getAllDoctor = (paginatedResults, headers) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     const doctorIdsArray = paginatedResults.map(val => val.doctorId)
     let doctorDetails = {}
     if (doctorIdsArray.length > 0) {
@@ -165,7 +165,7 @@ const getAllDoctor = (paginatedResults, headers) => {
         "doctorServiceUrl"
       );
       if (getDetails?.status) {
-        for (const doctor of getDetails?.body?.results) {
+        for (const doctor of getDetails?.body?.results ?? []) {
           doctorDetails[doctor?.for_portal_user?._id] = doctor
         }
       }
@@ -175,7 +175,7 @@ const getAllDoctor = (paginatedResults, headers) => {
 }
 const getAllPatient = (paginatedResults,headers,ids = []) => {
   
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     const patientIdsArray = ids && ids.length > 0 ? ids : paginatedResults.map(val => val.patientId)
     let patientDetails = {}
     if (patientIdsArray.length > 0) {
@@ -310,7 +310,7 @@ const initiateRefund = async (getAppointment, testName) => {
 
 
 const notificationSaved = (paramsData, headers, requestData) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     try {
       let endPoint = ''
       let serviceUrl = ''
@@ -2609,7 +2609,7 @@ class AppointmentController {
       getTestResult.centerDetails = getCenterDetails[0]
       let resultData = []
       if (getTestResult?.resultType === 'upload' && getTestResult?.uploadResultData?.length > 0) {
-        for (const val of getTestResult?.uploadResultData) {
+        for (const val of getTestResult?.uploadResultData ?? []) {
           resultData.push({
             key: val,
             signedUrl: await generateSignedUrl(val)
@@ -3894,7 +3894,7 @@ class AppointmentController {
     }
   }
 
-  async updateExternalLabRadioStatus(req,res){    
+  async updateExternalLabRadioStatus(){    
     try {
       console.log("15 days cron for external started__");
 

@@ -1,7 +1,7 @@
 import express from "express";
 import { registerValidator } from "../validator/pharmacy";
 import { dataValidation } from "../helpers/transmission";
-const pharmacy = require("../controllers/pharmacy_controller");
+import pharmacy from "../controllers/pharmacy_controller.js";
 import StaffManagementController from "../controllers/staffManagementController"
 import { verifyRole, verifyToken } from "../helpers/verifyToken";
 import { addMembersToGroupChat, allMessage, clearAllmessages, createdChat, createGroupChat, getCreatedChats, getNotification, markAllReadNotification, markReadNotificationByID, saveNotification, sendMessage, updateNotification, updateOnlineStatus, updateConfirmScheduleorder, clearSinglemessages } from "../controllers/Chat-Controller/Chat";
@@ -23,7 +23,6 @@ pharmacyRoute.post("/forgot-password", pharmacy.forgotPassword);
 pharmacyRoute.post("/change-password", pharmacy.changePassword);
 pharmacyRoute.post("/lock-profile", pharmacy.lockProfile);
 pharmacyRoute.post('/delete-active-admin', pharmacy.deleteActiveadmin)
-pharmacyRoute.post("/pharmacy-opening-hours", pharmacy.pharmacyOpeningHours);
 pharmacyRoute.post("/reset-password", pharmacy.resetPassword);
 pharmacyRoute.get("/get-all-pharmacy", pharmacy.getAllPharmacy);
 pharmacyRoute.get("/get-all-pharmacy-admin-details", pharmacy.getAllPharmacyAdminDetails);

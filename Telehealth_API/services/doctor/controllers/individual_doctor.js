@@ -3,7 +3,6 @@
 // models
 import PortalUser from "../models/portal_user";
 import BasicInfo from "../models/basic_info";
-import HospitalAdminInfo from "../models/hospital_admin_info";
 import Appointment from "../models/appointment";
 import PrescribeLabTest from "../models/prescribe_lab_test";
 import PrescribeRadiologyTest from "../models/prescribe_radiology_test";
@@ -41,7 +40,7 @@ const {
   OTP_LIMIT_EXCEED_WITHIN,
   OTP_TRY_AFTER,
   SEND_ATTEMPTS,
-  TEST_P_FRONTEND_URL,
+  test_p_FRONTEND_URL,
   LOGIN_AFTER,
   PASSWORD_ATTEMPTS,
   TIMEZONE,
@@ -55,14 +54,13 @@ import {
 } from "../helpers/chat";
 import Http from "../helpers/httpservice";
 import mongoose from "mongoose";
-import GuestUser from "../models/guestuser";
 import { notification } from "../helpers/notification";
 import { generateSignedUrl } from "../helpers/gcs";
 import moment from "moment";
 const httpService = new Http();
 
 const canSendOtp = (deviceExist, currentTime) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const limitExceedWithin1 = new Date(
       currentTime.getTime() + OTP_LIMIT_EXCEED_WITHIN * 60000
     );
@@ -143,49 +141,6 @@ const startVideoRecording = async (roomName, uid, appointmentId, userId) => {
   }
 };
 class IndividualDoctor {
-  async CreateGuestUser(req, res) {
-    try {
-      const { name } = req.body;
-      if (name == "") {
-        return sendResponse(req, res, 200, {
-          status: false,
-          body: null,
-          message: "Please enter Name",
-          errorCode: null,
-        });
-      }
-      let token = generateToken({ name: name });
-      let guestData = new GuestUser({
-        name: name,
-        token: token,
-      });
-      let response = await guestData.save();
-      if (response) {
-        return sendResponse(req, res, 200, {
-          status: true,
-          body: response,
-          message: "successfully created",
-          errorCode: null,
-        });
-      } else {
-        return sendResponse(req, res, 200, {
-          status: false,
-          body: null,
-          message: "Something went wrong",
-          errorCode: null,
-        });
-      }
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to create user",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
   async signUp(req, res) {
     try {
       const {
@@ -752,7 +707,7 @@ class IndividualDoctor {
       });
       await ForgotPasswordData.save();
 
-      const link = `${TEST_P_FRONTEND_URL}/individual-doctor/newpassword?token=${resetToken}&user_id=${userData._id}`;
+      const link = `${test_p_FRONTEND_URL}/individual-doctor/newpassword?token=${resetToken}&user_id=${userData._id}`;
       const getEmailContent = await httpService.getStaging(
         "superadmin/get-notification-by-condition",
         { condition: "FORGOT_PASSWORD", type: "email" },
@@ -1668,7 +1623,7 @@ class IndividualDoctor {
         participants: appintmentdetails.data.participantsinfodetails,
       };
       const uniqueId = req.body.uid;
-      let completepromise = new Promise(async (resolve, reject) => {
+      let completepromise = new Promise(async (resolve) => {
         if (checkavailableUser.participants.length > 0) {
           let count = 0;
           checkavailableUser.participants.forEach(async (el) => {
@@ -1892,7 +1847,7 @@ class IndividualDoctor {
         Authorization: req.headers["authorization"],
       };
       let portalinfo = portaltype != "" ? `&portal=${portaltype}` : "";
-      const link = `${TEST_P_FRONTEND_URL}/external-video?id=${appointment}${portalinfo}`;
+      const link = `${test_p_FRONTEND_URL}/external-video?id=${appointment}${portalinfo}`;
 
       let result = await PortalUser.findOne({ email: email });
 
@@ -1993,15 +1948,7 @@ class IndividualDoctor {
           path: "profile_picture",
           select: "url",
         });
-      } else {
-        findUsers = await HospitalAdminInfo.findOne(
-          { for_portal_user },
-          {
-            for_portal_user: 1,
-            hospital_name: 1,
-            profile_picture: 1,
-          }
-        );
+      
       }
       sendResponse(req, res, 200, {
         status: true,

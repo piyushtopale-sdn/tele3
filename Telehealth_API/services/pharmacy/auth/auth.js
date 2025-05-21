@@ -109,7 +109,7 @@ export const changePassword = async (req, res) => {
             let payload = { password: password };
 
             User.findByIdAndUpdate(_id, { $set: payload }, { new: true },
-                (err, result) => {
+                (err) => {
                     if (err) {
                         return res.status(messageID.internalServerError).json(encryptObjectData({
                             status: responseCodes.failedStatus,
@@ -165,7 +165,7 @@ export const updateProfile = async (req, res) => {
             let _id = req.user._id;
 
             User.findByIdAndUpdate(_id, { $set: payload }, { new: true },
-                (err, result) => {
+                (err) => {
                     if (err) return res.status(messageID.internalServerError).json({
                         status: responseCodes.failedStatus,
                         messageID: messageID.internalServerError,
@@ -305,7 +305,7 @@ export const createPassword = async function (req, res) {
         let newPassword = await bcrypt.hash(password, salt);
 
         User.findByIdAndUpdate(id, { $set: { password: newPassword } }, { new: true },
-            (err, result) => {
+            (err) => {
                 if (err) {
                     return res.status(messageID.successCode).json(encryptObjectData({
                         status: responseCodes.successStatus,

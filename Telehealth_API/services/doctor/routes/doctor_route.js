@@ -1,7 +1,7 @@
 "use strict";
 
 import express from "express";
-const { doctorController } = require("../controllers/doctor.controller");
+import { doctorController } from "../controllers/doctor.controller.js";
 import { verifyRole, verifyToken } from "../helpers/verifyToken";
 import { handleResponse } from "../middleware/utils";
 import fs from "fs";
@@ -105,11 +105,9 @@ doctorRoute.post("/list-document", doctorController.listDocumentMetadata);
 
 doctorRoute.post('/advance-doctor-filter', doctorController.advanceDoctorFilter);
 doctorRoute.get('/doctor-management-view-basic-info', doctorController.doctorManagementViewBasicInfo);
-doctorRoute.get('/doctor-management-get-locations', doctorController.doctorManagementGetLocations);
 doctorRoute.get('/get-related-doctors', doctorController.getRelatedDoctors);
 doctorRoute.get('/get-related-doctors-fourPortals', doctorController.getRelatedDoctorsForFourPortals);
 doctorRoute.post('/update-appointment-status', doctorController.updateAppointmentPaymentStatus);
-doctorRoute.get('/get-eprescription-template-url', doctorController.getEprescriptionTemplateUrl);
 doctorRoute.get('/get-Idby-DoctorName', doctorController.getIdbyDoctorName);
 doctorRoute.post('/send-Mail-TO-Patient', doctorController.sendMailTOPatient);
 doctorRoute.get('/get-eprescription', doctorController.getEprescription);
@@ -138,7 +136,6 @@ doctorRoute.get('/doctor-management-request-list', doctorController.doctorManage
 doctorRoute.post('/doctor-management-accept-or-reject', doctorController.acceptOrRejectDoctorRequest);
 doctorRoute.post('/doctor-management-active-lock-delete-doctor', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementActiveLockDeleteDoctor);
 doctorRoute.post('/delete-availabilty-by-deleting-location', doctorController.deleteAvailability);
-doctorRoute.get('/doctor-four-portal-management-list', doctorController.doctorFourPortalListForHospital);
 doctorRoute.post('/doctor-management-basic-info', verifyRole(['superadmin', 'INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER', 'INDIVIDUAL_DOCTOR']), doctorController.doctorManagementBasicInfo);
 doctorRoute.post('/doctor-management-available-dates', doctorController.addAvailableDates); 
 
@@ -166,19 +163,9 @@ doctorRoute.post('/template-delete', doctorController.templateDelete);
 doctorRoute.post('/create-eprescription', doctorController.createEprescription);
 doctorRoute.post('/add-eprescription-medicine-dosage', doctorController.addEprescriptionMedicineDosage);
 doctorRoute.post('/delete-eprescription-medicine-dosage', doctorController.deleteEprescriptionMedicineDosage);
-doctorRoute.post('/add-eprescription-labTest', doctorController.addEprescriptionLabTest);
-doctorRoute.get('/get-eprescription-lab-test', doctorController.getEprescriptionLabTest);
-doctorRoute.post('/add-eprescription-imagingTest', doctorController.addEprescriptionImagingTest);
-doctorRoute.get('/get-eprescription-imaging-test', doctorController.getEprescriptionImagingTest);
-doctorRoute.post('/add-eprescription-vaccination', doctorController.addEprescriptionVaccination);
-doctorRoute.get('/get-eprescription-vaccination-test', doctorController.getEprescriptionVaccinationTest);
-doctorRoute.post('/add-eprescription-other', doctorController.addEprescriptionOther);
-doctorRoute.get('/get-eprescription-other-test', doctorController.getEprescriptionOtherTest);
 doctorRoute.get('/get-eprescription-medicine-dosage', doctorController.getEprescriptionMedicineDosage);
 doctorRoute.get('/get-all-eprescription-tests', doctorController.getAllTests);
-doctorRoute.post('/add-eprescription-esignature', uploadImage, doctorController.addEprescriptionEsignature);
 doctorRoute.post('/list-all-eprescription', doctorController.listAllEprescription);
-doctorRoute.get('/get-doctor-location', doctorController.getDoctorLocationInfo);
 doctorRoute.get('/get-all-eprescription-details-for-medicine', doctorController.getAllEprescriptionDetailsForMedicine);
 // department_asper_hospital
 doctorRoute.post('/department-Asper-Hospital_Doctor', doctorController.getdataAsperHospitalDoctor);
@@ -191,16 +178,6 @@ doctorRoute.get('/graph-list-status', doctorController.graphListHospital);
 doctorRoute.get('/Patient-payment-historyToDoc', doctorController.patientPaymentHistoryToDoctor);
 doctorRoute.get('/getAllDoctorData', doctorController.getAllDoctorData);
 
-
-// HospitalTypes
-doctorRoute.post('/add-healthcentre', doctorController.addHealthCentre_SuperAdmin)
-doctorRoute.get('/list-healthcentre', doctorController.allHealthCentreList)
-doctorRoute.put('/update-healthcentre', doctorController.updateHealthCentre)
-doctorRoute.post('/delete-healthcentre', doctorController.actionOnHealthCentre)
-doctorRoute.get('/exportsheetlist-healthcentre', doctorController.allHealthCentreListforexport)
-doctorRoute.post('/upload-csv-for-healthcentre-list', uploadFileToLocalStorage, doctorController.uploadCSVForHealthCentre)
-
-doctorRoute.get('/common-healthcentrelist', doctorController.commmonHealthCentreList)
 
 doctorRoute.post("/save-superadmin-notification", doctorController.saveSuperadminNotification);
 

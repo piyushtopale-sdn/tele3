@@ -1,9 +1,6 @@
-import mongoose from "mongoose";
 import BasicInfo from "../models/basic_info";
 import { sendResponse } from "../helpers/transmission";
 import PortalUser from "../models/portal_user";
-import Http from "../helpers/httpservice";
-const httpService = new Http();
 import LabTest from "../models/lab_test.models";
 import RadiologyTest from "../models/radiology_test";
 import { generateSignedUrl } from "../helpers/gcs";

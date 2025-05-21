@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyToken } from "../helpers/verifyToken";
-const patient = require("../controllers/patient_controller");
+import patient from "../controllers/patient_controller.js";
 const PatientRoute = express.Router();
 
 

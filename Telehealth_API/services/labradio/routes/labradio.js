@@ -10,48 +10,10 @@ const fourportalappointment = new AppointmentController();
 import { verifyRole, verifyToken } from "../helpers/verifyToken"
 
 import { activeLockDeleteLabRadio, approveOrRejectLabRadio, getLabRadioTestsList, getLab_RadioList, getLabRadioListByPortalUser,  labRadioViewBasicInfo } from "../controllers/superadminmanagement";
-const { labradio } = require("../controllers/labradio");
-const { advFiltersLabRadio } = require('../controllers/homepage-filter-list/advance_filters')
-import { handleResponse } from "../middleware/utils";
-import fs from "fs"
+import { labradio } from "../controllers/labradio.js";
+import { advFiltersLabRadio } from '../controllers/homepage-filter-list/advance_filters.js';
 import { addMembersToGroupChat, allMessage, clearAllmessages, clearSinglemessages, createdChat, createGroupChat, getAllUsersForChat, getCreatedChats, getNotification, markAllReadNotification, markReadNotificationByID, saveNotification, sendMessage, updateNotification, updateOnlineStatus } from "../controllers/Chat";
 const labRadioRoute = express.Router();
-
-
-const uploadFileToLocalStorage = async (req, res, next) => {
-
-    if (!req.files) {
-        return handleResponse(req, res, 500, {
-            status: false,
-            body: null,
-            message: "No files found",
-            errorCode: "INTERNAL_SERVER_ERROR",
-        })
-    }
-    const file = req.files.file;
-    if (file.mimetype !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-        return handleResponse(req, res, 500, {
-            status: false,
-            body: null,
-            message: "Only excel file allowed!",
-            errorCode: "INTERNAL_SERVER_ERROR",
-        })
-    }
-    const filename = file.name.split('.')[0] + '-' + Date.now() + '.xlsx';
-    req.filename = filename;
-    const newPath = `${__dirname.replace('routes', 'uploads')}/${filename}`
-    fs.writeFile(newPath, file.data, (err) => {
-        if (err) {
-            return handleResponse(req, res, 500, {
-                status: false,
-                body: err,
-                message: "Something went wrong while uploading file",
-                errorCode: "INTERNAL_SERVER_ERROR ",
-            })
-        }
-        next()
-    })
-}
 
 // login
 labRadioRoute.post("/sign-up", labradio.signUp);
@@ -83,7 +45,6 @@ labRadioRoute.post('/active-lock-delete-labradio', activeLockDeleteLabRadio);
 //hospital management
 labRadioRoute.get('/four-portal-management-request-list', labradio.fourportalManagementRequestList);
 labRadioRoute.get('/four-portal-all-management-list', labradio.fourPortalAllManagementList);
-labRadioRoute.post('/four-portal-management-availability', labradio.forPortalManagementAvailability);
 labRadioRoute.post('/four-portal-management-accept-or-reject', labradio.acceptOrRejectFourPortalRequest);
 
 
@@ -160,10 +121,6 @@ labRadioRoute.get('/appointmentList_for_patient', fourportalappointment.appointm
 labRadioRoute.post('/four-portal-assign-healthcare-provider', fourportalappointment.portal_assignHealthcareProvider);
 labRadioRoute.post('/four-portal-consulatation-data', fourportalappointment.portal_post_updateConsulatation);
 labRadioRoute.post("/four-portal-reschedule-appointment", fourportalappointment.portal_rescheduleAppointment);
-labRadioRoute.post("/four-portal-set-reminder", fourportalappointment.portal_setReminder);
-labRadioRoute.get("/four-portal-get-reminder", fourportalappointment.portal_getReminder);
-labRadioRoute.post("/four-portal-add-and-edit-assessment", fourportalappointment.portal_addAssessment);
-labRadioRoute.get("/four-portal-assessment-list", fourportalappointment.portal_assessmentList);
 labRadioRoute.get("/four-portal-to-hospital-payment-history", fourportalappointment.hospitalPaymentHistory);
 /* videocalling */
 labRadioRoute.get('/four-portal-view-appointment-by-roomname', portal_viewAppointmentByRoomName);

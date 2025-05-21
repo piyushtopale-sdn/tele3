@@ -4,7 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import path from "path";
 import InitiateMongoServer from "./config/db.js";
-import { doctorRoute, individualDoctorRoute, doctor2Route, appointmentRoutes, roleRoute, menuRoute, patientRoute, leaveManagementRoute, patientClinicalInfoRoute } from "./routes/index";
+import { doctorRoute, individualDoctorRoute, doctor2Route, appointmentRoutes, roleRoute, patientRoute, leaveManagementRoute, patientClinicalInfoRoute } from "./routes/index";
 import AppointmentController from "./controllers/appointment.controllers";
 const useragent = require('express-useragent');
 const fileUpload = require('express-fileupload');
@@ -49,7 +49,6 @@ app.use("/doctor2", doctor2Route);
 app.use("/appointment", appointmentRoutes);
 app.use("/patient", patientRoute);
 app.use("/role", roleRoute);
-app.use("/menu", menuRoute);
 app.use("/leave", leaveManagementRoute);
 
 export default app;

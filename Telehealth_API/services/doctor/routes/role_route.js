@@ -2,7 +2,7 @@
 
 import express from "express";
 import { verifyToken } from "../helpers/verifyToken";
-const roleController = require("../controllers/roles/role");
+import roleController from "../controllers/roles/role.js";
 const roleRoute = express.Router();
 
 roleRoute.use(verifyToken);

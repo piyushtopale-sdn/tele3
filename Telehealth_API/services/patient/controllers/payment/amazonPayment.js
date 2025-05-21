@@ -13,7 +13,8 @@ import https from 'https';
 import fs from 'fs';
 import path from 'path';
 
-const crypto = require('crypto');
+// const crypto = require('crypto');
+import crypto from 'crypto';
 
 const { AMAZONPAY } = config
 const httpService = new Http();
@@ -367,7 +368,7 @@ class AmazonPaymentController {
         try {
             const requestData = {
                 merchantIdentifier: 'merchant.com.test_papp',
-                displayName: 'Test_p',
+                displayName: 'test_p',
                 initiative: 'web',
                 initiativeContext: AMAZONPAY.domain
             };

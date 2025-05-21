@@ -18,7 +18,7 @@ import moment from "moment";
 
 const httpService = new Http()
 const getAllDoctor = (paginatedResults, headers) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       const doctorIdsArray = paginatedResults.map(val => val.doctorId)
       let doctorDetails = {}
       if (doctorIdsArray.length > 0) {
@@ -31,7 +31,7 @@ const getAllDoctor = (paginatedResults, headers) => {
           "doctorServiceUrl"
         );
         if (getDetails?.status) {
-          for (const doctor of getDetails?.body?.results) {
+          for (const doctor of getDetails?.body?.results ?? []) {
             doctorDetails[doctor?.for_portal_user?._id] = doctor
           }
         }
@@ -40,7 +40,7 @@ const getAllDoctor = (paginatedResults, headers) => {
     })
   }
     const getAllPatient = (paginatedResults, headers) => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve) => {
         const patientIdsArray = paginatedResults.map(val => val.patientId)
             let patientDetails = {}
             if (patientIdsArray.length > 0) {
@@ -306,7 +306,7 @@ class OrderController {
                 paginatedResults[index].doctorProfile = promisesResult[1][paginatedResults[index].doctorId.toString()]?.profilePicture
                 // Get medicine dosage data
                 let dosageData = []
-                for (const ele of paginatedResults[index]?.medicineDosageId) {
+                for (const ele of paginatedResults[index]?.medicineDosageId ?? []) {
                     dosageData.push(getAllDosageData[ele])
                 }
                 paginatedResults[index].dosageData = dosageData
@@ -370,7 +370,7 @@ class OrderController {
                 "doctorServiceUrl"
               );
               if (getDetails?.status) {
-                for (const doctor of getDetails?.body?.results) {
+                for (const doctor of getDetails?.body?.results ?? []) {
                   doctorDetails[doctor?.for_portal_user?._id] = doctor
                 }
               }
@@ -389,7 +389,7 @@ class OrderController {
               }
             }
             let dasageIdsArray = []
-            for (const ele of getOrder?.medicineDetailIds) {
+            for (const ele of getOrder?.medicineDetailIds ?? []) {
                 dasageIdsArray.push(ele.medicineDosageId)
             }
             const getData = await httpService.getStaging('patient-clinical-info/get-all-medicine-dosage-by-ids', { ids: dasageIdsArray }, headers, 'doctorServiceUrl');
@@ -955,7 +955,7 @@ class OrderController {
 
     async dashboardLineGraph(req, res) {
         try {
-            const { for_portal_user, yearFilter } = req.query;
+            let { for_portal_user, yearFilter } = req.query;
             const currentYear = yearFilter ? yearFilter : new Date().getFullYear();
             let checkUser = await PortalUser.findOne({ _id: mongoose.Types.ObjectId(for_portal_user) });
 

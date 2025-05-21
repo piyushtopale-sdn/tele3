@@ -1,9 +1,11 @@
 "use strict";
-const individualDoctorStaffRole = require("../controllers/roles/role");
-const individualDoctorStaff = require("../controllers/individual_doctor_staff_controller");
+// const individualDoctorStaffRole = require("../controllers/roles/role");
+import individualDoctorStaffRole from "../controllers/roles/role.js";
+// const individualDoctorStaff = require("../controllers/individual_doctor_staff_controller");
+import individualDoctorStaff from "../controllers/individual_doctor_staff_controller.js";
 
 import express from "express";
-const {individualDoctor} = require("../controllers/individual_doctor");
+import { individualDoctor } from "../controllers/individual_doctor.js";
 const individualDoctorRoute = express.Router();
 import {verifyRole, verifyToken} from "../helpers/verifyToken"
 
@@ -41,7 +43,6 @@ individualDoctorRoute.post("/delete-staff-role", individualDoctorStaffRole.delet
 individualDoctorRoute.post("/update-logs" ,individualDoctor.updatelogsData);
 individualDoctorRoute.get("/get-all-logs-by-userId",individualDoctor.getAllLogs);
 
-individualDoctorRoute.post("/create-guest-user", individualDoctor.CreateGuestUser);
 individualDoctorRoute.post("/create-unregister-doctor", individualDoctor.unregisterDoctor);
 individualDoctorRoute.post("/create-unregister-doctor-staff", individualDoctor.unregisterDoctorStaff);
 individualDoctorRoute.get("/get-unregister-doctor", individualDoctor.get_unregisterDoctor);

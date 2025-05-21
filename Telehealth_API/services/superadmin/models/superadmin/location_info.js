@@ -9,33 +9,27 @@ const locationInfoSchema = new mongoose.Schema(
       type: String,
     },
     country: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Country",
+      type: String,      
       default: null
     },
     region: {
-     type: mongoose.Schema.Types.ObjectId,
-     ref: "Region",
+     type: String,
      default: null
     },
     province: {
-     type: mongoose.Schema.Types.ObjectId,
-     ref: "Province",
+     type: String,
      default: null
     },
     department: {
-     type: mongoose.Schema.Types.ObjectId,
-     ref: "Department",
+     type: String,
      default: null
     },
     city: {
-     type: mongoose.Schema.Types.ObjectId,
-     ref: "City",
+     type: String,
      default: null
     },
     village: {
-     type: mongoose.Schema.Types.ObjectId,
-     ref: "Village",
+     type: String,
      default: null
     },
     for_user: {

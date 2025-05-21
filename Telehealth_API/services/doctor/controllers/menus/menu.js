@@ -81,7 +81,7 @@ const edit_menu = async (req, res) => {
             body: null,
             message: "Menu updated successfully",
             errorCode: null,
-        })).catch((err) => handleResponse(req, res, 500, {
+        })).catch(() => handleResponse(req, res, 500, {
             status: false,
             body: null,
             message: "failed to edit menu",

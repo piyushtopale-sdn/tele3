@@ -2,7 +2,7 @@ import axios from "axios"
 import { config } from "../config/constants"
 
 export const sendSms = (mobile_number, text) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         const AppSid = process?.env?.SMS_APP_SID ? process.env.SMS_APP_SID : config.SMS_APP_SID;
         const SenderID = process?.env?.SENDER_ID ? process.env.SENDER_ID : config.SENDER_ID;
 

@@ -55,7 +55,7 @@ const checkPassword = async (password, user) => {
 };
 
 const storeMedicalDocuments = (fileKey, req) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     try {
       const {
         parentPatientId,
@@ -85,7 +85,7 @@ const storeMedicalDocuments = (fileKey, req) => {
   });
 };
 const calculateHbA1c = (patientId) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     try {
       const threeMonthsAgo = new Date();
       threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
@@ -176,7 +176,7 @@ const generateNotificationMessage = (
 };
 
 const saveNotification = (paramsData, headers, requestData) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     try {
       let endPoint = "";
       let serviceUrl = "";

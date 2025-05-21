@@ -17,7 +17,7 @@ import {
 import Http from "../helpers/httpservice";
 import { sendNotification } from "../helpers/notification";
 import { generateSignedUrl } from "../helpers/gcs";
-import moment from "moment";
+import moment from 'moment-timezone';
 const httpService = new Http();
 
 const createSlot = (date, slot, providerId, isRescheduled, appointmentData) => {
@@ -646,7 +646,7 @@ class AppointmentController {
   }
 
   /** New function created to updated status eod - Mar 12, 2024 */
-  async updateAppointmentStatus(req, res) {
+  async updateAppointmentStatus() {
     try {
       // Get current time in the configured timezone
       const currentTime = moment().tz(config.TIMEZONE);
@@ -825,10 +825,14 @@ class AppointmentController {
   }
 
   async doctorAvailableSlot(req, res) {
+    console.log("req.query______",config.TIMEZONE);
+    
     try {
       const { date, doctorId } = req.query
       const weekDayArray = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
       const newDate = moment(date).tz(config.TIMEZONE)
+      console.log("newDate_______",newDate);
+      
       const day = weekDayArray[newDate.day()]
 
       /** Set first priority to unavailability_slot (if there is data for the requested date) no slot will be return between start to end time

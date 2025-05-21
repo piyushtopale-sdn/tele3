@@ -306,7 +306,7 @@ class PaymentController {
              const subscriptionPlanObjectDescription = {}
              const getData = await httpService.getStaging('superadmin/all-subscription-plans',  { limit: 0, page: 1, plan_for: 'patient', is_deleted: "all", is_activated: "all" }, headers, 'superadminServiceUrl'); 
              if (getData?.status) {
-                for (const plan of getData?.body?.allPlans) {
+                for (const plan of getData?.body?.allPlans ?? []) {
                     subscriptionPlanObject[plan?._id] = plan?.plan_name;
                     subscriptionPlanObjectArb[plan?._id] = plan?.plan_name_arabic;
                     subscriptionPlanObjectDescription[plan?._id] = plan?.description;

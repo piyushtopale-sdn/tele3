@@ -1,7 +1,6 @@
 "use strict";
 
 // models
-import HospitalAdminInfo from "../models/hospital_admin_info";
 import BasicInfo from "../models/basic_info";
 import ReviewAndRating from "../models/review";
 import PortalUser from "../models/portal_user";
@@ -20,7 +19,7 @@ import { generateSignedUrl } from "../helpers/gcs";
 const httpService = new Http();
 
 const getHospitalTeam = async (hospital_portal_id) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     try {
       const filter = {
         for_hospitalIds: { $in: [mongoose.Types.ObjectId(hospital_portal_id)] },
@@ -153,110 +152,6 @@ const getHospitalTeam = async (hospital_portal_id) => {
 const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 class PatientController {
-  async hospitalDetailsById(req, res) {
-    try {
-      const { hospital_portal_id } = req.query;
-      let hopitalId = mongoose.Types.ObjectId(hospital_portal_id);
-      const result = await HospitalAdminInfo.find({ _id: hopitalId }).populate({
-        path: "for_portal_user",
-        select: {
-          email: 1,
-        },
-      });
-      let data = result[0];
-      sendResponse(req, res, 200, {
-        status: true,
-        body: data,
-        message: `Hospital admin details`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: error.message
-          ? error.message
-          : `Failed to fetch hospital admin details`,
-        errorCode: error.code ? error.code : "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async viewHospitalAdminDetailsForPatient(req, res) {
-    const headers = {
-      Authorization: req.headers["authorization"],
-    };
-    try {
-      const { hospital_portal_id } = req.query;
-
-      const pathology_tests = await PathologyTestInfoNew.find({
-        for_portal_user: hospital_portal_id,
-      });
-
-      const result = await HospitalAdminInfo.find({
-        for_portal_user: hospital_portal_id,
-      })
-        .select({
-          hospitalPictures: 1,
-          about_hospital: 1,
-          hospital_name: 1,
-          profile_picture: 1,
-          opening_hours_status: 1,
-          patient_portal: 1,
-        })
-        .populate({
-          path: "for_portal_user",
-          select: { email: 1, country_code: 1, mobile: 1 },
-          match: { "for_portal_user.isDeleted": false },
-        })
-        .populate({
-          path: "in_location",
-        });
-
-      let data = result[0];
-
-      let hospitalPicture = [];
-
-      data.hospitalPictures = hospitalPicture;
-      //Hospital Rating
-
-      const resData = await httpService.getStaging(
-        "patient/get-review-and-rating",
-        {
-          portal_user_id: hospital_portal_id,
-          page: 1,
-          limit: 10,
-          reviewBy: "patient",
-        },
-        headers,
-        "hospitalServiceUrl"
-      );
-      //Get Doctors count and group them by specialization
-      const hospitalDoctor = await getHospitalTeam(hospital_portal_id);
-
-      sendResponse(req, res, 200, {
-        status: true,
-        body: {
-          data,
-          doctorCount: hospitalDoctor.doctorCount,
-          hospital_rating: resData.body,
-          our_team: hospitalDoctor.our_team,
-          pathology_tests,
-        },
-        message: `Hospital admin details`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: error.message
-          ? error.message
-          : `Failed to fetch hospital admin details`,
-        errorCode: error.code ? error.code : "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
   async viewHospitalDoctorsForPatient(req, res) {
     try {
       const { hospital_portal_id, doctor_name, speciality } = req.query;
@@ -647,21 +542,7 @@ class PatientController {
           },
         },
         { $unwind: { path: "$basicinfos", preserveNullAndEmptyArrays: true } },
-
-        {
-          $lookup: {
-            from: "hospitaladmininfos",
-            localField: "portal_user_id",
-            foreignField: "for_portal_user",
-            as: "hospitaladmininfos",
-          },
-        },
-        {
-          $unwind: {
-            path: "$hospitaladmininfos",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
+       
         {
           $project: {
             rating: 1,
@@ -671,7 +552,6 @@ class PatientController {
             patient_login_id: 1,
             doctorName: "$basicinfos.full_name",
             doctorNameArabic: "$basicinfos.full_name_arabic",
-            hospitalName: "$hospitaladmininfos.hospital_name",
           },
         },
       ];
@@ -733,7 +613,6 @@ class PatientController {
           patientName: patientDetails[value.patient_login_id],
           doctorName: value?.doctorName,
           doctorNameArabic: value?.doctorNameArabic,
-          hospitalName: value?.hospitalName,
           _id: value?._id,
         });
       }
@@ -862,35 +741,7 @@ class PatientController {
         {
           $unwind: { path: "$documentinfos", preserveNullAndEmptyArrays: true },
         },
-        {
-          $lookup: {
-            from: "hospitaladmininfos",
-            localField: "portal_user_id",
-            foreignField: "for_portal_user",
-            as: "hospitaladmininfos",
-          },
-        },
-        {
-          $unwind: {
-            path: "$hospitaladmininfos",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-
-        {
-          $lookup: {
-            from: "hospitaladmininfos",
-            localField: "basicinfos.for_hospital",
-            foreignField: "for_portal_user",
-            as: "hospitaladmininfosForHosDoctor",
-          },
-        },
-        {
-          $unwind: {
-            path: "$hospitaladmininfosForHosDoctor",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
+       
 
         {
           $project: {
@@ -902,10 +753,7 @@ class PatientController {
             role: "$portalusers.role",
             doctorName: "$basicinfos.full_name",
             doctorNameArabic: "$basicinfos.full_name_arabic",
-            hospitalName: "$hospitaladmininfos.hospital_name",
             doctorProfileUrl: "$documentinfos.url",
-            hospitalProfileUrl: "$hospitaladmininfos.profile_picture",
-            for_hospital: "$hospitaladmininfosForHosDoctor.hospital_name",
           },
         },
       ]);

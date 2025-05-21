@@ -1,8 +1,6 @@
 "use strict";
 
 import { sendResponse } from "../helpers/transmission";
-import department_info from "../models/department_info";
-import service_info from "../models/service_info";
 import bcrypt from "bcrypt"
 import mongoose from "mongoose";
 import Counter from "../models/counter";
@@ -298,18 +296,8 @@ class IndividualDoctorStaffController {
         })
         .populate({
           path: 'specialty'
-        })
-      let department = staffFullDetails?.department;
-      let departdetails = [];
-      if (department?.length > 0) {
-        departdetails = await department_info.find({ _id: { $in: department } });
-      }
-
-      let service = staffFullDetails?.services;
-      let servicedetails = [];
-      if (service?.length > 0) {
-        servicedetails = await service_info.find({ _id: { $in: service } });
-      }
+        })      
+     
       let unitdetails = [];
      
       let doctorIds = staffFullDetails?.for_doctor;
@@ -329,7 +317,6 @@ class IndividualDoctorStaffController {
         role: staffFullDetails?.role,
         specialty: staffFullDetails?.specialty,
         departdetails: departdetails,
-        servicedetails: servicedetails,
         unitdetails: unitdetails,
         doctorDetails: doctorDetails,
         doj:staffFullDetails?.doj

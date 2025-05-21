@@ -3,7 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import path from "path";
 import DB from "./db/db.js";
-import { roleRoute, menuRoute, pharmacyRoute, orderRoute } from "./routes/index";
+import { roleRoute,  pharmacyRoute, orderRoute } from "./routes/index";
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
 
@@ -32,7 +32,6 @@ app.use((err, req, res, next) => {
 // Routes
 app.use("/", express.static("public"));
 app.use("/role", roleRoute);
-app.use("/menu", menuRoute);
 app.use("/order", orderRoute);
 app.use("/pharmacy", pharmacyRoute);
 

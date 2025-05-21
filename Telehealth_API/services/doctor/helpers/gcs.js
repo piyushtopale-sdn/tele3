@@ -1,7 +1,7 @@
 const { storage } = require('./google-cloud-storage')
 
 export const generateSignedUrl = (fileName) => {
-    return new Promise(async(resolve, reject) => {
+    return new Promise(async(resolve) => {
         try {
             const options = {
                 version: 'v4', // Signed URL version

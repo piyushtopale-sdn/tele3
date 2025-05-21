@@ -12,8 +12,7 @@ import SubscriptionPlan from "../../models/subscription/subscriptionplans";
 import SubscriptionPlanService from "../../models/subscription/subscriptionplan_service";
 import Otp2fa from "../../models/otp2fa";
 import { config, smsTemplateOTP, MedicineColumns } from "../../config/constants";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, TEST_P_FRONTEND_URL, NODE_ENV } = config
-// const { bcryptCompare, generateTenSaltHash, processExcel, generate4DigitOTP } = require("../../middleware/utils");
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, NODE_ENV } = config
 import { bcryptCompare, generateTenSaltHash, processExcel, generate4DigitOTP } from "../../middleware/utils.js";
 const secret = config.SECRET;
 import { sendResponse } from "../../helpers/transmission";
@@ -86,7 +85,7 @@ const checkPassword = async (password, user) => {
 // };
 // PT - Mar 18
 export const saveLogs = (logData) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const logEntry = new Logs(logData);
       logEntry.save()
         .then(() => resolve(true))
@@ -113,7 +112,7 @@ export const viewRes = async (req, res) => {
 }
 
 const canSendOtp = (deviceExist, currentTime) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const limitExceedWithin1 = new Date(currentTime.getTime() + OTP_LIMIT_EXCEED_WITHIN * 60000);
         let returnData = { status: false, limitExceedWithin: limitExceedWithin1 }
         if (!deviceExist) resolve({status: true}) // First time sending
@@ -711,7 +710,7 @@ export const forgotPassword = async (req, res) => {
         });
         await ForgotPasswordData.save();
 
-        const link = `${TEST_P_FRONTEND_URL}/super-admin/newpassword?token=${resetToken}&user_id=${userData._id}`
+        const link = `${test_p_FRONTEND_URL}/super-admin/newpassword?token=${resetToken}&user_id=${userData._id}`
         const getEmailContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'FORGOT_PASSWORD', type: 'email' }, headers, 'superadminServiceUrl');
         let emailContent
         if (getEmailContent?.status && getEmailContent?.data?.length > 0) {
@@ -1601,33 +1600,6 @@ export const getMaximumRequest = async (req, res) => {
         });
     }
 }
-export const getLocationName = async (req, res) => {
-    try {
-        const { _id, country, region, province, department, city, village, address, neighborhood, pincode } = req.body.location
-        const countryName = country != '' ? (await Country.findById(country).select('name').exec()) : '';
-        const regionName = region != '' ? (await Region.findById(region).select('name').exec()) : '';
-        const provinceName = province != '' ? (await Province.findById(province).select('name').exec()) : '';
-        const departmentName = department != '' ? (await Department.findById(department).select('name').exec()) : "";
-        const cityName = city != '' ? (await City.findById(city).select('name').exec()) : '';
-        const villageName = village != '' ? (await Village.findById(village).select('name').exec()) : '';
-
-        const location = { _id, countryName, regionName, provinceName, departmentName, cityName, villageName, address, neighborhood, pincode }
-
-        return sendResponse(req, res, 200, {
-            status: true,
-            body: location,
-            message: "location name fetched successfully",
-            errorCode: null,
-        });
-    } catch (error) {
-        return sendResponse(req, res, 500, {
-            status: false,
-            body: error,
-            message: "Something went wrong fetching location name",
-            errorCode: "Internal server error",
-        });
-    }
-}
 
 export const refreshToken = async (req, res) => {
     try {
@@ -1675,103 +1647,7 @@ export const refreshToken = async (req, res) => {
         });
     }
 }
-
-export const getSelectedMasterData = async (req, res) => {
-    try {
-        const { speciality } = req.body
-        let resultArray = {}
-        if (speciality.length > 0) {
-            let specialityArry = speciality.map(val => mongoose.Types.ObjectId(val))
-            const specialityData = await Speciality.find({ _id: { $in: specialityArry } }).select({ specilization: 1 })
-            let specialityObject = {}
-            for (const value of specialityData) {
-                specialityObject[value._id] = value.specilization
-            }
-            resultArray.speciality = specialityData
-            resultArray.specialityObject = specialityObject
-        }
-        return sendResponse(req, res, 200, {
-            status: true,
-            body: { result: resultArray },
-            message: "master data fetched successfully",
-            errorCode: null,
-        });
-    } catch (error) {
-        return sendResponse(req, res, 500, {
-            status: false,
-            body: error,
-            message: error.message ? error.message : "Something went wrong fetching master details",
-            errorCode: error.code ? error.code : "Internal server error",
-        });
-    }
-}
-export const addOrUpdateAppointmentCommission = async (req, res) => {
-    try {
-        const { type, online, home_visit, face_to_face, for_user, createdBy } = req.body
-        const checkExist = await AppointmentCommission.find({ type })
-        if (checkExist.length > 0) {
-            await AppointmentCommission.findOneAndUpdate({ _id: { $eq: checkExist[0]._id } }, {
-                $set: {
-                    online,
-                    home_visit,
-                    face_to_face
-                }
-            }, { new: true }).exec();
-        } else {
-            const result = new AppointmentCommission({
-                type,
-                online,
-                home_visit,
-                face_to_face,
-                for_user,
-                createdBy
-            })
-            await result.save()
-        }
-        return sendResponse(req, res, 200, {
-            status: true,
-            body: null,
-            message: `commission data ${checkExist.length > 0 ? 'updated' : 'added'} successfully`,
-            errorCode: null,
-        });
-    } catch (error) {
-        return sendResponse(req, res, 500, {
-            status: false,
-            body: error,
-            message: error.message ? error.message : "Something went wrong",
-            errorCode: error.code ? error.code : "Internal server error",
-        });
-    }
-}
-export const getAppointmentCommission = async (req, res) => {
-    try {
-        let { for_user } = req.query
-
-        let checkUser = await Superadmin.findOne({ _id: mongoose.Types.ObjectId(for_user) });
-
-        if (checkUser.role === 'STAFF_USER') {
-            let userFind = await PortalUser.findOne({ superadmin_id: mongoose.Types.ObjectId(for_user) });
-            for_user = userFind?.for_staff;
-        }
-
-        const checkExist = await AppointmentCommission.find({ for_user: { $eq: for_user } })
-
-        return sendResponse(req, res, 200, {
-            status: true,
-            body: checkExist,
-            message: `commission data fetched successfully`,
-            errorCode: null,
-        });
-    } catch (error) {
-        return sendResponse(req, res, 500, {
-            status: false,
-            body: error,
-            message: error.message ? error.message : "Something went wrong",
-            errorCode: error.code ? error.code : "Internal server error",
-        });
-    }
-}
-
+      
 export const gettotalMonthWiseforSuperAdmingraph = async (req, res) => {
     try {
 
@@ -2381,7 +2257,7 @@ export const updateGeneralSettings = async (req, res) => {
     }
 };
 const getLabRadioConsultationCount = (query, header) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         const { fromDate, toDate } = query
         let count = {
             labCounsultationcount: 0,
@@ -2401,7 +2277,7 @@ const getLabRadioConsultationCount = (query, header) => {
     })
 }
 const getPharmacyOrderCount = (query, header) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         const { fromDate, toDate } = query
         let count = 0
         const getData = await httpService.getStaging('pharmacy/dashboard', { fromDate, toDate }, header, 'pharmacyServiceUrl');
@@ -2412,7 +2288,7 @@ const getPharmacyOrderCount = (query, header) => {
     })
 }
 const getConsultationCount = (query, header) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         const { fromDate, toDate } = query
         let count = 0
         const getData = await httpService.getStaging('individual-doctor/dashboard', { fromDate, toDate }, header, 'doctorServiceUrl');
@@ -2423,7 +2299,7 @@ const getConsultationCount = (query, header) => {
     })
 }
 const getPatientCount = (query, header) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         const { fromDate, toDate } = query
         let count = 0
         const getPatient = await httpService.getStaging('patient/get-total-patient-count', { fromDate, toDate }, header, 'patientServiceUrl');
@@ -2434,7 +2310,7 @@ const getPatientCount = (query, header) => {
     })
 }
 const getDoctorCount = (query, header) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         const { fromDate, toDate } = query
         let doctorCount = {
             activeCount: 0,
@@ -2448,7 +2324,7 @@ const getDoctorCount = (query, header) => {
     })
 }
 const getPharmaciesCount = (query, header) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         const { fromDate, toDate } = query
         let count = 0
         const getData = await httpService.getStaging('pharmacy/get-total-pharmacy-count', { fromDate, toDate }, header, 'pharmacyServiceUrl');
@@ -2459,7 +2335,7 @@ const getPharmaciesCount = (query, header) => {
     })
 }
 const getLabRadioCount = (query, header) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         const { fromDate, toDate } = query
         let count = {
             totalLaboratory: 0,

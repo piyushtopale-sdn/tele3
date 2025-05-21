@@ -1,10 +1,11 @@
 import express from "express";
 import { addMembersToGroupChat, allMessage, clearAllmessages, clearSinglemessages, createdChat, createGroupChat, getCreatedChats, getNotification, markAllReadNotification, markReadNotificationByID, readMessageCount, saveNotification, sendMessage, sendPushNotificattionToPatient, totalMessageCount, updateOnlineStatus } from "../controllers/Chat-Controller/Chat";
-const hospital = require("../controllers/hospital_controller");
-const hospitalStaff = require("../controllers/hospital_staff_controller");
+import hospital from "../controllers/hospital_controller.js";
+import hospitalStaff from "../controllers/hospital_staff_controller.js";
 import { verifyToken, verifyRole } from "../helpers/verifyToken";
 import { handleResponse } from "../middleware/utils";
-const hospitalStaffRole = require("../controllers/roles/role");
+// const hospitalStaffRole = require("../controllers/roles/role");
+import hospitalStaffRole from "../controllers/roles/role.js";
 const doctor2Route = express.Router();
 import fs from "fs";
 
@@ -67,12 +68,8 @@ doctor2Route.post('/notification', hospital.notification);
 doctor2Route.get('/notificationlist', hospital.notificationlist);
 doctor2Route.post('/update-notification', hospital.updateNotification)
 doctor2Route.get('/get-all-notification', getNotification)
-doctor2Route.get("/get-hospital-location", hospital.getHospitalLocationData);
 doctor2Route.get("/get-portal-user-data", hospital.getPortalUserData);
-doctor2Route.get("/get-service-data", hospital.getServiceData);
-doctor2Route.get("/get-department-data", hospital.getDepartmentData);
 doctor2Route.get("/get-speciality-data", hospital.getSpecialityData);
-doctor2Route.get("/get-expertise-data", hospital.getExpertiseData);
 doctor2Route.get("/get-staff-profile-data", hospital.getStaffProfileData);
 //logsUpdate
 doctor2Route.post("/update-logs", hospital.updatelogsData);
@@ -80,12 +77,6 @@ doctor2Route.get("/get-all-logs-by-userId", hospital.getAllLogs);
 doctor2Route.get("/get-all-staff-data", hospital.getHospitalStaffData);
 
 doctor2Route.use(verifyToken);
-doctor2Route.post('/uploadExcelforDepartment', uploadFileToLocalStorage, hospital.uploadExcelforDepartment)
-doctor2Route.post('/uploadExcelforExpertise', uploadFileToLocalStorage, hospital.uploadExcelforExpertise)
-doctor2Route.post('/uploadCSVForService', uploadFileToLocalStorage, hospital.uploadCSVForService)
-doctor2Route.get('/expertiseListforexport', hospital.expertiseListforexport)
-doctor2Route.get('/departmentListforexport', hospital.departmentListforexport)
-doctor2Route.get('/serviceListforexport', hospital.serviceListforexport)
 //Staff
 doctor2Route.post("/add-staff", hospitalStaff.addStaff);
 doctor2Route.post("/edit-staff", hospitalStaff.editStaff);
@@ -100,7 +91,6 @@ doctor2Route.post('/update-specialty', verifyRole(["superadmin"]), hospital.upda
 doctor2Route.post('/action-on-specialty', verifyRole(["superadmin"]), hospital.actionOnSpecialty)
 doctor2Route.post('/upload-csv-for-specialty', uploadFileToLocalStorage, hospital.uploadCSVForSpecialty)
 doctor2Route.get('/export-specialty', hospital.exportSpecialty)
-
 
 // chat route
 doctor2Route.post('/create-chat', createdChat);
@@ -126,11 +116,7 @@ doctor2Route.put('/clear-single-message', clearSinglemessages)
 doctor2Route.post("/save-superadmin-notification", hospital.saveSuperadminNotification);
 doctor2Route.get("/get-hospital-count-superadmin-dashboard", hospital.totalHospitalforAdminDashboard);
 doctor2Route.get("/get-consultation-count", hospital.totalConsultation);
-doctor2Route.post("/update-notification-status",hospital.updateNotificationStatus);
-doctor2Route.get("/providerdocumentlist",hospital.getProviderDocumentsByFilters);
-doctor2Route.get("/getproviderdocument",hospital.getProviderDocument);
-doctor2Route.put("/inactive_isdelete_providerdocument",hospital.inActive_isDeletedProviderDocument);
-doctor2Route.get("/get-hospital-dashboard-count", hospital.totalCountforHospitalDashboard);
-doctor2Route.get("/get-hospital-dashboard-staff-count", hospital.totalStaffDoctorHospitalDashboard);
+doctor2Route.post("/update-notification-status",hospital.updateNotificationStatus);;
+
 
 export default doctor2Route;

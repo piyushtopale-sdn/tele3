@@ -4,7 +4,7 @@ const httpService = new Http();
 import { sendSms } from "../middleware/sendSms";
 
 export const notification = (paramsData, headers, requestData) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     (async () => {
       try {
         let endPoint = '';
@@ -47,7 +47,7 @@ const generateNotificationMessage = (type, content, contentData) => {
 }
 
 export const sendNotification = (paramsData, headers) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     (async () => {
       try {
         const getContent = await httpService.getStaging(

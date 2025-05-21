@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import PortalUser from "../../models/portal_user";
 import BasicInfo from "../../models/basic_info";
 import PathologyTestInfoNew from "../../models/pathologyTestInfoNew";
-import PortalAvailability from "../../models/availability";
 import ReviewAndRating from "../../models/reviews";
 import { sendResponse } from "../../helpers/transmission";
 import Http from "../../helpers/httpservice";
@@ -95,10 +94,6 @@ class advFiltersLabRadio {
     try {
       const { portal_id } = req.query;
 
-      const headers = {
-        Authorization: req.headers["authorization"],
-      };
-
       const pathology_tests = await PathologyTestInfoNew.find({
         for_portal_user: portal_id,
       });
@@ -113,12 +108,7 @@ class advFiltersLabRadio {
       const project = {
         full_name: 1,
         years_of_experience: 1,
-        profile_picture: "$profile_picture.url",
-        fee_management: {
-          online: "$in_fee_management.online",
-          home_visit: "$in_fee_management.home_visit",
-          f2f: "$in_fee_management.f2f",
-        },
+        profile_picture: "$profile_picture.url",        
         about: 1,
         portal_user_data: {
           mobile: "$for_portal_user_d.mobile",
@@ -126,18 +116,9 @@ class advFiltersLabRadio {
           country_code: "$for_portal_user_d.country_code",
         },
         address: "$in_location.address",
-        loc: "$in_location.loc",
-        education_details: "$in_education.education_details",
-        services: "$services.service",
-        speciality: 1,
-        in_availability: 1,
-        nextAvailableDate: 1,
-        nextAvailableSlot: 1,
-        appointment_accepted: 1,
-        medicine_request: 1,
-        hospital_location: "$in_hospital_location.hospital_or_clinic_location",
-      };
-      if (getRole.role === "INDIVIDUAL") delete project.services;
+        loc: "$in_location.loc",        
+        
+      };  
       let aggregate = [
         {
           $lookup: {
@@ -152,35 +133,7 @@ class advFiltersLabRadio {
             path: "$for_portal_user_d",
             preserveNullAndEmptyArrays: true,
           },
-        },
-        {
-          $lookup: {
-            from: "documentinfos",
-            localField: "profile_picture",
-            foreignField: "_id",
-            as: "profile_picture",
-          },
-        },
-        {
-          $unwind: {
-            path: "$profile_picture",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $lookup: {
-            from: "feemanagements",
-            localField: "in_fee_management",
-            foreignField: "_id",
-            as: "in_fee_management",
-          },
-        },
-        {
-          $unwind: {
-            path: "$in_fee_management",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
+        },      
         {
           $lookup: {
             from: "locationinfos",
@@ -189,75 +142,16 @@ class advFiltersLabRadio {
             as: "in_location",
           },
         },
-        { $unwind: { path: "$in_location", preserveNullAndEmptyArrays: true } },
-        {
-          $lookup: {
-            from: "educationaldetails",
-            localField: "in_education",
-            foreignField: "_id",
-            as: "in_education",
-          },
-        },
-        {
-          $unwind: { path: "$in_education", preserveNullAndEmptyArrays: true },
-        },
-        /* {
-            $lookup: {
-                from: 'specialties',
-                localField: 'speciality',
-                foreignField: '_id',
-                as: 'speciality'
-            }
-        },
-        { $unwind: { path: "$speciality", preserveNullAndEmptyArrays: true } }, */
-        {
-          $lookup: {
-            from: "hospitallocations",
-            localField: "in_hospital_location",
-            foreignField: "_id",
-            as: "in_hospital_location",
-          },
-        },
-        {
-          $unwind: {
-            path: "$in_hospital_location",
-            preserveNullAndEmptyArrays: true,
-          },
-        },
+        { $unwind: { path: "$in_location", preserveNullAndEmptyArrays: true } },       
       ];      
       aggregate.push({ $match: filter }, { $project: project });
       let resultData = await BasicInfo.aggregate(aggregate);
 
       let data = {};
 
-      if (resultData[0].speciality) {
-        const speciality = await httpService.getStaging(
-          "hospital/get-speciality-data",
-          { data: resultData[0].speciality },
-          headers,
-          "hospitalServiceUrl"
-        );
-        data.specialityName = speciality.data[0].specilization;
-        data.speciality_id = speciality.data[0]._id;
-       
-      }
-
       for (const key in resultData[0]) {
         data[key] = resultData[0][key];
-      }
-      let availabilityObjectIDArray = [];
-      for (const id of data.in_availability) {
-        availabilityObjectIDArray.push(mongoose.Types.ObjectId(id));
-      }
-      let availResult = await PortalAvailability.find({
-        _id: { $in: availabilityObjectIDArray },
-      });
-      data.in_availability = availResult;
-
-      data.nextAppointmentAvailable = resultData[0].nextAvailableDate;
-      data.nextAvailableSlot = resultData[0].nextAvailableSlot;
-      data.onDutyToday = true;
-      data.portal_id = portal_id;
+      }    
 
       const portalUser = await PortalUser.findById(portal_id).select(
         "average_rating"
@@ -269,36 +163,6 @@ class advFiltersLabRadio {
         average_rating: portalUser.average_rating,
         total_review: getRatingCount,
       };
-
-      //Get Opening hours
-      let hospital_location = [];
-      for (const location of data.hospital_location) {
-        if (location.status == "APPROVED") {
-          if (location.hospital_id) {
-            const getWeekDaysValue = await PortalAvailability.find({
-              location_id: location.hospital_id,
-              for_portal_user: { $eq: portal_id },
-            }).select({ week_days: 1, appointment_type: 1 });
-            let openingHoursObject = {};
-            for (const week_days_value of getWeekDaysValue) {
-              const getData = await getPortalOpeningsHours(
-                week_days_value.week_days
-              );
-              openingHoursObject[week_days_value.appointment_type] = getData;
-            }
-            location.openingHours = openingHoursObject;
-          } else {
-            let openingHoursObject = {
-              ONLINE: await getPortalOpeningsHours([]),
-              HOME_VISIT: await getPortalOpeningsHours([]),
-              FACE_TO_FACE: await getPortalOpeningsHours([]),
-            };
-            location.openingHours = openingHoursObject;
-          }
-          hospital_location.push(location);
-        }
-      }
-      data.hospital_location = hospital_location;
       sendResponse(req, res, 200, {
         status: true,
         body: { data, doctor_rating, pathology_tests },

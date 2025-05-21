@@ -13,7 +13,7 @@ import { sendPushNotification } from "../../helpers/firebase_notification";
 
 
 const notificationSaved = (paramsData, headers, requestData) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     try {
       let endPoint = '';
       let serviceUrl = '';

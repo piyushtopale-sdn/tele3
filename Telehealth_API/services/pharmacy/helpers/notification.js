@@ -6,7 +6,7 @@ import { sendPushNotification } from "./firebase_notification";
 import { sendSms } from "../middleware/sendSms";
 
 export const notification = (paramsData, headers, requestData) => {
-  return new Promise(async(resolve, reject) => {
+  return new Promise(async(resolve) => {
     try {
       let endPoint = ''
       let serviceUrl = ''
@@ -58,7 +58,7 @@ const generateNotificationMessage = (type, content, contentData) => {
 }
 
 export const sendNotification = (paramsData, headers) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
       try {
         let getPatientDetails = httpService.postStaging(
           "patient/get-patient-details-by-id",

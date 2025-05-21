@@ -7,7 +7,7 @@ import Otp2fa from "../models/otp";
 import LocationInfo from "../models/location_info";
 import StaffInfo from "../models/staffInfo";
 import ForgotPasswordToken from "../models/forgot_password_token";
-import { generate4DigitOTP, smsTemplateOTP, AppointmentReasonColumns, config } from "../config/constants";
+import { generate4DigitOTP, smsTemplateOTP, config } from "../config/constants";
 import { sendSms } from "../middleware/sendSms";
 import { sendEmail } from "../helpers/ses";
 import crypto from "crypto";
@@ -19,13 +19,11 @@ import {
   generateRefreshToken,
   generateTenSaltHash,
   generateToken,
-  processExcel,
 } from "../middleware/utils";
 import mongoose from "mongoose";
 import { hashPassword } from "../helpers/string";
 import Http from "../helpers/httpservice";
 const httpService = new Http();
-import Availability from "../models/availability";
 import ReviewAndRating from "../models/reviews";
 import PathologyTestInfoNew from "../models/pathologyTestInfoNew";
 import Appointment from "../models/appointment";
@@ -35,27 +33,11 @@ import { agoraTokenGenerator } from "../helpers/chat";
 import Logs from "../models/logs";
 import { notification, sendNotification } from "../helpers/notification";
 import { generateSignedUrl, uploadSingleOrMultipleDocuments } from "../helpers/gcs";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, TEST_P_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS, TIMEZONE, NODE_ENV } = config
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS, TIMEZONE, NODE_ENV } = config
 
-const validateColumnWithExcel = (toValidate, excelColumn) => {
-  const requestBodyCount = Object.keys(toValidate).length;
-  const fileColumnCount = Object.keys(excelColumn).length;
-  if (requestBodyCount !== fileColumnCount) {
-    return false;
-  }
-
-  let index = 1;
-  for (const iterator of Object.keys(excelColumn)) {
-    if (iterator !== toValidate[`col${index}`]) {
-      return false;
-    }
-    index++;
-  }
-  return true;
-};
 
 const canSendOtp = (deviceExist, currentTime) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
       const limitExceedWithin1 = new Date(currentTime.getTime() + OTP_LIMIT_EXCEED_WITHIN * 60000);
       let returnData = { status: false, limitExceedWithin: limitExceedWithin1 }
       if (!deviceExist) resolve({status: true}) // First time sending
@@ -76,7 +58,7 @@ const canSendOtp = (deviceExist, currentTime) => {
 };
 
 const getAllDoctor = (paginatedResults, headers) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     const doctorIdsArray = paginatedResults.map(val => val.doctorId)
     let doctorDetails = {}
     if (doctorIdsArray.length > 0) {
@@ -89,7 +71,7 @@ const getAllDoctor = (paginatedResults, headers) => {
         "doctorServiceUrl"
       );
       if (getDetails?.status) {
-        for (const doctor of getDetails?.body?.results) {
+        for (const doctor of getDetails?.body?.results ?? []) {
           doctorDetails[doctor?.for_portal_user?._id] = doctor
         }
       }
@@ -98,7 +80,7 @@ const getAllDoctor = (paginatedResults, headers) => {
   })
 }
 const getAllPatient = (paginatedResults,headers) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     const patientIdsArray = paginatedResults.map(val => val.patientId)
       let patientDetails = {}
       if (patientIdsArray.length > 0) {
@@ -1142,7 +1124,7 @@ class LabRadiology {
         token: hashResetToken,
       });
       await ForgotPasswordData.save();
-      const link = `${TEST_P_FRONTEND_URL}/portals/newpassword/${type}?token=${resetToken}&user_id=${userData._id}&type=${type}`
+      const link = `${test_p_FRONTEND_URL}/portals/newpassword/${type}?token=${resetToken}&user_id=${userData._id}&type=${type}`
       const getEmailContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'FORGOT_PASSWORD', type: 'email' }, headers, 'superadminServiceUrl');
       let emailContent
       if (getEmailContent?.status && getEmailContent?.data?.length > 0) {
@@ -1171,7 +1153,6 @@ class LabRadiology {
           errorCode: null,
         });
       } else {
-        console.log('Error while sending a reset link', error);
         return sendResponse(req, res, 500, {
           status: false,
           message: "Internal server error. Unable to send email.",
@@ -2031,71 +2012,8 @@ class LabRadiology {
       sendResponse(req, res, 500, {
         status: false,
         data: error,
-        message: `failed to ${verify_status} doctor`,
+        message: `failed to update details`,
         errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-
-  async forPortalManagementAvailability(req, res) {
-    const { portal_user_id, doctor_availability, type } = req.body;
-    try {
-      const dataArray = [];
-      for (let data of doctor_availability) {
-        data["for_portal_user"] = portal_user_id;
-        data["type"] = type;
-        if (data.existingIds === "") {
-          dataArray.push(data);
-        } else {
-          await Availability.findOneAndUpdate(
-            { _id: { $eq: data.existingIds } },
-            {
-              $set: {
-                week_days: data.week_days,
-                availability_slot: data.availability_slot,
-                unavailability_slot: data.unavailability_slot,
-                slot_interval: data.slot_interval,
-              },
-            }
-          ).exec();
-        }
-      }
-      if (dataArray.length > 0) {
-        const result = await Availability.insertMany(dataArray);
-        const existingInavailability = await BasicInfo.findOne(
-          { for_portal_user: { $eq: portal_user_id } },
-          { in_availability: 1 }
-        );
-
-        const resultArray = existingInavailability.in_availability;
-        const appointmentArray = [];
-        for (const data of result) {
-          appointmentArray.push(data.appointment_type);
-          resultArray.push(data._id);
-        }
-        await BasicInfo.findOneAndUpdate(
-          { for_portal_user: { $eq: portal_user_id } },
-          {
-            $set: {
-              in_availability: resultArray,
-              accepted_appointment: appointmentArray,
-            },
-          }
-        ).exec();
-      }
-      sendResponse(req, res, 200, {
-        status: true,
-        data: null,
-        message: `Doctor availability added successfully`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: error.message ? error.message : "Something went wrong",
-        errorCode: error.code ? error.code : "Internal server error",
       });
     }
   }
@@ -2369,7 +2287,7 @@ class LabRadiology {
         participants: appintmentdetails.data.participantsinfodetails,
       };
       const uniqueId = req.body.uid;
-      let completepromise = new Promise(async (resolve, reject) => {
+      let completepromise = new Promise(async (resolve) => {
         if (checkavailableUser.participants.length > 0) {
           let count = 0;
           checkavailableUser.participants.forEach(async (el) => {
@@ -4360,7 +4278,7 @@ export const getData = async (data) => {
     data1: null,
   };
 
-  for (const data1 of data?.data) {
+  for (const data1 of data?.data ?? []) {
     let d = new Date();
     let g1 = new Date(d.getFullYear(), d.getMonth(), d.getDate());
     let g2 = new Date(data1?.expiry_date);

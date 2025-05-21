@@ -83,7 +83,7 @@ export const createdChat = async (req, res) => {
 };
 
 
-const approveOrRejectMedicine = (data) => {
+const approveOrRejectMedicine = () => {
   return Promise.resolve(""); // or some string later
 };
 

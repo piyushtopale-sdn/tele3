@@ -33,12 +33,12 @@ export const config = {
         JWT: process.env.JWT_SECRET || "",
     },
     MOYASAR_SECRET_KEY: process.env.MOYASAR_SECRET_KEY,
-    TEST_P_FRONTEND_URL: process.env.TEST_P_FRONTEND_URL,
+    test_p_FRONTEND_URL: process.env.test_p_FRONTEND_URL,
     JWT_EXPIRATION_IN_MINUTES: process.env.JWT_EXPIRATION_IN_MINUTES || 1440,
     SMS_APP_SID: process.env.SMS_APP_SID,
     SENDER_ID: process.env.SENDER_ID,
     NODE_ENV: process.env.NODE_ENV || "local",
-    Test_p_Backend_url: process.env.Test_p_Backend_url,
+    test_p_Backend_url: process.env.test_p_Backend_url,
     TIMEZONE: process.env.TIMEZONE,
     OTP_EXPIRATION: process.env.OTP_EXPIRATION || 10,
     OTP_LIMIT_EXCEED_WITHIN: process.env.OTP_LIMIT_EXCEED_WITHIN || 5,
@@ -470,70 +470,8 @@ export const messageID = {
     conflictCode: 409,
 
 }
-
-export const LabTestColumns = {
-    col1: 'category',
-    col2: 'lab_test',
-    col3: 'description',
-    col4: 'contributing_factors_to_abnormal_values',
-    col5: 'normal_value_blood',
-    col6: 'normal_value_urine',
-    col7: 'possible_interpretation_of_abnormal_blood_value_high_levels',
-    col8: 'possible_interpretation_of_abnormal_blood_value_low_levels',
-    col9: 'possible_interpretation_of_abnormal_urine_value_high_levels',
-    col10: 'possible_interpretation_of_abnormal_urine_value_low_levels',
-    col11: 'blood_procedure_before',
-    col12: 'blood_procedure_during',
-    col13: 'blood_procedure_after',
-    col14: 'urine_procedure_before',
-    col15: 'urine_procedure_during',
-    col16: 'urine_procedure_after',
-    col17: 'clinical_warning',
-    col18: 'other',
-    col19: 'link'
-}
-export const ImagingTestColumns = {
-    col1: 'category',
-    col2: 'imaging',
-    col3: 'description',
-    col4: 'clinical_consideration',
-    col5: 'normal_values',
-    col6: 'abnormal_values',
-    col7: 'contributing_factors_to_abnormal',
-    col8: 'procedure_before',
-    col9: 'procedure_during',
-    col10: 'procedure_after',
-    col11: 'clinical_warning',
-    col12: 'contraindications',
-    col13: 'other',
-    col14: 'link'
-}
-export const OthersTestColumns = {
-    col1: 'category',
-    col2: 'others',
-    col3: 'description',
-    col4: 'clinical_consideration',
-    col5: 'normal_values',
-    col6: 'abnormal_values',
-    col7: 'contributing_factors_to_abnormal',
-    col8: 'procedure_before',
-    col9: 'procedure_during',
-    col10: 'procedure_after',
-    col11: 'clinical_warning',
-    col12: 'contraindications',
-    col13: 'other',
-    col14: 'link'
-}
-export const VaccinationColumns = {
-    col1: 'name'
-}
-
 export const SpecialtyColumns = {
     col1: 'specialization',
-}
-
-export const AppointmentReasonColumns = {
-    col1: 'ReasonName',
 }
 
 export const TimeZone = {
@@ -554,51 +492,6 @@ export const MedicineColumns = {
     col10: 'Other',
     col11: 'Link',
 }
-export const CountryColumns = {
-    col1: 'name',
-    col2: 'country_code',
-    col3: 'iso_code'
-}
-
-export const VillageColumns = {
-    col1: 'country_name',
-    col2: 'region_name',
-    col3: 'province_name',
-    col4: 'department_name',
-    col5: 'name',
-
-}
-export const CityColumns = {
-    col1: 'country_name',
-    col2: 'region_name',
-    col3: 'province_name',
-    col4: 'department_name',
-    col5: 'name',
-
-}
-export const DepartmentColumns = {
-    col1: 'country_name',
-    col2: 'region_name',
-    col3: 'province_name',
-    col4: 'name',
-
-}
-export const ProvinceColumns = {
-    col1: 'country_name',
-    col2: 'region_name',
-    col3: 'province_name',
-
-
-}
-export const RegionColumns = {
-    col1: 'country_name',
-    col2: 'name',
-
-
-}
-export const TeamColumns = {
-    col1: 'team',
-}
 
 export const DesignationColumns = {
     col1: 'designation',
@@ -608,27 +501,6 @@ export const HealthCenterColumns = {
 }
 export const LanguageColumns = {
     col1: 'language',
-}
-
-export const departmentHospital = {
-    col1: 'department_name',
-    // col2: 'country_code',
-    // col3: 'iso_code'
-}
-
-export const expertiseHospital = {
-    col1: 'expertise_name',
-    // col2: 'added_by'
-    // col2: 'country_code',
-    // col3: 'iso_code'
-}
-
-export const serviceHospital = {
-    col1: 'service_name',
-    col2: 'for_department',
-    // col3: 'added_by',
-
-    // col3: 'iso_code'
 }
 
 export const emailText = {

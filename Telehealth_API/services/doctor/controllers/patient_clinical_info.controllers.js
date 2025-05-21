@@ -18,7 +18,7 @@ const httpService = new Http();
 
 const getAllPatient = (patientIdsArray, headers) => {
 
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     let patientDetails = {}
     if (patientIdsArray.length > 0) {
       const getDetails = await httpService.postStaging(
@@ -35,27 +35,9 @@ const getAllPatient = (patientIdsArray, headers) => {
     resolve(patientDetails)
   })
 }
-const getAlborgeResponse = (idsArray) => {
 
-  return new Promise(async (resolve, reject) => {
-    let response = {}
-    if (idsArray.length > 0) {
-      const getDetails = await httpService.getStaging(
-        "appointment/get-alborge-results-from-prescribed-Id",
-        { ids: idsArray },
-        {},
-        "labradioServiceUrl"
-      );
-
-      if (getDetails?.status) {
-        response = getDetails?.data
-      }
-    }
-    resolve(response)
-  })
-}
 const getAllLabRadioName = (headers, idsArray) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     let details = {}
     if (idsArray.length > 0) {
       const getDetails = await httpService.getStaging(
@@ -954,7 +936,7 @@ class PatientClinicalInfoController {
           "doctorServiceUrl"
         );
         if (getDetails?.status) {
-          for (const doctor of getDetails?.body?.results) {
+          for (const doctor of getDetails?.body?.results ?? []) {
             doctorDetails[doctor?.for_portal_user?._id] = doctor
           }
         }
@@ -972,7 +954,7 @@ class PatientClinicalInfoController {
           "doctorServiceUrl"
         );
         if (getDetails?.status) {
-          for (const appointment of getDetails?.body) {
+          for (const appointment of getDetails?.body ?? []) {
             appointmentDetails[appointment?._id] = appointment
           }
         }

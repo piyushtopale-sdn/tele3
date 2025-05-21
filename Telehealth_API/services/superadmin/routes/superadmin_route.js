@@ -7,7 +7,7 @@ import {
     listMedicineWithoutPaginationForDoctor, uploadCSVForMedicine, allSubscriptionPlans, listSubscriptionPlans,subscriptionPlanGetById,
     createSubscriptionPlan, deleteSubscriptionPlan, editSubscriptionPlan, forgotPassword, getServiceField, getSubscriptionPlanDetails, login, logout, matchEmailOtpFor2fa,
      matchSmsOtpFor2fa, resetForgotPassword, sendEmailOtpFor2fa, sendSmsOtpFor2fa, setMaximumRequest, listMedicineWithoutPagination,
-     fetchedMedicineByID, getLocationName, refreshToken, getMaximumRequest, getSelectedMasterData, addOrUpdateAppointmentCommission, getAppointmentCommission,listMedicineforexport,allAdminProfileList,
+     fetchedMedicineByID, refreshToken, getMaximumRequest, listMedicineforexport,allAdminProfileList,
      getallplanPriceforSuperAdmin,gettotalMonthWiseforSuperAdmingraph,deteleLockAdminUser,
      getallPaymentHistory,changePassword, updatelogsData, getAllLogs, getSuperAdminData, notification, viewRes, addUserLogs, getGeneralSettings, getDashboardData, getDashboardGraphData,updateGeneralSettings,
      createAdminProfile,
@@ -116,7 +116,6 @@ superadminRoute.get(
   listMedicineWithoutPaginationForDoctor
 );
 
-superadminRoute.post("/get-selected-master-data", getSelectedMasterData); //Get selected master data
 // superadminRoute.post("/update-socket-id", updateSocketId);
 superadminRoute.post("/add-logs", addUserLogs);
 superadminRoute.post("/update-logs", updatelogsData);
@@ -175,12 +174,6 @@ superadminRoute.get(
   StaffManagementController.listStaffforChat
 );
 
-superadminRoute.post("/get-locations-name", getLocationName); //Get Location name from location ID
-superadminRoute.post(
-  "/add-or-update-appointment-commission",
-  addOrUpdateAppointmentCommission
-);
-superadminRoute.get("/get-appointment-commission", getAppointmentCommission);
 
 // chat route
 superadminRoute.post("/create-chat", createdChat);

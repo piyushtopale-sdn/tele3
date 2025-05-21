@@ -939,7 +939,6 @@ export const clearSinglemessages = async (req, res) => {
         message: "Delete messages successfully",
       });
     } catch (err) {
-      ;
       return sendResponse(req, res, 500, {
         status: false,
         body: err,

@@ -13,7 +13,7 @@ import { sendResponse, createSession } from "../helpers/transmission";
 import { hashPassword } from "../helpers/string";
 import { sendEmail } from "../helpers/ses";
 import { config, generate4DigitOTP, smsTemplateOTP } from "../config/constants";
-const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, TEST_P_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS, TIMEZONE, NODE_ENV } = config
+const { OTP_EXPIRATION, OTP_LIMIT_EXCEED_WITHIN, OTP_TRY_AFTER, SEND_ATTEMPTS, test_p_FRONTEND_URL, LOGIN_AFTER, PASSWORD_ATTEMPTS, TIMEZONE, NODE_ENV } = config
 import { sendSms } from "../middleware/sendSms";
 import {
     generateRefreshToken,
@@ -31,7 +31,7 @@ import { notification, sendNotification } from "../helpers/notification";
 import { generateSignedUrl } from "../helpers/gcs";
 
 const canSendOtp = (deviceExist, currentTime) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         const limitExceedWithin1 = new Date(currentTime.getTime() + OTP_LIMIT_EXCEED_WITHIN * 60000);
         let returnData = { status: false, limitExceedWithin: limitExceedWithin1 }
         if (!deviceExist) resolve({status: true}) // First time sending
@@ -1043,7 +1043,7 @@ class PharmacyController {
                 passwordToken
             });
             const result = await otpData.save();
-            const link = `${TEST_P_FRONTEND_URL}/pharmacy/newpassword?token=${passwordToken}&user_id=${portalUserData._id}`
+            const link = `${test_p_FRONTEND_URL}/pharmacy/newpassword?token=${passwordToken}&user_id=${portalUserData._id}`
             const getEmailContent = await httpService.getStaging('superadmin/get-notification-by-condition', { condition: 'FORGOT_PASSWORD', type: 'email' }, headers, 'superadminServiceUrl');
             let emailContent
             if (getEmailContent?.status && getEmailContent?.data?.length > 0) {
@@ -1504,34 +1504,7 @@ class PharmacyController {
                     },
                     { new: true }
                 ).exec();
-            }
-            const findBank = await BankDetailInfo.findOne({ for_portal_user: for_portal_user });
-            let bankData
-            if (!findBank) {
-                const bankDetailInfo = new BankDetailInfo({
-                    bank_name,
-                    account_holder_name,
-                    account_number,
-                    ifsc_code,
-                    bank_address,
-                    for_portal_user,
-                });
-                bankData = bankDetailInfo.save();
-            } else {
-                bankData = await BankDetailInfo.findOneAndUpdate(
-                    { for_portal_user: for_portal_user },
-                    {
-                        $set: {
-                            bank_name,
-                            account_holder_name,
-                            account_number,
-                            ifsc_code,
-                            bank_address,
-                        },
-                    },
-                    { new: true }
-                ).exec();
-            }
+            }       
 
             // Mobile Pay 
             let dataArray = []
@@ -1669,94 +1642,6 @@ class PharmacyController {
         }
     }
 
-    async pharmacyOpeningHours(req, res) {
-        try {
-            const { pharmacy_id, week_days, open_date_and_time, close_date_and_time, getDetails } = req.body;
-            const openingHoursDetails = await OpeningHours.findOne({ for_portal_user: pharmacy_id })
-            if (getDetails != "") {
-                return sendResponse(req, res, 200, {
-                    status: true,
-                    data: { openingHoursDetails },
-                    message: "successfully get details pharmacy opening hours",
-                    errorCode: null,
-                });
-            }
-
-            let newObject
-            let newArray = []
-            let newArray2 = []
-            if (open_date_and_time.length > 0) {
-                open_date_and_time.map((singleData) => {
-                    newObject = {
-                        start_time_with_date: new Date(singleData.date + "T" + singleData.start_time + ":15.215Z"),
-                        end_time_with_date: new Date(singleData.date + "T" + singleData.end_time + ":15.215Z")
-                    }
-                    newArray.push(newObject)
-                })
-            } else {
-                newArray = [
-                    {
-                        "start_time_with_date": new Date(),
-                        "end_time_with_date": new Date()
-                    }
-                ]
-            }
-
-            if (close_date_and_time.length > 0) {
-                close_date_and_time.map((singleData) => {
-                    newObject = {
-                        start_time_with_date: new Date(singleData.date + "T" + singleData.start_time + ":15.215Z"),
-                        end_time_with_date: new Date(singleData.date + "T" + singleData.end_time + ":15.215Z")
-                    }
-                    newArray2.push(newObject)
-                })
-            } else {
-                newArray2 = [
-                    {
-                        "start_time_with_date": new Date(),
-                        "end_time_with_date": new Date()
-                    }
-                ]
-            }
-
-            let openingHoursData
-            if (openingHoursDetails) {
-                openingHoursData = await OpeningHours.findOneAndUpdate(
-                    { for_portal_user: pharmacy_id },
-                    {
-                        $set: {
-                            week_days,
-                            open_date_and_time: newArray,
-                            close_date_and_time: newArray2
-                        },
-                    },
-                    { new: true }
-                ).exec();
-            } else {
-                const openingHoursInfo = new OpeningHours({
-                    week_days,
-                    open_date_and_time: newArray,
-                    close_date_and_time: newArray2,
-                    for_portal_user: pharmacy_id
-                });
-                openingHoursData = await openingHoursInfo.save();
-            }
-            sendResponse(req, res, 200, {
-                status: true,
-                data: { openingHoursData },
-                message: "successfully added pharmacy opening hours",
-                errorCode: null,
-            });
-        } catch (error) {
-            
-            sendResponse(req, res, 500, {
-                status: false,
-                data: error,
-                message: "failed to add pharmacy opening hours",
-                errorCode: "INTERNAL_SERVER_ERROR",
-            });
-        }
-    }
 
     async listPharmacyAdminUser(req, res) {
         try {
@@ -1955,7 +1840,7 @@ class PharmacyController {
             }
             if (adminData?.pharmacy_picture.length > 0) {
                 let signedUrlArray = []
-                for (const element of adminData?.pharmacy_picture) {
+                for (const element of adminData?.pharmacy_picture ?? []) {
                     signedUrlArray.push(await generateSignedUrl(element))
                 }
                 adminData.pharmacy_picture_signed_urls = signedUrlArray
@@ -2708,7 +2593,6 @@ class PharmacyController {
                 });
             }
         } catch (err) {
-            ;
             return sendResponse(req, res, 500, {
                 status: false,
                 body: err,

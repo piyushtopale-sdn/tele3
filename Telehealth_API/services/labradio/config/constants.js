@@ -42,20 +42,20 @@ export const config = {
     JWT_EXPIRATION_IN_MINUTES: process.env.JWT_EXPIRATION_IN_MINUTES || 1440,
     SMS_API_KEY: process.env.SMS_API_KEY,
     NODE_ENV: process.env.NODE_ENV || "local",
-    Test_p_Backend_url: process.env.Test_p_Backend_url,
+    test_p_Backend_url: process.env.test_p_Backend_url,
     TIMEZONE: process.env.TIMEZONE,
     OTP_EXPIRATION: process.env.OTP_EXPIRATION || 10,
     OTP_LIMIT_EXCEED_WITHIN: process.env.OTP_LIMIT_EXCEED_WITHIN || 5,
     OTP_TRY_AFTER: process.env.OTP_TRY_AFTER || 60,
     SEND_ATTEMPTS: process.env.SEND_ATTEMPTS || 5,
     BUCKET_NAME: process.env.BUCKET_NAME || "test_pdev",
-    TEST_P_FRONTEND_URL: process.env.TEST_P_FRONTEND_URL,
+    test_p_FRONTEND_URL: process.env.test_p_FRONTEND_URL,
     LOGIN_AFTER: process.env.LOGIN_AFTER || 60,
     PASSWORD_ATTEMPTS: process.env.PASSWORD_ATTEMPTS || 3,
     ALBORGE: {
-        "username": process.env.ALBORGE_USERNAME || "TEST_PAPI",
+        "username": process.env.ALBORGE_USERNAME || "test_pAPI",
         "password": process.env.ALBORGE_PASSWORD || "MBJYRC6Xgd8p",
-        "clientCode": process.env.ALBORGE_CLIENTCODE || "TEST_PAPI",
+        "clientCode": process.env.ALBORGE_CLIENTCODE || "test_pAPI",
         "branchCode": process.env.ALBORGE_BRANCH_CODE || "205",
         "payerCode": process.env.ALBORGE_PAYER_CODE || "5645",
         "contractCode": process.env.ALBORGE_CONTRACT_CODE || "5645",
@@ -134,10 +134,6 @@ export const messageID = {
     //to be used if record already axists
     conflictCode: 409,
 
-}
-
-export const AppointmentReasonColumns = {
-    col1: 'ReasonName',
 }
 
 export const LabSubTestColumns = {

@@ -5,7 +5,6 @@ import cron from 'node-cron';
 import path from "path";
 import InitiateMongoServer from "./config/db.js";
 import { labRadioRoute, labRadioTestRoute, labRadioManagementRoute, appointmentRoutes } from "./routes/index.js"
-import menuRoute from "./routes/menu_route.js";
 import appointmentController from "./controllers/appointment.controller.js";
 import leaveManagementsRoute from "./routes/leave_route.js";
 const fileUpload = require('express-fileupload');
@@ -57,7 +56,6 @@ app.use("/", express.static("public"));
 app.use("/lab-radio", labRadioRoute);
 app.use("/lab-radio-management", labRadioManagementRoute);
 app.use("/labradio-test", labRadioTestRoute);
-app.use("/menu", menuRoute);
 app.use("/leave", leaveManagementsRoute);
 app.use("/appointment", appointmentRoutes);
 

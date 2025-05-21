@@ -16,7 +16,7 @@ const secretKey = process.env.CLOUD_BUCKET_SECRET_KEY;
 const AUTH_HEADER = `Basic ${Buffer.from(`${AGORA_ACCESS_KEY}:${AGORA_SECRET_KEY}`).toString('base64')}`;
 
 export async function agoraTokenGenerator(roomName, uniqueId) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const appId = APP_ID;
     const appCertificate = APP_CERTIFICATE;
     const channelName = roomName;

@@ -3,7 +3,6 @@
 // utils
 import { sendResponse } from "../helpers/transmission";
 import bcrypt from "bcrypt"
-import Http from "../helpers/httpservice"
 import mongoose from "mongoose";
 // models
 import Counter from "../models/counter";
@@ -308,19 +307,8 @@ class StaffController {
                 })
                 .populate({
                     path: "role",
-                }).lean()
-          
-            let department = staffFullDetails?.department;
-            
-            if (department.length > 0) {
-                await department_info.find({ _id: { $in: department } });
-            }
-
-            let service = staffFullDetails?.services;
-            
-            if (service.length > 0) {
-                await service_info.find({ _id: { $in: service } });
-            }
+                }).lean()         
+           
             
             let doctorIds = staffFullDetails?.for_doctor;
             

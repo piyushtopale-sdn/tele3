@@ -381,30 +381,6 @@ class StaffManagementController {
         isDeleted: false
       })
         .populate({
-          path: "location_id",
-          populate: [{
-            path: 'country',
-            model: 'Country'
-          }, {
-            path: 'region',
-            model: 'Region'
-          }, {
-            path: 'province',
-            model: 'Province'
-          }
-            , {
-            path: 'department',
-            model: 'Department'
-          }
-            , {
-            path: 'city',
-            model: 'City'
-          }, {
-            path: 'village',
-            model: 'Village'
-          }]
-        })
-        .populate({
           path: "superadmin_id",
           select: { fullName: 1, first_name: 1, middle_name: 1, last_name: 1, email: 1, mobile: 1, country_code: 1 }
         })

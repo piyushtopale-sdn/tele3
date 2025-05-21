@@ -103,7 +103,7 @@ const edit_user_menu = async (req, res) => {
             body: null,
             message: "successfully data updated",
             errorCode: null,
-        })).catch((err) => {
+        })).catch(() => {
             
             handleResponse(req, res, 500, {
                 status: false,
@@ -138,7 +138,7 @@ const addSubmenuPermission = async (req, res) => {
             body: permissionObject,
             message: "successfully data updated",
             errorCode: null,
-        })).catch((err) => {
+        })).catch(() => {
             
             handleResponse(req, res, 500, {
                 status: false,

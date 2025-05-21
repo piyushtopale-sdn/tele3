@@ -22,12 +22,12 @@ export const verifyEmail2fa = (email, code) => ({
           <p>If you didn’t request this, you can ignore this email.</p>
           <br/>
           <p>Thanks,</p>
-          <p>Test_p</p>`
+          <p>test_p</p>`
             },
         },
         Subject: {
             Charset: 'UTF-8',
-            Data: `Test_p Pharmacy OTP Verification`,
+            Data: `test_p Pharmacy OTP Verification`,
         }
     },
 })
@@ -54,12 +54,12 @@ export const sendStaffDetails = (email, password, type) => ({
           <br/>
           <br/>
           <p>Thanks,</p>
-          <p>Test_p</p>`
+          <p>test_p</p>`
             },
         },
         Subject: {
             Charset: 'UTF-8',
-            Data: `Test_p Pharmacy Staff Credential.`,
+            Data: `test_p Pharmacy Staff Credential.`,
         }
     },
 })

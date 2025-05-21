@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyRole, verifyToken } from "../helpers/verifyToken";
-const order = require("../controllers/order_controller");
+import order from "../controllers/order_controller.js";
 const orderRoute = express.Router();
 
 orderRoute.use(verifyToken);

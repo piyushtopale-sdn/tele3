@@ -7,7 +7,7 @@ const path = require('path')
 const localDestination = path.join(__dirname, '../uploads')
 
 export const uploadSingleOrMultipleDocuments = (req) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         (async () => {
             try {
                 const { userId, docType, serviceType } = req.body;
@@ -90,7 +90,7 @@ export const uploadSingleOrMultipleDocuments = (req) => {
 };
 
 export const generateSignedUrl = (fileName) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         (async () => {
             try {
                 const options = {
@@ -110,7 +110,7 @@ export const generateSignedUrl = (fileName) => {
 };
 
 export const deleteGCSFile = (fileName) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         (async () => {
             try {
                 await storage.file(fileName).delete();

@@ -22,7 +22,7 @@ const config = {
         JWT: process.env.JWT_SECRET || "",
     },
     JWT_EXPIRATION_IN_MINUTES: process.env.JWT_EXPIRATION_IN_MINUTES || 1440,
-    TEST_P_FRONTEND_URL: process.env.TEST_P_FRONTEND_URL || "http://44.211.113.36:9248",
+    test_p_FRONTEND_URL: process.env.test_p_FRONTEND_URL || "http://44.211.113.36:9248",
 };
 
 module.exports.get = function get() {

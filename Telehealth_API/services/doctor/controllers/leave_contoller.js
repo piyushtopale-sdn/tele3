@@ -3,7 +3,6 @@
 import LeaveManagement from "../models/leave_management";
 import mongoose from "mongoose";
 import { sendResponse } from "../helpers/transmission";
-import HospitalAdminInfo from "../models/hospital_admin_info";
 import StaffInfo from "../models/staff_info";
 
 
@@ -454,109 +453,6 @@ export const getAllMyLeave = async (req, res) => {
   }
 };
 
-// Hospital Dropdown list
-export const hospitalIds = async (req, res) => {
-  try {
-    const userArray = req.body;
-    const userObjectIds = userArray.map((id) => mongoose.Types.ObjectId(id));
-    const names = await HospitalAdminInfo.aggregate([
-      { $match: { for_portal_user: { $in: userObjectIds } } },
-      { $project: { for_portal_user: 1, hospital_name: 1 } },
-    ]);
-    sendResponse(req, res, 200, {
-      status: true,
-      message: "Add leave successfully",
-      errorCode: null,
-      result: names,
-    });
-  } catch (error) {
-    console.error("An error occurred:", error);
-    sendResponse(req, res, 500, {
-      status: false,
-      body: null,
-      message: "failed ",
-      errorCode: "INTERNAL_SERVER_ERROR",
-    });
-  }
-};
-
-export const getAllParticularHospitalLeave = async (req, res) => {
-  try {
-    const { page, limit, searchKey, createdDate, updatedDate } = req.query;
-    let sort = req.query.sort
-    let sortingarray = {};
-    if (sort != 'undefined' && sort != '' && sort != undefined) {
-      let keynew = sort.split(":")[0];
-      let value = sort.split(":")[1];
-      sortingarray[keynew] = Number(value);
-    } else {
-      sortingarray['for_portal_user.createdAt'] = -1;
-    }
-    let dateFilter = {};
-    if (createdDate && createdDate !== "") {
-      const createdDateObj = new Date(createdDate);
-      const updatedDateObj = new Date(updatedDate);
-      dateFilter.createdAt = { $gte: createdDateObj, $lte: updatedDateObj };
-    }
-    const filter = {
-      sent_to: mongoose.Types.ObjectId(req.query.sent_to),
-      role_type: "INDIVIDUAL_DOCTOR",
-      ...dateFilter
-      // status:"0"
-    };
-
-    let aggregate = [
-      { $match: filter },
-      {
-        $lookup: {
-          from: "basicinfos",
-          localField: "created_by",
-          foreignField: "for_portal_user",
-          as: "DoctorData",
-        },
-      },
-      { $unwind: "$DoctorData" },
-    ];
-
-
-    if (searchKey && searchKey !== "") {
-      filter["$or"] = [
-        { leave_type: { $regex: searchKey || "", $options: "i" } },
-        { "StaffData.name": { $regex: `.*${searchKey}.*`, $options: "i" } },
-        { subject: { $regex: searchKey || "", $options: "i" } },
-        { reason: { $regex: searchKey || "", $options: "i" } }
-      ];
-    }
-
-    const totalCount = await LeaveManagement.aggregate(aggregate);
-
-    aggregate.push(
-      { $sort: sortingarray },
-      { $skip: (page - 1) * limit },
-      { $limit: limit * 1 }
-    );
-    const listdata = await LeaveManagement.aggregate(aggregate);
-    sendResponse(req, res, 200, {
-      status: true,
-      body: {
-        totalPages: Math.ceil(totalCount.length / limit),
-        currentPage: page,
-        totalRecords: totalCount.length,
-        listdata,
-      },
-      message: `List Fetch successfully`,
-      errorCode: null,
-    });
-  } catch (err) {
-
-    sendResponse(req, res, 500, {
-      status: false,
-      data: err,
-      message: `Failed to fetch list`,
-      errorCode: "INTERNAL_SERVER_ERROR",
-    });
-  }
-};
 
 export const LeaveAccept = async (req, res) => {
   try {

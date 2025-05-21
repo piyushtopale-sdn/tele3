@@ -122,7 +122,7 @@ export const generateRandomString = (length = 12) => {
         "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890";
     const randomArray = Array.from(
         { length },
-        (v, k) => chars[Math.floor(Math.random() * chars.length)]
+        () => chars[Math.floor(Math.random() * chars.length)]
     );
     const randomString = randomArray.join("");
     return randomString;

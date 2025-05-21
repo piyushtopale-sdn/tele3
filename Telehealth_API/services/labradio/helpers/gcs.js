@@ -9,7 +9,7 @@ const localDestination = path.join(__dirname, '../uploads')
 
 /**Feb 12*/
 export const uploadSingleOrMultipleDocuments = (req) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve) => {
         try {
             const { userId, docType, serviceType } = req.body;
             const files = req.files.file;
@@ -67,7 +67,7 @@ export const uploadSingleOrMultipleDocuments = (req) => {
 };
 
 export const generateSignedUrl = (fileName) => {
-    return new Promise(async(resolve, reject) => {
+    return new Promise(async(resolve) => {
         try {
             const options = {
                 version: 'v4', // Signed URL version
