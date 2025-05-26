@@ -17,9 +17,8 @@ const eprescriptionMedicineDosageSchema = new mongoose.Schema(
         },
         frequency: {
             frequencyType: {
-                type: String,
-                default: null,
-                enum: [null, 'MOMENT', 'RECURRENCE', 'ALTERNATE_TAKING']
+                type: String,                
+                enum: ['MOMENT', 'RECURRENCE', 'ALTERNATE_TAKING']
             },
             morning: {
                 type: Number,
@@ -44,9 +43,8 @@ const eprescriptionMedicineDosageSchema = new mongoose.Schema(
                 default: 0
             },
             type: {
-                type: String,
-                default: null,
-                enum: [null, 'DAYS', 'WEEKS', 'MONTH']
+                type: String,                
+                enum: [ 'DAYS', 'WEEKS', 'MONTH']
             }
         },
         quantity: {

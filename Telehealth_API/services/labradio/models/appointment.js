@@ -104,12 +104,10 @@ const appointmentSchema = new mongoose.Schema(
             }
         ],      
         cancelReason: {
-            type: String,
-            default: null
+            type: String,            
         },
         cancelledOrAcceptedBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            default: null
+            type: mongoose.Schema.Types.ObjectId,            
         },
         prescribedLabRadiologyTestId: {
             type: mongoose.Schema.Types.ObjectId,

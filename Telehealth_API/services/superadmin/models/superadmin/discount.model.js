@@ -34,7 +34,6 @@ const couponSchema = new mongoose.Schema(
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'PortalUser',
-                default: null
             }
         ],
         isLabCoupon: {

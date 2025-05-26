@@ -4,19 +4,19 @@ const notificationSchema = new mongoose.Schema(
     {
         content: {
             type: String,
-            default: null
+            
         },
         url: {
             type: String,
-            default: null
+            
         },
         appointmentId: {
             type: mongoose.Schema.Types.ObjectId,
-            default: null
+            
         },
         title: {
             type:String,
-            default: null
+            
         },
         created_by: {
             type: mongoose.Schema.Types.ObjectId,

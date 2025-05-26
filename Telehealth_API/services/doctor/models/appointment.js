@@ -21,7 +21,6 @@ const appointmentSchema = new mongoose.Schema(
         },
         parent_patient_id :{
             type: String,
-            default: ""
         },
         patientId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -48,16 +47,13 @@ const appointmentSchema = new mongoose.Schema(
             }
         ],      
         cancelReason: {
-            type: String,
-            default: null
+            type: String,           
         },
         declinedReason: {
-            type: String,
-            default: null
+            type: String,          
         },
         cancelledOrAcceptedBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            default: null
+            type: mongoose.Schema.Types.ObjectId,            
         },
         cancel_by: {
             type: String,

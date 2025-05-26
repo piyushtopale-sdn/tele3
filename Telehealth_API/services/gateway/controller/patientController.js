@@ -4,9 +4,9 @@ import 'dotenv/config';
 import axios from "axios";
 import HttpService from "../middleware/httpservice";
 
-const config = require("../config/config.js").get();
+import { get } from '../config/config';
+const config = get();
 const { BASEURL } = config;
-
 
 export const signup = async (req, res) => {
     const baseurl = BASEURL.patientServiceUrl;

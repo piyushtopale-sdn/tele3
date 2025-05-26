@@ -49,7 +49,6 @@ const basicInfoSchema = new mongoose.Schema(
         },
         profile_picture: {
             type: String,
-            default: ""
         },        
         about: {
             type: String,
@@ -66,14 +65,12 @@ const basicInfoSchema = new mongoose.Schema(
             },
             license_image: {
                 type: String,
-                default: ""
             },
         },
         speciality: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'Specialty',
-                default: null
+                ref: 'Specialty'                
             }
         ],       
         categoryIds: [
@@ -90,12 +87,12 @@ const basicInfoSchema = new mongoose.Schema(
         },
         approved_at: {
             type: String,
-            default: null
+            
         },
         approved_or_rejected_by: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "PortalUser",
-            default: null
+            
         },
         in_location: {
             type: mongoose.Schema.Types.ObjectId,
@@ -104,7 +101,7 @@ const basicInfoSchema = new mongoose.Schema(
         in_education: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "EducationalDetail",
-            default: null
+            
         },        
         in_availability: {
             type: Array,
@@ -113,7 +110,7 @@ const basicInfoSchema = new mongoose.Schema(
         in_document_management: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "DocumentManagement",
-            default: null
+            
         },
         for_portal_user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -124,9 +121,6 @@ const basicInfoSchema = new mongoose.Schema(
         isInfoCompleted: {
             type: Boolean,
             default: true
-        },       
-        doctorfees:{
-            type: String,
         } 
     },
     { timestamps: true }

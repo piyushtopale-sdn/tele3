@@ -22,7 +22,7 @@ const menuSchema = new mongoose.Schema({
     },
     module_type: {
         type: String,
-        default: ''
+        
     },
     menu_order: {
         type: Number,
@@ -39,11 +39,11 @@ const menuSchema = new mongoose.Schema({
     },
     menu_icon: {
         type: String,
-        default: ''
+        
     },
     menu_icon_hover: {
         type: String,
-        default: ''
+        
     },
     disable_menu:{
         type: Boolean,        

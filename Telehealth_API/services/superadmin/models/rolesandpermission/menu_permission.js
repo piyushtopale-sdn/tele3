@@ -11,7 +11,6 @@ const menuPermissionSchema = new mongoose.Schema({
     },
     menu_order: {
         type: Number,
-        default: ''
     },
     permission_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -19,7 +18,6 @@ const menuPermissionSchema = new mongoose.Schema({
     },
     parent_id: {
         type: String,
-        default: ""
     },
     user_id: {
         type: mongoose.Schema.Types.ObjectId,

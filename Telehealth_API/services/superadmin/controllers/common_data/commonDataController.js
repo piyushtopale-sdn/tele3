@@ -26,8 +26,6 @@ const validateColumnWithExcel = (toValidate, excelColumn) => {
   return true;
 };
 
-const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
 class CommonDataController {
 
   // Designation by Super-admin
@@ -214,7 +212,7 @@ class CommonDataController {
 
       sendResponse(req, res, 200, {
         status: true,
-        body: result,
+        body: null,
         message: message,
         errorCode: null,
       });

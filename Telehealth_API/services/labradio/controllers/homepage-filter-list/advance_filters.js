@@ -10,85 +10,6 @@ import Http from "../../helpers/httpservice";
 
 const httpService = new Http();
 
-const getPortalOpeningsHours = async (week_days) => {
-  let Sunday = [];
-  let Monday = [];
-  let Tuesday = [];
-  let Wednesday = [];
-  let Thursday = [];
-  let Friday = [];
-  let Saturday = [];
-  if (week_days) {
-    week_days.forEach((data) => {
-      Sunday.push({
-        start_time:
-          data.sun_start_time.slice(0, 2) +
-          ":" +
-          data.sun_start_time.slice(2, 4),
-        end_time:
-          data.sun_end_time.slice(0, 2) + ":" + data.sun_end_time.slice(2, 4),
-      });
-      Monday.push({
-        start_time:
-          data.mon_start_time.slice(0, 2) +
-          ":" +
-          data.mon_start_time.slice(2, 4),
-        end_time:
-          data.mon_end_time.slice(0, 2) + ":" + data.mon_end_time.slice(2, 4),
-      });
-      Tuesday.push({
-        start_time:
-          data.tue_start_time.slice(0, 2) +
-          ":" +
-          data.tue_start_time.slice(2, 4),
-        end_time:
-          data.tue_end_time.slice(0, 2) + ":" + data.tue_end_time.slice(2, 4),
-      });
-      Wednesday.push({
-        start_time:
-          data.wed_start_time.slice(0, 2) +
-          ":" +
-          data.wed_start_time.slice(2, 4),
-        end_time:
-          data.wed_end_time.slice(0, 2) + ":" + data.wed_end_time.slice(2, 4),
-      });
-      Thursday.push({
-        start_time:
-          data.thu_start_time.slice(0, 2) +
-          ":" +
-          data.thu_start_time.slice(2, 4),
-        end_time:
-          data.thu_end_time.slice(0, 2) + ":" + data.thu_end_time.slice(2, 4),
-      });
-      Friday.push({
-        start_time:
-          data.fri_start_time.slice(0, 2) +
-          ":" +
-          data.fri_start_time.slice(2, 4),
-        end_time:
-          data.fri_end_time.slice(0, 2) + ":" + data.fri_end_time.slice(2, 4),
-      });
-      Saturday.push({
-        start_time:
-          data.sat_start_time.slice(0, 2) +
-          ":" +
-          data.sat_start_time.slice(2, 4),
-        end_time:
-          data.sat_end_time.slice(0, 2) + ":" + data.sat_end_time.slice(2, 4),
-      });
-    });
-  }
-  return {
-    Sunday,
-    Monday,
-    Tuesday,
-    Wednesday,
-    Thursday,
-    Friday,
-    Saturday,
-  };
-};
-
 class advFiltersLabRadio {
   async viewFourPortalDetailsForPatient(req, res) {
     try {
@@ -98,7 +19,6 @@ class advFiltersLabRadio {
         for_portal_user: portal_id,
       });
 
-      const getRole = await PortalUser.findById(portal_id).select("role");
       const filter = {
         for_portal_user: mongoose.Types.ObjectId(portal_id),
         "for_portal_user_d.isDeleted": false,

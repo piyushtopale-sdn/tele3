@@ -1263,34 +1263,20 @@ class HospitalController {
 
   async getAllUsersForChat(req, res) {
     try {
-      const { loggedInId, adminId, searchText } = req.query;
+      const { loggedInId, adminId } = req.query;
 
       let getData;
       const getRole = await PortalUser.findOne({
         _id: mongoose.Types.ObjectId(loggedInId),
       });
 
-      if (
-        getRole.role === "HOSPITAL_ADMIN" ||
-        getRole.role === "HOSPITAL_STAFF"
-      ) {
-        getData = await getListforHospital(
-          loggedInId,
-          adminId,
-          searchText,
-          req
-        );
-      }
       if (getRole.role === "INDIVIDUAL_DOCTOR_STAFF") {
         getData = await getIndividualDoctorStaff(loggedInId, adminId);
       }
       if (getRole.role === "INDIVIDUAL_DOCTOR") {
         getData = await getLisforIndividualDoctor(loggedInId, adminId);
       }
-      if (getRole.role === "HOSPITAL_DOCTOR") {
-        getData = await getListforHospitalDoctor(loggedInId, adminId);
-      }
-
+      
       return sendResponse(req, res, 200, {
         status: true,
         body: getData,
@@ -1476,28 +1462,6 @@ class HospitalController {
     }
   }
 
-  async getHospitalLocationData(req, res) {
-    try {
-      let result = await HospitalLocation.find({
-        for_portal_user: mongoose.Types.ObjectId(req.query.data),
-      }).exec();
-
-      sendResponse(req, res, 200, {
-        status: true,
-        data: result,
-        message: `hospital location fetch successfully`,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Internal server error",
-        errorCode: null,
-      });
-    }
-  }
-
   async getSpecialityData(req, res) {
     try {
       let result = await Specialty.find({ _id: req.query.data }).exec();
@@ -1579,38 +1543,6 @@ class HospitalController {
         status: false,
         body: null,
         message: "failed to update notification",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async getAllLocationById(req, res) {
-    try {
-      const { portal_user_id } = req.query;
-      let alllocation = await HospitalLocation.find({
-        for_portal_user: portal_user_id,
-      });
-
-      if (alllocation.length > 0) {
-        sendResponse(req, res, 200, {
-          status: true,
-          body: alllocation,
-          message: "List getting successfully!",
-          errorCode: null,
-        });
-      } else {
-        sendResponse(req, res, 200, {
-          status: false,
-          body: null,
-          message: "Failed to fetch list",
-          errorCode: "INTERNAL_SERVER_ERROR",
-        });
-      }
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "Failed to fetch list",
         errorCode: "INTERNAL_SERVER_ERROR",
       });
     }

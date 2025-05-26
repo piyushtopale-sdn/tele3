@@ -37,39 +37,6 @@ export const forgotPasswordEmail = (email, code, user_id) => {
     };
 }
 
-export const forgotPasswordEmailForIndividualDoctor = (email, code, user_id) => {
-    return {
-        Source: '<no-reply@yopmail.com>',
-        Destination: {
-            ToAddresses: [
-                email
-            ],
-        },
-        ReplyToAddresses: ['no-reply@yopmail.com'],
-        Message: {
-            Body: {
-                Html: {
-                    Charset: 'UTF-8',
-                    Data: `
-                <h3>Password Reset</h3>
-                <br/>
-               
-                <a href="${test_pFrontendUrl}/individual-doctor/newpassword?token=${code}&user_id=${user_id}&role="button">RESET YOUR PASSWORD</a>
-                <br/>
-                <p>Click the below button to reset your password</p>
-                <br/>
-                <p>Thanks,</p>
-                <p>/p>`,
-                },
-            },
-            Subject: {
-                Charset: 'UTF-8',
-                Data: `Forgot Password Link`,
-            }
-        },
-    };
-}
-
 export const verifyEmail2fa = (email, code) => ({
     Source: '<no-reply@yopmail.com>',
     Destination: {

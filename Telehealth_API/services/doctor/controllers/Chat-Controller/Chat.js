@@ -764,6 +764,7 @@ export const addMembersToGroupChat = async (req, res) => {
 };
 
 export const saveNotification = async (req, res) => {
+  
   try {
     const headers = {
       Authorization: req.headers["authorization"],
@@ -826,8 +827,11 @@ export const saveNotification = async (req, res) => {
         const notificationData = {
           title: senderData?.full_name,
           body: generateNotificationMessage('CHAT_MESSAGE', req.body.content, '', '')
-        };          
-        if (isNotification === true) {
+        };   
+        
+        const findChatWindowStatus = await Chat.findOne({_id:mongoose.Types.ObjectId(req.body.chatId)});
+
+        if (isNotification === true && findChatWindowStatus.ischatWindow  === false) {
           sendPushNotification(fcmToken, notificationData);
         }
       }
@@ -1167,6 +1171,41 @@ export const sendPushNotificattionToPatient = async (req, res) => {
       status: false,
       body: error,
       message: `failed to notification`,
+      errorCode: "INTERNAL_SERVER_ERROR",
+    });
+  }
+};
+
+export const update_opened_closed_ChatWindow = async (req, res) => {
+  
+  const { chatId, ischatWindow } = req.body;
+  try {
+    const updateSuperadmin = await Chat.findOneAndUpdate(
+      { _id: chatId },
+      { $set: { ischatWindow: ischatWindow } },
+      { new: true }
+    );
+    
+    if (updateSuperadmin) {
+      return sendResponse(req, res, 200, {
+        status: true,
+        data: updateSuperadmin,
+        message: `Updated successfully`,
+        errorCode: null,
+      });
+    } else {
+      return sendResponse(req, res, 200, {
+        status: false,
+        data: null,
+        message: `Failed to update`,
+        errorCode: null,
+      });
+    }
+  } catch (err) {
+    return sendResponse(req, res, 500, {
+      status: false,
+      data: err,
+      message: `failed to update staff`,
       errorCode: "INTERNAL_SERVER_ERROR",
     });
   }

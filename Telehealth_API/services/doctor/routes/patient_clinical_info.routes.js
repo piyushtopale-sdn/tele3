@@ -34,7 +34,7 @@ patientClinicalInfoRoute.get("/get-prescribe-radiology-test-count", verifyRole([
 
 patientClinicalInfoRoute.put("/update-prescribed-lab-radiology-status", verifyRole(["INDIVIDUAL", "patient"]), PatientClinicalInfoController.updatePrescribedLabRadiologyStatus);
 patientClinicalInfoRoute.put("/update-prescribed-test-status", verifyRole(["INDIVIDUAL", "patient", "superadmin"]), PatientClinicalInfoController._updatePrescribedLabRadiology_Status);
-patientClinicalInfoRoute.get("/get-prescribed-test-history/:id", verifyRole(["INDIVIDUAL_DOCTOR"]), PatientClinicalInfoController.getPrescribedTestHistory);
+patientClinicalInfoRoute.get("/get-prescribed-test-history/:id", verifyRole(["INDIVIDUAL_DOCTOR", "INDIVIDUAL_DOCTOR_ADMIN",'SUPER_USER']), PatientClinicalInfoController.getPrescribedTestHistory);
 patientClinicalInfoRoute.put("/lab-radio-update-prescribed-test-status-by-testIds", verifyRole(["INDIVIDUAL", "patient", "superadmin"]), PatientClinicalInfoController.prescribedLabRadio_update_statusHistory_forEachTest);
 
 

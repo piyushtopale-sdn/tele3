@@ -45,8 +45,7 @@ const orderDetailSchema = new mongoose.Schema(
             default: "pending",
         },
         parentPatientId: {
-            type: String,
-            default: ""
+            type: String,            
         },
         patientId: {
             type: mongoose.Schema.Types.ObjectId,

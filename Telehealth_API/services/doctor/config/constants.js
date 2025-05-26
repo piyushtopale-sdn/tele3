@@ -10,8 +10,6 @@ export const config = {
     },
     PORTS: {
         API_PORT: process.env.DOCTOR_SERVICE_PORT || 8004,
-        EMAIL_PORT: 4200,
-        APIHOST: "http://localhost",
     },
     API_PORT: process.env.DOCTOR_SERVICE_PORT || 8004,
     BaseUrl: {
@@ -22,12 +20,6 @@ export const config = {
         labradioServiceUrl: process.env.LABRADIO_SERVICE_URL,
         gatewayServiceUrl: process.env.GATEWAYSERVICEURL,
     },
-    EMAIL: {
-        host: "smtp.gmail.com",
-        user: process.env.ADMIN_EMAIL || "youremail@gmail.com",
-        password: process.env.ADMIN_PASSWORD || "password",
-    },
-    cryptoSecret: process.env.CRYPTOSECRET || "",
     CRYPTO_SECRET: process.env.CRYPTOSECRET || "",
     secret: {
         JWT: process.env.JWT_SECRET || "",
@@ -38,7 +30,6 @@ export const config = {
     SMS_APP_SID: process.env.SMS_APP_SID,
     SENDER_ID: process.env.SENDER_ID,
     NODE_ENV: process.env.NODE_ENV || "local",
-    test_p_Backend_url: process.env.test_p_Backend_url,
     TIMEZONE: process.env.TIMEZONE,
     OTP_EXPIRATION: process.env.OTP_EXPIRATION || 10,
     OTP_LIMIT_EXCEED_WITHIN: process.env.OTP_LIMIT_EXCEED_WITHIN || 5,

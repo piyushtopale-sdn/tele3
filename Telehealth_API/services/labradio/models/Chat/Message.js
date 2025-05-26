@@ -32,8 +32,7 @@ const messageModel = mongoose.Schema(
     deletedBy: [
       {
         user_Id: {
-          type: mongoose.Schema.Types.ObjectId,
-          default: null
+          type: mongoose.Schema.Types.ObjectId,          
         }
       }
     ],

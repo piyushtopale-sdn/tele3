@@ -5,7 +5,8 @@ import axios from "axios";
 import HttpService from "../middleware/httpservice";
 import FormData from 'form-data';
 
-const config = require("../config/config.js").get();
+import { get } from '../config/config';
+const config = get();
 const { BASEURL } = config;
 
 

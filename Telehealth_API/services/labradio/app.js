@@ -7,9 +7,8 @@ import InitiateMongoServer from "./config/db.js";
 import { labRadioRoute, labRadioTestRoute, labRadioManagementRoute, appointmentRoutes } from "./routes/index.js"
 import appointmentController from "./controllers/appointment.controller.js";
 import leaveManagementsRoute from "./routes/leave_route.js";
-const fileUpload = require('express-fileupload');
-
-const useragent = require('express-useragent');
+import fileUpload from 'express-fileupload';
+import useragent from 'express-useragent';
 const app = express();
 
 InitiateMongoServer();

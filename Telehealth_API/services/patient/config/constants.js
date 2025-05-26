@@ -10,8 +10,6 @@ export const config = {
     },
     PORTS: {
         API_PORT: process.env.PATIENT_SERVICE_PORT || 8007,
-        EMAIL_PORT: 4200,
-        APIHOST: "http://localhost",
     },
     BaseUrl: {
         doctorServiceUrl: process.env.DOCTOR_SERVICE_URL,
@@ -23,11 +21,6 @@ export const config = {
 
     },
     API_PORT: process.env.PATIENT_SERVICE_PORT || 8007,
-    EMAIL: {
-        HOST: "smtp.gmail.com",
-        USER: "",
-        PASSWORD: "",
-    },
     CRYPTO_SECRET: process.env.CRYPTOSECRET || "",
     secret: {
         JWT: process.env.JWT_SECRET || "",

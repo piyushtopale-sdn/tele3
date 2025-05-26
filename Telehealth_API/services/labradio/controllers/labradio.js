@@ -398,7 +398,7 @@ class LabRadiology {
               adminData.locationinfos[0].department =
                 locationdata?.body?.department_name;
             }
-          } catch (err) {}
+          } catch (err) { console.error("An error occurred:", err) }
         }
         if (adminData.verify_status !== "APPROVED") {
           const currentDate = new Date();

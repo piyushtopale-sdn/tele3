@@ -4,8 +4,8 @@ import bodyParser from "body-parser";
 import path from "path";
 import DB from "./db/db.js";
 import { roleRoute,  pharmacyRoute, orderRoute } from "./routes/index";
-const session = require('express-session');
-const fileUpload = require('express-fileupload');
+import session from 'express-session';
+import fileUpload from 'express-fileupload';
 
 const app = express();
 

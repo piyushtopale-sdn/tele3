@@ -18,8 +18,8 @@ import {
   contentManagementRoute
 } from './routes/index.js';
 import "dotenv/config.js";
-const useragent = require('express-useragent');
-const fileUpload = require('express-fileupload');
+import useragent from 'express-useragent';
+import fileUpload from 'express-fileupload';
 const app = express();
 
 InitiateMongoServer();

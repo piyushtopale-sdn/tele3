@@ -2,7 +2,8 @@
 "use strict";
 
 import axios from "axios";
-const config = require("../config/config.js").get();
+import { get } from '../config/config';
+const config = get();
 const { BaseUrl } = config;
 
 class Http {

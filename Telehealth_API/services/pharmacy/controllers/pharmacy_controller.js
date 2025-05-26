@@ -1434,14 +1434,7 @@ class PharmacyController {
                 village,
                 pincode,
             } = location_info;
-            const {
-                bank_name,
-                account_holder_name,
-                account_number,
-                ifsc_code,
-                bank_address,
-            } = bank_details;
-
+            
             const findUser = await PortalUser.findOne({ _id: for_portal_user })
             const isExist = await PortalUser.findOne({ email: email, _id: { $ne: for_portal_user }, isDeleted: false });
             if (isExist) {
@@ -1545,7 +1538,6 @@ class PharmacyController {
                         show_to_patient,
                         // verify_status: "PENDING",
                         in_location: locationData._id,
-                        in_bank: bankData._id,
                         in_mobile_pay: mobile_pay_object_id,
                     },
                 },

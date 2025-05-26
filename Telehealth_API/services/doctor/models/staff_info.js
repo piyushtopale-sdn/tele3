@@ -32,24 +32,24 @@ const staffInfoSchema = new mongoose.Schema(
         department: [
             {
             type: mongoose.Schema.Types.ObjectId,
-                default: null
+                
             }
         ],
         services:[
             {
                 type: mongoose.Schema.Types.ObjectId,
-                default: null
+                
             }
         ],
         unit: [
             {
             type: mongoose.Schema.Types.ObjectId,
-                default: null
+                
             }
         ],
         expertise: {
             type: mongoose.Schema.Types.ObjectId,
-            default: null
+            
         },
         verify_status: {
             type: String,

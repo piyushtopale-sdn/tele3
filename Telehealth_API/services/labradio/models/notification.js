@@ -3,24 +3,19 @@ import mongoose from "mongoose";
 const notificationSchema = new mongoose.Schema(
     {
         content: {
-            type: String,
-            default: null
+            type: String,            
         },
         url: {
-            type: String,
-            default: null
+            type: String,            
         },
         appointmentId: {
-            type: mongoose.Schema.Types.ObjectId,
-            default: null
+            type: mongoose.Schema.Types.ObjectId,            
         },
         notitype: {
-            type:String,
-            default: null
+            type:String,            
         },
         title: {
-            type:String,
-            default: null
+            type:String,            
         },
         created_by: {
             type: mongoose.Schema.Types.ObjectId,

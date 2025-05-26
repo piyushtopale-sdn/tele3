@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import 'dotenv/config.js';
-const config = require("../config/config.js").get();
+import { get } from '../config/config';
+const config = get();
 const { DB } = config;
 
 const options = {

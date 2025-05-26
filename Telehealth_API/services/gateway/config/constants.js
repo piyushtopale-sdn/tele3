@@ -10,8 +10,6 @@ export const config = {
     },
     PORTS: {
         API_PORT: process.env.DOCTOR_SERVICE_PORT || 8004,
-        EMAIL_PORT: 4200,
-        APIHOST: "http://localhost",
     },
     API_PORT: process.env.DOCTOR_SERVICE_PORT || 8004,
     BaseUrl: {
@@ -22,12 +20,6 @@ export const config = {
         labradioServiceUrl: process.env.LABRADIO_SERVICE_URL,
         gatewayServiceUrl: process.env.GATEWAYSERVICEURL,
     },
-    EMAIL: {
-        host: "smtp.gmail.com",
-        user: process.env.ADMIN_EMAIL || "youremail@gmail.com",
-        password: process.env.ADMIN_PASSWORD || "password",
-    },
-    cryptoSecret: process.env.CRYPTOSECRET || "",
     CRYPTO_SECRET: process.env.CRYPTOSECRET || "",
     secret: {
         JWT: process.env.JWT_SECRET || "",

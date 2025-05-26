@@ -11,8 +11,6 @@ export const config = {
     },
     PORTS: {
         API_PORT: process.env.PHARMACY_SERVICE_PORT || 8001,
-        EMAIL_PORT: 4200,
-        APIHOST: "http://localhost",
     },
     BaseUrl: {
         labradioServiceUrl: process.env.LABRADIO_SERVICE_URL,
@@ -21,11 +19,6 @@ export const config = {
         pharmacyServiceUrl: process.env.PHARMACY_SERVICE_URL,
         doctorServiceUrl: process.env.DOCTOR_SERVICE_URL,
         gatewayServiceUrl: process.env.GATEWAYSERVICEURL,
-    },
-    EMAIL: {
-        HOST: "smtp.gmail.com",
-        USER: process.env.ADMIN_EMAIL,
-        PASSWORD: process.env.ADMIN_EMAIL_PASSWORD,
     },
     CRYPTO_SECRET: process.env.CRYPTOSECRET || "",
     SECRET: {

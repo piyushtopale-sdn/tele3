@@ -88,7 +88,6 @@ const portalUserSchema = new mongoose.Schema(
         ],
         fcmToken: {
             type: String,
-            default: null,
         },
         notification:{
             type:Boolean,

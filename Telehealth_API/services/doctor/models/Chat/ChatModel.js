@@ -36,7 +36,10 @@ const chatModel = mongoose.Schema(
     type:{
       type :String
     },
-
+    ischatWindow:{
+      type :Boolean,
+      default:false
+    },
   },
   { timestamps: true }
 );

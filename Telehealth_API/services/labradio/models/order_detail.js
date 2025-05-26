@@ -74,8 +74,8 @@ const orderDetailSchema = new mongoose.Schema(
             ref: "PortalUser",
         },
         service: {
-            type: String,
-            default: null
+            type: String
+            
         },
         order_schedule_confirm: {
             type: Boolean, default: false

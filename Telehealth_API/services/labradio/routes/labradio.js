@@ -9,7 +9,7 @@ const fourportalappointment = new AppointmentController();
 
 import { verifyRole, verifyToken } from "../helpers/verifyToken"
 
-import { activeLockDeleteLabRadio, approveOrRejectLabRadio, getLabRadioTestsList, getLab_RadioList, getLabRadioListByPortalUser,  labRadioViewBasicInfo } from "../controllers/superadminmanagement";
+import { activeLockDeleteLabRadio, approveOrRejectLabRadio, getLabRadioTestsList, getLab_RadioList, getLabRadioListByPortalUser } from "../controllers/superadminmanagement";
 import { labradio } from "../controllers/labradio.js";
 import { advFiltersLabRadio } from '../controllers/homepage-filter-list/advance_filters.js';
 import { addMembersToGroupChat, allMessage, clearAllmessages, clearSinglemessages, createdChat, createGroupChat, getAllUsersForChat, getCreatedChats, getNotification, markAllReadNotification, markReadNotificationByID, saveNotification, sendMessage, updateNotification, updateOnlineStatus } from "../controllers/Chat";
@@ -165,7 +165,7 @@ labRadioRoute.get('/dashboard-labradio-list', verifyRole(['superadmin', "ADMIN",
 labRadioRoute.get('/export-dashboard-labradio-list', verifyRole(['superadmin']), labradio.export_getDashboardLabRadiologyList) // For superadmin
 labRadioRoute.get('/dashboard', verifyRole(['INDIVIDUAL', 'superadmin']), labradio.getDashboardData) // For superadmin
 labRadioRoute.get('/dashboard-graph', verifyRole(['INDIVIDUAL', 'superadmin']), labradio.getDashboardGraphData) // For superadmin
-labRadioRoute.get('/get-labradio-details-by-id', verifyRole(['INDIVIDUAL_DOCTOR', 'patient', 'INDIVIDUAL']), labradio.getLabRadioDetailsById)
+labRadioRoute.get('/get-labradio-details-by-id', verifyRole(['INDIVIDUAL_DOCTOR', 'patient', 'INDIVIDUAL','INDIVIDUAL_DOCTOR_ADMIN','SUPER_USER']), labradio.getLabRadioDetailsById)
 labRadioRoute.get('/dashboard-records', verifyRole(['superadmin']), labradio.getDashboardDataRecords);
 labRadioRoute.get('/get-total-labradio-records', verifyRole(['superadmin']), labradio.getTotalLabRadioRecords);
 labRadioRoute.put('/update-center-user-admin', verifyRole(['superadmin']), labradio.markAsCenterUserAdmin);

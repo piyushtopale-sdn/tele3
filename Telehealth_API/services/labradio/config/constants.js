@@ -16,8 +16,6 @@ export const config = {
     },
     PORTS: {
         API_PORT: process.env.LABRADIO_SERVICE_PORT || 8008,
-        EMAIL_PORT: 4200,
-        APIHOST: "http://localhost",
     },
     API_PORT: process.env.LABRADIO_SERVICE_PORT || 8008,
     BaseUrl: {
@@ -29,12 +27,6 @@ export const config = {
         gatewayServiceUrl: process.env.GATEWAYSERVICEURL,
 
     },
-    EMAIL: {
-        host: "smtp.gmail.com",
-        user: process.env.ADMIN_EMAIL || "youremail@gmail.com",
-        password: process.env.ADMIN_PASSWORD || "password",
-    },
-    cryptoSecret: process.env.CRYPTOSECRET || "",
     CRYPTO_SECRET: process.env.CRYPTOSECRET || "",
     secret: {
         JWT: process.env.JWT_SECRET || "",
@@ -42,7 +34,6 @@ export const config = {
     JWT_EXPIRATION_IN_MINUTES: process.env.JWT_EXPIRATION_IN_MINUTES || 1440,
     SMS_API_KEY: process.env.SMS_API_KEY,
     NODE_ENV: process.env.NODE_ENV || "local",
-    test_p_Backend_url: process.env.test_p_Backend_url,
     TIMEZONE: process.env.TIMEZONE,
     OTP_EXPIRATION: process.env.OTP_EXPIRATION || 10,
     OTP_LIMIT_EXCEED_WITHIN: process.env.OTP_LIMIT_EXCEED_WITHIN || 5,

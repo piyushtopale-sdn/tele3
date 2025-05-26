@@ -1,8 +1,9 @@
 import { generateRandomString } from '../middleware/utils';
 import convert from 'heic-convert';
 const fs = require('fs/promises')
-const { storage } = require('./google-cloud-storage')
-const path = require('path')
+import { storage } from './google-cloud-storage';
+import path from 'path';
+
 
 const localDestination = path.join(__dirname, '../uploads')
 

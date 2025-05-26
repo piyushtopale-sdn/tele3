@@ -4,15 +4,14 @@ import bodyParser from "body-parser";
 import path from "path";
 import { readFile, superAdminRoute, roleRoute, menuRoute, patientRoute, pharmacyRoute } from "./routes/index";
 
-const { proxyRoute } = require("./routes/proxy-route");
-
-const { setupLogging } = require("./middleware/logging");
-const { setupRateLimit } = require("./middleware/ratelimit");
-const { setupCreditCheck } = require("./middleware/creditcheck");
-const { setupProxies } = require("./middleware/proxy");
+import { proxyRoute } from "./routes/proxy-route.js";
+import { setupLogging } from "./middleware/logging.js";
+import { setupRateLimit } from "./middleware/ratelimit.js";
+import { setupCreditCheck } from "./middleware/creditcheck.js";
+import { setupProxies } from "./middleware/proxy.js";
 
 const app = express();
-const fileUpload = require('express-fileupload');
+import fileUpload from 'express-fileupload';
 
 //middleware
 app.use(cors({ origin: "*" }));

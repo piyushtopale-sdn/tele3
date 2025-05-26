@@ -316,7 +316,6 @@ class IndividualDoctorStaffController {
         in_profile: staffFullDetails?.in_profile,
         role: staffFullDetails?.role,
         specialty: staffFullDetails?.specialty,
-        departdetails: departdetails,
         unitdetails: unitdetails,
         doctorDetails: doctorDetails,
         doj:staffFullDetails?.doj

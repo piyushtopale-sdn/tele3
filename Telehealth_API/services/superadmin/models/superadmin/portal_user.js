@@ -66,7 +66,6 @@ const portalUserSchema = new mongoose.Schema(
         },
         permissions: {
             type: Array,
-            default: null
         },
         for_staff: {
             type: mongoose.Schema.Types.ObjectId,

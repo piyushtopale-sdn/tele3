@@ -23,11 +23,9 @@ const basicInfoSchema = new mongoose.Schema(
     },
     profile_picture: {
       type: String,
-      default: "",
     },
     profile_picture_signed_url: {
       type: String,
-      default: "",
     },
     centre_picture: [
       {
@@ -36,7 +34,6 @@ const basicInfoSchema = new mongoose.Schema(
     ],
     centre_picture_signed_urls: {
       type: Array,
-      default: null,
     },
     licence_details: {
       id_number: {

@@ -19,7 +19,10 @@ import {
      getRadiologyRecords,
      getDoctorPatientRecords,
      getPharmacyOrderRecords,getlabRecords,
-     getLatestPatientLogin,updateAdminProfile} from "../controllers/superadmin/superadminController";
+     getLatestPatientLogin,updateAdminProfile,
+     createMediaContent,
+     getAllMediaContent,
+     deleteMediaContentById} from "../controllers/superadmin/superadminController";
 
 
 import { authorizeRole, verifyToken } from "../helpers/verifyToken";
@@ -263,6 +266,9 @@ superadminRoute.get("/all-admin-profile-list",  authorizeRole(['superadmin']),al
 superadminRoute.post("/detele-lock-admin-user",  authorizeRole(['superadmin']),deteleLockAdminUser);
 superadminRoute.get("/get-latest-patient-login",  authorizeRole(['superadmin']),getLatestPatientLogin);
 superadminRoute.put("/update-admin-profile",  authorizeRole(['superadmin']),updateAdminProfile);
+superadminRoute.post("/create-media-content",  authorizeRole(['superadmin']),createMediaContent);
+superadminRoute.get("/get-all-media-content",  authorizeRole(['superadmin']),getAllMediaContent);
+superadminRoute.delete("/delete-media-content",  authorizeRole(['superadmin']),deleteMediaContentById);
 
 
 

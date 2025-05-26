@@ -34,8 +34,7 @@ const immunizationInfoSchema = new mongoose.Schema(
             enum: ["patient", "doctor"]
         },
         added_by_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            default: null
+            type: mongoose.Schema.Types.ObjectId,            
         },
         for_portal_user: {
             type: mongoose.Schema.Types.ObjectId,

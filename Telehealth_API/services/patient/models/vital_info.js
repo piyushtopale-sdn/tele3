@@ -35,11 +35,9 @@ const vitalInfoSchema = new mongoose.Schema(
     },
     added_by: {
         type: mongoose.Schema.Types.ObjectId,
-        default: null
     },
     appointment_id: {
         type: mongoose.Schema.Types.ObjectId,
-        default: null
     },
     is_manual: {
       type: Boolean,

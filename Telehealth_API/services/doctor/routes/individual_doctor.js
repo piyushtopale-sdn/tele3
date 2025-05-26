@@ -1,7 +1,5 @@
 "use strict";
-// const individualDoctorStaffRole = require("../controllers/roles/role");
 import individualDoctorStaffRole from "../controllers/roles/role.js";
-// const individualDoctorStaff = require("../controllers/individual_doctor_staff_controller");
 import individualDoctorStaff from "../controllers/individual_doctor_staff_controller.js";
 
 import express from "express";
@@ -11,8 +9,6 @@ import {verifyRole, verifyToken} from "../helpers/verifyToken"
 
 individualDoctorRoute.post("/sign-up", individualDoctor.signUp);
 individualDoctorRoute.post("/login", individualDoctor.login);
-individualDoctorRoute.get("/get-doctors-list", individualDoctor.listIndividualDoctor);
-individualDoctorRoute.get("/get-doctor-details", individualDoctor.individualDoctor);
 individualDoctorRoute.post("/forgot-password", individualDoctor.forgotPassword);
 individualDoctorRoute.post("/reset-forgot-password", individualDoctor.resetForgotPassword);
 individualDoctorRoute.post("/send-sms-otp-for-2fa", individualDoctor.sendSmsOtpFor2fa);

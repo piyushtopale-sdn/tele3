@@ -4,19 +4,15 @@ const notificationModel = new mongoose.Schema(
     {
         content: {
             type: String,
-            default: null
         },
         url: {
             type: String,
-            default: null
         },
         appointmentId: {   //used to store orderid also
             type: mongoose.Schema.Types.ObjectId,
-            default: null
         },
         notitype: {
             type:String,
-            default: null
         },
         created_by: {
             type: mongoose.Schema.Types.ObjectId,
@@ -46,7 +42,6 @@ const notificationModel = new mongoose.Schema(
         },
         title: {
             type: String,
-            default: null
         }
     },
     { timestamps: true }

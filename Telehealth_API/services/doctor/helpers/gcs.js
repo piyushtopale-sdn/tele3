@@ -1,4 +1,4 @@
-const { storage } = require('./google-cloud-storage')
+import { storage } from './google-cloud-storage';
 
 export const generateSignedUrl = (fileName) => {
     return new Promise(async(resolve) => {

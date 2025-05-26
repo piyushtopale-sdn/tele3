@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
 import { messageID, messages } from "../config/constants";
 import { sendResponse } from "../helpers/transmission"
-const config = require('../config/config').get();
+import { get } from '../config/config';
+const config = get();
 const { secret } = config;
 
 export const verifyToken = async (req, res, next) => {
@@ -20,14 +21,14 @@ export const verifyToken = async (req, res, next) => {
         next();
     } catch (error) {
         if (error.name == "TokenExpiredError") {
-            sendResponse(req, res, messageID.unAuthorizedUser, {
+            return sendResponse(req, res, messageID.unAuthorizedUser, {
                 status: false,
                 body: null,
                 message: messages.tokenExpire,
                 errorCode: null,
             });
         }
-        sendResponse(req, res, messageID.unAuthorizedUser, {
+        return sendResponse(req, res, messageID.unAuthorizedUser, {
             status: false,
             body: null,
             message: messages.invalidToken,

@@ -6,8 +6,8 @@ import path from "path";
 import InitiateMongoServer from "./config/db.js";
 import { doctorRoute, individualDoctorRoute, doctor2Route, appointmentRoutes, roleRoute, patientRoute, leaveManagementRoute, patientClinicalInfoRoute } from "./routes/index";
 import AppointmentController from "./controllers/appointment.controllers";
-const useragent = require('express-useragent');
-const fileUpload = require('express-fileupload');
+import useragent from 'express-useragent';
+import fileUpload from 'express-fileupload';
 const app = express();
 
 InitiateMongoServer();

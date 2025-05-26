@@ -33,7 +33,6 @@ const messageModel = mongoose.Schema(
       {
         user_Id: {
           type: mongoose.Schema.Types.ObjectId,
-          default: null
         }
       }
     ]

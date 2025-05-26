@@ -26,11 +26,9 @@ const adminInfoSchema = new mongoose.Schema(
     },
     profile_picture: {
       type: String,
-      default: "",
     },
     profile_picture_signed_url: {
       type: String,
-      default: "",
     },
     pharmacy_picture: [
       {
@@ -39,7 +37,6 @@ const adminInfoSchema = new mongoose.Schema(
     ],
     pharmacy_picture_signed_urls: {
       type: Array,
-      default: null,
     },
     licence_details: {
       id_number: {

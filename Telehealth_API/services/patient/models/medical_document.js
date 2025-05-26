@@ -18,7 +18,6 @@ const medicalDocumentSchema = new mongoose.Schema(
         },
         parentPatientId: {
             type: String,
-            default: ""
         },
         documentsOf: {
             type: String,
@@ -30,7 +29,6 @@ const medicalDocumentSchema = new mongoose.Schema(
         },
         fileKey: {
             type: String,
-            default: ""
         },
         isDeleted: {
             type: Boolean,

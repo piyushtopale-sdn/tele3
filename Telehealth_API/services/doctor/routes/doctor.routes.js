@@ -1,10 +1,9 @@
 import express from "express";
-import { addMembersToGroupChat, allMessage, clearAllmessages, clearSinglemessages, createdChat, createGroupChat, getCreatedChats, getNotification, markAllReadNotification, markReadNotificationByID, readMessageCount, saveNotification, sendMessage, sendPushNotificattionToPatient, totalMessageCount, updateOnlineStatus } from "../controllers/Chat-Controller/Chat";
+import { addMembersToGroupChat, allMessage, clearAllmessages, clearSinglemessages, createdChat, createGroupChat, getCreatedChats, getNotification, markAllReadNotification, markReadNotificationByID, readMessageCount, saveNotification, sendMessage, sendPushNotificattionToPatient, totalMessageCount, updateOnlineStatus, update_opened_closed_ChatWindow } from "../controllers/Chat-Controller/Chat";
 import hospital from "../controllers/hospital_controller.js";
 import hospitalStaff from "../controllers/hospital_staff_controller.js";
 import { verifyToken, verifyRole } from "../helpers/verifyToken";
 import { handleResponse } from "../middleware/utils";
-// const hospitalStaffRole = require("../controllers/roles/role");
 import hospitalStaffRole from "../controllers/roles/role.js";
 const doctor2Route = express.Router();
 import fs from "fs";
@@ -116,7 +115,9 @@ doctor2Route.put('/clear-single-message', clearSinglemessages)
 doctor2Route.post("/save-superadmin-notification", hospital.saveSuperadminNotification);
 doctor2Route.get("/get-hospital-count-superadmin-dashboard", hospital.totalHospitalforAdminDashboard);
 doctor2Route.get("/get-consultation-count", hospital.totalConsultation);
-doctor2Route.post("/update-notification-status",hospital.updateNotificationStatus);;
+doctor2Route.post("/update-notification-status",hospital.updateNotificationStatus);
+doctor2Route.post('/update-opened-closed-ChatWindow', update_opened_closed_ChatWindow)
+
 
 
 export default doctor2Route;

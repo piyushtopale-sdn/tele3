@@ -9,15 +9,7 @@ const config = {
     },
     PORTS: {
         API_PORT: process.env.PATIENT_SERVICE_PORT || 8007,
-        EMAIL_PORT: 4200,
-        APIHOST: "http://localhost",
     },
-    EMAIL: {
-        host: "smtp.gmail.com",
-        user: process.env.ADMIN_EMAIL || "youremail@gmail.com",
-        password: process.env.ADMIN_PASSWORD || "password",
-    },
-    cryptoSecret: process.env.CRYPTOSECRET || "",
     secret: {
         JWT: process.env.JWT_SECRET || "",
     },

@@ -87,7 +87,6 @@ const LabTestSchema = new mongoose.Schema(
             },
             user_type: {
                 type: String,
-                default: null
             },
         }
     },

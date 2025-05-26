@@ -713,8 +713,6 @@ class AppointmentController {
           { _id: { $in: missedAppointments } },
           { $set: { status: 'MISSED' } }
         );
-      } else {
-        console.log('No missed appointments found for today.');
       }
     } catch (error) {
       console.error('Error processing missed appointments:', error);
@@ -825,13 +823,11 @@ class AppointmentController {
   }
 
   async doctorAvailableSlot(req, res) {
-    console.log("req.query______",config.TIMEZONE);
     
     try {
       const { date, doctorId } = req.query
       const weekDayArray = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
       const newDate = moment(date).tz(config.TIMEZONE)
-      console.log("newDate_______",newDate);
       
       const day = weekDayArray[newDate.day()]
 

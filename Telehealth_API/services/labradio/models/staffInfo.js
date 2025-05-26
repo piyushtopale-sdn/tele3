@@ -34,36 +34,6 @@ const staffSchema = new mongoose.Schema(
                 ref: "PortalUser",
             },
         ],
-        // specialty: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: "Specialty",
-        //     default: null
-        // },
-        specialty: {
-            type: Array
-        },
-        department: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                default: null
-            }
-        ],
-        services: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                default: null
-            }
-        ],
-        unit: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                default: null
-            }
-        ],
-        expertise: {
-            type: mongoose.Schema.Types.ObjectId,
-            default: null
-        },
         verify_status: {
             type: String,
             default: "APPROVED",

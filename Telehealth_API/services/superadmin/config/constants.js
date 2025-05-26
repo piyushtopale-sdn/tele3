@@ -11,8 +11,6 @@ export const config = {
     },
     PORTS: {
         API_PORT: process.env.SUPERADMIN_SERVICE_PORT || 8006,
-        EMAIL_PORT: 4200,
-        APIHOST: "http://localhost",
     },
     BaseUrl: {
         labradioServiceUrl: process.env.LABRADIO_SERVICE_URL,
@@ -23,11 +21,6 @@ export const config = {
         gatewayServiceUrl: process.env.GATEWAYSERVICEURL,
     },
     API_PORT: process.env.SUPERADMIN_SERVICE_PORT || 8006,
-    EMAIL: {
-        HOST: "smtp.gmail.com",
-        USER: "",
-        PASSWORD: "",
-    },
     CRYPTO_SECRET: process.env.CRYPTOSECRET || "",
     SECRET: {
         JWT: process.env.JWT_SECRET || "",

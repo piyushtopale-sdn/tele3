@@ -9,20 +9,11 @@ const config = {
     },
     PORTS: {
       API_PORT: process.env.PHARMACY_SERVICE_PORT || 8001,
-      EMAIL_PORT: 4200,
-      APIHOST: "http://localhost",
     },
-    EMAIL: {
-      host: "smtp.gmail.com",
-      user: "",
-      password: "",
-    },
-    cryptoSecret: process.env.CRYPTOSECRET || "",
     secret: {
       JWT: process.env.JWT_SECRET || "",
     },
     JWT_EXPIRATION_IN_MINUTES: process.env.JWT_EXPIRATION_IN_MINUTES || 1440,
-    hospitalRoutes: ['/hospital/subscription-listing', '/hospital/subscription-purchased-plan', '/hospital/view-subscription-purchased-plan'],
     NODE_ENV: process.env.NODE_ENV || "local",
   };
   

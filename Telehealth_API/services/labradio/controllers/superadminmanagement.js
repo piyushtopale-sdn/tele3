@@ -261,12 +261,34 @@ export const getLabRadioListByPortalUser = async (req, res) => {
 
     const result = await BasicInfo.aggregate(aggregate);
     /**Fetching signed url - Feb 7 */
+    // const signedResults = await Promise.all(
+    //   result.map(async (item) => ({
+    //     ...item,
+    //     signed_profile_picture: await generateSignedUrl(item.profile_picture),
+    //   }))
+    // );
+
     const signedResults = await Promise.all(
-      result.map(async (item) => ({
-        ...item,
-        signed_profile_picture: await generateSignedUrl(item.profile_picture),
-      }))
+      result.map(async (item) => {
+        try {
+          const signedUrl = item.profile_picture
+            ? await generateSignedUrl(item.profile_picture)
+            : null;
+    
+          return {
+            ...item,
+            signed_profile_picture: signedUrl,
+          };
+        } catch (error) {
+          console.error(`Error signing URL`, error);
+          return {
+            ...item,
+            signed_profile_picture: null,
+          };
+        }
+      })
     );
+    
     
     sendResponse(req, res, 200, {
       status: true,

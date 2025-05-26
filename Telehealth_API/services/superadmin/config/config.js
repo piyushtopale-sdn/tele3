@@ -9,15 +9,7 @@ const config = {
   },
   PORTS: {
     API_PORT: process.env.SUPERADMIN_SERVICE_PORT || 8006,
-    EMAIL_PORT: 4200,
-    APIHOST: "http://localhost",
   },
-  EMAIL: {
-    host: "smtp.gmail.com",
-    user: process.env.ADMIN_EMAIL,
-    password: process.env.ADMIN_PASSWORD || "pbskkrwtkrtzdagk",
-  },
-  cryptoSecret: process.env.CRYPTOSECRET || "",
   secret: {
     JWT: process.env.JWT_SECRET || "",
   },

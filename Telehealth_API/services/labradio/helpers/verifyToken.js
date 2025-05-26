@@ -27,7 +27,7 @@ export const verifyToken = async (req, res, next) => {
                 errorCode: null,
             });
         }
-        sendResponse(req, res, messageID.unAuthorizedUser, {
+        return sendResponse(req, res, messageID.unAuthorizedUser, {
             status: false,
             body: null,
             message: messages.invalidToken,

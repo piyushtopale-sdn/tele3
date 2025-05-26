@@ -62,7 +62,6 @@ const profileInfoSchema = new mongoose.Schema(
             },
             leftDoctorDate: {
                 type: String, // Store the date when doctor is unassigned
-                default: null
             }
         }],
         preferredPharmacy: [{
@@ -137,11 +136,9 @@ const profileInfoSchema = new mongoose.Schema(
         },
         added_by_doctor: {
             type: mongoose.Schema.Types.ObjectId,
-            default: null
         },
         identityCard :{
             type: String,
-            default:''
         },
         isFamilyMember: {
             type: Boolean,

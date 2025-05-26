@@ -2,7 +2,7 @@
 
 import express from "express";
 
-import { addLeave, getAllselfLeave, doctorStaffLeavesList, updateLeave, getAllMyLeave, hospitalIds,getAllParticularHospitalLeave, LeaveAccept, LeaveReject, getAllMyStaffLeaves, StaffLeaveAccept, StaffLeaveReject, getAllMyHospitalStaffLeave, getAllMyHospitalStaffLeaves, HospitalStaffLeaveAccept, HospitalStaffLeaveReject } from "../controllers/leave_contoller";
+import { addLeave, getAllselfLeave, doctorStaffLeavesList, updateLeave, getAllMyLeave, LeaveAccept, LeaveReject, getAllMyStaffLeaves, StaffLeaveAccept, StaffLeaveReject, getAllMyHospitalStaffLeave, getAllMyHospitalStaffLeaves, HospitalStaffLeaveAccept, HospitalStaffLeaveReject } from "../controllers/leave_contoller";
 
 const leaveManagementRoute = express.Router();
 

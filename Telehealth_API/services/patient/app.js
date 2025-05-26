@@ -7,9 +7,9 @@ import Payment from "./controllers/payment/paymentController";
 import AmazonPayment from "./controllers/payment/amazonPayment";
 import cron from 'node-cron';
 
-const useragent = require('express-useragent');
+import useragent from 'express-useragent';
 const app = express();
-const fileUpload = require('express-fileupload');
+import fileUpload from 'express-fileupload';
 
 InitiateMongoServer();
 // middleware

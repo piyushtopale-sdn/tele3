@@ -9,7 +9,6 @@ import PrescribeRadiologyTest from "../models/prescribe_radiology_test";
 import Eprescription from "../models/eprescription";
 import ProfileInfo from "../models/profile_info";
 import LocationInfo from "../models/location_info";
-import IndividualDoctorInfo from "../models/individual_doctor_info";
 import StaffInfo from "../models/staff_info";
 import ReviewAndRating from "../models/review";
 import Counter from "../models/counter";
@@ -238,94 +237,7 @@ class IndividualDoctor {
       });
     }
   }
-  async listIndividualDoctor(req, res) {
-    try {
-      const { in_hospital, limit, page } = req.body;
-      const result = await IndividualDoctorInfo.find({
-        in_hospital: { $eq: in_hospital },
-      })
-        .select({
-          specilaization: 1,
-          _id: 1,
-          exp_years: 1,
-          unite: 1,
-          licence_number: 1,
-        })
-        .populate({
-          path: "in_profile",
-          select: { _id: 1, name: 1 },
-        })
-        .populate({
-          path: "for_portal_user",
-          select: { _id: 1, email: 1, user_name: 1, phone_number: 1 },
-        })
-        .sort([["createdAt", -1]])
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec();
-      const count = await IndividualDoctorInfo.countDocuments({
-        in_hospital: { $eq: in_hospital },
-      });
-      sendResponse(req, res, 200, {
-        status: true,
-        body: {
-          totalPages: Math.ceil(count / limit),
-          currentPage: page,
-          totalRecords: count,
-          result,
-        },
-        message: "successfully fetched individual doctor list",
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to fetch doctor list",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-  async individualDoctor(req, res) {
-    try {
-      const { individual_doctor_id } = req.body;
-      const result = await IndividualDoctorInfo.find({
-        _id: individual_doctor_id,
-      })
-        .select({
-          specilaization: 1,
-          _id: 1,
-          exp_years: 1,
-          unite: 1,
-          licence_number: 1,
-        })
-        .populate({
-          path: "in_profile",
-          select: { _id: 1, name: 1 },
-        })
-        .populate({
-          path: "for_portal_user",
-          select: { _id: 1, email: 1, user_name: 1, phone_number: 1 },
-        })
-        .exec();
-      sendResponse(req, res, 200, {
-        status: true,
-        body: result,
-        message: "successfully fetched doctor details",
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to fetch doctor list",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
+ 
   async login(req, res) {
     try {
       const { email, password, role } = req.body;

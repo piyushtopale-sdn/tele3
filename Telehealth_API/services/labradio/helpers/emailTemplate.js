@@ -3,39 +3,6 @@ import { config } from "../config/constants";
 
 const test_pFrontendUrl = config.test_p_FRONTEND_URL || "http://localhost:4200";
 
-export const forgotPasswordEmailForIndividualDoctor = (email, code, user_id, type) => {
-    return {
-        Source: '<no-reply@yopmail.com>',
-        Destination: {
-            ToAddresses: [
-                email
-            ],
-        },
-        ReplyToAddresses: ['no-reply@yopmail.com'],
-        Message: {
-            Body: {
-                Html: {
-                    Charset: 'UTF-8',
-                    Data: `
-                <h3>Password Reset for ${type} portal.</h3>
-                <br/>
-               
-                <a href="${test_pFrontendUrl}/portals/newpassword/${type}?token=${code}&user_id=${user_id}&type=${type}&role="button">RESET YOUR PASSWORD</a>
-                <br/>
-                <p>Click the below button to reset your password</p>
-                <br/>
-                <p>Thanks,</p>
-                <p>/p>`,
-                },
-            },
-            Subject: {
-                Charset: 'UTF-8',
-                Data: `Forgot Password Link`,
-            }
-        },
-    };
-}
-
 export const verifyEmail2fa = (email, code) => ({
     Source: '<no-reply@yopmail.com>',
     Destination: {

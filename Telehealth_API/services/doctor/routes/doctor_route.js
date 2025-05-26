@@ -3,66 +3,14 @@
 import express from "express";
 import { doctorController } from "../controllers/doctor.controller.js";
 import { verifyRole, verifyToken } from "../helpers/verifyToken";
-import { handleResponse } from "../middleware/utils";
-import fs from "fs";
 
 const doctorRoute = express.Router();
-
-const uploadImage = async (req, res, next) => {
-  const file = req.files.file;
-  const filename = file.name.split('.')[0] + '-' + Date.now() + '.jpg';
-  req.filename = filename;
-  
-  const newPath = `${__dirname.replace('routes', 'uploadEsignature')}/${filename}`
-  file.mv(newPath);
-  next()
-}
-const uploadFileToLocalStorage = async (req, res, next) => {
-  if (!req.files) {
-    return handleResponse(req, res, 500, {
-      status: false,
-      body: null,
-      message: "No files found",
-      errorCode: "INTERNAL_SERVER_ERROR",
-    })
-  }
-  
-  const file = req.files.file;
-  if (file.mimetype !== "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-    return handleResponse(req, res, 500, {
-      status: false,
-      body: null,
-      message: "Only excel file allowed!",
-      errorCode: "INTERNAL_SERVER_ERROR",
-    })
-  }
-  const filename = file.name.split('.')[0] + '-' + Date.now() + '.xlsx';
-  req.filename = filename;
-  const newPath = `${__dirname.replace('routes', 'uploads')}/${filename}`
-  fs.writeFile(newPath, file.data, (err) => {
-    if (err) {
-      return handleResponse(req, res, 500, {
-        status: false,
-        body: err,
-        message: "Something went wrong while uploading file",
-        errorCode: "INTERNAL_SERVER_ERROR ",
-      })
-    }
-    next()
-  })
-}
 
 doctorRoute.post("/add-staff", doctorController.addStaff);
 doctorRoute.post("/delete-staff", doctorController.deleteStaff);
 doctorRoute.put(
   "/update-staff-details",
   doctorController.updateStaffDetails
-);
-doctorRoute.post("/add-doctor", doctorController.addDoctor);
-doctorRoute.post("/delete-doctor", doctorController.deleteDoctor);
-doctorRoute.put(
-  "/update-doctor-details",
-  doctorController.updateDoctorDetails
 );
 doctorRoute.post(
   "/add-doctor-education",
@@ -88,20 +36,12 @@ doctorRoute.post(
   "/delete-doctor-availability",
   doctorController.deleteDoctorAvailability
 );
-doctorRoute.put(
-  "/update-doctor-consultation",
-  doctorController.updateDoctorConsultation
-);
-doctorRoute.post(
-  "/delete-doctor-consultation",
-  doctorController.deleteDoctorConsultation
-);
+
 doctorRoute.post("/save-document", doctorController.saveDocumentMetadata);
 doctorRoute.post(
   "/delete-document",
   doctorController.deleteDocumentMetadata
 );
-doctorRoute.post("/list-document", doctorController.listDocumentMetadata);
 
 doctorRoute.post('/advance-doctor-filter', doctorController.advanceDoctorFilter);
 doctorRoute.get('/doctor-management-view-basic-info', doctorController.doctorManagementViewBasicInfo);

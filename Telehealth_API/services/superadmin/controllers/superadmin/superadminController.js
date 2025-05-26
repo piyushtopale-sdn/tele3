@@ -22,11 +22,12 @@ import { sendEmail } from "../../helpers/ses";
 
 import mongoose from "mongoose";
 import Notification from "../../models/superadmin/Chat/Notification";
-const Http = require('../../helpers/httpservice');
+import Http from '../../helpers/httpservice.js';
 import { decryptionData } from "../../helpers/crypto";
 
 import Logs from "../../models/superadmin/log"
 import GeneralSettings from "../../models/superadmin/general_settings";
+import Media from "../../models/superadmin/media.js"
 
 const httpService = new Http()
 /**
@@ -2992,7 +2993,6 @@ export const deteleLockAdminUser = async (req, res) => {
             errorCode: null,
         });
     } catch (error) {
-        console.log("Error : ", error.message);
         console.error("Error fetching latest login:", error);
         return sendResponse(req, res, 500, {
             status: false,
@@ -3099,6 +3099,114 @@ export const updateAdminProfile = async (req, res) => {
       });
     }
   };
+
+  export const createMediaContent = async (req, res) => {
+    try {
+      const { title, type, purpose, files } = req.body;
+      
+      const existingTitle = await Media.findOne({title});
+      
+      if(existingTitle){
+        return sendResponse(req, res, 200, {
+            status: true,
+            body: null,
+            message: "Title is already exist",
+          });
+      }
+
+      if (!files || !Array.isArray(files) || files.length === 0) {
+        return sendResponse(req, res, 200, {
+          status: true,
+          body: null,
+          message: "At least one media file URL is required.",
+        });
+      }
+  
+      if (files.length > 3) {
+        return sendResponse(req, res, 400, {
+          status: false,
+          body: null,
+          message: "You can only upload a maximum of 3 media files.",
+        });
+      }
+  
+      const newMedia = new Media({
+        title,
+        type,
+        purpose,
+        files,
+      });
+  
+      await newMedia.save();
+  
+      return sendResponse(req, res, 201, {
+        status: true,
+        body: { media: newMedia },
+        message: "Media uploaded successfully",
+        errorCode: null,
+      });
+  
+    } catch (error) {
+      console.error(error);
+      return sendResponse(req, res, 500, {
+        status: false,
+        body: null,
+        message: "Server error",
+      });
+    }
+  };
+  
+
+  export const getAllMediaContent = async (req,res) => {
+    try{
+        const mediaList = await Media.find().sort({createdAt: -1});
+        const count = mediaList.length
+        return sendResponse(req,res, 200, {
+            status:true,
+            body:{mediaList,count},
+            message:"Successfully fetched media list",
+            errorCode:null
+        })
+    }
+    catch(error){
+        return sendResponse(req,res,500, {
+            status:false,
+            body: null,
+            message: "Failed to fetch media content",
+        })
+    }
+  }
+
+  export const deleteMediaContentById = async (req,res) => {
+    try{
+        const {id} = req.query;
+        const media = await Media.findOne({_id:id})
+        if(!media){
+            return sendResponse(req,res,200, {
+                status:false,
+                body: null,
+                message: "Media not found",
+            })
+        }
+        await Media.findByIdAndDelete(id);
+        return sendResponse(req,res,200,{
+            status:true,
+            body:null,
+            message:"Media successfully deleted",
+            errorCode:null
+        })
+    }
+    catch(error){
+        return sendResponse(req,res,500,{
+            status:false,
+            body:null,
+            message:"Internal server error",
+            errorCode:null
+        })
+
+    }
+  }
+ 
   
   
 

@@ -72,7 +72,6 @@ const portalUserSchema = new mongoose.Schema(
     },
     permissions: {
       type: Array,
-      default: null,
     },
     average_rating: {
       type: String,
@@ -94,7 +93,6 @@ const portalUserSchema = new mongoose.Schema(
     },
     fcmToken: {
       type: String,
-      default: null,
     },
     profile_picture: {
       type: String,

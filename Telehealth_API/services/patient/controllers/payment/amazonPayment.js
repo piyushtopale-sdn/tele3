@@ -13,7 +13,6 @@ import https from 'https';
 import fs from 'fs';
 import path from 'path';
 
-// const crypto = require('crypto');
 import crypto from 'crypto';
 
 const { AMAZONPAY } = config

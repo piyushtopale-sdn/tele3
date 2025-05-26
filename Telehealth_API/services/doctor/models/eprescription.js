@@ -20,7 +20,6 @@ const eprescriptionSchema = new mongoose.Schema(
         },
         eSignature: {
             type: String,
-            default:null
         },
         status: {
             type: String,

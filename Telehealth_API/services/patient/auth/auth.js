@@ -4,7 +4,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from 'bcrypt';
 import { decryptionData, encryptObjectData } from "../middleware/utils";
 import { sendEmail } from "../middleware/sendEmail";
-const config = require('../config/config.js').get();
+import { get } from '../config/config';
+const config = get();
 const { secret } = config;
 
 export const login = async (req, res) => {

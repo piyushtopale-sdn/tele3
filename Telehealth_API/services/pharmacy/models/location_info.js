@@ -18,39 +18,30 @@ const locationInfoSchema = new mongoose.Schema(
     {
         nationality: {
             type: String,
-            default: null
         },
         neighborhood: {
             type: String,
-            default: null
         },
         region: {
              type: String,           
-            default: null
         },
         province: {
              type: String,            
-            default: null
         },
         department: {
              type: String,           
-            default: null
         },
         city: {
              type: String,            
-            default: null
         },
         village: {
              type: String,            
-            default: null
         },
         pincode: {
             type: String,
-            default: null
         },        
         address: {
             type: String,
-            default: null
         },
         loc: geoJsonSchema,
         for_portal_user: {

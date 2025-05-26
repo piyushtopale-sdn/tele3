@@ -1,4 +1,4 @@
-const firebase = require("./firebase");
+import firebase from './firebase';
  
 export const sendPushNotification =async( deviceTokens,notificationData)=>{
  

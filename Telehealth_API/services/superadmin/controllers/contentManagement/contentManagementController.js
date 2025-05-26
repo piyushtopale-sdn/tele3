@@ -606,7 +606,6 @@ class ContentManagementController {
             const text = contentData.content;
             const mobileNumber = `${patient.country_code}${patient.mobile}`;
             sendSms(mobileNumber, text);
-            console.log(`SMS sent to ${patient.full_name}`, text, mobileNumber);
           }
 
           if (sharevia.includes('email') && patient.email) {

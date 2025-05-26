@@ -6,7 +6,6 @@ import PortalUser from "../models/portal_user";
 import ProfileInfo from "../models/profile_info";
 import LocationInfo from "../models/location_info";
 import PathologyTestInfoNew from "../models/pathologyTestInfoNew";
-import DoctorInfo from "../models/doctor_info";
 import StaffInfo from "../models/staff_info";
 import BasicInfo from "../models/basic_info";
 import EducationalDetail from "../models/educational_details";
@@ -33,30 +32,13 @@ import { sendEmail } from "../helpers/ses";
 import { getNextSequenceValue, generateSequenceNumber } from "../middleware/utils";
 import { updatePaymentStatusAndSlot } from "./hospital_controller";
 import moment from "moment";
-import { config , messages} from "../config/constants";
+import { messages} from "../config/constants";
 import Notification from "../models/notification";
 import Specialty from "../models/specialty_info";
 import "dotenv/config.js";
 import { generateSignedUrl } from "../helpers/gcs";
 import Chat from "../models/Chat/ChatModel";
 import Message from "../models/Chat/Message";
-
-const validateColumnWithExcel = (toValidate, excelColumn) => {
-  const requestBodyCount = Object.keys(toValidate).length;
-  const fileColumnCount = Object.keys(excelColumn).length;
-  if (requestBodyCount !== fileColumnCount) {
-    return false;
-  }
-
-  let index = 1;
-  for (const iterator of Object.keys(excelColumn)) {
-    if (iterator !== toValidate[`col${index}`]) {
-      return false;
-    }
-    index++;
-  }
-  return true;
-};
 
 const saveVideoCallMessagesToChat = async (chatmessage) => {
   try {
@@ -366,253 +348,6 @@ class DoctorController {
     }
   }
 
-  async addDoctor(req, res) {
-    try {
-      const {
-        user_name,
-        email,
-        password,
-        phone_number,
-        name,
-        dob,
-        language,
-        gender,
-        address,
-        about,
-        profile_picture,
-        nationality,
-        country,
-        state,
-        city,
-        zip,
-        title,
-        exp_years,
-        unite,
-        licence_number,
-        as_staff,
-        specilaization,
-        act,
-      } = req.body;
-
-      const passwordHash = await hashPassword(password);
-      const userDetails = new PortalUser({
-        user_name,
-        email,
-        password: passwordHash,
-        phone_number,
-        verified: false,
-        role: "HOSPITAL_DOCTOR",
-      });
-      const userData = await userDetails.save();
-      const locationInfo = new LocationInfo({
-        nationality,
-        country,
-        state,
-        city,
-        zip,
-        for_portal_user: userData._id,
-      });
-      const locationData = await locationInfo.save();
-      const profileInfo = new ProfileInfo({
-        name,
-        dob,
-        language,
-        gender,
-        address,
-        about,
-        profile_picture,
-        in_location: locationData._id,
-        for_portal_user: userData._id,
-      });
-      const profileData = await profileInfo.save();
-      const doctorInfo = new DoctorInfo({
-        in_profile: profileData._id,
-        title,
-        exp_years,
-        unite,
-        licence_number,
-        as_staff,
-        specilaization,
-        act,
-        for_portal_user: userData._id,
-      });
-      const doctorDetails = await doctorInfo.save();
-      sendResponse(req, res, 200, {
-        status: true,
-        body: { doctorDetails },
-        message: messages.doctorCreated.en,
-        messageArabic: messages.doctorCreated.ar,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "failed to create doctor",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async updateDoctorDetails(req, res) {
-    try {
-      const {
-        for_portal_user,
-        user_name,
-        phone_number,
-        name,
-        dob,
-        language,
-        gender,
-        address,
-        about,
-        profile_picture,
-        nationality,
-        country,
-        state,
-        city,
-        zip,
-        title,
-        exp_years,
-        unite,
-        licence_number,
-        as_staff,
-        specilaization,
-        act,
-      } = req.body;
-      const userData = PortalUser.updateOne(
-        { _id: for_portal_user },
-        {
-          $set: {
-            user_name,
-            phone_number,
-            role: "HOSPITAL_DOCTOR",
-          },
-        },
-        { new: true }
-      ).exec();
-
-      const locationData = LocationInfo.updateOne(
-        { for_portal_user },
-        {
-          $set: {
-            nationality,
-            country,
-            state,
-            city,
-            zip,
-          },
-        },
-        { new: true }
-      ).exec();
-
-      const profileData = ProfileInfo.updateOne(
-        { for_portal_user },
-        {
-          $set: {
-            name,
-            dob,
-            language,
-            gender,
-            address,
-            about,
-            profile_picture,
-          },
-        },
-        { new: true }
-      ).exec();
-
-      const doctorDetails = DoctorInfo.updateOne(
-        { for_portal_user },
-        {
-          $set: {
-            title,
-            exp_years,
-            unite,
-            licence_number,
-            as_staff,
-            specilaization,
-            act,
-          },
-        },
-        { new: true }
-      ).exec();
-
-      await Promise.all([userData, locationData, profileData, doctorDetails]);
-      sendResponse(req, res, 200, {
-        status: true,
-        body: { doctorDetails },
-        message: messages.doctorUpdated.en,
-        messageArabic: messages.doctorUpdated.ar,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "failed to update doctor details",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async deleteDoctor(req, res) {
-    try {
-      const { for_portal_user } = req.body;
-      const portalUser = PortalUser.deleteOne(
-        { _id: for_portal_user },
-        { new: true }
-      ).exec();
-      const locationData = LocationInfo.deleteOne(
-        { for_portal_user },
-        { new: true }
-      ).exec();
-      const profileData = ProfileInfo.deleteOne(
-        { for_portal_user },
-        { new: true }
-      ).exec();
-      const doctorData = DoctorInfo.deleteOne(
-        { for_portal_user },
-        { new: true }
-      ).exec();
-      const doctorAvailabilityData = DoctorAvailability.deleteOne(
-        { for_portal_user },
-        { new: true }
-      ).exec();
-      const educationalData = EducationalDetail.deleteMany(
-        { for_portal_user },
-        { new: true }
-      ).exec();
-      const DocumentData = DocumentInfo.deleteMany(
-        { for_portal_user },
-        { new: true }
-      ).exec();
-      await Promise.all([
-        portalUser,
-        locationData,
-        profileData,
-        doctorData,
-        doctorAvailabilityData,
-        educationalData,
-        DocumentData,
-      ]);
-      sendResponse(req, res, 200, {
-        status: true,
-        body: { doctorData },
-        message: messages.doctorDeleted.en,
-        messageArabic: messages.doctorDeleted.ar,
-        errorCode: null,
-      });
-    } catch (error) {
-      sendResponse(req, res, 500, {
-        status: false,
-        body: error,
-        message: "failed to delete hospital doctor",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
   async addDoctorEducation(req, res) {
     try {
       const educationalData = await EducationalDetail.insertMany(req.body);
@@ -793,59 +528,7 @@ class DoctorController {
     }
   }
 
-  async updateDoctorConsultation(req, res) {
-    try {
-      const { for_portal_user, consultation_fee } = req.body;
-      const consultationFee = await DoctorInfo.updateOne(
-        { for_portal_user },
-        { $set: { consultation_fee } },
-        { new: true }
-      ).exec();
-      sendResponse(req, res, 200, {
-        status: true,
-        body: { consultationFee },
-        message: messages.doctorConsultationUpdated.en,
-        messageArabic: messages.doctorConsultationUpdated.ar,
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to update doctor consultation details",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async deleteDoctorConsultation(req, res) {
-    try {
-      const { for_portal_user } = req.body;
-      const consultationFee = await DoctorInfo.updateOne(
-        { for_portal_user },
-        { $set: { consultation_fee: [] } },
-        { new: true }
-      ).exec();
-      sendResponse(req, res, 200, {
-        status: true,
-        body: { consultationFee },
-        message: messages.doctorConsultationDeleted.en,
-        messageArabic: messages.doctorConsultationDeleted.ar,
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to delete doctor consultation details",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async saveDocumentMetadata(req, res) {
+   async saveDocumentMetadata(req, res) {
     try {
       const {
         name,
@@ -912,43 +595,6 @@ class DoctorController {
         status: false,
         body: null,
         message: "failed to delete document details",
-        errorCode: "INTERNAL_SERVER_ERROR",
-      });
-    }
-  }
-
-  async listDocumentMetadata(req, res) {
-    try {
-      const { for_portal_user, limit, page, code } = req.body;
-      const result = await DocumentInfo.find({
-        for_portal_user: { $eq: for_portal_user },
-        code: { $eq: code },
-      })
-        .sort([["createdAt", -1]])
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec();
-      const count = await DoctorInfo.countDocuments({
-        for_portal_user: { $eq: for_portal_user },
-      });
-      sendResponse(req, res, 200, {
-        status: true,
-        body: {
-          totalPages: Math.ceil(count / limit),
-          currentPage: page,
-          totalRecords: count,
-          result,
-        },
-        message: messages.documentsFetched.en,
-        messageArabic: messages.documentsFetched.ar,
-        errorCode: null,
-      });
-    } catch (error) {
-      console.error("An error occurred:", error);
-      sendResponse(req, res, 500, {
-        status: false,
-        body: null,
-        message: "failed to fetch document list",
         errorCode: "INTERNAL_SERVER_ERROR",
       });
     }
@@ -3326,15 +2972,7 @@ async doctorManagementUpdateAvailability(req, res) {
 
       result = await Eprescription.findOne({ appointmentId });
 
-      let environvent = config.NODE_ENV;
-
-      // result.eSignature = `http://localhost:8005/hospital/esignature-for-e-prescription/${result.eSignature}`
-
-      if (environvent == "local") {
-        result.eSignature = `http://localhost:8005/hospital/esignature-for-e-prescription/${result.eSignature}`;
-      } else {
-        result.eSignature = `${config.test_p_Backend_url}/hospital/esignature-for-e-prescription/${result.eSignature}`;
-      }
+      result.eSignature = `http://localhost:8005/hospital/esignature-for-e-prescription/${result.eSignature}`
 
       if (result) {
         sendResponse(req, res, 200, {

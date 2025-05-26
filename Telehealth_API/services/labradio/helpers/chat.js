@@ -1,7 +1,4 @@
-const {
-  RtcTokenBuilder,
-  RtcRole,
-} = require("agora-access-token");
+import { RtcTokenBuilder, RtcRole } from "agora-access-token";
 import "dotenv/config";
 const appIds=process.env.APP_ID;
 const appcertificatekey=process.env.APP_CERTIFICATE;

@@ -20,13 +20,11 @@ const reviewAndRatingSchema = new mongoose.Schema(
         },
         reviewBy: {
             type: String,
-            default: null,
-            enum: [null, 'patient', 'Radiology', 'Laboratory']
+            enum: ['patient', 'Radiology', 'Laboratory']
         },
         reviewTo: {
             type: String,
-            default: null,
-            enum: [null, 'Radiology', 'Laboratory-Imaging', ]
+            enum: [ 'Radiology', 'Laboratory-Imaging', ]
         },
     },
     { timestamps: true }

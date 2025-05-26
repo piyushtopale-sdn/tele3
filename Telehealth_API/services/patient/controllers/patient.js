@@ -635,9 +635,14 @@ class Patient {
         uuid,
         role: "patient",
       };
-      profileData.profile_pic_signed_url = await generateSignedUrl(
-        profileData?.profile_pic
-      );
+      // profileData.profile_pic_signed_url = await generateSignedUrl(
+      //   profileData?.profile_pic
+      // );
+
+      profileData.profile_pic_signed_url = profileData?.profile_pic
+        ? await generateSignedUrl(profileData.profile_pic)
+        : null;
+
 
       if (req.body.fcmToken != "" || req.body.fcmToken != undefined) {
         

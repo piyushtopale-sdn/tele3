@@ -1,7 +1,6 @@
 import HttpService from "./httpservice";
 
 export const SocketChat = (socket, io) => {
-  const activeChatRooms = new Map(); 
 
   socket.on("join-chat-room", async (userInfo) => {
     socket.join(userInfo.userId);
@@ -67,9 +66,6 @@ export const SocketChat = (socket, io) => {
         let sendMessagData = await HttpService.postStagingChat('doctor2/create-message', { data: messageData }, headers, 'doctorServiceUrl');        
         io.in(messageData?.senderID).emit("new-message-read", sendMessagData?.body);
         io.in(messageData?.receiverID).emit("new-message-read", sendMessagData?.body);
-
-        const isChatOpen = activeChatRooms.get(messageData?.receiverID) === messageData?.chatId;
-
         let saveNotification = await HttpService.postStagingChat('doctor2/save-notification',
           {
             chatId: messageData?.chatId,
@@ -77,8 +73,7 @@ export const SocketChat = (socket, io) => {
             for_portal_user: messageData?.receiverID,
             content: messageData?.message,
             notitype: messageData?.notitype,
-            created_by_type: messageData?.created_by_type,
-            skipPush: isChatOpen
+            created_by_type: messageData?.created_by_type           
           }, headers, 'doctorServiceUrl')
         
        io.in(messageData?.receiverID).emit("received-notification", saveNotification)
@@ -435,14 +430,14 @@ export const SocketChat = (socket, io) => {
   });
 
 
-  socket.on('chatroom-open', ({ userId, chatId }) => {    
-    activeChatRooms.set(userId, chatId);
+  socket.on('chatroom-open', async (data) => {  
+    const headers = {
+      Authorization: data?.token,
+    };
+    let updateWindow = await HttpService.postStagingChat('doctor2/update-opened-closed-ChatWindow', { chatId: data?.chatId, ischatWindow:data?.ischatWindow }, headers, 'doctorServiceUrl');        
+    console.log("updateWindow___________",updateWindow);    
   });
-
-  socket.on('chatroom-close', ({ userId }) => {
-    activeChatRooms.delete(userId);
-  });
-  
+ 
 }
 
 
