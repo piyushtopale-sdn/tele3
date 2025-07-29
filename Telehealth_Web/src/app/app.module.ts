@@ -57,6 +57,7 @@ import { DatePipe } from '@angular/common';
 	bootstrap: [AppComponent]
 })
 export class AppModule {
+	
 }
 
 export function HttpLoaderFactory(http: HttpClient) {
